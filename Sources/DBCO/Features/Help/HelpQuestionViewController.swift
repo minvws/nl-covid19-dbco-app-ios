@@ -123,7 +123,7 @@ final class HelpQuestionViewController: UIViewController {
     }
     
     private static func createLinkedItemsTableView() -> UITableView {
-        let tableView = FlexibleTableView(frame: .zero, style: .grouped)
+        let tableView = SelfSizingTableView(frame: .zero, style: .grouped)
         tableView.translatesAutoresizingMaskIntoConstraints = false
 
         tableView.separatorStyle = .none
@@ -171,18 +171,3 @@ extension HelpQuestionViewController: UITableViewDelegate {
     }
     
 }
-
-class FlexibleTableView: UITableView {
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        invalidateIntrinsicContentSize()
-    }
-    
-    override var intrinsicContentSize: CGSize {
-        return contentSize
-    }
-    
-}
-
-
