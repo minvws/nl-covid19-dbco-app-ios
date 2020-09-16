@@ -12,7 +12,6 @@
 		CD7282C3250F9AFE00D68911 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C2250F9AFE00D68911 /* MainViewController.swift */; };
 		CD7282C6250F9D2400D68911 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C5250F9D2400D68911 /* MainCoordinator.swift */; };
 		CDA5C11125123DC9009440D1 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C11025123DC9009440D1 /* AppVersion.swift */; };
-		CDA5C11425124880009440D1 /* GitHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C11325124880009440D1 /* GitHash.swift */; };
 		CDC4A8E8250B87E5001BABC6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC4A8E7250B87E5001BABC6 /* AppDelegate.swift */; };
 		CDC4A8EA250B87E5001BABC6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC4A8E9250B87E5001BABC6 /* SceneDelegate.swift */; };
 		CDC4A8F1250B87E6001BABC6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CDC4A8F0250B87E6001BABC6 /* Assets.xcassets */; };
@@ -35,7 +34,6 @@
 		CD7282C2250F9AFE00D68911 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		CD7282C5250F9D2400D68911 /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		CDA5C11025123DC9009440D1 /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
-		CDA5C11325124880009440D1 /* GitHash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHash.swift; sourceTree = "<group>"; };
 		CDC4A8E4250B87E5001BABC6 /* DBCO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DBCO.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDC4A8E7250B87E5001BABC6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CDC4A8E9250B87E5001BABC6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -106,14 +104,6 @@
 			path = Main;
 			sourceTree = "<group>";
 		};
-		CDA5C1122512486F009440D1 /* Generated */ = {
-			isa = PBXGroup;
-			children = (
-				CDA5C11325124880009440D1 /* GitHash.swift */,
-			);
-			path = Generated;
-			sourceTree = "<group>";
-		};
 		CDC4A8DB250B87E5001BABC6 = {
 			isa = PBXGroup;
 			children = (
@@ -133,7 +123,6 @@
 		CDC4A8E6250B87E5001BABC6 /* DBCO */ = {
 			isa = PBXGroup;
 			children = (
-				CDA5C1122512486F009440D1 /* Generated */,
 				CDFCF90A2510C4710062269A /* Common */,
 				CD7282BB250F728000D68911 /* Features */,
 				CDC4A8FB250B8945001BABC6 /* Resources */,
@@ -181,10 +170,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CDC4A8F8250B87E6001BABC6 /* Build configuration list for PBXNativeTarget "DBCO" */;
 			buildPhases = (
-				CDA5C10F2512395B009440D1 /* Generate GitHash.swift */,
 				CDC4A8E0250B87E5001BABC6 /* Sources */,
 				CDC4A8E1250B87E5001BABC6 /* Frameworks */,
 				CDC4A8E2250B87E5001BABC6 /* Resources */,
+				CDA5C115251250F1009440D1 /* Set GitHash to info.plist in built app */,
 			);
 			buildRules = (
 			);
@@ -242,7 +231,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		CDA5C10F2512395B009440D1 /* Generate GitHash.swift */ = {
+		CDA5C115251250F1009440D1 /* Set GitHash to info.plist in built app */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -250,15 +239,16 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}",
 			);
-			name = "Generate GitHash.swift";
+			name = "Set GitHash to info.plist in built app";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/Scripts/SetGitHash.sh\n";
+			shellScript = "INFOPLIST=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nGITHASH=$(git rev-parse --verify --short HEAD)\n/usr/libexec/PlistBuddy -c \"Set :GitHash $GITHASH\" \"${INFOPLIST}\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -269,7 +259,6 @@
 			files = (
 				CDFCF9192510FC760062269A /* SelfSizingTableView.swift in Sources */,
 				CDFCF905250FA0910062269A /* HelpViewController.swift in Sources */,
-				CDA5C11425124880009440D1 /* GitHash.swift in Sources */,
 				CDA5C11125123DC9009440D1 /* AppVersion.swift in Sources */,
 				CDFCF9102510DF430062269A /* HelpItemTableViewCell.swift in Sources */,
 				CD7282BF250F740000D68911 /* AppCoordinator.swift in Sources */,

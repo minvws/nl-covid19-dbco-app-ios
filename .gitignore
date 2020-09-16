@@ -30,6 +30,3 @@ xcuserdata/
 *.ipa
 *.dSYM.zip
 *.dSYM
-
-## Generated
-Sources/DBCO/Generated/GitHash.swift
