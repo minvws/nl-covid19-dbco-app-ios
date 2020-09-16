@@ -6,9 +6,6 @@
 build/
 DerivedData/
 !*.xcodeproj/xcshareddata/xcschemes
-*.xcodeproj
-Sources/EN/Resources/Info.plist
-Sources/ENCoreUnitTests/Mocks.swift
 Carthage
 
 ## Various settings
