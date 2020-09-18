@@ -10,17 +10,7 @@ import Contacts
 
 extension CNContact {
     var fullName: String {
-        let nameParts = [
-            isKeyAvailable(CNContactNamePrefixKey) ? namePrefix : nil,
-            isKeyAvailable(CNContactGivenNameKey) ? givenName : nil,
-            isKeyAvailable(CNContactMiddleNameKey) ? middleName : nil,
-            isKeyAvailable(CNContactFamilyNameKey) ? familyName : nil,
-            isKeyAvailable(CNContactNameSuffixKey) ? nameSuffix : nil,
-        ]
-        .compactMap { $0 }
-        .filter { !$0.isEmpty }
-        
-        return nameParts.joined(separator: " ")
+        return CNContactFormatter.string(from: self, style: .fullName) ?? ""
     }
 }
 
@@ -31,21 +21,26 @@ class SelectContactViewModel {
     private var searchResults: [CNContact]
     
     init(suggestedName: String? = nil) {
-        let allContactsPredicate = CNContact.predicateForContactsInContainer(withIdentifier: contactStore.defaultContainerIdentifier())
         let keys = [
-            CNContactNamePrefixKey,
-            CNContactGivenNameKey,
-            CNContactMiddleNameKey,
-            CNContactFamilyNameKey,
-            CNContactNameSuffixKey,
-            CNContactBirthdayKey,
-            CNContactPhoneNumbersKey,
-            CNContactEmailAddressesKey,
-            CNContactPostalAddressesKey
-        ] as [CNKeyDescriptor]
+            CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
+            CNContactBirthdayKey as CNKeyDescriptor,
+            CNContactPhoneNumbersKey as CNKeyDescriptor,
+            CNContactEmailAddressesKey as CNKeyDescriptor,
+            CNContactPostalAddressesKey as CNKeyDescriptor,
+            CNContactTypeKey as CNKeyDescriptor
+        ]
+        
+        let request = CNContactFetchRequest(keysToFetch: keys)
+        request.sortOrder = .familyName
         
         do {
-            contacts = try contactStore.unifiedContacts(matching: allContactsPredicate, keysToFetch: keys)
+            var contacts = [CNContact]()
+            try contactStore.enumerateContacts(with: request) { contact, stop in
+                if contact.contactType == .person {
+                    contacts.append(contact)
+                }
+            }
+            self.contacts = contacts
         } catch {
             contacts = []
         }
