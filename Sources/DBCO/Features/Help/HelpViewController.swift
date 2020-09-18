@@ -55,12 +55,7 @@ final class HelpViewController: UIViewController {
     }
     
     private func setupTableView() {
-        view.addSubview(tableView)
-        
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.embed(in: view)
         
         tableView.dataSource = self
         tableView.delegate = self

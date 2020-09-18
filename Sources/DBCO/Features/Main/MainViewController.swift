@@ -9,6 +9,7 @@ import UIKit
 
 protocol MainViewControllerDelegate: class {
     func mainViewControllerWantsHelp(_ controller: MainViewController)
+    func mainViewControllerRequestContact(_ controller: MainViewController)
 }
 
 class MainViewController: UIViewController {
@@ -21,18 +22,23 @@ class MainViewController: UIViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
         
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle(.helpTitle, for: .normal)
-        button.addTarget(self, action: #selector(openHelp), for: .touchUpInside)
+        let helpButton = UIButton(type: .system)
+        helpButton.translatesAutoresizingMaskIntoConstraints = false
+        helpButton.setTitle(.helpTitle, for: .normal)
+        helpButton.addTarget(self, action: #selector(openHelp), for: .touchUpInside)
         
-        let label = UILabel(frame: .zero)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = .mainAppVersionTitle
-        label.textColor = .lightGray
-        label.font = UIFont.preferredFont(forTextStyle: .footnote)
+        let contactButton = UIButton(type: .system)
+        contactButton.translatesAutoresizingMaskIntoConstraints = false
+        contactButton.setTitle("Choose Contact", for: .normal)
+        contactButton.addTarget(self, action: #selector(requestContact), for: .touchUpInside)
         
-        let stackView = UIStackView(arrangedSubviews: [button, label])
+        let versionLabel = UILabel(frame: .zero)
+        versionLabel.translatesAutoresizingMaskIntoConstraints = false
+        versionLabel.text = .mainAppVersionTitle
+        versionLabel.textColor = .lightGray
+        versionLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
+        
+        let stackView = UIStackView(arrangedSubviews: [contactButton, helpButton, versionLabel])
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.spacing = 10
@@ -45,6 +51,10 @@ class MainViewController: UIViewController {
     
     @objc private func openHelp(_ sender: Any) {
         delegate?.mainViewControllerWantsHelp(self)
+    }
+    
+    @objc private func requestContact(_ sender: Any) {
+        delegate?.mainViewControllerRequestContact(self)
     }
 
 }

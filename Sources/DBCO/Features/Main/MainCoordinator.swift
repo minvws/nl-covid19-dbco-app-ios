@@ -6,6 +6,7 @@
  */
 
 import UIKit
+import Contacts
 
 final class MainCoordinator: Coordinator {
     private let window: UIWindow
@@ -28,6 +29,10 @@ final class MainCoordinator: Coordinator {
     func openHelp() {
         startChildCoordinator(HelpCoordinator(presenter: mainController, delegate: self))
     }
+    
+    func openContactSelection() {
+        startChildCoordinator(SelectContactCoordinator(presenter: mainController, delegate: self))
+    }
 
 }
 
@@ -40,11 +45,24 @@ extension MainCoordinator: HelpCoordinatorDelegate {
     
 }
 
+extension MainCoordinator: SelectContactCoordinatorDelegate {
+    
+    func selectContactCoordinatorDidFinish(_ coordinator: SelectContactCoordinator, with contact: CNContact?) {
+        removeChildCoordinator(coordinator)
+        print(contact?.fullName)
+    }
+    
+}
+
 // MARK: - ViewController delegates
 extension MainCoordinator: MainViewControllerDelegate {
     
     func mainViewControllerWantsHelp(_ controller: MainViewController) {
         openHelp()
+    }
+    
+    func mainViewControllerRequestContact(_ contorller: MainViewController) {
+        openContactSelection()
     }
     
 }

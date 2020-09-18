@@ -19,6 +19,16 @@ extension UIView {
         bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -insets.bottom).isActive = true
     }
     
+    func embedInSafeArea(of view: UIView, with insets: UIEdgeInsets = .zero) {
+        view.addSubview(self)
+        
+        translatesAutoresizingMaskIntoConstraints = false
+        leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: insets.left).isActive = true
+        trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -insets.right).isActive = true
+        topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: insets.top).isActive = true
+        bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -insets.bottom).isActive = true
+    }
+    
     func withInsets(_ insets: UIEdgeInsets) -> UIView {
         let containingView = UIView(frame: .zero)
         embed(in: containingView, with: insets)
