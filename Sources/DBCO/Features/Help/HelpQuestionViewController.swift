@@ -96,7 +96,7 @@ final class HelpQuestionViewController: UIViewController {
         linkedItemsLabel.textColor = .systemBlue
         
         let tableSection = UIStackView(arrangedSubviews: [
-            linkedItemsLabel.withInsets(UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)),
+            linkedItemsLabel.withInsets(.leftRight(16)),
             tableView
         ])
         tableSection.axis = .vertical

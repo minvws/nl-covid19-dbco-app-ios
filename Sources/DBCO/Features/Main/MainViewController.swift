@@ -45,11 +45,12 @@ class MainViewController: UIViewController {
         
         
         let stackView = UIStackView(vertical: [contactButton, specificContactButton, helpButton, versionLabel], spacing: 10)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(stackView)
-    
-        stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
+        stackView.alignment = .center
+        
+        stackView.snap(
+            to: .bottom,
+            of: view.safeAreaLayoutGuide,
+            insets: .bottom(20))
     }
     
     @objc private func openHelp(_ sender: Any) {

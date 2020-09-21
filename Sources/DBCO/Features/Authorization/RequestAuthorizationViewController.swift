@@ -113,7 +113,7 @@ class RequestAuthorizationViewController: ViewController {
         
         containerView.distribution = .equalSpacing
         
-        containerView.embedInSafeArea(of: view, with: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16))
+        containerView.embed(in: view.safeAreaLayoutGuide, insets: .all(16))
     }
     
     override func applicationDidBecomeActive() {

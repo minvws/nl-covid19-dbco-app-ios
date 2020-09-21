@@ -14,7 +14,6 @@ final class HelpItemTableViewCell: UITableViewCell, Configurable, Reusable {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         build()
-        setupConstraints()
     }
 
     required init?(coder: NSCoder) {
@@ -27,17 +26,9 @@ final class HelpItemTableViewCell: UITableViewCell, Configurable, Reusable {
 
     private func build() {
         separatorView.backgroundColor = UIColor(white: 0.9, alpha: 1)
-        addSubview(separatorView)
+        separatorView.snap(to: .bottom, of: contentView, size: 1, insets: .left(14))
         
-        titleLabel.embed(in: contentView, with: UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16))
-    }
-
-    private func setupConstraints() {
-        separatorView.translatesAutoresizingMaskIntoConstraints = false
-        separatorView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14).isActive = true
-        separatorView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        separatorView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        separatorView.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        titleLabel.embed(in: contentView, insets: .leftRight(16) + .topBottom(12))
     }
 
     // MARK: - Private
