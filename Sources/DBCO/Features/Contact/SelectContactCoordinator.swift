@@ -17,13 +17,15 @@ final class SelectContactCoordinator: NSObject, Coordinator {
     private weak var presenter: UIViewController?
     private let navigationController: NavigationController
     private var selectedContact: CNContact?
+    private var suggestedName: String?
     
     var children = [Coordinator]()
     
-    init(presenter: UIViewController, delegate: SelectContactCoordinatorDelegate) {
+    init(presenter: UIViewController, suggestedName: String? = nil, delegate: SelectContactCoordinatorDelegate) {
         self.delegate = delegate
         self.presenter = presenter
         self.navigationController = NavigationController()
+        self.suggestedName = suggestedName
     }
     
     func start() {
@@ -31,7 +33,7 @@ final class SelectContactCoordinator: NSObject, Coordinator {
         let currentStatus = CNContactStore.authorizationStatus(for: .contacts)
         
         if currentStatus == .authorized {
-            let viewModel = SelectContactViewModel()
+            let viewModel = SelectContactViewModel(suggestedName: suggestedName)
             let selectController = SelectContactViewController(viewModel: viewModel)
             selectController.delegate = self
             
@@ -55,7 +57,7 @@ final class SelectContactCoordinator: NSObject, Coordinator {
     }
     
     func continueAfterAuthorization() {
-        let viewModel = SelectContactViewModel()
+        let viewModel = SelectContactViewModel(suggestedName: suggestedName)
         let selectController = SelectContactViewController(viewModel: viewModel)
         selectController.delegate = self
         

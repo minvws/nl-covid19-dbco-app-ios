@@ -18,7 +18,11 @@ class SelectContactViewModel {
     
     private let contactStore = CNContactStore()
     private let contacts: [CNContact]
+    private let suggestedContacts: [CNContact]
     private var searchResults: [CNContact]
+    
+    private let contactTableViewManager: TableViewManager<ContactTableViewCell>
+    private let searchTableViewManager: TableViewManager<ContactTableViewCell>
     
     init(suggestedName: String? = nil) {
         let keys = [
@@ -45,15 +49,49 @@ class SelectContactViewModel {
             contacts = []
         }
         
+        if let suggestedNameParts = suggestedName?.lowercased().split(separator: " ") {
+            func calculateMatchedParts(for contact: CNContact) -> Int {
+                let contactNameParts = contact.fullName.lowercased().split(separator: " ")
+                return suggestedNameParts
+                    .filter { contactNameParts.contains($0) }
+                    .count
+            }
+            
+            let sortedSuggestions = contacts
+                .map { (contact: $0, matchedParts: calculateMatchedParts(for: $0)) }
+                .filter { $0.matchedParts > 0 }
+                .sorted { $0.matchedParts > $1.matchedParts }
+            
+            suggestedContacts = sortedSuggestions.map { $0.contact }
+        } else {
+            suggestedContacts = []
+        }
+        
         searchResults = []
+        
+        contactTableViewManager = .init()
+        searchTableViewManager = .init()
+        
+        var sections = [(title: String, contacts: [CNContact])]()
+        
+        if !suggestedContacts.isEmpty {
+            sections.append(("Waarschijnlijk zoek je", suggestedContacts))
+        }
+        
+        sections.append(("Andere contacten", contacts))
+        
+        contactTableViewManager.numberOfSections = { sections.count }
+        contactTableViewManager.numberOfRowsInSection = { sections[$0].contacts.count }
+        contactTableViewManager.itemForCellAtIndexPath = { sections[$0.section].contacts[$0.row] }
+        contactTableViewManager.titleForHeaderInSection = { sections.count > 1 ? sections[$0].title : nil }
+        
+        searchTableViewManager.numberOfRowsInSection = { [unowned self] _ in self.searchResults.count }
+        searchTableViewManager.itemForCellAtIndexPath = { [unowned self] in self.searchResults[$0.row] }
+        
     }
     
-    var rowCount: Int {
-        return contacts.count
-    }
-    
-    func contact(at index: Int) -> CNContact {
-        return contacts[index]
+    private var numberOfSections: Int {
+        return suggestedContacts.isEmpty ? 1 : 2
     }
     
     var searchText: String? {
@@ -63,15 +101,19 @@ class SelectContactViewModel {
             } else {
                 searchResults = []
             }
+            
+            searchTableViewManager.reloadData()
         }
     }
     
-    var searchResultRowCount: Int {
-        return searchResults.count
+    func setupContactsTableView(_ tableView: UITableView, selectedContactHandler: @escaping (CNContact) -> Void) {
+        contactTableViewManager.manage(tableView)
+        contactTableViewManager.didSelectItem = selectedContactHandler
     }
     
-    func searchResult(at index: Int) -> CNContact {
-        return searchResults[index]
+    func setupSearchTableView(_ tableView: UITableView, selectedContactHandler: @escaping (CNContact) -> Void) {
+        searchTableViewManager.manage(tableView)
+        searchTableViewManager.didSelectItem = selectedContactHandler
     }
     
     
@@ -118,11 +160,10 @@ class SelectContactViewController: UIViewController {
     
     private func setupTableView() {
         tableView.embed(in: view)
-        
-        tableView.dataSource = self
-        tableView.delegate = self
-        
-        tableView.register(ContactTableViewCell.self, forCellReuseIdentifier: ContactTableViewCell.reuseIdentifier)
+        viewModel.setupContactsTableView(tableView) { [weak self] contact in
+            guard let self = self else { return }
+            self.delegate?.selectContactViewController(self, didSelect: contact)
+        }
     }
     
     private func setupSearchController() {
@@ -160,7 +201,6 @@ extension SelectContactViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
         viewModel.searchText = searchController.searchBar.text
-        searchResultsController.reload()
     }
 
 }
@@ -169,30 +209,6 @@ extension SelectContactViewController: SearchResultsViewControllerDelegate {
     
     fileprivate func searchResultsViewController(_ controller: SearchResultsViewController, didSelect contact: CNContact) {
         delegate?.selectContactViewController(self, didSelect: contact)
-    }
-    
-}
-
-extension SelectContactViewController: UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.rowCount
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ContactTableViewCell.reuseIdentifier, for: indexPath) as! ContactTableViewCell
-        cell.configure(for: viewModel.contact(at: indexPath.row))
-        return cell
-    }
-    
-}
-
-extension SelectContactViewController: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        delegate?.selectContactViewController(self, didSelect: viewModel.contact(at: indexPath.row))
     }
     
 }
@@ -230,11 +246,10 @@ private class SearchResultsViewController: UIViewController {
     
     private func setupTableView() {
         tableView.embed(in: view)
-        
-        tableView.dataSource = self
-        tableView.delegate = self
-        
-        tableView.register(ContactTableViewCell.self, forCellReuseIdentifier: ContactTableViewCell.reuseIdentifier)
+        viewModel.setupSearchTableView(tableView) { [weak self] contact in
+            guard let self = self else { return }
+            self.delegate?.searchResultsViewController(self, didSelect: contact)
+        }
     }
     
     private static func createContactsTableView() -> UITableView {
@@ -257,34 +272,6 @@ private class SearchResultsViewController: UIViewController {
         tableView.allowsMultipleSelection = false
         tableView.tableFooterView = UIView()
         return tableView
-    }
-    
-    func reload() {
-        tableView.reloadData()
-    }
-    
-}
-
-extension SearchResultsViewController: UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.searchResultRowCount
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ContactTableViewCell.reuseIdentifier, for: indexPath) as! ContactTableViewCell
-        cell.configure(for: viewModel.searchResult(at: indexPath.row))
-        return cell
-    }
-    
-}
-
-extension SearchResultsViewController: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        delegate?.searchResultsViewController(self, didSelect: viewModel.searchResult(at: indexPath.row))
     }
     
 }

@@ -9,9 +9,19 @@ import UIKit
 
 class HelpQuestionViewModel {
     private let question: HelpQuestion
+    private let tableViewManager: TableViewManager<HelpItemTableViewCell>
 
     init(question: HelpQuestion) {
         self.question = question
+        tableViewManager = .init()
+        
+        tableViewManager.numberOfRowsInSection = { [unowned self] _ in self.question.linkedItems.count }
+        tableViewManager.itemForCellAtIndexPath = { [unowned self] in self.question.linkedItems[$0.row] }
+    }
+    
+    func setupTableView(_ tableView: UITableView, selectedItemHandler: @escaping (HelpItem) -> Void) {
+        tableViewManager.manage(tableView)
+        tableViewManager.didSelectItem = selectedItemHandler
     }
     
     var title: String {
@@ -24,14 +34,6 @@ class HelpQuestionViewModel {
     
     var showLinkedItems: Bool {
         return !question.linkedItems.isEmpty
-    }
-    
-    var linkedItemRowCount: Int {
-        return question.linkedItems.count
-    }
-    
-    func linkedItem(at index: Int) -> HelpOverviewItem {
-        return question.linkedItems[index]
     }
 }
 
@@ -64,14 +66,10 @@ final class HelpQuestionViewController: UIViewController {
         title = .helpTitle
         
         setupContentView()
+        setupTableView()
     }
     
     private func setupContentView() {
-        tableView.dataSource = self
-        tableView.delegate = self
-        
-        tableView.register(HelpItemTableViewCell.self, forCellReuseIdentifier: HelpItemTableViewCell.reuseIdentifier)
-        
         let scrollView = UIScrollView(frame: .zero)
         scrollView.delaysContentTouches = false
         
@@ -122,6 +120,13 @@ final class HelpQuestionViewController: UIViewController {
         
     }
     
+    private func setupTableView() {
+        viewModel.setupTableView(tableView) { [weak self] item in
+            guard let self = self else { return }
+            self.delegate?.helpQuestionViewController(self, didSelect: item as! HelpOverviewItem)
+        }
+    }
+    
     private static func createLinkedItemsTableView() -> UITableView {
         let tableView = SelfSizingTableView(frame: .zero, style: .grouped)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -144,30 +149,4 @@ final class HelpQuestionViewController: UIViewController {
         return tableView
     }
 
-}
-
-// MARK: - UITableViewDataSource
-extension HelpQuestionViewController: UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.linkedItemRowCount
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: HelpItemTableViewCell.reuseIdentifier, for: indexPath) as! HelpItemTableViewCell
-        cell.configure(for: viewModel.linkedItem(at: indexPath.row))
-        return cell
-    }
-    
-}
-
-// MARK: - UITableViewDelegate
-extension HelpQuestionViewController: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        delegate?.helpQuestionViewController(self, didSelect: viewModel.linkedItem(at: indexPath.row))
-    }
-    
 }

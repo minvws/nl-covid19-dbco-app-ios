@@ -8,9 +8,7 @@
 import UIKit
 import Contacts
 
-final class ContactTableViewCell: UITableViewCell {
-    
-    static let reuseIdentifier: String = String(describing: ContactTableViewCell.self)
+final class ContactTableViewCell: UITableViewCell, Configurable, Reusable {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
@@ -22,13 +20,15 @@ final class ContactTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(for contact: CNContact) {
-        textLabel?.text = contact.fullName
+    func configure(_ item: CNContact) {
+        titleLabel.text = item.fullName
     }
 
     private func build() {
         separatorView.backgroundColor = UIColor(white: 0.9, alpha: 1)
         addSubview(separatorView)
+        
+        titleLabel.embed(in: contentView, with: UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16))
     }
 
     private func setupConstraints() {
@@ -37,15 +37,10 @@ final class ContactTableViewCell: UITableViewCell {
         separatorView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         separatorView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         separatorView.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        
-        textLabel?.translatesAutoresizingMaskIntoConstraints = false
-        textLabel?.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
-        textLabel?.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
-        textLabel?.topAnchor.constraint(equalTo: topAnchor, constant: 12).isActive = true
-        textLabel?.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12).isActive = true
     }
 
     // MARK: - Private
 
     private let separatorView = UIView()
+    private let titleLabel = UILabel()
 }

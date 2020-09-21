@@ -9,17 +9,19 @@ import UIKit
 
 class HelpViewModel {
     private let items: [HelpOverviewItem]
+    private let tableViewManager: TableViewManager<HelpItemTableViewCell>
 
     init(helpItems: [HelpOverviewItem]) {
         items = helpItems
+        tableViewManager = .init()
+        
+        tableViewManager.numberOfRowsInSection = { [unowned self] _ in self.items.count }
+        tableViewManager.itemForCellAtIndexPath = { [unowned self] in self.items[$0.row] }
     }
     
-    var rowCount: Int {
-        return items.count
-    }
-    
-    func item(at index: Int) -> HelpOverviewItem {
-        return items[index]
+    func setupTableView(_ tableView: UITableView, selectedItemHandler: @escaping (HelpItem) -> Void) {
+        tableViewManager.manage(tableView)
+        tableViewManager.didSelectItem = selectedItemHandler
     }
 }
 
@@ -54,13 +56,19 @@ final class HelpViewController: UIViewController {
         setupTableView()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        tableView.indexPathForSelectedRow.map { tableView.deselectRow(at: $0, animated: true) }
+    }
+    
     private func setupTableView() {
         tableView.embed(in: view)
         
-        tableView.dataSource = self
-        tableView.delegate = self
-        
-        tableView.register(HelpItemTableViewCell.self, forCellReuseIdentifier: HelpItemTableViewCell.reuseIdentifier)
+        viewModel.setupTableView(tableView) { [weak self] item in
+            guard let self = self else { return }
+            self.delegate?.helpViewController(self, didSelect: item as! HelpOverviewItem)
+        }
     }
     
     private static func createHelpTableView() -> UITableView {
@@ -85,32 +93,6 @@ final class HelpViewController: UIViewController {
         return tableView
     }
 
-}
-
-// MARK: - UITableViewDataSource
-extension HelpViewController: UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.rowCount
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: HelpItemTableViewCell.reuseIdentifier, for: indexPath) as! HelpItemTableViewCell
-        cell.configure(for: viewModel.item(at: indexPath.row))
-        return cell
-    }
-    
-}
-
-// MARK: - UITableViewDelegate
-extension HelpViewController: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        delegate?.helpViewController(self, didSelect: viewModel.item(at: indexPath.row))
-    }
-    
 }
 
 

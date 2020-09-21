@@ -30,8 +30,8 @@ final class MainCoordinator: Coordinator {
         startChildCoordinator(HelpCoordinator(presenter: mainController, delegate: self))
     }
     
-    func openContactSelection() {
-        startChildCoordinator(SelectContactCoordinator(presenter: mainController, delegate: self))
+    func openContactSelection(suggestedName: String?) {
+        startChildCoordinator(SelectContactCoordinator(presenter: mainController, suggestedName: suggestedName, delegate: self))
     }
 
 }
@@ -49,7 +49,6 @@ extension MainCoordinator: SelectContactCoordinatorDelegate {
     
     func selectContactCoordinatorDidFinish(_ coordinator: SelectContactCoordinator, with contact: CNContact?) {
         removeChildCoordinator(coordinator)
-        print(contact?.fullName)
     }
     
 }
@@ -61,8 +60,8 @@ extension MainCoordinator: MainViewControllerDelegate {
         openHelp()
     }
     
-    func mainViewControllerRequestContact(_ contorller: MainViewController) {
-        openContactSelection()
+    func mainViewControllerRequestContact(_ controller: MainViewController, with name: String?) {
+        openContactSelection(suggestedName: name)
     }
     
 }

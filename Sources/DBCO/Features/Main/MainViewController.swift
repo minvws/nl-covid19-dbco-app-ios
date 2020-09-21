@@ -9,7 +9,7 @@ import UIKit
 
 protocol MainViewControllerDelegate: class {
     func mainViewControllerWantsHelp(_ controller: MainViewController)
-    func mainViewControllerRequestContact(_ controller: MainViewController)
+    func mainViewControllerRequestContact(_ controller: MainViewController, with name: String?)
 }
 
 class MainViewController: UIViewController {
@@ -32,17 +32,20 @@ class MainViewController: UIViewController {
         contactButton.setTitle("Choose Contact", for: .normal)
         contactButton.addTarget(self, action: #selector(requestContact), for: .touchUpInside)
         
+        let specificContactButton = UIButton(type: .system)
+        specificContactButton.translatesAutoresizingMaskIntoConstraints = false
+        specificContactButton.setTitle("Choose Contact for \"Anna\"", for: .normal)
+        specificContactButton.addTarget(self, action: #selector(requestSpecificContact), for: .touchUpInside)
+        
         let versionLabel = UILabel(frame: .zero)
         versionLabel.translatesAutoresizingMaskIntoConstraints = false
         versionLabel.text = .mainAppVersionTitle
         versionLabel.textColor = .lightGray
         versionLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
         
-        let stackView = UIStackView(arrangedSubviews: [contactButton, helpButton, versionLabel])
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.spacing = 10
         
+        let stackView = UIStackView(vertical: [contactButton, specificContactButton, helpButton, versionLabel], spacing: 10)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(stackView)
     
         stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -54,7 +57,11 @@ class MainViewController: UIViewController {
     }
     
     @objc private func requestContact(_ sender: Any) {
-        delegate?.mainViewControllerRequestContact(self)
+        delegate?.mainViewControllerRequestContact(self, with: nil)
+    }
+    
+    @objc private func requestSpecificContact(_ sender: Any) {
+        delegate?.mainViewControllerRequestContact(self, with: "Anna")
     }
 
 }
