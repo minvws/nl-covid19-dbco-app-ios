@@ -95,6 +95,19 @@ extension SelectContactCoordinator: SelectContactViewControllerDelegate {
     
     func selectContactViewController(_ controller: SelectContactViewController, didSelect contact: CNContact) {
         selectedContact = contact
+        
+        let detailViewModel = SelectContactDetailsViewModel(contact: contact)
+        let detailsController = SelectContactDetailsViewController(viewModel: detailViewModel)
+        detailsController.delegate = self
+        
+        navigationController.pushViewController(detailsController, animated: true)
+    }
+    
+}
+
+extension SelectContactCoordinator: SelectContactDetailsViewControllerDelegate {
+    
+    func selectContactDetailsViewControllerDidFinish(_ controller: SelectContactDetailsViewModel) {
         navigationController.dismiss(animated: true)
     }
     
