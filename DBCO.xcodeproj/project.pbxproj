@@ -11,6 +11,8 @@
 		CD2963472514E129008443AF /* ContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2963462514E129008443AF /* ContactTableViewCell.swift */; };
 		CD29634C2518CE8E008443AF /* TableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD29634B2518CE8E008443AF /* TableViewManager.swift */; };
 		CD29634F2518ED51008443AF /* UIEdgeInsets+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD29634E2518ED51008443AF /* UIEdgeInsets+Convenience.swift */; };
+		CD2963522518F291008443AF /* SelectContactDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2963512518F291008443AF /* SelectContactDetailsViewController.swift */; };
+		CD2963552518F59E008443AF /* UITableView+Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2963542518F59E008443AF /* UITableView+Defaults.swift */; };
 		CD7282BF250F740000D68911 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282BE250F740000D68911 /* AppCoordinator.swift */; };
 		CD7282C1250F945900D68911 /* HelpCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C0250F945900D68911 /* HelpCoordinator.swift */; };
 		CD7282C3250F9AFE00D68911 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C2250F9AFE00D68911 /* MainViewController.swift */; };
@@ -41,6 +43,8 @@
 		CD2963462514E129008443AF /* ContactTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactTableViewCell.swift; sourceTree = "<group>"; };
 		CD29634B2518CE8E008443AF /* TableViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewManager.swift; sourceTree = "<group>"; };
 		CD29634E2518ED51008443AF /* UIEdgeInsets+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+Convenience.swift"; sourceTree = "<group>"; };
+		CD2963512518F291008443AF /* SelectContactDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectContactDetailsViewController.swift; sourceTree = "<group>"; };
+		CD2963542518F59E008443AF /* UITableView+Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Defaults.swift"; sourceTree = "<group>"; };
 		CD7282BE250F740000D68911 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		CD7282C0250F945900D68911 /* HelpCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpCoordinator.swift; sourceTree = "<group>"; };
 		CD7282C2250F9AFE00D68911 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -128,6 +132,7 @@
 				CD2963462514E129008443AF /* ContactTableViewCell.swift */,
 				CDA5C11725135A46009440D1 /* SelectContactCoordinator.swift */,
 				CD2963432514BF4E008443AF /* SelectContactViewController.swift */,
+				CD2963512518F291008443AF /* SelectContactDetailsViewController.swift */,
 			);
 			path = Contact;
 			sourceTree = "<group>";
@@ -199,6 +204,7 @@
 				CDFCF9162510ECC70062269A /* UIView+Embed.swift */,
 				CDA5C11B25139D36009440D1 /* UIStackView+Axis.swift */,
 				CD29634E2518ED51008443AF /* UIEdgeInsets+Convenience.swift */,
+				CD2963542518F59E008443AF /* UITableView+Defaults.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -306,11 +312,13 @@
 				CDFCF9102510DF430062269A /* HelpItemTableViewCell.swift in Sources */,
 				CD7282BF250F740000D68911 /* AppCoordinator.swift in Sources */,
 				CDFCF9092510BEF50062269A /* HelpItem.swift in Sources */,
+				CD2963552518F59E008443AF /* UITableView+Defaults.swift in Sources */,
 				CDC272EF2514B46B00AE7BB6 /* RequestContactsAuthorizationViewModel.swift in Sources */,
 				CD7282C6250F9D2400D68911 /* MainCoordinator.swift in Sources */,
 				CD7282C1250F945900D68911 /* HelpCoordinator.swift in Sources */,
 				CDFCF9152510EBC40062269A /* NSAttributedString+Extension.swift in Sources */,
 				CDC4A8E8250B87E5001BABC6 /* AppDelegate.swift in Sources */,
+				CD2963522518F291008443AF /* SelectContactDetailsViewController.swift in Sources */,
 				CDA5C11825135A46009440D1 /* SelectContactCoordinator.swift in Sources */,
 				CDFCF90C2510C47E0062269A /* Localization.swift in Sources */,
 				CDC4A8EA250B87E5001BABC6 /* SceneDelegate.swift in Sources */,

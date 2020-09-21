@@ -128,7 +128,7 @@ protocol SelectContactViewControllerDelegate: class {
 class SelectContactViewController: UIViewController {
     private let viewModel: SelectContactViewModel
     private let searchResultsController: SearchResultsViewController
-    private let tableView: UITableView = createContactsTableView()
+    private let tableView: UITableView = .createDefaultGrouped()
     private let searchController: UISearchController
     
     weak var delegate: SelectContactViewControllerDelegate?
@@ -158,6 +158,12 @@ class SelectContactViewController: UIViewController {
         setupSearchController()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        tableView.indexPathForSelectedRow.map { tableView.deselectRow(at: $0, animated: true) }
+    }
+    
     private func setupTableView() {
         tableView.embed(in: view)
         viewModel.setupContactsTableView(tableView) { [weak self] contact in
@@ -171,28 +177,6 @@ class SelectContactViewController: UIViewController {
         searchController.searchBar.placeholder = "Naam contact"
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
-    }
-    
-    private static func createContactsTableView() -> UITableView {
-        let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-
-        tableView.separatorStyle = .none
-        tableView.backgroundColor = .clear
-
-        tableView.showsVerticalScrollIndicator = true
-        tableView.showsHorizontalScrollIndicator = false
-        tableView.isScrollEnabled = true
-
-        tableView.estimatedRowHeight = 100
-        tableView.rowHeight = UITableView.automaticDimension
-
-        tableView.estimatedSectionHeaderHeight = 50
-        tableView.sectionHeaderHeight = UITableView.automaticDimension
-
-        tableView.allowsMultipleSelection = false
-        tableView.tableFooterView = UIView()
-        return tableView
     }
     
 }
@@ -222,7 +206,7 @@ private protocol SearchResultsViewControllerDelegate: class {
 
 private class SearchResultsViewController: UIViewController {
     private let viewModel: SelectContactViewModel
-    private let tableView: UITableView = createContactsTableView()
+    private let tableView: UITableView = .createDefaultGrouped()
     private let searchController = UISearchController(searchResultsController: nil)
     
     weak var delegate: SearchResultsViewControllerDelegate?
@@ -244,34 +228,18 @@ private class SearchResultsViewController: UIViewController {
         setupTableView()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        tableView.indexPathForSelectedRow.map { tableView.deselectRow(at: $0, animated: true) }
+    }
+    
     private func setupTableView() {
         tableView.embed(in: view)
         viewModel.setupSearchTableView(tableView) { [weak self] contact in
             guard let self = self else { return }
             self.delegate?.searchResultsViewController(self, didSelect: contact)
         }
-    }
-    
-    private static func createContactsTableView() -> UITableView {
-        let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-
-        tableView.separatorStyle = .none
-        tableView.backgroundColor = .clear
-
-        tableView.showsVerticalScrollIndicator = true
-        tableView.showsHorizontalScrollIndicator = false
-        tableView.isScrollEnabled = true
-
-        tableView.estimatedRowHeight = 100
-        tableView.rowHeight = UITableView.automaticDimension
-
-        tableView.estimatedSectionHeaderHeight = 50
-        tableView.sectionHeaderHeight = UITableView.automaticDimension
-
-        tableView.allowsMultipleSelection = false
-        tableView.tableFooterView = UIView()
-        return tableView
     }
     
 }

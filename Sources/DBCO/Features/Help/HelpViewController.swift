@@ -33,7 +33,7 @@ protocol HelpViewControllerDelegate: class {
 
 final class HelpViewController: UIViewController {
     private let viewModel: HelpViewModel
-    private let tableView: UITableView = createHelpTableView()
+    private let tableView: UITableView = .createDefaultGrouped()
     
     weak var delegate: HelpViewControllerDelegate?
     
@@ -69,28 +69,6 @@ final class HelpViewController: UIViewController {
             guard let self = self else { return }
             self.delegate?.helpViewController(self, didSelect: item as! HelpOverviewItem)
         }
-    }
-    
-    private static func createHelpTableView() -> UITableView {
-        let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-
-        tableView.separatorStyle = .none
-        tableView.backgroundColor = .clear
-
-        tableView.showsVerticalScrollIndicator = true
-        tableView.showsHorizontalScrollIndicator = false
-        tableView.isScrollEnabled = true
-
-        tableView.estimatedRowHeight = 100
-        tableView.rowHeight = UITableView.automaticDimension
-
-        tableView.estimatedSectionHeaderHeight = 50
-        tableView.sectionHeaderHeight = UITableView.automaticDimension
-
-        tableView.allowsMultipleSelection = false
-        tableView.tableFooterView = UIView()
-        return tableView
     }
 
 }

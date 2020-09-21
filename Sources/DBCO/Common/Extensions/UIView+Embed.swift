@@ -67,18 +67,9 @@ extension UIView {
                 return [.left, .right, .bottom]
             }
         }
-        
-        var isHorizontal: Bool {
-            switch self {
-            case .left, .right:
-                return true
-            case .top, .bottom:
-                return false
-            }
-        }
     }
     
-    func snap(to side: Side, of embeddable: Embeddable, size: CGFloat? = nil, insets: UIEdgeInsets = .zero) {
+    func snap(to side: Side, of embeddable: Embeddable, width: CGFloat? = nil, height: CGFloat? = nil, insets: UIEdgeInsets = .zero) {
         guard let view = embeddable.view else {
             print("Warning: could not snap view(\(self)) to embeddable(\(embeddable))")
             return
@@ -94,12 +85,12 @@ extension UIView {
         topAnchor.constraint(equalTo: embeddable.topAnchor, constant: insets.top).isActive = constrainedSides.contains(.top)
         bottomAnchor.constraint(equalTo: embeddable.bottomAnchor, constant: -insets.bottom).isActive = constrainedSides.contains(.bottom)
         
-        if let size = size, !side.isHorizontal {
-            if side.isHorizontal {
-                widthAnchor.constraint(equalToConstant: size).isActive = true
-            } else {
-                heightAnchor.constraint(equalToConstant: size).isActive = true
-            }
+        if let height = height {
+            heightAnchor.constraint(equalToConstant: height).isActive = true
+        }
+        
+        if let width = width {
+            widthAnchor.constraint(equalToConstant: width).isActive = true
         }
     }
     

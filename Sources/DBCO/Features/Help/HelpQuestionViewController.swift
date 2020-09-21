@@ -45,7 +45,7 @@ protocol HelpQuestionViewControllerDelegate: class {
 
 final class HelpQuestionViewController: UIViewController {
     private let viewModel: HelpQuestionViewModel
-    private let tableView: UITableView = createLinkedItemsTableView()
+    private let tableView = SelfSizingTableView.createDefaultGrouped()
     
     weak var delegate: HelpQuestionViewControllerDelegate?
     
@@ -86,28 +86,23 @@ final class HelpQuestionViewController: UIViewController {
                                                                    font: UIFont.preferredFont(forTextStyle: .body),
                                                                    textColor: .black)
 
-        let textSection = UIStackView(arrangedSubviews: [titleLabel, bodyLabel])
-        textSection.axis = .vertical
-        textSection.spacing = 20
+        let textSection = UIStackView(vertical: [titleLabel, bodyLabel], spacing: 20)
         
         let linkedItemsLabel = UILabel(frame: .zero)
         linkedItemsLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
         linkedItemsLabel.text = .helpAlsoRead
         linkedItemsLabel.textColor = .systemBlue
         
-        let tableSection = UIStackView(arrangedSubviews: [
+        let tableSection = UIStackView(vertical: [
             linkedItemsLabel.withInsets(.leftRight(16)),
             tableView
         ])
-        tableSection.axis = .vertical
     
-        let stackView = UIStackView(arrangedSubviews: [
+        let stackView = UIStackView(vertical: [
             textSection.withInsets(UIEdgeInsets(top: 16, left: 16, bottom: 0, right: 16)),
             tableSection
-        ])
+        ], spacing: 40)
             
-        stackView.axis = .vertical
-        stackView.spacing = 40
         stackView.distribution = .equalSpacing
         
         scrollView.addSubview(stackView)
@@ -126,27 +121,4 @@ final class HelpQuestionViewController: UIViewController {
             self.delegate?.helpQuestionViewController(self, didSelect: item as! HelpOverviewItem)
         }
     }
-    
-    private static func createLinkedItemsTableView() -> UITableView {
-        let tableView = SelfSizingTableView(frame: .zero, style: .grouped)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-
-        tableView.separatorStyle = .none
-        tableView.backgroundColor = .clear
-
-        tableView.showsVerticalScrollIndicator = false
-        tableView.showsHorizontalScrollIndicator = false
-        tableView.isScrollEnabled = false
-
-        tableView.estimatedRowHeight = 100
-        tableView.rowHeight = UITableView.automaticDimension
-
-        tableView.estimatedSectionHeaderHeight = 50
-        tableView.sectionHeaderHeight = UITableView.automaticDimension
-
-        tableView.allowsMultipleSelection = false
-        tableView.tableFooterView = UIView()
-        return tableView
-    }
-
 }

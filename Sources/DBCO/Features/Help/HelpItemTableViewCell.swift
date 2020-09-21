@@ -26,7 +26,7 @@ final class HelpItemTableViewCell: UITableViewCell, Configurable, Reusable {
 
     private func build() {
         separatorView.backgroundColor = UIColor(white: 0.9, alpha: 1)
-        separatorView.snap(to: .bottom, of: contentView, size: 1, insets: .left(14))
+        separatorView.snap(to: .bottom, of: contentView, height: 1, insets: .left(14))
         
         titleLabel.embed(in: contentView, insets: .leftRight(16) + .topBottom(12))
     }
