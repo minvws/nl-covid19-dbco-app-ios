@@ -135,6 +135,9 @@ final class ContactDetailsTableViewCell: UITableViewCell, Configurable, Reusable
         
         titleLabel.embed(in: contentView, insets: .leftRight(16) + .topBottom(12))
         titleLabel.numberOfLines = 0
+        
+        selectionStyle = .none
+        accessoryType = .checkmark
     }
 
     // MARK: - Private

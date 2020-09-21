@@ -76,7 +76,7 @@ final class HelpQuestionViewController: UIViewController {
         scrollView.embed(in: view)
         
         let titleLabel = UILabel(frame: .zero)
-        titleLabel.font = UIFont.preferredFont(forTextStyle: .title1)
+        titleLabel.font = Theme.fonts.title1
         titleLabel.numberOfLines = 0
         titleLabel.text = viewModel.title
         
@@ -89,7 +89,7 @@ final class HelpQuestionViewController: UIViewController {
         let textSection = UIStackView(vertical: [titleLabel, bodyLabel], spacing: 20)
         
         let linkedItemsLabel = UILabel(frame: .zero)
-        linkedItemsLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        linkedItemsLabel.font = Theme.fonts.subhead
         linkedItemsLabel.text = .helpAlsoRead
         linkedItemsLabel.textColor = .systemBlue
         

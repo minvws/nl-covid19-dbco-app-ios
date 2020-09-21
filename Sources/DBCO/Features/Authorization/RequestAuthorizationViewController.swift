@@ -70,7 +70,7 @@ class RequestAuthorizationViewController: ViewController {
     
     private func setupView() {
         let titleLabel = UILabel()
-        titleLabel.font = .preferredFont(forTextStyle: .title1)
+        titleLabel.font = Theme.fonts.title1
         titleLabel.numberOfLines = 0
     
         viewModel.title
@@ -78,29 +78,25 @@ class RequestAuthorizationViewController: ViewController {
             .store(in: &cancellables)
         
         let bodyLabel = UILabel()
-        bodyLabel.font = .preferredFont(forTextStyle: .body)
+        bodyLabel.font = Theme.fonts.body
         bodyLabel.numberOfLines = 0
         
         viewModel.body
             .assign(to: \.text, on: bodyLabel)
             .store(in: &cancellables)
         
-        let authorizeButton = UIButton(type: .system)
-        authorizeButton.setTitle("Geef toestemming", for: .normal)
-        authorizeButton.addTarget(self, action: #selector(authorize), for: .touchUpInside)
+        let authorizeButton = Button(title: "Geef toestemming")
+            .touchUpInside(self, action: #selector(authorize))
         
         viewModel.hideAuthorizeButton
             .assign(to: \.isHidden, on: authorizeButton)
             .store(in: &cancellables)
         
-        let continueButton = UIButton(type: .system)
-        continueButton.setTitle("Ik doe alles met de hand", for: .normal)
-        continueButton.addTarget(self, action: #selector(continueWithoutAuthorization), for: .touchUpInside)
-        continueButton.tintColor = .lightGray
+        let continueButton = Button(title: "Ik doe alles met de hand", style: .secondary)
+            .touchUpInside(self, action: #selector(continueWithoutAuthorization))
         
-        let settingsButton = UIButton(type: .system)
-        settingsButton.setTitle("Naar Instellingen", for: .normal)
-        settingsButton.addTarget(self, action: #selector(redirectToSettings), for: .touchUpInside)
+        let settingsButton = Button(title: "Naar Instellingen")
+            .touchUpInside(self, action: #selector(redirectToSettings))
         
         viewModel.hideSettingsButton
             .assign(to: \.isHidden, on: settingsButton)
@@ -113,7 +109,7 @@ class RequestAuthorizationViewController: ViewController {
         
         containerView.distribution = .equalSpacing
         
-        containerView.embed(in: view.safeAreaLayoutGuide, insets: .all(16))
+        containerView.embed(in: view.readableContentGuide, insets: .topBottom(16))
     }
     
     override func applicationDidBecomeActive() {
@@ -127,16 +123,16 @@ class RequestAuthorizationViewController: ViewController {
         viewModel.configure(for: status)
     }
     
-    @objc private func authorize(_ sender: Any) {
+    @objc private func authorize() {
         delegate?.requestAuthorization(for: self)
     }
     
-    @objc private func continueWithoutAuthorization(_ sender: Any) {
+    @objc private func continueWithoutAuthorization() {
         delegate?.continueWithoutAuthorization(for: self)
     }
     
     
-    @objc private func redirectToSettings(_ sender: Any) {
+    @objc private func redirectToSettings() {
         delegate?.redirectToSettings(for: self)
     }
 

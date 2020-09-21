@@ -22,46 +22,39 @@ class MainViewController: UIViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
         
-        let helpButton = UIButton(type: .system)
-        helpButton.translatesAutoresizingMaskIntoConstraints = false
-        helpButton.setTitle(.helpTitle, for: .normal)
-        helpButton.addTarget(self, action: #selector(openHelp), for: .touchUpInside)
-        
-        let contactButton = UIButton(type: .system)
-        contactButton.translatesAutoresizingMaskIntoConstraints = false
-        contactButton.setTitle("Choose Contact", for: .normal)
-        contactButton.addTarget(self, action: #selector(requestContact), for: .touchUpInside)
-        
-        let specificContactButton = UIButton(type: .system)
-        specificContactButton.translatesAutoresizingMaskIntoConstraints = false
-        specificContactButton.setTitle("Choose Contact for \"Anna\"", for: .normal)
-        specificContactButton.addTarget(self, action: #selector(requestSpecificContact), for: .touchUpInside)
-        
         let versionLabel = UILabel(frame: .zero)
-        versionLabel.translatesAutoresizingMaskIntoConstraints = false
         versionLabel.text = .mainAppVersionTitle
-        versionLabel.textColor = .lightGray
-        versionLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
+        versionLabel.textAlignment = .center
+        versionLabel.textColor = Theme.colors.gray
+        versionLabel.font = Theme.fonts.footnote
         
-        
-        let stackView = UIStackView(vertical: [contactButton, specificContactButton, helpButton, versionLabel], spacing: 10)
-        stackView.alignment = .center
+        let stackView = UIStackView(
+            vertical: [
+                Button(title: "Choose Contact")
+                    .touchUpInside(self, action: #selector(requestContact)),
+                Button(title: "Choose Contact for \"Anna\"")
+                    .touchUpInside(self, action: #selector(requestSpecificContact)),
+                Button(title: .helpTitle, style: .info)
+                    .touchUpInside(self, action: #selector(openHelp)),
+                versionLabel
+            ],
+            spacing: 10)
         
         stackView.snap(
             to: .bottom,
-            of: view.safeAreaLayoutGuide,
+            of: view.readableContentGuide,
             insets: .bottom(20))
     }
     
-    @objc private func openHelp(_ sender: Any) {
+    @objc private func openHelp() {
         delegate?.mainViewControllerWantsHelp(self)
     }
     
-    @objc private func requestContact(_ sender: Any) {
+    @objc private func requestContact() {
         delegate?.mainViewControllerRequestContact(self, with: nil)
     }
     
-    @objc private func requestSpecificContact(_ sender: Any) {
+    @objc private func requestSpecificContact() {
         delegate?.mainViewControllerRequestContact(self, with: "Anna")
     }
 
