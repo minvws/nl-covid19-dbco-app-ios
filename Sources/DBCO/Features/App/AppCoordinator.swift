@@ -44,7 +44,7 @@ final class AppCoordinator: Coordinator {
     }
     
     func start() {
-        startChildCoordinator(MainCoordinator(window: window))
+        startChildCoordinator(TaskOverviewCoordinator(window: window))
     }
 
 }

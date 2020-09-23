@@ -31,10 +31,11 @@ extension UILayoutGuide: Embeddable {
 
 extension UIView {
     
-    func embed(in embeddable: Embeddable, insets: UIEdgeInsets = .zero) {
+    @discardableResult
+    func embed(in embeddable: Embeddable, insets: UIEdgeInsets = .zero) -> Self {
         guard let view = embeddable.view else {
             print("Warning: could not embed view(\(self)) to embeddable(\(embeddable))")
-            return
+            return self
         }
         
         view.addSubview(self)
@@ -44,6 +45,8 @@ extension UIView {
         trailingAnchor.constraint(equalTo: embeddable.trailingAnchor, constant: -insets.right).isActive = true
         topAnchor.constraint(equalTo: embeddable.topAnchor, constant: insets.top).isActive = true
         bottomAnchor.constraint(equalTo: embeddable.bottomAnchor, constant: -insets.bottom).isActive = true
+        
+        return self
     }
  
 }
@@ -69,10 +72,11 @@ extension UIView {
         }
     }
     
-    func snap(to side: Side, of embeddable: Embeddable, width: CGFloat? = nil, height: CGFloat? = nil, insets: UIEdgeInsets = .zero) {
+    @discardableResult
+    func snap(to side: Side, of embeddable: Embeddable, width: CGFloat? = nil, height: CGFloat? = nil, insets: UIEdgeInsets = .zero) -> Self {
         guard let view = embeddable.view else {
             print("Warning: could not snap view(\(self)) to embeddable(\(embeddable))")
-            return
+            return self
         }
         
         view.addSubview(self)
@@ -92,6 +96,8 @@ extension UIView {
         if let width = width {
             widthAnchor.constraint(equalToConstant: width).isActive = true
         }
+        
+        return self
     }
     
 }
@@ -101,6 +107,13 @@ extension UIView {
     func withInsets(_ insets: UIEdgeInsets) -> UIView {
         let containingView = UIView(frame: .zero)
         embed(in: containingView, insets: insets)
+        return containingView
+    }
+    
+    func wrappedInReadableContentGuide(insets: UIEdgeInsets = .zero) -> UIView {
+        let containingView = UIView(frame: .zero)
+        containingView.preservesSuperviewLayoutMargins = true
+        embed(in: containingView.readableContentGuide, insets: insets)
         return containingView
     }
     

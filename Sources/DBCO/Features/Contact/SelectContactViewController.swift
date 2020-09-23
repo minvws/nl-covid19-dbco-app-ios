@@ -106,12 +106,12 @@ class SelectContactViewModel {
         }
     }
     
-    func setupContactsTableView(_ tableView: UITableView, selectedContactHandler: @escaping (CNContact) -> Void) {
+    func setupContactsTableView(_ tableView: UITableView, selectedContactHandler: @escaping (CNContact, IndexPath) -> Void) {
         contactTableViewManager.manage(tableView)
         contactTableViewManager.didSelectItem = selectedContactHandler
     }
     
-    func setupSearchTableView(_ tableView: UITableView, selectedContactHandler: @escaping (CNContact) -> Void) {
+    func setupSearchTableView(_ tableView: UITableView, selectedContactHandler: @escaping (CNContact, IndexPath) -> Void) {
         searchTableViewManager.manage(tableView)
         searchTableViewManager.didSelectItem = selectedContactHandler
     }
@@ -166,7 +166,7 @@ class SelectContactViewController: UIViewController {
     
     private func setupTableView() {
         tableView.embed(in: view)
-        viewModel.setupContactsTableView(tableView) { [weak self] contact in
+        viewModel.setupContactsTableView(tableView) { [weak self] contact, _ in
             guard let self = self else { return }
             self.delegate?.selectContactViewController(self, didSelect: contact)
         }
@@ -236,7 +236,7 @@ private class SearchResultsViewController: UIViewController {
     
     private func setupTableView() {
         tableView.embed(in: view)
-        viewModel.setupSearchTableView(tableView) { [weak self] contact in
+        viewModel.setupSearchTableView(tableView) { [weak self] contact, _ in
             guard let self = self else { return }
             self.delegate?.searchResultsViewController(self, didSelect: contact)
         }

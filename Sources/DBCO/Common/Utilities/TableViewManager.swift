@@ -22,8 +22,11 @@ class TableViewManager<Cell: UITableViewCell & Reusable & Configurable>: NSObjec
     var numberOfSections: (() -> Int)?
     var numberOfRowsInSection: ((_ section: Int) -> Int)?
     var itemForCellAtIndexPath: ((_ indexPath: IndexPath) -> Cell.Item)?
-    var didSelectItem: ((Cell.Item) -> Void)?
+    var didSelectItem: ((_ item: Cell.Item, _ indexPath: IndexPath) -> Void)?
     var titleForHeaderInSection: ((_ section: Int) -> String?)?
+    var viewForHeaderInSection: ((_ section: Int) -> UIView?)?
+    var viewForFooterInSection: ((_ section: Int) -> UIView?)?
+
     
     weak var tableView: UITableView?
     
@@ -56,11 +59,19 @@ class TableViewManager<Cell: UITableViewCell & Reusable & Configurable>: NSObjec
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let inputForCellAtIndexPath = itemForCellAtIndexPath, let didSelectInput = didSelectItem else { return }
         
-        didSelectInput(inputForCellAtIndexPath(indexPath))
+        didSelectInput(inputForCellAtIndexPath(indexPath), indexPath)
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return titleForHeaderInSection?(section)
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return viewForHeaderInSection?(section)
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return viewForFooterInSection?(section)
     }
     
 }

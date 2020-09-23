@@ -19,7 +19,7 @@ class HelpQuestionViewModel {
         tableViewManager.itemForCellAtIndexPath = { [unowned self] in self.question.linkedItems[$0.row] }
     }
     
-    func setupTableView(_ tableView: UITableView, selectedItemHandler: @escaping (HelpItem) -> Void) {
+    func setupTableView(_ tableView: UITableView, selectedItemHandler: @escaping (HelpItem, IndexPath) -> Void) {
         tableViewManager.manage(tableView)
         tableViewManager.didSelectItem = selectedItemHandler
     }
@@ -116,7 +116,7 @@ final class HelpQuestionViewController: UIViewController {
     }
     
     private func setupTableView() {
-        viewModel.setupTableView(tableView) { [weak self] item in
+        viewModel.setupTableView(tableView) { [weak self] item, _ in
             guard let self = self else { return }
             self.delegate?.helpQuestionViewController(self, didSelect: item as! HelpOverviewItem)
         }

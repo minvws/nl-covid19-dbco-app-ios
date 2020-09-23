@@ -134,6 +134,10 @@ final class Colors {
     var captionGray: UIColor {
         return color(for: "CaptionGray")
     }
+    
+    var separator: UIColor {
+        return color(for: "Separator")
+    }
 
     // MARK: - Private
 
