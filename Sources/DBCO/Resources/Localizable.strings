@@ -1,3 +1,5 @@
+"appVersionTitle" = "Version %@ (%@)";
+
 /* MARK: - Help */
 "helpTitle" = "About this app";
 "helpSubtitle" = "Frequently asked questions";

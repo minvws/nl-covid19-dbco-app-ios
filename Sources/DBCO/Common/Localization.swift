@@ -45,6 +45,9 @@ public final class Localization {
 }
 
 extension String {
+    // MARK: - App Version
+    static func appVersionTitle(_ version: String, _ build: String) -> String { return Localization.string(for: "appVersionTitle", [version, build]) }
+    
     // MARK: - Help
     
     static var helpTitle: String { return Localization.string(for: "helpTitle") }

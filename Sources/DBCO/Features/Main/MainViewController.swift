@@ -26,10 +26,21 @@ class MainViewController: UIViewController {
         button.setTitle(.helpTitle, for: .normal)
         button.addTarget(self, action: #selector(openHelp), for: .touchUpInside)
         
-        view.addSubview(button)
-        button.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
+        let label = UILabel(frame: .zero)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = .mainAppVersionTitle
+        label.textColor = .lightGray
+        label.font = UIFont.preferredFont(forTextStyle: .footnote)
         
+        let stackView = UIStackView(arrangedSubviews: [button, label])
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        
+        view.addSubview(stackView)
+    
+        stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
     }
     
     @objc private func openHelp(_ sender: Any) {
