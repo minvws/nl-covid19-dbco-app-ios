@@ -25,9 +25,9 @@ final class ContactTableViewCell: UITableViewCell, Configurable, Reusable {
 
     private func build() {
         SeparatorView()
-            .snap(to: .bottom, of: contentView, height: 1, insets: .left(14))
+            .snap(to: .bottom, of: contentView.readableIdentation, height: 1)
         
-        titleLabel.embed(in: contentView, insets: .leftRight(16) + .topBottom(12))
+        titleLabel.embed(in: contentView.readableWidth, insets: .topBottom(12))
     }
 
     // MARK: - Private

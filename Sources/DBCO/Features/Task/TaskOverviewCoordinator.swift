@@ -73,7 +73,17 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
     }
     
     func taskOverviewViewController(_ controller: TaskOverviewViewController, didSelect task: Task) {
-        
+        switch task {
+        case let contactDetailsTask as ContactDetailsTask:
+            if contactDetailsTask.completed {
+                // edit flow
+            } else {
+                // pick flow
+                openContactSelection(suggestedName: contactDetailsTask.name)
+            }
+        default:
+            break
+        }
     }
     
 }

@@ -102,7 +102,7 @@ class TaskOverviewViewController: UIViewController {
         
         let headerView = TextView(htmlText: headerText)
             .linkTouched { [weak self] _ in self?.openHelp() }
-            .wrappedInReadableContentGuide(insets: .bottom(10))
+            .wrappedInReadableContentGuide(insets: .topBottom(10))
         
         let footerView = Button(title: "+ Contact toevoegen", style: .secondary)
             .touchUpInside(self, action: #selector(requestContact))

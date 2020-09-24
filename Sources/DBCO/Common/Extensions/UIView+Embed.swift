@@ -16,6 +16,33 @@ protocol Embeddable {
     var bottomAnchor: NSLayoutYAxisAnchor { get }
 }
 
+struct CustomEmbeddable: Embeddable {
+    let view: UIView?
+    let leadingAnchor: NSLayoutXAxisAnchor
+    let trailingAnchor: NSLayoutXAxisAnchor
+    let topAnchor: NSLayoutYAxisAnchor
+    let bottomAnchor: NSLayoutYAxisAnchor
+}
+
+extension UIView {
+    
+    var readableWidth: Embeddable {
+        return CustomEmbeddable(view: self,
+                                leadingAnchor: readableContentGuide.leadingAnchor,
+                                trailingAnchor: readableContentGuide.trailingAnchor,
+                                topAnchor: topAnchor,
+                                bottomAnchor: bottomAnchor)
+    }
+    
+    var readableIdentation: Embeddable {
+        return CustomEmbeddable(view: self,
+                                leadingAnchor: readableContentGuide.leadingAnchor,
+                                trailingAnchor: trailingAnchor,
+                                topAnchor: topAnchor,
+                                bottomAnchor: bottomAnchor)
+    }
+}
+
 extension UIView: Embeddable {
     var view: UIView? {
         return self
@@ -99,7 +126,6 @@ extension UIView {
         
         return self
     }
-    
 }
 
 extension UIView {

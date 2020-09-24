@@ -20,33 +20,45 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
     
     func configure(_ item: Task) {
         switch item {
-        case .enterContactDetails(let name, let completed):
-            configureForContactDetails(name: name, completed: completed)
+        case let contactDetailsTask as ContactDetailsTask:
+            configureForContactDetails(task: contactDetailsTask)
+        default:
+            break
         }
     }
     
-    private func configureForContactDetails(name: String, completed: Bool) {
-        titleLabel.text = name
+    private func configureForContactDetails(task: ContactDetailsTask) {
+        titleLabel.text = task.name
         titleLabel.font = Theme.fonts.bodyBold
         
-        subtitleLabel.text = completed ? "Gegevens toegevoegd" : "Vul gegevens aan"
+        subtitleLabel.text = task.completed ? "Gegevens toegevoegd" : "Vul gegevens aan"
         subtitleLabel.font = Theme.fonts.callout
         subtitleLabel.textColor = Theme.colors.captionGray
+        
+        icon.isHighlighted = task.completed
     }
 
     private func build() {
+        icon.image = UIImage(named: "Warning")
+        icon.highlightedImage = UIImage(named: "Checkmark")
+        icon.contentMode = .center
+        
         let disclosureIndicator = UIImageView(image: UIImage(named: "Chevron"))
         disclosureIndicator.contentMode = .right
         
-        UIStackView(horizontal: [UIStackView(vertical: [titleLabel, subtitleLabel]), disclosureIndicator])
+        let text = UIStackView(vertical: [titleLabel,
+                                          UIStackView(horizontal: [icon, subtitleLabel], spacing: 4)],
+                               spacing: 4)
+        
+        UIStackView(horizontal: [text, disclosureIndicator])
             .embed(in: containerView, insets: .all(16))
         
         
         containerView.backgroundColor = Theme.colors.tertiary
-        containerView.layer.cornerRadius = 10
+        containerView.layer.cornerRadius = 8
         
         
-        containerView.embed(in: contentView.readableContentGuide, insets: .topBottom(-7))
+        containerView.embed(in: contentView.readableWidth, insets: .topBottom(4))
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -76,4 +88,5 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
     private let containerView = UIView()
+    private let icon = UIImageView()
 }

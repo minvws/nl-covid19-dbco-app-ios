@@ -7,24 +7,27 @@
 
 import Foundation
 
-enum Task {
-    case enterContactDetails(name: String, completed: Bool)
+protocol Task {
+    var identifier: String { get }
+    var completed: Bool { get }
+    var isSynced: Bool { get }
+}
+
+struct ContactDetailsTask: Task {
+    let name: String
     
-    var completed: Bool {
-        switch self {
-        case .enterContactDetails(_, let completed):
-            return completed
-        }
-    }
+    let identifier: String
+    let completed: Bool
+    let isSynced: Bool
 }
 
 final class TaskManager {
     
     private(set) var tasks: [Task] = [
-        .enterContactDetails(name: "Aziz F", completed: false),
-        .enterContactDetails(name: "Job J", completed: false),
-        .enterContactDetails(name: "Lia B", completed: false),
-        .enterContactDetails(name: "Thom Hoekstra", completed: true)
+        ContactDetailsTask(name: "Aziz F", identifier: UUID().uuidString, completed: false, isSynced: false),
+        ContactDetailsTask(name: "Job J", identifier: UUID().uuidString, completed: false, isSynced: false),
+        ContactDetailsTask(name: "J Attema", identifier: UUID().uuidString, completed: false, isSynced: false),
+        ContactDetailsTask(name: "Thom H", identifier: UUID().uuidString, completed: false, isSynced: false)
     ]
     
 }

@@ -93,6 +93,7 @@ extension SelectContactCoordinator: RequestAuthorizationViewControllerDelegate {
 
 extension SelectContactCoordinator: SelectContactViewControllerDelegate {
     
+    
     func selectContactViewController(_ controller: SelectContactViewController, didSelect contact: CNContact) {
         selectedContact = contact
         
@@ -101,6 +102,16 @@ extension SelectContactCoordinator: SelectContactViewControllerDelegate {
         detailsController.delegate = self
         
         navigationController.pushViewController(detailsController, animated: true)
+    }
+    
+    func selectContactViewControllerDidRequestManualInput(_ controller: SelectContactViewController) {
+        selectedContact = nil
+        navigationController.dismiss(animated: true)
+    }
+    
+    func selectContactViewControllerDidCancel(_ controller: SelectContactViewController) {
+        selectedContact = nil
+        navigationController.dismiss(animated: true)
     }
     
 }
