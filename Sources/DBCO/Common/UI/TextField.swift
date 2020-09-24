@@ -15,11 +15,12 @@ class TextField: UITextField {
         }
     }
     
-    init(label: String) {
+    init(label: String, text: String? = nil) {
         super.init(frame: .zero)
         setup()
         
         placeholder = label
+        self.text = text
     }
     
     required init?(coder: NSCoder) {
@@ -31,6 +32,8 @@ class TextField: UITextField {
         backgroundView.backgroundColor = Theme.colors.tertiary
         backgroundView.layer.cornerRadius = 8
         backgroundView.isUserInteractionEnabled = false
+        
+        font = Theme.fonts.body
         
         addSubview(label)
         addSubview(backgroundView)
@@ -49,14 +52,18 @@ class TextField: UITextField {
     }
     
     override func textRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.inset(by: .bottom(self.bounds.height - backgroundView.frame.height))
+        if isEditing {
+            return bounds.inset(by: .bottom(self.bounds.height - backgroundView.frame.height))
+        } else {
+            return bounds.inset(by: .leftRight(12) + .top(self.bounds.height - backgroundView.frame.height))
+        }
     }
     
     override var intrinsicContentSize: CGSize {
         let labelHeight = label.intrinsicContentSize.height
         let backgroundHeight = baseFieldHeight + Constants.backgroundBaseHeight
         
-        return CGSize(width: 375, height: labelHeight + Constants.spacing + backgroundHeight)
+        return CGSize(width: 100, height: labelHeight + Constants.spacing + backgroundHeight)
     }
     
     override func layoutSubviews() {

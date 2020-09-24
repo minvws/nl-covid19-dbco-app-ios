@@ -55,7 +55,7 @@ class TaskOverviewViewModel {
     }
 }
 
-class TaskOverviewViewController: UIViewController {
+class TaskOverviewViewController: PromptableViewController {
     private let viewModel: TaskOverviewViewModel
     private let tableView = UITableView.createDefaultGrouped()
     
@@ -80,22 +80,11 @@ class TaskOverviewViewController: UIViewController {
         
         setupTableView()
         
-        let confirmContainerView = UIView()
-        confirmContainerView.preservesSuperviewLayoutMargins = true
-        
-        SeparatorView()
-            .snap(to: .top, of: confirmContainerView, height: 1)
-        
-        Button(title: "Ik ben klaar")
-            .embed(in: confirmContainerView.readableContentGuide, insets: .top(5) + .bottom(10))
-        
-        
-        let stackView = UIStackView(vertical: [tableView, confirmContainerView])
-        stackView.preservesSuperviewLayoutMargins = true
-        stackView.embed(in: view)
+        promptView = Button(title: "Ik ben klaar")
     }
     
     private func setupTableView() {
+        tableView.embed(in: contentView)
         tableView.delaysContentTouches = false
         
         let headerText = "Vul de contactgegevens aan van deze contacten die je samen met de GGD in kaart hebt gebracht. Doe dit snel. <a href=\"app://readmore\">Lees meer</a>"

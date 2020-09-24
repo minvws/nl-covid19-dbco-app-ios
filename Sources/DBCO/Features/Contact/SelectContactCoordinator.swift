@@ -9,14 +9,14 @@ import UIKit
 import Contacts
 
 protocol SelectContactCoordinatorDelegate: class {
-    func selectContactCoordinatorDidFinish(_ coordinator: SelectContactCoordinator, with contact: CNContact?)
+    func selectContactCoordinatorDidFinish(_ coordinator: SelectContactCoordinator, with contact: Contact?)
 }
 
 final class SelectContactCoordinator: NSObject, Coordinator {
     private weak var delegate: SelectContactCoordinatorDelegate?
     private weak var presenter: UIViewController?
     private let navigationController: NavigationController
-    private var selectedContact: CNContact?
+    private var selectedContact: Contact?
     private var suggestedName: String?
     
     var children = [Coordinator]()
@@ -95,10 +95,8 @@ extension SelectContactCoordinator: SelectContactViewControllerDelegate {
     
     
     func selectContactViewController(_ controller: SelectContactViewController, didSelect contact: CNContact) {
-        selectedContact = contact
-        
-        let detailViewModel = SelectContactDetailsViewModel(contact: contact)
-        let detailsController = SelectContactDetailsViewController(viewModel: detailViewModel)
+        let detailViewModel = EditContactViewModel(contact: contact)
+        let detailsController = EditContactViewController(viewModel: detailViewModel)
         detailsController.delegate = self
         
         navigationController.pushViewController(detailsController, animated: true)
@@ -116,9 +114,14 @@ extension SelectContactCoordinator: SelectContactViewControllerDelegate {
     
 }
 
-extension SelectContactCoordinator: SelectContactDetailsViewControllerDelegate {
+extension SelectContactCoordinator: EditContactViewControllerDelegate {
     
-    func selectContactDetailsViewControllerDidFinish(_ controller: SelectContactDetailsViewModel) {
+    func editContactViewControllerDidCancel(_ controller: EditContactViewController) {
+        
+    }
+    
+    func editContactViewController(_ controller: EditContactViewController, didSave contact: Contact) {
+        selectedContact = contact
         navigationController.dismiss(animated: true)
     }
     

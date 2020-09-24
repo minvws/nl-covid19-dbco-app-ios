@@ -55,7 +55,7 @@ extension TaskOverviewCoordinator: HelpCoordinatorDelegate {
 
 extension TaskOverviewCoordinator: SelectContactCoordinatorDelegate {
     
-    func selectContactCoordinatorDidFinish(_ coordinator: SelectContactCoordinator, with contact: CNContact?) {
+    func selectContactCoordinatorDidFinish(_ coordinator: SelectContactCoordinator, with contact: Contact?) {
         removeChildCoordinator(coordinator)
     }
     

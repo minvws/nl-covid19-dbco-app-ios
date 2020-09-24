@@ -15,6 +15,7 @@ protocol Task {
 
 struct ContactDetailsTask: Task {
     let name: String
+    var contact: Contact?
     
     let identifier: String
     let completed: Bool

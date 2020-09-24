@@ -144,7 +144,7 @@ protocol SelectContactViewControllerDelegate: class {
     func selectContactViewControllerDidCancel(_ controller: SelectContactViewController)
 }
 
-class SelectContactViewController: UIViewController {
+class SelectContactViewController: PromptableViewController {
     private let viewModel: SelectContactViewModel
     private let searchResultsController: SearchResultsViewController
     private let tableView: UITableView = .createDefaultGrouped()
@@ -185,20 +185,8 @@ class SelectContactViewController: UIViewController {
     }
     
     private func setupTableView() {
-        let manualInputContainerView = UIView()
-        manualInputContainerView.preservesSuperviewLayoutMargins = true
-        
-        SeparatorView()
-            .snap(to: .top, of: manualInputContainerView, height: 1)
-        
-        Button(title: "+ Handmatig toevoegen", style: .secondary)
+        promptView = Button(title: "+ Handmatig toevoegen", style: .secondary)
             .touchUpInside(self, action: #selector(requestManualInput))
-            .embed(in: manualInputContainerView.readableContentGuide, insets: .top(5) + .bottom(10))
-        
-        
-        let stackView = UIStackView(vertical: [tableView, manualInputContainerView])
-        stackView.preservesSuperviewLayoutMargins = true
-        stackView.embed(in: view)
 
         viewModel.setupContactsTableView(
             tableView,
@@ -213,6 +201,8 @@ class SelectContactViewController: UIViewController {
                 guard let self = self else { return }
                 self.delegate?.selectContactViewController(self, didSelect: contact)
             })
+        
+        tableView.embed(in: contentView)
     }
     
     private func setupSearchController() {
