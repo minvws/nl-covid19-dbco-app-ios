@@ -80,11 +80,6 @@ class Button: UIButton {
         super.layoutSubviews()
         updateRoundedCorners()
     }
-    
-    override var intrinsicContentSize: CGSize {
-        let superSize = super.intrinsicContentSize
-        return CGSize(width: superSize.width + 40, height: superSize.height + 15)
-    }
 
     // MARK: - Private
 
@@ -111,7 +106,8 @@ class Button: UIButton {
             backgroundColor = .clear
             setTitleColor(Theme.colors.primary, for: .normal)
         }
-
+        
+        contentEdgeInsets = .topBottom(13.5) + .leftRight(20)
         tintColor = .white
     }
 
