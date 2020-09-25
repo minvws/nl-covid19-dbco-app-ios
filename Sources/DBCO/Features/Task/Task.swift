@@ -18,11 +18,17 @@ struct ContactDetailsTask: Task {
     var contact: Contact?
     
     let identifier: String
-    let completed: Bool
-    let isSynced: Bool
+    var completed: Bool
+    var isSynced: Bool
+}
+
+protocol TaskManagerListener: class {
+    func taskManagerDidUpdateTasks(_ taskManager: TaskManager)
 }
 
 final class TaskManager {
+    
+    private var listeners = [TaskManagerListener?]()
     
     private(set) var tasks: [Task] = [
         ContactDetailsTask(name: "Aziz F", identifier: UUID().uuidString, completed: false, isSynced: false),
@@ -30,5 +36,35 @@ final class TaskManager {
         ContactDetailsTask(name: "J Attema", identifier: UUID().uuidString, completed: false, isSynced: false),
         ContactDetailsTask(name: "Thom H", identifier: UUID().uuidString, completed: false, isSynced: false)
     ]
+    
+    func setContact(_ contact: Contact, for task: ContactDetailsTask) {
+        guard let index = tasks.lastIndex(where: { $0.identifier == task.identifier }) else {
+            return
+        }
+        
+        var updatedTask = task
+        updatedTask.contact = contact
+        updatedTask.isSynced = false
+        updatedTask.completed = contact.isValid
+        
+        tasks[index] = updatedTask
+        
+        listeners.forEach { $0?.taskManagerDidUpdateTasks(self) }
+    }
+    
+    func addContact(_ contact: Contact) {
+        tasks.append(ContactDetailsTask(name: contact.fullName,
+                                        contact: contact,
+                                        identifier: UUID().uuidString,
+                                        completed: contact.isValid,
+                                        isSynced: false))
+        
+        listeners.forEach { $0?.taskManagerDidUpdateTasks(self) }
+    }
+    
+    func addListener(_ listener: TaskManagerListener) {
+        weak var weakListener = listener
+        listeners.append(weakListener)
+    }
     
 }

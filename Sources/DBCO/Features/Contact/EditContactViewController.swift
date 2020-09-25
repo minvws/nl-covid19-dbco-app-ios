@@ -28,15 +28,18 @@ extension ContactField {
 class EditContactViewModel {
     let contact: Contact
     let title: String
+    let showCancelButton: Bool
     
-    init(contact: CNContact) {
+    init(contact: CNContact, showCancelButton: Bool = false) {
         self.contact = Contact(type: .roommate, cnContact: contact)
         self.title = contact.fullName
+        self.showCancelButton = showCancelButton
     }
     
-    init(contact: Contact) {
+    init(contact: Contact, showCancelButton: Bool = false) {
         self.contact = contact
         self.title = contact.fullName
+        self.showCancelButton = showCancelButton
     }
     
     typealias Input = (label: String, text: String?)
@@ -96,6 +99,10 @@ final class EditContactViewController: PromptableViewController {
         // Do any additional setup after loading the view.
         title = viewModel.title
         
+        if viewModel.showCancelButton {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+        }
+        
         promptView = Button(title: "Opslaan")
             .touchUpInside(self, action: #selector(save))
         
@@ -129,6 +136,10 @@ final class EditContactViewController: PromptableViewController {
     
     @objc private func save() {
         delegate?.editContactViewController(self, didSave: viewModel.contact)
+    }
+    
+    @objc private func cancel() {
+        delegate?.editContactViewControllerDidCancel(self)
     }
     
     // MARK: - Keyboard handling

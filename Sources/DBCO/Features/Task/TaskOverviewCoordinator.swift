@@ -13,6 +13,7 @@ final class TaskOverviewCoordinator: Coordinator {
     private let overviewController: TaskOverviewViewController
     private let navigationController: NavigationController
     private let taskManager: TaskManager
+    private var selectedTask: Task?
     
     init(window: UIWindow) {
         self.window = window
@@ -38,8 +39,12 @@ final class TaskOverviewCoordinator: Coordinator {
         startChildCoordinator(HelpCoordinator(presenter: overviewController, delegate: self))
     }
     
-    func openContactSelection(suggestedName: String?) {
+    func selectContact(suggestedName: String?) {
         startChildCoordinator(SelectContactCoordinator(presenter: overviewController, suggestedName: suggestedName, delegate: self))
+    }
+    
+    func editContact(contact: Contact) {
+        startChildCoordinator(EditContactCoordinator(presenter: overviewController, contact: contact, delegate: self))
     }
 
 }
@@ -57,6 +62,34 @@ extension TaskOverviewCoordinator: SelectContactCoordinatorDelegate {
     
     func selectContactCoordinatorDidFinish(_ coordinator: SelectContactCoordinator, with contact: Contact?) {
         removeChildCoordinator(coordinator)
+        
+        guard let contact = contact else {
+            return
+        }
+        
+        if let task = selectedTask as? ContactDetailsTask {
+            taskManager.setContact(contact, for: task)
+            selectedTask = nil
+        } else {
+            taskManager.addContact(contact)
+        }
+    }
+    
+}
+
+extension TaskOverviewCoordinator: EditContactCoordinatorDelegate {
+    
+    func editContactCoordinator(_ coordinator: EditContactCoordinator, didFinishEditing contact: Contact) {
+        removeChildCoordinator(coordinator)
+        
+        if let task = selectedTask as? ContactDetailsTask {
+            taskManager.setContact(contact, for: task)
+            selectedTask = nil
+        }
+    }
+    
+    func editContactCoordinatorDidCancel(_ coordinator: EditContactCoordinator) {
+        removeChildCoordinator(coordinator)
     }
     
 }
@@ -69,17 +102,20 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
     }
     
     func taskOverviewViewControllerDidRequestAddContact(_ controller: TaskOverviewViewController) {
-        openContactSelection(suggestedName: nil)
+        selectContact(suggestedName: nil)
     }
     
     func taskOverviewViewController(_ controller: TaskOverviewViewController, didSelect task: Task) {
+        selectedTask = task
+        
         switch task {
         case let contactDetailsTask as ContactDetailsTask:
-            if contactDetailsTask.completed {
+            if let contact = contactDetailsTask.contact {
                 // edit flow
+                editContact(contact: contact)
             } else {
                 // pick flow
-                openContactSelection(suggestedName: contactDetailsTask.name)
+                selectContact(suggestedName: contactDetailsTask.name)
             }
         default:
             break

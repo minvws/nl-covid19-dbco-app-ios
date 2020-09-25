@@ -28,7 +28,7 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
     }
     
     private func configureForContactDetails(task: ContactDetailsTask) {
-        titleLabel.text = task.name
+        titleLabel.text = task.contact?.fullName ?? task.name
         titleLabel.font = Theme.fonts.bodyBold
         
         subtitleLabel.text = task.completed ? "Gegevens toegevoegd" : "Vul gegevens aan"

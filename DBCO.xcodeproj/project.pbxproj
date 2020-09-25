@@ -36,6 +36,7 @@
 		CDE30E64251BC02100862A40 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E63251BC02100862A40 /* TextField.swift */; };
 		CDE30E69251C89FF00862A40 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E68251C89FF00862A40 /* NavigationController.swift */; };
 		CDE30E6C251CE15800862A40 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E6B251CE15800862A40 /* Contact.swift */; };
+		CDE30E72251E278200862A40 /* EditContactCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E71251E278200862A40 /* EditContactCoordinator.swift */; };
 		CDFCF905250FA0910062269A /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF904250FA0910062269A /* HelpViewController.swift */; };
 		CDFCF907250FA6E80062269A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF906250FA6E80062269A /* ViewController.swift */; };
 		CDFCF9092510BEF50062269A /* HelpItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF9082510BEF50062269A /* HelpItem.swift */; };
@@ -80,6 +81,7 @@
 		CDE30E63251BC02100862A40 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		CDE30E68251C89FF00862A40 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		CDE30E6B251CE15800862A40 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
+		CDE30E71251E278200862A40 /* EditContactCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditContactCoordinator.swift; sourceTree = "<group>"; };
 		CDFCF904250FA0910062269A /* HelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
 		CDFCF906250FA6E80062269A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		CDFCF9082510BEF50062269A /* HelpItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpItem.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 			children = (
 				CD2963462514E129008443AF /* ContactTableViewCell.swift */,
 				CDA5C11725135A46009440D1 /* SelectContactCoordinator.swift */,
+				CDE30E71251E278200862A40 /* EditContactCoordinator.swift */,
 				CD2963432514BF4E008443AF /* SelectContactViewController.swift */,
 				CD2963512518F291008443AF /* EditContactViewController.swift */,
 				CDE30E6B251CE15800862A40 /* Contact.swift */,
@@ -351,6 +354,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CDFCF9192510FC760062269A /* SelfSizingTableView.swift in Sources */,
+				CDE30E72251E278200862A40 /* EditContactCoordinator.swift in Sources */,
 				CD2963442514BF4E008443AF /* SelectContactViewController.swift in Sources */,
 				CD29634C2518CE8E008443AF /* TableViewManager.swift in Sources */,
 				CDA5C11A251389BB009440D1 /* RequestAuthorizationViewController.swift in Sources */,

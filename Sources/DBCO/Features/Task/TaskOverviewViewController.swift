@@ -34,24 +34,33 @@ class SeparatorView: UIView {
 class TaskOverviewViewModel {
     private let tableViewManager: TableViewManager<TaskTableViewCell>
     private let taskManager: TaskManager
-    private var headerView: UIView?
-    private var footerView: UIView?
+    private var headerViewBuilder: (() -> UIView?)?
+    private var footerViewBuilder: (() -> UIView?)?
     
     init(taskManager: TaskManager) {
         self.taskManager = taskManager
+        
         tableViewManager = .init()
         
         tableViewManager.numberOfRowsInSection = { [unowned self] _ in return self.taskManager.tasks.count }
         tableViewManager.itemForCellAtIndexPath = { [unowned self] in return self.taskManager.tasks[$0.row] }
-        tableViewManager.viewForHeaderInSection = { [unowned self] _ in return self.headerView }
-        tableViewManager.viewForFooterInSection = { [unowned self] _ in return self.footerView }
+        tableViewManager.viewForHeaderInSection = { [unowned self] _ in return self.headerViewBuilder?() }
+        tableViewManager.viewForFooterInSection = { [unowned self] _ in return self.footerViewBuilder?() }
+        
+        taskManager.addListener(self)
     }
     
-    func setupTableView(_ tableView: UITableView, headerView: UIView, footerView: UIView, selectedTaskHandler: @escaping (Task, IndexPath) -> Void) {
+    func setupTableView(_ tableView: UITableView, headerViewBuilder: (() -> UIView?)?, footerViewBuilder: (() -> UIView?)?, selectedTaskHandler: @escaping (Task, IndexPath) -> Void) {
         tableViewManager.manage(tableView)
         tableViewManager.didSelectItem = selectedTaskHandler
-        self.headerView = headerView
-        self.footerView = footerView
+        self.headerViewBuilder = headerViewBuilder
+        self.footerViewBuilder = footerViewBuilder
+    }
+}
+
+extension TaskOverviewViewModel: TaskManagerListener {
+    func taskManagerDidUpdateTasks(_ taskManager: TaskManager) {
+        tableViewManager.reloadData()
     }
 }
 
@@ -88,15 +97,19 @@ class TaskOverviewViewController: PromptableViewController {
         
         let headerText = "Vul de contactgegevens aan van deze contacten die je samen met de GGD in kaart hebt gebracht. Doe dit snel. <a href=\"app://readmore\">Lees meer</a>"
         
-        let headerView = TextView(htmlText: headerText)
-            .linkTouched { [weak self] _ in self?.openHelp() }
-            .wrappedInReadableContentGuide(insets: .topBottom(10))
+        let headerViewBuilder = {
+            TextView(htmlText: headerText)
+                .linkTouched { [weak self] _ in self?.openHelp() }
+                .wrappedInReadableContentGuide(insets: .topBottom(10))
+        }
         
-        let footerView = Button(title: "+ Contact toevoegen", style: .secondary)
-            .touchUpInside(self, action: #selector(requestContact))
-            .wrappedInReadableContentGuide(insets: .top(5) + .bottom(10))
+        let footerViewBuilder = { [unowned self] in
+            Button(title: "+ Contact toevoegen", style: .secondary)
+                .touchUpInside(self, action: #selector(requestContact))
+                .wrappedInReadableContentGuide(insets: .top(5) + .bottom(10))
+        }
         
-        viewModel.setupTableView(tableView, headerView: headerView, footerView: footerView) { [weak self] task, indexPath in
+        viewModel.setupTableView(tableView, headerViewBuilder: headerViewBuilder, footerViewBuilder: footerViewBuilder) { [weak self] task, indexPath in
             guard let self = self else { return }
             
             self.delegate?.taskOverviewViewController(self, didSelect: task)
