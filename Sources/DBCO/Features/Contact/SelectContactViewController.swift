@@ -97,7 +97,7 @@ class SelectContactViewModel {
     var searchText: String? {
         didSet {
             if let searchText = searchText, !searchText.isEmpty {
-                searchResults = contacts.filter { $0.fullName.lowercased().contains(searchText.lowercased())}
+                searchResults = contacts.filter { $0.fullName.lowercased().contains(searchText.lowercased()) }
             } else {
                 searchResults = []
             }
