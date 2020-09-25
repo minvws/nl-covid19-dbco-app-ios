@@ -9,6 +9,7 @@ import UIKit
 
 protocol MainViewControllerDelegate: class {
     func mainViewControllerWantsHelp(_ controller: MainViewController)
+    func mainViewControllerRequestContact(_ controller: MainViewController, with name: String?)
 }
 
 class MainViewController: UIViewController {
@@ -21,30 +22,40 @@ class MainViewController: UIViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
         
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle(.helpTitle, for: .normal)
-        button.addTarget(self, action: #selector(openHelp), for: .touchUpInside)
+        let versionLabel = UILabel(frame: .zero)
+        versionLabel.text = .mainAppVersionTitle
+        versionLabel.textAlignment = .center
+        versionLabel.textColor = Theme.colors.gray
+        versionLabel.font = Theme.fonts.footnote
         
-        let label = UILabel(frame: .zero)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = .mainAppVersionTitle
-        label.textColor = .lightGray
-        label.font = UIFont.preferredFont(forTextStyle: .footnote)
+        let stackView = UIStackView(
+            vertical: [
+                Button(title: "Choose Contact")
+                    .touchUpInside(self, action: #selector(requestContact)),
+                Button(title: "Choose Contact for \"Anna\"")
+                    .touchUpInside(self, action: #selector(requestSpecificContact)),
+                Button(title: .helpTitle, style: .info)
+                    .touchUpInside(self, action: #selector(openHelp)),
+                versionLabel
+            ],
+            spacing: 10)
         
-        let stackView = UIStackView(arrangedSubviews: [button, label])
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.spacing = 10
-        
-        view.addSubview(stackView)
-    
-        stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
+        stackView.snap(
+            to: .bottom,
+            of: view.readableContentGuide,
+            insets: .bottom(20))
     }
     
-    @objc private func openHelp(_ sender: Any) {
+    @objc private func openHelp() {
         delegate?.mainViewControllerWantsHelp(self)
+    }
+    
+    @objc private func requestContact() {
+        delegate?.mainViewControllerRequestContact(self, with: nil)
+    }
+    
+    @objc private func requestSpecificContact() {
+        delegate?.mainViewControllerRequestContact(self, with: "Anna")
     }
 
 }

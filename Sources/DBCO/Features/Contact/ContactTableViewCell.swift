@@ -6,10 +6,9 @@
  */
 
 import UIKit
+import Contacts
 
-final class HelpItemTableViewCell: UITableViewCell, Configurable, Reusable {
-    
-    static let reuseIdentifier: String = String(describing: HelpItemTableViewCell.self)
+final class ContactTableViewCell: UITableViewCell, Configurable, Reusable {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
@@ -20,8 +19,8 @@ final class HelpItemTableViewCell: UITableViewCell, Configurable, Reusable {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(_ item: HelpItem) {
-        titleLabel.text = item.title
+    func configure(_ item: CNContact) {
+        titleLabel.text = item.fullName
     }
 
     private func build() {

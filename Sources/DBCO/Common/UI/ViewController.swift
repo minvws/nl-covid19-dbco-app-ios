@@ -23,13 +23,49 @@ class ViewController: UIViewController, DismissActionable, PopActionable {
     var onDismissed: ((ViewController) -> Void)?
     var onPopped: ((ViewController) -> Void)?
     
+    func applicationDidBecomeActive() {
+        
+    }
+    
+    func startReceivingDidBecomeActiveNotifications() {
+        shouldAddDidBecomeActiveObserver = true
+        
+    }
+    
+    func stopReceivingDidBecomeActiveNotifications() {
+        shouldAddDidBecomeActiveObserver = false
+    }
+    
+    private var didBecomeActiveObserver: NSObjectProtocol?
+    private var shouldAddDidBecomeActiveObserver = false
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        
+        removeDidBecomeActiveObserverIfNeeded()
         
         if isBeingDismissed || navigationController?.isBeingDismissed == true || tabBarController?.isBeingDismissed == true {
             onDismissed?(self)
         } else if isMovingFromParent {
             onPopped?(self)
+        }
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if shouldAddDidBecomeActiveObserver {
+            didBecomeActiveObserver = NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
+                self?.applicationDidBecomeActive()
+            }
+        }
+    }
+    
+    private func removeDidBecomeActiveObserverIfNeeded() {
+        if let observer = didBecomeActiveObserver {
+            NotificationCenter.default.removeObserver(observer)
+            didBecomeActiveObserver = nil
         }
     }
 }
