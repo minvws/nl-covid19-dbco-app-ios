@@ -16,15 +16,13 @@ final class HelpCoordinator: Coordinator {
     private weak var presenter: UIViewController?
     private let navigationController: NavigationController
     
-    var children = [Coordinator]()
-    
     init(presenter: UIViewController, delegate: HelpCoordinatorDelegate) {
         self.delegate = delegate
         self.presenter = presenter
         self.navigationController = NavigationController()
     }
     
-    func start() {
+    override func start() {
         let itemManager = HelpItemManager()
         let viewModel = HelpViewModel(helpItems: itemManager.overviewItems)
         let helpController = HelpViewController(viewModel: viewModel)

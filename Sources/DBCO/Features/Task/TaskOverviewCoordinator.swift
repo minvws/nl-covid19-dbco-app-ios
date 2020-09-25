@@ -14,8 +14,6 @@ final class TaskOverviewCoordinator: Coordinator {
     private let navigationController: NavigationController
     private let taskManager: TaskManager
     
-    var children = [Coordinator]()
-    
     init(window: UIWindow) {
         self.window = window
         taskManager = TaskManager()
@@ -26,10 +24,12 @@ final class TaskOverviewCoordinator: Coordinator {
         navigationController = NavigationController(rootViewController: overviewController)
         navigationController.navigationBar.prefersLargeTitles = true
         
+        super.init()
+        
         overviewController.delegate = self
     }
     
-    func start() {
+    override func start() {
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
     }

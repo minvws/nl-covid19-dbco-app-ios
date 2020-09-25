@@ -12,14 +12,13 @@ protocol SelectContactCoordinatorDelegate: class {
     func selectContactCoordinatorDidFinish(_ coordinator: SelectContactCoordinator, with contact: Contact?)
 }
 
-final class SelectContactCoordinator: NSObject, Coordinator {
+final class SelectContactCoordinator: Coordinator {
+    
     private weak var delegate: SelectContactCoordinatorDelegate?
     private weak var presenter: UIViewController?
     private let navigationController: NavigationController
     private var selectedContact: Contact?
     private var suggestedName: String?
-    
-    var children = [Coordinator]()
     
     init(presenter: UIViewController, suggestedName: String? = nil, delegate: SelectContactCoordinatorDelegate) {
         self.delegate = delegate
@@ -28,7 +27,7 @@ final class SelectContactCoordinator: NSObject, Coordinator {
         self.suggestedName = suggestedName
     }
     
-    func start() {
+    override func start() {
         let firstController: UIViewController
         let currentStatus = CNContactStore.authorizationStatus(for: .contacts)
         

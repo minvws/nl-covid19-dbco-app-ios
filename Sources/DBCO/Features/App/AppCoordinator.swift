@@ -7,17 +7,11 @@
 
 import UIKit
 
-protocol Coordinator: class {
-    var children: [Coordinator] { get set }
+class Coordinator: NSObject {
+    private(set) var children = [Coordinator]()
     
-    func start()
-}
-
-extension Coordinator {
-    
-    func startChildCoordinator(_ coordinator: Coordinator) {
-        addChildCoordinator(coordinator)
-        coordinator.start()
+    func start() {
+        preconditionFailure("Override start() in your subclass")
     }
     
     func addChildCoordinator(_ coordinator: Coordinator) {
@@ -31,19 +25,24 @@ extension Coordinator {
             children.remove(at: index)
         }
     }
-    
+}
+
+extension Coordinator {
+    func startChildCoordinator(_ coordinator: Coordinator) {
+        addChildCoordinator(coordinator)
+        coordinator.start()
+    }
 }
 
 final class AppCoordinator: Coordinator {
     private let window: UIWindow
     
-    var children = [Coordinator]()
     
     init(scene: UIWindowScene) {
         window = UIWindow(windowScene: scene)
     }
     
-    func start() {
+    override func start() {
         startChildCoordinator(TaskOverviewCoordinator(window: window))
     }
 

@@ -61,7 +61,6 @@ class TaskOverviewViewController: PromptableViewController {
     
     weak var delegate: TaskOverviewViewControllerDelegate?
     
-    
     required init(viewModel: TaskOverviewViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
