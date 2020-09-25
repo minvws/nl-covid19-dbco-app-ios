@@ -62,8 +62,6 @@ class EditContactViewModel {
         let other = inputs.suffix(from: 2).map(Row.single)
         return [name] + other
     }
-    
-    
 }
 
 protocol EditContactViewControllerDelegate: class {
@@ -136,11 +134,11 @@ final class EditContactViewController: PromptableViewController {
     // MARK: - Keyboard handling
     
     private func registerForKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShown), name: UIWindow.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIWindow.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIWindow.keyboardWillHideNotification, object: nil)
     }
     
-    @objc func keyboardWillShown(notification: NSNotification) {
+    @objc private func keyboardWillShow(notification: NSNotification) {
         guard let userInfo = notification.userInfo else { return }
         let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? .zero
         
@@ -180,7 +178,7 @@ final class EditContactViewController: PromptableViewController {
         }
     }
 
-    @objc func keyboardWillHide(notification: NSNotification) {
+    @objc private func keyboardWillHide(notification: NSNotification) {
         scrollView.contentInset = .zero
         scrollView.verticalScrollIndicatorInsets.bottom = .zero
     }
