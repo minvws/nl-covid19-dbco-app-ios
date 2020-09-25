@@ -74,6 +74,7 @@ protocol EditContactViewControllerDelegate: class {
 
 final class EditContactViewController: PromptableViewController {
     private let viewModel: EditContactViewModel
+    private let scrollView = UIScrollView()
     
     weak var delegate: EditContactViewControllerDelegate?
     
@@ -87,6 +88,10 @@ final class EditContactViewController: PromptableViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -96,10 +101,9 @@ final class EditContactViewController: PromptableViewController {
         promptView = Button(title: "Opslaan")
             .touchUpInside(self, action: #selector(save))
         
-        let scrollView = UIScrollView()
         scrollView.embed(in: contentView)
         scrollView.preservesSuperviewLayoutMargins = true
-        scrollView.keyboardDismissMode = .onDrag
+        scrollView.keyboardDismissMode = .interactive
         
         let widthProviderView = UIView()
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
@@ -120,11 +124,82 @@ final class EditContactViewController: PromptableViewController {
         
         UIStackView(vertical: rows, spacing: 16)
             .embed(in: scrollView.readableWidth, insets: .topBottom(32))
+        
+        registerForKeyboardNotifications()
     }
+
     
     @objc private func save() {
         delegate?.editContactViewController(self, didSave: viewModel.contact)
     }
+    
+    // MARK: - Keyboard handling
+    
+    private func registerForKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShown), name: UIWindow.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIWindow.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShown(notification: NSNotification) {
+        guard let userInfo = notification.userInfo else { return }
+        let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? .zero
+        
+        let convertedFrame = view.window?.convert(endFrame, to: contentView)
+        
+        let inset = contentView.frame.maxY - (convertedFrame?.minY ?? 0)
+        
+        scrollView.contentInset.bottom = inset
+        scrollView.verticalScrollIndicatorInsets.bottom = inset
+        
+        if let firstResponder = UIResponder.currentFirstResponder as? TextField {
+            let frame = firstResponder
+                .convert(firstResponder.bounds, to: scrollView)
+                .insetBy(dx: 0, dy: -16) // Apply some margin above and below
+            
+            let visibleFrame = CGRect(x: 0,
+                                      y: scrollView.contentOffset.y,
+                                      width: scrollView.frame.width,
+                                      height: scrollView.frame.height - inset)
+                .inset(by: scrollView.safeAreaInsets)
+            
+            // cancel current animation
+            scrollView.setContentOffset(scrollView.contentOffset, animated: false)
+            
+            if !visibleFrame.contains(frame) {
+                if frame.minY < visibleFrame.minY {
+                    scrollView.setContentOffset(CGPoint(x: 0,
+                                                        y: frame.minY - scrollView.safeAreaInsets.top),
+                                                animated: true)
+                } else {
+                    let delta = visibleFrame.maxY - frame.maxY
+                    scrollView.setContentOffset(CGPoint(x: 0,
+                                                        y: visibleFrame.minY - delta - scrollView.safeAreaInsets.top),
+                                                animated: true)
+                }
+            }
+        }
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        scrollView.contentInset = .zero
+        scrollView.verticalScrollIndicatorInsets.bottom = .zero
+    }
 
 }
 
+extension UIResponder {
+
+    private static weak var _currentFirstResponder: UIResponder?
+
+    static var currentFirstResponder: UIResponder? {
+        _currentFirstResponder = nil
+        UIApplication.shared.sendAction(#selector(UIResponder.findFirstResponder(_:)), to: nil, from: nil, for: nil)
+
+        return _currentFirstResponder
+    }
+
+    @objc func findFirstResponder(_ sender: Any) {
+        UIResponder._currentFirstResponder = self
+    }
+    
+}
