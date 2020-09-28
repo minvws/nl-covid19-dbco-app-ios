@@ -87,10 +87,10 @@ class SelectContactViewModel {
         var sections = [(title: String, contacts: [CNContact])]()
         
         if !suggestedContacts.isEmpty {
-            sections.append(("Waarschijnlijk zoek je", suggestedContacts))
+            sections.append((.selectContactSuggestions, suggestedContacts))
         }
         
-        sections.append(("Andere contacten", contacts))
+        sections.append((.selectContactOtherContacts, contacts))
         
         contactTableViewManager.numberOfSections = { sections.count }
         contactTableViewManager.numberOfRowsInSection = { sections[$0].contacts.count }
@@ -170,7 +170,7 @@ class SelectContactViewController: PromptableViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        title = "Selecteer contact"
+        title = .selectContactTitle
         view.backgroundColor = .white
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
         
@@ -185,7 +185,7 @@ class SelectContactViewController: PromptableViewController {
     }
     
     private func setupTableView() {
-        promptView = Button(title: "+ Handmatig toevoegen", style: .secondary)
+        promptView = Button(title: .selectContactAddManually, style: .secondary)
             .touchUpInside(self, action: #selector(requestManualInput))
 
         viewModel.setupContactsTableView(
@@ -207,7 +207,7 @@ class SelectContactViewController: PromptableViewController {
     
     private func setupSearchController() {
         searchController.searchResultsUpdater = self
-        searchController.searchBar.placeholder = "Zoeken"
+        searchController.searchBar.placeholder = .selectContactSearch
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
     }

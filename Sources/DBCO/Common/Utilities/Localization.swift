@@ -48,13 +48,43 @@ extension String {
     // MARK: - App Version
     static func appVersionTitle(_ version: String, _ build: String) -> String { return Localization.string(for: "appVersionTitle", [version, build]) }
     
-    // MARK: - Contacts Authorization
-    static var contactsPermissionTitle: String { return Localization.string(for: "") }
-    static var contactsPermissionBody: String { return Localization.string(for: "") }
-    static var contactsPermissionDeniedBody: String { return Localization.string(for: "") }
-    static var allowAccessButtonTitle: String { return Localization.string(for: "") }
-    static var continueWithoutAccessButtonTitle: String { return Localization.string(for: "") }
-    static var toSettingsButtonTitle: String { return Localization.string(for: "") }
+    /* MARK: - General */
+    static var save: String { return Localization.string(for: "save") }
+    
+    /* MARK: - Task Overview */
+    static var taskOverviewTitle: String { return Localization.string(for: "taskOverviewTitle") }
+    static var taskOverviewHeaderText: String { return Localization.string(for: "taskOverviewHeaderText") }
+    static var taskOverviewDoneButtonTitle: String { return Localization.string(for: "taskOverviewDoneButtonTitle") }
+    static var taskOverviewAddContactButtonTitle: String { return Localization.string(for: "taskOverviewAddContactButtonTitle") }
+    static var taskContactCaptionCompleted: String { return Localization.string(for: "task.contact.caption.completed") }
+    static var taskContactCaptionIncomplete: String { return Localization.string(for: "task.contact.caption.incomplete") }
+    
+    // MARK: - Request Contacts Permission
+    static var requestPermissionContactsTitle: String { return Localization.string(for: "requestPermssion.contacts.title") }
+    static var requestPermissionContactsBody: String { return Localization.string(for: "requestPermssion.contacts.body") }
+    static var requestPermissionContactsBodyDenied: String { return Localization.string(for: "requestPermssion.contacts.body.denied") }
+    static var requestPermissionContactsAllowButtonTitle: String { return Localization.string(for: "requestPermssion.contacts.allowButtonTitle") }
+    static var requestPermissionContactsContinueButtonTitle: String { return Localization.string(for: "requestPermssion.contacts.continueButtonTitle") }
+    static var requestPermissionContactsSettingsButtonTitle: String { return Localization.string(for: "requestPermssion.contacts.settingsButtonTitle") }
+    
+    // MARK: - Contact Selection
+    static var selectContactTitle: String { return Localization.string(for: "selectContactTitle") }
+    static var selectContactSearch: String { return Localization.string(for: "selectContactSearch") }
+    static var selectContactAddManually: String { return Localization.string(for: "selectContactAddManually") }
+    static var selectContactSuggestions: String { return Localization.string(for: "selectContactSuggestions") }
+    static var selectContactOtherContacts: String { return Localization.string(for: "selectContactOtherContacts") }
+    
+    // MARK: - Editing Contacts
+    static var contactInformationFirstName: String { return Localization.string(for: "contactInformationFirstName") }
+    static var contactInformationLastName: String { return Localization.string(for: "contactInformationLastName") }
+    static var contactInformationPhoneNumber: String { return Localization.string(for: "contactInformationPhoneNumber") }
+    static var contactInformationEmailAddress: String { return Localization.string(for: "contactInformationEmailAddress") }
+    static var contactInformationRelationType: String { return Localization.string(for: "contactInformationRelationType") }
+    static var contactInformationBirthDate: String { return Localization.string(for: "contactInformationBirthDate") }
+    static var contactInformationBSN: String { return Localization.string(for: "contactInformationBSN") }
+    static var contactInformationProfession: String { return Localization.string(for: "contactInformationProfession") }
+    static var contactInformationCompanyName: String { return Localization.string(for: "contactInformationCompanyName") }
+    static var contactInformationNotes: String { return Localization.string(for: "contactInformationNotes") }
     
     // MARK: - Help
     

@@ -27,17 +27,22 @@ extension CNAuthorizationStatus: AuthorizationStatusConvertible {
 }
 
 class RequestContactsAuthorizationViewModel: RequestAuthorizationViewModel {
+    
+    let authorizeButtonTitle = String.requestPermissionContactsAllowButtonTitle
+    let continueButtonTitle = String.requestPermissionContactsContinueButtonTitle
+    let settingsButtonTitle = String.requestPermissionContactsSettingsButtonTitle
+    
     private(set) lazy var title: AnyPublisher<String?, Never> = $status
-        .map { _ in return "Contacten delen gaat sneller als we toestemming hebben" }
+        .map { _ in return .requestPermissionContactsTitle }
         .eraseToAnyPublisher()
     
     private(set) lazy var body: AnyPublisher<String?, Never> = $status
         .map {
             switch $0 {
             case .authorized, .notDetermined:
-                return "Je beslist zelf welke contactgegevens je deelt met de GGD."
+                return .requestPermissionContactsBody
             case .denied, .restricted:
-                return "Ga naar instellingen om toestemming te geven."
+                return .requestPermissionContactsBodyDenied
             }
         }
         .eraseToAnyPublisher()

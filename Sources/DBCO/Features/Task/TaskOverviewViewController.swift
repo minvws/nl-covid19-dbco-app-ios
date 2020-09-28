@@ -84,27 +84,25 @@ class TaskOverviewViewController: PromptableViewController {
 
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
-        title = "Mijn contacten"
+        title = .taskOverviewTitle
         
         setupTableView()
         
-        promptView = Button(title: "Ik ben klaar")
+        promptView = Button(title: .taskOverviewDoneButtonTitle)
     }
     
     private func setupTableView() {
         tableView.embed(in: contentView)
         tableView.delaysContentTouches = false
         
-        let headerText = "Vul de contactgegevens aan van deze contacten die je samen met de GGD in kaart hebt gebracht. Doe dit snel. <a href=\"app://readmore\">Lees meer</a>"
-        
         let headerViewBuilder = {
-            TextView(htmlText: headerText)
+            TextView(htmlText: .taskOverviewHeaderText)
                 .linkTouched { [weak self] _ in self?.openHelp() }
                 .wrappedInReadableContentGuide(insets: .topBottom(10))
         }
         
         let footerViewBuilder = { [unowned self] in
-            Button(title: "+ Contact toevoegen", style: .secondary)
+            Button(title: .taskOverviewAddContactButtonTitle, style: .secondary)
                 .touchUpInside(self, action: #selector(requestContact))
                 .wrappedInReadableContentGuide(insets: .top(5) + .bottom(10))
         }

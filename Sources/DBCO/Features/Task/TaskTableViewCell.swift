@@ -31,7 +31,7 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
         titleLabel.text = task.contact?.fullName ?? task.name
         titleLabel.font = Theme.fonts.bodyBold
         
-        subtitleLabel.text = task.completed ? "Gegevens toegevoegd" : "Vul gegevens aan"
+        subtitleLabel.text = task.completed ? .taskContactCaptionCompleted : .taskContactCaptionIncomplete
         subtitleLabel.font = Theme.fonts.callout
         subtitleLabel.textColor = Theme.colors.captionGray
         

@@ -30,6 +30,10 @@ protocol RequestAuthorizationViewModel {
     var body: AnyPublisher<String?, Never> { get }
     var hideAuthorizeButton: AnyPublisher<Bool, Never> { get }
     var hideSettingsButton: AnyPublisher<Bool, Never> { get }
+    
+    var authorizeButtonTitle: String { get }
+    var continueButtonTitle: String { get }
+    var settingsButtonTitle: String { get }
 
     func configure(for status: AuthorizationStatusConvertible)
 }
@@ -85,17 +89,17 @@ class RequestAuthorizationViewController: ViewController {
             .assign(to: \.text, on: bodyLabel)
             .store(in: &cancellables)
         
-        let authorizeButton = Button(title: "Geef toestemming")
+        let authorizeButton = Button(title: viewModel.authorizeButtonTitle)
             .touchUpInside(self, action: #selector(authorize))
         
         viewModel.hideAuthorizeButton
             .assign(to: \.isHidden, on: authorizeButton)
             .store(in: &cancellables)
         
-        let continueButton = Button(title: "Ik doe alles met de hand", style: .secondary)
+        let continueButton = Button(title: viewModel.continueButtonTitle, style: .secondary)
             .touchUpInside(self, action: #selector(continueWithoutAuthorization))
         
-        let settingsButton = Button(title: "Naar Instellingen")
+        let settingsButton = Button(title: viewModel.settingsButtonTitle)
             .touchUpInside(self, action: #selector(redirectToSettings))
         
         viewModel.hideSettingsButton

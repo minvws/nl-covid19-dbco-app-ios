@@ -418,14 +418,6 @@
 			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
-		CDE30E802521D9BA00862A40 /* Info.plist */ = {
-			isa = PBXVariantGroup;
-			children = (
-				CDE30E832521D9DF00862A40 /* en */,
-			);
-			name = Info.plist;
-			sourceTree = "<group>";
-		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */

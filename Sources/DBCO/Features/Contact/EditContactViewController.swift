@@ -11,16 +11,16 @@ import Contacts
 extension ContactField {
     var label: String {
         switch self {
-        case .firstName: return "Voornaam"
-        case .lastName: return "Achternaam"
-        case .phoneNumber: return "Telefoonnummer"
-        case .email: return "E-mailadres"
-        case .relation: return "Wat is dit van je?"
-        case .birthDate: return "Geboortedatum"
-        case .bsn: return "Burgerservice nummer"
-        case .profession: return "Beroep"
-        case .companyName: return "Naam bedrijf/vereniging"
-        case .notes: return "Toelichting"
+        case .firstName: return .contactInformationFirstName
+        case .lastName: return .contactInformationLastName
+        case .phoneNumber: return .contactInformationPhoneNumber
+        case .email: return .contactInformationEmailAddress
+        case .relation: return .contactInformationRelationType
+        case .birthDate: return .contactInformationBirthDate
+        case .bsn: return .contactInformationBSN
+        case .profession: return .contactInformationProfession
+        case .companyName: return .contactInformationCompanyName
+        case .notes: return .contactInformationNotes
         }
     }
 }
@@ -103,7 +103,7 @@ final class EditContactViewController: PromptableViewController {
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
         }
         
-        promptView = Button(title: "Opslaan")
+        promptView = Button(title: .save)
             .touchUpInside(self, action: #selector(save))
         
         scrollView.embed(in: contentView)
