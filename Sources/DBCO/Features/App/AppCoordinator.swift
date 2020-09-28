@@ -10,6 +10,9 @@ import UIKit
 class Coordinator: NSObject {
     private(set) var children = [Coordinator]()
     
+    /// A property that lets the parent of the coordinator associate an object to this coordinator.
+    var context: Any?
+    
     func start() {
         preconditionFailure("Override start() in your subclass")
     }
@@ -28,8 +31,9 @@ class Coordinator: NSObject {
 }
 
 extension Coordinator {
-    func startChildCoordinator(_ coordinator: Coordinator) {
+    func startChildCoordinator(_ coordinator: Coordinator, context: Any? = nil) {
         addChildCoordinator(coordinator)
+        coordinator.context = context
         coordinator.start()
     }
 }
