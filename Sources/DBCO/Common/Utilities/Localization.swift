@@ -48,6 +48,14 @@ extension String {
     // MARK: - App Version
     static func appVersionTitle(_ version: String, _ build: String) -> String { return Localization.string(for: "appVersionTitle", [version, build]) }
     
+    // MARK: - Contacts Authorization
+    static var contactsPermissionTitle: String { return Localization.string(for: "") }
+    static var contactsPermissionBody: String { return Localization.string(for: "") }
+    static var contactsPermissionDeniedBody: String { return Localization.string(for: "") }
+    static var allowAccessButtonTitle: String { return Localization.string(for: "") }
+    static var continueWithoutAccessButtonTitle: String { return Localization.string(for: "") }
+    static var toSettingsButtonTitle: String { return Localization.string(for: "") }
+    
     // MARK: - Help
     
     static var helpTitle: String { return Localization.string(for: "helpTitle") }

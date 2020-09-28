@@ -1,0 +1,25 @@
+"appVersionTitle" = "Version %@ (%@)";
+
+/* MARK: - Help */
+"helpTitle" = "About this app";
+"helpSubtitle" = "Frequently asked questions";
+"helpAlsoRead" = "Also read";
+
+"help.faq.notification.title" = "When does the app send notifications?";
+"help.faq.location.title" = "Can the app see my location?";
+"help.faq.location.description" = "No. Using Bluetooth, the app only sees if you're near other people who also have the app. Bluetooth isn't linked to your location, so the app never sees where you are.<br><br>Bluetooth only wirelessly connects 2 devices that are near each other. Like your phone and a speaker, or a pair of wireless headphones.<br><br>The app can estimate the distance between 2 phones using the strength of the Bluetooth signal.";
+"help.faq.anonymous.title" = "How can the app be anonymous?";
+"help.faq.anonymous.description_1" = "The app exchanges random codes with other phones. These codes don't include any personal or location data. The code exchange happens when you're near a person who also has the app.";
+"help.faq.anonymous.description_2" = "Was this person later found to have coronavirus? Together with the GGD they can add their code to a list of codes of infected people. By doing so the infection can be confirmed. <br><br>After this, you and others who have these codes on their phones get a notification. This notification only says when they've been close to an infected person. Not who this person is and where they've encountered them.";
+"help.bluetooth.title" = "Can the Bluetooth signal pass through walls?";
+
+"help.faq.reason.title" = "Why is this app important?";
+"help.faq.reason.description" = "The app can quickly warn you after you've been near someone who has coronavirus. Even before you show symptoms. Because it's possible to have coronavirus and be contagious without having symptoms. <br><br>If you get a warning through the app, you'll get instructions on what to do next. And if you should get tested. So you prevent unknowingly infecting people in your environment.<br><br>Did you get tested, and do you have coronavirus? Together with the GGD, you can warn people who were near you for an extended amount of time. Including people you don't know. In a restaurant, cinema or waiting room, and if those people also used the app.<br><br>Thanks to CoronaMelder we can act quicker and prevent new infections. Only together can we get coronavirus under control.";
+
+"help.faq.notification.description" = "You get a notification after you've been exposed to a higher risk of infection. This happens if you've spent 15 minutes near someone who was later found to have coronavirus. Only if this person also uses the app.<br><br>Whether or not you get a notification depends on the strength of the Bluetooth signal and the duration of your encounter.<br><br>Did someone cycle past you on the street? Then you won't get a notification later. Yes, the Bluetooth signal was strong because you were near each other. But only for a short time. So your risk of infection is very low.<br><br>Were you near someone in the train or office? Then you might get a notification later. The Bluetooth signal was strong and you were near each other for a longer period of time.";
+"help.faq.bluetooth.title" = "Can the Bluetooth signal pass through walls?";
+"help.faq.bluetooth.description" = "Yes, but the signal would be very weak. Bluetooth works best when your phone is in the same room as another person's phone.<br><br>So the chance of you getting your neighbours' Bluetooth signal is very low.<br><br>That also means you probably won't get a notification if your neighbour has coronavirus and you haven't been in the same room.";
+"help.faq.power_usage.title" = "How much power does the app use?";
+"help.faq.power_usage.description" = "The app uses Bluetooth Low Energy — a special kind of Bluetooth that only uses a tiny amount of power. How fast this drains your battery depends on your phone.";
+
+

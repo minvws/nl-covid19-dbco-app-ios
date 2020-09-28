@@ -37,11 +37,11 @@
 		CDE30E69251C89FF00862A40 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E68251C89FF00862A40 /* NavigationController.swift */; };
 		CDE30E6C251CE15800862A40 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E6B251CE15800862A40 /* Contact.swift */; };
 		CDE30E72251E278200862A40 /* EditContactCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E71251E278200862A40 /* EditContactCoordinator.swift */; };
+		CDE30E782521D92600862A40 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CDE30E7A2521D92600862A40 /* Localizable.strings */; };
 		CDFCF905250FA0910062269A /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF904250FA0910062269A /* HelpViewController.swift */; };
 		CDFCF907250FA6E80062269A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF906250FA6E80062269A /* ViewController.swift */; };
 		CDFCF9092510BEF50062269A /* HelpItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF9082510BEF50062269A /* HelpItem.swift */; };
 		CDFCF90C2510C47E0062269A /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF90B2510C47E0062269A /* Localization.swift */; };
-		CDFCF90E2510C7250062269A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CDFCF90D2510C5C40062269A /* Localizable.strings */; };
 		CDFCF9102510DF430062269A /* HelpItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF90F2510DF430062269A /* HelpItemTableViewCell.swift */; };
 		CDFCF9122510E0550062269A /* HelpQuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF9112510E0550062269A /* HelpQuestionViewController.swift */; };
 		CDFCF9152510EBC40062269A /* NSAttributedString+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF9142510EB4D0062269A /* NSAttributedString+Extension.swift */; };
@@ -82,11 +82,14 @@
 		CDE30E68251C89FF00862A40 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		CDE30E6B251CE15800862A40 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		CDE30E71251E278200862A40 /* EditContactCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditContactCoordinator.swift; sourceTree = "<group>"; };
+		CDE30E762521D90200862A40 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		CDE30E792521D92600862A40 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CDE30E7C2521D92B00862A40 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CDE30E7E2521D97000862A40 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		CDFCF904250FA0910062269A /* HelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
 		CDFCF906250FA6E80062269A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		CDFCF9082510BEF50062269A /* HelpItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpItem.swift; sourceTree = "<group>"; };
 		CDFCF90B2510C47E0062269A /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
-		CDFCF90D2510C5C40062269A /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		CDFCF90F2510DF430062269A /* HelpItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpItemTableViewCell.swift; sourceTree = "<group>"; };
 		CDFCF9112510E0550062269A /* HelpQuestionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpQuestionViewController.swift; sourceTree = "<group>"; };
 		CDFCF9142510EB4D0062269A /* NSAttributedString+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Extension.swift"; sourceTree = "<group>"; };
@@ -231,7 +234,7 @@
 				CD29636325191C7C008443AF /* Colors.xcassets */,
 				CDC4A8F5250B87E6001BABC6 /* Info.plist */,
 				CDC4A8F2250B87E6001BABC6 /* LaunchScreen.storyboard */,
-				CDFCF90D2510C5C40062269A /* Localizable.strings */,
+				CDE30E7A2521D92600862A40 /* Localizable.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -301,6 +304,7 @@
 			knownRegions = (
 				en,
 				Base,
+				nl,
 			);
 			mainGroup = CDC4A8DB250B87E5001BABC6;
 			productRefGroup = CDC4A8E5250B87E5001BABC6 /* Products */;
@@ -319,7 +323,7 @@
 			files = (
 				CDC4A8F4250B87E6001BABC6 /* LaunchScreen.storyboard in Resources */,
 				CD29636425191C80008443AF /* Colors.xcassets in Resources */,
-				CDFCF90E2510C7250062269A /* Localizable.strings in Resources */,
+				CDE30E782521D92600862A40 /* Localizable.strings in Resources */,
 				CDC4A8F1250B87E6001BABC6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -399,8 +403,27 @@
 			isa = PBXVariantGroup;
 			children = (
 				CDC4A8F3250B87E6001BABC6 /* Base */,
+				CDE30E762521D90200862A40 /* nl */,
+				CDE30E7E2521D97000862A40 /* en */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		CDE30E7A2521D92600862A40 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CDE30E792521D92600862A40 /* en */,
+				CDE30E7C2521D92B00862A40 /* nl */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		CDE30E802521D9BA00862A40 /* Info.plist */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CDE30E832521D9DF00862A40 /* en */,
+			);
+			name = Info.plist;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -410,6 +433,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -471,6 +495,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
