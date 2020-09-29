@@ -27,7 +27,7 @@
 "selectContactOtherContacts" = "Andere contacten";
 
 // MARK: - Editing Contacts
-"contactInformationFirstName" = "Voorname";
+"contactInformationFirstName" = "Voornaam";
 "contactInformationLastName" = "Achternaam";
 "contactInformationPhoneNumber" = "Telefoonnummer";
 "contactInformationEmailAddress" = "E-mailadres";

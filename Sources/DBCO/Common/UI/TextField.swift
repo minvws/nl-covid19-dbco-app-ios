@@ -9,6 +9,27 @@ import UIKit
 
 class TextField: UITextField {
     
+    enum InputType {
+        case text
+        case name
+        case email
+        case options([String])
+        case date(DateFormatter)
+        case number
+    }
+    
+    typealias ValueHandler = (String?) -> Void
+    typealias Validator = (String?) -> Bool
+    
+    var editingDidEndHandler: ValueHandler?
+    var validator: Validator?
+    
+    var inputType: InputType = .text {
+        didSet {
+            configureInputType()
+        }
+    }
+    
     override var placeholder: String? {
         didSet {
             label.text = placeholder
@@ -29,6 +50,8 @@ class TextField: UITextField {
     }
     
     private func setup() {
+        delegate = self
+        
         backgroundView.backgroundColor = Theme.colors.tertiary
         backgroundView.layer.cornerRadius = 8
         backgroundView.isUserInteractionEnabled = false
@@ -37,6 +60,57 @@ class TextField: UITextField {
         
         addSubview(label)
         addSubview(backgroundView)
+        
+        addTarget(self, action: #selector(handleEditingDidEnd), for: .editingDidEndOnExit)
+        addTarget(self, action: #selector(handleEditingDidEnd), for: .editingDidEnd)
+    }
+    
+    private func configureInputType() {
+        func createDoneToolbar() -> UIToolbar {
+            let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 100, height: 35))
+            toolBar.setItems([UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))], animated: false)
+            toolBar.barTintColor = .white
+            toolBar.sizeToFit()
+            return toolBar
+        }
+        
+        inputAccessoryView = nil
+        inputView = nil
+        
+        switch inputType {
+        case .text:
+            break
+        case .number:
+            keyboardType = .numberPad
+            inputAccessoryView = createDoneToolbar()
+        case .email:
+            keyboardType = .emailAddress
+        case .name:
+            keyboardType = .default
+            autocapitalizationType = .words
+        case .date(let dateFormatter):
+            let datePicker = UIDatePicker()
+            text.map(dateFormatter.date)?.map { datePicker.date = $0 }
+            datePicker.datePickerMode = .date
+            datePicker.preferredDatePickerStyle = .wheels
+            datePicker.addTarget(self, action: #selector(handleDateValueChanged), for: .valueChanged)
+            
+            inputView = datePicker
+            inputAccessoryView = createDoneToolbar()
+        case .options(let options):
+            pickerOptions = [""] + options
+            
+            let picker = UIPickerView()
+            picker.dataSource = self
+            picker.delegate = self
+            
+            pickerOptions?
+                .firstIndex(of: text ?? "")
+                .map { picker.selectRow($0, inComponent: 0, animated: false) }
+            
+            inputView = picker
+            inputAccessoryView = createDoneToolbar()
+        }
     }
 
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
@@ -78,6 +152,22 @@ class TextField: UITextField {
     
     // MARK: - Private
     
+    @objc private func handleEditingDidEnd() {
+        editingDidEndHandler?(text)
+    }
+    
+    @objc private func handleDateValueChanged(_ datePicker: UIDatePicker) {
+        guard case .date(let formatter) = inputType else {
+            return
+        }
+        
+        text = formatter.string(from: datePicker.date)
+    }
+    
+    @objc private func done() {
+        resignFirstResponder()
+    }
+    
     private struct Constants {
         static let spacing: CGFloat = 8
         static let backgroundBaseHeight: CGFloat = 26
@@ -87,7 +177,41 @@ class TextField: UITextField {
         return ceil(font!.lineHeight + 1)
     }
     
+    private var pickerOptions: [String]?
     private var label = UILabel()
     private var backgroundView = UIView()
+    
+}
+
+extension TextField: UITextFieldDelegate {
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        switch inputType {
+        case .date, .options:
+            return false
+        default:
+            return true
+        }
+    }
+    
+}
+
+extension TextField: UIPickerViewDataSource, UIPickerViewDelegate {
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pickerOptions?.count ?? 0
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return pickerOptions?[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        text = pickerOptions?[row]
+    }
     
 }

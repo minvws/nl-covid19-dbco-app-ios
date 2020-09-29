@@ -25,8 +25,35 @@ extension ContactField {
     }
 }
 
+extension FieldType {
+
+    var inputType: TextField.InputType {
+        switch self {
+        case .text(let validation):
+            switch validation {
+            case .name:
+                return .name
+            case .email:
+                return .email
+            case .phoneNumber:
+                return .number
+            case .number:
+                return .number
+            case .general:
+                return .text
+            }
+        case .multilineText:
+            return .text
+        case .date:
+            return .date(Contact.birthDateFormatter)
+        case .dropdown(let options):
+            return .options(options)
+        }
+    }
+}
+
 class EditContactViewModel {
-    let contact: Contact
+    private(set) var contact: Contact
     let title: String
     let showCancelButton: Bool
     
@@ -42,23 +69,38 @@ class EditContactViewModel {
         self.showCancelButton = showCancelButton
     }
     
-    typealias Input = (label: String, text: String?)
+    struct Input {
+        let label: String
+        let text: String?
+        let valueHandler: TextField.ValueHandler
+        let validator: TextField.Validator
+        let inputType: TextField.InputType
+    }
     
     enum Row {
         case group([Input])
         case single(Input)
     }
     
-    private func values(for field: ContactField) -> [String?] {
+    private func values(for field: ContactField) -> [(value: String?, identifier: UUID)] {
         return contact.values
             .filter { $0.field == field }
-            .map { $0.value }
+            .map { ($0.value, $0.identifier) }
     }
     
     var rows: [Row] {
-        let inputs = contact.type.requiredFields.flatMap { field -> [Input] in
+        let inputs = contact.type.requiredFields.flatMap { [unowned self] field -> [Input] in
             values(for: field)
-                .map { Input(label: field.label, text: $0) }
+                .map { value, identifier in
+                    Input(
+                        label: field.label,
+                        text: value,
+                        valueHandler: { newValue in
+                            contact.setValue(newValue, forFieldWithIdentifier: identifier)
+                        },
+                        validator: { _ in return true },
+                        inputType: field.fieldType.inputType)
+                }
         }
         
         let name = Row.group(Array(inputs.prefix(2)))
@@ -114,7 +156,11 @@ final class EditContactViewController: PromptableViewController {
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
         
         func createTextField(_ input: EditContactViewModel.Input) -> TextField {
-            return TextField(label: input.label, text: input.text)
+            let textField = TextField(label: input.label, text: input.text)
+            textField.editingDidEndHandler = input.valueHandler
+            textField.inputType = input.inputType
+            textField.validator = input.validator
+            return textField
         }
         
         let rows = viewModel.rows.map { row -> UIView in
@@ -168,7 +214,8 @@ final class EditContactViewController: PromptableViewController {
             let visibleFrame = CGRect(x: 0,
                                       y: scrollView.contentOffset.y,
                                       width: scrollView.frame.width,
-                                      height: scrollView.frame.height - inset)
+                                      height: scrollView.frame.height)
+                .inset(by: scrollView.contentInset)
                 .inset(by: scrollView.safeAreaInsets)
             
             // cancel current animation

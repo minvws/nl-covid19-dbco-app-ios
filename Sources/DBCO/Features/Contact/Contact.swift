@@ -10,7 +10,18 @@ import Contacts
 
 struct Contact {
     var type: ContactType
-    var values: [(field: ContactField, value: String?)]
+    var values: [(field: ContactField, value: String?, identifier: UUID)]
+    
+    init(type: ContactType) {
+        self.type = type
+        self.values = .init()
+        
+        type.requiredFields.forEach { requiredField in
+            if !values.contains(where: { $0.field == requiredField }) {
+                values.append((field: requiredField, value: nil, identifier: UUID()))
+            }
+        }
+    }
     
     var fullName: String {
         let nameParts: [String?] = [
@@ -28,6 +39,14 @@ struct Contact {
                 $0.field == field && $0.value?.isValid(for: field.fieldType) == true
             }
         }
+    }
+    
+    mutating func setValue(_ value: String?, forFieldWithIdentifier identifier: UUID) {
+        guard let index = values.firstIndex(where: { $0.identifier == identifier }) else {
+            return
+        }
+        
+        values[index].value = value
     }
 }
 
@@ -123,27 +142,28 @@ extension Contact {
         self.values = .init()
         
         if cnContact.isKeyAvailable(CNContactGivenNameKey) {
-            values.append((field: .firstName, value: cnContact.givenName))
+            values.append((field: .firstName, value: cnContact.givenName, identifier: UUID()))
         }
         
         if cnContact.isKeyAvailable(CNContactFamilyNameKey) {
-            values.append((field: .lastName, value: cnContact.familyName))
+            values.append((field: .lastName, value: cnContact.familyName, identifier: UUID()))
         }
         
         if cnContact.isKeyAvailable(CNContactPhoneNumbersKey) {
             cnContact.phoneNumbers.forEach {
-                values.append((field: .phoneNumber, value: $0.value.stringValue))
+                values.append((field: .phoneNumber, value: $0.value.stringValue, identifier: UUID()))
             }
         }
         
         if cnContact.isKeyAvailable(CNContactEmailAddressesKey) {
             cnContact.emailAddresses.forEach {
-                values.append((field: .email, value: $0.value as String))
+                values.append((field: .email, value: $0.value as String, identifier: UUID()))
             }
         }
         
         if cnContact.isKeyAvailable(CNContactBirthdayKey), let date = cnContact.birthday?.date {
-            values.append((field: .birthDate, value: date.description))
+            
+            values.append((field: .birthDate, value: Self.birthDateFormatter.string(from: date), identifier: UUID()))
         }
         
         // remove non required fields
@@ -152,8 +172,22 @@ extension Contact {
         // add values for remaining fields
         type.requiredFields.forEach { requiredField in
             if !values.contains(where: { $0.field == requiredField }) {
-                values.append((field: requiredField, value: nil))
+                values.append((field: requiredField, value: nil, identifier: UUID()))
             }
         }
     }
+}
+
+extension Contact {
+    
+    static let birthDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        formatter.timeStyle = .none
+        formatter.calendar = Calendar.current
+        formatter.locale = Locale.current
+        
+        return formatter
+    }()
+    
 }
