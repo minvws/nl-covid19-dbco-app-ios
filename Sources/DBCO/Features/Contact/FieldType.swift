@@ -28,6 +28,12 @@ extension String {
     }
 }
 
+extension Optional where Wrapped == String {
+    func isValid(for fieldType: FieldType) -> Bool {
+        return self?.isValid(for: fieldType) ?? true
+    }
+}
+
 extension ContactField {
     
     var fieldType: FieldType {

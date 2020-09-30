@@ -22,7 +22,11 @@ class TextField: UITextField {
     typealias Validator = (String?) -> Bool
     
     var editingDidEndHandler: ValueHandler?
-    var validator: Validator?
+    var validator: Validator? {
+        didSet {
+            validateIfNeeded()
+        }
+    }
     
     var inputType: InputType = .text {
         didSet {
@@ -51,6 +55,22 @@ class TextField: UITextField {
     
     private func setup() {
         delegate = self
+
+        validationIconView.image = UIImage(systemName: "exclamationmark.circle.fill")?
+            .withTintColor(Theme.colors.warning)
+            .withRenderingMode(.alwaysOriginal)
+        validationIconView.highlightedImage = UIImage(systemName: "checkmark.circle.fill")?
+            .withTintColor(Theme.colors.ok)
+            .withRenderingMode(.alwaysOriginal)
+        validationIconView.contentMode = .center
+        validationIconView.setContentCompressionResistancePriority(.required, for: .horizontal)
+        textWidthLabel.alpha = 0
+        
+        iconContainerView.addArrangedSubview(UIStackView(horizontal: [textWidthLabel, validationIconView], spacing: 5).alignment(.center))
+        iconContainerView.axis = .vertical
+        iconContainerView.alignment = .leading
+        iconContainerView.isUserInteractionEnabled = false
+        iconContainerView.isHidden = true
         
         backgroundView.backgroundColor = Theme.colors.tertiary
         backgroundView.layer.cornerRadius = 8
@@ -60,9 +80,11 @@ class TextField: UITextField {
         
         addSubview(label)
         addSubview(backgroundView)
+        addSubview(iconContainerView)
         
         addTarget(self, action: #selector(handleEditingDidEnd), for: .editingDidEndOnExit)
         addTarget(self, action: #selector(handleEditingDidEnd), for: .editingDidEnd)
+        addTarget(self, action: #selector(handleEditingDidBegin), for: .editingDidBegin)
     }
     
     private func configureInputType() {
@@ -83,8 +105,10 @@ class TextField: UITextField {
         case .number:
             keyboardType = .numberPad
             inputAccessoryView = createDoneToolbar()
+            textContentType = .givenName
         case .email:
             keyboardType = .emailAddress
+            textContentType = .emailAddress
         case .name:
             keyboardType = .default
             autocapitalizationType = .words
@@ -148,12 +172,41 @@ class TextField: UITextField {
         
         label.frame = CGRect(x: 0, y: 0, width: bounds.width, height: labelSize.height)
         backgroundView.frame = CGRect(x: 0, y: bounds.height - backgroundHeight, width: bounds.width, height: backgroundHeight)
+        iconContainerView.frame = backgroundView.frame.inset(by: .leftRight(12))
+    }
+    
+    override var text: String? {
+        didSet {
+            textWidthLabel.text = text
+            validateIfNeeded()
+        }
+    }
+    
+    override var font: UIFont? {
+        didSet {
+            textWidthLabel.font = font
+        }
+    }
+    
+    override var attributedText: NSAttributedString? {
+        didSet {
+            textWidthLabel.attributedText = attributedText
+            validateIfNeeded()
+        }
     }
     
     // MARK: - Private
     
     @objc private func handleEditingDidEnd() {
         editingDidEndHandler?(text)
+        
+        validateIfNeeded()
+    }
+    
+    @objc private func handleEditingDidBegin() {
+        editingDidEndHandler?(text)
+        
+        iconContainerView.isHidden = true
     }
     
     @objc private func handleDateValueChanged(_ datePicker: UIDatePicker) {
@@ -168,6 +221,15 @@ class TextField: UITextField {
         resignFirstResponder()
     }
     
+    private func validateIfNeeded() {
+        if let validator = validator, text?.isEmpty == false {
+            iconContainerView.isHidden = false
+            validationIconView.isHighlighted = validator(text) == true
+        } else {
+            iconContainerView.isHidden = true
+        }
+    }
+    
     private struct Constants {
         static let spacing: CGFloat = 8
         static let backgroundBaseHeight: CGFloat = 26
@@ -177,15 +239,23 @@ class TextField: UITextField {
         return ceil(font!.lineHeight + 1)
     }
     
+    
     private var pickerOptions: [String]?
     private var label = UILabel()
     private var backgroundView = UIView()
+    private var textWidthLabel = UILabel()
+    private var validationIconView = UIImageView()
+    private lazy var iconContainerView = UIStackView()
     
 }
 
 extension TextField: UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let text = text {
+            textWidthLabel.text = (text as NSString).replacingCharacters(in: range, with: string) as String
+        }
+        
         switch inputType {
         case .date, .options:
             return false

@@ -98,7 +98,7 @@ class EditContactViewModel {
                         valueHandler: { newValue in
                             contact.setValue(newValue, forFieldWithIdentifier: identifier)
                         },
-                        validator: { _ in return true },
+                        validator: { $0.isValid(for: field.fieldType) },
                         inputType: field.fieldType.inputType)
                 }
         }
