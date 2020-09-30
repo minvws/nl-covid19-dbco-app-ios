@@ -80,11 +80,14 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             let datePicker = UIDatePicker()
             text.map(dateFormatter.date)?.map { datePicker.date = $0 }
             datePicker.datePickerMode = .date
-            datePicker.preferredDatePickerStyle = .wheels
+            datePicker.preferredDatePickerStyle = .automatic
             datePicker.addTarget(self, action: #selector(handleDateValueChanged), for: .valueChanged)
-
-            inputView = datePicker
-            inputAccessoryView = createDoneToolbar()
+            datePicker.tintColor = Theme.colors.primary
+            
+            addSubview(datePicker)
+            
+            self.datePicker = datePicker
+            text = nil
         case .picker(let options):
             pickerOptions = [""] + options
 
@@ -105,6 +108,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         super.layoutSubviews()
 
         iconContainerView.frame = backgroundView.frame.inset(by: .leftRight(12))
+        datePicker?.frame = backgroundView.frame
+        resetDatePickerBackground()
     }
     
     override var text: String? {
@@ -139,20 +144,35 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         guard case .date(let formatter) = Field.inputType else {
             return
         }
-        
-        text = formatter.string(from: datePicker.date)
+
+        object?[keyPath: path].value = formatter.string(from: datePicker.date)
+        resetDatePickerBackground()
     }
     
     @objc private func done() {
         resignFirstResponder()
     }
     
+    private func resetDatePickerBackground() {
+        datePicker?.subviews.first?.subviews.first?.backgroundColor = .clear
+    }
+    
+    private var datePicker: UIDatePicker?
     private var pickerOptions: [String]?
     private var textWidthLabel = UILabel()
     private var validationIconView = UIImageView()
     private lazy var iconContainerView = UIStackView()
     
     // MARK: - Delegate implementations
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        switch Field.inputType {
+        case .date:
+            return false
+        default:
+            return true
+        }
+    }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let text = text {
