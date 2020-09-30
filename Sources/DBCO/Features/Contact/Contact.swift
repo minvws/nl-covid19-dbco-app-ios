@@ -15,121 +15,94 @@ enum ContactType {
     case other
 }
 
-enum ContactField {
-    case firstName
-    case lastName
-    case phoneNumber
-    case email
-    case relation
-    case birthDate
-    case bsn
-    case profession
-    case companyName
-    case notes
+class Contact {
+    let type: ContactType
     
-    var allowsMultiple: Bool {
-        switch self {
-        case .phoneNumber, .email:
-            return true
-        default:
-            return false
-        }
-    }
-}
-
-struct Contact {
-    var type: ContactType
-    var values: [(field: ContactField, value: String?, identifier: UUID)]
-    
-    init(type: ContactType) {
-        self.type = type
-        self.values = .init()
-        
-        type.requiredFields.forEach { requiredField in
-            if !values.contains(where: { $0.field == requiredField }) {
-                values.append((field: requiredField, value: nil, identifier: UUID()))
-            }
-        }
-    }
+    var firstName = FirstName()
+    var lastName = LastName()
+    var phoneNumbers = [PhoneNumber]()
+    var emailAddresses = [EmailAddress]()
+    var birthDate = BirthDate()
+    var bsn = BSN()
+    var companyName = CompanyName()
+    var relationType = RelationType()
+    var profession = Profession()
+    var notes = Notes()
     
     var fullName: String {
-        let nameParts: [String?] = [
-            values.first(where: { $0.field == .firstName})?.value,
-            values.first(where: { $0.field == .lastName})?.value]
-         
-        return nameParts
-            .compactMap { $0 }
-            .joined(separator: " ")
+        [firstName.value, lastName.value].compactMap { $0 }.joined(separator: " ")
     }
     
-    mutating func setValue(_ value: String?, forFieldWithIdentifier identifier: UUID) {
-        guard let index = values.firstIndex(where: { $0.identifier == identifier }) else {
-            return
-        }
-        
-        values[index].value = value
-    }
-}
-
-extension ContactType {
-    var requiredFields: [ContactField] {
-        switch self {
-        case .roommate:
-            return [.firstName, .lastName, .phoneNumber, .email, .relation, .birthDate, .bsn, .profession]
-        case .close:
-            return [.firstName, .lastName, .phoneNumber, .email, .relation]
-        case .other:
-            return [.firstName, .lastName, .phoneNumber, .email]
-        case .general:
-            return [.firstName, .lastName, .phoneNumber, .email, .companyName, .notes]
-        }
-    }
-}
-
-extension Contact {
-    init(type: ContactType, cnContact: CNContact) {
+    init(type: ContactType, cnContact: CNContact? = nil) {
         self.type = type
-        self.values = .init()
         
-        if cnContact.isKeyAvailable(CNContactGivenNameKey) {
-            values.append((field: .firstName, value: cnContact.givenName, identifier: UUID()))
+        if let cnContact = cnContact {
+            firstName = cnContact.contactFirstName
+            lastName = cnContact.contactLastName
+            phoneNumbers = cnContact.contactPhoneNumbers
+            emailAddresses = cnContact.contactEmailAddresses
+            birthDate = cnContact.contactBirthDay
         }
-        
-        if cnContact.isKeyAvailable(CNContactFamilyNameKey) {
-            values.append((field: .lastName, value: cnContact.familyName, identifier: UUID()))
-        }
-        
-        if cnContact.isKeyAvailable(CNContactPhoneNumbersKey) {
-            cnContact.phoneNumbers.forEach {
-                values.append((field: .phoneNumber, value: $0.value.stringValue, identifier: UUID()))
-            }
-        }
-        
-        if cnContact.isKeyAvailable(CNContactEmailAddressesKey) {
-            cnContact.emailAddresses.forEach {
-                values.append((field: .email, value: $0.value as String, identifier: UUID()))
-            }
-        }
-        
-        if cnContact.isKeyAvailable(CNContactBirthdayKey), let date = cnContact.birthday?.date {
-            
-            values.append((field: .birthDate, value: Self.birthDateFormatter.string(from: date), identifier: UUID()))
-        }
-        
-        // remove non required fields
-        values.removeAll { !type.requiredFields.contains($0.field) }
-        
-        // add values for remaining fields
-        type.requiredFields.forEach { requiredField in
-            if !values.contains(where: { $0.field == requiredField }) {
-                values.append((field: requiredField, value: nil, identifier: UUID()))
-            }
-        }
+    }
+    
+    var isValid: Bool {
+        return false
     }
 }
 
-extension Contact {
+extension Contact: NSCopying {
     
+    func copy(with zone: NSZone? = nil) -> Any {
+        let contact = Contact(type: type)
+        contact.firstName = firstName
+        contact.lastName = lastName
+        contact.phoneNumbers = phoneNumbers
+        contact.emailAddresses = emailAddresses
+        contact.birthDate = birthDate
+        contact.bsn = bsn
+        contact.companyName = companyName
+        contact.relationType = relationType
+        contact.profession = profession
+        contact.notes = notes
+        
+        return contact
+    }
+
+}
+
+protocol ContactValue {
+    var value: String? { get set }
+}
+
+struct FirstName: ContactValue {
+    var value: String?
+}
+
+struct LastName: ContactValue {
+    var value: String?
+}
+
+struct PhoneNumber: ContactValue {
+    var value: String?
+}
+
+struct EmailAddress: ContactValue {
+    var value: String?
+}
+
+struct BirthDate: ContactValue {
+    var value: String?
+    
+    init(value: String? = nil) {
+        self.value = value
+    }
+    
+    init(date: Date?) {
+        if let date = date {
+            self.value = BirthDate.birthDateFormatter.string(from: date)
+        }
+    }
+        
     static let birthDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
@@ -139,5 +112,55 @@ extension Contact {
         
         return formatter
     }()
+}
+
+struct CompanyName: ContactValue {
+    var value: String?
+}
+
+struct BSN: ContactValue {
+    var value: String?
+}
+
+struct RelationType: ContactValue {
+    var value: String?
+}
+
+struct Profession: ContactValue {
+    var value: String?
+}
+
+struct Notes: ContactValue {
+    var value: String?
+}
+
+extension CNContact {
     
+    var contactFirstName: FirstName {
+        FirstName(value: isKeyAvailable(CNContactGivenNameKey) ? givenName : nil)
+    }
+    
+    var contactLastName: LastName {
+        LastName(value: isKeyAvailable(CNContactFamilyNameKey) ? familyName : nil)
+    }
+    
+    var contactPhoneNumbers: [PhoneNumber] {
+        if isKeyAvailable(CNContactPhoneNumbersKey) {
+            return phoneNumbers.map { PhoneNumber(value: $0.value.stringValue)  }
+        }
+        
+        return []
+    }
+    
+    var contactEmailAddresses: [EmailAddress] {
+        if isKeyAvailable(CNContactEmailAddressesKey) {
+            return emailAddresses.map { EmailAddress(value: $0.value as String)  }
+        }
+        
+        return []
+    }
+    
+    var contactBirthDay: BirthDate {
+        BirthDate(date: isKeyAvailable(CNContactBirthdayKey) ? birthday?.date : nil)
+    }
 }

@@ -8,50 +8,6 @@
 import UIKit
 import Contacts
 
-extension ContactField {
-    var label: String {
-        switch self {
-        case .firstName: return .contactInformationFirstName
-        case .lastName: return .contactInformationLastName
-        case .phoneNumber: return .contactInformationPhoneNumber
-        case .email: return .contactInformationEmailAddress
-        case .relation: return .contactInformationRelationType
-        case .birthDate: return .contactInformationBirthDate
-        case .bsn: return .contactInformationBSN
-        case .profession: return .contactInformationProfession
-        case .companyName: return .contactInformationCompanyName
-        case .notes: return .contactInformationNotes
-        }
-    }
-}
-
-extension FieldType {
-
-    var inputType: TextField.InputType {
-        switch self {
-        case .text(let validation):
-            switch validation {
-            case .name:
-                return .name
-            case .email:
-                return .email
-            case .phoneNumber:
-                return .number
-            case .number:
-                return .number
-            case .general:
-                return .text
-            }
-        case .multilineText:
-            return .text
-        case .date:
-            return .date(Contact.birthDateFormatter)
-        case .dropdown(let options):
-            return .options(options)
-        }
-    }
-}
-
 class EditContactViewModel {
     private(set) var contact: Contact
     let title: String
@@ -64,48 +20,41 @@ class EditContactViewModel {
     }
     
     init(contact: Contact, showCancelButton: Bool = false) {
-        self.contact = contact
+        self.contact = contact.copy() as! Contact
         self.title = contact.fullName
         self.showCancelButton = showCancelButton
     }
     
-    struct Input {
-        let label: String
-        let text: String?
-        let valueHandler: TextField.ValueHandler
-        let validator: TextField.Validator
-        let inputType: TextField.InputType
-    }
-    
     enum Row {
-        case group([Input])
-        case single(Input)
-    }
-    
-    private func values(for field: ContactField) -> [(value: String?, identifier: UUID)] {
-        return contact.values
-            .filter { $0.field == field }
-            .map { ($0.value, $0.identifier) }
+        case group([UIView])
+        case single(UIView)
     }
     
     var rows: [Row] {
-        let inputs = contact.type.requiredFields.flatMap { [unowned self] field -> [Input] in
-            values(for: field)
-                .map { value, identifier in
-                    Input(
-                        label: field.label,
-                        text: value,
-                        valueHandler: { newValue in
-                            contact.setValue(newValue, forFieldWithIdentifier: identifier)
-                        },
-                        validator: { $0.isValid(for: field.fieldType) },
-                        inputType: field.fieldType.inputType)
-                }
-        }
+        let firstNameField = InputField(for: contact, path: \.firstName)
+        let lastNameField = InputField(for: contact, path: \.lastName)
         
-        let name = Row.group(Array(inputs.prefix(2)))
-        let other = inputs.suffix(from: 2).map(Row.single)
-        return [name] + other
+        let phoneNumberFields = contact.phoneNumbers.indices
+            .map { \Contact.phoneNumbers[$0] }
+            .map { InputField(for: contact, path: $0) }
+            .map(Row.single)
+        
+        let emailFields = contact.emailAddresses.indices
+            .map { \Contact.emailAddresses[$0] }
+            .map { InputField(for: contact, path: $0) }
+            .map(Row.single)
+        
+        var base = [Row.group([firstNameField, lastNameField])]
+        base += phoneNumberFields
+        base += emailFields
+        
+        return base + [
+            .single(InputField(for: contact, path: \.relationType)),
+            .single(InputField(for: contact, path: \.birthDate)),
+            .single(InputField(for: contact, path: \.bsn)),
+            .single(InputField(for: contact, path: \.profession)),
+            .single(InputField(for: contact, path: \.notes))
+        ]
     }
 }
 
@@ -155,21 +104,12 @@ final class EditContactViewController: PromptableViewController {
         let widthProviderView = UIView()
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
         
-        func createTextField(_ input: EditContactViewModel.Input) -> TextField {
-            let textField = TextField(label: input.label, text: input.text)
-            textField.editingDidEndHandler = input.valueHandler
-            textField.inputType = input.inputType
-            textField.validator = input.validator
-            return textField
-        }
-        
         let rows = viewModel.rows.map { row -> UIView in
             switch row {
-            case .group(let inputs):
-                let columns = inputs.map(createTextField)
-                return UIStackView(horizontal: columns, spacing: 15).distribution(.fillEqually)
-            case .single(let input):
-                return createTextField(input)
+            case .group(let fields):
+                return UIStackView(horizontal: fields, spacing: 15).distribution(.fillEqually)
+            case .single(let field):
+                return field
             }
         }
         
