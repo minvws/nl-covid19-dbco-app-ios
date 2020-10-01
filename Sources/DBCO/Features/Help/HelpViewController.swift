@@ -19,7 +19,7 @@ class HelpViewModel {
         tableViewManager.itemForCellAtIndexPath = { [unowned self] in self.items[$0.row] }
     }
     
-    func setupTableView(_ tableView: UITableView, selectedItemHandler: @escaping (HelpItem) -> Void) {
+    func setupTableView(_ tableView: UITableView, selectedItemHandler: @escaping (HelpItem, IndexPath) -> Void) {
         tableViewManager.manage(tableView)
         tableViewManager.didSelectItem = selectedItemHandler
     }
@@ -65,10 +65,20 @@ final class HelpViewController: UIViewController {
     private func setupTableView() {
         tableView.embed(in: view)
         
-        viewModel.setupTableView(tableView) { [weak self] item in
+        viewModel.setupTableView(tableView) { [weak self] item, _ in
             guard let self = self else { return }
             self.delegate?.helpViewController(self, didSelect: item as! HelpOverviewItem)
         }
+        
+        let versionLabel = UILabel(frame: .zero)
+        versionLabel.text = .mainAppVersionTitle
+        versionLabel.textAlignment = .center
+        versionLabel.textColor = Theme.colors.captionGray
+        versionLabel.font = Theme.fonts.footnote
+        versionLabel.sizeToFit()
+        
+        tableView.tableFooterView = versionLabel
+        
     }
 
 }

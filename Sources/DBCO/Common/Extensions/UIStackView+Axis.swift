@@ -21,4 +21,14 @@ extension UIStackView {
         self.spacing = spacing
     }
     
+    func distribution(_ value: UIStackView.Distribution) -> Self {
+        distribution = value
+        return self
+    }
+    
+    func alignment(_ value: UIStackView.Alignment) -> Self {
+        alignment = value
+        return self
+    }
+ 
 }

@@ -35,7 +35,7 @@ class SelectContactViewModel {
         ]
         
         let request = CNContactFetchRequest(keysToFetch: keys)
-        request.sortOrder = .familyName
+        request.sortOrder = .givenName
         
         do {
             var contacts = [CNContact]()
@@ -50,17 +50,29 @@ class SelectContactViewModel {
         }
         
         if let suggestedNameParts = suggestedName?.lowercased().split(separator: " ") {
+            var maxMatchedParts = 0
+            
             func calculateMatchedParts(for contact: CNContact) -> Int {
-                let contactNameParts = contact.fullName.lowercased().split(separator: " ")
-                return suggestedNameParts
-                    .filter { contactNameParts.contains($0) }
-                    .count
+                var matchedParts: Int = 0
+                var contactNameParts = contact.fullName.lowercased().split(separator: " ")
+                
+                for part in suggestedNameParts {
+                    if let matchedIndex = contactNameParts.firstIndex(where: { $0.starts(with: part) }) {
+                        contactNameParts.remove(at: matchedIndex)
+                        matchedParts += 1
+                    }
+                }
+                
+                maxMatchedParts = max(matchedParts, maxMatchedParts)
+                
+                return matchedParts
             }
             
             let sortedSuggestions = contacts
                 .map { (contact: $0, matchedParts: calculateMatchedParts(for: $0)) }
-                .filter { $0.matchedParts > 0 }
+                .filter { $0.matchedParts > 1 }
                 .sorted { $0.matchedParts > $1.matchedParts }
+                .prefix { $0.matchedParts == maxMatchedParts }
             
             suggestedContacts = sortedSuggestions.map { $0.contact }
         } else {
@@ -75,18 +87,18 @@ class SelectContactViewModel {
         var sections = [(title: String, contacts: [CNContact])]()
         
         if !suggestedContacts.isEmpty {
-            sections.append(("Waarschijnlijk zoek je", suggestedContacts))
+            sections.append((.selectContactSuggestions, suggestedContacts))
         }
         
-        sections.append(("Andere contacten", contacts))
+        sections.append((.selectContactOtherContacts, contacts))
         
         contactTableViewManager.numberOfSections = { sections.count }
         contactTableViewManager.numberOfRowsInSection = { sections[$0].contacts.count }
         contactTableViewManager.itemForCellAtIndexPath = { sections[$0.section].contacts[$0.row] }
         contactTableViewManager.titleForHeaderInSection = { sections.count > 1 ? sections[$0].title : nil }
         
-        searchTableViewManager.numberOfRowsInSection = { [unowned self] _ in self.searchResults.count }
-        searchTableViewManager.itemForCellAtIndexPath = { [unowned self] in self.searchResults[$0.row] }
+        searchTableViewManager.numberOfRowsInSection = { [unowned self] _ in searchResults.count }
+        searchTableViewManager.itemForCellAtIndexPath = { [unowned self] in searchResults[$0.row] }
         
     }
     
@@ -106,12 +118,19 @@ class SelectContactViewModel {
         }
     }
     
-    func setupContactsTableView(_ tableView: UITableView, selectedContactHandler: @escaping (CNContact) -> Void) {
+    func setupContactsTableView(_ tableView: UITableView, sectionHeaderViewBuilder: @escaping (String) -> UIView, selectedContactHandler: @escaping (CNContact, IndexPath) -> Void) {
         contactTableViewManager.manage(tableView)
         contactTableViewManager.didSelectItem = selectedContactHandler
+        contactTableViewManager.viewForHeaderInSection = { [unowned self] section in
+            guard let title = contactTableViewManager.titleForHeaderInSection?(section) else {
+                return nil
+            }
+            
+            return sectionHeaderViewBuilder(title)
+        }
     }
     
-    func setupSearchTableView(_ tableView: UITableView, selectedContactHandler: @escaping (CNContact) -> Void) {
+    func setupSearchTableView(_ tableView: UITableView, selectedContactHandler: @escaping (CNContact, IndexPath) -> Void) {
         searchTableViewManager.manage(tableView)
         searchTableViewManager.didSelectItem = selectedContactHandler
     }
@@ -120,12 +139,12 @@ class SelectContactViewModel {
 }
 
 protocol SelectContactViewControllerDelegate: class {
-    
     func selectContactViewController(_ controller: SelectContactViewController, didSelect contact: CNContact)
-    
+    func selectContactViewControllerDidRequestManualInput(_ controller: SelectContactViewController)
+    func selectContactViewControllerDidCancel(_ controller: SelectContactViewController)
 }
 
-class SelectContactViewController: UIViewController {
+class SelectContactViewController: PromptableViewController {
     private let viewModel: SelectContactViewModel
     private let searchResultsController: SearchResultsViewController
     private let tableView: UITableView = .createDefaultGrouped()
@@ -151,8 +170,9 @@ class SelectContactViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        title = "Contact toevoegen"
+        title = .selectContactTitle
         view.backgroundColor = .white
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
         
         setupTableView()
         setupSearchController()
@@ -165,18 +185,39 @@ class SelectContactViewController: UIViewController {
     }
     
     private func setupTableView() {
-        tableView.embed(in: view)
-        viewModel.setupContactsTableView(tableView) { [weak self] contact in
-            guard let self = self else { return }
-            self.delegate?.selectContactViewController(self, didSelect: contact)
-        }
+        promptView = Button(title: .selectContactAddManually, style: .secondary)
+            .touchUpInside(self, action: #selector(requestManualInput))
+
+        viewModel.setupContactsTableView(
+            tableView,
+            sectionHeaderViewBuilder: {
+                let label = UILabel()
+                label.text = $0.uppercased()
+                label.font = Theme.fonts.caption1
+                label.textColor = Theme.colors.primary
+                return label.wrappedInReadableContentGuide(insets: .top(10) + .bottom(5))
+            },
+            selectedContactHandler: { [weak self] contact, _ in
+                guard let self = self else { return }
+                self.delegate?.selectContactViewController(self, didSelect: contact)
+            })
+        
+        tableView.embed(in: contentView)
     }
     
     private func setupSearchController() {
         searchController.searchResultsUpdater = self
-        searchController.searchBar.placeholder = "Naam contact"
+        searchController.searchBar.placeholder = .selectContactSearch
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
+    }
+    
+    @objc private func requestManualInput() {
+        delegate?.selectContactViewControllerDidRequestManualInput(self)
+    }
+    
+    @objc private func cancel() {
+        delegate?.selectContactViewControllerDidCancel(self)
     }
     
 }
@@ -236,7 +277,7 @@ private class SearchResultsViewController: UIViewController {
     
     private func setupTableView() {
         tableView.embed(in: view)
-        viewModel.setupSearchTableView(tableView) { [weak self] contact in
+        viewModel.setupSearchTableView(tableView) { [weak self] contact, _ in
             guard let self = self else { return }
             self.delegate?.searchResultsViewController(self, didSelect: contact)
         }

@@ -11,16 +11,19 @@
 		CD2963472514E129008443AF /* ContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2963462514E129008443AF /* ContactTableViewCell.swift */; };
 		CD29634C2518CE8E008443AF /* TableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD29634B2518CE8E008443AF /* TableViewManager.swift */; };
 		CD29634F2518ED51008443AF /* UIEdgeInsets+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD29634E2518ED51008443AF /* UIEdgeInsets+Convenience.swift */; };
-		CD2963522518F291008443AF /* SelectContactDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2963512518F291008443AF /* SelectContactDetailsViewController.swift */; };
+		CD2963522518F291008443AF /* EditContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2963512518F291008443AF /* EditContactViewController.swift */; };
 		CD2963552518F59E008443AF /* UITableView+Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2963542518F59E008443AF /* UITableView+Defaults.swift */; };
 		CD29635825191941008443AF /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD29635725191941008443AF /* Button.swift */; };
 		CD29635B25191972008443AF /* Haptic.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD29635A25191972008443AF /* Haptic.swift */; };
 		CD29636125191AA8008443AF /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD29636025191AA8008443AF /* Theme.swift */; };
 		CD29636425191C80008443AF /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD29636325191C7C008443AF /* Colors.xcassets */; };
+		CD421872251B4819004544B3 /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD421871251B4819004544B3 /* TaskTableViewCell.swift */; };
+		CD421875251B4843004544B3 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD421874251B4843004544B3 /* Task.swift */; };
 		CD7282BF250F740000D68911 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282BE250F740000D68911 /* AppCoordinator.swift */; };
 		CD7282C1250F945900D68911 /* HelpCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C0250F945900D68911 /* HelpCoordinator.swift */; };
-		CD7282C3250F9AFE00D68911 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C2250F9AFE00D68911 /* MainViewController.swift */; };
-		CD7282C6250F9D2400D68911 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C5250F9D2400D68911 /* MainCoordinator.swift */; };
+		CD7282C3250F9AFE00D68911 /* TaskOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C2250F9AFE00D68911 /* TaskOverviewViewController.swift */; };
+		CD7282C6250F9D2400D68911 /* TaskOverviewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C5250F9D2400D68911 /* TaskOverviewCoordinator.swift */; };
+		CD7FACA1251B3FCD00AB8142 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7FACA0251B3FCD00AB8142 /* TextView.swift */; };
 		CDA5C11125123DC9009440D1 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C11025123DC9009440D1 /* AppVersion.swift */; };
 		CDA5C11825135A46009440D1 /* SelectContactCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C11725135A46009440D1 /* SelectContactCoordinator.swift */; };
 		CDA5C11A251389BB009440D1 /* RequestAuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C119251389BB009440D1 /* RequestAuthorizationViewController.swift */; };
@@ -30,11 +33,15 @@
 		CDC4A8EA250B87E5001BABC6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC4A8E9250B87E5001BABC6 /* SceneDelegate.swift */; };
 		CDC4A8F1250B87E6001BABC6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CDC4A8F0250B87E6001BABC6 /* Assets.xcassets */; };
 		CDC4A8F4250B87E6001BABC6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CDC4A8F2250B87E6001BABC6 /* LaunchScreen.storyboard */; };
+		CDE30E64251BC02100862A40 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E63251BC02100862A40 /* TextField.swift */; };
+		CDE30E69251C89FF00862A40 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E68251C89FF00862A40 /* NavigationController.swift */; };
+		CDE30E6C251CE15800862A40 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E6B251CE15800862A40 /* Contact.swift */; };
+		CDE30E72251E278200862A40 /* EditContactCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E71251E278200862A40 /* EditContactCoordinator.swift */; };
+		CDE30E782521D92600862A40 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CDE30E7A2521D92600862A40 /* Localizable.strings */; };
 		CDFCF905250FA0910062269A /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF904250FA0910062269A /* HelpViewController.swift */; };
 		CDFCF907250FA6E80062269A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF906250FA6E80062269A /* ViewController.swift */; };
 		CDFCF9092510BEF50062269A /* HelpItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF9082510BEF50062269A /* HelpItem.swift */; };
 		CDFCF90C2510C47E0062269A /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF90B2510C47E0062269A /* Localization.swift */; };
-		CDFCF90E2510C7250062269A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CDFCF90D2510C5C40062269A /* Localizable.strings */; };
 		CDFCF9102510DF430062269A /* HelpItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF90F2510DF430062269A /* HelpItemTableViewCell.swift */; };
 		CDFCF9122510E0550062269A /* HelpQuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF9112510E0550062269A /* HelpQuestionViewController.swift */; };
 		CDFCF9152510EBC40062269A /* NSAttributedString+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF9142510EB4D0062269A /* NSAttributedString+Extension.swift */; };
@@ -47,16 +54,19 @@
 		CD2963462514E129008443AF /* ContactTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactTableViewCell.swift; sourceTree = "<group>"; };
 		CD29634B2518CE8E008443AF /* TableViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewManager.swift; sourceTree = "<group>"; };
 		CD29634E2518ED51008443AF /* UIEdgeInsets+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+Convenience.swift"; sourceTree = "<group>"; };
-		CD2963512518F291008443AF /* SelectContactDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectContactDetailsViewController.swift; sourceTree = "<group>"; };
+		CD2963512518F291008443AF /* EditContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditContactViewController.swift; sourceTree = "<group>"; };
 		CD2963542518F59E008443AF /* UITableView+Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Defaults.swift"; sourceTree = "<group>"; };
 		CD29635725191941008443AF /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		CD29635A25191972008443AF /* Haptic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptic.swift; sourceTree = "<group>"; };
 		CD29636025191AA8008443AF /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		CD29636325191C7C008443AF /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		CD421871251B4819004544B3 /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
+		CD421874251B4843004544B3 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		CD7282BE250F740000D68911 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		CD7282C0250F945900D68911 /* HelpCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpCoordinator.swift; sourceTree = "<group>"; };
-		CD7282C2250F9AFE00D68911 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
-		CD7282C5250F9D2400D68911 /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
+		CD7282C2250F9AFE00D68911 /* TaskOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskOverviewViewController.swift; sourceTree = "<group>"; };
+		CD7282C5250F9D2400D68911 /* TaskOverviewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskOverviewCoordinator.swift; sourceTree = "<group>"; };
+		CD7FACA0251B3FCD00AB8142 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		CDA5C11025123DC9009440D1 /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		CDA5C11725135A46009440D1 /* SelectContactCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectContactCoordinator.swift; sourceTree = "<group>"; };
 		CDA5C119251389BB009440D1 /* RequestAuthorizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestAuthorizationViewController.swift; sourceTree = "<group>"; };
@@ -68,11 +78,18 @@
 		CDC4A8F0250B87E6001BABC6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CDC4A8F3250B87E6001BABC6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CDC4A8F5250B87E6001BABC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CDE30E63251BC02100862A40 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
+		CDE30E68251C89FF00862A40 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		CDE30E6B251CE15800862A40 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
+		CDE30E71251E278200862A40 /* EditContactCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditContactCoordinator.swift; sourceTree = "<group>"; };
+		CDE30E762521D90200862A40 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		CDE30E792521D92600862A40 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CDE30E7C2521D92B00862A40 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CDE30E7E2521D97000862A40 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		CDFCF904250FA0910062269A /* HelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
 		CDFCF906250FA6E80062269A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		CDFCF9082510BEF50062269A /* HelpItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpItem.swift; sourceTree = "<group>"; };
 		CDFCF90B2510C47E0062269A /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
-		CDFCF90D2510C5C40062269A /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		CDFCF90F2510DF430062269A /* HelpItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpItemTableViewCell.swift; sourceTree = "<group>"; };
 		CDFCF9112510E0550062269A /* HelpQuestionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpQuestionViewController.swift; sourceTree = "<group>"; };
 		CDFCF9142510EB4D0062269A /* NSAttributedString+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Extension.swift"; sourceTree = "<group>"; };
@@ -97,6 +114,9 @@
 				CD29635725191941008443AF /* Button.swift */,
 				CDFCF9182510FC760062269A /* SelfSizingTableView.swift */,
 				CDFCF906250FA6E80062269A /* ViewController.swift */,
+				CD7FACA0251B3FCD00AB8142 /* TextView.swift */,
+				CDE30E63251BC02100862A40 /* TextField.swift */,
+				CDE30E68251C89FF00862A40 /* NavigationController.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -120,7 +140,7 @@
 				CDA5C11D2514B400009440D1 /* Authorization */,
 				CDA5C11625135A07009440D1 /* Contact */,
 				CD7282BC250F728800D68911 /* Help */,
-				CD7282C4250F9CF100D68911 /* Main */,
+				CD7282C4250F9CF100D68911 /* Task */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -147,13 +167,15 @@
 			path = App;
 			sourceTree = "<group>";
 		};
-		CD7282C4250F9CF100D68911 /* Main */ = {
+		CD7282C4250F9CF100D68911 /* Task */ = {
 			isa = PBXGroup;
 			children = (
-				CD7282C5250F9D2400D68911 /* MainCoordinator.swift */,
-				CD7282C2250F9AFE00D68911 /* MainViewController.swift */,
+				CD7282C5250F9D2400D68911 /* TaskOverviewCoordinator.swift */,
+				CD7282C2250F9AFE00D68911 /* TaskOverviewViewController.swift */,
+				CD421871251B4819004544B3 /* TaskTableViewCell.swift */,
+				CD421874251B4843004544B3 /* Task.swift */,
 			);
-			path = Main;
+			path = Task;
 			sourceTree = "<group>";
 		};
 		CDA5C11625135A07009440D1 /* Contact */ = {
@@ -161,8 +183,10 @@
 			children = (
 				CD2963462514E129008443AF /* ContactTableViewCell.swift */,
 				CDA5C11725135A46009440D1 /* SelectContactCoordinator.swift */,
+				CDE30E71251E278200862A40 /* EditContactCoordinator.swift */,
 				CD2963432514BF4E008443AF /* SelectContactViewController.swift */,
-				CD2963512518F291008443AF /* SelectContactDetailsViewController.swift */,
+				CD2963512518F291008443AF /* EditContactViewController.swift */,
+				CDE30E6B251CE15800862A40 /* Contact.swift */,
 			);
 			path = Contact;
 			sourceTree = "<group>";
@@ -210,7 +234,7 @@
 				CD29636325191C7C008443AF /* Colors.xcassets */,
 				CDC4A8F5250B87E6001BABC6 /* Info.plist */,
 				CDC4A8F2250B87E6001BABC6 /* LaunchScreen.storyboard */,
-				CDFCF90D2510C5C40062269A /* Localizable.strings */,
+				CDE30E7A2521D92600862A40 /* Localizable.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -280,6 +304,7 @@
 			knownRegions = (
 				en,
 				Base,
+				nl,
 			);
 			mainGroup = CDC4A8DB250B87E5001BABC6;
 			productRefGroup = CDC4A8E5250B87E5001BABC6 /* Products */;
@@ -298,7 +323,7 @@
 			files = (
 				CDC4A8F4250B87E6001BABC6 /* LaunchScreen.storyboard in Resources */,
 				CD29636425191C80008443AF /* Colors.xcassets in Resources */,
-				CDFCF90E2510C7250062269A /* Localizable.strings in Resources */,
+				CDE30E782521D92600862A40 /* Localizable.strings in Resources */,
 				CDC4A8F1250B87E6001BABC6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -333,21 +358,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				CDFCF9192510FC760062269A /* SelfSizingTableView.swift in Sources */,
+				CDE30E72251E278200862A40 /* EditContactCoordinator.swift in Sources */,
 				CD2963442514BF4E008443AF /* SelectContactViewController.swift in Sources */,
 				CD29634C2518CE8E008443AF /* TableViewManager.swift in Sources */,
 				CDA5C11A251389BB009440D1 /* RequestAuthorizationViewController.swift in Sources */,
 				CDFCF905250FA0910062269A /* HelpViewController.swift in Sources */,
+				CDE30E69251C89FF00862A40 /* NavigationController.swift in Sources */,
 				CDA5C11125123DC9009440D1 /* AppVersion.swift in Sources */,
 				CDFCF9102510DF430062269A /* HelpItemTableViewCell.swift in Sources */,
 				CD7282BF250F740000D68911 /* AppCoordinator.swift in Sources */,
 				CDFCF9092510BEF50062269A /* HelpItem.swift in Sources */,
 				CD2963552518F59E008443AF /* UITableView+Defaults.swift in Sources */,
 				CDC272EF2514B46B00AE7BB6 /* RequestContactsAuthorizationViewModel.swift in Sources */,
-				CD7282C6250F9D2400D68911 /* MainCoordinator.swift in Sources */,
+				CD7282C6250F9D2400D68911 /* TaskOverviewCoordinator.swift in Sources */,
+				CDE30E64251BC02100862A40 /* TextField.swift in Sources */,
 				CD7282C1250F945900D68911 /* HelpCoordinator.swift in Sources */,
+				CD421872251B4819004544B3 /* TaskTableViewCell.swift in Sources */,
 				CDFCF9152510EBC40062269A /* NSAttributedString+Extension.swift in Sources */,
 				CDC4A8E8250B87E5001BABC6 /* AppDelegate.swift in Sources */,
-				CD2963522518F291008443AF /* SelectContactDetailsViewController.swift in Sources */,
+				CD2963522518F291008443AF /* EditContactViewController.swift in Sources */,
 				CD29635825191941008443AF /* Button.swift in Sources */,
 				CDA5C11825135A46009440D1 /* SelectContactCoordinator.swift in Sources */,
 				CDFCF90C2510C47E0062269A /* Localization.swift in Sources */,
@@ -355,12 +384,15 @@
 				CD29635B25191972008443AF /* Haptic.swift in Sources */,
 				CDFCF907250FA6E80062269A /* ViewController.swift in Sources */,
 				CD29636125191AA8008443AF /* Theme.swift in Sources */,
+				CD421875251B4843004544B3 /* Task.swift in Sources */,
+				CDE30E6C251CE15800862A40 /* Contact.swift in Sources */,
 				CD29634F2518ED51008443AF /* UIEdgeInsets+Convenience.swift in Sources */,
-				CD7282C3250F9AFE00D68911 /* MainViewController.swift in Sources */,
+				CD7282C3250F9AFE00D68911 /* TaskOverviewViewController.swift in Sources */,
 				CDFCF9172510ECC70062269A /* UIView+Embed.swift in Sources */,
 				CD2963472514E129008443AF /* ContactTableViewCell.swift in Sources */,
 				CDFCF9122510E0550062269A /* HelpQuestionViewController.swift in Sources */,
 				CDA5C11C25139D36009440D1 /* UIStackView+Axis.swift in Sources */,
+				CD7FACA1251B3FCD00AB8142 /* TextView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,8 +403,19 @@
 			isa = PBXVariantGroup;
 			children = (
 				CDC4A8F3250B87E6001BABC6 /* Base */,
+				CDE30E762521D90200862A40 /* nl */,
+				CDE30E7E2521D97000862A40 /* en */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		CDE30E7A2521D92600862A40 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CDE30E792521D92600862A40 /* en */,
+				CDE30E7C2521D92B00862A40 /* nl */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -382,6 +425,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -443,6 +487,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
