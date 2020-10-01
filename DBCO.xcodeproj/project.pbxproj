@@ -117,14 +117,8 @@
 		CD29635D25191975008443AF /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				CD29635725191941008443AF /* Button.swift */,
-				CD1824ED2524B3E4006EB272 /* InputField.swift */,
-				CDE30E68251C89FF00862A40 /* NavigationController.swift */,
-				CD49BAEA2525CE7C0079D018 /* PromptableViewController.swift */,
-				CDFCF9182510FC760062269A /* SelfSizingTableView.swift */,
-				CDE30E63251BC02100862A40 /* TextField.swift */,
-				CD7FACA0251B3FCD00AB8142 /* TextView.swift */,
-				CDFCF906250FA6E80062269A /* ViewController.swift */,
+				CD49BAEE2525CEF80079D018 /* Controllers */,
+				CD49BAED2525CEE60079D018 /* Views */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -139,6 +133,28 @@
 				CD29636025191AA8008443AF /* Theme.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		CD49BAED2525CEE60079D018 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				CD29635725191941008443AF /* Button.swift */,
+				CD1824ED2524B3E4006EB272 /* InputField.swift */,
+				CDFCF9182510FC760062269A /* SelfSizingTableView.swift */,
+				CDE30E63251BC02100862A40 /* TextField.swift */,
+				CD7FACA0251B3FCD00AB8142 /* TextView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		CD49BAEE2525CEF80079D018 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				CDE30E68251C89FF00862A40 /* NavigationController.swift */,
+				CD49BAEA2525CE7C0079D018 /* PromptableViewController.swift */,
+				CDFCF906250FA6E80062269A /* ViewController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		CD7282BB250F728000D68911 /* Features */ = {

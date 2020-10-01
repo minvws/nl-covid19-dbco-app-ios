@@ -41,6 +41,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         iconContainerView.alignment = .leading
         iconContainerView.isUserInteractionEnabled = false
         iconContainerView.isHidden = true
+        iconContainerView.frame.size.width = 100 // To prevent some constraint errors before layout
         
         addSubview(iconContainerView)
         
@@ -116,6 +117,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     override var text: String? {
         didSet {
             textWidthLabel.text = text
+            updateValidationStateIfNeeded()
         }
     }
     
@@ -128,6 +130,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     override var attributedText: NSAttributedString? {
         didSet {
             textWidthLabel.attributedText = attributedText
+            updateValidationStateIfNeeded()
         }
     }
     
@@ -135,6 +138,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     
     @objc private func handleEditingDidEnd() {
         object?[keyPath: path].value = text
+        updateValidationStateIfNeeded()
     }
     
     @objc private func handleEditingDidBegin() {
@@ -152,6 +156,14 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     
     @objc private func done() {
         resignFirstResponder()
+    }
+    
+    private func updateValidationStateIfNeeded() {
+        guard Field.showValidationState else { return }
+        
+        // TODO: Placeholder implementation
+        iconContainerView.isHidden = text?.isEmpty == true
+        validationIconView.isHighlighted = true
     }
     
     private func resetDatePickerBackground() {
