@@ -168,6 +168,10 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     
     private func resetDatePickerBackground() {
         datePicker?.subviews.first?.subviews.first?.backgroundColor = .clear
+        
+        DispatchQueue.main.async { [datePicker] in
+            datePicker?.subviews.first?.subviews.first?.backgroundColor = .clear
+        }
     }
     
     private var datePicker: UIDatePicker?
