@@ -20,6 +20,7 @@
 		CD29636425191C80008443AF /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD29636325191C7C008443AF /* Colors.xcassets */; };
 		CD421872251B4819004544B3 /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD421871251B4819004544B3 /* TaskTableViewCell.swift */; };
 		CD421875251B4843004544B3 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD421874251B4843004544B3 /* Task.swift */; };
+		CD49BAEB2525CE7C0079D018 /* PromptableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD49BAEA2525CE7C0079D018 /* PromptableViewController.swift */; };
 		CD7282BF250F740000D68911 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282BE250F740000D68911 /* AppCoordinator.swift */; };
 		CD7282C1250F945900D68911 /* HelpCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C0250F945900D68911 /* HelpCoordinator.swift */; };
 		CD7282C3250F9AFE00D68911 /* TaskOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C2250F9AFE00D68911 /* TaskOverviewViewController.swift */; };
@@ -65,6 +66,7 @@
 		CD29636325191C7C008443AF /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		CD421871251B4819004544B3 /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
 		CD421874251B4843004544B3 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
+		CD49BAEA2525CE7C0079D018 /* PromptableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptableViewController.swift; sourceTree = "<group>"; };
 		CD7282BE250F740000D68911 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		CD7282C0250F945900D68911 /* HelpCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpCoordinator.swift; sourceTree = "<group>"; };
 		CD7282C2250F9AFE00D68911 /* TaskOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskOverviewViewController.swift; sourceTree = "<group>"; };
@@ -116,12 +118,13 @@
 			isa = PBXGroup;
 			children = (
 				CD29635725191941008443AF /* Button.swift */,
-				CDFCF9182510FC760062269A /* SelfSizingTableView.swift */,
-				CDFCF906250FA6E80062269A /* ViewController.swift */,
-				CD7FACA0251B3FCD00AB8142 /* TextView.swift */,
 				CD1824ED2524B3E4006EB272 /* InputField.swift */,
-				CDE30E63251BC02100862A40 /* TextField.swift */,
 				CDE30E68251C89FF00862A40 /* NavigationController.swift */,
+				CD49BAEA2525CE7C0079D018 /* PromptableViewController.swift */,
+				CDFCF9182510FC760062269A /* SelfSizingTableView.swift */,
+				CDE30E63251BC02100862A40 /* TextField.swift */,
+				CD7FACA0251B3FCD00AB8142 /* TextView.swift */,
+				CDFCF906250FA6E80062269A /* ViewController.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -387,6 +390,7 @@
 				CD29635825191941008443AF /* Button.swift in Sources */,
 				CDE30E8725232FE200862A40 /* InputFieldEditable.swift in Sources */,
 				CDA5C11825135A46009440D1 /* SelectContactCoordinator.swift in Sources */,
+				CD49BAEB2525CE7C0079D018 /* PromptableViewController.swift in Sources */,
 				CDFCF90C2510C47E0062269A /* Localization.swift in Sources */,
 				CDC4A8EA250B87E5001BABC6 /* SceneDelegate.swift in Sources */,
 				CD29635B25191972008443AF /* Haptic.swift in Sources */,
