@@ -15,8 +15,6 @@ class NavigationController: UINavigationController, DismissActionable {
         
         navigationBar.barTintColor = Theme.colors.navigationControllerBackground
         navigationBar.tintColor = Theme.colors.primary
-        
-        setLeftMarginIfNeeded()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -25,23 +23,5 @@ class NavigationController: UINavigationController, DismissActionable {
         if isBeingDismissed {
             onDismissed?(self)
         }
-    }
-    
-    private func setLeftMarginIfNeeded() {
-        guard UIDevice.current.userInterfaceIdiom == .pad else {
-            return
-        }
-        
-        let leftMargin = view.readableContentGuide.layoutFrame.minX
-        navigationBar.layoutMargins.left = leftMargin
-        navigationBar.layoutMarginsDidChange()
-    }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-
-        coordinator.animate(alongsideTransition: { _ in
-            self.setLeftMarginIfNeeded()
-        }, completion: nil)
     }
 }

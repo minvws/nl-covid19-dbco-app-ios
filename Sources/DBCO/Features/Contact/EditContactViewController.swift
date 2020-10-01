@@ -8,25 +8,8 @@
 import UIKit
 import Contacts
 
-extension ContactField {
-    var label: String {
-        switch self {
-        case .firstName: return .contactInformationFirstName
-        case .lastName: return .contactInformationLastName
-        case .phoneNumber: return .contactInformationPhoneNumber
-        case .email: return .contactInformationEmailAddress
-        case .relation: return .contactInformationRelationType
-        case .birthDate: return .contactInformationBirthDate
-        case .bsn: return .contactInformationBSN
-        case .profession: return .contactInformationProfession
-        case .companyName: return .contactInformationCompanyName
-        case .notes: return .contactInformationNotes
-        }
-    }
-}
-
 class EditContactViewModel {
-    let contact: Contact
+    private(set) var contact: Contact
     let title: String
     let showCancelButton: Bool
     
@@ -37,33 +20,41 @@ class EditContactViewModel {
     }
     
     init(contact: Contact, showCancelButton: Bool = false) {
-        self.contact = contact
+        self.contact = contact.copy() as! Contact
         self.title = contact.fullName
         self.showCancelButton = showCancelButton
     }
     
-    typealias Input = (label: String, text: String?)
-    
     enum Row {
-        case group([Input])
-        case single(Input)
-    }
-    
-    private func values(for field: ContactField) -> [String?] {
-        return contact.values
-            .filter { $0.field == field }
-            .map { $0.value }
+        case group([UIView])
+        case single(UIView)
     }
     
     var rows: [Row] {
-        let inputs = contact.type.requiredFields.flatMap { field -> [Input] in
-            values(for: field)
-                .map { Input(label: field.label, text: $0) }
-        }
+        let firstNameField = InputField(for: contact, path: \.firstName)
+        let lastNameField = InputField(for: contact, path: \.lastName)
         
-        let name = Row.group(Array(inputs.prefix(2)))
-        let other = inputs.suffix(from: 2).map(Row.single)
-        return [name] + other
+        let phoneNumberFields = contact.phoneNumbers.indices
+            .map { \Contact.phoneNumbers[$0] }
+            .map { InputField(for: contact, path: $0) }
+            .map(Row.single)
+        
+        let emailFields = contact.emailAddresses.indices
+            .map { \Contact.emailAddresses[$0] }
+            .map { InputField(for: contact, path: $0) }
+            .map(Row.single)
+        
+        var base = [Row.group([firstNameField, lastNameField])]
+        base += phoneNumberFields
+        base += emailFields
+        
+        return base + [
+            .single(InputField(for: contact, path: \.relationType)),
+            .single(InputField(for: contact, path: \.birthDate)),
+            .single(InputField(for: contact, path: \.bsn)),
+            .single(InputField(for: contact, path: \.profession)),
+            .single(InputField(for: contact, path: \.notes))
+        ]
     }
 }
 
@@ -113,17 +104,12 @@ final class EditContactViewController: PromptableViewController {
         let widthProviderView = UIView()
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
         
-        func createTextField(_ input: EditContactViewModel.Input) -> TextField {
-            return TextField(label: input.label, text: input.text)
-        }
-        
         let rows = viewModel.rows.map { row -> UIView in
             switch row {
-            case .group(let inputs):
-                let columns = inputs.map(createTextField)
-                return UIStackView(horizontal: columns, spacing: 15).distribution(.fillEqually)
-            case .single(let input):
-                return createTextField(input)
+            case .group(let fields):
+                return UIStackView(horizontal: fields, spacing: 15).distribution(.fillEqually)
+            case .single(let field):
+                return field
             }
         }
         
@@ -168,7 +154,8 @@ final class EditContactViewController: PromptableViewController {
             let visibleFrame = CGRect(x: 0,
                                       y: scrollView.contentOffset.y,
                                       width: scrollView.frame.width,
-                                      height: scrollView.frame.height - inset)
+                                      height: scrollView.frame.height)
+                .inset(by: scrollView.contentInset)
                 .inset(by: scrollView.safeAreaInsets)
             
             // cancel current animation

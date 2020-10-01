@@ -9,10 +9,9 @@ import UIKit
 
 class TextField: UITextField {
     
-    override var placeholder: String? {
-        didSet {
-            label.text = placeholder
-        }
+    init() {
+        super.init(frame: .zero)
+        setup()
     }
     
     init(label: String, text: String? = nil) {
@@ -87,7 +86,7 @@ class TextField: UITextField {
         return ceil(font!.lineHeight + 1)
     }
     
-    private var label = UILabel()
-    private var backgroundView = UIView()
+    private(set) var label = UILabel()
+    private(set) var backgroundView = UIView()
     
 }
