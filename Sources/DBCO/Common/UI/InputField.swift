@@ -82,7 +82,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             datePicker.datePickerMode = .date
             datePicker.preferredDatePickerStyle = .automatic
             datePicker.addTarget(self, action: #selector(handleDateValueChanged), for: .valueChanged)
-            datePicker.tintColor = Theme.colors.primary
+            datePicker.tintColor = .black
+            resetDatePickerBackground()
             
             addSubview(datePicker)
             
