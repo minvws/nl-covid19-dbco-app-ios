@@ -146,6 +146,12 @@ class PromptableViewController: ViewController {
     }
     
     func hidePrompt(animated: Bool = true) {
+        guard animated else {
+            promptView?.isHidden = true
+            view.layoutIfNeeded()
+            return
+        }
+        
         // Expands the view so the prompt container will be outside of the screen (animated)
         // Then hides the prompt container and restores the view's height
         
@@ -172,6 +178,12 @@ class PromptableViewController: ViewController {
     }
     
     func showPrompt(animated: Bool = true) {
+        guard animated else {
+            promptView?.isHidden = false
+            view.layoutIfNeeded()
+            return
+        }
+        
         // Shows the prompt container
         // Then expands the view so the prompt container will be outside of the screen
         // Then restores view's original height (animated)
