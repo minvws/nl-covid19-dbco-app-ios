@@ -83,6 +83,7 @@ class RequestAuthorizationViewController: ViewController {
         
         let bodyLabel = UILabel()
         bodyLabel.font = Theme.fonts.body
+        bodyLabel.textColor = Theme.colors.captionGray
         bodyLabel.numberOfLines = 0
         
         viewModel.body

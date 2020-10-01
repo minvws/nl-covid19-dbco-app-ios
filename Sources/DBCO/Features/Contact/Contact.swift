@@ -33,15 +33,47 @@ class Contact {
         [firstName.value, lastName.value].compactMap { $0 }.joined(separator: " ")
     }
     
-    init(type: ContactType, cnContact: CNContact? = nil) {
+    init(type: ContactType) {
+        self.type = type
+        setDefaults()
+    }
+    
+    init(type: ContactType, cnContact: CNContact) {
         self.type = type
         
-        if let cnContact = cnContact {
-            firstName = cnContact.contactFirstName
-            lastName = cnContact.contactLastName
-            phoneNumbers = cnContact.contactPhoneNumbers
-            emailAddresses = cnContact.contactEmailAddresses
-            birthDate = cnContact.contactBirthDay
+        firstName = cnContact.contactFirstName
+        lastName = cnContact.contactLastName
+        phoneNumbers = cnContact.contactPhoneNumbers
+        emailAddresses = cnContact.contactEmailAddresses
+        birthDate = cnContact.contactBirthDay
+        
+        setDefaults()
+    }
+    
+    init(type: ContactType, name: String) {
+        self.type = type
+        
+        let nameParts = name.split(separator: " ")
+        switch nameParts.count {
+        case 2...:
+            firstName.value = String(nameParts.first!)
+            lastName.value = String(nameParts.last!)
+        case 1:
+            firstName.value = String(nameParts.first!)
+        default:
+            break
+        }
+        
+        setDefaults()
+    }
+    
+    private func setDefaults() {
+        if phoneNumbers.isEmpty {
+            phoneNumbers.append(PhoneNumber())
+        }
+        
+        if emailAddresses.isEmpty {
+            emailAddresses.append(EmailAddress())
         }
     }
     
