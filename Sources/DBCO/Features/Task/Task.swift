@@ -28,7 +28,11 @@ protocol TaskManagerListener: class {
 
 final class TaskManager {
     
-    private var listeners = [TaskManagerListener?]()
+    private struct ListenerWrapper {
+        weak var listener: TaskManagerListener?
+    }
+    
+    private var listeners = [ListenerWrapper]()
     
     private(set) var tasks: [Task] = [
         ContactDetailsTask(name: "Aziz F", identifier: UUID().uuidString, completed: false, isSynced: false),
@@ -49,7 +53,7 @@ final class TaskManager {
         
         tasks[index] = updatedTask
         
-        listeners.forEach { $0?.taskManagerDidUpdateTasks(self) }
+        listeners.forEach { $0.listener?.taskManagerDidUpdateTasks(self) }
     }
     
     func addContact(_ contact: Contact) {
@@ -59,12 +63,11 @@ final class TaskManager {
                                         completed: contact.isValid,
                                         isSynced: false))
         
-        listeners.forEach { $0?.taskManagerDidUpdateTasks(self) }
+        listeners.forEach { $0.listener?.taskManagerDidUpdateTasks(self) }
     }
     
     func addListener(_ listener: TaskManagerListener) {
-        weak var weakListener = listener
-        listeners.append(weakListener)
+        listeners.append(ListenerWrapper(listener: listener))
     }
     
 }
