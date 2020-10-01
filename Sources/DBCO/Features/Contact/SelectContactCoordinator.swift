@@ -81,7 +81,11 @@ extension SelectContactCoordinator: RequestAuthorizationViewControllerDelegate {
     }
     
     func continueWithoutAuthorization(for controller: RequestAuthorizationViewController) {
-        navigationController.dismiss(animated: true)
+        let detailViewModel = EditContactViewModel(contact: Contact(type: .general, name: suggestedName ?? ""), showCancelButton: true)
+        let detailsController = EditContactViewController(viewModel: detailViewModel)
+        detailsController.delegate = self
+        
+        navigationController.setViewControllers([detailsController], animated: true)
     }
     
     func currentAutorizationStatus(for controller: RequestAuthorizationViewController) -> AuthorizationStatusConvertible {
@@ -92,7 +96,6 @@ extension SelectContactCoordinator: RequestAuthorizationViewControllerDelegate {
 
 extension SelectContactCoordinator: SelectContactViewControllerDelegate {
     
-    
     func selectContactViewController(_ controller: SelectContactViewController, didSelect contact: CNContact) {
         let detailViewModel = EditContactViewModel(contact: contact)
         let detailsController = EditContactViewController(viewModel: detailViewModel)
@@ -102,8 +105,11 @@ extension SelectContactCoordinator: SelectContactViewControllerDelegate {
     }
     
     func selectContactViewControllerDidRequestManualInput(_ controller: SelectContactViewController) {
-        selectedContact = nil
-        navigationController.dismiss(animated: true)
+        let detailViewModel = EditContactViewModel(contact: Contact(type: .general, name: suggestedName ?? ""))
+        let detailsController = EditContactViewController(viewModel: detailViewModel)
+        detailsController.delegate = self
+        
+        navigationController.pushViewController(detailsController, animated: true)
     }
     
     func selectContactViewControllerDidCancel(_ controller: SelectContactViewController) {
@@ -116,7 +122,8 @@ extension SelectContactCoordinator: SelectContactViewControllerDelegate {
 extension SelectContactCoordinator: EditContactViewControllerDelegate {
     
     func editContactViewControllerDidCancel(_ controller: EditContactViewController) {
-        
+        selectedContact = nil
+        navigationController.dismiss(animated: true)
     }
     
     func editContactViewController(_ controller: EditContactViewController, didSave contact: Contact) {

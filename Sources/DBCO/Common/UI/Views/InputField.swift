@@ -169,6 +169,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     private func resetDatePickerBackground() {
         datePicker?.subviews.first?.subviews.first?.backgroundColor = .clear
         
+        // Schedule clearing the backgroundColor again on the next runloop.
+        // This seems to handle all cases where the UIDatePicker resets its backgroundColor
         DispatchQueue.main.async { [datePicker] in
             datePicker?.subviews.first?.subviews.first?.backgroundColor = .clear
         }
