@@ -159,7 +159,7 @@ class PromptableViewController: ViewController {
             return
         }
         
-        let originalFrame = self.view.frame
+        let originalFrame = view.frame
         
         var frame = view.frame
         frame.size.height += (view as! PromptView).promptContainerView.frame.height
@@ -192,19 +192,19 @@ class PromptableViewController: ViewController {
             return
         }
         
-        let originalFrame = self.view.frame
+        let originalFrame = view.frame
         
         promptView?.isHidden = false
         
-        self.view.layoutIfNeeded()
+        view.layoutIfNeeded()
         
         var frame = view.frame
         frame.size.height += (view as! PromptView).promptContainerView.frame.height
         view.frame = frame
         
-        self.view.layoutIfNeeded()
+        view.layoutIfNeeded()
         
-        self.view.frame = originalFrame
+        view.frame = originalFrame
         
         UIView.animate(
             withDuration: 0.3,
