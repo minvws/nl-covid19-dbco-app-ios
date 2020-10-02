@@ -7,6 +7,7 @@
 
 import UIKit
 import Contacts
+import ContactsUI
 
 protocol SelectContactCoordinatorDelegate: class {
     func selectContactCoordinatorDidFinish(_ coordinator: SelectContactCoordinator, with contact: Contact?)
@@ -28,24 +29,48 @@ final class SelectContactCoordinator: Coordinator {
     }
     
     override func start() {
-        let firstController: UIViewController
         let currentStatus = CNContactStore.authorizationStatus(for: .contacts)
         
-        if currentStatus == .authorized {
+        switch currentStatus {
+        case .authorized:
             let viewModel = SelectContactViewModel(suggestedName: suggestedName)
             let selectController = SelectContactViewController(viewModel: viewModel)
             selectController.delegate = self
             
-            firstController = selectController
-        } else {
+            presentNavigationController(with: selectController)
+            
+        case .notDetermined:
             let viewModel = RequestContactsAuthorizationViewModel(currentStatus: currentStatus)
             let authorizationController = RequestAuthorizationViewController(viewModel: viewModel)
             authorizationController.delegate = self
             
-            firstController = authorizationController
+            presentNavigationController(with: authorizationController)
+            
+        case .denied, .restricted: fallthrough
+        @unknown default:
+            let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            
+            actionSheet.addAction(
+                UIAlertAction(title: .selectContactFromContactsFallback, style: .default) { _ in
+                    self.continueWithSystemContactPicker()
+                })
+            
+            actionSheet.addAction(
+                UIAlertAction(title: .selectContactAddManuallyFallback, style: .default) { _ in
+                    self.continueManually()
+                })
+            
+            actionSheet.addAction(
+                UIAlertAction(title: .cancel, style: .cancel) { _ in
+                    self.delegate?.selectContactCoordinatorDidFinish(self, with: nil)
+                })
+            
+            presenter?.present(actionSheet, animated: true)
         }
-
-        navigationController.setViewControllers([firstController], animated: false)
+    }
+    
+    private func presentNavigationController(with controller: UIViewController) {
+        navigationController.setViewControllers([controller], animated: false)
         presenter?.present(navigationController, animated: true)
         
         navigationController.onDismissed = { [weak self] _ in
@@ -55,12 +80,28 @@ final class SelectContactCoordinator: Coordinator {
         }
     }
     
-    func continueAfterAuthorization() {
+    private func continueAfterAuthorization() {
         let viewModel = SelectContactViewModel(suggestedName: suggestedName)
         let selectController = SelectContactViewController(viewModel: viewModel)
         selectController.delegate = self
         
         navigationController.setViewControllers([selectController], animated: true)
+    }
+    
+    private func continueWithSystemContactPicker() {
+        let picker = CNContactPickerViewController()
+        picker.delegate = self
+        
+        presenter?.present(picker, animated: true)
+    }
+    
+    private func continueManually() {
+        let contact = Contact(type: .general, name: suggestedName ?? "")
+        let editViewModel = EditContactViewModel(contact: contact, showCancelButton: true)
+        let editController = EditContactViewController(viewModel: editViewModel)
+        editController.delegate = self
+        
+        presentNavigationController(with: editController)
     }
 }
 
@@ -129,6 +170,24 @@ extension SelectContactCoordinator: EditContactViewControllerDelegate {
     func editContactViewController(_ controller: EditContactViewController, didSave contact: Contact) {
         selectedContact = contact
         navigationController.dismiss(animated: true)
+    }
+    
+}
+
+extension SelectContactCoordinator: CNContactPickerDelegate {
+    
+    func contactPickerDidCancel(_ picker: CNContactPickerViewController) {
+        delegate?.selectContactCoordinatorDidFinish(self, with: nil)
+    }
+    
+    func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
+        picker.dismiss(animated: true) {
+            let editViewModel = EditContactViewModel(contact: contact, showCancelButton: true)
+            let editController = EditContactViewController(viewModel: editViewModel)
+            editController.delegate = self
+            
+            self.presentNavigationController(with: editController)
+        }
     }
     
 }

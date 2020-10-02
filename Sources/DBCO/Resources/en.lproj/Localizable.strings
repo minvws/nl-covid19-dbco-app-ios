@@ -2,6 +2,7 @@
 
 /* MARK: - General */
 "save" = "Save";
+"cancel" = "Cancel";
 
 /* MARK: - Task Overview */
 "taskOverviewTitle" = "My contacts";
@@ -25,8 +26,11 @@
 "selectContactAddManually" = "+ Add manually";
 "selectContactSuggestions" = "You are probably looking for";
 "selectContactOtherContacts" = "Other contacts";
+"selectContactFromContactsFallback" = "From contacten";
+"selectContactAddManuallyFallback" = "Add manually";
 
 // MARK: - Editing Contacts
+"contactFallbackTitle" = "Add contact";
 "contactInformationFirstName" = "First name";
 "contactInformationLastName" = "Last name";
 "contactInformationPhoneNumber" = "Phone number";
