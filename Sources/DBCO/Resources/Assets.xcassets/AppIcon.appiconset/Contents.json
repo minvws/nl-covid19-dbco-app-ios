@@ -1,109 +1,109 @@
 {
   "images" : [
     {
-      "filename" : "TempIcon-20@2x.png",
+      "filename" : "Appicon-20@2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
-      "filename" : "TempIcon-20@3x.png",
+      "filename" : "Appicon-20@3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "20x20"
     },
     {
-      "filename" : "TempIcon-29@2x.png",
+      "filename" : "Appicon-29@2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
-      "filename" : "TempIcon-29@3x.png",
+      "filename" : "Appicon-29@3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "29x29"
     },
     {
-      "filename" : "TempIcon-40@2x.png",
+      "filename" : "Appicon-40@2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
-      "filename" : "TempIcon-40@3x.png",
+      "filename" : "Appicon-40@3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "40x40"
     },
     {
-      "filename" : "TempIcon-60@2x.png",
+      "filename" : "Appicon-60@2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
-      "filename" : "TempIcon-60@3x.png",
+      "filename" : "Appicon-60@3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "60x60"
     },
     {
-      "filename" : "TempIcon-20@1x.png",
+      "filename" : "Appicon-20@1x.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "20x20"
     },
     {
-      "filename" : "TempIcon-20@2x-1.png",
+      "filename" : "Appicon-20@2x-1.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
-      "filename" : "TempIcon-29@1x.png",
+      "filename" : "Appicon-29@1x.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "29x29"
     },
     {
-      "filename" : "TempIcon-29@2x-1.png",
+      "filename" : "Appicon-29@2x-1.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
-      "filename" : "TempIcon-40@1x.png",
+      "filename" : "Appicon-40@1x.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "40x40"
     },
     {
-      "filename" : "TempIcon-40@2x-1.png",
+      "filename" : "Appicon-40@2x-1.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
-      "filename" : "TempIcon-76@1x.png",
+      "filename" : "Appicon-76@1x.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "76x76"
     },
     {
-      "filename" : "TempIcon-76@2x.png",
+      "filename" : "Appicon-76@2x.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "76x76"
     },
     {
-      "filename" : "TempIcon-83-5@2x.png",
+      "filename" : "Appicon-83-5@2x.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "83.5x83.5"
     },
     {
-      "filename" : "TempIcon-1024@1x.png",
+      "filename" : "Appicon-1024@1x.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"
