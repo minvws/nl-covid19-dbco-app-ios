@@ -50,6 +50,7 @@ extension String {
     
     /* MARK: - General */
     static var save: String { return Localization.string(for: "save") }
+    static var cancel: String { return Localization.string(for: "cancel") }
     
     /* MARK: - Task Overview */
     static var taskOverviewTitle: String { return Localization.string(for: "taskOverviewTitle") }
@@ -73,8 +74,11 @@ extension String {
     static var selectContactAddManually: String { return Localization.string(for: "selectContactAddManually") }
     static var selectContactSuggestions: String { return Localization.string(for: "selectContactSuggestions") }
     static var selectContactOtherContacts: String { return Localization.string(for: "selectContactOtherContacts") }
+    static var selectContactFromContactsFallback: String { return Localization.string(for: "selectContactFromContactsFallback") }
+    static var selectContactAddManuallyFallback: String { return Localization.string(for: "selectContactAddManuallyFallback") }
     
     // MARK: - Editing Contacts
+    static var contactFallbackTitle: String { return Localization.string(for: "contactFallbackTitle") }
     static var contactInformationFirstName: String { return Localization.string(for: "contactInformationFirstName") }
     static var contactInformationLastName: String { return Localization.string(for: "contactInformationLastName") }
     static var contactInformationPhoneNumber: String { return Localization.string(for: "contactInformationPhoneNumber") }

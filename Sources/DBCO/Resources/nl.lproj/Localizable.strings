@@ -2,6 +2,7 @@
 
 /* MARK: - General */
 "save" = "Opslaan";
+"cancel" = "Annuleren";
 
 /* MARK: - Task Overview */
 "taskOverviewTitle" = "Mijn contacten";
@@ -25,8 +26,11 @@
 "selectContactAddManually" = "+ Handmatig toevoegen";
 "selectContactSuggestions" = "Waarschijnlijk zoek je";
 "selectContactOtherContacts" = "Andere contacten";
+"selectContactFromContactsFallback" = "Uit contacten";
+"selectContactAddManuallyFallback" = "Handmatig toevoegen";
 
 // MARK: - Editing Contacts
+"contactFallbackTitle" = "Contact toevoegen";
 "contactInformationFirstName" = "Voornaam";
 "contactInformationLastName" = "Achternaam";
 "contactInformationPhoneNumber" = "Telefoonnummer";

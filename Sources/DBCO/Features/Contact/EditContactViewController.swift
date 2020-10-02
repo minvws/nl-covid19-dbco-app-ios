@@ -21,7 +21,7 @@ class EditContactViewModel {
     
     init(contact: Contact, showCancelButton: Bool = false) {
         self.contact = contact.copy() as! Contact
-        self.title = contact.fullName
+        self.title = contact.fullName.isEmpty ? .contactFallbackTitle : contact.fullName
         self.showCancelButton = showCancelButton
     }
     
