@@ -23,7 +23,7 @@ platform :ios do
     run_tests(
       app_name: "DBCO",
       device: "iPhone 11 Pro",
-      workspace: "DBCO.xcodeproj",
+      project: "DBCO.xcodeproj",
       scheme: "DBCO",
       reinstall_app: true,
       app_identifier: "nl.rijksoverheid.dbco",
