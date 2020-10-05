@@ -25,6 +25,7 @@
 		CD7282C1250F945900D68911 /* HelpCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C0250F945900D68911 /* HelpCoordinator.swift */; };
 		CD7282C3250F9AFE00D68911 /* TaskOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C2250F9AFE00D68911 /* TaskOverviewViewController.swift */; };
 		CD7282C6250F9D2400D68911 /* TaskOverviewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C5250F9D2400D68911 /* TaskOverviewCoordinator.swift */; };
+		CD756C35252B3D36005FEDA0 /* DBCOTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C34252B3D36005FEDA0 /* DBCOTests.swift */; };
 		CD7FACA1251B3FCD00AB8142 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7FACA0251B3FCD00AB8142 /* TextView.swift */; };
 		CDA5C11125123DC9009440D1 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C11025123DC9009440D1 /* AppVersion.swift */; };
 		CDA5C11825135A46009440D1 /* SelectContactCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C11725135A46009440D1 /* SelectContactCoordinator.swift */; };
@@ -52,6 +53,16 @@
 		CDFCF9192510FC760062269A /* SelfSizingTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF9182510FC760062269A /* SelfSizingTableView.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		CD756C37252B3D37005FEDA0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CDC4A8DC250B87E5001BABC6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CDC4A8E3250B87E5001BABC6;
+			remoteInfo = DBCO;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		CD1824ED2524B3E4006EB272 /* InputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputField.swift; sourceTree = "<group>"; };
 		CD2963432514BF4E008443AF /* SelectContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectContactViewController.swift; sourceTree = "<group>"; };
@@ -71,6 +82,9 @@
 		CD7282C0250F945900D68911 /* HelpCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpCoordinator.swift; sourceTree = "<group>"; };
 		CD7282C2250F9AFE00D68911 /* TaskOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskOverviewViewController.swift; sourceTree = "<group>"; };
 		CD7282C5250F9D2400D68911 /* TaskOverviewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskOverviewCoordinator.swift; sourceTree = "<group>"; };
+		CD756C32252B3D36005FEDA0 /* DBCOTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DBCOTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD756C34252B3D36005FEDA0 /* DBCOTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBCOTests.swift; sourceTree = "<group>"; };
+		CD756C36252B3D37005FEDA0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CD7FACA0251B3FCD00AB8142 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		CDA5C11025123DC9009440D1 /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		CDA5C11725135A46009440D1 /* SelectContactCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectContactCoordinator.swift; sourceTree = "<group>"; };
@@ -104,6 +118,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		CD756C2F252B3D36005FEDA0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CDC4A8E1250B87E5001BABC6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -202,6 +223,15 @@
 			path = Task;
 			sourceTree = "<group>";
 		};
+		CD756C33252B3D36005FEDA0 /* DBCOTests */ = {
+			isa = PBXGroup;
+			children = (
+				CD756C34252B3D36005FEDA0 /* DBCOTests.swift */,
+				CD756C36252B3D37005FEDA0 /* Info.plist */,
+			);
+			path = DBCOTests;
+			sourceTree = "<group>";
+		};
 		CDA5C11625135A07009440D1 /* Contact */ = {
 			isa = PBXGroup;
 			children = (
@@ -229,6 +259,7 @@
 			isa = PBXGroup;
 			children = (
 				CDC4A8E6250B87E5001BABC6 /* DBCO */,
+				CD756C33252B3D36005FEDA0 /* DBCOTests */,
 				CDC4A8E5250B87E5001BABC6 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -237,6 +268,7 @@
 			isa = PBXGroup;
 			children = (
 				CDC4A8E4250B87E5001BABC6 /* DBCO.app */,
+				CD756C32252B3D36005FEDA0 /* DBCOTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -289,6 +321,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		CD756C31252B3D36005FEDA0 /* DBCOTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CD756C3B252B3D37005FEDA0 /* Build configuration list for PBXNativeTarget "DBCOTests" */;
+			buildPhases = (
+				CD756C2E252B3D36005FEDA0 /* Sources */,
+				CD756C2F252B3D36005FEDA0 /* Frameworks */,
+				CD756C30252B3D36005FEDA0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CD756C38252B3D37005FEDA0 /* PBXTargetDependency */,
+			);
+			name = DBCOTests;
+			productName = DBCOTests;
+			productReference = CD756C32252B3D36005FEDA0 /* DBCOTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		CDC4A8E3250B87E5001BABC6 /* DBCO */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = CDC4A8F8250B87E6001BABC6 /* Build configuration list for PBXNativeTarget "DBCO" */;
@@ -313,10 +363,14 @@
 		CDC4A8DC250B87E5001BABC6 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1170;
+				LastSwiftUpdateCheck = 1200;
 				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.";
 				TargetAttributes = {
+					CD756C31252B3D36005FEDA0 = {
+						CreatedOnToolsVersion = 12.0;
+						TestTargetID = CDC4A8E3250B87E5001BABC6;
+					};
 					CDC4A8E3250B87E5001BABC6 = {
 						CreatedOnToolsVersion = 11.7;
 					};
@@ -337,11 +391,19 @@
 			projectRoot = "";
 			targets = (
 				CDC4A8E3250B87E5001BABC6 /* DBCO */,
+				CD756C31252B3D36005FEDA0 /* DBCOTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		CD756C30252B3D36005FEDA0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CDC4A8E2250B87E5001BABC6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -378,6 +440,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		CD756C2E252B3D36005FEDA0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD756C35252B3D36005FEDA0 /* DBCOTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CDC4A8E0250B87E5001BABC6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -426,6 +496,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		CD756C38252B3D37005FEDA0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CDC4A8E3250B87E5001BABC6 /* DBCO */;
+			targetProxy = CD756C37252B3D37005FEDA0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		CDC4A8F2250B87E6001BABC6 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -449,6 +527,46 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		CD756C39252B3D37005FEDA0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = DBCOTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.DBCOTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DBCO.app/DBCO";
+			};
+			name = Debug;
+		};
+		CD756C3A252B3D37005FEDA0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = DBCOTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.DBCOTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DBCO.app/DBCO";
+			};
+			name = Release;
+		};
 		CDC4A8F6250B87E6001BABC6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -610,6 +728,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		CD756C3B252B3D37005FEDA0 /* Build configuration list for PBXNativeTarget "DBCOTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CD756C39252B3D37005FEDA0 /* Debug */,
+				CD756C3A252B3D37005FEDA0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		CDC4A8DF250B87E5001BABC6 /* Build configuration list for PBXProject "DBCO" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
