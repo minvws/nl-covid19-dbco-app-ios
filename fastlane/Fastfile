@@ -42,7 +42,7 @@ platform :ios do
 
     build_ios_app(
       scheme: "DBCO",
-      configuration: "Release",
+      configuration: "Ad Hoc",
       export_options: {
         method: "ad-hoc",
         provisioningProfiles: {
