@@ -1,3 +1,47 @@
+"appVersionTitle" = "Version %@ (%@)";
+
+/* MARK: - General */
+"save" = "Save";
+"cancel" = "Cancel";
+
+/* MARK: - Task Overview */
+"taskOverviewTitle" = "My contacts";
+"taskOverviewHeaderText" = "Add details for the contacts you discussed together with the GGD. This is urgent. <a href=\"app://readmore\">Read more</a>";
+"taskOverviewDoneButtonTitle" = "I am done";
+"taskOverviewAddContactButtonTitle" = "+ Add contact";
+"task.contact.caption.completed" = "Details added";
+"task.contact.caption.incomplete" = "Enter details";
+
+/* MARK: - Request Contacts Permission */
+"requestPermssion.contacts.title" = "Sharing contacts is faster when we have access.";
+"requestPermssion.contacts.body" = "You decide which contact details are shared with the GGD.";
+"requestPermssion.contacts.body.denied" = "Allow aceess in the settings app";
+"requestPermssion.contacts.allowButtonTitle" = "Allow access";
+"requestPermssion.contacts.continueButtonTitle" = "I'll add everything manually";
+"requestPermssion.contacts.settingsButtonTitle" = "Go to settings";
+
+/* MARK: - Contact Selection */
+"selectContactTitle" = "Select contact";
+"selectContactSearch" = "Search";
+"selectContactAddManually" = "+ Add manually";
+"selectContactSuggestions" = "You are probably looking for";
+"selectContactOtherContacts" = "Other contacts";
+"selectContactFromContactsFallback" = "From contacten";
+"selectContactAddManuallyFallback" = "Add manually";
+
+// MARK: - Editing Contacts
+"contactFallbackTitle" = "Add contact";
+"contactInformationFirstName" = "First name";
+"contactInformationLastName" = "Last name";
+"contactInformationPhoneNumber" = "Phone number";
+"contactInformationEmailAddress" = "Emailaddress";
+"contactInformationRelationType" = "What is your relation?";
+"contactInformationBirthDate" = "Birthdate";
+"contactInformationBSN" = "Burgerservice number";
+"contactInformationProfession" = "Profession";
+"contactInformationCompanyName" = "Company name";
+"contactInformationNotes" = "Notes";
+
 /* MARK: - Help */
 "helpTitle" = "About this app";
 "helpSubtitle" = "Frequently asked questions";

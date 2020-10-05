@@ -9,17 +9,19 @@ import UIKit
 
 class HelpViewModel {
     private let items: [HelpOverviewItem]
+    private let tableViewManager: TableViewManager<HelpItemTableViewCell>
 
     init(helpItems: [HelpOverviewItem]) {
         items = helpItems
+        tableViewManager = .init()
+        
+        tableViewManager.numberOfRowsInSection = { [unowned self] _ in self.items.count }
+        tableViewManager.itemForCellAtIndexPath = { [unowned self] in self.items[$0.row] }
     }
     
-    var rowCount: Int {
-        return items.count
-    }
-    
-    func item(at index: Int) -> HelpOverviewItem {
-        return items[index]
+    func setupTableView(_ tableView: UITableView, selectedItemHandler: @escaping (HelpItem, IndexPath) -> Void) {
+        tableViewManager.manage(tableView)
+        tableViewManager.didSelectItem = selectedItemHandler
     }
 }
 
@@ -31,7 +33,7 @@ protocol HelpViewControllerDelegate: class {
 
 final class HelpViewController: UIViewController {
     private let viewModel: HelpViewModel
-    private let tableView: UITableView = createHelpTableView()
+    private let tableView: UITableView = .createDefaultGrouped()
     
     weak var delegate: HelpViewControllerDelegate?
     
@@ -54,68 +56,31 @@ final class HelpViewController: UIViewController {
         setupTableView()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        tableView.indexPathForSelectedRow.map { tableView.deselectRow(at: $0, animated: true) }
+    }
+    
     private func setupTableView() {
-        view.addSubview(tableView)
+        tableView.embed(in: view)
         
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        viewModel.setupTableView(tableView) { [weak self] item, _ in
+            guard let self = self else { return }
+            self.delegate?.helpViewController(self, didSelect: item as! HelpOverviewItem)
+        }
         
-        tableView.dataSource = self
-        tableView.delegate = self
+        let versionLabel = UILabel(frame: .zero)
+        versionLabel.text = .mainAppVersionTitle
+        versionLabel.textAlignment = .center
+        versionLabel.textColor = Theme.colors.captionGray
+        versionLabel.font = Theme.fonts.footnote
+        versionLabel.sizeToFit()
         
-        tableView.register(HelpItemTableViewCell.self, forCellReuseIdentifier: HelpItemTableViewCell.reuseIdentifier)
-    }
-    
-    private static func createHelpTableView() -> UITableView {
-        let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-
-        tableView.separatorStyle = .none
-        tableView.backgroundColor = .clear
-
-        tableView.showsVerticalScrollIndicator = true
-        tableView.showsHorizontalScrollIndicator = false
-        tableView.isScrollEnabled = true
-
-        tableView.estimatedRowHeight = 100
-        tableView.rowHeight = UITableView.automaticDimension
-
-        tableView.estimatedSectionHeaderHeight = 50
-        tableView.sectionHeaderHeight = UITableView.automaticDimension
-
-        tableView.allowsMultipleSelection = false
-        tableView.tableFooterView = UIView()
-        return tableView
-    }
-
-}
-
-// MARK: - UITableViewDataSource
-extension HelpViewController: UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.rowCount
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: HelpItemTableViewCell.reuseIdentifier, for: indexPath) as! HelpItemTableViewCell
-        cell.configure(for: viewModel.item(at: indexPath.row))
-        return cell
-    }
-    
-}
-
-// MARK: - UITableViewDelegate
-extension HelpViewController: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+        tableView.tableFooterView = versionLabel
         
-        delegate?.helpViewController(self, didSelect: viewModel.item(at: indexPath.row))
     }
-    
+
 }
 
 

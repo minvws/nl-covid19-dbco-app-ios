@@ -7,44 +7,29 @@
 
 import UIKit
 
-final class HelpItemTableViewCell: UITableViewCell {
-    
-    static let reuseIdentifier: String = String(describing: HelpItemTableViewCell.self)
+final class HelpItemTableViewCell: UITableViewCell, Configurable, Reusable {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         build()
-        setupConstraints()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(for item: HelpItem) {
-        textLabel?.text = item.title
+    func configure(_ item: HelpItem) {
+        titleLabel.text = item.title
     }
 
     private func build() {
-        separatorView.backgroundColor = UIColor(white: 0.9, alpha: 1)
-        addSubview(separatorView)
-    }
-
-    private func setupConstraints() {
-        separatorView.translatesAutoresizingMaskIntoConstraints = false
-        separatorView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14).isActive = true
-        separatorView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        separatorView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        separatorView.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        SeparatorView()
+            .snap(to: .bottom, of: contentView, height: 1, insets: .left(14))
         
-        textLabel?.translatesAutoresizingMaskIntoConstraints = false
-        textLabel?.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
-        textLabel?.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
-        textLabel?.topAnchor.constraint(equalTo: topAnchor, constant: 12).isActive = true
-        textLabel?.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12).isActive = true
+        titleLabel.embed(in: contentView, insets: .leftRight(16) + .topBottom(12))
     }
 
     // MARK: - Private
 
-    private let separatorView = UIView()
+    private let titleLabel = UILabel()
 }

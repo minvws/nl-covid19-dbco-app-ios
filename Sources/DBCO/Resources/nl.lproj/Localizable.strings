@@ -1,0 +1,69 @@
+"appVersionTitle" = "Versie %@ (%@)";
+
+/* MARK: - General */
+"save" = "Opslaan";
+"cancel" = "Annuleren";
+
+/* MARK: - Task Overview */
+"taskOverviewTitle" = "Mijn contacten";
+"taskOverviewHeaderText" = "Vul de contactgegevens aan van deze contacten die je samen met de GGD in kaart hebt gebracht. Doe dit snel. <a href=\"app://readmore\">Lees meer</a>";
+"taskOverviewDoneButtonTitle" = "Ik ben klaar";
+"taskOverviewAddContactButtonTitle" = "+ Contact toevoegen";
+"task.contact.caption.completed" = "Gegevens toegevoegd";
+"task.contact.caption.incomplete" = "Vul gegevens aan";
+
+/* MARK: - Request Contacts Permission */
+"requestPermssion.contacts.title" = "Contacten delen gaat sneller als we toestemming hebben";
+"requestPermssion.contacts.body" = "Je beslist zelf welke contactgegevens je deelt met de GGD.";
+"requestPermssion.contacts.body.denied" = "Ga naar instellingen om toestemming te geven.";
+"requestPermssion.contacts.allowButtonTitle" = "Geef Toestemming";
+"requestPermssion.contacts.continueButtonTitle" = "Ik doe alles met de hand";
+"requestPermssion.contacts.settingsButtonTitle" = "Naar Instellingen";
+
+/* MARK: - Contact Selection */
+"selectContactTitle" = "Selecteer contact";
+"selectContactSearch" = "Zoeken";
+"selectContactAddManually" = "+ Handmatig toevoegen";
+"selectContactSuggestions" = "Waarschijnlijk zoek je";
+"selectContactOtherContacts" = "Andere contacten";
+"selectContactFromContactsFallback" = "Uit contacten";
+"selectContactAddManuallyFallback" = "Handmatig toevoegen";
+
+// MARK: - Editing Contacts
+"contactFallbackTitle" = "Contact toevoegen";
+"contactInformationFirstName" = "Voornaam";
+"contactInformationLastName" = "Achternaam";
+"contactInformationPhoneNumber" = "Telefoonnummer";
+"contactInformationEmailAddress" = "E-mailadres";
+"contactInformationRelationType" = "Wat is dit van je?";
+"contactInformationBirthDate" = "Geboortedatum";
+"contactInformationBSN" = "Burgerservice nummer";
+"contactInformationProfession" = "Beroep";
+"contactInformationCompanyName" = "Naam bedrijf/vereniging";
+"contactInformationNotes" = "Toelichting";
+
+/* MARK: - Help */
+"helpTitle" = "Over de app";
+"helpSubtitle" = "Veelgestelde vragen";
+"helpAlsoRead" = "Lees ook";
+
+"help.faq.notification.title" = "Wanneer krijg ik een melding van de app?";
+"help.faq.location.title" = "Kan de app mijn locatie zien?";
+"help.faq.location.description" = "Nee, de app ziet via bluetooth alleen of je in de buurt bent van andere mensen die de app ook op hun telefoon hebben. De app ziet nooit waar je bent.<br><br>Bluetooth is bedoeld om een draadloze verbinding te maken tussen 2 apparaten die bij elkaar in de buurt zijn. Zoals je telefoon en een geluidsbox of koptelefoon.<br><br>De app kan de afstand tussen 2 telefoons schatten door de sterkte van het bluetoothsignaal.
+";
+"help.faq.anonymous.title" = "Hoe kan de app anoniem zijn?";
+"help.faq.anonymous.description_1" = "De app wisselt codes uit met andere telefoons. In deze codes staan geen persoonsgegevens of locatiegegevens. Ze zijn helemaal willekeurig. Het uitwisselen van codes gebeurt op het moment dat je dicht bij een persoon bent die ook de app heeft.";
+"help.faq.anonymous.description_2" = "Blijkt deze persoon later corona te hebben? Dan kan diegene samen met de GGD zijn of haar codes aan een lijst met codes van besmette personen toevoegen. Zo kan de besmetting bevestigd worden.<br><br>Daarna wordt er een melding verstuurd naar alle andere mensen die deze codes op hun telefoon hebben. In deze melding staat alleen wanneer ze in de buurt zijn geweest van een besmet persoon. Niet wie dit is en waar ze die persoon zijn tegengekomen.";
+"help.bluetooth.title" = "Werkt bluetooth door muren heen?";
+
+"help.faq.reason.title" = "Waarom is deze app belangrijk?";
+"help.faq.reason.description" = "De app kan je snel waarschuwen nadat je in de buurt bent geweest van iemand die corona heeft. Al voordat je klachten krijgt. Je kunt namelijk corona hebben en besmettelijk zijn zonder dat je het zelf doorhebt.<br><br>Als je via de app een waarschuwing krijgt, lees je in de app wat je kunt doen. En of je je moet laten testen. Zo voorkom je dat je onbewust mensen in je omgeving besmet.<br><br>Ben je getest en heb je corona? Dan kun je samen met de GGD de mensen waarschuwen die lang bij jou in de buurt zijn geweest. Ook onbekenden. In een restaurant, bioscoop of wachtkamer. Zolang deze mensen ook de app gebruiken.<br><br>Dankzij CoronaMelder kunnen we sneller ingrijpen en nieuwe besmettingen voorkomen. Alleen samen krijgen we corona onder controle.";
+
+"help.faq.notification.description" = "Je krijgt een melding nadat je extra kans op besmetting hebt gelopen. Dit gebeurt als je minstens 15 minuten dicht bij iemand bent geweest die later corona blijkt te hebben. En natuurlijk alleen als die persoon ook de app gebruikt.<br><br>Of je een melding krijgt hangt af van de sterkte van het bluetoothsignaal. En van de duur van jullie contact.<br><br>Fietste er iemand voorbij op straat? Dan krijg je later geen melding. Jullie waren dicht bij elkaar, dus het bluetooth-signaal was sterk. Maar het contact duurde zo kort dat de kans op besmetting heel erg klein is.<br><br>Zat je dicht bij iemand in de trein of op kantoor? Dan kun je later wel een melding krijgen. Het bluetoothsignaal was sterk genoeg en jullie waren langere tijd dicht bij elkaar in de buurt.";
+"help.faq.bluetooth.title" = "Werkt bluetooth door muren heen?";
+"help.faq.bluetooth.description" = "Ja, maar het signaal wordt dan erg zwak. Bluetooth werkt het beste als jouw telefoon in dezelfde ruimte is als de telefoon van een andere persoon.<br><br>De kans is bijvoorbeeld heel klein dat je app het bluetoothsignaal van je buren ontvangt.<br><br>En daardoor is de kans ook heel klein dat je een melding krijgt als je buurman corona blijkt te hebben en jullie niet in dezelfde ruimte zijn geweest.";
+"help.faq.power_usage.title" = "Hoeveel stroom gebruikt de app?";
+"help.faq.power_usage.description" = "De app maakt gebruikt van Bluetooth Low Energy (lage-energiebluetooth). Dit is een speciale vorm van bluetooth die heel weinig stroom gebruikt. Hoeveel procent dit precies van je telefoonbatterij vraagt verschilt per telefoon.";
+
+
+
