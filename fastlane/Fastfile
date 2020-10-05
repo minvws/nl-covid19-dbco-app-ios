@@ -53,7 +53,7 @@ platform :ios do
 
     firebase_app_distribution(
       app: "1:14711935107:ios:58f70d62749507a0074bb6",
-      groups: "Testers"
+      groups: "testers"
     )
 
     inform_slack(
