@@ -144,4 +144,11 @@ extension UIView {
         return containingView
     }
     
+    func wrappedInReadableWidth(insets: UIEdgeInsets = .zero) -> UIView {
+        let containingView = UIView(frame: .zero)
+        containingView.preservesSuperviewLayoutMargins = true
+        embed(in: containingView.readableWidth, insets: insets)
+        return containingView
+    }
+    
 }

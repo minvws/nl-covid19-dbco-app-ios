@@ -8,7 +8,7 @@
 import UIKit
 
 protocol StartViewControllerDelegate: class {
-    func onboardingViewControllerWantsToContinue(_ controller: StartViewController)
+    func startViewControllerWantsToContinue(_ controller: StartViewController)
 }
 
 class StartViewModel {}
@@ -88,7 +88,7 @@ class StartViewController: UIViewController {
     }
     
     @objc private func handleContinue() {
-        delegate?.onboardingViewControllerWantsToContinue(self)
+        delegate?.startViewControllerWantsToContinue(self)
     }
 
 }

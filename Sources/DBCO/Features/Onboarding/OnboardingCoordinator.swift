@@ -28,6 +28,7 @@ final class OnboardingCoordinator: Coordinator {
         
         super.init()
         
+        navigationController.delegate = self
         startController.delegate = self
     }
     
@@ -38,10 +39,34 @@ final class OnboardingCoordinator: Coordinator {
 
 }
 
+extension OnboardingCoordinator: UINavigationControllerDelegate {
+    
+    func navigationControllerSupportedInterfaceOrientations(_ navigationController: UINavigationController) -> UIInterfaceOrientationMask {
+        return .portrait
+    }
+    
+}
+
 extension OnboardingCoordinator: StartViewControllerDelegate {
     
-    func onboardingViewControllerWantsToContinue(_ controller: StartViewController) {
-        delegate?.onboardingCoordinatorDidFinish(self)
+    func startViewControllerWantsToContinue(_ controller: StartViewController) {
+        let viewModel = PairViewModel()
+        let pairController = PairViewController(viewModel: viewModel)
+        pairController.delegate = self
+        navigationController.pushViewController(pairController, animated: true)
+    }
+    
+}
+
+extension OnboardingCoordinator: PairViewControllerDelegate {
+    
+    func pairViewController(_ controller: PairViewController, wantsToPairWith code: String) {
+        controller.startLoadingAnimation()
+        
+        // Fake doing some work for now
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            controller.stopLoadingAnimation()
+        }
     }
     
 }
