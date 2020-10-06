@@ -27,7 +27,7 @@
 		CD7282C6250F9D2400D68911 /* TaskOverviewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C5250F9D2400D68911 /* TaskOverviewCoordinator.swift */; };
 		CD756C35252B3D36005FEDA0 /* DBCOTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C34252B3D36005FEDA0 /* DBCOTests.swift */; };
 		CD756C4A252C6A30005FEDA0 /* OnboardingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C49252C6A30005FEDA0 /* OnboardingCoordinator.swift */; };
-		CD756C50252C6AC9005FEDA0 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C4F252C6AC9005FEDA0 /* StartViewController.swift */; };
+		CD756C50252C6AC9005FEDA0 /* OnboardingStepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C4F252C6AC9005FEDA0 /* OnboardingStepViewController.swift */; };
 		CD756C5E252C9A7F005FEDA0 /* PairViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C5D252C9A7E005FEDA0 /* PairViewController.swift */; };
 		CD756C64252CA787005FEDA0 /* PairingCodeField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C63252CA787005FEDA0 /* PairingCodeField.swift */; };
 		CD7FACA1251B3FCD00AB8142 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7FACA0251B3FCD00AB8142 /* TextView.swift */; };
@@ -90,7 +90,7 @@
 		CD756C34252B3D36005FEDA0 /* DBCOTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBCOTests.swift; sourceTree = "<group>"; };
 		CD756C36252B3D37005FEDA0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CD756C49252C6A30005FEDA0 /* OnboardingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinator.swift; sourceTree = "<group>"; };
-		CD756C4F252C6AC9005FEDA0 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
+		CD756C4F252C6AC9005FEDA0 /* OnboardingStepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStepViewController.swift; sourceTree = "<group>"; };
 		CD756C5D252C9A7E005FEDA0 /* PairViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairViewController.swift; sourceTree = "<group>"; };
 		CD756C63252CA787005FEDA0 /* PairingCodeField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingCodeField.swift; sourceTree = "<group>"; };
 		CD7FACA0251B3FCD00AB8142 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
@@ -246,7 +246,7 @@
 			isa = PBXGroup;
 			children = (
 				CD756C49252C6A30005FEDA0 /* OnboardingCoordinator.swift */,
-				CD756C4F252C6AC9005FEDA0 /* StartViewController.swift */,
+				CD756C4F252C6AC9005FEDA0 /* OnboardingStepViewController.swift */,
 				CD756C5D252C9A7E005FEDA0 /* PairViewController.swift */,
 			);
 			path = Onboarding;
@@ -474,7 +474,7 @@
 			files = (
 				CDFCF9192510FC760062269A /* SelfSizingTableView.swift in Sources */,
 				CDE30E72251E278200862A40 /* EditContactCoordinator.swift in Sources */,
-				CD756C50252C6AC9005FEDA0 /* StartViewController.swift in Sources */,
+				CD756C50252C6AC9005FEDA0 /* OnboardingStepViewController.swift in Sources */,
 				CD2963442514BF4E008443AF /* SelectContactViewController.swift in Sources */,
 				CD29634C2518CE8E008443AF /* TableViewManager.swift in Sources */,
 				CDA5C11A251389BB009440D1 /* RequestAuthorizationViewController.swift in Sources */,

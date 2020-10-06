@@ -15,21 +15,25 @@ protocol OnboardingCoordinatorDelegate: class {
 final class OnboardingCoordinator: Coordinator {
     private let window: UIWindow
     private let navigationController: NavigationController
+    private var didPair: Bool = false
     
     weak var delegate: OnboardingCoordinatorDelegate?
     
     init(window: UIWindow) {
         self.window = window
         
-        let viewModel = StartViewModel()
-        let startController = StartViewController(viewModel: viewModel)
-        navigationController = NavigationController(rootViewController: startController)
+        let viewModel = OnboardingStepViewModel(image: UIImage(named: "StartVisual")!,
+                                                title: .onboardingStep1Title,
+                                                message: .onboardingStep1Message,
+                                                buttonTitle: .next)
+        let stepController = OnboardingStepViewController(viewModel: viewModel)
+        navigationController = NavigationController(rootViewController: stepController)
         navigationController.navigationBar.prefersLargeTitles = true
         
         super.init()
         
         navigationController.delegate = self
-        startController.delegate = self
+        stepController.delegate = self
     }
     
     override func start() {
@@ -47,13 +51,17 @@ extension OnboardingCoordinator: UINavigationControllerDelegate {
     
 }
 
-extension OnboardingCoordinator: StartViewControllerDelegate {
+extension OnboardingCoordinator: OnboardingStepViewControllerDelegate {
     
-    func startViewControllerWantsToContinue(_ controller: StartViewController) {
-        let viewModel = PairViewModel()
-        let pairController = PairViewController(viewModel: viewModel)
-        pairController.delegate = self
-        navigationController.pushViewController(pairController, animated: true)
+    func onboardingStepViewControllerWantsToContinue(_ controller: OnboardingStepViewController) {
+        if didPair {
+            delegate?.onboardingCoordinatorDidFinish(self)
+        } else {
+            let viewModel = PairViewModel()
+            let pairController = PairViewController(viewModel: viewModel)
+            pairController.delegate = self
+            navigationController.pushViewController(pairController, animated: true)
+        }
     }
     
 }
@@ -62,10 +70,22 @@ extension OnboardingCoordinator: PairViewControllerDelegate {
     
     func pairViewController(_ controller: PairViewController, wantsToPairWith code: String) {
         controller.startLoadingAnimation()
+        navigationController.navigationBar.isUserInteractionEnabled = false
         
         // Fake doing some work for now
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             controller.stopLoadingAnimation()
+            self.navigationController.navigationBar.isUserInteractionEnabled = true
+            
+            self.didPair = true
+            
+            let viewModel = OnboardingStepViewModel(image: UIImage(named: "StartVisual")!,
+                                                    title: .onboardingStep3Title,
+                                                    message: .onboardingStep3Message,
+                                                    buttonTitle: .start)
+            let stepController = OnboardingStepViewController(viewModel: viewModel)
+            stepController.delegate = self
+            self.navigationController.setViewControllers([stepController], animated: true)
         }
     }
     

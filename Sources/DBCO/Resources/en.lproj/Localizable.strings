@@ -3,6 +3,15 @@
 /* MARK: - General */
 "save" = "Save";
 "cancel" = "Cancel";
+"next" = "Next";
+"start" = "Start";
+
+/* MARK: - Onboarding */
+"onboarding.step1.title" = "Help the GGD with contact tracing";
+"onboarding.step1.message" = "This app allows you to share contact details with the GGD. Doing so speeds up contact tracing efforts.";
+"onboarding.step2.title" = "Enter the code you received from the GGD employee";
+"onboarding.step3.title" = "Supply details for the contacts in the app";
+"onboarding.step3.message" = "This app allows you to share contact details with the GGD. Doing so speeds up contact tracing efforts.";
 
 /* MARK: - Task Overview */
 "taskOverviewTitle" = "My contacts";

@@ -44,13 +44,13 @@ class PairViewController: UIViewController {
         let titleLabel = UILabel()
         titleLabel.font = Theme.fonts.title2
         titleLabel.numberOfLines = 0
-        titleLabel.text = "Vul de code in die je hebt gekregen van de GGD-medewerker"
+        titleLabel.text = .onboardingStep2Title
         
         let keyboardSpacerView = UIView()
         keyboardSpacerHeightConstraint = keyboardSpacerView.heightAnchor.constraint(equalToConstant: 0)
         keyboardSpacerHeightConstraint.isActive = true
         
-        let nextButton = Button(title: "Volgende", style: .primary)
+        let nextButton = Button(title: .next, style: .primary)
             .touchUpInside(self, action: #selector(pair))
         
         codeField.$pairingCode
