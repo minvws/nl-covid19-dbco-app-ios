@@ -13,24 +13,6 @@ protocol TaskOverviewViewControllerDelegate: class {
     func taskOverviewViewController(_ controller: TaskOverviewViewController, didSelect task: Task)
 }
 
-class SeparatorView: UIView {
-    
-    init() {
-        super.init(frame: .zero)
-        setup()
-        
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setup()
-    }
-    
-    private func setup() {
-        backgroundColor = Theme.colors.separator
-    }
-}
-
 class TaskOverviewViewModel {
     private let tableViewManager: TableViewManager<TaskTableViewCell>
     private let taskManager: TaskManager
