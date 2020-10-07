@@ -24,7 +24,7 @@ final class HelpItemTableViewCell: UITableViewCell, Configurable, Reusable {
 
     private func build() {
         SeparatorView()
-            .snap(to: .bottom, of: contentView, height: 1, insets: .left(14))
+            .snap(to: .bottom, of: contentView, insets: .left(14))
         
         titleLabel.embed(in: contentView, insets: .leftRight(16) + .topBottom(12))
     }

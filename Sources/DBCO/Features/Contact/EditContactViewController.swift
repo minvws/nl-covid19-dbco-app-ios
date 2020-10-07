@@ -98,11 +98,11 @@ final class EditContactViewController: PromptableViewController {
             .touchUpInside(self, action: #selector(save))
         
         scrollView.embed(in: contentView)
-        scrollView.preservesSuperviewLayoutMargins = true
         scrollView.keyboardDismissMode = .interactive
         
         let widthProviderView = UIView()
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
+        widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         
         let rows = viewModel.rows.map { row -> UIView in
             switch row {
@@ -113,12 +113,26 @@ final class EditContactViewController: PromptableViewController {
             }
         }
         
+        let contactTypeSection = SectionView(title: "Aard van het contact", caption: "Vragen over jullie ontmoeting", index: 1)
+        contactTypeSection.isCompleted = true
+        contactTypeSection.collapse(animated: false)
+        
+        let contactDetailsSection = SectionView(title: "Contactgegevens", caption: "Vul contactgegevens aan", index: 2)
         UIStackView(vertical: rows, spacing: 16)
-            .embed(in: scrollView.readableWidth, insets: .topBottom(32))
+            .embed(in: contactDetailsSection.contentView.readableWidth)
+        
+        let informContactSection = SectionView(title: "Informeren", caption: "Deel het handelingsperspectief", index: 3)
+        informContactSection.collapse(animated: false)
+        
+        VStack(contactTypeSection,
+               contactDetailsSection,
+               informContactSection)
+            .embed(in: scrollView)
         
         registerForKeyboardNotifications()
     }
-
+    
+    private var contactDetailsSection: SectionView!
     
     @objc private func save() {
         delegate?.editContactViewController(self, didSave: viewModel.contact)
@@ -145,35 +159,6 @@ final class EditContactViewController: PromptableViewController {
         
         scrollView.contentInset.bottom = inset
         scrollView.verticalScrollIndicatorInsets.bottom = inset
-        
-        if let firstResponder = UIResponder.currentFirstResponder as? TextField {
-            let frame = firstResponder
-                .convert(firstResponder.bounds, to: scrollView)
-                .insetBy(dx: 0, dy: -16) // Apply some margin above and below
-            
-            let visibleFrame = CGRect(x: 0,
-                                      y: scrollView.contentOffset.y,
-                                      width: scrollView.frame.width,
-                                      height: scrollView.frame.height)
-                .inset(by: scrollView.contentInset)
-                .inset(by: scrollView.safeAreaInsets)
-            
-            // cancel current animation
-            scrollView.setContentOffset(scrollView.contentOffset, animated: false)
-            
-            if !visibleFrame.contains(frame) {
-                if frame.minY < visibleFrame.minY {
-                    scrollView.setContentOffset(CGPoint(x: 0,
-                                                        y: frame.minY - scrollView.safeAreaInsets.top),
-                                                animated: true)
-                } else {
-                    let delta = visibleFrame.maxY - frame.maxY
-                    scrollView.setContentOffset(CGPoint(x: 0,
-                                                        y: visibleFrame.minY - delta - scrollView.safeAreaInsets.top),
-                                                animated: true)
-                }
-            }
-        }
     }
 
     @objc private func keyboardWillHide(notification: NSNotification) {
