@@ -74,7 +74,7 @@ class TaskOverviewViewController: PromptableViewController {
     }
     
     private func setupTableView() {
-        tableView.embed(in: contentView)
+        tableView.embed(in: contentView, preservesSuperviewLayoutMargins: false)
         tableView.delaysContentTouches = false
         
         let headerViewBuilder = {
