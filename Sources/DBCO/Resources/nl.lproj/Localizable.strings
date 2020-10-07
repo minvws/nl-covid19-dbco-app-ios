@@ -3,6 +3,15 @@
 /* MARK: - General */
 "save" = "Opslaan";
 "cancel" = "Annuleren";
+"next" = "Volgende";
+"start" = "Beginnen";
+
+/* MARK: - Onboarding */
+"onboarding.step1.title" = "Help de GGD bij het contactonderzoek";
+"onboarding.step1.message" = "Je kunt via deze app gegevens van je contacten met de GGD delen. Zo zorg je dat het contactonderzoek sneller gaat.";
+"onboarding.step2.title" = "Vul de code in die je hebt gekregen van de GGD-medewerker";
+"onboarding.step3.title" = "Voeg de gegevens toe aan de contacten in de app";
+"onboarding.step3.message" = "Je kunt via deze app gegevens van je contacten met de GGD delen. Zo zorg je dat het contactonderzoek sneller gaat.";
 
 /* MARK: - Task Overview */
 "taskOverviewTitle" = "Mijn contacten";

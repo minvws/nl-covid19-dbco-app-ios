@@ -30,8 +30,14 @@ final class TaskOverviewCoordinator: Coordinator {
     }
     
     override func start() {
+        let snapshotView = window.snapshotView(afterScreenUpdates: true)!
+        
         window.rootViewController = navigationController
-        window.makeKeyAndVisible()
+        navigationController.view.addSubview(snapshotView)
+        
+        UIView.transition(with: window, duration: 0.5, options: [.transitionFlipFromRight]) {
+            snapshotView.removeFromSuperview()
+        }
     }
     
     func openHelp() {

@@ -51,6 +51,15 @@ extension String {
     /* MARK: - General */
     static var save: String { return Localization.string(for: "save") }
     static var cancel: String { return Localization.string(for: "cancel") }
+    static var next: String { return Localization.string(for: "next") }
+    static var start: String { return Localization.string(for: "start") }
+    
+    /* MARK: - Onboarding */
+    static var onboardingStep1Title: String { return Localization.string(for: "onboarding.step1.title") }
+    static var onboardingStep1Message: String { return Localization.string(for: "onboarding.step1.message") }
+    static var onboardingStep2Title: String { return Localization.string(for: "onboarding.step2.title") }
+    static var onboardingStep3Title: String { return Localization.string(for: "onboarding.step3.title") }
+    static var onboardingStep3Message: String { return Localization.string(for: "onboarding.step3.message") }
     
     /* MARK: - Task Overview */
     static var taskOverviewTitle: String { return Localization.string(for: "taskOverviewTitle") }
