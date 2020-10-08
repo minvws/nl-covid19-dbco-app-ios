@@ -37,6 +37,14 @@ func VStack(spacing: CGFloat = 0, _ views: UIView ...) -> UIStackView {
     return UIStackView(vertical: views, spacing: spacing)
 }
 
+func VStack(spacing: CGFloat = 0, _ views: [UIView]) -> UIStackView {
+    return UIStackView(vertical: views, spacing: spacing)
+}
+
 func HStack(spacing: CGFloat = 0, _ views: UIView ...) -> UIStackView {
+    return UIStackView(horizontal: views, spacing: spacing)
+}
+
+func HStack(spacing: CGFloat = 0, _ views: [UIView]) -> UIStackView {
     return UIStackView(horizontal: views, spacing: spacing)
 }
