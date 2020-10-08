@@ -113,15 +113,15 @@ final class EditContactViewController: PromptableViewController {
             }
         }
         
-        let contactTypeSection = SectionView(title: "Aard van het contact", caption: "Vragen over jullie ontmoeting", index: 1)
+        let contactTypeSection = SectionView(title: .contactTypeSectionTitle, caption: .contactTypeSectionMessage, index: 1)
         contactTypeSection.isCompleted = true
         contactTypeSection.collapse(animated: false)
         
-        let contactDetailsSection = SectionView(title: "Contactgegevens", caption: "Vul contactgegevens aan", index: 2)
+        let contactDetailsSection = SectionView(title: .contactDetailsSectionTitle, caption: .contactDetailsSectionMessage, index: 2)
         UIStackView(vertical: rows, spacing: 16)
             .embed(in: contactDetailsSection.contentView.readableWidth)
         
-        let informContactSection = SectionView(title: "Informeren", caption: "Deel het handelingsperspectief", index: 3)
+        let informContactSection = SectionView(title: .informContactSectionTitle, caption: .informContactSectionMessage, index: 3)
         informContactSection.collapse(animated: false)
         
         VStack(contactTypeSection,

@@ -87,6 +87,13 @@ extension String {
     static var selectContactAddManuallyFallback: String { return Localization.string(for: "selectContactAddManuallyFallback") }
     
     // MARK: - Editing Contacts
+    static var contactTypeSectionTitle: String { return Localization.string(for: "contactTypeSection.title") }
+    static var contactTypeSectionMessage: String { return Localization.string(for: "contactTypeSection.message") }
+    static var contactDetailsSectionTitle: String { return Localization.string(for: "contactDetailsSection.title") }
+    static var contactDetailsSectionMessage: String { return Localization.string(for: "contactDetailsSection.message") }
+    static var informContactSectionTitle: String { return Localization.string(for: "informContactSection.title") }
+    static var informContactSectionMessage: String { return Localization.string(for: "informContactSection.message") }
+    
     static var contactFallbackTitle: String { return Localization.string(for: "contactFallbackTitle") }
     static var contactInformationFirstName: String { return Localization.string(for: "contactInformationFirstName") }
     static var contactInformationLastName: String { return Localization.string(for: "contactInformationLastName") }
