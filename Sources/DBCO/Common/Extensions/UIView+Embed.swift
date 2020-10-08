@@ -60,13 +60,15 @@ extension UILayoutGuide: Embeddable {
 extension UIView {
     
     @discardableResult
-    func embed(in embeddable: Embeddable, insets: UIEdgeInsets = .zero) -> Self {
+    func embed(in embeddable: Embeddable, insets: UIEdgeInsets = .zero, preservesSuperviewLayoutMargins: Bool = true) -> Self {
         guard let view = embeddable.view else {
             print("Warning: could not embed view(\(self)) to embeddable(\(embeddable))")
             return self
         }
         
         view.addSubview(self)
+        view.preservesSuperviewLayoutMargins = preservesSuperviewLayoutMargins
+        self.preservesSuperviewLayoutMargins = preservesSuperviewLayoutMargins
         
         translatesAutoresizingMaskIntoConstraints = false
         leadingAnchor.constraint(equalTo: embeddable.leadingAnchor, constant: insets.left).isActive = true
@@ -101,13 +103,15 @@ extension UIView {
     }
     
     @discardableResult
-    func snap(to side: Side, of embeddable: Embeddable, width: CGFloat? = nil, height: CGFloat? = nil, insets: UIEdgeInsets = .zero) -> Self {
+    func snap(to side: Side, of embeddable: Embeddable, width: CGFloat? = nil, height: CGFloat? = nil, insets: UIEdgeInsets = .zero, preservesSuperviewLayoutMargins: Bool = true) -> Self {
         guard let view = embeddable.view else {
             print("Warning: could not snap view(\(self)) to embeddable(\(embeddable))")
             return self
         }
         
         view.addSubview(self)
+        view.preservesSuperviewLayoutMargins = preservesSuperviewLayoutMargins
+        self.preservesSuperviewLayoutMargins = preservesSuperviewLayoutMargins
         
         let constrainedSides = side.constrainedSides
         

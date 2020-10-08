@@ -30,6 +30,9 @@
 		CD756C50252C6AC9005FEDA0 /* OnboardingStepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C4F252C6AC9005FEDA0 /* OnboardingStepViewController.swift */; };
 		CD756C5E252C9A7F005FEDA0 /* PairViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C5D252C9A7E005FEDA0 /* PairViewController.swift */; };
 		CD756C64252CA787005FEDA0 /* PairingCodeField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C63252CA787005FEDA0 /* PairingCodeField.swift */; };
+		CD756C70252DC629005FEDA0 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C6F252DC629005FEDA0 /* SeparatorView.swift */; };
+		CD756C74252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C73252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift */; };
+		CD756C78252DDF30005FEDA0 /* SectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C77252DDF30005FEDA0 /* SectionView.swift */; };
 		CD7FACA1251B3FCD00AB8142 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7FACA0251B3FCD00AB8142 /* TextView.swift */; };
 		CDA5C11125123DC9009440D1 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C11025123DC9009440D1 /* AppVersion.swift */; };
 		CDA5C11825135A46009440D1 /* SelectContactCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C11725135A46009440D1 /* SelectContactCoordinator.swift */; };
@@ -93,6 +96,9 @@
 		CD756C4F252C6AC9005FEDA0 /* OnboardingStepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStepViewController.swift; sourceTree = "<group>"; };
 		CD756C5D252C9A7E005FEDA0 /* PairViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairViewController.swift; sourceTree = "<group>"; };
 		CD756C63252CA787005FEDA0 /* PairingCodeField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingCodeField.swift; sourceTree = "<group>"; };
+		CD756C6F252DC629005FEDA0 /* SeparatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
+		CD756C73252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIResponder+CurrentFirstResponder.swift"; sourceTree = "<group>"; };
+		CD756C77252DDF30005FEDA0 /* SectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionView.swift; sourceTree = "<group>"; };
 		CD7FACA0251B3FCD00AB8142 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		CDA5C11025123DC9009440D1 /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		CDA5C11725135A46009440D1 /* SelectContactCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectContactCoordinator.swift; sourceTree = "<group>"; };
@@ -173,6 +179,8 @@
 				CD756C63252CA787005FEDA0 /* PairingCodeField.swift */,
 				CDE30E63251BC02100862A40 /* TextField.swift */,
 				CD7FACA0251B3FCD00AB8142 /* TextView.swift */,
+				CD756C6F252DC629005FEDA0 /* SeparatorView.swift */,
+				CD756C77252DDF30005FEDA0 /* SectionView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -334,6 +342,7 @@
 				CDA5C11B25139D36009440D1 /* UIStackView+Axis.swift */,
 				CD2963542518F59E008443AF /* UITableView+Defaults.swift */,
 				CDFCF9162510ECC70062269A /* UIView+Embed.swift */,
+				CD756C73252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -480,6 +489,7 @@
 				CDA5C11A251389BB009440D1 /* RequestAuthorizationViewController.swift in Sources */,
 				CDFCF905250FA0910062269A /* HelpViewController.swift in Sources */,
 				CDE30E69251C89FF00862A40 /* NavigationController.swift in Sources */,
+				CD756C78252DDF30005FEDA0 /* SectionView.swift in Sources */,
 				CD1824EE2524B3E4006EB272 /* InputField.swift in Sources */,
 				CDA5C11125123DC9009440D1 /* AppVersion.swift in Sources */,
 				CDFCF9102510DF430062269A /* HelpItemTableViewCell.swift in Sources */,
@@ -494,6 +504,7 @@
 				CD421872251B4819004544B3 /* TaskTableViewCell.swift in Sources */,
 				CDFCF9152510EBC40062269A /* NSAttributedString+Extension.swift in Sources */,
 				CDC4A8E8250B87E5001BABC6 /* AppDelegate.swift in Sources */,
+				CD756C70252DC629005FEDA0 /* SeparatorView.swift in Sources */,
 				CD2963522518F291008443AF /* EditContactViewController.swift in Sources */,
 				CD29635825191941008443AF /* Button.swift in Sources */,
 				CDE30E8725232FE200862A40 /* InputFieldEditable.swift in Sources */,
@@ -501,6 +512,7 @@
 				CD49BAEB2525CE7C0079D018 /* PromptableViewController.swift in Sources */,
 				CDFCF90C2510C47E0062269A /* Localization.swift in Sources */,
 				CDC4A8EA250B87E5001BABC6 /* SceneDelegate.swift in Sources */,
+				CD756C74252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift in Sources */,
 				CD756C4A252C6A30005FEDA0 /* OnboardingCoordinator.swift in Sources */,
 				CD29635B25191972008443AF /* Haptic.swift in Sources */,
 				CDFCF907250FA6E80062269A /* ViewController.swift in Sources */,
@@ -911,18 +923,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = C2H38GV99H;
+				DEVELOPMENT_TEAM = 5598UZ23ZV;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO App Store";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -932,18 +944,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = C2H38GV99H;
+				DEVELOPMENT_TEAM = 5598UZ23ZV;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO App Store";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

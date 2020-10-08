@@ -39,6 +39,13 @@
 "selectContactAddManuallyFallback" = "Handmatig toevoegen";
 
 // MARK: - Editing Contacts
+"contactTypeSection.title" = "Aard van het contact";
+"contactTypeSection.message" = "Vragen over jullie ontmoeting";
+"contactDetailsSection.title" = "Contactgegevens";
+"contactDetailsSection.message" = "Vul contactgegevens aan";
+"informContactSection.title" = "Informeren";
+"informContactSection.message" = "Deel het handelingsperspectief";
+
 "contactFallbackTitle" = "Contact toevoegen";
 "contactInformationFirstName" = "Voornaam";
 "contactInformationLastName" = "Achternaam";

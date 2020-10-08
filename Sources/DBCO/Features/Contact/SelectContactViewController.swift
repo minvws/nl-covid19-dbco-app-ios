@@ -202,7 +202,7 @@ class SelectContactViewController: PromptableViewController {
                 self.delegate?.selectContactViewController(self, didSelect: contact)
             })
         
-        tableView.embed(in: contentView)
+        tableView.embed(in: contentView, preservesSuperviewLayoutMargins: false)
     }
     
     private func setupSearchController() {

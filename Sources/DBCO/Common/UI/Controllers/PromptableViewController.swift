@@ -22,7 +22,6 @@ class PromptableViewController: ViewController {
             didSet {
                 guard let promptView = promptView else { return }
                 
-                
                 promptView.setContentCompressionResistancePriority(.required, for: .vertical)
                 promptView.setContentHuggingPriority(.required, for: .vertical)
                 
@@ -43,19 +42,15 @@ class PromptableViewController: ViewController {
         
         init() {
             super.init(frame: .zero)
-            preservesSuperviewLayoutMargins = true
             
             contentView.backgroundColor = .white
-            contentView.preservesSuperviewLayoutMargins = true
             
             promptContainerView.backgroundColor = .white
-            promptContainerView.preservesSuperviewLayoutMargins = true
             
             SeparatorView()
-                .snap(to: .top, of: promptContainerView, height: 1)
+                .snap(to: .top, of: promptContainerView)
             
             let stackView = UIStackView(vertical: [contentView, promptContainerView])
-            stackView.preservesSuperviewLayoutMargins = true
             stackView.embed(in: self)
         }
         

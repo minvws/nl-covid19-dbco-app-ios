@@ -1,3 +1,5 @@
+// NOTE(THOM): This file needs proper translations.
+
 "appVersionTitle" = "Version %@ (%@)";
 
 /* MARK: - General */
@@ -39,6 +41,13 @@
 "selectContactAddManuallyFallback" = "Add manually";
 
 // MARK: - Editing Contacts
+"contactTypeSection.title" = "Aard van het contact";
+"contactTypeSection.message" = "Vragen over jullie ontmoeting";
+"contactDetailsSection.title" = "Contactgegevens";
+"contactDetailsSection.message" = "Vul contactgegevens aan";
+"informContactSection.title" = "Informeren";
+"informContactSection.message" = "Deel het handelingsperspectief";
+
 "contactFallbackTitle" = "Add contact";
 "contactInformationFirstName" = "First name";
 "contactInformationLastName" = "Last name";
