@@ -122,12 +122,12 @@ final class EditContactViewController: PromptableViewController {
             return label
         }
         
-        func listItem(text: String) -> UIView {
+        func listItem(text: String.SubSequence) -> UIView {
             let label = UILabel()
             label.font = Theme.fonts.body
             label.textColor = Theme.colors.captionGray
             label.numberOfLines = 0
-            label.text = text
+            label.text = String(text)
             
             let icon = UIImageView(image: UIImage(named: "ListItem"))
             icon.setContentHuggingPriority(.required, for: .horizontal)
@@ -136,8 +136,8 @@ final class EditContactViewController: PromptableViewController {
                 .alignment(.top)
         }
         
-        func list(items: String ...) -> UIView {
-            return VStack(spacing: 8, items.map(listItem))
+        func list(from multilineText: String) -> UIView {
+            return VStack(spacing: 8, multilineText.split(separator: "\n").map(listItem))
         }
         
         
@@ -148,13 +148,13 @@ final class EditContactViewController: PromptableViewController {
         
         VStack(spacing: 24,
                VStack(spacing: 16,
-                      groupHeaderLabel(title: "Woon je in hetzelfde huis of ben je langer dan 12 uur in tegelijk in een huis geweest?"),
-                      ToggleGroup(ToggleButton(title: "Nee", selected: true),
-                                  ToggleButton(title: "Ja"))),
+                      groupHeaderLabel(title: .contactSameHouseholdQuestion),
+                      ToggleGroup(ToggleButton(title: .contactSameHouseholdQuestionAnswerNegative, selected: true),
+                                  ToggleButton(title: .contactSameHouseholdQuestionAnswerPositive))),
                VStack(spacing: 16,
-                      groupHeaderLabel(title: "Wanneer was je voor het laatst 15 minuten of langer binnen 1,5 meter van elkaar?"),
+                      groupHeaderLabel(title: .contactLastContactQuestion),
                       ToggleGroup(DateToggleButton(),
-                                  ToggleButton(title: "Dat ben ik niet geweest", selected: true))))
+                                  ToggleButton(title: .contactLastContactQuestionAnswerNegative, selected: true))))
             .embed(in: contactTypeSection.contentView.readableWidth)
         
         // Details
@@ -163,15 +163,10 @@ final class EditContactViewController: PromptableViewController {
         VStack(spacing: 24,
                VStack(spacing: 16, rows),
                VStack(spacing: 16,
-                      groupHeaderLabel(title: "Is een of meerdere onderstaande zaken van toepassing voor deze persoon?"),
-                      list(items:
-                            "Is student",
-                            "70 jaar of ouder",
-                            "Heeft gezondheidsklachten of loopt extra gezondheidsrisico’s",
-                            "Woont in een asielzoekerscentrum",
-                            "Spreekt slecht of geen Nederlands"),
-                      ToggleGroup(ToggleButton(title: "Ja, één of meerdere dingen"),
-                                  ToggleButton(title: "Nee, ik denk het niet"))))
+                      groupHeaderLabel(title: .contactPriorityQuestion),
+                      list(from: .contactPriorityQuestionItems),
+                      ToggleGroup(ToggleButton(title: .contactPriorityQuestionAnswerPositive),
+                                  ToggleButton(title: .contactPriorityQuestionAnswerNegative))))
             .embed(in: contactDetailsSection.contentView.readableWidth)
         
         // Inform

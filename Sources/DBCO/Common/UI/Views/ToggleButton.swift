@@ -105,7 +105,7 @@ class DateToggleButton: ToggleButton {
         editLabel.translatesAutoresizingMaskIntoConstraints = false
         editLabel.font = Theme.fonts.body
         editLabel.textColor = Theme.colors.primary
-        editLabel.text = "Wijzig"
+        editLabel.text = .edit
         
         addSubview(editLabel)
         
