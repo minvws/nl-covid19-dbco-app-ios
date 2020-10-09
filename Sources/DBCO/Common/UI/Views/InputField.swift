@@ -8,8 +8,8 @@
 import UIKit
 
 class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
-    weak var object: Object?
-    let path: WritableKeyPath<Object, Field>
+    private weak var object: Object?
+    private let path: WritableKeyPath<Object, Field>
     
     init(for object: Object, path: WritableKeyPath<Object, Field>) {
         self.object = object

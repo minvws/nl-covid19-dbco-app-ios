@@ -10,6 +10,7 @@ import UIKit
 class TextView: UITextView, UITextViewDelegate {
     
     private var linkHandlers = [(URL) -> Void]()
+    private var textChangedHandlers = [(String?) -> Void]()
     
     init(htmlText: String) {
         super.init(frame: .zero, textContainer: nil)
@@ -18,7 +19,7 @@ class TextView: UITextView, UITextViewDelegate {
         attributedText = .makeFromHtml(text: htmlText, font: Theme.fonts.body, textColor: Theme.colors.captionGray)
     }
     
-    init(text: String) {
+    init(text: String? = nil) {
         super.init(frame: .zero, textContainer: nil)
         setup()
         
@@ -32,19 +33,33 @@ class TextView: UITextView, UITextViewDelegate {
         self.attributedText = attributedText
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     private func setup() {
+        delegate = self
+        
+        font = Theme.fonts.body
         isScrollEnabled = false
         isEditable = false
-        delegate = self
-        textContainerInset = .zero
+        backgroundColor = nil
+        layer.cornerRadius = 0
         textContainer.lineFragmentPadding = 0
+        textContainerInset = .zero
         linkTextAttributes = [
             .foregroundColor: Theme.colors.primary,
             .underlineColor: UIColor.clear]
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    override var intrinsicContentSize: CGSize {
+        let superSize = super.intrinsicContentSize
+        
+        if isEditable {
+            return CGSize(width: 200, height: max(114, superSize.height))
+        } else {
+            return superSize
+        }
     }
     
     @discardableResult
@@ -53,6 +68,11 @@ class TextView: UITextView, UITextViewDelegate {
         return self
     }
     
+    @discardableResult
+    func textChanged(handler: @escaping (String?) -> Void) -> Self {
+        textChangedHandlers.append(handler)
+        return self
+    }
     
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         switch interaction {
@@ -63,6 +83,10 @@ class TextView: UITextView, UITextViewDelegate {
         }
         
         return false
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        textChangedHandlers.forEach { $0(textView.text) }
     }
     
 }

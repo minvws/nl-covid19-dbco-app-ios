@@ -5,6 +5,7 @@
 "cancel" = "Annuleren";
 "next" = "Volgende";
 "start" = "Beginnen";
+"edit" = "Wijzig";
 
 /* MARK: - Onboarding */
 "onboarding.step1.title" = "Help de GGD bij het contactonderzoek";
@@ -45,6 +46,18 @@
 "contactDetailsSection.message" = "Vul contactgegevens aan";
 "informContactSection.title" = "Informeren";
 "informContactSection.message" = "Deel het handelingsperspectief";
+
+"contactSameHouseholdQuestion" = "Woon je in hetzelfde huis of ben je langer dan 12 uur in tegelijk in een huis geweest?";
+"contactSameHouseholdQuestion.answer.positive" = "Ja";
+"contactSameHouseholdQuestion.answer.negative" = "Nee";
+
+"contactLastContactQuestion" = "Wanneer was je voor het laatst 15 minuten of langer binnen 1,5 meter van elkaar?";
+"contactLastContactQuestion.answer.negative" = "Dat ben ik niet geweest";
+
+"contactPriorityQuestion" = "Is een of meerdere onderstaande zaken van toepassing voor deze persoon?";
+"contactPriorityQuestion.items" = "Is student\n70 jaar of ouder\nHeeft gezondheidsklachten of loopt extra gezondheidsrisico’s\nWoont in een asielzoekerscentrum\nSpreekt slecht of geen Nederlands";
+"contactPriorityQuestion.answer.positive" = "Ja, één of meerdere dingen";
+"contactPriorityQuestion.answer.negative" = "Nee, ik denk het niet";
 
 "contactFallbackTitle" = "Contact toevoegen";
 "contactInformationFirstName" = "Voornaam";

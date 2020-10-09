@@ -53,6 +53,7 @@ extension String {
     static var cancel: String { return Localization.string(for: "cancel") }
     static var next: String { return Localization.string(for: "next") }
     static var start: String { return Localization.string(for: "start") }
+    static var edit: String { return Localization.string(for: "edit") }
     
     /* MARK: - Onboarding */
     static var onboardingStep1Title: String { return Localization.string(for: "onboarding.step1.title") }
@@ -93,6 +94,16 @@ extension String {
     static var contactDetailsSectionMessage: String { return Localization.string(for: "contactDetailsSection.message") }
     static var informContactSectionTitle: String { return Localization.string(for: "informContactSection.title") }
     static var informContactSectionMessage: String { return Localization.string(for: "informContactSection.message") }
+    
+    static var contactSameHouseholdQuestion: String { return Localization.string(for: "contactSameHouseholdQuestion") }
+    static var contactSameHouseholdQuestionAnswerPositive: String { return Localization.string(for: "contactSameHouseholdQuestion.answer.positive") }
+    static var contactSameHouseholdQuestionAnswerNegative: String { return Localization.string(for: "contactSameHouseholdQuestion.answer.negative") }
+    static var contactLastContactQuestion: String { return Localization.string(for: "contactLastContactQuestion") }
+    static var contactLastContactQuestionAnswerNegative: String { return Localization.string(for: "contactLastContactQuestion.answer.negative") }
+    static var contactPriorityQuestion: String { return Localization.string(for: "contactPriorityQuestion") }
+    static var contactPriorityQuestionItems: String { return Localization.string(for: "contactPriorityQuestion.items") }
+    static var contactPriorityQuestionAnswerPositive: String { return Localization.string(for: "contactPriorityQuestion.answer.positive") }
+    static var contactPriorityQuestionAnswerNegative: String { return Localization.string(for: "contactPriorityQuestion.answer.negative") }
     
     static var contactFallbackTitle: String { return Localization.string(for: "contactFallbackTitle") }
     static var contactInformationFirstName: String { return Localization.string(for: "contactInformationFirstName") }

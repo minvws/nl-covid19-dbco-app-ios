@@ -14,11 +14,18 @@ enum InputType {
     case date(formatter: DateFormatter)
 }
 
-protocol InputFieldEditable {
+protocol Editable {
     var value: String? { get set }
     
     static var label: String { get }
     static var placeholder: String? { get }
+}
+
+extension Editable {
+    static var placeholder: String? { return nil }
+}
+
+protocol InputFieldEditable: Editable {
     static var showValidationState: Bool { get }
     static var inputType: InputType { get }
     static var keyboardType: UIKeyboardType { get }
@@ -27,7 +34,6 @@ protocol InputFieldEditable {
 }
 
 extension InputFieldEditable {
-    static var placeholder: String? { return nil }
     static var showValidationState: Bool { return false }
     static var inputType: InputType { return .text }
     static var keyboardType: UIKeyboardType { return .default }
