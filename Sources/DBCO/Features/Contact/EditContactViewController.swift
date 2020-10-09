@@ -53,7 +53,7 @@ class EditContactViewModel {
             .single(InputField(for: contact, path: \.birthDate)),
             .single(InputField(for: contact, path: \.bsn)),
             .single(InputField(for: contact, path: \.profession)),
-            .single(InputField(for: contact, path: \.notes))
+            .single(InputTextView(for: contact, path: \.notes))
         ]
     }
 }

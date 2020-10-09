@@ -18,6 +18,7 @@
 		CD29635B25191972008443AF /* Haptic.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD29635A25191972008443AF /* Haptic.swift */; };
 		CD29636125191AA8008443AF /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD29636025191AA8008443AF /* Theme.swift */; };
 		CD29636425191C80008443AF /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD29636325191C7C008443AF /* Colors.xcassets */; };
+		CD2AC0762530601900E8AF78 /* InputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2AC0752530601900E8AF78 /* InputTextView.swift */; };
 		CD421872251B4819004544B3 /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD421871251B4819004544B3 /* TaskTableViewCell.swift */; };
 		CD421875251B4843004544B3 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD421874251B4843004544B3 /* Task.swift */; };
 		CD49BAEB2525CE7C0079D018 /* PromptableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD49BAEA2525CE7C0079D018 /* PromptableViewController.swift */; };
@@ -84,6 +85,7 @@
 		CD29635A25191972008443AF /* Haptic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptic.swift; sourceTree = "<group>"; };
 		CD29636025191AA8008443AF /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		CD29636325191C7C008443AF /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		CD2AC0752530601900E8AF78 /* InputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextView.swift; sourceTree = "<group>"; };
 		CD421871251B4819004544B3 /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
 		CD421874251B4843004544B3 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		CD49BAEA2525CE7C0079D018 /* PromptableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptableViewController.swift; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 				CD756C77252DDF30005FEDA0 /* SectionView.swift */,
 				CDA525FB252F0FAA004E923A /* ToggleButton.swift */,
 				CDA52600252F1752004E923A /* ToggleGroup.swift */,
+				CD2AC0752530601900E8AF78 /* InputTextView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -508,6 +511,7 @@
 				CD7282C6250F9D2400D68911 /* TaskOverviewCoordinator.swift in Sources */,
 				CDE30E64251BC02100862A40 /* TextField.swift in Sources */,
 				CD7282C1250F945900D68911 /* HelpCoordinator.swift in Sources */,
+				CD2AC0762530601900E8AF78 /* InputTextView.swift in Sources */,
 				CD421872251B4819004544B3 /* TaskTableViewCell.swift in Sources */,
 				CDA525FC252F0FAA004E923A /* ToggleButton.swift in Sources */,
 				CDFCF9152510EBC40062269A /* NSAttributedString+Extension.swift in Sources */,
