@@ -35,30 +35,28 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
         subtitleLabel.font = Theme.fonts.callout
         subtitleLabel.textColor = Theme.colors.captionGray
         
-        icon.isHighlighted = task.completed
+        statusView.status = task.completed ? .completed : .warning
     }
 
     private func build() {
-        icon.image = UIImage(named: "Warning")
-        icon.highlightedImage = UIImage(named: "Checkmark")
-        icon.contentMode = .center
+        statusView.setContentHuggingPriority(.required, for: .horizontal)
         
         let disclosureIndicator = UIImageView(image: UIImage(named: "Chevron"))
         disclosureIndicator.contentMode = .right
+        disclosureIndicator.setContentHuggingPriority(.required, for: .horizontal)
         
-        let text = UIStackView(vertical: [titleLabel,
-                                          UIStackView(horizontal: [icon, subtitleLabel], spacing: 4)],
-                               spacing: 4)
+        HStack(spacing: 16,
+               statusView,
+               VStack(spacing: 4, titleLabel, subtitleLabel),
+               disclosureIndicator)
+            .alignment(.center)
+            .embed(in: containerView)
         
-        UIStackView(horizontal: [text, disclosureIndicator])
-            .embed(in: containerView, insets: .all(16))
+        containerView
+            .embed(in: contentView.readableWidth, insets: .topBottom(16))
         
-        
-        containerView.backgroundColor = Theme.colors.tertiary
-        containerView.layer.cornerRadius = 8
-        
-        
-        containerView.embed(in: contentView.readableWidth, insets: .topBottom(4))
+        SeparatorView()
+            .snap(to: .bottom, of: contentView.readableIdentation)
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -88,5 +86,5 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
     private let containerView = UIView()
-    private let icon = UIImageView()
+    private let statusView = StatusView()
 }
