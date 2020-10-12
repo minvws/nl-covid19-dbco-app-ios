@@ -86,7 +86,7 @@ class TaskOverviewViewController: PromptableViewController {
         let footerViewBuilder = { [unowned self] in
             Button(title: .taskOverviewAddContactButtonTitle, style: .secondary)
                 .touchUpInside(self, action: #selector(requestContact))
-                .wrappedInReadableContentGuide(insets: .top(5) + .bottom(10))
+                .wrappedInReadableContentGuide(insets: .top(16) + .bottom(10))
         }
         
         viewModel.setupTableView(tableView, headerViewBuilder: headerViewBuilder, footerViewBuilder: footerViewBuilder) { [weak self] task, indexPath in

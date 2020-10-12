@@ -95,11 +95,13 @@ class SectionView: UIView {
     }
     
     func expand(animated: Bool) {
+        collapseIndicator.transform = CGAffineTransform(rotationAngle: .pi - 0.000001) // set that rotation to something very close to, but not quite 180 degrees so animating back to 0 reverses the rotation
+        
         func applyAnimatedState() {
             contentView.alpha = 1
             contentContainerView.isHidden = false
             isCollapsed = false
-            collapseIndicator.transform = CGAffineTransform(rotationAngle: .pi)
+            collapseIndicator.transform = .identity
         }
         
         if animated {
@@ -112,14 +114,13 @@ class SectionView: UIView {
     }
     
     func collapse(animated: Bool) {
-        collapseIndicator.transform = CGAffineTransform(rotationAngle: .pi - 0.000001) // set that rotation to something very close to, but not quite 180 degrees so animating back to 0 reverses the rotation
         
         func applyAnimatedState() {
             contentView.alpha = 0
             contentView.endEditing(true)
             contentContainerView.isHidden = true
             isCollapsed = true
-            collapseIndicator.transform = .identity
+            collapseIndicator.transform = CGAffineTransform(rotationAngle: .pi)
         }
         
         if animated {
