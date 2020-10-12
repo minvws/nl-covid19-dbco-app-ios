@@ -28,12 +28,15 @@ class PairingCodeField: UITextField {
     private func setup() {
         let attributes: [NSAttributedString.Key: Any] = [
             .kern: 11,
-            .font: UIFont.monospacedDigitSystemFont(ofSize: 22, weight: .regular)
+            .font: UIFont.monospacedSystemFont(ofSize: 22, weight: .regular)
         ]
         
-        font = UIFont.monospacedDigitSystemFont(ofSize: 22, weight: .regular)
+        placeholderLabel.embed(in: self)
+        sendSubviewToBack(placeholderLabel)
+        updatePlaceholder()
+        
+        font = UIFont.monospacedSystemFont(ofSize: 22, weight: .regular)
         tintColor = Theme.colors.primary
-        attributedPlaceholder = NSAttributedString(string: "000-000-000", attributes: attributes)
         
         typingAttributes = attributes
         defaultTextAttributes = attributes
@@ -48,6 +51,19 @@ class PairingCodeField: UITextField {
         let superSize = super.intrinsicContentSize
         return CGSize(width: superSize.width, height: superSize.height + 18)
     }
+    
+    private func updatePlaceholder(textLength: Int = 0) {
+        let fullPlaceholder = "000-000-000"
+        let remainingPlaceholder = Array(repeating: " ", count: textLength).joined() + String(fullPlaceholder.suffix(fullPlaceholder.count - textLength))
+        placeholderLabel.textColor = Theme.colors.captionGray.withAlphaComponent(0.5)
+        placeholderLabel.attributedText = NSAttributedString(string: remainingPlaceholder, attributes: [
+            .foregroundColor: Theme.colors.captionGray.withAlphaComponent(0.5),
+            .kern: 11,
+            .font: UIFont.monospacedSystemFont(ofSize: 22, weight: .regular)
+        ])
+    }
+    
+    private let placeholderLabel = UILabel()
 }
 
 extension PairingCodeField: UITextFieldDelegate {
@@ -72,6 +88,8 @@ extension PairingCodeField: UITextFieldDelegate {
         }
         
         self.text = codeWithSeparators
+
+        updatePlaceholder(textLength: codeWithSeparators.count)
         
         if trimmedCode.count == 9 {
             pairingCode = String(trimmedCode)
