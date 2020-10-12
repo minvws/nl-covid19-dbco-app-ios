@@ -6,7 +6,6 @@
  */
 
 import UIKit
-import Combine
 
 protocol PairViewControllerDelegate: class {
     func pairViewController(_ controller: PairViewController, wantsToPairWith code: String)
@@ -19,9 +18,8 @@ class PairViewController: UIViewController {
     
     private let codeField = PairingCodeField()
     private let loadingOverlay = UIView()
-    private let loadingIndicator = UIActivityIndicatorView(style: .medium)
+    private let loadingIndicator = UIActivityIndicatorView(style: .white)
     private var keyboardSpacerHeightConstraint: NSLayoutConstraint!
-    private var cancellables = Set<AnyCancellable>()
     
     weak var delegate: PairViewControllerDelegate?
     
@@ -57,10 +55,7 @@ class PairViewController: UIViewController {
         let nextButton = Button(title: .next, style: .primary)
             .touchUpInside(self, action: #selector(pair))
         
-        codeField.$pairingCode
-            .map { $0 != nil }
-            .assign(to: \.isEnabled, on: nextButton)
-            .store(in: &cancellables)
+        codeField.didUpdatePairingCode { nextButton.isEnabled = $0 != nil }
         
         let containerView =
             VStack(spacing: 32,

@@ -28,6 +28,7 @@ class HelpViewModel {
 protocol HelpViewControllerDelegate: class {
     
     func helpViewController(_ controller: HelpViewController, didSelect item: HelpOverviewItem)
+    func helpViewControllerWantsToClose(_ controller: HelpViewController)
     
 }
 
@@ -52,6 +53,7 @@ final class HelpViewController: UIViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
         title = .helpTitle
+        navigationItem.rightBarButtonItem = .init(image: UIImage(named: "CloseButton"), style: .done, target: self, action: #selector(close))
         
         setupTableView()
     }
@@ -60,6 +62,10 @@ final class HelpViewController: UIViewController {
         super.viewDidAppear(animated)
         
         tableView.indexPathForSelectedRow.map { tableView.deselectRow(at: $0, animated: true) }
+    }
+    
+    @objc private func close() {
+        delegate?.helpViewControllerWantsToClose(self)
     }
     
     private func setupTableView() {

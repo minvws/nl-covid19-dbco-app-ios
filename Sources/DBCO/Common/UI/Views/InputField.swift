@@ -26,12 +26,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     private func setup() {
         delegate = self
 
-        validationIconView.image = UIImage(systemName: "exclamationmark.circle.fill")?
-            .withTintColor(Theme.colors.warning)
-            .withRenderingMode(.alwaysOriginal)
-        validationIconView.highlightedImage = UIImage(systemName: "checkmark.circle.fill")?
-            .withTintColor(Theme.colors.ok)
-            .withRenderingMode(.alwaysOriginal)
+        validationIconView.image = UIImage(named: "Validation/Invalid")
+        validationIconView.highlightedImage = UIImage(named: "Validation/Valid")
         validationIconView.contentMode = .center
         validationIconView.setContentCompressionResistancePriority(.required, for: .horizontal)
         textWidthLabel.alpha = 0
@@ -58,14 +54,6 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     }
     
     private func configureInputType() {
-        func createDoneToolbar() -> UIToolbar {
-            let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 100, height: 35))
-            toolBar.setItems([UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))], animated: false)
-            toolBar.barTintColor = .white
-            toolBar.sizeToFit()
-            return toolBar
-        }
-
         inputAccessoryView = nil
         inputView = nil
 
@@ -76,20 +64,25 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             textContentType = Field.textContentType
         case .number:
             keyboardType = .numberPad
-            inputAccessoryView = createDoneToolbar()
+            inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
         case .date(let dateFormatter):
             let datePicker = UIDatePicker()
             text.map(dateFormatter.date)?.map { datePicker.date = $0 }
             datePicker.datePickerMode = .date
-            datePicker.preferredDatePickerStyle = .automatic
-            datePicker.addTarget(self, action: #selector(handleDateValueChanged), for: .valueChanged)
             datePicker.tintColor = .black
-            resetDatePickerBackground()
-            
-            addSubview(datePicker)
+            datePicker.addTarget(self, action: #selector(handleDateValueChanged), for: .valueChanged)
             
             self.datePicker = datePicker
-            text = nil
+            
+            if #available(iOS 13.4, *) {
+                datePicker.preferredDatePickerStyle = .automatic
+                addSubview(datePicker)
+                text = nil
+                resetDatePickerBackground()
+            } else {
+                inputView = datePicker
+                inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
+            }
         case .picker(let options):
             pickerOptions = [""] + options
 
@@ -102,7 +95,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
                 .map { picker.selectRow($0, inComponent: 0, animated: false) }
 
             inputView = picker
-            inputAccessoryView = createDoneToolbar()
+            inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
         }
     }
     
@@ -110,8 +103,11 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         super.layoutSubviews()
 
         iconContainerView.frame = backgroundView.frame.inset(by: .leftRight(12))
-        datePicker?.frame = backgroundView.frame
-        resetDatePickerBackground()
+        
+        if #available(iOS 13.4, *) {
+            datePicker?.frame = backgroundView.frame
+            resetDatePickerBackground()
+        }
     }
     
     override var text: String? {
@@ -152,6 +148,10 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
 
         object?[keyPath: path].value = formatter.string(from: datePicker.date)
         resetDatePickerBackground()
+        if #available(iOS 13.4, *) {
+        } else {
+            text = formatter.string(from: datePicker.date)
+        }
     }
     
     @objc private func done() {
@@ -167,6 +167,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     }
     
     private func resetDatePickerBackground() {
+        guard #available(iOS 13.4, *) else { return }
+        
         datePicker?.subviews.first?.subviews.first?.backgroundColor = .clear
         
         // Schedule clearing the backgroundColor again on the next runloop.
@@ -185,6 +187,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     // MARK: - Delegate implementations
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        guard #available(iOS 13.4, *) else { return true }
+        
         switch Field.inputType {
         case .date:
             return false

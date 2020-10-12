@@ -29,6 +29,7 @@ final class OnboardingCoordinator: Coordinator {
         let stepController = OnboardingStepViewController(viewModel: viewModel)
         navigationController = NavigationController(rootViewController: stepController)
         navigationController.navigationBar.prefersLargeTitles = true
+        navigationController.navigationBar.shadowImage = UIImage()
         
         super.init()
         
