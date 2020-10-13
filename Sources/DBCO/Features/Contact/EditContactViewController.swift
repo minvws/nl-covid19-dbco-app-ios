@@ -14,7 +14,7 @@ class EditContactViewModel {
     let showCancelButton: Bool
     
     init(contact: CNContact, showCancelButton: Bool = false) {
-        self.contact = Contact(type: .roommate, cnContact: contact)
+        self.contact = Contact(category: .category1, cnContact: contact)
         self.title = contact.fullName
         self.showCancelButton = showCancelButton
     }

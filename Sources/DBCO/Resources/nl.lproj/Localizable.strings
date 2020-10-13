@@ -17,7 +17,7 @@
 /* MARK: - Task Overview */
 "taskOverviewTitle" = "Mijn contacten";
 "taskOverviewHeaderText" = "Vul de contactgegevens aan van deze contacten die je samen met de GGD in kaart hebt gebracht. Doe dit snel. <a href=\"app://readmore\">Lees meer</a>";
-"taskOverviewDoneButtonTitle" = "Ik ben klaar";
+"taskOverviewDoneButtonTitle" = "Verstuur gegevens";
 "taskOverviewAddContactButtonTitle" = "+ Contact toevoegen";
 "task.contact.caption.completed" = "Gegevens toegevoegd";
 "task.contact.caption.incomplete" = "Vul gegevens aan";

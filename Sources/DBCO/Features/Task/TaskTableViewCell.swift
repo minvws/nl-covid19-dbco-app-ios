@@ -31,11 +31,19 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
         titleLabel.text = task.contact?.fullName ?? task.name
         titleLabel.font = Theme.fonts.bodyBold
         
-        subtitleLabel.text = task.completed ? .taskContactCaptionCompleted : .taskContactCaptionIncomplete
+        subtitleLabel.text = {
+            switch task.status {
+            case .completed:
+                return .taskContactCaptionCompleted
+            case .inProgress, .notStarted:
+                return .taskContactCaptionIncomplete
+            }
+        }()
+        
         subtitleLabel.font = Theme.fonts.callout
         subtitleLabel.textColor = Theme.colors.captionGray
         
-        statusView.status = task.completed ? .completed : .warning
+        statusView.status = task.status
     }
 
     private func build() {

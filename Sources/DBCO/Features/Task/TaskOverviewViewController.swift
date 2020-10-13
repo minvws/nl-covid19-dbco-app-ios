@@ -14,34 +14,63 @@ protocol TaskOverviewViewControllerDelegate: class {
 }
 
 class TaskOverviewViewModel {
+    typealias SectionHeaderContent = (title: String, subtitle: String)
     private let tableViewManager: TableViewManager<TaskTableViewCell>
     private let taskManager: TaskManager
-    private var headerViewBuilder: (() -> UIView?)?
-    private var footerViewBuilder: (() -> UIView?)?
+    private var tableHeaderBuilder: (() -> UIView?)?
+    private var sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?
+    
+    private var sections: [(header: UIView?, tasks: [Task])]
     
     init(taskManager: TaskManager) {
         self.taskManager = taskManager
         
         tableViewManager = .init()
         
-        tableViewManager.numberOfRowsInSection = { [unowned self] _ in return self.taskManager.tasks.count }
-        tableViewManager.itemForCellAtIndexPath = { [unowned self] in return self.taskManager.tasks[$0.row] }
-        tableViewManager.viewForHeaderInSection = { [unowned self] _ in return self.headerViewBuilder?() }
-        tableViewManager.viewForFooterInSection = { [unowned self] _ in return self.footerViewBuilder?() }
+        sections = []
+        
+        tableViewManager.numberOfSections = { [unowned self] in return sections.count }
+        tableViewManager.numberOfRowsInSection = { [unowned self] in return sections[$0].tasks.count }
+        tableViewManager.itemForCellAtIndexPath = { [unowned self] in return sections[$0.section].tasks[$0.row] }
+        tableViewManager.viewForHeaderInSection = { [unowned self] in return sections[$0].header }
         
         taskManager.addListener(self)
     }
     
-    func setupTableView(_ tableView: UITableView, headerViewBuilder: (() -> UIView?)?, footerViewBuilder: (() -> UIView?)?, selectedTaskHandler: @escaping (Task, IndexPath) -> Void) {
+    func setupTableView(_ tableView: UITableView, tableHeaderBuilder: (() -> UIView?)?, sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?, selectedTaskHandler: @escaping (Task, IndexPath) -> Void) {
         tableViewManager.manage(tableView)
         tableViewManager.didSelectItem = selectedTaskHandler
-        self.headerViewBuilder = headerViewBuilder
-        self.footerViewBuilder = footerViewBuilder
+        self.tableHeaderBuilder = tableHeaderBuilder
+        self.sectionHeaderBuilder = sectionHeaderBuilder
+        
+        buildSections()
+    }
+    
+    private func buildSections() {
+        sections = []
+        sections.append((tableHeaderBuilder?(), []))
+        
+        let otherContacts = taskManager.tasks.filter { ($0 as? ContactDetailsTask)?.preferredStaffContact == false }
+        let staffContacts = taskManager.tasks.filter { ($0 as? ContactDetailsTask)?.preferredStaffContact == true }
+        
+        let otherSectionHeader = SectionHeaderContent("Jij informeert deze contacten", "Vul zo veel mogelijk contactgegevens aan")
+        let staffSectionHeader = SectionHeaderContent("De GGD informeert deze contacten", "Vul zo veel mogelijk contactgegevens aan")
+        
+        if !otherContacts.isEmpty {
+            sections.append((header: sectionHeaderBuilder?(otherSectionHeader),
+                             tasks: otherContacts))
+        }
+        
+        if !staffContacts.isEmpty {
+            sections.append((header: sectionHeaderBuilder?(staffSectionHeader),
+                             tasks: staffContacts))
+        }
     }
 }
 
 extension TaskOverviewViewModel: TaskManagerListener {
     func taskManagerDidUpdateTasks(_ taskManager: TaskManager) {
+        buildSections()
         tableViewManager.reloadData()
     }
 }
@@ -77,19 +106,20 @@ class TaskOverviewViewController: PromptableViewController {
         tableView.embed(in: contentView, preservesSuperviewLayoutMargins: false)
         tableView.delaysContentTouches = false
         
-        let headerViewBuilder = {
-            TextView(htmlText: .taskOverviewHeaderText)
-                .linkTouched { [weak self] _ in self?.openHelp() }
-                .wrappedInReadableContentGuide(insets: .topBottom(10))
-        }
-        
-        let footerViewBuilder = { [unowned self] in
+        let tableHeaderBuilder = { [unowned self] in
             Button(title: .taskOverviewAddContactButtonTitle, style: .secondary)
                 .touchUpInside(self, action: #selector(requestContact))
-                .wrappedInReadableContentGuide(insets: .top(16) + .bottom(10))
+                .wrappedInReadableWidth(insets: .top(16))
         }
         
-        viewModel.setupTableView(tableView, headerViewBuilder: headerViewBuilder, footerViewBuilder: footerViewBuilder) { [weak self] task, indexPath in
+        let sectionHeaderBuilder = { (title: String, subtitle: String) -> UIView in
+            VStack(spacing: 4,
+                   Label(title, font: Theme.fonts.bodyBold),
+                   Label(subtitle, font: Theme.fonts.subhead, textColor: Theme.colors.captionGray))
+                .wrappedInReadableWidth(insets: .top(20) + .bottom(16))
+        }
+        
+        viewModel.setupTableView(tableView, tableHeaderBuilder: tableHeaderBuilder, sectionHeaderBuilder: sectionHeaderBuilder) { [weak self] task, indexPath in
             guard let self = self else { return }
             
             self.delegate?.taskOverviewViewController(self, didSelect: task)

@@ -7,18 +7,25 @@
 
 import Foundation
 
+enum TaskStatus {
+    case notStarted
+    case inProgress(Float)
+    case completed
+}
+
 protocol Task {
     var identifier: String { get }
-    var completed: Bool { get }
+    var status: TaskStatus { get }
     var isSynced: Bool { get }
 }
 
 struct ContactDetailsTask: Task {
     let name: String
     var contact: Contact?
+    var preferredStaffContact: Bool
     
     let identifier: String
-    var completed: Bool
+    var status: TaskStatus
     var isSynced: Bool
 }
 
@@ -35,10 +42,10 @@ final class TaskManager {
     private var listeners = [ListenerWrapper]()
     
     private(set) var tasks: [Task] = [
-        ContactDetailsTask(name: "Aziz F", identifier: UUID().uuidString, completed: false, isSynced: false),
-        ContactDetailsTask(name: "Job J", identifier: UUID().uuidString, completed: false, isSynced: false),
-        ContactDetailsTask(name: "J Attema", identifier: UUID().uuidString, completed: false, isSynced: false),
-        ContactDetailsTask(name: "Thom H", identifier: UUID().uuidString, completed: false, isSynced: false)
+        ContactDetailsTask(name: "Aziz F", preferredStaffContact: false, identifier: UUID().uuidString, status: .notStarted, isSynced: false),
+        ContactDetailsTask(name: "Job J", preferredStaffContact: false, identifier: UUID().uuidString, status: .completed, isSynced: false),
+        ContactDetailsTask(name: "Lia B", preferredStaffContact: false, identifier: UUID().uuidString, status: .inProgress(0.3), isSynced: false),
+        ContactDetailsTask(name: "Thom H", preferredStaffContact: true, identifier: UUID().uuidString, status: .inProgress(0.8), isSynced: false)
     ]
     
     func setContact(_ contact: Contact, for task: ContactDetailsTask) {
@@ -49,7 +56,7 @@ final class TaskManager {
         var updatedTask = task
         updatedTask.contact = contact
         updatedTask.isSynced = false
-        updatedTask.completed = contact.isValid
+        updatedTask.status = .completed
         
         tasks[index] = updatedTask
         
@@ -59,8 +66,9 @@ final class TaskManager {
     func addContact(_ contact: Contact) {
         tasks.append(ContactDetailsTask(name: contact.fullName,
                                         contact: contact,
+                                        preferredStaffContact: false,
                                         identifier: UUID().uuidString,
-                                        completed: contact.isValid,
+                                        status: .completed,
                                         isSynced: false))
         
         listeners.forEach { $0.listener?.taskManagerDidUpdateTasks(self) }

@@ -43,6 +43,7 @@
 		CDA5C11A251389BB009440D1 /* RequestAuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C119251389BB009440D1 /* RequestAuthorizationViewController.swift */; };
 		CDA5C11C25139D36009440D1 /* UIStackView+Axis.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C11B25139D36009440D1 /* UIStackView+Axis.swift */; };
 		CDADF7DE2534773800424492 /* UIToolbar+Done.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDADF7DD2534773800424492 /* UIToolbar+Done.swift */; };
+		CDADF7EE2535B6A500424492 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDADF7ED2535B6A500424492 /* Label.swift */; };
 		CDC272EF2514B46B00AE7BB6 /* RequestContactsAuthorizationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC272EE2514B46B00AE7BB6 /* RequestContactsAuthorizationViewModel.swift */; };
 		CDC4A8E8250B87E5001BABC6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC4A8E7250B87E5001BABC6 /* AppDelegate.swift */; };
 		CDC4A8EA250B87E5001BABC6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC4A8E9250B87E5001BABC6 /* SceneDelegate.swift */; };
@@ -114,6 +115,7 @@
 		CDA5C119251389BB009440D1 /* RequestAuthorizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestAuthorizationViewController.swift; sourceTree = "<group>"; };
 		CDA5C11B25139D36009440D1 /* UIStackView+Axis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Axis.swift"; sourceTree = "<group>"; };
 		CDADF7DD2534773800424492 /* UIToolbar+Done.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIToolbar+Done.swift"; sourceTree = "<group>"; };
+		CDADF7ED2535B6A500424492 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		CDC272EE2514B46B00AE7BB6 /* RequestContactsAuthorizationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestContactsAuthorizationViewModel.swift; sourceTree = "<group>"; };
 		CDC4A8E4250B87E5001BABC6 /* DBCO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DBCO.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDC4A8E7250B87E5001BABC6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 				CD7FACA0251B3FCD00AB8142 /* TextView.swift */,
 				CDA525FB252F0FAA004E923A /* ToggleButton.swift */,
 				CDA52600252F1752004E923A /* ToggleGroup.swift */,
+				CDADF7ED2535B6A500424492 /* Label.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -514,6 +517,7 @@
 				CD2963552518F59E008443AF /* UITableView+Defaults.swift in Sources */,
 				CD756C64252CA787005FEDA0 /* PairingCodeField.swift in Sources */,
 				CDC272EF2514B46B00AE7BB6 /* RequestContactsAuthorizationViewModel.swift in Sources */,
+				CDADF7EE2535B6A500424492 /* Label.swift in Sources */,
 				CD7282C6250F9D2400D68911 /* TaskOverviewCoordinator.swift in Sources */,
 				CDE30E64251BC02100862A40 /* TextField.swift in Sources */,
 				CD7282C1250F945900D68911 /* HelpCoordinator.swift in Sources */,
