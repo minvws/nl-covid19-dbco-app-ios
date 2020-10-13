@@ -6,7 +6,6 @@
  */
 
 import Foundation
-import Combine
 import Contacts
 
 extension CNAuthorizationStatus: AuthorizationStatusConvertible {
@@ -32,42 +31,26 @@ class RequestContactsAuthorizationViewModel: RequestAuthorizationViewModel {
     let continueButtonTitle = String.requestPermissionContactsContinueButtonTitle
     let settingsButtonTitle = String.requestPermissionContactsSettingsButtonTitle
     
-    private(set) lazy var title: AnyPublisher<String?, Never> = $status
-        .map { _ in return .requestPermissionContactsTitle }
-        .eraseToAnyPublisher()
-    
-    private(set) lazy var body: AnyPublisher<String?, Never> = $status
-        .map {
-            switch $0 {
-            case .authorized, .notDetermined:
-                return .requestPermissionContactsBody
-            case .denied, .restricted:
-                return .requestPermissionContactsBodyDenied
-            }
-        }
-        .eraseToAnyPublisher()
-    
-    private(set) lazy var hideAuthorizeButton: AnyPublisher<Bool, Never> = hideSettingsButton.map(!).eraseToAnyPublisher()
-    
-    private(set) lazy var hideSettingsButton: AnyPublisher<Bool, Never> = $status
-        .map {
-            switch $0 {
-            case .authorized, .notDetermined:
-                return true
-            case .denied, .restricted:
-                return false
-            }
-        }
-        .eraseToAnyPublisher()
-    
-    @Published private var status: AuthorizationStatus
-    
     init(currentStatus: AuthorizationStatusConvertible) {
-        self.status = currentStatus.status
+        
     }
     
-    func configure(for status: AuthorizationStatusConvertible) {
-        self.status = status.status
+    func configure(for status: AuthorizationStatusConvertible) -> RequestAuthorizationViewConfiguration {
+        
+        switch status.status {
+        case .authorized, .notDetermined:
+            return .init(
+                title: .requestPermissionContactsTitle,
+                body: .requestPermissionContactsBody,
+                hideAuthorizeButton: false,
+                hideSettingsButton: true)
+        case .denied, .restricted:
+            return .init(
+                title: .requestPermissionContactsTitle,
+                body: .requestPermissionContactsBodyDenied,
+                hideAuthorizeButton: true,
+                hideSettingsButton: false)
+        }
     }
     
 }

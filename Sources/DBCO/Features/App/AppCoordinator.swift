@@ -42,8 +42,13 @@ final class AppCoordinator: Coordinator {
     private let window: UIWindow
     
     
+    @available(iOS 13.0, *)
     init(scene: UIWindowScene) {
         window = UIWindow(windowScene: scene)
+    }
+    
+    override init() {
+        self.window = UIWindow(frame: UIScreen.main.bounds)
     }
     
     override func start() {

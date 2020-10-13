@@ -40,6 +40,7 @@ class HelpQuestionViewModel {
 protocol HelpQuestionViewControllerDelegate: class {
     
     func helpQuestionViewController(_ controller: HelpQuestionViewController, didSelect item: HelpOverviewItem)
+    func helpQuestionViewControllerWantsToClose(_ controller: HelpQuestionViewController)
     
 }
 
@@ -64,9 +65,14 @@ final class HelpQuestionViewController: UIViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
         title = .helpTitle
+        navigationItem.rightBarButtonItem = .init(image: UIImage(named: "CloseButton"), style: .done, target: self, action: #selector(close))
         
         setupContentView()
         setupTableView()
+    }
+    
+    @objc private func close() {
+        delegate?.helpQuestionViewControllerWantsToClose(self)
     }
     
     private func setupContentView() {

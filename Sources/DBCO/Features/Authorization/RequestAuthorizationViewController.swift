@@ -6,7 +6,6 @@
  */
 
 import UIKit
-import Combine
 
 enum AuthorizationStatus {
     case notDetermined
@@ -25,17 +24,19 @@ extension AuthorizationStatus: AuthorizationStatusConvertible {
     }
 }
 
+struct RequestAuthorizationViewConfiguration {
+    let title: String?
+    let body: String?
+    let hideAuthorizeButton: Bool
+    let hideSettingsButton: Bool
+}
+
 protocol RequestAuthorizationViewModel {
-    var title: AnyPublisher<String?, Never> { get }
-    var body: AnyPublisher<String?, Never> { get }
-    var hideAuthorizeButton: AnyPublisher<Bool, Never> { get }
-    var hideSettingsButton: AnyPublisher<Bool, Never> { get }
-    
     var authorizeButtonTitle: String { get }
     var continueButtonTitle: String { get }
     var settingsButtonTitle: String { get }
 
-    func configure(for status: AuthorizationStatusConvertible)
+    func configure(for status: AuthorizationStatusConvertible) -> RequestAuthorizationViewConfiguration
 }
 
 protocol RequestAuthorizationViewControllerDelegate: class {
@@ -47,7 +48,6 @@ protocol RequestAuthorizationViewControllerDelegate: class {
 
 class RequestAuthorizationViewController: ViewController {
     private var didBecomeActiveObserver: NSObjectProtocol?
-    private var cancellables = Set<AnyCancellable>()
     private let viewModel: RequestAuthorizationViewModel
     
     weak var delegate: RequestAuthorizationViewControllerDelegate?
@@ -67,45 +67,27 @@ class RequestAuthorizationViewController: ViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
         
+        setupView()
         requestAuthorizationStatus()
         startReceivingDidBecomeActiveNotifications()
-        setupView()
     }
     
     private func setupView() {
-        let titleLabel = UILabel()
         titleLabel.font = Theme.fonts.title1
         titleLabel.numberOfLines = 0
-    
-        viewModel.title
-            .assign(to: \.text, on: titleLabel)
-            .store(in: &cancellables)
         
-        let bodyLabel = UILabel()
         bodyLabel.font = Theme.fonts.body
         bodyLabel.textColor = Theme.colors.captionGray
         bodyLabel.numberOfLines = 0
         
-        viewModel.body
-            .assign(to: \.text, on: bodyLabel)
-            .store(in: &cancellables)
-        
-        let authorizeButton = Button(title: viewModel.authorizeButtonTitle)
-            .touchUpInside(self, action: #selector(authorize))
-        
-        viewModel.hideAuthorizeButton
-            .assign(to: \.isHidden, on: authorizeButton)
-            .store(in: &cancellables)
+        authorizeButton.title = viewModel.authorizeButtonTitle
+        authorizeButton.touchUpInside(self, action: #selector(authorize))
         
         let continueButton = Button(title: viewModel.continueButtonTitle, style: .secondary)
             .touchUpInside(self, action: #selector(continueWithoutAuthorization))
         
-        let settingsButton = Button(title: viewModel.settingsButtonTitle)
-            .touchUpInside(self, action: #selector(redirectToSettings))
-        
-        viewModel.hideSettingsButton
-            .assign(to: \.isHidden, on: settingsButton)
-            .store(in: &cancellables)
+        settingsButton.title = viewModel.settingsButtonTitle
+        settingsButton.touchUpInside(self, action: #selector(redirectToSettings))
         
         let containerView = UIStackView(vertical: [
             UIStackView(vertical: [titleLabel, bodyLabel], spacing: 10),
@@ -125,7 +107,12 @@ class RequestAuthorizationViewController: ViewController {
     
     private func requestAuthorizationStatus() {
         guard let status = delegate?.currentAutorizationStatus(for: self) else { return }
-        viewModel.configure(for: status)
+        let configuration = viewModel.configure(for: status)
+        
+        titleLabel.text = configuration.title
+        bodyLabel.text = configuration.body
+        authorizeButton.isHidden = configuration.hideAuthorizeButton
+        settingsButton.isHidden = configuration.hideSettingsButton
     }
     
     @objc private func authorize() {
@@ -140,5 +127,10 @@ class RequestAuthorizationViewController: ViewController {
     @objc private func redirectToSettings() {
         delegate?.redirectToSettings(for: self)
     }
+    
+    private let titleLabel = UILabel()
+    private let bodyLabel = UILabel()
+    private let authorizeButton = Button()
+    private let settingsButton = Button()
 
 }

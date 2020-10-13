@@ -60,12 +60,20 @@ extension HelpCoordinator: HelpViewControllerDelegate {
         push(item: item)
     }
     
+    func helpViewControllerWantsToClose(_ controller: HelpViewController) {
+        navigationController.dismiss(animated: true)
+    }
+    
 }
 
 extension HelpCoordinator: HelpQuestionViewControllerDelegate {
     
     func helpQuestionViewController(_ controller: HelpQuestionViewController, didSelect item: HelpOverviewItem) {
         push(item: item)
+    }
+    
+    func helpQuestionViewControllerWantsToClose(_ controller: HelpQuestionViewController) {
+        navigationController.dismiss(animated: true)
     }
     
 }

@@ -98,6 +98,14 @@ class DateToggleButton: ToggleButton {
     
     var date: Date?
     
+    override var isSelected: Bool {
+        didSet {
+            if !isSelected {
+                offscreenTextField.resignFirstResponder()
+            }
+        }
+    }
+    
     override fileprivate func setup() {
         super.setup()
         
@@ -113,7 +121,6 @@ class DateToggleButton: ToggleButton {
         editLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         
         datePicker.datePickerMode = .date
-        datePicker.preferredDatePickerStyle = .automatic
         datePicker.addTarget(self, action: #selector(updateDateValue), for: .editingDidEnd)
         datePicker.tintColor = .black
         datePicker.maximumDate = Date()
@@ -124,11 +131,27 @@ class DateToggleButton: ToggleButton {
             date = datePicker.date
         }
         
-        datePicker
-            .withInsets(.leftRight(4))
-            .embed(in: self)
-        
-        accessibilityElements = [datePicker]
+        if #available(iOS 13.4, *) {
+            datePicker.addTarget(self, action: #selector(updateDateValue), for: .editingDidEnd)
+            datePicker.preferredDatePickerStyle = .automatic
+            datePicker
+                .withInsets(.leftRight(4))
+                .embed(in: self)
+            
+            accessibilityElements = [datePicker]
+        } else {
+            datePicker.addTarget(self, action: #selector(updateDateValue), for: .valueChanged)
+            offscreenTextField.delegate = self
+            offscreenTextField.inputView = datePicker
+            offscreenTextField.inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
+            offscreenTextField.frame = CGRect(x: -2000, y: 0, width: 10, height: 10)
+            
+            setTitle(Self.dateFormatter.string(from: datePicker.date), for: .normal)
+            
+            addSubview(offscreenTextField)
+            
+            addTarget(self, action: #selector(showPicker), for: .touchUpInside)
+        }
     }
     
     override func layoutSubviews() {
@@ -137,6 +160,13 @@ class DateToggleButton: ToggleButton {
     }
     
     // MARK: - Private
+    @objc private func showPicker() {
+        offscreenTextField.becomeFirstResponder()
+    }
+    
+    @objc private func done() {
+        offscreenTextField.resignFirstResponder()
+    }
     
     @objc private func updateDateValue() {
         resetDatePickerBackground()
@@ -144,6 +174,11 @@ class DateToggleButton: ToggleButton {
         date = datePicker.date
         isSelected = true
         sendActions(for: .valueChanged)
+        
+        if #available(iOS 13.4, *) {
+        } else {
+            setTitle(Self.dateFormatter.string(from: datePicker.date), for: .normal)
+        }
     }
     
     private func resetDatePickerBackground() {
@@ -157,4 +192,21 @@ class DateToggleButton: ToggleButton {
     }
     
     private let datePicker = UIDatePicker()
+    private let offscreenTextField = UITextField()
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        formatter.timeStyle = .none
+        formatter.calendar = Calendar.current
+        formatter.locale = Locale.current
+        
+        return formatter
+    }()
+}
+
+extension DateToggleButton: UITextFieldDelegate {
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        return false
+    }
 }

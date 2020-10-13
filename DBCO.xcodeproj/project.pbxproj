@@ -42,6 +42,7 @@
 		CDA5C11825135A46009440D1 /* SelectContactCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C11725135A46009440D1 /* SelectContactCoordinator.swift */; };
 		CDA5C11A251389BB009440D1 /* RequestAuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C119251389BB009440D1 /* RequestAuthorizationViewController.swift */; };
 		CDA5C11C25139D36009440D1 /* UIStackView+Axis.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C11B25139D36009440D1 /* UIStackView+Axis.swift */; };
+		CDADF7DE2534773800424492 /* UIToolbar+Done.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDADF7DD2534773800424492 /* UIToolbar+Done.swift */; };
 		CDC272EF2514B46B00AE7BB6 /* RequestContactsAuthorizationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC272EE2514B46B00AE7BB6 /* RequestContactsAuthorizationViewModel.swift */; };
 		CDC4A8E8250B87E5001BABC6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC4A8E7250B87E5001BABC6 /* AppDelegate.swift */; };
 		CDC4A8EA250B87E5001BABC6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC4A8E9250B87E5001BABC6 /* SceneDelegate.swift */; };
@@ -112,6 +113,7 @@
 		CDA5C11725135A46009440D1 /* SelectContactCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectContactCoordinator.swift; sourceTree = "<group>"; };
 		CDA5C119251389BB009440D1 /* RequestAuthorizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestAuthorizationViewController.swift; sourceTree = "<group>"; };
 		CDA5C11B25139D36009440D1 /* UIStackView+Axis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Axis.swift"; sourceTree = "<group>"; };
+		CDADF7DD2534773800424492 /* UIToolbar+Done.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIToolbar+Done.swift"; sourceTree = "<group>"; };
 		CDC272EE2514B46B00AE7BB6 /* RequestContactsAuthorizationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestContactsAuthorizationViewModel.swift; sourceTree = "<group>"; };
 		CDC4A8E4250B87E5001BABC6 /* DBCO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DBCO.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDC4A8E7250B87E5001BABC6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -355,6 +357,7 @@
 				CD2963542518F59E008443AF /* UITableView+Defaults.swift */,
 				CDFCF9162510ECC70062269A /* UIView+Embed.swift */,
 				CD756C73252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift */,
+				CDADF7DD2534773800424492 /* UIToolbar+Done.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -542,6 +545,7 @@
 				CD2963472514E129008443AF /* ContactTableViewCell.swift in Sources */,
 				CDFCF9122510E0550062269A /* HelpQuestionViewController.swift in Sources */,
 				CDA5C11C25139D36009440D1 /* UIStackView+Axis.swift in Sources */,
+				CDADF7DE2534773800424492 /* UIToolbar+Done.swift in Sources */,
 				CD7FACA1251B3FCD00AB8142 /* TextView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -665,7 +669,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -763,7 +767,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -867,7 +871,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -924,7 +928,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
