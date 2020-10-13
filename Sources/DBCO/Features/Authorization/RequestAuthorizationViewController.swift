@@ -73,23 +73,21 @@ class RequestAuthorizationViewController: ViewController {
     }
     
     private func setupView() {
-        titleLabel = UILabel()
         titleLabel.font = Theme.fonts.title1
         titleLabel.numberOfLines = 0
         
-        bodyLabel = UILabel()
         bodyLabel.font = Theme.fonts.body
         bodyLabel.textColor = Theme.colors.captionGray
         bodyLabel.numberOfLines = 0
         
-        authorizeButton = Button(title: viewModel.authorizeButtonTitle)
-            .touchUpInside(self, action: #selector(authorize))
+        authorizeButton.title = viewModel.authorizeButtonTitle
+        authorizeButton.touchUpInside(self, action: #selector(authorize))
         
         let continueButton = Button(title: viewModel.continueButtonTitle, style: .secondary)
             .touchUpInside(self, action: #selector(continueWithoutAuthorization))
         
-        settingsButton = Button(title: viewModel.settingsButtonTitle)
-            .touchUpInside(self, action: #selector(redirectToSettings))
+        settingsButton.title = viewModel.settingsButtonTitle
+        settingsButton.touchUpInside(self, action: #selector(redirectToSettings))
         
         let containerView = UIStackView(vertical: [
             UIStackView(vertical: [titleLabel, bodyLabel], spacing: 10),
@@ -130,9 +128,9 @@ class RequestAuthorizationViewController: ViewController {
         delegate?.redirectToSettings(for: self)
     }
     
-    private var titleLabel: UILabel!
-    private var bodyLabel: UILabel!
-    private var authorizeButton: Button!
-    private var settingsButton: Button!
+    private let titleLabel = UILabel()
+    private let bodyLabel = UILabel()
+    private let authorizeButton = Button()
+    private let settingsButton = Button()
 
 }
