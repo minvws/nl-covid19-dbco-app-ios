@@ -40,17 +40,21 @@ final class TaskOverviewCoordinator: Coordinator {
         }
     }
     
-    func openHelp() {
+    private func upload() {
+        startChildCoordinator(UploadCoordinator(presenter: overviewController, taskManager: taskManager, delegate: self))
+    }
+    
+    private func openHelp() {
         startChildCoordinator(HelpCoordinator(presenter: overviewController, delegate: self))
     }
     
-    func selectContact(suggestedName: String?, for task: ContactDetailsTask? = nil) {
+    private func selectContact(suggestedName: String?, for task: ContactDetailsTask? = nil) {
         startChildCoordinator(
             SelectContactCoordinator(presenter: overviewController, suggestedName: suggestedName, delegate: self),
             context: task)
     }
     
-    func editContact(contact: Contact, for task: ContactDetailsTask) {
+    private func editContact(contact: Contact, for task: ContactDetailsTask) {
         startChildCoordinator(
             EditContactCoordinator(presenter: overviewController, contact: contact, delegate: self),
             context: task)
@@ -101,6 +105,14 @@ extension TaskOverviewCoordinator: EditContactCoordinatorDelegate {
     
 }
 
+extension TaskOverviewCoordinator: UploadCoordinatorDelegate {
+    
+    func uploadCoordinatorDidFinish(_ coordinator: UploadCoordinator) {
+        removeChildCoordinator(coordinator)
+    }
+    
+}
+
 // MARK: - ViewController delegates
 extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
     
@@ -113,7 +125,6 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
     }
     
     func taskOverviewViewController(_ controller: TaskOverviewViewController, didSelect task: Task) {
-        
         switch task {
         case let contactDetailsTask as ContactDetailsTask:
             if let contact = contactDetailsTask.contact {
@@ -126,6 +137,10 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
         default:
             break
         }
+    }
+    
+    func taskOverviewViewControllerDidRequestUpload(_ controller: TaskOverviewViewController) {
+        upload()
     }
     
 }

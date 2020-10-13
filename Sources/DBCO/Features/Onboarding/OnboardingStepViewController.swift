@@ -47,28 +47,17 @@ class OnboardingStepViewController: UIViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
         
-        let titleLabel = UILabel()
-        titleLabel.font = Theme.fonts.title2
-        titleLabel.numberOfLines = 0
-        titleLabel.text = viewModel.title
-        
-        let messageLabel = UILabel()
-        messageLabel.font = Theme.fonts.body
-        messageLabel.textColor = Theme.colors.captionGray
-        messageLabel.numberOfLines = 0
-        messageLabel.text = viewModel.message
-        
         let textContainerView =
             VStack(spacing: 32,
                    VStack(spacing: 16,
-                          titleLabel,
-                          messageLabel),
+                          Label(title2: viewModel.title).multiline(),
+                          Label(body: viewModel.message, textColor: Theme.colors.captionGray).multiline()),
                    Button(title: viewModel.buttonTitle, style: .primary)
                        .touchUpInside(self, action: #selector(handleContinue)))
         
         textContainerView.snap(to: .bottom,
                                of: view.readableContentGuide,
-                               insets: .bottom(16))
+                               insets: .bottom(8))
         
         imageView = UIImageView(image: viewModel.image)
         imageView.contentMode = .scaleAspectFit

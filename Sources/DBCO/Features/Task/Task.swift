@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum TaskStatus {
+enum TaskStatus: Equatable {
     case notStarted
     case inProgress(Float)
     case completed
@@ -31,8 +31,10 @@ struct ContactDetailsTask: Task {
 
 protocol TaskManagerListener: class {
     func taskManagerDidUpdateTasks(_ taskManager: TaskManager)
+    func taskManagerDidUpdateSyncState(_ taskManager: TaskManager)
 }
 
+// Temporary implementation
 final class TaskManager {
     
     private struct ListenerWrapper {
@@ -41,12 +43,22 @@ final class TaskManager {
     
     private var listeners = [ListenerWrapper]()
     
+    private(set) var isSynced: Bool = false {
+        didSet {
+            listeners.forEach { $0.listener?.taskManagerDidUpdateSyncState(self) }
+        }
+    }
+    
     private(set) var tasks: [Task] = [
         ContactDetailsTask(name: "Aziz F", preferredStaffContact: false, identifier: UUID().uuidString, status: .notStarted, isSynced: false),
         ContactDetailsTask(name: "Job J", preferredStaffContact: false, identifier: UUID().uuidString, status: .completed, isSynced: false),
         ContactDetailsTask(name: "Lia B", preferredStaffContact: false, identifier: UUID().uuidString, status: .inProgress(0.3), isSynced: false),
         ContactDetailsTask(name: "Thom H", preferredStaffContact: true, identifier: UUID().uuidString, status: .inProgress(0.8), isSynced: false)
     ]
+    
+    var hasUnfinishedTasks: Bool {
+        tasks.contains { $0.status != .completed }
+    }
     
     func setContact(_ contact: Contact, for task: ContactDetailsTask) {
         guard let index = tasks.lastIndex(where: { $0.identifier == task.identifier }) else {
@@ -61,6 +73,7 @@ final class TaskManager {
         tasks[index] = updatedTask
         
         listeners.forEach { $0.listener?.taskManagerDidUpdateTasks(self) }
+        isSynced = false
     }
     
     func addContact(_ contact: Contact) {
@@ -72,10 +85,19 @@ final class TaskManager {
                                         isSynced: false))
         
         listeners.forEach { $0.listener?.taskManagerDidUpdateTasks(self) }
+        isSynced = false
     }
     
     func addListener(_ listener: TaskManagerListener) {
         listeners.append(ListenerWrapper(listener: listener))
+    }
+    
+    func sync(completionHandler: ((Bool) -> Void)?) {
+        // Fake doing some work
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.isSynced = true
+            completionHandler?(true)
+        }
     }
     
 }
