@@ -96,7 +96,7 @@ final class SelectContactCoordinator: Coordinator {
     }
     
     private func continueManually() {
-        let contact = Contact(type: .general, name: suggestedName ?? "")
+        let contact = Contact(category: .category2b, name: suggestedName ?? "")
         let editViewModel = EditContactViewModel(contact: contact, showCancelButton: true)
         let editController = EditContactViewController(viewModel: editViewModel)
         editController.delegate = self
@@ -122,7 +122,7 @@ extension SelectContactCoordinator: RequestAuthorizationViewControllerDelegate {
     }
     
     func continueWithoutAuthorization(for controller: RequestAuthorizationViewController) {
-        let detailViewModel = EditContactViewModel(contact: Contact(type: .general, name: suggestedName ?? ""), showCancelButton: true)
+        let detailViewModel = EditContactViewModel(contact: Contact(category: .category2b, name: suggestedName ?? ""), showCancelButton: true)
         let detailsController = EditContactViewController(viewModel: detailViewModel)
         detailsController.delegate = self
         
@@ -146,7 +146,7 @@ extension SelectContactCoordinator: SelectContactViewControllerDelegate {
     }
     
     func selectContactViewControllerDidRequestManualInput(_ controller: SelectContactViewController) {
-        let detailViewModel = EditContactViewModel(contact: Contact(type: .general, name: suggestedName ?? ""))
+        let detailViewModel = EditContactViewModel(contact: Contact(category: .category2b, name: suggestedName ?? ""))
         let detailsController = EditContactViewController(viewModel: detailViewModel)
         detailsController.delegate = self
         

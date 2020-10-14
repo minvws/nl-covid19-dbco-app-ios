@@ -9,13 +9,8 @@
 import UIKit
 
 class StatusView: UIView {
-    enum Status {
-        case warning
-        case completed
-        case progress(CGFloat)
-    }
     
-    var status: Status {
+    var status: TaskStatus {
         didSet {
             applyStatus()
         }
@@ -23,14 +18,14 @@ class StatusView: UIView {
 
     private let imageView = UIImageView()
 
-    init(status: Status = .warning) {
+    init(status: TaskStatus = .notStarted) {
         self.status = status
         super.init(frame: CGRect(origin: .zero, size: CGSize(width: 24, height: 24)))
         setup()
     }
     
     required init?(coder: NSCoder) {
-        self.status = .warning
+        self.status = .notStarted
         super.init(coder: coder)
         setup()
     }
@@ -43,13 +38,13 @@ class StatusView: UIView {
     
     private func applyStatus() {
         switch status {
-        case .warning:
+        case .notStarted:
             imageView.isHighlighted = false
             imageView.isHidden = false
         case .completed:
             imageView.isHighlighted = true
             imageView.isHidden = false
-        case .progress:
+        case .inProgress:
             imageView.isHidden = true
         }
         
@@ -61,10 +56,10 @@ class StatusView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        guard case .progress(let progress) = status else { return }
+        guard case .inProgress(let progress) = status else { return }
         guard let context = UIGraphicsGetCurrentContext() else { return }
         
-        let clampedProgress = min(max(progress, 0), 1)
+        let clampedProgress = min(max(CGFloat(progress), 0), 1)
         
         UIColor.white.setFill()
         context.fill(rect)

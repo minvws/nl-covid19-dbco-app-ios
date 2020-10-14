@@ -5,28 +5,26 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
+
 import UIKit
 
-protocol TaskOverviewViewControllerDelegate: class {
-    func taskOverviewViewControllerDidRequestHelp(_ controller: TaskOverviewViewController)
-    func taskOverviewViewControllerDidRequestAddContact(_ controller: TaskOverviewViewController)
-    func taskOverviewViewController(_ controller: TaskOverviewViewController, didSelect task: Task)
-    func taskOverviewViewControllerDidRequestUpload(_ controller: TaskOverviewViewController)
+protocol UnfinishedTasksViewControllerDelegate: class {
+    func unfinishedTasksViewController(_ controller: UnfinishedTasksViewController, didSelect task: Task)
+    func unfinishedTasksViewControllerDidRequestUpload(_ controller: UnfinishedTasksViewController)
+    func unfinishedTasksViewControllerDidCancel(_ controller: UnfinishedTasksViewController)
 }
 
-class TaskOverviewViewModel {
+class UnfinishedTasksViewModel {
     typealias SectionHeaderContent = (title: String, subtitle: String)
-    typealias PromptFunction = (_ animated: Bool) -> Void
     
     private let tableViewManager: TableViewManager<TaskTableViewCell>
     private let taskManager: TaskManager
     private var tableHeaderBuilder: (() -> UIView?)?
     private var sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?
     
-    private var sections: [(header: UIView?, tasks: [Task])]
+    private let relevantTaskIdentifiers: [String]
     
-    private var hidePrompt: PromptFunction?
-    private var showPrompt: PromptFunction?
+    private var sections: [(header: UIView?, tasks: [Task])]
     
     init(taskManager: TaskManager) {
         self.taskManager = taskManager
@@ -34,6 +32,10 @@ class TaskOverviewViewModel {
         tableViewManager = .init()
         
         sections = []
+        
+        relevantTaskIdentifiers = taskManager.tasks
+            .filter { $0.status != .completed }
+            .map { $0.identifier }
         
         tableViewManager.numberOfSections = { [unowned self] in return sections.count }
         tableViewManager.numberOfRowsInSection = { [unowned self] in return sections[$0].tasks.count }
@@ -52,20 +54,14 @@ class TaskOverviewViewModel {
         buildSections()
     }
     
-    func setHidePrompt(_ hidePrompt: @escaping PromptFunction) {
-        self.hidePrompt = hidePrompt
-    }
-    
-    func setShowPrompt(_ showPrompt: @escaping PromptFunction) {
-        self.showPrompt = showPrompt
-    }
-    
     private func buildSections() {
         sections = []
         sections.append((tableHeaderBuilder?(), []))
         
-        let otherContacts = taskManager.tasks.filter { ($0 as? ContactDetailsTask)?.preferredStaffContact == false }
-        let staffContacts = taskManager.tasks.filter { ($0 as? ContactDetailsTask)?.preferredStaffContact == true }
+        let tasks = taskManager.tasks.filter { relevantTaskIdentifiers.contains($0.identifier) }
+        
+        let otherContacts = tasks.filter { ($0 as? ContactDetailsTask)?.preferredStaffContact == false }
+        let staffContacts = tasks.filter { ($0 as? ContactDetailsTask)?.preferredStaffContact == true }
         
         let otherSectionHeader = SectionHeaderContent(.taskOverviewIndexContactsHeaderTitle, .taskOverviewIndexContactsHeaderSubtitle)
         let staffSectionHeader = SectionHeaderContent(.taskOverviewStaffContactsHeaderTitle, .taskOverviewStaffContactsHeaderSubtitle)
@@ -82,28 +78,22 @@ class TaskOverviewViewModel {
     }
 }
 
-extension TaskOverviewViewModel: TaskManagerListener {
+extension UnfinishedTasksViewModel: TaskManagerListener {
     func taskManagerDidUpdateTasks(_ taskManager: TaskManager) {
         buildSections()
         tableViewManager.reloadData()
     }
     
-    func taskManagerDidUpdateSyncState(_ taskManager: TaskManager) {
-        if taskManager.isSynced {
-            hidePrompt?(true)
-        } else {
-            showPrompt?(true)
-        }
-    }
+    func taskManagerDidUpdateSyncState(_ taskManager: TaskManager) {}
 }
 
-class TaskOverviewViewController: PromptableViewController {
-    private let viewModel: TaskOverviewViewModel
+class UnfinishedTasksViewController: PromptableViewController {
+    private let viewModel: UnfinishedTasksViewModel
     private let tableView = UITableView.createDefaultGrouped()
     
-    weak var delegate: TaskOverviewViewControllerDelegate?
+    weak var delegate: UnfinishedTasksViewControllerDelegate?
     
-    required init(viewModel: TaskOverviewViewModel) {
+    required init(viewModel: UnfinishedTasksViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -117,25 +107,23 @@ class TaskOverviewViewController: PromptableViewController {
 
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
-        title = .taskOverviewTitle
+        title = .unfinishedTasksOverviewTitle
+        navigationItem.leftBarButtonItem = .init(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
         
         setupTableView()
         
-        promptView = Button(title: .taskOverviewDoneButtonTitle)
+        promptView = Button(title: .next)
             .touchUpInside(self, action: #selector(upload))
-        
-        viewModel.setHidePrompt { [unowned self] in hidePrompt(animated: $0) }
-        viewModel.setShowPrompt { [unowned self] in showPrompt(animated: $0) }
     }
     
     private func setupTableView() {
         tableView.embed(in: contentView, preservesSuperviewLayoutMargins: false)
         tableView.delaysContentTouches = false
         
-        let tableHeaderBuilder = { [unowned self] in
-            Button(title: .taskOverviewAddContactButtonTitle, style: .secondary)
-                .touchUpInside(self, action: #selector(requestContact))
-                .wrappedInReadableWidth(insets: .top(16))
+        let tableHeaderBuilder = {
+            Label(title2: .unfinishedTasksOverviewMessage)
+                .multiline()
+                .wrappedInReadableWidth(insets: .top(60) + .bottom(20))
         }
         
         let sectionHeaderBuilder = { (title: String, subtitle: String) -> UIView in
@@ -148,21 +136,17 @@ class TaskOverviewViewController: PromptableViewController {
         viewModel.setupTableView(tableView, tableHeaderBuilder: tableHeaderBuilder, sectionHeaderBuilder: sectionHeaderBuilder) { [weak self] task, indexPath in
             guard let self = self else { return }
             
-            self.delegate?.taskOverviewViewController(self, didSelect: task)
+            self.delegate?.unfinishedTasksViewController(self, didSelect: task)
             self.tableView.deselectRow(at: indexPath, animated: true)
         }
     }
     
-    @objc private func openHelp() {
-        delegate?.taskOverviewViewControllerDidRequestHelp(self)
-    }
-    
-    @objc private func requestContact() {
-        delegate?.taskOverviewViewControllerDidRequestAddContact(self)
+    @objc private func cancel() {
+        delegate?.unfinishedTasksViewControllerDidCancel(self)
     }
     
     @objc private func upload() {
-        delegate?.taskOverviewViewControllerDidRequestUpload(self)
+        delegate?.unfinishedTasksViewControllerDidRequestUpload(self)
     }
 
 }

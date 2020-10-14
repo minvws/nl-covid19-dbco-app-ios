@@ -67,6 +67,12 @@ extension String {
     static var taskOverviewHeaderText: String { return Localization.string(for: "taskOverviewHeaderText") }
     static var taskOverviewDoneButtonTitle: String { return Localization.string(for: "taskOverviewDoneButtonTitle") }
     static var taskOverviewAddContactButtonTitle: String { return Localization.string(for: "taskOverviewAddContactButtonTitle") }
+    
+    static var taskOverviewIndexContactsHeaderTitle: String { return Localization.string(for: "taskOverviewIndexContactsHeader.title") }
+    static var taskOverviewIndexContactsHeaderSubtitle: String { return Localization.string(for: "taskOverviewIndexContactsHeader.subtitle") }
+    static var taskOverviewStaffContactsHeaderTitle: String { return Localization.string(for: "taskOverviewStaffContactsHeader.title") }
+    static var taskOverviewStaffContactsHeaderSubtitle: String { return Localization.string(for: "taskOverviewStaffContactsHeader.subtitle") }
+    
     static var taskContactCaptionCompleted: String { return Localization.string(for: "task.contact.caption.completed") }
     static var taskContactCaptionIncomplete: String { return Localization.string(for: "task.contact.caption.incomplete") }
     
@@ -116,6 +122,11 @@ extension String {
     static var contactInformationProfession: String { return Localization.string(for: "contactInformationProfession") }
     static var contactInformationCompanyName: String { return Localization.string(for: "contactInformationCompanyName") }
     static var contactInformationNotes: String { return Localization.string(for: "contactInformationNotes") }
+    
+    /* MARK: - Uploading */
+    static var unfinishedTasksOverviewTitle: String { return Localization.string(for: "unfinishedTasksOverviewTitle") }
+    static var unfinishedTasksOverviewMessage: String { return Localization.string(for: "unfinishedTasksOverviewMessage") }
+    static var uploadInProgressMessage: String { return Localization.string(for: " uploadInProgressMessage") }
     
     // MARK: - Help
     
