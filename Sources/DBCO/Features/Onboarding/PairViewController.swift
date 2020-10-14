@@ -55,6 +55,7 @@ class PairViewController: UIViewController {
         let nextButton = Button(title: .next, style: .primary)
             .touchUpInside(self, action: #selector(pair))
         
+        nextButton.isEnabled = false
         codeField.didUpdatePairingCode { nextButton.isEnabled = $0 != nil }
         
         let containerView =
