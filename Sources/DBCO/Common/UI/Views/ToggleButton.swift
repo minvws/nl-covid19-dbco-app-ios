@@ -131,7 +131,7 @@ class DateToggleButton: ToggleButton {
             date = datePicker.date
         }
         
-        if #available(iOS 13.4, *) {
+        if #available(iOS 14.0, *) {
             datePicker.addTarget(self, action: #selector(updateDateValue), for: .editingDidEnd)
             datePicker.preferredDatePickerStyle = .automatic
             datePicker
@@ -175,7 +175,7 @@ class DateToggleButton: ToggleButton {
         isSelected = true
         sendActions(for: .valueChanged)
         
-        if #available(iOS 13.4, *) {
+        if #available(iOS 14.0, *) {
         } else {
             setTitle(Self.dateFormatter.string(from: datePicker.date), for: .normal)
         }
