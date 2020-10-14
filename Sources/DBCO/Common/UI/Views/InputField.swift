@@ -74,9 +74,10 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             
             self.datePicker = datePicker
             
-            if #available(iOS 13.4, *) {
-                datePicker.preferredDatePickerStyle = .automatic
+            if #available(iOS 14.0, *) {
                 addSubview(datePicker)
+                datePicker.preferredDatePickerStyle = .automatic
+                
                 text = nil
                 resetDatePickerBackground()
             } else {
@@ -104,7 +105,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
 
         iconContainerView.frame = backgroundView.frame.inset(by: .leftRight(12))
         
-        if #available(iOS 13.4, *) {
+        if #available(iOS 14.0, *) {
             datePicker?.frame = backgroundView.frame
             resetDatePickerBackground()
         }
@@ -148,7 +149,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
 
         object?[keyPath: path].value = formatter.string(from: datePicker.date)
         resetDatePickerBackground()
-        if #available(iOS 13.4, *) {
+        if #available(iOS 14.0, *) {
         } else {
             text = formatter.string(from: datePicker.date)
         }
@@ -167,7 +168,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     }
     
     private func resetDatePickerBackground() {
-        guard #available(iOS 13.4, *) else { return }
+        guard #available(iOS 14.0, *) else { return }
         
         datePicker?.subviews.first?.subviews.first?.backgroundColor = .clear
         
@@ -187,7 +188,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     // MARK: - Delegate implementations
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        guard #available(iOS 13.4, *) else { return true }
+        guard #available(iOS 14.0, *) else { return true }
         
         switch Field.inputType {
         case .date:
