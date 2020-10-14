@@ -19,6 +19,12 @@
 "taskOverviewHeaderText" = "Vul de contactgegevens aan van deze contacten die je samen met de GGD in kaart hebt gebracht. Doe dit snel. <a href=\"app://readmore\">Lees meer</a>";
 "taskOverviewDoneButtonTitle" = "Verstuur gegevens";
 "taskOverviewAddContactButtonTitle" = "+ Contact toevoegen";
+
+"taskOverviewIndexContactsHeader.title" = "Jij informeert deze contacten";
+"taskOverviewIndexContactsHeader.subtitle" = "Vul zo veel mogelijk contactgegevens aan";
+"taskOverviewStaffContactsHeader.title" = "De GGD informeert deze contacten";
+"taskOverviewStaffContactsHeader.subtitle" = "Vul zo veel mogelijk contactgegevens aan";
+
 "task.contact.caption.completed" = "Gegevens toegevoegd";
 "task.contact.caption.incomplete" = "Vul gegevens aan";
 
@@ -70,6 +76,11 @@
 "contactInformationProfession" = "Beroep";
 "contactInformationCompanyName" = "Naam bedrijf/vereniging";
 "contactInformationNotes" = "Toelichting";
+
+/* MARK: - Uploading */
+"unfinishedTasksOverviewTitle" = "Bijna klaar";
+"unfinishedTasksOverviewMessage" = "Kun je de gegevens van deze contacten controleren?";
+"uploadInProgressMessage" = "Versturen...";
 
 /* MARK: - Help */
 "helpTitle" = "Over de app";

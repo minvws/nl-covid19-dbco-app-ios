@@ -21,6 +21,12 @@
 "taskOverviewHeaderText" = "Add details for the contacts you discussed together with the GGD. This is urgent. <a href=\"app://readmore\">Read more</a>";
 "taskOverviewDoneButtonTitle" = "Send data";
 "taskOverviewAddContactButtonTitle" = "+ Add contact";
+
+"taskOverviewIndexContactsHeader.title" = "Jij informeert deze contacten";
+"taskOverviewIndexContactsHeader.subtitle" = "Vul zo veel mogelijk contactgegevens aan";
+"taskOverviewStaffContactsHeader.title" = "De GGD informeert deze contacten";
+"taskOverviewStaffContactsHeader.subtitle" = "Vul zo veel mogelijk contactgegevens aan";
+
 "task.contact.caption.completed" = "Details added";
 "task.contact.caption.incomplete" = "Enter details";
 
@@ -72,6 +78,11 @@
 "contactInformationProfession" = "Profession";
 "contactInformationCompanyName" = "Company name";
 "contactInformationNotes" = "Notes";
+
+/* MARK: - Uploading */
+"unfinishedTasksOverviewTitle" = "Bijna klaar";
+"unfinishedTasksOverviewMessage" = "Kun je de gegevens van deze contacten controleren?";
+"uploadInProgressMessage" = "Versturen...";
 
 /* MARK: - Help */
 "helpTitle" = "About this app";

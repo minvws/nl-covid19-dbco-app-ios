@@ -63,8 +63,8 @@ class UnfinishedTasksViewModel {
         let otherContacts = tasks.filter { ($0 as? ContactDetailsTask)?.preferredStaffContact == false }
         let staffContacts = tasks.filter { ($0 as? ContactDetailsTask)?.preferredStaffContact == true }
         
-        let otherSectionHeader = SectionHeaderContent("Jij informeert deze contacten", "Vul zo veel mogelijk contactgegevens aan")
-        let staffSectionHeader = SectionHeaderContent("De GGD informeert deze contacten", "Vul zo veel mogelijk contactgegevens aan")
+        let otherSectionHeader = SectionHeaderContent(.taskOverviewIndexContactsHeaderTitle, .taskOverviewIndexContactsHeaderSubtitle)
+        let staffSectionHeader = SectionHeaderContent(.taskOverviewStaffContactsHeaderTitle, .taskOverviewStaffContactsHeaderSubtitle)
         
         if !otherContacts.isEmpty {
             sections.append((header: sectionHeaderBuilder?(otherSectionHeader),
@@ -107,7 +107,7 @@ class UnfinishedTasksViewController: PromptableViewController {
 
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
-        title = "Bijna klaar"
+        title = .unfinishedTasksOverviewTitle
         navigationItem.leftBarButtonItem = .init(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
         
         setupTableView()
@@ -121,7 +121,7 @@ class UnfinishedTasksViewController: PromptableViewController {
         tableView.delaysContentTouches = false
         
         let tableHeaderBuilder = {
-            Label(title2: "Kun je de gegevens van deze contacten controleren?")
+            Label(title2: .unfinishedTasksOverviewMessage)
                 .multiline()
                 .wrappedInReadableWidth(insets: .top(60) + .bottom(20))
         }

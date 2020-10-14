@@ -67,8 +67,8 @@ class TaskOverviewViewModel {
         let otherContacts = taskManager.tasks.filter { ($0 as? ContactDetailsTask)?.preferredStaffContact == false }
         let staffContacts = taskManager.tasks.filter { ($0 as? ContactDetailsTask)?.preferredStaffContact == true }
         
-        let otherSectionHeader = SectionHeaderContent("Jij informeert deze contacten", "Vul zo veel mogelijk contactgegevens aan")
-        let staffSectionHeader = SectionHeaderContent("De GGD informeert deze contacten", "Vul zo veel mogelijk contactgegevens aan")
+        let otherSectionHeader = SectionHeaderContent(.taskOverviewIndexContactsHeaderTitle, .taskOverviewIndexContactsHeaderSubtitle)
+        let staffSectionHeader = SectionHeaderContent(.taskOverviewStaffContactsHeaderTitle, .taskOverviewStaffContactsHeaderSubtitle)
         
         if !otherContacts.isEmpty {
             sections.append((header: sectionHeaderBuilder?(otherSectionHeader),
