@@ -10,7 +10,7 @@ import Contacts
 import ContactsUI
 
 protocol SelectContactCoordinatorDelegate: class {
-    func selectContactCoordinatorDidFinish(_ coordinator: SelectContactCoordinator, with contact: Contact?)
+    func selectContactCoordinatorDidFinish(_ coordinator: SelectContactCoordinator, with contact: OldContact?)
 }
 
 final class SelectContactCoordinator: Coordinator {
@@ -18,7 +18,7 @@ final class SelectContactCoordinator: Coordinator {
     private weak var delegate: SelectContactCoordinatorDelegate?
     private weak var presenter: UIViewController?
     private let navigationController: NavigationController
-    private var selectedContact: Contact?
+    private var selectedContact: OldContact?
     private var suggestedName: String?
     
     init(presenter: UIViewController, suggestedName: String? = nil, delegate: SelectContactCoordinatorDelegate) {
@@ -96,7 +96,7 @@ final class SelectContactCoordinator: Coordinator {
     }
     
     private func continueManually() {
-        let contact = Contact(category: .category2b, name: suggestedName ?? "")
+        let contact = OldContact(category: .category2b, name: suggestedName ?? "")
         let editViewModel = EditContactViewModel(contact: contact, showCancelButton: true)
         let editController = EditContactViewController(viewModel: editViewModel)
         editController.delegate = self
@@ -122,7 +122,7 @@ extension SelectContactCoordinator: RequestAuthorizationViewControllerDelegate {
     }
     
     func continueWithoutAuthorization(for controller: RequestAuthorizationViewController) {
-        let detailViewModel = EditContactViewModel(contact: Contact(category: .category2b, name: suggestedName ?? ""), showCancelButton: true)
+        let detailViewModel = EditContactViewModel(contact: OldContact(category: .category2b, name: suggestedName ?? ""), showCancelButton: true)
         let detailsController = EditContactViewController(viewModel: detailViewModel)
         detailsController.delegate = self
         
@@ -146,7 +146,7 @@ extension SelectContactCoordinator: SelectContactViewControllerDelegate {
     }
     
     func selectContactViewControllerDidRequestManualInput(_ controller: SelectContactViewController) {
-        let detailViewModel = EditContactViewModel(contact: Contact(category: .category2b, name: suggestedName ?? ""))
+        let detailViewModel = EditContactViewModel(contact: OldContact(category: .category2b, name: suggestedName ?? ""))
         let detailsController = EditContactViewController(viewModel: detailViewModel)
         detailsController.delegate = self
         
@@ -167,7 +167,7 @@ extension SelectContactCoordinator: EditContactViewControllerDelegate {
         navigationController.dismiss(animated: true)
     }
     
-    func editContactViewController(_ controller: EditContactViewController, didSave contact: Contact) {
+    func editContactViewController(_ controller: EditContactViewController, didSave contact: OldContact) {
         selectedContact = contact
         navigationController.dismiss(animated: true)
     }

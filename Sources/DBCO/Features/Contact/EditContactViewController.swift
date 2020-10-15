@@ -9,18 +9,18 @@ import UIKit
 import Contacts
 
 class EditContactViewModel {
-    private(set) var contact: Contact
+    private(set) var contact: OldContact
     let title: String
     let showCancelButton: Bool
     
     init(contact: CNContact, showCancelButton: Bool = false) {
-        self.contact = Contact(category: .category1, cnContact: contact)
+        self.contact = OldContact(category: .category1, cnContact: contact)
         self.title = contact.fullName
         self.showCancelButton = showCancelButton
     }
     
-    init(contact: Contact, showCancelButton: Bool = false) {
-        self.contact = contact.copy() as! Contact
+    init(contact: OldContact, showCancelButton: Bool = false) {
+        self.contact = contact.copy() as! OldContact
         self.title = contact.fullName.isEmpty ? .contactFallbackTitle : contact.fullName
         self.showCancelButton = showCancelButton
     }
@@ -35,12 +35,12 @@ class EditContactViewModel {
         let lastNameField = InputField(for: contact, path: \.lastName)
         
         let phoneNumberFields = contact.phoneNumbers.indices
-            .map { \Contact.phoneNumbers[$0] }
+            .map { \OldContact.phoneNumbers[$0] }
             .map { InputField(for: contact, path: $0) }
             .map(Row.single)
         
         let emailFields = contact.emailAddresses.indices
-            .map { \Contact.emailAddresses[$0] }
+            .map { \OldContact.emailAddresses[$0] }
             .map { InputField(for: contact, path: $0) }
             .map(Row.single)
         
@@ -60,7 +60,7 @@ class EditContactViewModel {
 
 protocol EditContactViewControllerDelegate: class {
     func editContactViewControllerDidCancel(_ controller: EditContactViewController)
-    func editContactViewController(_ controller: EditContactViewController, didSave contact: Contact)
+    func editContactViewController(_ controller: EditContactViewController, didSave contact: OldContact)
     
 }
 

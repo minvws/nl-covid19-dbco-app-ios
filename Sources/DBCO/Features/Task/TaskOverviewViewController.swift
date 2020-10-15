@@ -64,8 +64,8 @@ class TaskOverviewViewModel {
         sections = []
         sections.append((tableHeaderBuilder?(), []))
         
-        let otherContacts = taskManager.tasks.filter { ($0 as? ContactDetailsTask)?.preferredStaffContact == false }
-        let staffContacts = taskManager.tasks.filter { ($0 as? ContactDetailsTask)?.preferredStaffContact == true }
+        let otherContacts = taskManager.tasks.filter { [.index, .none].contains($0.contact.communication) }
+        let staffContacts = taskManager.tasks.filter { $0.contact.communication == .staff }
         
         let otherSectionHeader = SectionHeaderContent(.taskOverviewIndexContactsHeaderTitle, .taskOverviewIndexContactsHeaderSubtitle)
         let staffSectionHeader = SectionHeaderContent(.taskOverviewStaffContactsHeaderTitle, .taskOverviewStaffContactsHeaderSubtitle)

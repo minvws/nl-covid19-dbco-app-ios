@@ -13,13 +13,13 @@ enum TaskStatus: Equatable {
     case completed
 }
 
-protocol Task {
+protocol OldTask {
     var identifier: String { get }
     var status: TaskStatus { get }
     var isSynced: Bool { get }
 }
 
-struct ContactDetailsTask: Task {
+struct ContactDetailsTask: OldTask {
     let name: String
     var contact: Contact?
     var preferredStaffContact: Bool
@@ -49,7 +49,7 @@ final class TaskManager {
         }
     }
     
-    private(set) var tasks: [Task] = [
+    private(set) var tasks: [OldTask] = [
         ContactDetailsTask(name: "Aziz F", preferredStaffContact: false, identifier: UUID().uuidString, status: .notStarted, isSynced: false),
         ContactDetailsTask(name: "Job J", preferredStaffContact: false, identifier: UUID().uuidString, status: .completed, isSynced: false),
         ContactDetailsTask(name: "Lia B", preferredStaffContact: false, identifier: UUID().uuidString, status: .inProgress(0.3), isSynced: false),

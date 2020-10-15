@@ -19,26 +19,17 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
     }
     
     func configure(_ item: Task) {
-        switch item {
-        case let contactDetailsTask as ContactDetailsTask:
-            configureForContactDetails(task: contactDetailsTask)
-        default:
-            break
+        switch item.taskType {
+        case .contact:
+            configureForContactDetails(task: item)
         }
     }
     
-    private func configureForContactDetails(task: ContactDetailsTask) {
-        titleLabel.text = task.contact?.fullName ?? task.name
+    private func configureForContactDetails(task: Task) {
+        titleLabel.text = task.label
         titleLabel.font = Theme.fonts.bodyBold
         
-        subtitleLabel.text = {
-            switch task.status {
-            case .completed:
-                return .taskContactCaptionCompleted
-            case .inProgress, .notStarted:
-                return .taskContactCaptionIncomplete
-            }
-        }()
+        subtitleLabel.text = task.taskContext
         
         subtitleLabel.font = Theme.fonts.callout
         subtitleLabel.textColor = Theme.colors.captionGray

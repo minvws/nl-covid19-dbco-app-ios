@@ -22,7 +22,7 @@ class UnfinishedTasksViewModel {
     private var tableHeaderBuilder: (() -> UIView?)?
     private var sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?
     
-    private let relevantTaskIdentifiers: [String]
+    private let relevantTaskIdentifiers: [UUID]
     
     private var sections: [(header: UIView?, tasks: [Task])]
     
@@ -35,7 +35,7 @@ class UnfinishedTasksViewModel {
         
         relevantTaskIdentifiers = taskManager.tasks
             .filter { $0.status != .completed }
-            .map { $0.identifier }
+            .map { $0.uuid }
         
         tableViewManager.numberOfSections = { [unowned self] in return sections.count }
         tableViewManager.numberOfRowsInSection = { [unowned self] in return sections[$0].tasks.count }
@@ -58,10 +58,10 @@ class UnfinishedTasksViewModel {
         sections = []
         sections.append((tableHeaderBuilder?(), []))
         
-        let tasks = taskManager.tasks.filter { relevantTaskIdentifiers.contains($0.identifier) }
+        let tasks = taskManager.tasks.filter { relevantTaskIdentifiers.contains($0.uuid) }
         
-        let otherContacts = tasks.filter { ($0 as? ContactDetailsTask)?.preferredStaffContact == false }
-        let staffContacts = tasks.filter { ($0 as? ContactDetailsTask)?.preferredStaffContact == true }
+        let otherContacts = tasks.filter { [.index, .none].contains($0.contact.communication) }
+        let staffContacts = tasks.filter { $0.contact.communication == .staff }
         
         let otherSectionHeader = SectionHeaderContent(.taskOverviewIndexContactsHeaderTitle, .taskOverviewIndexContactsHeaderSubtitle)
         let staffSectionHeader = SectionHeaderContent(.taskOverviewStaffContactsHeaderTitle, .taskOverviewStaffContactsHeaderSubtitle)

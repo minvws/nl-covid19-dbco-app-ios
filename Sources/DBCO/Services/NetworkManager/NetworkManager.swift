@@ -50,16 +50,8 @@ enum HTTPContentType: String {
 protocol NetworkManaging {
     init(configuration: NetworkConfiguration)
     
-    func getTasks(caseIdentifier: String, completion: @escaping (Result<[NewTask], NetworkError>) -> ())
+    func getTasks(caseIdentifier: String, completion: @escaping (Result<[Task], NetworkError>) -> ())
     func getQuestionnaires(completion: @escaping (Result<[Questionnaire], NetworkError>) -> ())
-}
-
-struct NewTask: Decodable {
-    
-}
-
-struct Questionnaire: Decodable {
-    
 }
 
 class NetworkManager: NetworkManaging, Logging {
@@ -73,26 +65,30 @@ class NetworkManager: NetworkManaging, Logging {
                                   delegateQueue: nil)
     }
     
-    func getTasks(caseIdentifier: String, completion: @escaping (Result<[NewTask], NetworkError>) -> ()) {
+    func getTasks(caseIdentifier: String, completion: @escaping (Result<[Task], NetworkError>) -> ()) {
         let urlRequest = constructRequest(url: configuration.tasksUrl(caseIdentifier: caseIdentifier),
                                           method: .GET)
-
-        decodedJSONData(request: urlRequest) { result in
+        
+        func open(result: Result<Envelope<Task>, NetworkError>) {
             DispatchQueue.main.async {
-                completion(result)
+                completion(result.map { $0.items })
             }
         }
+
+        decodedJSONData(request: urlRequest, completion: open)
     }
     
     func getQuestionnaires(completion: @escaping (Result<[Questionnaire], NetworkError>) -> ()) {
         let urlRequest = constructRequest(url: configuration.questionnairesUrl,
                                           method: .GET)
-
-        decodedJSONData(request: urlRequest) { result in
+        
+        func open(result: Result<Envelope<Questionnaire>, NetworkError>) {
             DispatchQueue.main.async {
-                completion(result)
+                completion(result.map { $0.items })
             }
         }
+        
+        decodedJSONData(request: urlRequest, completion: open)
     }
     
     // MARK: - Construct Request
@@ -213,7 +209,7 @@ class NetworkManager: NetworkManaging, Logging {
             if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 self.logDebug("Raw JSON: \(json)")
             }
-            self.logError("Error Deserializing \(Object.self): \(error.localizedDescription)")
+            self.logError("Error Deserializing \(Object.self): \(error)")
             return .failure(.cannotDeserialize)
         }
     }
@@ -258,11 +254,6 @@ class NetworkManager: NetworkManaging, Logging {
     private let sessionDelegate: URLSessionDelegate? // hold on to delegate to prevent deallocation
     
     private lazy var jsonEncoder = JSONEncoder()
-    private lazy var jsonDecoder: JSONDecoder = {
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromUpperCamelCase
-
-        return decoder
-    }()
+    private lazy var jsonDecoder = JSONDecoder()
 }
 

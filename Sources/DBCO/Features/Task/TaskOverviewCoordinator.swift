@@ -14,9 +14,9 @@ final class TaskOverviewCoordinator: Coordinator {
     private let navigationController: NavigationController
     private let taskManager: TaskManager
     
-    init(window: UIWindow) {
+    init(window: UIWindow, taskManager: TaskManager) {
         self.window = window
-        taskManager = TaskManager()
+        self.taskManager = taskManager
         
         let viewModel = TaskOverviewViewModel(taskManager: taskManager)
         
@@ -48,13 +48,13 @@ final class TaskOverviewCoordinator: Coordinator {
         startChildCoordinator(HelpCoordinator(presenter: overviewController, delegate: self))
     }
     
-    private func selectContact(suggestedName: String?, for task: ContactDetailsTask? = nil) {
+    private func selectContact(suggestedName: String?, for task: Task? = nil) {
         startChildCoordinator(
             SelectContactCoordinator(presenter: overviewController, suggestedName: suggestedName, delegate: self),
             context: task)
     }
     
-    private func editContact(contact: Contact, for task: ContactDetailsTask) {
+    private func editContact(contact: OldContact, for task: Task) {
         startChildCoordinator(
             EditContactCoordinator(presenter: overviewController, contact: contact, delegate: self),
             context: task)
@@ -73,14 +73,14 @@ extension TaskOverviewCoordinator: HelpCoordinatorDelegate {
 
 extension TaskOverviewCoordinator: SelectContactCoordinatorDelegate {
     
-    func selectContactCoordinatorDidFinish(_ coordinator: SelectContactCoordinator, with contact: Contact?) {
+    func selectContactCoordinatorDidFinish(_ coordinator: SelectContactCoordinator, with contact: OldContact?) {
         removeChildCoordinator(coordinator)
         
         guard let contact = contact else {
             return
         }
         
-        if let task = coordinator.context as? ContactDetailsTask {
+        if let task = coordinator.context as? Task {
             taskManager.setContact(contact, for: task)
         } else {
             taskManager.addContact(contact)
@@ -91,10 +91,10 @@ extension TaskOverviewCoordinator: SelectContactCoordinatorDelegate {
 
 extension TaskOverviewCoordinator: EditContactCoordinatorDelegate {
     
-    func editContactCoordinator(_ coordinator: EditContactCoordinator, didFinishEditing contact: Contact) {
+    func editContactCoordinator(_ coordinator: EditContactCoordinator, didFinishEditing contact: OldContact) {
         removeChildCoordinator(coordinator)
         
-        if let task = coordinator.context as? ContactDetailsTask {
+        if let task = coordinator.context as? Task {
             taskManager.setContact(contact, for: task)
         }
     }
@@ -125,15 +125,16 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
     }
     
     func taskOverviewViewController(_ controller: TaskOverviewViewController, didSelect task: Task) {
-        switch task {
-        case let contactDetailsTask as ContactDetailsTask:
-            if let contact = contactDetailsTask.contact {
-                // edit flow
-                editContact(contact: contact, for: contactDetailsTask)
-            } else {
-                // pick flow
-                selectContact(suggestedName: contactDetailsTask.name, for: contactDetailsTask)
-            }
+        switch task.taskType {
+        case .contact:
+//            if let contact = contactDetailsTask.contact {
+//                // edit flow
+//                editContact(contact: contact, for: contactDetailsTask)
+//            } else {
+//                // pick flow
+//                selectContact(suggestedName: contactDetailsTask.name, for: contactDetailsTask)
+//            }
+            break
         default:
             break
         }

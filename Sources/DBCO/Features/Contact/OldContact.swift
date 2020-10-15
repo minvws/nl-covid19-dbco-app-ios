@@ -8,15 +8,10 @@
 import Foundation
 import Contacts
 
-enum ContactCategory {
-    case category1
-    case category2a
-    case category2b
-    case category3
-}
 
-class Contact {
-    let category: ContactCategory
+
+class OldContact {
+    let category: Task.Contact.Category
     
     var firstName = FirstName()
     var lastName = LastName()
@@ -33,12 +28,12 @@ class Contact {
         [firstName.value, lastName.value].compactMap { $0 }.joined(separator: " ")
     }
     
-    init(category: ContactCategory) {
+    init(category: Task.Contact.Category) {
         self.category = category
         setDefaults()
     }
     
-    init(category: ContactCategory, cnContact: CNContact) {
+    init(category: Task.Contact.Category, cnContact: CNContact) {
         self.category = category
         
         firstName = cnContact.contactFirstName
@@ -50,7 +45,7 @@ class Contact {
         setDefaults()
     }
     
-    init(category: ContactCategory, name: String) {
+    init(category: Task.Contact.Category, name: String) {
         self.category = category
         
         let nameParts = name.split(separator: " ")
@@ -82,10 +77,10 @@ class Contact {
     }
 }
 
-extension Contact: NSCopying {
+extension OldContact: NSCopying {
     
     func copy(with zone: NSZone? = nil) -> Any {
-        let contact = Contact(category: category)
+        let contact = OldContact(category: category)
         contact.firstName = firstName
         contact.lastName = lastName
         contact.phoneNumbers = phoneNumbers

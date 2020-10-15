@@ -72,7 +72,7 @@ class UploadCoordinator: Coordinator {
             context: task)
     }
     
-    private func editContact(contact: Contact, for task: ContactDetailsTask) {
+    private func editContact(contact: OldContact, for task: ContactDetailsTask) {
         startChildCoordinator(
             EditContactCoordinator(presenter: navigationController, contact: contact, delegate: self),
             context: task)
@@ -82,14 +82,14 @@ class UploadCoordinator: Coordinator {
 
 extension UploadCoordinator: SelectContactCoordinatorDelegate {
     
-    func selectContactCoordinatorDidFinish(_ coordinator: SelectContactCoordinator, with contact: Contact?) {
+    func selectContactCoordinatorDidFinish(_ coordinator: SelectContactCoordinator, with contact: OldContact?) {
         removeChildCoordinator(coordinator)
         
         guard let contact = contact else {
             return
         }
         
-        if let task = coordinator.context as? ContactDetailsTask {
+        if let task = coordinator.context as? Task {
             taskManager.setContact(contact, for: task)
         } else {
             taskManager.addContact(contact)
@@ -101,15 +101,16 @@ extension UploadCoordinator: SelectContactCoordinatorDelegate {
 extension UploadCoordinator: UnfinishedTasksViewControllerDelegate {
     
     func unfinishedTasksViewController(_ controller: UnfinishedTasksViewController, didSelect task: Task) {
-        switch task {
-        case let contactDetailsTask as ContactDetailsTask:
-            if let contact = contactDetailsTask.contact {
-                // edit flow
-                editContact(contact: contact, for: contactDetailsTask)
-            } else {
-                // pick flow
-                selectContact(suggestedName: contactDetailsTask.name, for: contactDetailsTask)
-            }
+        switch task.taskType {
+        case .contact:
+//            if let contact = task.contact {
+//                // edit flow
+//                editContact(contact: contact, for: contactDetailsTask)
+//            } else {
+//                // pick flow
+//                selectContact(suggestedName: contactDetailsTask.name, for: contactDetailsTask)
+//            }
+            break
         default:
             break
         }
@@ -127,10 +128,10 @@ extension UploadCoordinator: UnfinishedTasksViewControllerDelegate {
 
 extension UploadCoordinator: EditContactCoordinatorDelegate {
     
-    func editContactCoordinator(_ coordinator: EditContactCoordinator, didFinishEditing contact: Contact) {
+    func editContactCoordinator(_ coordinator: EditContactCoordinator, didFinishEditing contact: OldContact) {
         removeChildCoordinator(coordinator)
         
-        if let task = coordinator.context as? ContactDetailsTask {
+        if let task = coordinator.context as? Task {
             taskManager.setContact(contact, for: task)
         }
     }

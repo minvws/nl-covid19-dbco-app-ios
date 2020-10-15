@@ -40,6 +40,7 @@ extension Coordinator {
 
 final class AppCoordinator: Coordinator {
     private let window: UIWindow
+    private let taskManager = TaskManager()
     
     
     @available(iOS 13.0, *)
@@ -52,7 +53,7 @@ final class AppCoordinator: Coordinator {
     }
     
     override func start() {
-        let startCoordinator = OnboardingCoordinator(window: window)
+        let startCoordinator = OnboardingCoordinator(window: window, taskManager: taskManager)
         startCoordinator.delegate = self
         startChildCoordinator(startCoordinator)
     }
@@ -64,7 +65,7 @@ extension AppCoordinator: OnboardingCoordinatorDelegate {
     func onboardingCoordinatorDidFinish(_ coordinator: OnboardingCoordinator) {
         removeChildCoordinator(coordinator)
         
-        startChildCoordinator(TaskOverviewCoordinator(window: window))
+        startChildCoordinator(TaskOverviewCoordinator(window: window, taskManager: taskManager))
     }
     
 }
