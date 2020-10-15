@@ -10,7 +10,7 @@ import Foundation
 struct Task: Codable {
     enum Status: Equatable {
         case notStarted
-        case inProgress(Float)
+        case inProgress(Double)
         case completed
     }
     
@@ -49,8 +49,13 @@ struct Task: Codable {
     
     let contact: Contact!
     
+    var result: QuestionnaireResult?
     var status: Status {
-        return .notStarted
+        if let progress = result?.progress {
+            return progress == 1 ? .completed : .inProgress(progress)
+        } else {
+            return .notStarted
+        }
     }
     
     init(from decoder: Decoder) throws {
@@ -58,7 +63,7 @@ struct Task: Codable {
         
         uuid = try container.decode(UUID.self, forKey: .uuid)
         source = try container.decode(Source.self, forKey: .source)
-        label = try container.decode(String.self, forKey: .label)
+        label = try container.decode(String?.self, forKey: .label)
         taskContext = try container.decode(String?.self, forKey: .taskContext)
         
         taskType = try container.decode(TaskType.self, forKey: .taskType)
@@ -67,5 +72,30 @@ struct Task: Codable {
         case .contact:
             contact = try Contact(from: decoder)
         }
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        try uuid.encode(to: encoder)
+        try source.encode(to: encoder)
+        try label?.encode(to: encoder)
+        try taskContext?.encode(to: encoder)
+        try taskType.encode(to: encoder)
+        
+        switch taskType {
+        case .contact:
+            try contact.category.encode(to: encoder)
+            try contact.communication.encode(to: encoder)
+        }
+        
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case uuid
+        case source
+        case label
+        case taskContext
+        case taskType
+        case category
+        case communication
     }
 }

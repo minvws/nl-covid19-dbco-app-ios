@@ -27,6 +27,10 @@ final class TaskOverviewCoordinator: Coordinator {
         super.init()
         
         overviewController.delegate = self
+        
+        if let firstTask = taskManager.tasks.first {
+            taskManager.applyResult(QuestionnaireResult(questionnaireUuid: UUID(), answers: []), to: firstTask)
+        }
     }
     
     override func start() {
