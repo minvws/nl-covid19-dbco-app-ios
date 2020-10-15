@@ -52,6 +52,15 @@
 		CDC4A8EA250B87E5001BABC6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC4A8E9250B87E5001BABC6 /* SceneDelegate.swift */; };
 		CDC4A8F1250B87E6001BABC6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CDC4A8F0250B87E6001BABC6 /* Assets.xcassets */; };
 		CDC4A8F4250B87E6001BABC6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CDC4A8F2250B87E6001BABC6 /* LaunchScreen.storyboard */; };
+		CDC7C86225376AB200FE7E05 /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C86125376AB200FE7E05 /* Services.swift */; };
+		CDC7C8692538412600FE7E05 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C8682538412600FE7E05 /* NetworkManager.swift */; };
+		CDC7C86F2538429B00FE7E05 /* NetworkConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C86E2538429B00FE7E05 /* NetworkConfiguration.swift */; };
+		CDC7C873253842A200FE7E05 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C872253842A200FE7E05 /* Endpoint.swift */; };
+		CDC7C8772538469B00FE7E05 /* NetworkManagerURLSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C8762538469B00FE7E05 /* NetworkManagerURLSessionDelegate.swift */; };
+		CDC7C87E2538487B00FE7E05 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C87B2538482400FE7E05 /* HTTPMethod.swift */; };
+		CDC7C8842538498400FE7E05 /* Encodable+AnyEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C8822538497C00FE7E05 /* Encodable+AnyEncodable.swift */; };
+		CDC7C8872538498700FE7E05 /* JSONDecoder+Decoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C8832538497C00FE7E05 /* JSONDecoder+Decoding.swift */; };
+		CDC7C88C2538507100FE7E05 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C88B25384FF600FE7E05 /* Logging.swift */; };
 		CDE30E64251BC02100862A40 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E63251BC02100862A40 /* TextField.swift */; };
 		CDE30E69251C89FF00862A40 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E68251C89FF00862A40 /* NavigationController.swift */; };
 		CDE30E6C251CE15800862A40 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E6B251CE15800862A40 /* Contact.swift */; };
@@ -129,6 +138,15 @@
 		CDC4A8F0250B87E6001BABC6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CDC4A8F3250B87E6001BABC6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CDC4A8F5250B87E6001BABC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CDC7C86125376AB200FE7E05 /* Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
+		CDC7C8682538412600FE7E05 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		CDC7C86E2538429B00FE7E05 /* NetworkConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConfiguration.swift; sourceTree = "<group>"; };
+		CDC7C872253842A200FE7E05 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
+		CDC7C8762538469B00FE7E05 /* NetworkManagerURLSessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManagerURLSessionDelegate.swift; sourceTree = "<group>"; };
+		CDC7C87B2538482400FE7E05 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
+		CDC7C8822538497C00FE7E05 /* Encodable+AnyEncodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+AnyEncodable.swift"; sourceTree = "<group>"; };
+		CDC7C8832538497C00FE7E05 /* JSONDecoder+Decoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSONDecoder+Decoding.swift"; sourceTree = "<group>"; };
+		CDC7C88B25384FF600FE7E05 /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		CDE30E63251BC02100862A40 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		CDE30E68251C89FF00862A40 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		CDE30E6B251CE15800862A40 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
@@ -338,6 +356,7 @@
 		CDC4A8E6250B87E5001BABC6 /* DBCO */ = {
 			isa = PBXGroup;
 			children = (
+				CDC7C86025376A2D00FE7E05 /* Services */,
 				CDFCF90A2510C4710062269A /* Common */,
 				CD7282BB250F728000D68911 /* Features */,
 				CDC4A8FB250B8945001BABC6 /* Resources */,
@@ -358,9 +377,57 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		CDC7C86025376A2D00FE7E05 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				CDC7C8672538411300FE7E05 /* NetworkManager */,
+				CDC7C86125376AB200FE7E05 /* Services.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		CDC7C8672538411300FE7E05 /* NetworkManager */ = {
+			isa = PBXGroup;
+			children = (
+				CDC7C8682538412600FE7E05 /* NetworkManager.swift */,
+				CDC7C8762538469B00FE7E05 /* NetworkManagerURLSessionDelegate.swift */,
+				CDC7C87A2538481C00FE7E05 /* Config */,
+				CDC7C8812538497C00FE7E05 /* Extensions */,
+			);
+			path = NetworkManager;
+			sourceTree = "<group>";
+		};
+		CDC7C87A2538481C00FE7E05 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				CDC7C872253842A200FE7E05 /* Endpoint.swift */,
+				CDC7C86E2538429B00FE7E05 /* NetworkConfiguration.swift */,
+				CDC7C87B2538482400FE7E05 /* HTTPMethod.swift */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		CDC7C8812538497C00FE7E05 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				CDC7C8822538497C00FE7E05 /* Encodable+AnyEncodable.swift */,
+				CDC7C8832538497C00FE7E05 /* JSONDecoder+Decoding.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		CDC7C88A25384FF600FE7E05 /* Logging */ = {
+			isa = PBXGroup;
+			children = (
+				CDC7C88B25384FF600FE7E05 /* Logging.swift */,
+			);
+			path = Logging;
+			sourceTree = "<group>";
+		};
 		CDFCF90A2510C4710062269A /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				CDC7C88A25384FF600FE7E05 /* Logging */,
 				CDFCF9132510EB250062269A /* Extensions */,
 				CD29635D25191975008443AF /* UI */,
 				CD29635E25191990008443AF /* Utilities */,
@@ -516,6 +583,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDC7C8692538412600FE7E05 /* NetworkManager.swift in Sources */,
 				CDFCF9192510FC760062269A /* SelfSizingTableView.swift in Sources */,
 				CDE30E72251E278200862A40 /* EditContactCoordinator.swift in Sources */,
 				CD756C50252C6AC9005FEDA0 /* OnboardingStepViewController.swift in Sources */,
@@ -523,6 +591,7 @@
 				CD29634C2518CE8E008443AF /* TableViewManager.swift in Sources */,
 				CDA5C11A251389BB009440D1 /* RequestAuthorizationViewController.swift in Sources */,
 				CDFCF905250FA0910062269A /* HelpViewController.swift in Sources */,
+				CDC7C87E2538487B00FE7E05 /* HTTPMethod.swift in Sources */,
 				CDE30E69251C89FF00862A40 /* NavigationController.swift in Sources */,
 				CD756C78252DDF30005FEDA0 /* SectionView.swift in Sources */,
 				CD1824EE2524B3E4006EB272 /* InputField.swift in Sources */,
@@ -536,12 +605,14 @@
 				CDC272EF2514B46B00AE7BB6 /* RequestContactsAuthorizationViewModel.swift in Sources */,
 				CDADF7EE2535B6A500424492 /* Label.swift in Sources */,
 				CD7282C6250F9D2400D68911 /* TaskOverviewCoordinator.swift in Sources */,
+				CDC7C8872538498700FE7E05 /* JSONDecoder+Decoding.swift in Sources */,
 				CDE30E64251BC02100862A40 /* TextField.swift in Sources */,
 				CD7282C1250F945900D68911 /* HelpCoordinator.swift in Sources */,
 				CDADF7F32535E34400424492 /* UploadCoordinator.swift in Sources */,
 				CD65CD812535F77400BB761A /* LoadingViewController.swift in Sources */,
 				CD2AC0762530601900E8AF78 /* InputTextView.swift in Sources */,
 				CD421872251B4819004544B3 /* TaskTableViewCell.swift in Sources */,
+				CDC7C86F2538429B00FE7E05 /* NetworkConfiguration.swift in Sources */,
 				CDA525FC252F0FAA004E923A /* ToggleButton.swift in Sources */,
 				CD2AC08A25308B6500E8AF78 /* StatusView.swift in Sources */,
 				CDFCF9152510EBC40062269A /* NSAttributedString+Extension.swift in Sources */,
@@ -555,15 +626,20 @@
 				CDFCF90C2510C47E0062269A /* Localization.swift in Sources */,
 				CDC4A8EA250B87E5001BABC6 /* SceneDelegate.swift in Sources */,
 				CD756C74252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift in Sources */,
+				CDC7C873253842A200FE7E05 /* Endpoint.swift in Sources */,
 				CD756C4A252C6A30005FEDA0 /* OnboardingCoordinator.swift in Sources */,
 				CD65CD8525360F5C00BB761A /* UnfinishedTasksViewController.swift in Sources */,
+				CDC7C8772538469B00FE7E05 /* NetworkManagerURLSessionDelegate.swift in Sources */,
+				CDC7C88C2538507100FE7E05 /* Logging.swift in Sources */,
 				CD29635B25191972008443AF /* Haptic.swift in Sources */,
 				CDFCF907250FA6E80062269A /* ViewController.swift in Sources */,
 				CD29636125191AA8008443AF /* Theme.swift in Sources */,
 				CD421875251B4843004544B3 /* Task.swift in Sources */,
+				CDC7C86225376AB200FE7E05 /* Services.swift in Sources */,
 				CDE30E6C251CE15800862A40 /* Contact.swift in Sources */,
 				CD29634F2518ED51008443AF /* UIEdgeInsets+Convenience.swift in Sources */,
 				CD7282C3250F9AFE00D68911 /* TaskOverviewViewController.swift in Sources */,
+				CDC7C8842538498400FE7E05 /* Encodable+AnyEncodable.swift in Sources */,
 				CDFCF9172510ECC70062269A /* UIView+Embed.swift in Sources */,
 				CD756C5E252C9A7F005FEDA0 /* PairViewController.swift in Sources */,
 				CD2963472514E129008443AF /* ContactTableViewCell.swift in Sources */,

@@ -126,7 +126,7 @@ extension String {
     /* MARK: - Uploading */
     static var unfinishedTasksOverviewTitle: String { return Localization.string(for: "unfinishedTasksOverviewTitle") }
     static var unfinishedTasksOverviewMessage: String { return Localization.string(for: "unfinishedTasksOverviewMessage") }
-    static var uploadInProgressMessage: String { return Localization.string(for: " uploadInProgressMessage") }
+    static var uploadInProgressMessage: String { return Localization.string(for: "uploadInProgressMessage") }
     
     // MARK: - Help
     
