@@ -151,7 +151,7 @@
 		CDC7C8822538497C00FE7E05 /* Encodable+AnyEncodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+AnyEncodable.swift"; sourceTree = "<group>"; };
 		CDC7C8832538497C00FE7E05 /* JSONDecoder+Decoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSONDecoder+Decoding.swift"; sourceTree = "<group>"; };
 		CDC7C88B25384FF600FE7E05 /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
-		CDC7C89325385AD600FE7E05 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Task.swift; path = ../../Task.swift; sourceTree = "<group>"; };
+		CDC7C89325385AD600FE7E05 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		CDC7C897253873CE00FE7E05 /* Envelope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Envelope.swift; sourceTree = "<group>"; };
 		CDC7C89D25387E2000FE7E05 /* Questionnaire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Questionnaire.swift; sourceTree = "<group>"; };
 		CDC7C8A125387E4400FE7E05 /* TaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
@@ -283,13 +283,11 @@
 		CD7282C4250F9CF100D68911 /* Task */ = {
 			isa = PBXGroup;
 			children = (
-				CDC7C89325385AD600FE7E05 /* Task.swift */,
+				CDC7C8A125387E4400FE7E05 /* TaskManager.swift */,
 				CD7282C5250F9D2400D68911 /* TaskOverviewCoordinator.swift */,
 				CD7282C2250F9AFE00D68911 /* TaskOverviewViewController.swift */,
 				CD421871251B4819004544B3 /* TaskTableViewCell.swift */,
 				CD421874251B4843004544B3 /* OldTask.swift */,
-				CDC7C89D25387E2000FE7E05 /* Questionnaire.swift */,
-				CDC7C8A125387E4400FE7E05 /* TaskManager.swift */,
 			);
 			path = Task;
 			sourceTree = "<group>";
@@ -369,6 +367,7 @@
 			children = (
 				CDC7C86025376A2D00FE7E05 /* Services */,
 				CDFCF90A2510C4710062269A /* Common */,
+				CDC7C8A72538916F00FE7E05 /* Models */,
 				CD7282BB250F728000D68911 /* Features */,
 				CDC4A8FB250B8945001BABC6 /* Resources */,
 			);
@@ -434,6 +433,15 @@
 				CDC7C88B25384FF600FE7E05 /* Logging.swift */,
 			);
 			path = Logging;
+			sourceTree = "<group>";
+		};
+		CDC7C8A72538916F00FE7E05 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				CDC7C89325385AD600FE7E05 /* Task.swift */,
+				CDC7C89D25387E2000FE7E05 /* Questionnaire.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		CDFCF90A2510C4710062269A /* Common */ = {
