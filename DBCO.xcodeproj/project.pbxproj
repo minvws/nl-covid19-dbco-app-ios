@@ -283,7 +283,6 @@
 		CD7282C4250F9CF100D68911 /* Task */ = {
 			isa = PBXGroup;
 			children = (
-				CDC7C8A125387E4400FE7E05 /* TaskManager.swift */,
 				CD7282C5250F9D2400D68911 /* TaskOverviewCoordinator.swift */,
 				CD7282C2250F9AFE00D68911 /* TaskOverviewViewController.swift */,
 				CD421871251B4819004544B3 /* TaskTableViewCell.swift */,
@@ -440,6 +439,7 @@
 			children = (
 				CDC7C89325385AD600FE7E05 /* Task.swift */,
 				CDC7C89D25387E2000FE7E05 /* Questionnaire.swift */,
+				CDC7C8A125387E4400FE7E05 /* TaskManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";

@@ -43,10 +43,10 @@ final class TaskManager {
     }
     
     func setContact(_ contact: OldContact, for task: Task) {
-        guard let index = tasks.lastIndex(where: { $0.uuid == task.uuid }) else {
-            return
-        }
-        
+//        guard let index = tasks.lastIndex(where: { $0.uuid == task.uuid }) else {
+//            return
+//        }
+//        
 //        var updatedTask = task
 //        updatedTask.contact = contact
 //        updatedTask.isSynced = false

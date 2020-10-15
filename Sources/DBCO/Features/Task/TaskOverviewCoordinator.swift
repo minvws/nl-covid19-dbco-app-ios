@@ -135,8 +135,6 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
 //                selectContact(suggestedName: contactDetailsTask.name, for: contactDetailsTask)
 //            }
             break
-        default:
-            break
         }
     }
     

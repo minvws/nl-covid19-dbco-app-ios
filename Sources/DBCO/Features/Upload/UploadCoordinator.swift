@@ -111,8 +111,6 @@ extension UploadCoordinator: UnfinishedTasksViewControllerDelegate {
 //                selectContact(suggestedName: contactDetailsTask.name, for: contactDetailsTask)
 //            }
             break
-        default:
-            break
         }
     }
     
