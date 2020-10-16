@@ -12,13 +12,11 @@ final class TaskOverviewCoordinator: Coordinator {
     private let window: UIWindow
     private let overviewController: TaskOverviewViewController
     private let navigationController: NavigationController
-    private let taskManager: TaskManager
     
-    init(window: UIWindow, taskManager: TaskManager) {
+    init(window: UIWindow) {
         self.window = window
-        self.taskManager = taskManager
         
-        let viewModel = TaskOverviewViewModel(taskManager: taskManager)
+        let viewModel = TaskOverviewViewModel()
         
         overviewController = TaskOverviewViewController(viewModel: viewModel)
         navigationController = NavigationController(rootViewController: overviewController)
@@ -27,10 +25,6 @@ final class TaskOverviewCoordinator: Coordinator {
         super.init()
         
         overviewController.delegate = self
-        
-        if let firstTask = taskManager.tasks.first {
-            taskManager.applyResult(QuestionnaireResult(questionnaireUuid: UUID(), answers: []), to: firstTask)
-        }
     }
     
     override func start() {
@@ -45,7 +39,7 @@ final class TaskOverviewCoordinator: Coordinator {
     }
     
     private func upload() {
-        startChildCoordinator(UploadCoordinator(presenter: overviewController, taskManager: taskManager, delegate: self))
+        startChildCoordinator(UploadCoordinator(presenter: overviewController, delegate: self))
     }
     
     private func openHelp() {
@@ -85,9 +79,9 @@ extension TaskOverviewCoordinator: SelectContactCoordinatorDelegate {
         }
         
         if let task = coordinator.context as? Task {
-            taskManager.setContact(contact, for: task)
+            Services.taskManager.setContact(contact, for: task)
         } else {
-            taskManager.addContact(contact)
+            Services.taskManager.addContact(contact)
         }
     }
     
@@ -99,7 +93,7 @@ extension TaskOverviewCoordinator: EditContactCoordinatorDelegate {
         removeChildCoordinator(coordinator)
         
         if let task = coordinator.context as? Task {
-            taskManager.setContact(contact, for: task)
+            Services.taskManager.setContact(contact, for: task)
         }
     }
     

@@ -19,7 +19,6 @@ class TaskOverviewViewModel {
     typealias PromptFunction = (_ animated: Bool) -> Void
     
     private let tableViewManager: TableViewManager<TaskTableViewCell>
-    private let taskManager: TaskManager
     private var tableHeaderBuilder: (() -> UIView?)?
     private var sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?
     
@@ -28,9 +27,7 @@ class TaskOverviewViewModel {
     private var hidePrompt: PromptFunction?
     private var showPrompt: PromptFunction?
     
-    init(taskManager: TaskManager) {
-        self.taskManager = taskManager
-        
+    init() {
         tableViewManager = .init()
         
         sections = []
@@ -40,7 +37,7 @@ class TaskOverviewViewModel {
         tableViewManager.itemForCellAtIndexPath = { [unowned self] in return sections[$0.section].tasks[$0.row] }
         tableViewManager.viewForHeaderInSection = { [unowned self] in return sections[$0].header }
         
-        taskManager.addListener(self)
+        Services.taskManager.addListener(self)
     }
     
     func setupTableView(_ tableView: UITableView, tableHeaderBuilder: (() -> UIView?)?, sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?, selectedTaskHandler: @escaping (Task, IndexPath) -> Void) {
@@ -64,8 +61,8 @@ class TaskOverviewViewModel {
         sections = []
         sections.append((tableHeaderBuilder?(), []))
         
-        let otherContacts = taskManager.tasks.filter { [.index, .none].contains($0.contact.communication) }
-        let staffContacts = taskManager.tasks.filter { $0.contact.communication == .staff }
+        let otherContacts = Services.taskManager.tasks.filter { [.index, .none].contains($0.contact.communication) }
+        let staffContacts = Services.taskManager.tasks.filter { $0.contact.communication == .staff }
         
         let otherSectionHeader = SectionHeaderContent(.taskOverviewIndexContactsHeaderTitle, .taskOverviewIndexContactsHeaderSubtitle)
         let staffSectionHeader = SectionHeaderContent(.taskOverviewStaffContactsHeaderTitle, .taskOverviewStaffContactsHeaderSubtitle)
@@ -83,12 +80,12 @@ class TaskOverviewViewModel {
 }
 
 extension TaskOverviewViewModel: TaskManagerListener {
-    func taskManagerDidUpdateTasks(_ taskManager: TaskManager) {
+    func taskManagerDidUpdateTasks(_ taskManager: TaskManaging) {
         buildSections()
         tableViewManager.reloadData()
     }
     
-    func taskManagerDidUpdateSyncState(_ taskManager: TaskManager) {
+    func taskManagerDidUpdateSyncState(_ taskManager: TaskManaging) {
         if taskManager.isSynced {
             hidePrompt?(true)
         } else {

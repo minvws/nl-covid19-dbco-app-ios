@@ -14,15 +14,13 @@ protocol OnboardingCoordinatorDelegate: class {
 
 final class OnboardingCoordinator: Coordinator {
     private let window: UIWindow
-    private let taskManager: TaskManager
     private let navigationController: NavigationController
     private var didPair: Bool = false
     
     weak var delegate: OnboardingCoordinatorDelegate?
     
-    init(window: UIWindow, taskManager: TaskManager) {
+    init(window: UIWindow) {
         self.window = window
-        self.taskManager = taskManager
         
         let viewModel = OnboardingStepViewModel(image: UIImage(named: "StartVisual")!,
                                                 title: .onboardingStep1Title,
@@ -82,7 +80,7 @@ extension OnboardingCoordinator: PairViewControllerDelegate {
         navigationController.navigationBar.isUserInteractionEnabled = false
         
         // Load task stubs
-        taskManager.loadTasksAndQuestions {
+        Services.taskManager.loadTasksAndQuestions {
             controller.stopLoadingAnimation()
             self.navigationController.navigationBar.isUserInteractionEnabled = true
             

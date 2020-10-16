@@ -53,7 +53,7 @@ final class AppCoordinator: Coordinator {
     }
     
     override func start() {
-        let startCoordinator = OnboardingCoordinator(window: window, taskManager: taskManager)
+        let startCoordinator = OnboardingCoordinator(window: window)
         startCoordinator.delegate = self
         startChildCoordinator(startCoordinator)
     }
@@ -65,7 +65,7 @@ extension AppCoordinator: OnboardingCoordinatorDelegate {
     func onboardingCoordinatorDidFinish(_ coordinator: OnboardingCoordinator) {
         removeChildCoordinator(coordinator)
         
-        startChildCoordinator(TaskOverviewCoordinator(window: window, taskManager: taskManager))
+        startChildCoordinator(TaskOverviewCoordinator(window: window))
     }
     
 }

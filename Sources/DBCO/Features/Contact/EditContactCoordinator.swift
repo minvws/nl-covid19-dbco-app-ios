@@ -29,8 +29,8 @@ final class EditContactCoordinator: Coordinator {
     }
     
     override func start() {
-        let viewModel = EditContactViewModel(contact: contact, showCancelButton: true)
-        let editController = EditContactViewController(viewModel: viewModel)
+        let viewModel = ContactQuestionnaireViewModel(contact: contact, showCancelButton: true)
+        let editController = ContactQuestionnaireViewController(viewModel: viewModel)
         editController.delegate = self
 
         navigationController.setViewControllers([editController], animated: false)
@@ -48,13 +48,13 @@ final class EditContactCoordinator: Coordinator {
     }
 }
 
-extension EditContactCoordinator: EditContactViewControllerDelegate {
+extension EditContactCoordinator: ContactQuestionnaireViewControllerDelegate {
     
-    func editContactViewControllerDidCancel(_ controller: EditContactViewController) {
+    func contactQuestionnaireViewControllerDidCancel(_ controller: ContactQuestionnaireViewController) {
         navigationController.dismiss(animated: true)
     }
     
-    func editContactViewController(_ controller: EditContactViewController, didSave contact: OldContact) {
+    func contactQuestionnaireViewController(_ controller: ContactQuestionnaireViewController, didSave contact: OldContact) {
         self.updatedContact = contact
         navigationController.dismiss(animated: true)
     }

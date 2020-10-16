@@ -12,7 +12,7 @@
 		CD2963472514E129008443AF /* ContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2963462514E129008443AF /* ContactTableViewCell.swift */; };
 		CD29634C2518CE8E008443AF /* TableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD29634B2518CE8E008443AF /* TableViewManager.swift */; };
 		CD29634F2518ED51008443AF /* UIEdgeInsets+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD29634E2518ED51008443AF /* UIEdgeInsets+Convenience.swift */; };
-		CD2963522518F291008443AF /* EditContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2963512518F291008443AF /* EditContactViewController.swift */; };
+		CD2963522518F291008443AF /* ContactQuestionnaireViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2963512518F291008443AF /* ContactQuestionnaireViewController.swift */; };
 		CD2963552518F59E008443AF /* UITableView+Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2963542518F59E008443AF /* UITableView+Defaults.swift */; };
 		CD29635825191941008443AF /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD29635725191941008443AF /* Button.swift */; };
 		CD29635B25191972008443AF /* Haptic.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD29635A25191972008443AF /* Haptic.swift */; };
@@ -98,7 +98,7 @@
 		CD2963462514E129008443AF /* ContactTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactTableViewCell.swift; sourceTree = "<group>"; };
 		CD29634B2518CE8E008443AF /* TableViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewManager.swift; sourceTree = "<group>"; };
 		CD29634E2518ED51008443AF /* UIEdgeInsets+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+Convenience.swift"; sourceTree = "<group>"; };
-		CD2963512518F291008443AF /* EditContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditContactViewController.swift; sourceTree = "<group>"; };
+		CD2963512518F291008443AF /* ContactQuestionnaireViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactQuestionnaireViewController.swift; sourceTree = "<group>"; };
 		CD2963542518F59E008443AF /* UITableView+Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Defaults.swift"; sourceTree = "<group>"; };
 		CD29635725191941008443AF /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		CD29635A25191972008443AF /* Haptic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptic.swift; sourceTree = "<group>"; };
@@ -310,6 +310,14 @@
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
+		CDA0F67625398C8B009FD2A9 /* TaskManager */ = {
+			isa = PBXGroup;
+			children = (
+				CDC7C8A125387E4400FE7E05 /* TaskManager.swift */,
+			);
+			path = TaskManager;
+			sourceTree = "<group>";
+		};
 		CDA5C11625135A07009440D1 /* Contact */ = {
 			isa = PBXGroup;
 			children = (
@@ -317,7 +325,7 @@
 				CDE30E8625232FE200862A40 /* InputFieldEditable.swift */,
 				CD2963462514E129008443AF /* ContactTableViewCell.swift */,
 				CDE30E71251E278200862A40 /* EditContactCoordinator.swift */,
-				CD2963512518F291008443AF /* EditContactViewController.swift */,
+				CD2963512518F291008443AF /* ContactQuestionnaireViewController.swift */,
 				CDA5C11725135A46009440D1 /* SelectContactCoordinator.swift */,
 				CD2963432514BF4E008443AF /* SelectContactViewController.swift */,
 			);
@@ -391,6 +399,7 @@
 			children = (
 				CDC7C86125376AB200FE7E05 /* Services.swift */,
 				CDC7C8672538411300FE7E05 /* NetworkManager */,
+				CDA0F67625398C8B009FD2A9 /* TaskManager */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -439,7 +448,6 @@
 			children = (
 				CDC7C89325385AD600FE7E05 /* Task.swift */,
 				CDC7C89D25387E2000FE7E05 /* Questionnaire.swift */,
-				CDC7C8A125387E4400FE7E05 /* TaskManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -639,7 +647,7 @@
 				CDFCF9152510EBC40062269A /* NSAttributedString+Extension.swift in Sources */,
 				CDC4A8E8250B87E5001BABC6 /* AppDelegate.swift in Sources */,
 				CD756C70252DC629005FEDA0 /* SeparatorView.swift in Sources */,
-				CD2963522518F291008443AF /* EditContactViewController.swift in Sources */,
+				CD2963522518F291008443AF /* ContactQuestionnaireViewController.swift in Sources */,
 				CD29635825191941008443AF /* Button.swift in Sources */,
 				CDE30E8725232FE200862A40 /* InputFieldEditable.swift in Sources */,
 				CDA5C11825135A46009440D1 /* SelectContactCoordinator.swift in Sources */,

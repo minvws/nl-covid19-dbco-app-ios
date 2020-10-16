@@ -18,7 +18,6 @@ class UnfinishedTasksViewModel {
     typealias SectionHeaderContent = (title: String, subtitle: String)
     
     private let tableViewManager: TableViewManager<TaskTableViewCell>
-    private let taskManager: TaskManager
     private var tableHeaderBuilder: (() -> UIView?)?
     private var sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?
     
@@ -26,14 +25,12 @@ class UnfinishedTasksViewModel {
     
     private var sections: [(header: UIView?, tasks: [Task])]
     
-    init(taskManager: TaskManager) {
-        self.taskManager = taskManager
-        
+    init() {
         tableViewManager = .init()
         
         sections = []
         
-        relevantTaskIdentifiers = taskManager.tasks
+        relevantTaskIdentifiers = Services.taskManager.tasks
             .filter { $0.status != .completed }
             .map { $0.uuid }
         
@@ -42,7 +39,7 @@ class UnfinishedTasksViewModel {
         tableViewManager.itemForCellAtIndexPath = { [unowned self] in return sections[$0.section].tasks[$0.row] }
         tableViewManager.viewForHeaderInSection = { [unowned self] in return sections[$0].header }
         
-        taskManager.addListener(self)
+        Services.taskManager.addListener(self)
     }
     
     func setupTableView(_ tableView: UITableView, tableHeaderBuilder: (() -> UIView?)?, sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?, selectedTaskHandler: @escaping (Task, IndexPath) -> Void) {
@@ -58,7 +55,7 @@ class UnfinishedTasksViewModel {
         sections = []
         sections.append((tableHeaderBuilder?(), []))
         
-        let tasks = taskManager.tasks.filter { relevantTaskIdentifiers.contains($0.uuid) }
+        let tasks = Services.taskManager.tasks.filter { relevantTaskIdentifiers.contains($0.uuid) }
         
         let otherContacts = tasks.filter { [.index, .none].contains($0.contact.communication) }
         let staffContacts = tasks.filter { $0.contact.communication == .staff }
@@ -79,12 +76,12 @@ class UnfinishedTasksViewModel {
 }
 
 extension UnfinishedTasksViewModel: TaskManagerListener {
-    func taskManagerDidUpdateTasks(_ taskManager: TaskManager) {
+    func taskManagerDidUpdateTasks(_ taskManager: TaskManaging) {
         buildSections()
         tableViewManager.reloadData()
     }
     
-    func taskManagerDidUpdateSyncState(_ taskManager: TaskManager) {}
+    func taskManagerDidUpdateSyncState(_ taskManager: TaskManaging) {}
 }
 
 class UnfinishedTasksViewController: PromptableViewController {

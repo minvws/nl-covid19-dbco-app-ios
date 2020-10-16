@@ -97,8 +97,8 @@ final class SelectContactCoordinator: Coordinator {
     
     private func continueManually() {
         let contact = OldContact(category: .category2b, name: suggestedName ?? "")
-        let editViewModel = EditContactViewModel(contact: contact, showCancelButton: true)
-        let editController = EditContactViewController(viewModel: editViewModel)
+        let editViewModel = ContactQuestionnaireViewModel(contact: contact, showCancelButton: true)
+        let editController = ContactQuestionnaireViewController(viewModel: editViewModel)
         editController.delegate = self
         
         presentNavigationController(with: editController)
@@ -122,8 +122,8 @@ extension SelectContactCoordinator: RequestAuthorizationViewControllerDelegate {
     }
     
     func continueWithoutAuthorization(for controller: RequestAuthorizationViewController) {
-        let detailViewModel = EditContactViewModel(contact: OldContact(category: .category2b, name: suggestedName ?? ""), showCancelButton: true)
-        let detailsController = EditContactViewController(viewModel: detailViewModel)
+        let detailViewModel = ContactQuestionnaireViewModel(contact: OldContact(category: .category2b, name: suggestedName ?? ""), showCancelButton: true)
+        let detailsController = ContactQuestionnaireViewController(viewModel: detailViewModel)
         detailsController.delegate = self
         
         navigationController.setViewControllers([detailsController], animated: true)
@@ -138,16 +138,16 @@ extension SelectContactCoordinator: RequestAuthorizationViewControllerDelegate {
 extension SelectContactCoordinator: SelectContactViewControllerDelegate {
     
     func selectContactViewController(_ controller: SelectContactViewController, didSelect contact: CNContact) {
-        let detailViewModel = EditContactViewModel(contact: contact)
-        let detailsController = EditContactViewController(viewModel: detailViewModel)
+        let detailViewModel = ContactQuestionnaireViewModel(contact: contact)
+        let detailsController = ContactQuestionnaireViewController(viewModel: detailViewModel)
         detailsController.delegate = self
         
         navigationController.pushViewController(detailsController, animated: true)
     }
     
     func selectContactViewControllerDidRequestManualInput(_ controller: SelectContactViewController) {
-        let detailViewModel = EditContactViewModel(contact: OldContact(category: .category2b, name: suggestedName ?? ""))
-        let detailsController = EditContactViewController(viewModel: detailViewModel)
+        let detailViewModel = ContactQuestionnaireViewModel(contact: OldContact(category: .category2b, name: suggestedName ?? ""))
+        let detailsController = ContactQuestionnaireViewController(viewModel: detailViewModel)
         detailsController.delegate = self
         
         navigationController.pushViewController(detailsController, animated: true)
@@ -160,14 +160,14 @@ extension SelectContactCoordinator: SelectContactViewControllerDelegate {
     
 }
 
-extension SelectContactCoordinator: EditContactViewControllerDelegate {
+extension SelectContactCoordinator: ContactQuestionnaireViewControllerDelegate {
     
-    func editContactViewControllerDidCancel(_ controller: EditContactViewController) {
+    func contactQuestionnaireViewControllerDidCancel(_ controller: ContactQuestionnaireViewController) {
         selectedContact = nil
         navigationController.dismiss(animated: true)
     }
     
-    func editContactViewController(_ controller: EditContactViewController, didSave contact: OldContact) {
+    func contactQuestionnaireViewController(_ controller: ContactQuestionnaireViewController, didSave contact: OldContact) {
         selectedContact = contact
         navigationController.dismiss(animated: true)
     }
@@ -182,8 +182,8 @@ extension SelectContactCoordinator: CNContactPickerDelegate {
     
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
         picker.dismiss(animated: true) {
-            let editViewModel = EditContactViewModel(contact: contact, showCancelButton: true)
-            let editController = EditContactViewController(viewModel: editViewModel)
+            let editViewModel = ContactQuestionnaireViewModel(contact: contact, showCancelButton: true)
+            let editController = ContactQuestionnaireViewController(viewModel: editViewModel)
             editController.delegate = self
             
             self.presentNavigationController(with: editController)

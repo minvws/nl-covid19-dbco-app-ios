@@ -7,13 +7,30 @@
 
 import Foundation
 
+protocol TaskManaging {
+    init()
+    
+    var tasks: [Task] { get }
+    var isSynced: Bool { get }
+    var hasUnfinishedTasks: Bool { get }
+    
+    func questionnaire(for task: Task) -> Questionnaire
+    func loadTasksAndQuestions(completion: @escaping () -> Void)
+    func applyResult(_ result: QuestionnaireResult, to task: Task)
+    func addListener(_ listener: TaskManagerListener)
+    func sync(completionHandler: ((Bool) -> Void)?)
+    
+    func setContact(_ contact: OldContact, for task: Task)
+    func addContact(_ contact: OldContact)
+}
+
 protocol TaskManagerListener: class {
-    func taskManagerDidUpdateTasks(_ taskManager: TaskManager)
-    func taskManagerDidUpdateSyncState(_ taskManager: TaskManager)
+    func taskManagerDidUpdateTasks(_ taskManager: TaskManaging)
+    func taskManagerDidUpdateSyncState(_ taskManager: TaskManaging)
 }
 
 // Temporary implementation
-final class TaskManager: Logging {
+final class TaskManager: TaskManaging, Logging {
     
     private struct ListenerWrapper {
         weak var listener: TaskManagerListener?
@@ -39,19 +56,28 @@ final class TaskManager: Logging {
         let group = DispatchGroup()
         
         group.enter()
-        Services.network.getTasks(caseIdentifier: "1234") { result in
+        Services.networkManager.getTasks(caseIdentifier: "1234") { result in
             self.tasks = (try? result.get()) ?? []
             self.listeners.forEach { $0.listener?.taskManagerDidUpdateTasks(self) }
             group.leave()
         }
         
         group.enter()
-        Services.network.getQuestionnaires { result in
+        Services.networkManager.getQuestionnaires { result in
             self.questionnaires = (try? result.get()) ?? []
             group.leave()
         }
         
         group.notify(queue: .main, execute: completion)
+    }
+    
+    func questionnaire(for task: Task) -> Questionnaire {
+        guard let questionnaire = questionnaires.first(where: { $0.taskType == task.taskType }) else {
+            logError("Could not find applicable questionnaire")
+            fatalError()
+        }
+        
+        return questionnaire
     }
     
     func applyResult(_ result: QuestionnaireResult, to task: Task) {

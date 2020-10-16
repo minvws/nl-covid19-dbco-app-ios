@@ -17,13 +17,11 @@ class UploadCoordinator: Coordinator {
     private weak var presenter: UIViewController?
     
     private let navigationController: NavigationController
-    private let taskManager: TaskManager
     
-    init(presenter: UIViewController, taskManager: TaskManager, delegate: UploadCoordinatorDelegate) {
+    init(presenter: UIViewController, delegate: UploadCoordinatorDelegate) {
         self.delegate = delegate
         self.presenter = presenter
         self.navigationController = NavigationController()
-        self.taskManager = taskManager
     }
     
     override func start() {
@@ -34,7 +32,7 @@ class UploadCoordinator: Coordinator {
             self.delegate?.uploadCoordinatorDidFinish(self)
         }
         
-        if taskManager.hasUnfinishedTasks {
+        if Services.taskManager.hasUnfinishedTasks {
             showUnfinishedTasks()
         } else {
             sync(animated: false)
@@ -44,7 +42,7 @@ class UploadCoordinator: Coordinator {
     }
     
     private func showUnfinishedTasks() {
-        let viewModel = UnfinishedTasksViewModel(taskManager: taskManager)
+        let viewModel = UnfinishedTasksViewModel()
         let tasksController = UnfinishedTasksViewController(viewModel: viewModel)
         tasksController.delegate = self
         
@@ -54,7 +52,7 @@ class UploadCoordinator: Coordinator {
     private func sync(animated: Bool) {
         navigationController.setViewControllers([LoadingViewController()], animated: animated)
         
-        taskManager.sync { _ in
+        Services.taskManager.sync { _ in
             let viewModel = OnboardingStepViewModel(image: UIImage(named: "StartVisual")!,
                                                     title: "Bedankt voor het delen van de gegevens met de GGD",
                                                     message: "Wil je toch nog contactgegevens aanpassen, contacten toevoegen of een andere wijziging doorgeven dan kan dat.",
@@ -90,9 +88,9 @@ extension UploadCoordinator: SelectContactCoordinatorDelegate {
         }
         
         if let task = coordinator.context as? Task {
-            taskManager.setContact(contact, for: task)
+            Services.taskManager.setContact(contact, for: task)
         } else {
-            taskManager.addContact(contact)
+            Services.taskManager.addContact(contact)
         }
     }
     
@@ -130,7 +128,7 @@ extension UploadCoordinator: EditContactCoordinatorDelegate {
         removeChildCoordinator(coordinator)
         
         if let task = coordinator.context as? Task {
-            taskManager.setContact(contact, for: task)
+            Services.taskManager.setContact(contact, for: task)
         }
     }
     

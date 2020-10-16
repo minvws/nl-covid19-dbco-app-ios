@@ -8,7 +8,7 @@
 import UIKit
 import Contacts
 
-class EditContactViewModel {
+class ContactQuestionnaireViewModel {
     private(set) var contact: OldContact
     let title: String
     let showCancelButton: Bool
@@ -58,19 +58,19 @@ class EditContactViewModel {
     }
 }
 
-protocol EditContactViewControllerDelegate: class {
-    func editContactViewControllerDidCancel(_ controller: EditContactViewController)
-    func editContactViewController(_ controller: EditContactViewController, didSave contact: OldContact)
+protocol ContactQuestionnaireViewControllerDelegate: class {
+    func contactQuestionnaireViewControllerDidCancel(_ controller: ContactQuestionnaireViewController)
+    func contactQuestionnaireViewController(_ controller: ContactQuestionnaireViewController, didSave contact: OldContact)
     
 }
 
-final class EditContactViewController: PromptableViewController {
-    private let viewModel: EditContactViewModel
+final class ContactQuestionnaireViewController: PromptableViewController {
+    private let viewModel: ContactQuestionnaireViewModel
     private let scrollView = UIScrollView()
     
-    weak var delegate: EditContactViewControllerDelegate?
+    weak var delegate: ContactQuestionnaireViewControllerDelegate?
     
-    init(viewModel: EditContactViewModel) {
+    init(viewModel: ContactQuestionnaireViewModel) {
         self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)
@@ -184,11 +184,11 @@ final class EditContactViewController: PromptableViewController {
     private var contactDetailsSection: SectionView!
     
     @objc private func save() {
-        delegate?.editContactViewController(self, didSave: viewModel.contact)
+        delegate?.contactQuestionnaireViewController(self, didSave: viewModel.contact)
     }
     
     @objc private func cancel() {
-        delegate?.editContactViewControllerDidCancel(self)
+        delegate?.contactQuestionnaireViewControllerDidCancel(self)
     }
     
     // MARK: - Keyboard handling

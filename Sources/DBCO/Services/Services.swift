@@ -9,11 +9,18 @@ import Foundation
 
 class Services {
     private static var networkManagingType: NetworkManaging.Type = NetworkManager.self
+    private static var taskManagingType: TaskManaging.Type = TaskManager.self
     
     /// Override the NetworkManaging type that will be instantiated
-    static func use(_ networkManager: NetworkManager.Type) {
+    static func use(_ networkManager: NetworkManaging.Type) {
         networkManagingType = networkManager
     }
     
-    static private(set) var network: NetworkManaging = networkManagingType.init(configuration: .test)
+    /// Override the TaskManaging type that will be instantiated
+    static func use(_ taskManager: TaskManaging.Type) {
+        taskManagingType = taskManager
+    }
+    
+    static private(set) var networkManager: NetworkManaging = networkManagingType.init(configuration: .test)
+    static private(set) var taskManager: TaskManaging = taskManagingType.init()
 }
