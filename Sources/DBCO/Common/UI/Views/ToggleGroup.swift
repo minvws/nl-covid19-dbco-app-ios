@@ -10,11 +10,20 @@ import UIKit
 
 class ToggleGroup: UIStackView {
     
-    init(_ buttons: ToggleButton ...) {
+    private var selectionHandler: ((Int) -> Void)?
+    
+    convenience init(label: String? = nil, _ buttons: ToggleButton ...) {
+        self.init(label: label, buttons)
+    }
+    
+    init(label: String? = nil, _ buttons: [ToggleButton]) {
         super.init(frame: .zero)
         
         axis = .vertical
         spacing = 8
+        
+        self.label.text = label
+        addArrangedSubview(self.label)
         
         buttons.forEach(addArrangedSubview)
         buttons.forEach { $0.addTarget(self, action: #selector(handleToggle), for: .valueChanged) }
@@ -24,6 +33,13 @@ class ToggleGroup: UIStackView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    @discardableResult
+    func didSelect(handler: @escaping (Int) -> Void) -> Self {
+        selectionHandler = handler
+        return self
+    }
+    
+    // MARK: - Private
     @objc private func handleToggle(_ sender: ToggleButton) {
         guard sender.isSelected else {
             sender.isSelected = true
@@ -34,6 +50,12 @@ class ToggleGroup: UIStackView {
             guard $0 !== sender else { return }
             ($0 as? ToggleButton)?.isSelected = !sender.isSelected
         }
+        
+        if let index = arrangedSubviews.firstIndex(where: { $0 === sender }) {
+            selectionHandler?(index - 1) // label is index 0
+        }
     }
+    
+    private(set) var label = Label(bodyBold: nil).multiline()
     
 }

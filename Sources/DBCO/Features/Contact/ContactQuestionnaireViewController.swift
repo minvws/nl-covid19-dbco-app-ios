@@ -9,48 +9,59 @@ import UIKit
 import Contacts
 
 class ContactQuestionnaireViewModel {
-    private(set) var contact: OldContact
-    private(set) var task: Task
-    let title: String
+    private var task: Task
+    private var baseResult: QuestionnaireResult
+    
+    var updatedTask: Task {
+        var updatedTask = task
+        updatedTask.result = baseResult
+        updatedTask.result?.answers = answerManagers.map(\.answer)
+        
+        return updatedTask
+    }
+    
+    private(set) var title: String
     let showCancelButton: Bool
     
+    private let answerManagers: [AnswerManaging]
+    
     init(task: Task, contact: CNContact? = nil, showCancelButton: Bool = false) {
-        self.contact = OldContact(category: .category1)
         self.task = task
-        self.title = contact?.fullName ?? .contactFallbackTitle
+        self.title = task.contactName ?? .contactFallbackTitle
         self.showCancelButton = showCancelButton
+        
+        let questionnaire = Services.taskManager.questionnaire(for: task)
+        
+        let questionsAndAnswers: [(question: Question, answer: Answer)] = {
+            let currentAnswers = task.result?.answers ?? []
+            
+            return questionnaire.questions.map { question in
+                (question, currentAnswers.first { $0.questionUuid == question.uuid } ?? question.emptyAnswer)
+            }
+        }()
+        
+        self.baseResult = QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: questionsAndAnswers.map(\.answer))
+        
+        self.answerManagers = questionsAndAnswers.compactMap { question, answer in
+            switch answer.value {
+            case .classificationDetails:
+                return nil
+            case .contactDetails:
+                return ContactDetailsAnswerManager(question: question, answer: answer, contact: contact)
+            case .date:
+                return DateAnswerManager(question: question, answer: answer)
+            case .open:
+                return OpenAnswerManager(question: question, answer: answer)
+            case .multipleChoice:
+                return MultipleChoiceAnswerManager(question: question, answer: answer)
+            }
+        }
+        
+        self.title = updatedTask.contactName ?? .contactFallbackTitle
     }
     
-    enum Row {
-        case group([UIView])
-        case single(UIView)
-    }
-    
-    var rows: [Row] {
-        let firstNameField = InputField(for: contact, path: \.firstName)
-        let lastNameField = InputField(for: contact, path: \.lastName)
-        
-        let phoneNumberFields = contact.phoneNumbers.indices
-            .map { \OldContact.phoneNumbers[$0] }
-            .map { InputField(for: contact, path: $0) }
-            .map(Row.single)
-        
-        let emailFields = contact.emailAddresses.indices
-            .map { \OldContact.emailAddresses[$0] }
-            .map { InputField(for: contact, path: $0) }
-            .map(Row.single)
-        
-        var base = [Row.group([firstNameField, lastNameField])]
-        base += phoneNumberFields
-        base += emailFields
-        
-        return base + [
-            .single(InputField(for: contact, path: \.relationType)),
-            .single(InputField(for: contact, path: \.birthDate)),
-            .single(InputField(for: contact, path: \.bsn)),
-            .single(InputField(for: contact, path: \.profession)),
-            .single(InputTextView(for: contact, path: \.notes))
-        ]
+    var views: [UIView] {
+        answerManagers.map(\.view)
     }
 }
 
@@ -99,15 +110,6 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
         widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         
-        let rows = viewModel.rows.map { row -> UIView in
-            switch row {
-            case .group(let fields):
-                return UIStackView(horizontal: fields, spacing: 15).distribution(.fillEqually)
-            case .single(let field):
-                return field
-            }
-        }
-        
         func groupHeaderLabel(title: String) -> UILabel {
             let label = UILabel()
             label.font = Theme.fonts.bodyBold
@@ -155,13 +157,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         // Details
         let contactDetailsSection = SectionView(title: .contactDetailsSectionTitle, caption: .contactDetailsSectionMessage, index: 2)
         
-        VStack(spacing: 24,
-               VStack(spacing: 16, rows),
-               VStack(spacing: 16,
-                      groupHeaderLabel(title: .contactPriorityQuestion),
-                      list(from: .contactPriorityQuestionItems),
-                      ToggleGroup(ToggleButton(title: .contactPriorityQuestionAnswerPositive),
-                                  ToggleButton(title: .contactPriorityQuestionAnswerNegative))))
+        VStack(spacing: 16, viewModel.views)
             .embed(in: contactDetailsSection.contentView.readableWidth)
         
         // Inform
@@ -179,7 +175,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
     private var contactDetailsSection: SectionView!
     
     @objc private func save() {
-        delegate?.contactQuestionnaireViewController(self, didSave: viewModel.task)
+        delegate?.contactQuestionnaireViewController(self, didSave: viewModel.updatedTask)
     }
     
     @objc private func cancel() {

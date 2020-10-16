@@ -38,6 +38,12 @@
 		CD756C74252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C73252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift */; };
 		CD756C78252DDF30005FEDA0 /* SectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C77252DDF30005FEDA0 /* SectionView.swift */; };
 		CD7FACA1251B3FCD00AB8142 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7FACA0251B3FCD00AB8142 /* TextView.swift */; };
+		CDA0F6812539AA42009FD2A9 /* Answer+CNContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA0F6802539AA42009FD2A9 /* Answer+CNContact.swift */; };
+		CDA0F6852539AA66009FD2A9 /* Task+ContactName.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA0F6842539AA66009FD2A9 /* Task+ContactName.swift */; };
+		CDA0F6892539AAB8009FD2A9 /* Answer+Progress.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA0F6882539AAB8009FD2A9 /* Answer+Progress.swift */; };
+		CDA0F68D2539AB18009FD2A9 /* Question+EmptyAnswer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA0F68C2539AB18009FD2A9 /* Question+EmptyAnswer.swift */; };
+		CDA0F6912539F0D9009FD2A9 /* AnswerManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA0F6902539F0D9009FD2A9 /* AnswerManaging.swift */; };
+		CDA0F6962539F1A3009FD2A9 /* LabeledInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA0F6952539F1A3009FD2A9 /* LabeledInputView.swift */; };
 		CDA525FC252F0FAA004E923A /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA525FB252F0FAA004E923A /* ToggleButton.swift */; };
 		CDA52601252F1752004E923A /* ToggleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA52600252F1752004E923A /* ToggleGroup.swift */; };
 		CDA5C11125123DC9009440D1 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C11025123DC9009440D1 /* AppVersion.swift */; };
@@ -126,6 +132,12 @@
 		CD756C73252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIResponder+CurrentFirstResponder.swift"; sourceTree = "<group>"; };
 		CD756C77252DDF30005FEDA0 /* SectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionView.swift; sourceTree = "<group>"; };
 		CD7FACA0251B3FCD00AB8142 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
+		CDA0F6802539AA42009FD2A9 /* Answer+CNContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Answer+CNContact.swift"; sourceTree = "<group>"; };
+		CDA0F6842539AA66009FD2A9 /* Task+ContactName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+ContactName.swift"; sourceTree = "<group>"; };
+		CDA0F6882539AAB8009FD2A9 /* Answer+Progress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Answer+Progress.swift"; sourceTree = "<group>"; };
+		CDA0F68C2539AB18009FD2A9 /* Question+EmptyAnswer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Question+EmptyAnswer.swift"; sourceTree = "<group>"; };
+		CDA0F6902539F0D9009FD2A9 /* AnswerManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerManaging.swift; sourceTree = "<group>"; };
+		CDA0F6952539F1A3009FD2A9 /* LabeledInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledInputView.swift; sourceTree = "<group>"; };
 		CDA525FB252F0FAA004E923A /* ToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
 		CDA52600252F1752004E923A /* ToggleGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleGroup.swift; sourceTree = "<group>"; };
 		CDA5C11025123DC9009440D1 /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
@@ -313,11 +325,23 @@
 		CDA0F67625398C8B009FD2A9 /* TaskManager */ = {
 			isa = PBXGroup;
 			children = (
+				CDA0F67F2539AA2A009FD2A9 /* Extensions */,
 				CDC7C89325385AD600FE7E05 /* Task.swift */,
 				CDC7C89D25387E2000FE7E05 /* Questionnaire.swift */,
 				CDC7C8A125387E4400FE7E05 /* TaskManager.swift */,
 			);
 			path = TaskManager;
+			sourceTree = "<group>";
+		};
+		CDA0F67F2539AA2A009FD2A9 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				CDA0F6802539AA42009FD2A9 /* Answer+CNContact.swift */,
+				CDA0F6842539AA66009FD2A9 /* Task+ContactName.swift */,
+				CDA0F6882539AAB8009FD2A9 /* Answer+Progress.swift */,
+				CDA0F68C2539AB18009FD2A9 /* Question+EmptyAnswer.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		CDA5C11625135A07009440D1 /* Contact */ = {
@@ -330,6 +354,8 @@
 				CD2963512518F291008443AF /* ContactQuestionnaireViewController.swift */,
 				CDA5C11725135A46009440D1 /* SelectContactCoordinator.swift */,
 				CD2963432514BF4E008443AF /* SelectContactViewController.swift */,
+				CDA0F6902539F0D9009FD2A9 /* AnswerManaging.swift */,
+				CDA0F6952539F1A3009FD2A9 /* LabeledInputView.swift */,
 			);
 			path = Contact;
 			sourceTree = "<group>";
@@ -606,6 +632,7 @@
 				CDC7C8692538412600FE7E05 /* NetworkManager.swift in Sources */,
 				CDFCF9192510FC760062269A /* SelfSizingTableView.swift in Sources */,
 				CDE30E72251E278200862A40 /* EditContactCoordinator.swift in Sources */,
+				CDA0F6912539F0D9009FD2A9 /* AnswerManaging.swift in Sources */,
 				CD756C50252C6AC9005FEDA0 /* OnboardingStepViewController.swift in Sources */,
 				CD2963442514BF4E008443AF /* SelectContactViewController.swift in Sources */,
 				CD29634C2518CE8E008443AF /* TableViewManager.swift in Sources */,
@@ -618,14 +645,17 @@
 				CDA5C11125123DC9009440D1 /* AppVersion.swift in Sources */,
 				CDA52601252F1752004E923A /* ToggleGroup.swift in Sources */,
 				CDFCF9102510DF430062269A /* HelpItemTableViewCell.swift in Sources */,
+				CDA0F68D2539AB18009FD2A9 /* Question+EmptyAnswer.swift in Sources */,
 				CD7282BF250F740000D68911 /* AppCoordinator.swift in Sources */,
 				CDFCF9092510BEF50062269A /* HelpItem.swift in Sources */,
 				CD2963552518F59E008443AF /* UITableView+Defaults.swift in Sources */,
+				CDA0F6812539AA42009FD2A9 /* Answer+CNContact.swift in Sources */,
 				CD756C64252CA787005FEDA0 /* PairingCodeField.swift in Sources */,
 				CDC272EF2514B46B00AE7BB6 /* RequestContactsAuthorizationViewModel.swift in Sources */,
 				CDADF7EE2535B6A500424492 /* Label.swift in Sources */,
 				CD7282C6250F9D2400D68911 /* TaskOverviewCoordinator.swift in Sources */,
 				CDC7C8A225387E4400FE7E05 /* TaskManager.swift in Sources */,
+				CDA0F6852539AA66009FD2A9 /* Task+ContactName.swift in Sources */,
 				CDC7C8872538498700FE7E05 /* JSONDecoder+Decoding.swift in Sources */,
 				CDE30E64251BC02100862A40 /* TextField.swift in Sources */,
 				CD7282C1250F945900D68911 /* HelpCoordinator.swift in Sources */,
@@ -653,8 +683,10 @@
 				CDC7C8772538469B00FE7E05 /* NetworkManagerURLSessionDelegate.swift in Sources */,
 				CDC7C89425385AD600FE7E05 /* Task.swift in Sources */,
 				CDC7C88C2538507100FE7E05 /* Logging.swift in Sources */,
+				CDA0F6892539AAB8009FD2A9 /* Answer+Progress.swift in Sources */,
 				CD29635B25191972008443AF /* Haptic.swift in Sources */,
 				CDFCF907250FA6E80062269A /* ViewController.swift in Sources */,
+				CDA0F6962539F1A3009FD2A9 /* LabeledInputView.swift in Sources */,
 				CD29636125191AA8008443AF /* Theme.swift in Sources */,
 				CD421875251B4843004544B3 /* OldTask.swift in Sources */,
 				CDC7C86225376AB200FE7E05 /* Services.swift in Sources */,

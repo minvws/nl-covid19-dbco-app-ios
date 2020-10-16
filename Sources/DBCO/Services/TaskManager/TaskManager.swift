@@ -110,21 +110,7 @@ final class TaskManager: TaskManaging, Logging {
             case (.some(let current), .none):
                 return current
             case (.none, .none):
-                let value: Answer.Value = {
-                    switch question.questionType {
-                    case .classificationDetails:
-                        return .classificationDetails(livedTogetherRisk: nil, durationRisk: nil, distanceRisk: nil, otherRisk: nil)
-                    case .contactDetails:
-                        return .contactDetails(firstName: nil, lastName: nil, email: nil, phoneNumber: nil)
-                    case .date:
-                        return .date(nil)
-                    case .open:
-                        return .open(nil)
-                    case .multipleChoice:
-                        return .multipleChoice(nil)
-                    }
-                }()
-                return Answer(uuid: UUID(), questionUuid: question.uuid, lastModified: Date(), value: value)
+                return question.emptyAnswer
             }
         }
         
@@ -133,6 +119,8 @@ final class TaskManager: TaskManaging, Logging {
             .map(answerForQuestion)
         
         tasks[index].result = QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: answers)
+        
+        isSynced = false
         
         listeners.forEach { $0.listener?.taskManagerDidUpdateTasks(self) }
     }

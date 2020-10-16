@@ -141,6 +141,42 @@ struct BirthDate: ContactValue {
     }()
 }
 
+struct GeneralDate: ContactValue {
+    var value: String?
+    var label: String?
+    
+    init(label: String?, value: String? = nil) {
+        self.value = value
+        self.label = label
+    }
+    
+    init(label: String?, date: Date?) {
+        if let date = date {
+            self.value = GeneralDate.dateFormatter.string(from: date)
+        }
+        
+        self.label = label
+    }
+    
+    var dateValue: Date? {
+        guard let value = value else {
+            return nil
+        }
+        
+        return GeneralDate.dateFormatter.date(from: value)
+    }
+        
+    static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        formatter.timeStyle = .none
+        formatter.calendar = Calendar.current
+        formatter.locale = Locale.current
+        
+        return formatter
+    }()
+}
+
 struct CompanyName: ContactValue {
     var value: String?
 }
@@ -159,6 +195,23 @@ struct Profession: ContactValue {
 
 struct Notes: ContactValue {
     var value: String?
+}
+
+struct Text: ContactValue {
+    var label: String?
+    var value: String?
+}
+
+struct Options: ContactValue {
+    var label: String?
+    var value: String?
+    let inputType: InputType
+    
+    init(label: String?, value: String?, options: [InputType.PickerOption]) {
+        self.label = label
+        self.value = value
+        self.inputType = .picker(options: options)
+    }
 }
 
 extension CNContact {

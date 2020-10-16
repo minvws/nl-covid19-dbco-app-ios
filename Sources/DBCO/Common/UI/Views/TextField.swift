@@ -14,7 +14,7 @@ class TextField: UITextField {
         setup()
     }
     
-    init(label: String, text: String? = nil) {
+    init(label: String?, text: String? = nil) {
         super.init(frame: .zero)
         setup()
         
@@ -62,7 +62,11 @@ class TextField: UITextField {
         let labelHeight = label.intrinsicContentSize.height
         let backgroundHeight = baseFieldHeight + Constants.backgroundBaseHeight
         
-        return CGSize(width: 100, height: labelHeight + Constants.spacing + backgroundHeight)
+        if label.text?.isEmpty == false {
+            return CGSize(width: 100, height: labelHeight + Constants.spacing + backgroundHeight)
+        } else {
+            return CGSize(width: 100, height: backgroundHeight)
+        }
     }
     
     override func layoutSubviews() {
@@ -86,7 +90,7 @@ class TextField: UITextField {
         return ceil(font!.lineHeight + 1)
     }
     
-    private(set) var label = UILabel()
+    private(set) var label = Label(subhead: nil)
     private(set) var backgroundView = UIView()
     
 }

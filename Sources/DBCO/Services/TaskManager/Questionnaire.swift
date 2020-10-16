@@ -104,48 +104,10 @@ struct Answer {
         }
     }
     
-    let value: Value
-    
-    var progress: Double {
-        switch value {
-        case .classificationDetails(let livedTogetherRisk, let durationRisk, let distanceRisk, let otherRisk):
-            let valueCount = [livedTogetherRisk, durationRisk, distanceRisk, otherRisk]
-                .compactMap { $0 }
-                .count
-            
-            return Double(valueCount) / 4
-        case .contactDetails(let firstName, let lastName, let email, let phoneNumber):
-            let valueCount = [firstName, lastName, email, phoneNumber]
-                .compactMap { $0 }
-                .filter { !$0.isEmpty }
-                .count
-            
-            return Double(valueCount) / 4
-        case .date(let value):
-            return value != nil ? 1 : 0
-        case .open(let value):
-            return value?.isEmpty == false ? 1 : 0
-        case .multipleChoice(let value):
-            return value != nil ? 1 : 0
-        }
-    }
-}
-
-// For Prefilling
-extension Answer.Value {
-    static func contactDetails(contact: OldContact) -> Self {
-        return .contactDetails(firstName: contact.firstName.value,
-                               lastName: contact.lastName.value,
-                               email: contact.emailAddresses.first?.value,
-                               phoneNumber: contact.phoneNumbers.first?.value)
-    }
+    var value: Value
 }
 
 struct QuestionnaireResult {
     let questionnaireUuid: UUID
-    let answers: [Answer]
-    
-    var progress: Double {
-        answers.reduce(0) { $0 + ($1.progress / Double(answers.count)) }
-    }
+    var answers: [Answer]
 }
