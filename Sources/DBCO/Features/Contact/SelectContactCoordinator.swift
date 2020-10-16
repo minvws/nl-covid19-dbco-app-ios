@@ -10,7 +10,8 @@ import Contacts
 import ContactsUI
 
 protocol SelectContactCoordinatorDelegate: class {
-    func selectContactCoordinatorDidFinish(_ coordinator: SelectContactCoordinator, with contact: OldContact?)
+    func selectContactCoordinator(_ coordinator: SelectContactCoordinator, didFinishWith task: Task)
+    func selectContactCoordinatorDidCancel(_ coordinator: SelectContactCoordinator)
 }
 
 final class SelectContactCoordinator: Coordinator {
@@ -18,14 +19,14 @@ final class SelectContactCoordinator: Coordinator {
     private weak var delegate: SelectContactCoordinatorDelegate?
     private weak var presenter: UIViewController?
     private let navigationController: NavigationController
-    private var selectedContact: OldContact?
-    private var suggestedName: String?
+    private let task: Task
+    private var updatedTask: Task?
     
-    init(presenter: UIViewController, suggestedName: String? = nil, delegate: SelectContactCoordinatorDelegate) {
+    init(presenter: UIViewController, contactTask: Task, delegate: SelectContactCoordinatorDelegate) {
         self.delegate = delegate
         self.presenter = presenter
         self.navigationController = NavigationController()
-        self.suggestedName = suggestedName
+        self.task = contactTask
     }
     
     override func start() {
@@ -33,7 +34,7 @@ final class SelectContactCoordinator: Coordinator {
         
         switch currentStatus {
         case .authorized:
-            let viewModel = SelectContactViewModel(suggestedName: suggestedName)
+            let viewModel = SelectContactViewModel(suggestedName: task.label)
             let selectController = SelectContactViewController(viewModel: viewModel)
             selectController.delegate = self
             
@@ -62,10 +63,18 @@ final class SelectContactCoordinator: Coordinator {
             
             actionSheet.addAction(
                 UIAlertAction(title: .cancel, style: .cancel) { _ in
-                    self.delegate?.selectContactCoordinatorDidFinish(self, with: nil)
+                    self.callDelegate()
                 })
             
             presenter?.present(actionSheet, animated: true)
+        }
+    }
+    
+    private func callDelegate() {
+        if let updatedTask = updatedTask {
+            delegate?.selectContactCoordinator(self, didFinishWith: updatedTask)
+        } else {
+            delegate?.selectContactCoordinatorDidCancel(self)
         }
     }
     
@@ -76,12 +85,12 @@ final class SelectContactCoordinator: Coordinator {
         navigationController.onDismissed = { [weak self] _ in
             guard let self = self else { return }
             
-            self.delegate?.selectContactCoordinatorDidFinish(self, with: self.selectedContact)
+            self.callDelegate()
         }
     }
     
     private func continueAfterAuthorization() {
-        let viewModel = SelectContactViewModel(suggestedName: suggestedName)
+        let viewModel = SelectContactViewModel(suggestedName: task.label)
         let selectController = SelectContactViewController(viewModel: viewModel)
         selectController.delegate = self
         
@@ -96,8 +105,7 @@ final class SelectContactCoordinator: Coordinator {
     }
     
     private func continueManually() {
-        let contact = OldContact(category: .category2b, name: suggestedName ?? "")
-        let editViewModel = ContactQuestionnaireViewModel(contact: contact, showCancelButton: true)
+        let editViewModel = ContactQuestionnaireViewModel(task: task, showCancelButton: true)
         let editController = ContactQuestionnaireViewController(viewModel: editViewModel)
         editController.delegate = self
         
@@ -122,11 +130,11 @@ extension SelectContactCoordinator: RequestAuthorizationViewControllerDelegate {
     }
     
     func continueWithoutAuthorization(for controller: RequestAuthorizationViewController) {
-        let detailViewModel = ContactQuestionnaireViewModel(contact: OldContact(category: .category2b, name: suggestedName ?? ""), showCancelButton: true)
-        let detailsController = ContactQuestionnaireViewController(viewModel: detailViewModel)
-        detailsController.delegate = self
+        let editViewModel = ContactQuestionnaireViewModel(task: task, showCancelButton: true)
+        let editController = ContactQuestionnaireViewController(viewModel: editViewModel)
+        editController.delegate = self
         
-        navigationController.setViewControllers([detailsController], animated: true)
+        navigationController.setViewControllers([editController], animated: true)
     }
     
     func currentAutorizationStatus(for controller: RequestAuthorizationViewController) -> AuthorizationStatusConvertible {
@@ -138,23 +146,23 @@ extension SelectContactCoordinator: RequestAuthorizationViewControllerDelegate {
 extension SelectContactCoordinator: SelectContactViewControllerDelegate {
     
     func selectContactViewController(_ controller: SelectContactViewController, didSelect contact: CNContact) {
-        let detailViewModel = ContactQuestionnaireViewModel(contact: contact)
-        let detailsController = ContactQuestionnaireViewController(viewModel: detailViewModel)
+        let viewModel = ContactQuestionnaireViewModel(task: task, contact: contact)
+        let detailsController = ContactQuestionnaireViewController(viewModel: viewModel)
         detailsController.delegate = self
         
         navigationController.pushViewController(detailsController, animated: true)
     }
     
     func selectContactViewControllerDidRequestManualInput(_ controller: SelectContactViewController) {
-        let detailViewModel = ContactQuestionnaireViewModel(contact: OldContact(category: .category2b, name: suggestedName ?? ""))
-        let detailsController = ContactQuestionnaireViewController(viewModel: detailViewModel)
+        let viewModel = ContactQuestionnaireViewModel(task: task)
+        let detailsController = ContactQuestionnaireViewController(viewModel: viewModel)
         detailsController.delegate = self
         
         navigationController.pushViewController(detailsController, animated: true)
     }
     
     func selectContactViewControllerDidCancel(_ controller: SelectContactViewController) {
-        selectedContact = nil
+        updatedTask = nil
         navigationController.dismiss(animated: true)
     }
     
@@ -163,12 +171,12 @@ extension SelectContactCoordinator: SelectContactViewControllerDelegate {
 extension SelectContactCoordinator: ContactQuestionnaireViewControllerDelegate {
     
     func contactQuestionnaireViewControllerDidCancel(_ controller: ContactQuestionnaireViewController) {
-        selectedContact = nil
+        updatedTask = nil
         navigationController.dismiss(animated: true)
     }
     
-    func contactQuestionnaireViewController(_ controller: ContactQuestionnaireViewController, didSave contact: OldContact) {
-        selectedContact = contact
+    func contactQuestionnaireViewController(_ controller: ContactQuestionnaireViewController, didSave contactTask: Task) {
+        updatedTask = contactTask
         navigationController.dismiss(animated: true)
     }
     
@@ -177,13 +185,13 @@ extension SelectContactCoordinator: ContactQuestionnaireViewControllerDelegate {
 extension SelectContactCoordinator: CNContactPickerDelegate {
     
     func contactPickerDidCancel(_ picker: CNContactPickerViewController) {
-        delegate?.selectContactCoordinatorDidFinish(self, with: nil)
+        delegate?.selectContactCoordinatorDidCancel(self)
     }
     
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
         picker.dismiss(animated: true) {
-            let editViewModel = ContactQuestionnaireViewModel(contact: contact, showCancelButton: true)
-            let editController = ContactQuestionnaireViewController(viewModel: editViewModel)
+            let viewModel = ContactQuestionnaireViewModel(task: self.task, contact: contact, showCancelButton: true)
+            let editController = ContactQuestionnaireViewController(viewModel: viewModel)
             editController.delegate = self
             
             self.presentNavigationController(with: editController)

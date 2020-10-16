@@ -313,6 +313,8 @@
 		CDA0F67625398C8B009FD2A9 /* TaskManager */ = {
 			isa = PBXGroup;
 			children = (
+				CDC7C89325385AD600FE7E05 /* Task.swift */,
+				CDC7C89D25387E2000FE7E05 /* Questionnaire.swift */,
 				CDC7C8A125387E4400FE7E05 /* TaskManager.swift */,
 			);
 			path = TaskManager;
@@ -374,7 +376,6 @@
 			children = (
 				CDC7C86025376A2D00FE7E05 /* Services */,
 				CDFCF90A2510C4710062269A /* Common */,
-				CDC7C8A72538916F00FE7E05 /* Models */,
 				CD7282BB250F728000D68911 /* Features */,
 				CDC4A8FB250B8945001BABC6 /* Resources */,
 			);
@@ -441,15 +442,6 @@
 				CDC7C88B25384FF600FE7E05 /* Logging.swift */,
 			);
 			path = Logging;
-			sourceTree = "<group>";
-		};
-		CDC7C8A72538916F00FE7E05 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				CDC7C89325385AD600FE7E05 /* Task.swift */,
-				CDC7C89D25387E2000FE7E05 /* Questionnaire.swift */,
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		CDFCF90A2510C4710062269A /* Common */ = {

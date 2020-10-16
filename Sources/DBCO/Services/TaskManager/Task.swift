@@ -74,6 +74,19 @@ struct Task: Codable {
         }
     }
     
+    init(type: TaskType) {
+        self.uuid = UUID()
+        self.taskType = type
+        self.source = .app
+        self.label = nil
+        self.taskContext = nil
+        
+        switch taskType {
+        case .contact:
+            contact = Contact(category: .category3, communication: .none)
+        }
+    }
+    
     func encode(to encoder: Encoder) throws {
         try uuid.encode(to: encoder)
         try source.encode(to: encoder)

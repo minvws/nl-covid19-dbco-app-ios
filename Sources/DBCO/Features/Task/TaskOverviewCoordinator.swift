@@ -46,16 +46,17 @@ final class TaskOverviewCoordinator: Coordinator {
         startChildCoordinator(HelpCoordinator(presenter: overviewController, delegate: self))
     }
     
-    private func selectContact(suggestedName: String?, for task: Task? = nil) {
-        startChildCoordinator(
-            SelectContactCoordinator(presenter: overviewController, suggestedName: suggestedName, delegate: self),
-            context: task)
+    private func selectContact(for task: Task) {
+        startChildCoordinator(SelectContactCoordinator(presenter: overviewController, contactTask: task, delegate: self))
     }
     
-    private func editContact(contact: OldContact, for task: Task) {
-        startChildCoordinator(
-            EditContactCoordinator(presenter: overviewController, contact: contact, delegate: self),
-            context: task)
+    private func addContact() {
+        let task = Task(type: .contact)
+        startChildCoordinator(SelectContactCoordinator(presenter: overviewController, contactTask: task, delegate: self))
+    }
+    
+    private func editContact(for task: Task) {
+        startChildCoordinator(EditContactCoordinator(presenter: overviewController, contactTask: task, delegate: self))
     }
 
 }
@@ -70,31 +71,24 @@ extension TaskOverviewCoordinator: HelpCoordinatorDelegate {
 }
 
 extension TaskOverviewCoordinator: SelectContactCoordinatorDelegate {
-    
-    func selectContactCoordinatorDidFinish(_ coordinator: SelectContactCoordinator, with contact: OldContact?) {
+
+    func selectContactCoordinator(_ coordinator: SelectContactCoordinator, didFinishWith task: Task) {
         removeChildCoordinator(coordinator)
-        
-        guard let contact = contact else {
-            return
-        }
-        
-        if let task = coordinator.context as? Task {
-            Services.taskManager.setContact(contact, for: task)
-        } else {
-            Services.taskManager.addContact(contact)
-        }
+        Services.taskManager.save(task)
+    }
+    
+    func selectContactCoordinatorDidCancel(_ coordinator: SelectContactCoordinator) {
+        removeChildCoordinator(coordinator)
     }
     
 }
 
 extension TaskOverviewCoordinator: EditContactCoordinatorDelegate {
     
-    func editContactCoordinator(_ coordinator: EditContactCoordinator, didFinishEditing contact: OldContact) {
+    func editContactCoordinator(_ coordinator: EditContactCoordinator, didFinishContactTask task: Task) {
         removeChildCoordinator(coordinator)
         
-        if let task = coordinator.context as? Task {
-            Services.taskManager.setContact(contact, for: task)
-        }
+        Services.taskManager.save(task)
     }
     
     func editContactCoordinatorDidCancel(_ coordinator: EditContactCoordinator) {
@@ -119,20 +113,19 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
     }
     
     func taskOverviewViewControllerDidRequestAddContact(_ controller: TaskOverviewViewController) {
-        selectContact(suggestedName: nil)
+        addContact()
     }
     
     func taskOverviewViewController(_ controller: TaskOverviewViewController, didSelect task: Task) {
         switch task.taskType {
         case .contact:
-//            if let contact = contactDetailsTask.contact {
-//                // edit flow
-//                editContact(contact: contact, for: contactDetailsTask)
-//            } else {
-//                // pick flow
-//                selectContact(suggestedName: contactDetailsTask.name, for: contactDetailsTask)
-//            }
-            break
+            if task.result != nil {
+                // edit flow
+                editContact(for: task)
+            } else {
+                // pick flow
+                selectContact(for: task)
+            }
         }
     }
     

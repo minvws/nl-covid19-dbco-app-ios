@@ -10,18 +10,14 @@ import Contacts
 
 class ContactQuestionnaireViewModel {
     private(set) var contact: OldContact
+    private(set) var task: Task
     let title: String
     let showCancelButton: Bool
     
-    init(contact: CNContact, showCancelButton: Bool = false) {
-        self.contact = OldContact(category: .category1, cnContact: contact)
-        self.title = contact.fullName
-        self.showCancelButton = showCancelButton
-    }
-    
-    init(contact: OldContact, showCancelButton: Bool = false) {
-        self.contact = contact.copy() as! OldContact
-        self.title = contact.fullName.isEmpty ? .contactFallbackTitle : contact.fullName
+    init(task: Task, contact: CNContact? = nil, showCancelButton: Bool = false) {
+        self.contact = OldContact(category: .category1)
+        self.task = task
+        self.title = contact?.fullName ?? .contactFallbackTitle
         self.showCancelButton = showCancelButton
     }
     
@@ -60,8 +56,7 @@ class ContactQuestionnaireViewModel {
 
 protocol ContactQuestionnaireViewControllerDelegate: class {
     func contactQuestionnaireViewControllerDidCancel(_ controller: ContactQuestionnaireViewController)
-    func contactQuestionnaireViewController(_ controller: ContactQuestionnaireViewController, didSave contact: OldContact)
-    
+    func contactQuestionnaireViewController(_ controller: ContactQuestionnaireViewController, didSave contactTask: Task)
 }
 
 final class ContactQuestionnaireViewController: PromptableViewController {
@@ -184,7 +179,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
     private var contactDetailsSection: SectionView!
     
     @objc private func save() {
-        delegate?.contactQuestionnaireViewController(self, didSave: viewModel.contact)
+        delegate?.contactQuestionnaireViewController(self, didSave: viewModel.task)
     }
     
     @objc private func cancel() {

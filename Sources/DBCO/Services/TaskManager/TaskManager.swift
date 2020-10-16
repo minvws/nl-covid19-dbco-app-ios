@@ -16,12 +16,10 @@ protocol TaskManaging {
     
     func questionnaire(for task: Task) -> Questionnaire
     func loadTasksAndQuestions(completion: @escaping () -> Void)
-    func applyResult(_ result: QuestionnaireResult, to task: Task)
     func addListener(_ listener: TaskManagerListener)
-    func sync(completionHandler: ((Bool) -> Void)?)
     
-    func setContact(_ contact: OldContact, for task: Task)
-    func addContact(_ contact: OldContact)
+    func save(_ task: Task)
+    func sync(completionHandler: ((Bool) -> Void)?)
 }
 
 protocol TaskManagerListener: class {
@@ -80,11 +78,13 @@ final class TaskManager: TaskManaging, Logging {
         return questionnaire
     }
     
-    func applyResult(_ result: QuestionnaireResult, to task: Task) {
-        guard let index = tasks.lastIndex(where: { $0.uuid == task.uuid }) else {
-            logError("Invalid task")
-            fatalError()
+    func save(_ task: Task) {
+        func storeNewTask() -> Int {
+            tasks.append(task)
+            return tasks.count - 1
         }
+        
+        let index = tasks.lastIndex { $0.uuid == task.uuid } ?? storeNewTask()
             
         guard let questionnaire = questionnaires.first(where: { $0.taskType == task.taskType }) else {
             logError("Could not find applicable questionnaire")
@@ -92,7 +92,7 @@ final class TaskManager: TaskManaging, Logging {
         }
         
         let currentAnswers = tasks[index].result?.answers ?? []
-        let newAnswers = result.answers
+        let newAnswers = task.result?.answers ?? []
         
         // Ensure we have (empty) answers for all necessary questions
         // Updating existing any answers
@@ -133,34 +133,8 @@ final class TaskManager: TaskManaging, Logging {
             .map(answerForQuestion)
         
         tasks[index].result = QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: answers)
-    }
-    
-    func setContact(_ contact: OldContact, for task: Task) {
-//        guard let index = tasks.lastIndex(where: { $0.uuid == task.uuid }) else {
-//            return
-//        }
-//        
-//        var updatedTask = task
-//        updatedTask.contact = contact
-//        updatedTask.isSynced = false
-//        updatedTask.status = .completed
-//
-//        tasks[index] = updatedTask
         
         listeners.forEach { $0.listener?.taskManagerDidUpdateTasks(self) }
-        isSynced = false
-    }
-    
-    func addContact(_ contact: OldContact) {
-//        tasks.append(ContactDetailsTask(name: contact.fullName,
-//                                        contact: contact,
-//                                        preferredStaffContact: false,
-//                                        identifier: UUID().uuidString,
-//                                        status: .completed,
-//                                        isSynced: false))
-        
-        listeners.forEach { $0.listener?.taskManagerDidUpdateTasks(self) }
-        isSynced = false
     }
     
     func addListener(_ listener: TaskManagerListener) {
