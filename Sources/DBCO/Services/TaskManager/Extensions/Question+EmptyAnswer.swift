@@ -16,6 +16,8 @@ extension Question {
                 return .classificationDetails(livedTogetherRisk: nil, durationRisk: nil, distanceRisk: nil, otherRisk: nil)
             case .contactDetails:
                 return .contactDetails(firstName: nil, lastName: nil, email: nil, phoneNumber: nil)
+            case .contactDetailsFull:
+                return .contactDetailsFull(firstName: nil, lastName: nil, email: nil, phoneNumber: nil)
             case .date:
                 return .date(nil)
             case .open:

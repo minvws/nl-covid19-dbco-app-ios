@@ -22,12 +22,14 @@ struct Question: Codable {
     enum Group: String, Codable {
         case classification
         case contactDetails = "contactdetails"
+        case other
     }
     
     enum QuestionType: String, Codable {
         case classificationDetails = "classificationdetails"
         case date
         case contactDetails = "contactdetails"
+        case contactDetailsFull = "contactdetails_full"
         case open
         case multipleChoice = "multiplechoice"
     }
@@ -80,6 +82,10 @@ struct Answer {
                             lastName: String?,
                             email: String?,
                             phoneNumber: String?)
+        case contactDetailsFull(firstName: String?,
+                            lastName: String?,
+                            email: String?,
+                            phoneNumber: String?)
         case date(Date?)
         case open(String?)
         case multipleChoice(AnswerOption?)
@@ -90,6 +96,8 @@ struct Answer {
                 return "classificationDetails(\(String(describing: livedTogetherRisk)), \(String(describing: durationRisk)), \(String(describing: distanceRisk)), \(String(describing: otherRisk)))"
             case .contactDetails(let firstName, let lastName, let email, let phoneNumber):
                 return "contactDetails(\(String(describing: firstName)), \(String(describing: lastName)), \(String(describing: email)), \(String(describing: phoneNumber)))"
+            case .contactDetailsFull(let firstName, let lastName, let email, let phoneNumber):
+                return "contactDetailsFull(\(String(describing: firstName)), \(String(describing: lastName)), \(String(describing: email)), \(String(describing: phoneNumber)))"
             case .date(let date):
                 return "date(\(String(describing: date)))"
             case .open(let value):

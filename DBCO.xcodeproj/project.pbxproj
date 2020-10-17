@@ -25,6 +25,7 @@
 		CD49BAEB2525CE7C0079D018 /* PromptableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD49BAEA2525CE7C0079D018 /* PromptableViewController.swift */; };
 		CD65CD812535F77400BB761A /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD65CD802535F77400BB761A /* LoadingViewController.swift */; };
 		CD65CD8525360F5C00BB761A /* UnfinishedTasksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD65CD8425360F5C00BB761A /* UnfinishedTasksViewController.swift */; };
+		CD6860CA253B31190061C318 /* ClassificationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6860C9253B31190061C318 /* ClassificationHelper.swift */; };
 		CD7282BF250F740000D68911 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282BE250F740000D68911 /* AppCoordinator.swift */; };
 		CD7282C1250F945900D68911 /* HelpCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C0250F945900D68911 /* HelpCoordinator.swift */; };
 		CD7282C3250F9AFE00D68911 /* TaskOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C2250F9AFE00D68911 /* TaskOverviewViewController.swift */; };
@@ -38,7 +39,7 @@
 		CD756C74252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C73252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift */; };
 		CD756C78252DDF30005FEDA0 /* SectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C77252DDF30005FEDA0 /* SectionView.swift */; };
 		CD7FACA1251B3FCD00AB8142 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7FACA0251B3FCD00AB8142 /* TextView.swift */; };
-		CDA0F6812539AA42009FD2A9 /* Answer+CNContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA0F6802539AA42009FD2A9 /* Answer+CNContact.swift */; };
+		CDA0F6812539AA42009FD2A9 /* Answer+Prefilling.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA0F6802539AA42009FD2A9 /* Answer+Prefilling.swift */; };
 		CDA0F6852539AA66009FD2A9 /* Task+ContactName.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA0F6842539AA66009FD2A9 /* Task+ContactName.swift */; };
 		CDA0F6892539AAB8009FD2A9 /* Answer+Progress.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA0F6882539AAB8009FD2A9 /* Answer+Progress.swift */; };
 		CDA0F68D2539AB18009FD2A9 /* Question+EmptyAnswer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA0F68C2539AB18009FD2A9 /* Question+EmptyAnswer.swift */; };
@@ -117,6 +118,7 @@
 		CD49BAEA2525CE7C0079D018 /* PromptableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptableViewController.swift; sourceTree = "<group>"; };
 		CD65CD802535F77400BB761A /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		CD65CD8425360F5C00BB761A /* UnfinishedTasksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfinishedTasksViewController.swift; sourceTree = "<group>"; };
+		CD6860C9253B31190061C318 /* ClassificationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassificationHelper.swift; sourceTree = "<group>"; };
 		CD7282BE250F740000D68911 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		CD7282C0250F945900D68911 /* HelpCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpCoordinator.swift; sourceTree = "<group>"; };
 		CD7282C2250F9AFE00D68911 /* TaskOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskOverviewViewController.swift; sourceTree = "<group>"; };
@@ -132,7 +134,7 @@
 		CD756C73252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIResponder+CurrentFirstResponder.swift"; sourceTree = "<group>"; };
 		CD756C77252DDF30005FEDA0 /* SectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionView.swift; sourceTree = "<group>"; };
 		CD7FACA0251B3FCD00AB8142 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
-		CDA0F6802539AA42009FD2A9 /* Answer+CNContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Answer+CNContact.swift"; sourceTree = "<group>"; };
+		CDA0F6802539AA42009FD2A9 /* Answer+Prefilling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Answer+Prefilling.swift"; sourceTree = "<group>"; };
 		CDA0F6842539AA66009FD2A9 /* Task+ContactName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+ContactName.swift"; sourceTree = "<group>"; };
 		CDA0F6882539AAB8009FD2A9 /* Answer+Progress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Answer+Progress.swift"; sourceTree = "<group>"; };
 		CDA0F68C2539AB18009FD2A9 /* Question+EmptyAnswer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Question+EmptyAnswer.swift"; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 				CDFCF90B2510C47E0062269A /* Localization.swift */,
 				CD29634B2518CE8E008443AF /* TableViewManager.swift */,
 				CD29636025191AA8008443AF /* Theme.swift */,
+				CD6860C9253B31190061C318 /* ClassificationHelper.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -336,7 +339,7 @@
 		CDA0F67F2539AA2A009FD2A9 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				CDA0F6802539AA42009FD2A9 /* Answer+CNContact.swift */,
+				CDA0F6802539AA42009FD2A9 /* Answer+Prefilling.swift */,
 				CDA0F6842539AA66009FD2A9 /* Task+ContactName.swift */,
 				CDA0F6882539AAB8009FD2A9 /* Answer+Progress.swift */,
 				CDA0F68C2539AB18009FD2A9 /* Question+EmptyAnswer.swift */,
@@ -643,13 +646,14 @@
 				CD756C78252DDF30005FEDA0 /* SectionView.swift in Sources */,
 				CD1824EE2524B3E4006EB272 /* InputField.swift in Sources */,
 				CDA5C11125123DC9009440D1 /* AppVersion.swift in Sources */,
+				CD6860CA253B31190061C318 /* ClassificationHelper.swift in Sources */,
 				CDA52601252F1752004E923A /* ToggleGroup.swift in Sources */,
 				CDFCF9102510DF430062269A /* HelpItemTableViewCell.swift in Sources */,
 				CDA0F68D2539AB18009FD2A9 /* Question+EmptyAnswer.swift in Sources */,
 				CD7282BF250F740000D68911 /* AppCoordinator.swift in Sources */,
 				CDFCF9092510BEF50062269A /* HelpItem.swift in Sources */,
 				CD2963552518F59E008443AF /* UITableView+Defaults.swift in Sources */,
-				CDA0F6812539AA42009FD2A9 /* Answer+CNContact.swift in Sources */,
+				CDA0F6812539AA42009FD2A9 /* Answer+Prefilling.swift in Sources */,
 				CD756C64252CA787005FEDA0 /* PairingCodeField.swift in Sources */,
 				CDC272EF2514B46B00AE7BB6 /* RequestContactsAuthorizationViewModel.swift in Sources */,
 				CDADF7EE2535B6A500424492 /* Label.swift in Sources */,

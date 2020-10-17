@@ -45,8 +45,10 @@ class ContactQuestionnaireViewModel {
         self.answerManagers = questionsAndAnswers.compactMap { question, answer in
             switch answer.value {
             case .classificationDetails:
-                return nil
+                return ClassificationDetailsAnswerManager(question: question, answer: answer, contactCategory: task.contact.category)
             case .contactDetails:
+                return ContactDetailsAnswerManager(question: question, answer: answer, contact: contact)
+            case .contactDetailsFull:
                 return ContactDetailsAnswerManager(question: question, answer: answer, contact: contact)
             case .date:
                 return DateAnswerManager(question: question, answer: answer)
@@ -60,8 +62,24 @@ class ContactQuestionnaireViewModel {
         self.title = updatedTask.contactName ?? .contactFallbackTitle
     }
     
-    var views: [UIView] {
-        answerManagers.map(\.view)
+    private func view(manager: AnswerManaging) -> UIView {
+        let view = manager.view
+        let isRelevant = manager.question.relevantForCategories.contains(task.contact.category)
+        view.isHidden = !isRelevant
+        
+        return view
+    }
+    
+    var classificationViews: [UIView] {
+        answerManagers
+            .filter { $0.question.group == .classification }
+            .map(view(manager:))
+    }
+    
+    var contactDetailViews: [UIView] {
+        answerManagers
+            .filter { $0.question.group == .contactDetails }
+            .map(view(manager:))
     }
 }
 
@@ -143,21 +161,13 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         contactTypeSection.isCompleted = true
         contactTypeSection.collapse(animated: false)
         
-        VStack(spacing: 24,
-               VStack(spacing: 16,
-                      groupHeaderLabel(title: .contactSameHouseholdQuestion),
-                      ToggleGroup(ToggleButton(title: .contactSameHouseholdQuestionAnswerNegative, selected: true),
-                                  ToggleButton(title: .contactSameHouseholdQuestionAnswerPositive))),
-               VStack(spacing: 16,
-                      groupHeaderLabel(title: .contactLastContactQuestion),
-                      ToggleGroup(DateToggleButton(),
-                                  ToggleButton(title: .contactLastContactQuestionAnswerNegative, selected: true))))
+        VStack(spacing: 24, viewModel.classificationViews)
             .embed(in: contactTypeSection.contentView.readableWidth)
         
         // Details
         let contactDetailsSection = SectionView(title: .contactDetailsSectionTitle, caption: .contactDetailsSectionMessage, index: 2)
         
-        VStack(spacing: 16, viewModel.views)
+        VStack(spacing: 16, viewModel.contactDetailViews)
             .embed(in: contactDetailsSection.contentView.readableWidth)
         
         // Inform

@@ -29,6 +29,7 @@ struct Task: Codable {
             case category2a = "2a"
             case category2b = "2b"
             case category3 = "3"
+            case other = "other"
         }
         
         enum Communication: String, Codable {

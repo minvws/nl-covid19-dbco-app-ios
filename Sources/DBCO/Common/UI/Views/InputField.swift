@@ -80,7 +80,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             
             if #available(iOS 14.0, *) {
                 addSubview(datePicker)
-                datePicker.preferredDatePickerStyle = .automatic
+                datePicker.preferredDatePickerStyle = .compact
                 
                 text = nil
                 resetDatePickerBackground()
