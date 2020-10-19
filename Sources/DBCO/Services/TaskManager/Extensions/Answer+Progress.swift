@@ -12,11 +12,14 @@ extension Answer {
     var progress: Double {
         switch value {
         case .classificationDetails(let livedTogetherRisk, let durationRisk, let distanceRisk, let otherRisk):
-            let valueCount = [livedTogetherRisk, durationRisk, distanceRisk, otherRisk]
-                .compactMap { $0 }
-                .count
+            let classificationResult = ClassificationHelper.classification(for: livedTogetherRisk, durationRisk: durationRisk, distanceRisk: distanceRisk, otherRisk: otherRisk)
             
-            return Double(valueCount) / 4
+            switch classificationResult {
+            case .success:
+                return 1
+            case .needsAssessmentFor:
+                return 0
+            }
         case .contactDetails(let firstName, let lastName, let email, let phoneNumber):
             let valueCount = [firstName, lastName, email, phoneNumber]
                 .compactMap { $0 }

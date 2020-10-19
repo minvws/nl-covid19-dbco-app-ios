@@ -19,6 +19,15 @@ struct ClassificationHelper {
     enum Result {
         case success(Task.Contact.Category)
         case needsAssessmentFor(Risk)
+        
+        var category: Task.Contact.Category? {
+            switch self {
+            case .success(let category):
+                return category
+            default:
+                return nil
+            }
+        }
     }
     
     static func classification(for livedTogetherRisk: Bool?,

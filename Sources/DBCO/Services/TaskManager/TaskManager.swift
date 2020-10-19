@@ -91,6 +91,12 @@ final class TaskManager: TaskManaging, Logging {
             fatalError()
         }
         
+        // Update task type content
+        switch tasks[index].taskType {
+        case .contact:
+            tasks[index].contact = task.contact
+        }
+        
         let currentAnswers = tasks[index].result?.answers ?? []
         let newAnswers = task.result?.answers ?? []
         

@@ -48,12 +48,12 @@ struct Task: Codable {
     let label: String?
     let taskContext: String?
     
-    let contact: Contact!
+    var contact: Contact!
     
     var result: QuestionnaireResult?
     var status: Status {
         if let progress = result?.progress {
-            return progress == 1 ? .completed : .inProgress(progress)
+            return abs(progress - 1) < 0.01 ? .completed : .inProgress(progress)
         } else {
             return .notStarted
         }

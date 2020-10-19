@@ -36,8 +36,6 @@ extension Answer.Value {
                                           distanceRisk: false,
                                           otherRisk: nil)
         }
-        
-        
     }
 }
 

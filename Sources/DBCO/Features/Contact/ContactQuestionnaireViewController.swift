@@ -11,9 +11,14 @@ import Contacts
 class ContactQuestionnaireViewModel {
     private var task: Task
     private var baseResult: QuestionnaireResult
+    private var updatedClassification: ClassificationHelper.Result
     
     var updatedTask: Task {
+        let updatedCategory = updatedClassification.category ?? task.contact.category
+        
         var updatedTask = task
+        updatedTask.contact = Task.Contact(category: updatedCategory,
+                                           communication: task.contact.communication)
         updatedTask.result = baseResult
         updatedTask.result?.answers = answerManagers.map(\.answer)
         
@@ -23,7 +28,7 @@ class ContactQuestionnaireViewModel {
     private(set) var title: String
     let showCancelButton: Bool
     
-    private let answerManagers: [AnswerManaging]
+    private var answerManagers: [AnswerManaging]
     
     init(task: Task, contact: CNContact? = nil, showCancelButton: Bool = false) {
         self.task = task
@@ -42,10 +47,13 @@ class ContactQuestionnaireViewModel {
         
         self.baseResult = QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: questionsAndAnswers.map(\.answer))
         
+        self.answerManagers = []
+        self.updatedClassification = .success(task.contact.category)
+        
         self.answerManagers = questionsAndAnswers.compactMap { question, answer in
             switch answer.value {
             case .classificationDetails:
-                return ClassificationDetailsAnswerManager(question: question, answer: answer, contactCategory: task.contact.category)
+                return ClassificationDetailsAnswerManager(question: question, answer: answer, contactCategory: task.contact.category) { [unowned self] in updateClassification(with: $0) }
             case .contactDetails:
                 return ContactDetailsAnswerManager(question: question, answer: answer, contact: contact)
             case .contactDetailsFull:
@@ -60,6 +68,20 @@ class ContactQuestionnaireViewModel {
         }
         
         self.title = updatedTask.contactName ?? .contactFallbackTitle
+    }
+    
+    private func updateClassification(with result: ClassificationHelper.Result) {
+        updatedClassification = result
+        
+        var taskCategory = task.contact.category
+        
+        if case .success(let updatedCategory) = result {
+            taskCategory = updatedCategory
+        }
+        
+        answerManagers.forEach {
+            $0.view.isHidden = !$0.question.relevantForCategories.contains(taskCategory)
+        }
     }
     
     private func view(manager: AnswerManaging) -> UIView {

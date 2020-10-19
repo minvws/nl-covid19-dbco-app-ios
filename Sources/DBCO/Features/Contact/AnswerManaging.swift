@@ -17,14 +17,16 @@ protocol AnswerManaging {
 class ClassificationDetailsAnswerManager: AnswerManaging {
     private var baseAnswer: Answer
     
-    private var livedTogetherRisk: Bool? { didSet { determineGroupVisibility() } }
-    private var durationRisk: Bool? { didSet { determineGroupVisibility() } }
-    private var distanceRisk: Bool? { didSet { determineGroupVisibility() } }
-    private var otherRisk: Bool? { didSet { determineGroupVisibility() } }
+    private var livedTogetherRisk: Bool?    { didSet { determineGroupVisibility() } }
+    private var durationRisk: Bool?         { didSet { determineGroupVisibility() } }
+    private var distanceRisk: Bool?         { didSet { determineGroupVisibility() } }
+    private var otherRisk: Bool?            { didSet { determineGroupVisibility() } }
     
     private var classification: ClassificationHelper.Result
     
-    init(question: Question, answer: Answer, contactCategory: Task.Contact.Category?) {
+    var classificationHandler: ((ClassificationHelper.Result) -> Void)?
+    
+    init(question: Question, answer: Answer, contactCategory: Task.Contact.Category?, classificationHandler: ((ClassificationHelper.Result) -> Void)? = nil) {
         self.baseAnswer = answer
         self.question = question
         
@@ -41,9 +43,9 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         self.distanceRisk = distanceRisk
         self.otherRisk = otherRisk
         
-        classification = .needsAssessmentFor(.livedTogether)
+        self.classificationHandler = classificationHandler
         
-        determineClassification()
+        classification = .needsAssessmentFor(.livedTogether)
         determineGroupVisibility()
     }
     
@@ -52,9 +54,12 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
                                                              durationRisk: durationRisk,
                                                              distanceRisk: distanceRisk,
                                                              otherRisk: otherRisk)
+        
+        classificationHandler?(classification)
     }
     
     private func determineGroupVisibility() {
+        determineClassification()
         
         let risks: [ClassificationHelper.Risk]
         
