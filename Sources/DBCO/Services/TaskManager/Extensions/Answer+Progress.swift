@@ -12,7 +12,10 @@ extension Answer {
     var progress: Double {
         switch value {
         case .classificationDetails(let livedTogetherRisk, let durationRisk, let distanceRisk, let otherRisk):
-            let classificationResult = ClassificationHelper.classification(for: livedTogetherRisk, durationRisk: durationRisk, distanceRisk: distanceRisk, otherRisk: otherRisk)
+            let classificationResult = ClassificationHelper.classificationResult(for: livedTogetherRisk,
+                                                                                 durationRisk: durationRisk,
+                                                                                 distanceRisk: distanceRisk,
+                                                                                 otherRisk: otherRisk)
             
             switch classificationResult {
             case .success:

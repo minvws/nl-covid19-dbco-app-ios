@@ -29,75 +29,105 @@ struct ClassificationHelper {
             }
         }
     }
-    
-    static func classification(for livedTogetherRisk: Bool?,
-                        durationRisk: Bool?,
-                        distanceRisk: Bool?,
-                        otherRisk: Bool?) -> Result {
+
+    private static func classification(for livedTogetherRisk: Bool?,
+                               durationRisk: Bool?,
+                               distanceRisk: Bool?,
+                               otherRisk: Bool?) -> (result: Result, visibleRisks: [Risk]) {
         
         switch livedTogetherRisk {
         case .some(true):
-            return .success(.category1)
+            return (.success(.category1), [.livedTogether])
         case .some(false):
             switch durationRisk {
             case .some(true):
                 switch distanceRisk {
                 case .some(true):
-                    return .success(.category2a)
+                    return (.success(.category2a), [.livedTogether, .duration, .distance])
                 case .some(false):
-                    return .success(.category3)
+                    return (.success(.category3), [.livedTogether, .duration, .distance])
                 case .none:
-                    return .needsAssessmentFor(.distance)
+                    return (.needsAssessmentFor(.distance), [.livedTogether, .duration, .distance])
                 }
             case .some(false):
                 switch distanceRisk {
                 case .some(true):
                     switch otherRisk {
                     case .some(true):
-                        return .success(.category2b)
+                        return (.success(.category2b), [.livedTogether, .duration, .distance, .other])
                     case .some(false):
-                        return .success(.other)
+                        return (.success(.other), [.livedTogether, .duration, .distance, .other])
                     case .none:
-                        return .needsAssessmentFor(.other)
+                        return (.needsAssessmentFor(.other), [.livedTogether, .duration, .distance, .other])
                     }
                 case .some(false):
-                    return .success(.other)
+                    return (.success(.other), [.livedTogether, .duration, .distance])
                 case .none:
-                    return .needsAssessmentFor(.distance)
+                    return (.needsAssessmentFor(.distance), [.livedTogether, .duration, .distance])
                 }
             case .none:
-                return .needsAssessmentFor(.duration)
+                return (.needsAssessmentFor(.duration), [.livedTogether, .duration])
             }
         case .none:
-            return .needsAssessmentFor(.livedTogether)
+            return (.needsAssessmentFor(.livedTogether), [.livedTogether])
         }
     }
     
-    static func classifiedRisks(for category: Task.Contact.Category) -> [Risk] {
+    static func classificationResult(for livedTogetherRisk: Bool?,
+                                     durationRisk: Bool?,
+                                     distanceRisk: Bool?,
+                                     otherRisk: Bool?) -> Result {
+        
+        classification(for: livedTogetherRisk,
+                       durationRisk: durationRisk,
+                       distanceRisk: distanceRisk,
+                       otherRisk: otherRisk)
+            .result
+    }
+    
+    static func visibleRisks(for livedTogetherRisk: Bool?,
+                             durationRisk: Bool?,
+                             distanceRisk: Bool?,
+                             otherRisk: Bool?) -> [Risk] {
+        
+        classification(for: livedTogetherRisk,
+                       durationRisk: durationRisk,
+                       distanceRisk: distanceRisk,
+                       otherRisk: otherRisk)
+            .visibleRisks
+    }
+    
+    static func setValues(for category: Task.Contact.Category,
+                          livedTogetherRisk: inout Bool?,
+                          durationRisk: inout Bool?,
+                          distanceRisk: inout Bool?,
+                          otherRisk: inout Bool?) {
         switch category {
         case .category1:
-            return [.livedTogether]
+            livedTogetherRisk = true
+            durationRisk = nil
+            distanceRisk = nil
+            otherRisk = nil
         case .category2a:
-            return [.livedTogether, .duration, .distance]
+            livedTogetherRisk = false
+            durationRisk = true
+            distanceRisk = true
+            otherRisk = nil
         case .category2b:
-            return [.livedTogether, .duration, .distance, .other]
+            livedTogetherRisk = false
+            durationRisk = false
+            distanceRisk = true
+            otherRisk = true
         case .category3:
-            return [.livedTogether, .duration, .distance]
+            livedTogetherRisk = false
+            durationRisk = true
+            distanceRisk = false
+            otherRisk = nil
         case .other:
-            return [.livedTogether, .duration, .distance]
-        }
-    }
-    
-    static func classifiedRisks(forUnassessedRisk risk: Risk) -> [Risk] {
-        switch risk {
-        case .livedTogether:
-            return []
-        case .duration:
-            return [.livedTogether]
-        case .distance:
-            return [.livedTogether, .duration]
-        case .other:
-            return [.livedTogether, .duration, .distance]
+            livedTogetherRisk = false
+            durationRisk = false
+            distanceRisk = false
+            otherRisk = false
         }
     }
     

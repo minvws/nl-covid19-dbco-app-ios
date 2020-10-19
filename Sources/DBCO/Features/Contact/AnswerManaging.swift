@@ -50,10 +50,10 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
     }
     
     private func determineClassification() {
-        classification = ClassificationHelper.classification(for: livedTogetherRisk,
-                                                             durationRisk: durationRisk,
-                                                             distanceRisk: distanceRisk,
-                                                             otherRisk: otherRisk)
+        classification = ClassificationHelper.classificationResult(for: livedTogetherRisk,
+                                                                   durationRisk: durationRisk,
+                                                                   distanceRisk: distanceRisk,
+                                                                   otherRisk: otherRisk)
         
         classificationHandler?(classification)
     }
@@ -61,15 +61,10 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
     private func determineGroupVisibility() {
         determineClassification()
         
-        let risks: [ClassificationHelper.Risk]
-        
-        switch classification {
-        case .success(let category):
-            risks = ClassificationHelper.classifiedRisks(for: category)
-            
-        case .needsAssessmentFor(let risk):
-            risks = ClassificationHelper.classifiedRisks(forUnassessedRisk: risk) + [risk]
-        }
+        let risks = ClassificationHelper.visibleRisks(for: livedTogetherRisk,
+                                                      durationRisk: durationRisk,
+                                                      distanceRisk: distanceRisk,
+                                                      otherRisk: otherRisk)
         
         livedTogetherRiskGroup.isHidden = !risks.contains(.livedTogether)
         durationRiskGroup.isHidden = !risks.contains(.duration)

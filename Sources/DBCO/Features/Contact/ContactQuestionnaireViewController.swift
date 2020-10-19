@@ -8,6 +8,12 @@
 import UIKit
 import Contacts
 
+private extension Question {
+    func isRelevant(in category: Task.Contact.Category) -> Bool {
+        relevantForCategories.contains(category) || questionType == .classificationDetails
+    }
+}
+
 class ContactQuestionnaireViewModel {
     private var task: Task
     private var baseResult: QuestionnaireResult
@@ -80,13 +86,13 @@ class ContactQuestionnaireViewModel {
         }
         
         answerManagers.forEach {
-            $0.view.isHidden = !$0.question.relevantForCategories.contains(taskCategory)
+            $0.view.isHidden = !$0.question.isRelevant(in: taskCategory)
         }
     }
     
     private func view(manager: AnswerManaging) -> UIView {
         let view = manager.view
-        let isRelevant = manager.question.relevantForCategories.contains(task.contact.category)
+        let isRelevant = manager.question.isRelevant(in: task.contact.category)
         view.isHidden = !isRelevant
         
         return view

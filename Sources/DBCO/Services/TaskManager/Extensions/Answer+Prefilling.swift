@@ -9,33 +9,17 @@ import Contacts
 
 extension Answer.Value {
     static func classificationDetails(contactCategory: Task.Contact.Category) -> Self {
-        switch contactCategory {
-        case .category1:
-            return .classificationDetails(livedTogetherRisk: true,
-                                          durationRisk: nil,
-                                          distanceRisk: nil,
-                                          otherRisk: nil)
-        case .category2a:
-            return .classificationDetails(livedTogetherRisk: false,
-                                          durationRisk: true,
-                                          distanceRisk: true,
-                                          otherRisk: nil)
-        case .category2b:
-            return .classificationDetails(livedTogetherRisk: false,
-                                          durationRisk: false,
-                                          distanceRisk: true,
-                                          otherRisk: true)
-        case .category3:
-            return .classificationDetails(livedTogetherRisk: false,
-                                          durationRisk: true,
-                                          distanceRisk: false,
-                                          otherRisk: nil)
-        case .other:
-            return .classificationDetails(livedTogetherRisk: false,
-                                          durationRisk: false,
-                                          distanceRisk: false,
-                                          otherRisk: nil)
-        }
+        var livedTogetherRisk: Bool?
+        var durationRisk: Bool?
+        var distanceRisk: Bool?
+        var otherRisk: Bool?
+        
+        ClassificationHelper.setValues(for: contactCategory, livedTogetherRisk: &livedTogetherRisk, durationRisk: &durationRisk, distanceRisk: &distanceRisk, otherRisk: &otherRisk)
+        
+        return .classificationDetails(livedTogetherRisk: livedTogetherRisk,
+                                      durationRisk: durationRisk,
+                                      distanceRisk: distanceRisk,
+                                      otherRisk: otherRisk)
     }
 }
 
