@@ -13,9 +13,22 @@ public extension NSAttributedString {
 
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = textAlignment
+        
+        // create custom tabstops to align lists
+        let tabInterval: CGFloat = 20
+        var tabStops = [NSTextTab]()
+        tabStops.append(NSTextTab(textAlignment: .natural, location: 1))
+        for i in 1...12 {
+            tabStops.append(NSTextTab(textAlignment: .natural, location: CGFloat(i)*tabInterval))
+        }
+        
+        paragraphStyle.tabStops = tabStops
+        paragraphStyle.headIndent = tabInterval
+        paragraphStyle.paragraphSpacing = 8
+        
         var attributes: [Key: Any] = [
             .foregroundColor: textColor,
-            .paragraphStyle: paragraphStyle
+            .paragraphStyle: paragraphStyle,
         ]
         if let underlineColor = underlineColor {
             attributes[.underlineColor] = underlineColor
@@ -47,6 +60,28 @@ public extension NSAttributedString {
 
                 attributedTitle.removeAttribute(.font, range: range)
                 attributedTitle.addAttribute(.font, value: newFont, range: range)
+            }
+            
+            // Replace added bullets with styled bullets
+            let bulletFont = font.withSize(10)
+            let bulletAttributes: [NSAttributedString.Key: Any] = [
+                .font: bulletFont,
+                .foregroundColor: Theme.colors.primary,
+                .baselineOffset: (font.xHeight - bulletFont.xHeight) / 2
+            ]
+            
+            let currentText = attributedTitle.string
+            var searchRange = NSRange(location: 0, length:currentText.count)
+            var foundRange = NSRange()
+            while searchRange.location < currentText.count {
+                searchRange.length = currentText.count - searchRange.location
+                foundRange = (currentText as NSString).range(of: "•", options: [], range: searchRange)
+                if foundRange.location != NSNotFound {
+                    searchRange.location = foundRange.location + foundRange.length
+                    attributedTitle.replaceCharacters(in: foundRange, with: NSAttributedString(string: "\u{25CF}", attributes: bulletAttributes))
+                } else {
+                    break
+                }
             }
 
             return attributedTitle
