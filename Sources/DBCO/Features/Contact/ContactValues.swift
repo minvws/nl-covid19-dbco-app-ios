@@ -92,10 +92,6 @@ struct BSN: ContactValue {
     var value: String?
 }
 
-struct Notes: ContactValue {
-    var value: String?
-}
-
 struct Text: ContactValue {
     var label: String?
     var value: String?

@@ -66,6 +66,7 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         switch classification {
         case .success(let category):
             risks = ClassificationHelper.classifiedRisks(for: category)
+            
         case .needsAssessmentFor(let risk):
             risks = ClassificationHelper.classifiedRisks(forUnassessedRisk: risk) + [risk]
         }
@@ -97,29 +98,29 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
     }
     
     private lazy var livedTogetherRiskGroup =
-        ToggleGroup(label: "Woon je in hetzelfde huis of ben je langer dan 12 uur op dezelfde plek geweest?",
-                    ToggleButton(title: "Nee", selected: livedTogetherRisk == false),
-                    ToggleButton(title: "Ja", selected: livedTogetherRisk == true))
+        ToggleGroup(label: .livedTogetherRiskQuestion,
+                    ToggleButton(title: .livedTogetherRiskQuestionAnswerNegative, selected: livedTogetherRisk == false),
+                    ToggleButton(title: .livedTogetherRiskQuestionAnswerPositive, selected: livedTogetherRisk == true))
         .didSelect { [unowned self] in self.livedTogetherRisk = $0 == 1 }
     
     private lazy var durationRiskGroup =
-        ToggleGroup(label: "Hoe lang waren jullie waarschijnlijk bij elkaar in de buurt?",
-                    ToggleButton(title: "Langer dan 15 minuten", selected: durationRisk == true),
-                    ToggleButton(title: "Korter dan 15 minuten", selected: durationRisk == false))
+        ToggleGroup(label: .durationRiskQuestion,
+                    ToggleButton(title: .durationRiskQuestionAnswerPositive, selected: durationRisk == true),
+                    ToggleButton(title: .durationRiskQuestionAnswerNegative, selected: durationRisk == false))
         .didSelect { [unowned self] in self.durationRisk = $0 == 0 }
     
     private lazy var distanceRiskGroup =
-        ToggleGroup(label: "Zijn jullie binnen 1,5 meter van elkaar geweest?",
-                    ToggleButton(title: "Ja, denk het wel", selected: distanceRisk == true),
-                    ToggleButton(title: "Nee, denk het niet", selected: distanceRisk == false))
+        ToggleGroup(label: .distanceRiskQuestion,
+                    ToggleButton(title: .distanceRiskQuestionAnswerPositive, selected: distanceRisk == true),
+                    ToggleButton(title: .distanceRiskQuestionAnswerNegative, selected: distanceRisk == false))
         .didSelect { [unowned self] in self.distanceRisk = $0 == 0 }
     
     private lazy var otherRiskGroup =
-        ToggleGroup(label: "Is een of meerdere van deze dingen tijdens jullie ontmoeting gebeurd?",
-                    ToggleButton(title: "Ja, één of meer", selected: otherRisk == true),
-                    ToggleButton(title: "Nee, denk het niet", selected: otherRisk == false))
+        ToggleGroup(label: .otherRiskQuestion,
+                    ToggleButton(title: .otherRiskQuestionAnswerPositive, selected: otherRisk == true),
+                    ToggleButton(title: .otherRiskQuestionAnswerNegative, selected: otherRisk == false))
         .didSelect { [unowned self] in self.otherRisk = $0 == 0 }
-        .decorateWithDescriptionIfNeeded(description: "* In je gezicht geniesd\n* Geknuffeld of gezoend\n* Ander lichamelijk contact")
+        .decorateWithDescriptionIfNeeded(description: .otherRiskQuestionDescription)
     
     private(set) lazy var view: UIView =
         VStack(spacing: 24,

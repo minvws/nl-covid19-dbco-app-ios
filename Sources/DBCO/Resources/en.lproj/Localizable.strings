@@ -55,29 +55,29 @@
 "informContactSection.title" = "Informeren";
 "informContactSection.message" = "Deel het handelingsperspectief";
 
-"contactSameHouseholdQuestion" = "Woon je in hetzelfde huis of ben je langer dan 12 uur in tegelijk in een huis geweest?";
-"contactSameHouseholdQuestion.answer.positive" = "Ja";
-"contactSameHouseholdQuestion.answer.negative" = "Nee";
+"livedTogetherRiskQuestion" = "Woon je in hetzelfde huis of ben je langer dan 12 uur op dezelfde plek geweest?";
+"livedTogetherRiskQuestion.answer.positive" = "Ja";
+"livedTogetherRiskQuestion.answer.negative" = "Nee";
 
-"contactLastContactQuestion" = "Wanneer was je voor het laatst 15 minuten of langer binnen 1,5 meter van elkaar?";
-"contactLastContactQuestion.answer.negative" = "Dat ben ik niet geweest";
+"durationRiskQuestion" = "Hoe lang waren jullie waarschijnlijk bij elkaar in de buurt?";
+"durationRiskQuestion.answer.positive" = "Langer dan 15 minuten";
+"durationRiskQuestion.answer.negative" = "Korter dan 15 minuten";
 
-"contactPriorityQuestion" = "Is een of meerdere onderstaande zaken van toepassing voor deze persoon?";
-"contactPriorityQuestion.items" = "Is student\n70 jaar of ouder\nHeeft gezondheidsklachten of loopt extra gezondheidsrisico’s\nWoont in een asielzoekerscentrum\nSpreekt slecht of geen Nederlands";
-"contactPriorityQuestion.answer.positive" = "Ja, één of meerdere dingen";
-"contactPriorityQuestion.answer.negative" = "Nee, ik denk het niet";
+"distanceRiskQuestion" = "Zijn jullie binnen 1,5 meter van elkaar geweest?";
+"distanceRiskQuestion.answer.positive" = "Ja, denk het wel";
+"distanceRiskQuestion.answer.negative" = "Nee, denk het niet";
 
-"contactFallbackTitle" = "Add contact";
-"contactInformationFirstName" = "First name";
-"contactInformationLastName" = "Last name";
-"contactInformationPhoneNumber" = "Phone number";
-"contactInformationEmailAddress" = "Emailaddress";
-"contactInformationRelationType" = "What is your relation?";
-"contactInformationBirthDate" = "Birthdate";
-"contactInformationBSN" = "Burgerservice number";
-"contactInformationProfession" = "Profession";
-"contactInformationCompanyName" = "Company name";
-"contactInformationNotes" = "Notes";
+"otherRiskQuestion" = "Is een of meerdere van deze dingen tijdens jullie ontmoeting gebeurd?";
+"otherRiskQuestion.description" = "* In je gezicht geniesd\n* Geknuffeld of gezoend\n* Ander lichamelijk contact";
+"otherRiskQuestion.answer.positive" = "Ja, één of meer";
+"otherRiskQuestion.answer.negative" = "Nee, denk het niet";
+
+"contactFallbackTitle" = "Contact toevoegen";
+"contactInformationFirstName" = "Voornaam";
+"contactInformationLastName" = "Achternaam";
+"contactInformationPhoneNumber" = "Telefoonnummer";
+"contactInformationEmailAddress" = "E-mailadres";
+"contactInformationBSN" = "Burgerservice nummer";
 
 /* MARK: - Uploading */
 "unfinishedTasksOverviewTitle" = "Bijna klaar";

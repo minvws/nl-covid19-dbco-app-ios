@@ -85,12 +85,6 @@ extension BSN: InputFieldEditable {
     var inputType: InputType { .number }
 }
 
-
-extension Notes: InputFieldEditable {
-    var label: String? { .contactInformationNotes }
-    var textContentType: UITextContentType? { .none }
-}
-
 extension Text: InputFieldEditable {
     var textContentType: UITextContentType? { .none }
 }
