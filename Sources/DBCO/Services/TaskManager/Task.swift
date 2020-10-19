@@ -113,3 +113,18 @@ struct Task: Codable {
         case communication
     }
 }
+
+extension Task {
+    static var emptyContactTask: Task {
+        
+        var task = Task(type: .contact)
+        let questionnaire = Services.taskManager.questionnaire(for: task)
+        guard let classificationUuid = questionnaire.questions.first(where: { $0.questionType == .classificationDetails })?.uuid else {
+            return task
+        }
+        
+        task.result = QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: [Answer(uuid: UUID(), questionUuid: classificationUuid, lastModified: Date(), value: .classificationDetails(livedTogetherRisk: nil, durationRisk: nil, distanceRisk: nil, otherRisk: nil))])
+        
+        return task
+    }
+}

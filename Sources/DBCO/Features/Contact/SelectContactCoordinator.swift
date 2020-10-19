@@ -19,10 +19,10 @@ final class SelectContactCoordinator: Coordinator {
     private weak var delegate: SelectContactCoordinatorDelegate?
     private weak var presenter: UIViewController?
     private let navigationController: NavigationController
-    private let task: Task
+    private let task: Task?
     private var updatedTask: Task?
     
-    init(presenter: UIViewController, contactTask: Task, delegate: SelectContactCoordinatorDelegate) {
+    init(presenter: UIViewController, contactTask: Task?, delegate: SelectContactCoordinatorDelegate) {
         self.delegate = delegate
         self.presenter = presenter
         self.navigationController = NavigationController()
@@ -34,7 +34,7 @@ final class SelectContactCoordinator: Coordinator {
         
         switch currentStatus {
         case .authorized:
-            let viewModel = SelectContactViewModel(suggestedName: task.label)
+            let viewModel = SelectContactViewModel(suggestedName: task?.label)
             let selectController = SelectContactViewController(viewModel: viewModel)
             selectController.delegate = self
             
@@ -90,7 +90,7 @@ final class SelectContactCoordinator: Coordinator {
     }
     
     private func continueAfterAuthorization() {
-        let viewModel = SelectContactViewModel(suggestedName: task.label)
+        let viewModel = SelectContactViewModel(suggestedName: task?.label)
         let selectController = SelectContactViewController(viewModel: viewModel)
         selectController.delegate = self
         

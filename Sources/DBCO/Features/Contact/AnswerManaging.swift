@@ -8,10 +8,14 @@
 import UIKit
 import Contacts
 
-protocol AnswerManaging {
+protocol AnswerManaging: class {
     var question: Question { get }
     var answer: Answer { get }
     var view: UIView { get }
+    
+    var hasValidAnswer: Bool { get }
+    
+    var updateHandler: ((AnswerManaging) -> Void)? { get set }
 }
 
 class ClassificationDetailsAnswerManager: AnswerManaging {
@@ -22,11 +26,11 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
     private var distanceRisk: Bool?         { didSet { determineGroupVisibility() } }
     private var otherRisk: Bool?            { didSet { determineGroupVisibility() } }
     
-    private var classification: ClassificationHelper.Result
+    private(set) var classification: ClassificationHelper.Result
     
-    var classificationHandler: ((ClassificationHelper.Result) -> Void)?
+    var updateHandler: ((AnswerManaging) -> Void)?
     
-    init(question: Question, answer: Answer, contactCategory: Task.Contact.Category?, classificationHandler: ((ClassificationHelper.Result) -> Void)? = nil) {
+    init(question: Question, answer: Answer, contactCategory: Task.Contact.Category?) {
         self.baseAnswer = answer
         self.question = question
         
@@ -43,8 +47,6 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         self.distanceRisk = distanceRisk
         self.otherRisk = otherRisk
         
-        self.classificationHandler = classificationHandler
-        
         classification = .needsAssessmentFor(.livedTogether)
         determineGroupVisibility()
     }
@@ -55,7 +57,7 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
                                                                    distanceRisk: distanceRisk,
                                                                    otherRisk: otherRisk)
         
-        classificationHandler?(classification)
+        updateHandler?(self)
     }
     
     private func determineGroupVisibility() {
@@ -92,6 +94,15 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         return answer
     }
     
+    var hasValidAnswer: Bool {
+        switch classification {
+        case .success:
+            return true
+        case .needsAssessmentFor(_):
+            return false
+        }
+    }
+    
     private lazy var livedTogetherRiskGroup =
         ToggleGroup(label: .livedTogetherRiskQuestion,
                     ToggleButton(title: .livedTogetherRiskQuestionAnswerNegative, selected: livedTogetherRisk == false),
@@ -126,12 +137,14 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
 }
 
 class ContactDetailsAnswerManager: AnswerManaging {
-    private(set) var firstName = FirstName()
-    private(set) var lastName = LastName()
-    private(set) var email = EmailAddress()
-    private(set) var phoneNumber = PhoneNumber()
+    private(set) var firstName = FirstName()        { didSet { updateHandler?(self) } }
+    private(set) var lastName = LastName()          { didSet { updateHandler?(self) } }
+    private(set) var email = EmailAddress()         { didSet { updateHandler?(self) } }
+    private(set) var phoneNumber = PhoneNumber()    { didSet { updateHandler?(self) } }
     
     private var baseAnswer: Answer
+    
+    var updateHandler: ((AnswerManaging) -> Void)?
     
     init(question: Question, answer: Answer, contact: CNContact?) {
         self.baseAnswer = answer
@@ -168,12 +181,22 @@ class ContactDetailsAnswerManager: AnswerManaging {
         answer.value = .contactDetails(firstName: firstName.value, lastName: lastName.value, email: email.value, phoneNumber: phoneNumber.value)
         return answer
     }
+    
+    var hasValidAnswer: Bool {
+        return
+            firstName.value != nil &&
+            lastName.value != nil &&
+            email.value != nil &&
+            phoneNumber.value != nil
+    }
 }
 
 class DateAnswerManager: AnswerManaging {
-    private(set) var date: GeneralDate
+    private(set) var date: GeneralDate { didSet { updateHandler?(self) } }
     
     private var baseAnswer: Answer
+    
+    var updateHandler: ((AnswerManaging) -> Void)?
     
     init(question: Question, answer: Answer) {
         self.baseAnswer = answer
@@ -196,12 +219,18 @@ class DateAnswerManager: AnswerManaging {
         answer.value = .date(date.dateValue)
         return answer
     }
+    
+    var hasValidAnswer: Bool {
+        return date.value != nil
+    }
 }
 
 class OpenAnswerManager: AnswerManaging {
-    private(set) var text: Text
+    private(set) var text: Text { didSet { updateHandler?(self) } }
     
     private var baseAnswer: Answer
+    
+    var updateHandler: ((AnswerManaging) -> Void)?
     
     init(question: Question, answer: Answer) {
         self.baseAnswer = answer
@@ -224,13 +253,19 @@ class OpenAnswerManager: AnswerManaging {
         answer.value = .open(text.value)
         return answer
     }
+    
+    var hasValidAnswer: Bool {
+        return text.value != nil
+    }
 }
 
 class MultipleChoiceAnswerManager: AnswerManaging {
     
     private var baseAnswer: Answer
     
-    private var options: Options!
+    var updateHandler: ((AnswerManaging) -> Void)?
+    
+    private var options: Options! { didSet { updateHandler?(self) } }
     private var buttons: ToggleGroup!
     private var selectedButtonIndex: Int?
  
@@ -252,7 +287,10 @@ class MultipleChoiceAnswerManager: AnswerManaging {
             self.selectedButtonIndex = question.answerOptions?.firstIndex { $0.value == option?.value }
             
             self.buttons = ToggleGroup(label: question.label, answerOptions.map { ToggleButton(title: $0.label, selected: $0.value == option?.value) } )
-                .didSelect { [unowned self] in selectedButtonIndex = $0 }
+                .didSelect { [unowned self] in
+                    selectedButtonIndex = $0
+                    updateHandler?(self)
+                }
         }
     }
     
@@ -284,5 +322,13 @@ class MultipleChoiceAnswerManager: AnswerManaging {
             answer.value = .multipleChoice(nil)
             return answer
         }
+    }
+    
+    var hasValidAnswer: Bool {
+        guard case .multipleChoice(let value) = answer.value else {
+            return false
+        }
+        
+        return value != nil
     }
 }

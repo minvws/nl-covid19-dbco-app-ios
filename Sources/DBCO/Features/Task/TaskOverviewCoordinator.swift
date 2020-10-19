@@ -51,8 +51,7 @@ final class TaskOverviewCoordinator: Coordinator {
     }
     
     private func addContact() {
-        let task = Task(type: .contact)
-        startChildCoordinator(SelectContactCoordinator(presenter: overviewController, contactTask: task, delegate: self))
+        startChildCoordinator(SelectContactCoordinator(presenter: overviewController, contactTask: nil, delegate: self))
     }
     
     private func editContact(for task: Task) {
