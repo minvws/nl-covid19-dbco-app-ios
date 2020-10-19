@@ -79,27 +79,12 @@ extension GeneralDate: InputFieldEditable {
     var inputType: InputType { .date(formatter: GeneralDate.dateFormatter) }
 }
 
-extension CompanyName: InputFieldEditable {
-    var label: String? { .contactInformationCompanyName }
-    var autocapitalizationType: UITextAutocapitalizationType { .words }
-    var textContentType: UITextContentType? { .organizationName }
-}
-
 extension BSN: InputFieldEditable {
     var label: String? { .contactInformationBSN }
     var showValidationState: Bool { true }
     var inputType: InputType { .number }
 }
 
-extension RelationType: InputFieldEditable {
-    var label: String? { .contactInformationRelationType }
-    var inputType: InputType { .picker(options: [("Familie", "Familie"), ("Familie", "Vriend of kennis")]) } // TODO: Actual values TBD
-}
-
-extension Profession: InputFieldEditable {
-    var label: String? { .contactInformationProfession }
-    var textContentType: UITextContentType? { .jobTitle }
-}
 
 extension Notes: InputFieldEditable {
     var label: String? { .contactInformationNotes }

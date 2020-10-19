@@ -8,95 +8,6 @@
 import Foundation
 import Contacts
 
-
-
-class OldContact {
-    let category: Task.Contact.Category
-    
-    var firstName = FirstName()
-    var lastName = LastName()
-    var phoneNumbers = [PhoneNumber]()
-    var emailAddresses = [EmailAddress]()
-    var birthDate = BirthDate()
-    var bsn = BSN()
-    var companyName = CompanyName()
-    var relationType = RelationType()
-    var profession = Profession()
-    var notes = Notes()
-    
-    var fullName: String {
-        [firstName.value, lastName.value].compactMap { $0 }.joined(separator: " ")
-    }
-    
-    init(category: Task.Contact.Category) {
-        self.category = category
-        setDefaults()
-    }
-    
-    init(category: Task.Contact.Category, cnContact: CNContact) {
-        self.category = category
-        
-        firstName = cnContact.contactFirstName
-        lastName = cnContact.contactLastName
-        phoneNumbers = cnContact.contactPhoneNumbers
-        emailAddresses = cnContact.contactEmailAddresses
-        birthDate = cnContact.contactBirthDay
-        
-        setDefaults()
-    }
-    
-    init(category: Task.Contact.Category, name: String) {
-        self.category = category
-        
-        let nameParts = name.split(separator: " ")
-        switch nameParts.count {
-        case 2...:
-            firstName.value = String(nameParts.first!)
-            lastName.value = String(nameParts.last!)
-        case 1:
-            firstName.value = String(nameParts.first!)
-        default:
-            break
-        }
-        
-        setDefaults()
-    }
-    
-    private func setDefaults() {
-        if phoneNumbers.isEmpty {
-            phoneNumbers.append(PhoneNumber())
-        }
-        
-        if emailAddresses.isEmpty {
-            emailAddresses.append(EmailAddress())
-        }
-    }
-    
-    var isValid: Bool {
-        return false
-    }
-}
-
-extension OldContact: NSCopying {
-    
-    func copy(with zone: NSZone? = nil) -> Any {
-        let contact = OldContact(category: category)
-        contact.firstName = firstName
-        contact.lastName = lastName
-        contact.phoneNumbers = phoneNumbers
-        contact.emailAddresses = emailAddresses
-        contact.birthDate = birthDate
-        contact.bsn = bsn
-        contact.companyName = companyName
-        contact.relationType = relationType
-        contact.profession = profession
-        contact.notes = notes
-        
-        return contact
-    }
-
-}
-
 protocol ContactValue {
     var value: String? { get set }
 }
@@ -177,19 +88,7 @@ struct GeneralDate: ContactValue {
     }()
 }
 
-struct CompanyName: ContactValue {
-    var value: String?
-}
-
 struct BSN: ContactValue {
-    var value: String?
-}
-
-struct RelationType: ContactValue {
-    var value: String?
-}
-
-struct Profession: ContactValue {
     var value: String?
 }
 
