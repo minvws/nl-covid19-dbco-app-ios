@@ -227,11 +227,11 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         
         
         // Type
-        let contactTypeSection = SectionView(title: .contactTypeSectionTitle, caption: .contactTypeSectionMessage, index: 1)
-        contactTypeSection.expand(animated: false)
+        let classificationSectionView = SectionView(title: .contactTypeSectionTitle, caption: .contactTypeSectionMessage, index: 1)
+        classificationSectionView.expand(animated: false)
         
         VStack(spacing: 24, viewModel.classificationViews)
-            .embed(in: contactTypeSection.contentView.readableWidth)
+            .embed(in: classificationSectionView.contentView.readableWidth)
         
         // Details
         let contactDetailsSection = SectionView(title: .contactDetailsSectionTitle, caption: .contactDetailsSectionMessage, index: 2)
@@ -244,11 +244,11 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         let informContactSection = SectionView(title: .informContactSectionTitle, caption: .informContactSectionMessage, index: 3)
         informContactSection.collapse(animated: false)
         
-        viewModel.classificationSectionView = contactTypeSection
+        viewModel.classificationSectionView = classificationSectionView
         viewModel.detailsSectionView = contactDetailsSection
         viewModel.informSectionView = informContactSection
         
-        VStack(contactTypeSection,
+        VStack(classificationSectionView,
                contactDetailsSection,
                informContactSection)
             .embed(in: scrollView)
