@@ -36,7 +36,13 @@ class ContactQuestionnaireViewModel {
     
     private var answerManagers: [AnswerManaging]
     
-    init(task: Task, contact: CNContact? = nil, showCancelButton: Bool = false) {
+    weak var classificationSectionView: SectionView?    { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
+    weak var detailsSectionView: SectionView?           { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
+    weak var informSectionView: SectionView?            { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
+    
+    init(task: Task?, contact: CNContact? = nil, showCancelButton: Bool = false) {
+        let initialCategory = task?.contact.category
+        let task = task ?? Task.emptyContactTask
         self.task = task
         self.title = task.contactName ?? .contactFallbackTitle
         self.showCancelButton = showCancelButton
@@ -59,7 +65,7 @@ class ContactQuestionnaireViewModel {
         self.answerManagers = questionsAndAnswers.compactMap { question, answer in
             switch answer.value {
             case .classificationDetails:
-                return ClassificationDetailsAnswerManager(question: question, answer: answer, contactCategory: task.contact.category) { [unowned self] in updateClassification(with: $0) }
+                return ClassificationDetailsAnswerManager(question: question, answer: answer, contactCategory: initialCategory)
             case .contactDetails:
                 return ContactDetailsAnswerManager(question: question, answer: answer, contact: contact)
             case .contactDetailsFull:
@@ -70,6 +76,19 @@ class ContactQuestionnaireViewModel {
                 return OpenAnswerManager(question: question, answer: answer)
             case .multipleChoice:
                 return MultipleChoiceAnswerManager(question: question, answer: answer)
+            }
+        }
+        
+        answerManagers.forEach {
+            $0.updateHandler = { [unowned self] in
+                switch $0 {
+                case let classificationManager as ClassificationDetailsAnswerManager:
+                    updateClassification(with: classificationManager.classification)
+                default:
+                    break
+                }
+                
+                updateProgress()
             }
         }
         
@@ -87,6 +106,29 @@ class ContactQuestionnaireViewModel {
         
         answerManagers.forEach {
             $0.view.isHidden = !$0.question.isRelevant(in: taskCategory)
+        }
+    }
+    
+    private func updateProgress(expandFirstUnfinishedSection: Bool = false) {
+        var taskCategory = task.contact.category
+        
+        if case .success(let updatedCategory) = updatedClassification {
+            taskCategory = updatedCategory
+        }
+        
+        let relevantManagers = answerManagers.filter { $0.question.isRelevant(in: taskCategory) }
+        let classificationManagers = relevantManagers.filter { $0.question.group == .classification }
+        let contactDetailsManagers = relevantManagers.filter { $0.question.group == .contactDetails }
+        let otherManagers = relevantManagers.filter { $0.question.group == .other }
+        
+        classificationSectionView?.isCompleted = classificationManagers.allSatisfy(\.hasValidAnswer)
+        detailsSectionView?.isCompleted = contactDetailsManagers.allSatisfy(\.hasValidAnswer)
+        informSectionView?.isCompleted = otherManagers.allSatisfy(\.hasValidAnswer)
+        
+        if expandFirstUnfinishedSection {
+            let sections = [classificationSectionView, detailsSectionView, informSectionView].compactMap { $0 }
+            sections.forEach { $0.collapse(animated: false) }
+            sections.first { !$0.isCompleted }?.expand(animated: false)
         }
     }
     
@@ -185,15 +227,15 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         
         
         // Type
-        let contactTypeSection = SectionView(title: .contactTypeSectionTitle, caption: .contactTypeSectionMessage, index: 1)
-        contactTypeSection.isCompleted = true
-        contactTypeSection.collapse(animated: false)
+        let classificationSectionView = SectionView(title: .contactTypeSectionTitle, caption: .contactTypeSectionMessage, index: 1)
+        classificationSectionView.expand(animated: false)
         
         VStack(spacing: 24, viewModel.classificationViews)
-            .embed(in: contactTypeSection.contentView.readableWidth)
+            .embed(in: classificationSectionView.contentView.readableWidth)
         
         // Details
         let contactDetailsSection = SectionView(title: .contactDetailsSectionTitle, caption: .contactDetailsSectionMessage, index: 2)
+        contactDetailsSection.collapse(animated: false)
         
         VStack(spacing: 16, viewModel.contactDetailViews)
             .embed(in: contactDetailsSection.contentView.readableWidth)
@@ -202,7 +244,11 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         let informContactSection = SectionView(title: .informContactSectionTitle, caption: .informContactSectionMessage, index: 3)
         informContactSection.collapse(animated: false)
         
-        VStack(contactTypeSection,
+        viewModel.classificationSectionView = classificationSectionView
+        viewModel.detailsSectionView = contactDetailsSection
+        viewModel.informSectionView = informContactSection
+        
+        VStack(classificationSectionView,
                contactDetailsSection,
                informContactSection)
             .embed(in: scrollView)

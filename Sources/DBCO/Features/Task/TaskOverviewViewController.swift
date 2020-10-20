@@ -148,6 +148,13 @@ class TaskOverviewViewController: PromptableViewController {
             self.delegate?.taskOverviewViewController(self, didSelect: task)
             self.tableView.deselectRow(at: indexPath, animated: true)
         }
+        
+        let versionLabel = Label(caption1: .mainAppVersionTitle, textColor: Theme.colors.captionGray)
+        versionLabel.textAlignment = .center
+        versionLabel.sizeToFit()
+        versionLabel.frame = CGRect(x: 0, y: 0, width: versionLabel.frame.width, height: 60.0)
+        
+        tableView.tableFooterView = versionLabel
     }
     
     @objc private func openHelp() {
