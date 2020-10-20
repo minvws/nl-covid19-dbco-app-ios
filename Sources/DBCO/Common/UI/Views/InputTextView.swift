@@ -17,8 +17,11 @@ class InputTextView<Object: AnyObject, Field: Editable>: UIView {
         
         super.init(frame: .zero)
         
-        let label = UILabel()
-        label.text = Field.label
+        if let labelText = object[keyPath: path].label {
+            label.text = labelText
+        } else {
+            label.isHidden = true
+        }
         
         textView.isEditable = true
         textView.textContainerInset = .topBottom(13) + .leftRight(12)
@@ -30,7 +33,7 @@ class InputTextView<Object: AnyObject, Field: Editable>: UIView {
         VStack(spacing: 8, label, textView)
             .embed(in: self)
         
-        accessibilityLabel = Field.label
+        accessibilityLabel = object[keyPath: path].label
         accessibilityElements = [textView]
         
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
@@ -52,4 +55,7 @@ class InputTextView<Object: AnyObject, Field: Editable>: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Private
+    private(set) var label = Label(subhead: nil)
 }

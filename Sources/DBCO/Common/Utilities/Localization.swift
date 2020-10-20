@@ -101,32 +101,35 @@ extension String {
     static var informContactSectionTitle: String { return Localization.string(for: "informContactSection.title") }
     static var informContactSectionMessage: String { return Localization.string(for: "informContactSection.message") }
     
-    static var contactSameHouseholdQuestion: String { return Localization.string(for: "contactSameHouseholdQuestion") }
-    static var contactSameHouseholdQuestionAnswerPositive: String { return Localization.string(for: "contactSameHouseholdQuestion.answer.positive") }
-    static var contactSameHouseholdQuestionAnswerNegative: String { return Localization.string(for: "contactSameHouseholdQuestion.answer.negative") }
-    static var contactLastContactQuestion: String { return Localization.string(for: "contactLastContactQuestion") }
-    static var contactLastContactQuestionAnswerNegative: String { return Localization.string(for: "contactLastContactQuestion.answer.negative") }
-    static var contactPriorityQuestion: String { return Localization.string(for: "contactPriorityQuestion") }
-    static var contactPriorityQuestionItems: String { return Localization.string(for: "contactPriorityQuestion.items") }
-    static var contactPriorityQuestionAnswerPositive: String { return Localization.string(for: "contactPriorityQuestion.answer.positive") }
-    static var contactPriorityQuestionAnswerNegative: String { return Localization.string(for: "contactPriorityQuestion.answer.negative") }
+    static var livedTogetherRiskQuestion: String { return Localization.string(for: "livedTogetherRiskQuestion") }
+    static var livedTogetherRiskQuestionAnswerPositive: String { return Localization.string(for: "livedTogetherRiskQuestion.answer.positive") }
+    static var livedTogetherRiskQuestionAnswerNegative: String { return Localization.string(for: "livedTogetherRiskQuestion.answer.negative") }
+    
+    static var durationRiskQuestion: String { return Localization.string(for: "durationRiskQuestion") }
+    static var durationRiskQuestionAnswerPositive: String { return Localization.string(for: "durationRiskQuestion.answer.positive") }
+    static var durationRiskQuestionAnswerNegative: String { return Localization.string(for: "durationRiskQuestion.answer.negative") }
+    
+    static var distanceRiskQuestion: String { return Localization.string(for: "distanceRiskQuestion") }
+    static var distanceRiskQuestionAnswerPositive: String { return Localization.string(for: "distanceRiskQuestion.answer.positive") }
+    static var distanceRiskQuestionAnswerNegative: String { return Localization.string(for: "distanceRiskQuestion.answer.negative") }
+    
+    static var otherRiskQuestion: String { return Localization.string(for: "otherRiskQuestion") }
+    static var otherRiskQuestionDescription: String { return Localization.string(for: "otherRiskQuestion.description") }
+    static var otherRiskQuestionAnswerPositive: String { return Localization.string(for: "otherRiskQuestion.answer.positive") }
+    static var otherRiskQuestionAnswerNegative: String { return Localization.string(for: "otherRiskQuestion.answer.negative") }
     
     static var contactFallbackTitle: String { return Localization.string(for: "contactFallbackTitle") }
     static var contactInformationFirstName: String { return Localization.string(for: "contactInformationFirstName") }
     static var contactInformationLastName: String { return Localization.string(for: "contactInformationLastName") }
     static var contactInformationPhoneNumber: String { return Localization.string(for: "contactInformationPhoneNumber") }
     static var contactInformationEmailAddress: String { return Localization.string(for: "contactInformationEmailAddress") }
-    static var contactInformationRelationType: String { return Localization.string(for: "contactInformationRelationType") }
     static var contactInformationBirthDate: String { return Localization.string(for: "contactInformationBirthDate") }
     static var contactInformationBSN: String { return Localization.string(for: "contactInformationBSN") }
-    static var contactInformationProfession: String { return Localization.string(for: "contactInformationProfession") }
-    static var contactInformationCompanyName: String { return Localization.string(for: "contactInformationCompanyName") }
-    static var contactInformationNotes: String { return Localization.string(for: "contactInformationNotes") }
     
     /* MARK: - Uploading */
     static var unfinishedTasksOverviewTitle: String { return Localization.string(for: "unfinishedTasksOverviewTitle") }
     static var unfinishedTasksOverviewMessage: String { return Localization.string(for: "unfinishedTasksOverviewMessage") }
-    static var uploadInProgressMessage: String { return Localization.string(for: " uploadInProgressMessage") }
+    static var uploadInProgressMessage: String { return Localization.string(for: "uploadInProgressMessage") }
     
     // MARK: - Help
     

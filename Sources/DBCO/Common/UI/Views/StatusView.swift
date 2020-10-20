@@ -10,7 +10,7 @@ import UIKit
 
 class StatusView: UIView {
     
-    var status: TaskStatus {
+    var status: Task.Status {
         didSet {
             applyStatus()
         }
@@ -18,7 +18,7 @@ class StatusView: UIView {
 
     private let imageView = UIImageView()
 
-    init(status: TaskStatus = .notStarted) {
+    init(status: Task.Status = .notStarted) {
         self.status = status
         super.init(frame: CGRect(origin: .zero, size: CGSize(width: 24, height: 24)))
         setup()

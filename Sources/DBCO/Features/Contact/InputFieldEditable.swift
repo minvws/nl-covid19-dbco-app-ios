@@ -8,95 +8,86 @@
 import UIKit
 
 enum InputType {
+    typealias PickerOption = (identifier: String, value: String)
+    
     case text
     case number
-    case picker(options: [String])
+    case picker(options: [PickerOption])
     case date(formatter: DateFormatter)
 }
 
 protocol Editable {
     var value: String? { get set }
     
-    static var label: String { get }
-    static var placeholder: String? { get }
+    var label: String? { get }
+    var placeholder: String? { get }
 }
 
 extension Editable {
-    static var placeholder: String? { return nil }
+    var placeholder: String? { return nil }
 }
 
 protocol InputFieldEditable: Editable {
-    static var showValidationState: Bool { get }
-    static var inputType: InputType { get }
-    static var keyboardType: UIKeyboardType { get }
-    static var autocapitalizationType: UITextAutocapitalizationType { get }
-    static var textContentType: UITextContentType? { get }
+    var showValidationState: Bool { get }
+    var inputType: InputType { get }
+    var keyboardType: UIKeyboardType { get }
+    var autocapitalizationType: UITextAutocapitalizationType { get }
+    var textContentType: UITextContentType? { get }
 }
 
 extension InputFieldEditable {
-    static var showValidationState: Bool { return false }
-    static var inputType: InputType { return .text }
-    static var keyboardType: UIKeyboardType { return .default }
-    static var autocapitalizationType: UITextAutocapitalizationType { return .sentences }
-    static var textContentType: UITextContentType? { return nil }
+    var showValidationState: Bool { return false }
+    var inputType: InputType { return .text }
+    var keyboardType: UIKeyboardType { return .default }
+    var autocapitalizationType: UITextAutocapitalizationType { return .sentences }
+    var textContentType: UITextContentType? { return nil }
 }
 
 // MARK: - ContactValue Extensions
 extension FirstName: InputFieldEditable {
-    static let label: String = .contactInformationFirstName
-    static let autocapitalizationType: UITextAutocapitalizationType = .words
-    static let textContentType: UITextContentType? = .givenName
+    var label: String? { .contactInformationFirstName }
+    var autocapitalizationType: UITextAutocapitalizationType { .words }
+    var textContentType: UITextContentType? { .givenName }
 }
 
 extension LastName: InputFieldEditable {
-    static let label: String = .contactInformationLastName
-    static let autocapitalizationType: UITextAutocapitalizationType = .words
-    static let textContentType: UITextContentType? = .familyName
+    var label: String? { .contactInformationLastName }
+    var autocapitalizationType: UITextAutocapitalizationType { .words }
+    var textContentType: UITextContentType? { .familyName }
 }
 
 extension PhoneNumber: InputFieldEditable {
-    static let label: String = .contactInformationPhoneNumber
-    static let showValidationState: Bool = true
-    static let inputType: InputType = .number
+    var label: String? { .contactInformationPhoneNumber }
+    var showValidationState: Bool { true }
+    var inputType: InputType { .number }
 }
 
 extension EmailAddress: InputFieldEditable {
-    static let label: String = .contactInformationEmailAddress
-    static let showValidationState: Bool = true
-    static let keyboardType: UIKeyboardType = .emailAddress
-    static let autocapitalizationType: UITextAutocapitalizationType = .none
-    static let textContentType: UITextContentType? = .emailAddress
+    var label: String? { .contactInformationEmailAddress }
+    var showValidationState: Bool { true }
+    var keyboardType: UIKeyboardType { .emailAddress }
+    var autocapitalizationType: UITextAutocapitalizationType { .none }
+    var textContentType: UITextContentType? { .emailAddress }
 }
 
 extension BirthDate: InputFieldEditable {
-    static let label: String = .contactInformationBirthDate
-    static let inputType: InputType = .date(formatter: birthDateFormatter)
+    var label: String? { .contactInformationBirthDate }
+    var inputType: InputType { .date(formatter: BirthDate.birthDateFormatter) }
 }
 
-extension CompanyName: InputFieldEditable {
-    static let label: String = .contactInformationCompanyName
-    static let autocapitalizationType: UITextAutocapitalizationType = .words
-    static let textContentType: UITextContentType? = .organizationName
+extension GeneralDate: InputFieldEditable {
+    var inputType: InputType { .date(formatter: GeneralDate.dateFormatter) }
 }
 
 extension BSN: InputFieldEditable {
-    static let label: String = .contactInformationBSN
-    static let showValidationState: Bool = true
-    static let inputType: InputType = .number
+    var label: String? { .contactInformationBSN }
+    var showValidationState: Bool { true }
+    var inputType: InputType { .number }
 }
 
-extension RelationType: InputFieldEditable {
-    static let label: String = .contactInformationRelationType
-    static let inputType: InputType = .picker(options: ["Familie", "Vriend of kennis"]) // TODO: Actual values TBD
+extension Text: InputFieldEditable {
+    var textContentType: UITextContentType? { .none }
 }
 
-extension Profession: InputFieldEditable {
-    static let label: String = .contactInformationProfession
-    static let textContentType: UITextContentType? = .jobTitle
-}
-
-extension Notes: InputFieldEditable {
-    static let label: String = .contactInformationNotes
-    static let textContentType: UITextContentType? = .none
-}
+extension Options: InputFieldEditable {}
 

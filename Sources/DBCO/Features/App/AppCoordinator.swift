@@ -40,6 +40,7 @@ extension Coordinator {
 
 final class AppCoordinator: Coordinator {
     private let window: UIWindow
+    private let taskManager = TaskManager()
     
     
     @available(iOS 13.0, *)

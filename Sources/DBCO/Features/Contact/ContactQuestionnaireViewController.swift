@@ -8,69 +8,121 @@
 import UIKit
 import Contacts
 
-class EditContactViewModel {
-    private(set) var contact: Contact
-    let title: String
+private extension Question {
+    func isRelevant(in category: Task.Contact.Category) -> Bool {
+        relevantForCategories.contains(category) || questionType == .classificationDetails
+    }
+}
+
+class ContactQuestionnaireViewModel {
+    private var task: Task
+    private var baseResult: QuestionnaireResult
+    private var updatedClassification: ClassificationHelper.Result
+    
+    var updatedTask: Task {
+        let updatedCategory = updatedClassification.category ?? task.contact.category
+        
+        var updatedTask = task
+        updatedTask.contact = Task.Contact(category: updatedCategory,
+                                           communication: task.contact.communication)
+        updatedTask.result = baseResult
+        updatedTask.result?.answers = answerManagers.map(\.answer)
+        
+        return updatedTask
+    }
+    
+    private(set) var title: String
     let showCancelButton: Bool
     
-    init(contact: CNContact, showCancelButton: Bool = false) {
-        self.contact = Contact(category: .category1, cnContact: contact)
-        self.title = contact.fullName
+    private var answerManagers: [AnswerManaging]
+    
+    init(task: Task, contact: CNContact? = nil, showCancelButton: Bool = false) {
+        self.task = task
+        self.title = task.contactName ?? .contactFallbackTitle
         self.showCancelButton = showCancelButton
+        
+        let questionnaire = Services.taskManager.questionnaire(for: task)
+        
+        let questionsAndAnswers: [(question: Question, answer: Answer)] = {
+            let currentAnswers = task.result?.answers ?? []
+            
+            return questionnaire.questions.map { question in
+                (question, currentAnswers.first { $0.questionUuid == question.uuid } ?? question.emptyAnswer)
+            }
+        }()
+        
+        self.baseResult = QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: questionsAndAnswers.map(\.answer))
+        
+        self.answerManagers = []
+        self.updatedClassification = .success(task.contact.category)
+        
+        self.answerManagers = questionsAndAnswers.compactMap { question, answer in
+            switch answer.value {
+            case .classificationDetails:
+                return ClassificationDetailsAnswerManager(question: question, answer: answer, contactCategory: task.contact.category) { [unowned self] in updateClassification(with: $0) }
+            case .contactDetails:
+                return ContactDetailsAnswerManager(question: question, answer: answer, contact: contact)
+            case .contactDetailsFull:
+                return ContactDetailsAnswerManager(question: question, answer: answer, contact: contact)
+            case .date:
+                return DateAnswerManager(question: question, answer: answer)
+            case .open:
+                return OpenAnswerManager(question: question, answer: answer)
+            case .multipleChoice:
+                return MultipleChoiceAnswerManager(question: question, answer: answer)
+            }
+        }
+        
+        self.title = updatedTask.contactName ?? .contactFallbackTitle
     }
     
-    init(contact: Contact, showCancelButton: Bool = false) {
-        self.contact = contact.copy() as! Contact
-        self.title = contact.fullName.isEmpty ? .contactFallbackTitle : contact.fullName
-        self.showCancelButton = showCancelButton
+    private func updateClassification(with result: ClassificationHelper.Result) {
+        updatedClassification = result
+        
+        var taskCategory = task.contact.category
+        
+        if case .success(let updatedCategory) = result {
+            taskCategory = updatedCategory
+        }
+        
+        answerManagers.forEach {
+            $0.view.isHidden = !$0.question.isRelevant(in: taskCategory)
+        }
     }
     
-    enum Row {
-        case group([UIView])
-        case single(UIView)
+    private func view(manager: AnswerManaging) -> UIView {
+        let view = manager.view
+        let isRelevant = manager.question.isRelevant(in: task.contact.category)
+        view.isHidden = !isRelevant
+        
+        return view
     }
     
-    var rows: [Row] {
-        let firstNameField = InputField(for: contact, path: \.firstName)
-        let lastNameField = InputField(for: contact, path: \.lastName)
-        
-        let phoneNumberFields = contact.phoneNumbers.indices
-            .map { \Contact.phoneNumbers[$0] }
-            .map { InputField(for: contact, path: $0) }
-            .map(Row.single)
-        
-        let emailFields = contact.emailAddresses.indices
-            .map { \Contact.emailAddresses[$0] }
-            .map { InputField(for: contact, path: $0) }
-            .map(Row.single)
-        
-        var base = [Row.group([firstNameField, lastNameField])]
-        base += phoneNumberFields
-        base += emailFields
-        
-        return base + [
-            .single(InputField(for: contact, path: \.relationType)),
-            .single(InputField(for: contact, path: \.birthDate)),
-            .single(InputField(for: contact, path: \.bsn)),
-            .single(InputField(for: contact, path: \.profession)),
-            .single(InputTextView(for: contact, path: \.notes))
-        ]
+    var classificationViews: [UIView] {
+        answerManagers
+            .filter { $0.question.group == .classification }
+            .map(view(manager:))
+    }
+    
+    var contactDetailViews: [UIView] {
+        answerManagers
+            .filter { $0.question.group == .contactDetails }
+            .map(view(manager:))
     }
 }
 
-protocol EditContactViewControllerDelegate: class {
-    func editContactViewControllerDidCancel(_ controller: EditContactViewController)
-    func editContactViewController(_ controller: EditContactViewController, didSave contact: Contact)
-    
+protocol ContactQuestionnaireViewControllerDelegate: class {
+    func contactQuestionnaireViewControllerDidCancel(_ controller: ContactQuestionnaireViewController)
+    func contactQuestionnaireViewController(_ controller: ContactQuestionnaireViewController, didSave contactTask: Task)
 }
 
-final class EditContactViewController: PromptableViewController {
-    private let viewModel: EditContactViewModel
+final class ContactQuestionnaireViewController: PromptableViewController {
+    private let viewModel: ContactQuestionnaireViewModel
     private let scrollView = UIScrollView()
     
-    weak var delegate: EditContactViewControllerDelegate?
+    weak var delegate: ContactQuestionnaireViewControllerDelegate?
     
-    init(viewModel: EditContactViewModel) {
+    init(viewModel: ContactQuestionnaireViewModel) {
         self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)
@@ -103,15 +155,6 @@ final class EditContactViewController: PromptableViewController {
         let widthProviderView = UIView()
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
         widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
-        
-        let rows = viewModel.rows.map { row -> UIView in
-            switch row {
-            case .group(let fields):
-                return UIStackView(horizontal: fields, spacing: 15).distribution(.fillEqually)
-            case .single(let field):
-                return field
-            }
-        }
         
         func groupHeaderLabel(title: String) -> UILabel {
             let label = UILabel()
@@ -146,27 +189,13 @@ final class EditContactViewController: PromptableViewController {
         contactTypeSection.isCompleted = true
         contactTypeSection.collapse(animated: false)
         
-        VStack(spacing: 24,
-               VStack(spacing: 16,
-                      groupHeaderLabel(title: .contactSameHouseholdQuestion),
-                      ToggleGroup(ToggleButton(title: .contactSameHouseholdQuestionAnswerNegative, selected: true),
-                                  ToggleButton(title: .contactSameHouseholdQuestionAnswerPositive))),
-               VStack(spacing: 16,
-                      groupHeaderLabel(title: .contactLastContactQuestion),
-                      ToggleGroup(DateToggleButton(),
-                                  ToggleButton(title: .contactLastContactQuestionAnswerNegative, selected: true))))
+        VStack(spacing: 24, viewModel.classificationViews)
             .embed(in: contactTypeSection.contentView.readableWidth)
         
         // Details
         let contactDetailsSection = SectionView(title: .contactDetailsSectionTitle, caption: .contactDetailsSectionMessage, index: 2)
         
-        VStack(spacing: 24,
-               VStack(spacing: 16, rows),
-               VStack(spacing: 16,
-                      groupHeaderLabel(title: .contactPriorityQuestion),
-                      list(from: .contactPriorityQuestionItems),
-                      ToggleGroup(ToggleButton(title: .contactPriorityQuestionAnswerPositive),
-                                  ToggleButton(title: .contactPriorityQuestionAnswerNegative))))
+        VStack(spacing: 16, viewModel.contactDetailViews)
             .embed(in: contactDetailsSection.contentView.readableWidth)
         
         // Inform
@@ -184,11 +213,11 @@ final class EditContactViewController: PromptableViewController {
     private var contactDetailsSection: SectionView!
     
     @objc private func save() {
-        delegate?.editContactViewController(self, didSave: viewModel.contact)
+        delegate?.contactQuestionnaireViewController(self, didSave: viewModel.updatedTask)
     }
     
     @objc private func cancel() {
-        delegate?.editContactViewControllerDidCancel(self)
+        delegate?.contactQuestionnaireViewControllerDidCancel(self)
     }
     
     // MARK: - Keyboard handling

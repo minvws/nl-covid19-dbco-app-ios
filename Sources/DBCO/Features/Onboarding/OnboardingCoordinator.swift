@@ -79,8 +79,8 @@ extension OnboardingCoordinator: PairViewControllerDelegate {
         controller.startLoadingAnimation()
         navigationController.navigationBar.isUserInteractionEnabled = false
         
-        // Fake doing some work for now
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        // Load task stubs
+        Services.taskManager.loadTasksAndQuestions {
             controller.stopLoadingAnimation()
             self.navigationController.navigationBar.isUserInteractionEnabled = true
             

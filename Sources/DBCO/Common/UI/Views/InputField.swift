@@ -45,8 +45,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         addTarget(self, action: #selector(handleEditingDidEnd), for: .editingDidEnd)
         addTarget(self, action: #selector(handleEditingDidBegin), for: .editingDidBegin)
         
-        label.text = Field.label
-        placeholder = Field.placeholder
+        label.text = object?[keyPath: path].label
+        placeholder = object?[keyPath: path].placeholder
         
         text = object?[keyPath: path].value
         
@@ -56,12 +56,16 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     private func configureInputType() {
         inputAccessoryView = nil
         inputView = nil
+        
+        guard let object = object else {
+            return
+        }
 
-        switch Field.inputType {
+        switch object[keyPath: path].inputType {
         case .text:
-            keyboardType = Field.keyboardType
-            autocapitalizationType = Field.autocapitalizationType
-            textContentType = Field.textContentType
+            keyboardType = object[keyPath: path].keyboardType
+            autocapitalizationType = object[keyPath: path].autocapitalizationType
+            textContentType = object[keyPath: path].textContentType
         case .number:
             keyboardType = .numberPad
             inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
@@ -76,7 +80,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             
             if #available(iOS 14.0, *) {
                 addSubview(datePicker)
-                datePicker.preferredDatePickerStyle = .automatic
+                datePicker.preferredDatePickerStyle = .compact
                 
                 text = nil
                 resetDatePickerBackground()
@@ -85,18 +89,21 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
                 inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
             }
         case .picker(let options):
-            pickerOptions = [""] + options
+            pickerOptions = [("", "")] + options
 
             let picker = UIPickerView()
             picker.dataSource = self
             picker.delegate = self
+            
+            let selectedIdentifier = object[keyPath: path].value
 
             pickerOptions?
-                .firstIndex(of: text ?? "")
+                .firstIndex { $0.identifier == selectedIdentifier }
                 .map { picker.selectRow($0, inComponent: 0, animated: false) }
 
             inputView = picker
             inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
+            optionPicker = picker
         }
     }
     
@@ -134,7 +141,14 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     // MARK: - Private
     
     @objc private func handleEditingDidEnd() {
-        object?[keyPath: path].value = text
+        
+        switch object?[keyPath: path].inputType ?? .text {
+        case .picker:
+            object?[keyPath: path].value = pickerOptions?[optionPicker!.selectedRow(inComponent: 0)].identifier
+        default:
+            object?[keyPath: path].value = text
+        }
+        
         updateValidationStateIfNeeded()
     }
     
@@ -143,9 +157,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     }
     
     @objc private func handleDateValueChanged(_ datePicker: UIDatePicker) {
-        guard case .date(let formatter) = Field.inputType else {
-            return
-        }
+        guard case .date(let formatter) = object?[keyPath: path].inputType else { return }
 
         object?[keyPath: path].value = formatter.string(from: datePicker.date)
         resetDatePickerBackground()
@@ -160,7 +172,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     }
     
     private func updateValidationStateIfNeeded() {
-        guard Field.showValidationState else { return }
+        guard object?[keyPath: path].showValidationState == true else { return }
         
         // TODO: Placeholder implementation
         iconContainerView.isHidden = text?.isEmpty == true
@@ -180,7 +192,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     }
     
     private var datePicker: UIDatePicker?
-    private var pickerOptions: [String]?
+    private var optionPicker: UIPickerView?
+    private var pickerOptions: [InputType.PickerOption]?
     private var textWidthLabel = UILabel()
     private var validationIconView = UIImageView()
     private lazy var iconContainerView = UIStackView()
@@ -189,8 +202,9 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         guard #available(iOS 14.0, *) else { return true }
+        guard let object = object else { return true }
         
-        switch Field.inputType {
+        switch object[keyPath: path].inputType {
         case .date:
             return false
         default:
@@ -203,7 +217,9 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             textWidthLabel.text = (text as NSString).replacingCharacters(in: range, with: string) as String
         }
         
-        switch Field.inputType {
+        guard let object = object else { return true }
+        
+        switch object[keyPath: path].inputType {
         case .date, .picker:
             return false
         default:
@@ -220,11 +236,11 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return pickerOptions?[row]
+        return pickerOptions?[row].value
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        text = pickerOptions?[row]
+        text = pickerOptions?[row].value
     }
     
 }
