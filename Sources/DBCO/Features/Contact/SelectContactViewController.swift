@@ -208,11 +208,8 @@ class SelectContactViewController: PromptableViewController {
         viewModel.setupContactsTableView(
             tableView,
             sectionHeaderViewBuilder: {
-                let label = UILabel()
-                label.text = $0.uppercased()
-                label.font = Theme.fonts.caption1
-                label.textColor = Theme.colors.primary
-                return label.wrappedInReadableContentGuide(insets: .top(10) + .bottom(5))
+                Label(caption1: $0.uppercased(), textColor: Theme.colors.primary)
+                    .wrappedInReadableContentGuide(insets: .top(10) + .bottom(5))
             },
             selectedContactHandler: { [weak self] contact, _ in
                 guard let self = self else { return }
