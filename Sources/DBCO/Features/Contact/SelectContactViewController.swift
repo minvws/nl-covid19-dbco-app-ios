@@ -27,10 +27,6 @@ class SelectContactViewModel {
     init(suggestedName: String? = nil) {
         let keys = [
             CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
-            CNContactBirthdayKey as CNKeyDescriptor,
-            CNContactPhoneNumbersKey as CNKeyDescriptor,
-            CNContactEmailAddressesKey as CNKeyDescriptor,
-            CNContactPostalAddressesKey as CNKeyDescriptor,
             CNContactTypeKey as CNKeyDescriptor
         ]
         
@@ -118,9 +114,31 @@ class SelectContactViewModel {
         }
     }
     
+    private func loadFullContact(_ selectedContactHandler: @escaping (CNContact, IndexPath) -> Void) -> (CNContact, IndexPath) -> Void {
+        return { [contactStore] contact, indexPath in
+            let keys = [
+                CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
+                CNContactBirthdayKey as CNKeyDescriptor,
+                CNContactPhoneNumbersKey as CNKeyDescriptor,
+                CNContactEmailAddressesKey as CNKeyDescriptor,
+                CNContactPostalAddressesKey as CNKeyDescriptor
+            ]
+            
+            let fullContact: CNContact
+            
+            do {
+                fullContact = try contactStore.unifiedContact(withIdentifier: contact.identifier, keysToFetch: keys)
+            } catch {
+                fullContact = contact
+            }
+            
+            selectedContactHandler(fullContact, indexPath)
+        }
+    }
+    
     func setupContactsTableView(_ tableView: UITableView, sectionHeaderViewBuilder: @escaping (String) -> UIView, selectedContactHandler: @escaping (CNContact, IndexPath) -> Void) {
         contactTableViewManager.manage(tableView)
-        contactTableViewManager.didSelectItem = selectedContactHandler
+        contactTableViewManager.didSelectItem = loadFullContact(selectedContactHandler)
         contactTableViewManager.viewForHeaderInSection = { [unowned self] section in
             guard let title = contactTableViewManager.titleForHeaderInSection?(section) else {
                 return nil
@@ -132,9 +150,8 @@ class SelectContactViewModel {
     
     func setupSearchTableView(_ tableView: UITableView, selectedContactHandler: @escaping (CNContact, IndexPath) -> Void) {
         searchTableViewManager.manage(tableView)
-        searchTableViewManager.didSelectItem = selectedContactHandler
+        searchTableViewManager.didSelectItem = loadFullContact(selectedContactHandler)
     }
-    
     
 }
 
