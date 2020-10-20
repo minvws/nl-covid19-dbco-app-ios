@@ -45,7 +45,11 @@ class SelectContactViewModel {
             contacts = []
         }
         
-        if let suggestedNameParts = suggestedName?.lowercased().split(separator: " ") {
+        let suggestedName = suggestedName?
+            .lowercased()
+            .replacingOccurrences(of: ".", with: "")
+        
+        if let suggestedNameParts = suggestedName?.split(separator: " ") {
             var maxMatchedParts = 0
             
             func calculateMatchedParts(for contact: CNContact) -> Int {
