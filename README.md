@@ -1,10 +1,13 @@
-# COVID-19 <Project Name> - <platform>
+# COVID-19 DBCO App - iOS
 
 ## Introduction
-This repository contains the <platform> implementation of the Dutch COVID-19 <project or app name>.
+This repository contains the iOS implementation of the Dutch COVID-19 DBCO app.
 
-* The <platform> app is located in the repository you are currently viewing.
-* The <related> can be found here: <related repo>
+* The iOS app is located in the repository you are currently viewing.
+* The Android app can be found here: https://github.com/minvws/nl-covid19-dbco-app-android
+* The Backend repository can be found here: https://github.com/minvws/nl-covid19-dbco-app-backend
+* Designs can be found here: https://github.com/minvws/nl-covid19-dbco-app-design
+* Technical documentation can be found here: https://github.com/minvws/nl-covid19-dbco-app-coordination
 
 ## Local development setup
 
