@@ -76,18 +76,14 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             datePicker.tintColor = .black
             datePicker.addTarget(self, action: #selector(handleDateValueChanged), for: .valueChanged)
             
+            if #available(iOS 13.4, *) {
+                datePicker.preferredDatePickerStyle = .wheels
+            }
+            
             self.datePicker = datePicker
             
-            if #available(iOS 14.0, *) {
-                addSubview(datePicker)
-                datePicker.preferredDatePickerStyle = .compact
-                
-                text = nil
-                resetDatePickerBackground()
-            } else {
-                inputView = datePicker
-                inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
-            }
+            inputView = datePicker
+            inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
         case .picker(let options):
             pickerOptions = [("", "")] + options
 
@@ -111,11 +107,6 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         super.layoutSubviews()
 
         iconContainerView.frame = backgroundView.frame.inset(by: .leftRight(12))
-        
-        if #available(iOS 14.0, *) {
-            datePicker?.frame = backgroundView.frame
-            resetDatePickerBackground()
-        }
     }
     
     override var text: String? {
@@ -160,11 +151,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         guard case .date(let formatter) = object?[keyPath: path].inputType else { return }
 
         object?[keyPath: path].value = formatter.string(from: datePicker.date)
-        resetDatePickerBackground()
-        if #available(iOS 14.0, *) {
-        } else {
-            text = formatter.string(from: datePicker.date)
-        }
+        text = formatter.string(from: datePicker.date)
     }
     
     @objc private func done() {
@@ -179,18 +166,6 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         validationIconView.isHighlighted = true
     }
     
-    private func resetDatePickerBackground() {
-        guard #available(iOS 14.0, *) else { return }
-        
-        datePicker?.subviews.first?.subviews.first?.backgroundColor = .clear
-        
-        // Schedule clearing the backgroundColor again on the next runloop.
-        // This seems to handle all cases where the UIDatePicker resets its backgroundColor
-        DispatchQueue.main.async { [datePicker] in
-            datePicker?.subviews.first?.subviews.first?.backgroundColor = .clear
-        }
-    }
-    
     private var datePicker: UIDatePicker?
     private var optionPicker: UIPickerView?
     private var pickerOptions: [InputType.PickerOption]?
@@ -199,18 +174,6 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     private lazy var iconContainerView = UIStackView()
     
     // MARK: - Delegate implementations
-    
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        guard #available(iOS 14.0, *) else { return true }
-        guard let object = object else { return true }
-        
-        switch object[keyPath: path].inputType {
-        case .date:
-            return false
-        default:
-            return true
-        }
-    }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let text = text {
