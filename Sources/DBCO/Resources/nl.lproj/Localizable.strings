@@ -40,8 +40,8 @@
 "selectContactTitle" = "Selecteer contact";
 "selectContactSearch" = "Zoeken";
 "selectContactAddManually" = "+ Handmatig toevoegen";
-"selectContactSuggestions" = "Waarschijnlijk zoek je";
-"selectContactOtherContacts" = "Andere contacten";
+"selectContactSuggestions" = "Suggesties";
+"selectContactOtherContacts" = "Alle contacten";
 "selectContactFromContactsFallback" = "Uit contacten";
 "selectContactAddManuallyFallback" = "Handmatig toevoegen";
 

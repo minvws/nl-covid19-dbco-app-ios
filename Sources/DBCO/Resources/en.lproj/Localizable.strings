@@ -42,8 +42,8 @@
 "selectContactTitle" = "Select contact";
 "selectContactSearch" = "Search";
 "selectContactAddManually" = "+ Add manually";
-"selectContactSuggestions" = "You are probably looking for";
-"selectContactOtherContacts" = "Other contacts";
+"selectContactSuggestions" = "Suggestions";
+"selectContactOtherContacts" = "All contacts";
 "selectContactFromContactsFallback" = "From contacten";
 "selectContactAddManuallyFallback" = "Add manually";
 
