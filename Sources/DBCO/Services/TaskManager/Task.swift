@@ -73,10 +73,15 @@ struct Task: Codable {
     var result: QuestionnaireResult?
     
     var status: Status {
-        if let progress = result?.progress {
-            return abs(progress - 1) < 0.01 ? .completed : .inProgress(progress)
-        } else {
-            return .notStarted
+        switch taskType {
+        case .contact:
+            if let questionnaireProgress = result?.progress {
+                // task progress = questionnaire progress * 0.9 + didInform * 0.1
+                let progress = (questionnaireProgress * 0.9) + (contact.didInform ? 0.1 : 0.0)
+                return abs(progress - 1) < 0.01 ? .completed : .inProgress(progress)
+            } else {
+                return .notStarted
+            }
         }
     }
     

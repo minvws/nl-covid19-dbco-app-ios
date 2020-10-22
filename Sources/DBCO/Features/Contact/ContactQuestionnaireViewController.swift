@@ -231,6 +231,7 @@ class ContactQuestionnaireViewModel {
 protocol ContactQuestionnaireViewControllerDelegate: class {
     func contactQuestionnaireViewControllerDidCancel(_ controller: ContactQuestionnaireViewController)
     func contactQuestionnaireViewController(_ controller: ContactQuestionnaireViewController, didSave contactTask: Task)
+    func contactQuestionnaireViewController(_ controller: ContactQuestionnaireViewController, wantsToInformContact task: Task, completionHandler: @escaping (_ success: Bool) -> Void)
 }
 
 final class ContactQuestionnaireViewController: PromptableViewController {
@@ -329,7 +330,11 @@ final class ContactQuestionnaireViewController: PromptableViewController {
     }
     
     @objc private func informContact() {
-        viewModel.registerDidInform()
+        delegate?.contactQuestionnaireViewController(self, wantsToInformContact: viewModel.updatedTask) { [weak self] success in
+            if success {
+                self?.viewModel.registerDidInform()
+            }
+        }
     }
     
     // MARK: - Keyboard handling
