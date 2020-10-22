@@ -59,4 +59,9 @@ extension EditContactCoordinator: ContactQuestionnaireViewControllerDelegate {
         navigationController.dismiss(animated: true)
     }
     
+    func contactQuestionnaireViewController(_ controller: ContactQuestionnaireViewController, wantsToInformContact task: Task, completionHandler: @escaping (Bool) -> Void) {
+        
+        controller.present(UIActivityViewController(contactTask: task, completionHandler: completionHandler), animated: true)
+    }
+    
 }

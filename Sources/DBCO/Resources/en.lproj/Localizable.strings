@@ -48,12 +48,21 @@
 "selectContactAddManuallyFallback" = "Add manually";
 
 // MARK: - Editing Contacts
-"contactTypeSection.title" = "Aard van het contact";
-"contactTypeSection.message" = "Vragen over jullie ontmoeting";
+"contactTypeSection.title" = "Soort contact";
+"contactTypeSection.message" = "Beantwoord vragen over ontmoeting";
 "contactDetailsSection.title" = "Contactgegevens";
-"contactDetailsSection.message" = "Vul contactgegevens aan";
+"contactDetailsSection.message" = "Vul zo veel mogelijk gegevens aan";
 "informContactSection.title" = "Informeren";
-"informContactSection.message" = "Deel het handelingsperspectief";
+"informContactSection.message.index" = "Neem contact op met deze persoon";
+"informContactSection.message.staff" = "De GGD neemt contact op";
+
+"informContactTitle.index" = "Vertel dat je besmet bent en deel de leefregels van het RIVM";
+"informContactTitle.staff" = "Wil je ook zelf contact opnemen?";
+
+"informContactGuidelines.close" = "Dit zijn de belangrijkste leefregels voor deze persoon:<ul><li>Blijf thuis, ontvang geen bezoek - alle huisgenoten blijven thuis</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li></ul>";
+"informContactGuidelines.other" = "Dit zijn de belangrijkste leefregels voor deze persoon:<ul><li>Houd 1,5 meter afstand en vermijd bezoek aan drukke plekken</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li></ul>";
+
+"informContactShareGuidelines" = "Leefregels delen";
 
 "livedTogetherRiskQuestion" = "Woon je in hetzelfde huis of ben je langer dan 12 uur op dezelfde plek geweest?";
 "livedTogetherRiskQuestion.answer.positive" = "Ja";
@@ -78,6 +87,12 @@
 "contactInformationPhoneNumber" = "Telefoonnummer";
 "contactInformationEmailAddress" = "E-mailadres";
 "contactInformationBSN" = "Burgerservice nummer";
+
+/* MARK: - Informing contacts */
+"contactInformPromptTitle" = "Weet %@ wat er speelt?";
+"contantInformOptionDone" = "Ja";
+"contantInformOptionInformLater" = "Nee, doe ik later";
+"contantInformOptionInformNow" = "Nee, nu informeren";
 
 /* MARK: - Uploading */
 "unfinishedTasksOverviewTitle" = "Bijna klaar";

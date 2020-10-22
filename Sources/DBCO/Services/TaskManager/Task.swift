@@ -40,6 +40,26 @@ struct Task: Codable {
         
         let category: Category
         let communication: Communication
+        let didInform: Bool
+        
+        init(category: Category, communication: Communication, didInform: Bool) {
+            self.category = category
+            self.communication = communication
+            self.didInform = didInform
+        }
+        
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            
+            category = try container.decode(Category.self, forKey: .category)
+            communication = try container.decode(Communication.self, forKey: .communication)
+            didInform = false
+        }
+        
+        func encode(to encoder: Encoder) throws {
+            try category.encode(to: encoder)
+            try communication.encode(to: encoder)
+        }
     }
     
     let uuid: UUID
@@ -51,11 +71,17 @@ struct Task: Codable {
     var contact: Contact!
     
     var result: QuestionnaireResult?
+    
     var status: Status {
-        if let progress = result?.progress {
-            return abs(progress - 1) < 0.01 ? .completed : .inProgress(progress)
-        } else {
-            return .notStarted
+        switch taskType {
+        case .contact:
+            if let questionnaireProgress = result?.progress {
+                // task progress = questionnaire progress * 0.9 + didInform * 0.1
+                let progress = (questionnaireProgress * 0.9) + (contact.didInform ? 0.1 : 0.0)
+                return abs(progress - 1) < 0.01 ? .completed : .inProgress(progress)
+            } else {
+                return .notStarted
+            }
         }
     }
     
@@ -84,7 +110,7 @@ struct Task: Codable {
         
         switch taskType {
         case .contact:
-            contact = Contact(category: .category3, communication: .none)
+            contact = Contact(category: .category3, communication: .none, didInform: false)
         }
     }
     
@@ -123,7 +149,13 @@ extension Task {
             return task
         }
         
-        task.result = QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: [Answer(uuid: UUID(), questionUuid: classificationUuid, lastModified: Date(), value: .classificationDetails(livedTogetherRisk: nil, durationRisk: nil, distanceRisk: nil, otherRisk: nil))])
+        task.result = QuestionnaireResult(questionnaireUuid: questionnaire.uuid,
+                                          answers: [
+                                            Answer(uuid: UUID(),
+                                                   questionUuid: classificationUuid,
+                                                   lastModified: Date(),
+                                                   value: .classificationDetails(livedTogetherRisk: nil, durationRisk: nil, distanceRisk: nil, otherRisk: nil))
+                                          ])
         
         return task
     }

@@ -22,4 +22,17 @@ extension Task {
             }
             .first ?? label
     }
+    
+    var contactFirstName: String? {
+        result?.answers
+            .compactMap {
+                switch $0.value {
+                case .contactDetails(let firstName, _, _, _):
+                    return firstName
+                default:
+                    return nil
+                }
+            }
+            .first ?? label
+    }
 }
