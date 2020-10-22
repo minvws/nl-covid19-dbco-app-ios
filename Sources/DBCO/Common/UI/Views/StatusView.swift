@@ -31,6 +31,7 @@ class StatusView: UIView {
     }
     
     private func setup() {
+        isOpaque = false
         imageView.image = UIImage(named: "Status/Warning")
         imageView.highlightedImage = UIImage(named: "Status/Completed")
         imageView.embed(in: self)
@@ -56,13 +57,13 @@ class StatusView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        guard case .inProgress(let progress) = status else { return }
         guard let context = UIGraphicsGetCurrentContext() else { return }
         
-        let clampedProgress = min(max(CGFloat(progress), 0), 1)
+        context.clear(rect)
         
-        UIColor.white.setFill()
-        context.fill(rect)
+        guard case .inProgress(let progress) = status else { return }
+        
+        let clampedProgress = min(max(CGFloat(progress), 0), 1)
     
         context.addEllipse(in: bounds.inset(by: .all(1)))
         context.setLineWidth(2)
