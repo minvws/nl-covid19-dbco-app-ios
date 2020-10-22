@@ -12,11 +12,11 @@ class TextView: UITextView, UITextViewDelegate {
     private var linkHandlers = [(URL) -> Void]()
     private var textChangedHandlers = [(String?) -> Void]()
     
-    init(htmlText: String) {
+    init(htmlText: String, font: UIFont = Theme.fonts.body, textColor: UIColor = Theme.colors.captionGray, boldTextColor: UIColor = .black) {
         super.init(frame: .zero, textContainer: nil)
         setup()
         
-        attributedText = .makeFromHtml(text: htmlText, font: Theme.fonts.body, textColor: Theme.colors.captionGray)
+        attributedText = .makeFromHtml(text: htmlText, font: font, textColor: textColor, boldTextColor: boldTextColor)
     }
     
     init(text: String? = nil) {
@@ -43,6 +43,7 @@ class TextView: UITextView, UITextViewDelegate {
         font = Theme.fonts.body
         isScrollEnabled = false
         isEditable = false
+        isSelectable = false
         backgroundColor = nil
         layer.cornerRadius = 0
         textContainer.lineFragmentPadding = 0
@@ -64,12 +65,14 @@ class TextView: UITextView, UITextViewDelegate {
     
     @discardableResult
     func linkTouched(handler: @escaping (URL) -> Void) -> Self {
+        isSelectable = true
         linkHandlers.append(handler)
         return self
     }
     
     @discardableResult
     func textChanged(handler: @escaping (String?) -> Void) -> Self {
+        isSelectable = true
         textChangedHandlers.append(handler)
         return self
     }
