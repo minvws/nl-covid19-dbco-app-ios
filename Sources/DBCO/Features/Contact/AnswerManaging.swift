@@ -77,8 +77,6 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
     let question: Question
     
     var answer: Answer {
-        determineClassification()
-        
         var answer = baseAnswer
         
         switch classification {

@@ -9,8 +9,8 @@ import UIKit
 
 public extension NSAttributedString {
 
-    static func makeFromHtml(text: String, font: UIFont, textColor: UIColor, boldTextColor: UIColor? = nil, textAlignment: NSTextAlignment = .left, lineHeight: CGFloat? = nil, underlineColor: UIColor? = nil) -> NSAttributedString {
-
+    static func makeFromHtml(text: String?, font: UIFont, textColor: UIColor, boldTextColor: UIColor? = nil, textAlignment: NSTextAlignment = .left, lineHeight: CGFloat? = nil, underlineColor: UIColor? = nil) -> NSAttributedString {
+        let text = text ?? ""
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = textAlignment
         paragraphStyle.paragraphSpacing = 8

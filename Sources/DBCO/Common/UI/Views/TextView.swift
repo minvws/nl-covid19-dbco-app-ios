@@ -16,7 +16,7 @@ class TextView: UITextView, UITextViewDelegate {
         super.init(frame: .zero, textContainer: nil)
         setup()
         
-        attributedText = .makeFromHtml(text: htmlText, font: font, textColor: textColor, boldTextColor: boldTextColor)
+        html(htmlText, font: font, textColor: textColor, boldTextColor: boldTextColor)
     }
     
     init(text: String? = nil) {
@@ -61,6 +61,12 @@ class TextView: UITextView, UITextViewDelegate {
         } else {
             return superSize
         }
+    }
+    
+    @discardableResult
+    func html(_ htmlText: String?, font: UIFont = Theme.fonts.body, textColor: UIColor = Theme.colors.captionGray, boldTextColor: UIColor = .black) -> Self {
+        attributedText = .makeFromHtml(text: htmlText, font: font, textColor: textColor, boldTextColor: boldTextColor)
+        return self
     }
     
     @discardableResult

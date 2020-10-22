@@ -20,6 +20,16 @@ class SectionView: UIView {
         }
     }
     
+    var title: String? {
+        get { titleLabel.text }
+        set { titleLabel.text = newValue }
+    }
+    
+    var caption: String? {
+        get { captionLabel.text }
+        set { captionLabel.text = newValue }
+    }
+    
     init(title: String, caption: String, index: Int) {
         super.init(frame: .zero)
         
@@ -37,13 +47,7 @@ class SectionView: UIView {
         collapseIndicator.image =  UIImage(named: "EditContact/SectionCollapse")
         collapseIndicator.setContentHuggingPriority(.required, for: .horizontal)
         
-        let titleLabel = UILabel(frame: .zero)
-        titleLabel.font = Theme.fonts.bodyBold
         titleLabel.text = title
-        
-        let captionLabel = UILabel(frame: .zero)
-        captionLabel.font = Theme.fonts.subhead
-        captionLabel.textColor = Theme.colors.captionGray
         captionLabel.text = caption
         
         HStack(spacing: 16, icon, VStack(spacing: 2, titleLabel, captionLabel), collapseIndicator)
@@ -136,4 +140,6 @@ class SectionView: UIView {
     private let headerContainerView = UIView()
     private let icon = UIImageView()
     private let collapseIndicator = UIImageView()
+    private let titleLabel = Label(bodyBold: "")
+    private let captionLabel = Label(subhead: "", textColor: Theme.colors.captionGray)
 }

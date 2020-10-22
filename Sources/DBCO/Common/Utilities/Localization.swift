@@ -99,7 +99,15 @@ extension String {
     static var contactDetailsSectionTitle: String { return Localization.string(for: "contactDetailsSection.title") }
     static var contactDetailsSectionMessage: String { return Localization.string(for: "contactDetailsSection.message") }
     static var informContactSectionTitle: String { return Localization.string(for: "informContactSection.title") }
-    static var informContactSectionMessage: String { return Localization.string(for: "informContactSection.message") }
+    static var informContactSectionMessageIndex: String { return Localization.string(for: "informContactSection.message.index") }
+    static var informContactSectionMessageStaff: String { return Localization.string(for: "informContactSection.message.staff") }
+    
+    static var informContactTitleIndex: String { return Localization.string(for: "informContactTitle.index") }
+    static var informContactTitleStaff: String { return Localization.string(for: "informContactTitle.staff") }
+    
+    static var informContactGuidelinesClose: String { return Localization.string(for: "informContactGuidelines.close") }
+    static var informContactGuidelinesOther: String { return Localization.string(for: "informContactGuidelines.other") }
+    static var informContactShareGuidelines: String { return Localization.string(for: "informContactShareGuidelines") }
     
     static var livedTogetherRiskQuestion: String { return Localization.string(for: "livedTogetherRiskQuestion") }
     static var livedTogetherRiskQuestionAnswerPositive: String { return Localization.string(for: "livedTogetherRiskQuestion.answer.positive") }
