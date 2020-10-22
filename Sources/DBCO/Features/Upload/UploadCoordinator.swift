@@ -133,7 +133,8 @@ extension UploadCoordinator: InformContactCoordinatorDelegate {
     
     func informContactCoordinator(_ coordinator: InformContactCoordinator, didFinishWith task: Task) {
         removeChildCoordinator(coordinator)
-        informContactIfNeeded(for: task)
+        
+        Services.taskManager.save(task)
     }
     
 }
