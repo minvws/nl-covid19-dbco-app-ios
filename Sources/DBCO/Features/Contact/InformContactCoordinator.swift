@@ -35,9 +35,9 @@ final class InformContactCoordinator: Coordinator {
     
     private func promptInform() {
         let firstName = task.contactFirstName ?? ""
-        let alert = UIAlertController(title: "Weet \(firstName) wat er speelt?", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: .contactInformPromptTitle(firstName: firstName), message: nil, preferredStyle: .alert)
         
-        alert.addAction(UIAlertAction(title: "Ja", style: .default) { _ in
+        alert.addAction(UIAlertAction(title: .contantInformOptionDone, style: .default) { _ in
             var updatedTask = self.task
             updatedTask.contact = Task.Contact(category: updatedTask.contact.category,
                                                communication: updatedTask.contact.communication,
@@ -45,11 +45,11 @@ final class InformContactCoordinator: Coordinator {
             self.delegate?.informContactCoordinator(self, didFinishWith: updatedTask)
         })
         
-        alert.addAction(UIAlertAction(title: "Nee, doe ik later", style: .default) { _ in
+        alert.addAction(UIAlertAction(title: .contantInformOptionInformLater, style: .default) { _ in
             self.delegate?.informContactCoordinator(self, didFinishWith: self.task)
         })
         
-        alert.addAction(UIAlertAction(title: "Nee, nu informeren", style: .default) { _ in
+        alert.addAction(UIAlertAction(title: .contantInformOptionInformNow, style: .default) { _ in
             self.inform()
         })
         

@@ -134,6 +134,12 @@ extension String {
     static var contactInformationBirthDate: String { return Localization.string(for: "contactInformationBirthDate") }
     static var contactInformationBSN: String { return Localization.string(for: "contactInformationBSN") }
     
+    /* MARK: - Informing contacts */
+    static func contactInformPromptTitle(firstName: String) -> String { return Localization.string(for: "contactInformPromptTitle", [firstName]) }
+    static var contantInformOptionDone: String { return Localization.string(for: "contantInformOptionDone") }
+    static var contantInformOptionInformLater: String { return Localization.string(for: "contantInformOptionInformLater") }
+    static var contantInformOptionInformNow: String { return Localization.string(for: "contantInformOptionInformNow") }
+    
     /* MARK: - Uploading */
     static var unfinishedTasksOverviewTitle: String { return Localization.string(for: "unfinishedTasksOverviewTitle") }
     static var unfinishedTasksOverviewMessage: String { return Localization.string(for: "unfinishedTasksOverviewMessage") }

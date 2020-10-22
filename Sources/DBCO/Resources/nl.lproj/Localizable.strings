@@ -86,6 +86,12 @@
 "contactInformationEmailAddress" = "E-mailadres";
 "contactInformationBSN" = "Burgerservice nummer";
 
+/* MARK: - Informing contacts */
+"contactInformPromptTitle" = "Weet %@ wat er speelt?";
+"contantInformOptionDone" = "Ja";
+"contantInformOptionInformLater" = "Nee, doe ik later";
+"contantInformOptionInformNow" = "Nee, nu informeren";
+
 /* MARK: - Uploading */
 "unfinishedTasksOverviewTitle" = "Bijna klaar";
 "unfinishedTasksOverviewMessage" = "Kun je de gegevens van deze contacten controleren?";
