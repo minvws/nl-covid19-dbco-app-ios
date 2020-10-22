@@ -82,7 +82,7 @@ extension UploadCoordinator: SelectContactCoordinatorDelegate {
     
     func selectContactCoordinator(_ coordinator: SelectContactCoordinator, didFinishWith task: Task) {
         removeChildCoordinator(coordinator)
-        Services.taskManager.save(task)
+        informContactIfNeeded(for: task)
     }
     
     func selectContactCoordinatorDidCancel(_ coordinator: SelectContactCoordinator) {
