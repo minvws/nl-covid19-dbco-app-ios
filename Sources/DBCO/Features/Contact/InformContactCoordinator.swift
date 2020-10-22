@@ -11,21 +11,25 @@ protocol InformContactCoordinatorDelegate: class {
     func informContactCoordinator(_ coordinator: InformContactCoordinator, didFinishWith task: Task)
 }
 
-final class InformContactCoordinator: Coordinator {
+final class InformContactCoordinator: Coordinator, Logging {
     
     private weak var delegate: InformContactCoordinatorDelegate?
     private weak var presenter: UIViewController?
     private let task: Task
     
     init(presenter: UIViewController, contactTask: Task, delegate: InformContactCoordinatorDelegate) {
-        guard contactTask.taskType == .contact else { fatalError() }
-        
         self.delegate = delegate
         self.presenter = presenter
         self.task = contactTask
     }
     
     override func start() {
+        guard task.taskType == .contact else {
+            logError("Supplied task (\(task)) to InformContactCoordinator is not a contact task")
+            delegate?.informContactCoordinator(self, didFinishWith: task)
+            return
+        }
+        
         if task.contact.didInform {
             delegate?.informContactCoordinator(self, didFinishWith: task)
         } else {
