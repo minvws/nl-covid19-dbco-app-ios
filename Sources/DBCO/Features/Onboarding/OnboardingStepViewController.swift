@@ -25,6 +25,7 @@ class OnboardingStepViewModel {
     }
 }
 
+/// - Tag: OnboardingStepViewController
 class OnboardingStepViewController: UIViewController {
     private let viewModel: OnboardingStepViewModel
     private var imageView: UIImageView!

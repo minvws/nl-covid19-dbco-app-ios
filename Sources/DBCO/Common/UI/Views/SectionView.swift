@@ -8,12 +8,18 @@
 
 import UIKit
 
+/// A collapsible container view for a with a header consisting of a title, a caption, a status indicator and a collapse indicator
+/// - Tag: SectionView
 class SectionView: UIView {
     
+    /// Add your subviews to this view.
     let contentView = UIView()
     
     private(set) var isCollapsed: Bool = false
     
+    /// Toggles the state of the status indicator view.
+    /// if isCompleted is true a checkmark icon will be shown. If false, the index of the section will be shown.
+    /// Currently supports up to index 3. To support more sections, just ensure the required images are available in the asset catalog (`"EditContact/Section\(index)"`).
     var isCompleted: Bool = false {
         didSet {
             icon.isHighlighted = isCompleted
@@ -118,7 +124,6 @@ class SectionView: UIView {
     }
     
     func collapse(animated: Bool) {
-        
         func applyAnimatedState() {
             contentView.alpha = 0
             contentView.endEditing(true)

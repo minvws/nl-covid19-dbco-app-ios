@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// A styled UIButton subclass
 class Button: UIButton {
 
     enum ButtonType {
@@ -118,7 +119,6 @@ class Button: UIButton {
     }
 
     @objc private func touchDownAnimation() {
-
         if useHapticFeedback { Haptic.light() }
 
         UIButton.animate(withDuration: 0.2, animations: {

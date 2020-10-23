@@ -14,6 +14,7 @@ protocol UnfinishedTasksViewControllerDelegate: class {
     func unfinishedTasksViewControllerDidCancel(_ controller: UnfinishedTasksViewController)
 }
 
+/// - Tag: UnfinishedTasksViewModel
 class UnfinishedTasksViewModel {
     typealias SectionHeaderContent = (title: String, subtitle: String)
     
@@ -30,6 +31,7 @@ class UnfinishedTasksViewModel {
         
         sections = []
         
+        // Store unfisnished task identifiers now, so any completed tasks won't have to dissappear from the overview.
         relevantTaskIdentifiers = Services.taskManager.tasks
             .filter { $0.status != .completed }
             .map { $0.uuid }
@@ -84,6 +86,8 @@ extension UnfinishedTasksViewModel: TaskManagerListener {
     func taskManagerDidUpdateSyncState(_ taskManager: TaskManaging) {}
 }
 
+
+/// - Tag: UnfinishedTasksViewControllers
 class UnfinishedTasksViewController: PromptableViewController {
     private let viewModel: UnfinishedTasksViewModel
     private let tableView = UITableView.createDefaultGrouped()

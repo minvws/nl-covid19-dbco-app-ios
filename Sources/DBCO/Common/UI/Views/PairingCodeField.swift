@@ -7,6 +7,8 @@
 
 import UIKit
 
+/// A styled subclass of UITextField showing 3 groups of 3 digits representing a pairing code.
+/// Calls listeners when a valid pairincode is entered or removed.
 class PairingCodeField: UITextField {
     private var pairingCodeHandlers = [(String?) -> Void]()
     

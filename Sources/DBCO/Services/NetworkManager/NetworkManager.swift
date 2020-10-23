@@ -47,6 +47,7 @@ enum HTTPContentType: String {
     case json = "application/json"
 }
 
+/// - Tag: NetworkManaging
 protocol NetworkManaging {
     init(configuration: NetworkConfiguration)
     

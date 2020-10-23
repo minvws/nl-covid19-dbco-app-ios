@@ -7,12 +7,28 @@
 
 import Foundation
 
-
+/// Helper class that converts the four identifiable risks to the contact category if possible.
+/// If no category can be determined it returns which risk(s) still needs assesment.
+///
+/// The backend only concerns itself with categories `1`, `2a`, `2b` and `3`.
+/// The app also defines an additinal category `other` to handle the case where the contact (task) doesn't need to be informed about exposure to the index (patient).
+///
+/// # See also
+/// [Task.Contact.Category](x-source-tag://Task.Contact.Category)
+/// - Tag: ClassificationHelper
 struct ClassificationHelper {
+    
     enum Risk {
+        /// The risk contacts have when living in the same household as the index (patient) or when having been near each other for longer than 12 hours.
         case livedTogether
+        
+        /// The risk contacts have when having near the index for 15min
         case duration
+        
+        /// The risk contacts have when having been closer than 1,5m to the index
         case distance
+        
+        /// The risk contacts have when having any of the following occured: Sneezing, cuddling, kissing or other physical contact
         case other
     }
     
@@ -73,6 +89,12 @@ struct ClassificationHelper {
         }
     }
     
+    /// Returns the classification or unassessed risk for the supplied parameters
+    ///
+    /// - parameter livedTogetherRisk: Optional Bool, set to nil if this risk has not been assessed yet.
+    /// - parameter durationRisk: Optional Bool, set to nil if this risk has not been assessed yet.
+    /// - parameter distanceRisk: Optional Bool, set to nil if this risk has not been assessed yet.
+    /// - parameter otherRisk: Optional Bool, set to nil if this risk has not been assessed yet.
     static func classificationResult(for livedTogetherRisk: Bool?,
                                      durationRisk: Bool?,
                                      distanceRisk: Bool?,
@@ -85,6 +107,12 @@ struct ClassificationHelper {
             .result
     }
     
+    /// Returns the risks that should be displayed/questioned in the UI for the supplied parameters
+    ///
+    /// - parameter livedTogetherRisk: Optional Bool, set to nil if this risk has not been assessed yet.
+    /// - parameter durationRisk: Optional Bool, set to nil if this risk has not been assessed yet.
+    /// - parameter distanceRisk: Optional Bool, set to nil if this risk has not been assessed yet.
+    /// - parameter otherRisk: Optional Bool, set to nil if this risk has not been assessed yet.
     static func visibleRisks(for livedTogetherRisk: Bool?,
                              durationRisk: Bool?,
                              distanceRisk: Bool?,
@@ -97,6 +125,13 @@ struct ClassificationHelper {
             .visibleRisks
     }
     
+    /// Set the appropriate risk values for the supplied category
+    ///
+    /// - parameter category: The category for which the risk values should be set
+    /// - parameter livedTogetherRisk: Optional Bool.
+    /// - parameter durationRisk: Optional Bool.
+    /// - parameter distanceRisk: Optional Bool.
+    /// - parameter otherRisk: Optional Bool.
     static func setValues(for category: Task.Contact.Category,
                           livedTogetherRisk: inout Bool?,
                           durationRisk: inout Bool?,

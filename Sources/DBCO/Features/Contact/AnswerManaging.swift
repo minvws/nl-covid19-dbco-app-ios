@@ -8,6 +8,7 @@
 import UIKit
 import Contacts
 
+/// - Tag: AnswerManaging
 protocol AnswerManaging: class {
     var question: Question { get }
     var answer: Answer { get }
@@ -18,6 +19,9 @@ protocol AnswerManaging: class {
     var updateHandler: ((AnswerManaging) -> Void)? { get set }
 }
 
+/// AnswerManager for the .classificationDetails question.
+/// Uses [ClassificationHelper](x-source-tag://ClassificationHelper) to determine the resulting category and which of the four (risk) questions should be displayed.
+/// The risk questions are displayed as [ToggleGroup](x-source-tag://ToggleGroup)
 class ClassificationDetailsAnswerManager: AnswerManaging {
     private var baseAnswer: Answer
     
@@ -134,6 +138,8 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
                otherRiskGroup)
 }
 
+/// AnswerManager for the .contactDetails question.
+/// Uses [InputField](x-source-tag://InputField) to question the firstName, lastName, email and phoneNumber of the index
 class ContactDetailsAnswerManager: AnswerManaging {
     private(set) var firstName = FirstName()        { didSet { updateHandler?(self) } }
     private(set) var lastName = LastName()          { didSet { updateHandler?(self) } }
@@ -189,6 +195,8 @@ class ContactDetailsAnswerManager: AnswerManaging {
     }
 }
 
+/// AnswerManager for the .date question.
+/// Uses [InputField](x-source-tag://InputField) to display an editable date.
 class DateAnswerManager: AnswerManaging {
     private(set) var date: GeneralDate { didSet { updateHandler?(self) } }
     
@@ -223,6 +231,8 @@ class DateAnswerManager: AnswerManaging {
     }
 }
 
+/// AnswerManager for the .open question.
+/// Uses [InputTextView](x-source-tag://InputTextView) to display an editable text view
 class OpenAnswerManager: AnswerManaging {
     private(set) var text: Text { didSet { updateHandler?(self) } }
     
@@ -257,6 +267,8 @@ class OpenAnswerManager: AnswerManaging {
     }
 }
 
+/// AnswerManager for the .multipleChoice question.
+/// When dealing with more than 4 options it will use a UIPickerView via [InputField](x-source-tag://InputField). When dealing with up to 4 options it will display the options using a [ToggleGroup](x-source-tag://ToggleGroup)
 class MultipleChoiceAnswerManager: AnswerManaging {
     
     private var baseAnswer: Answer

@@ -14,6 +14,7 @@ extension CNContact {
     }
 }
 
+/// - Tag: SelectContactViewModel
 class SelectContactViewModel {
     
     private let contactStore = CNContactStore()
@@ -165,6 +166,7 @@ protocol SelectContactViewControllerDelegate: class {
     func selectContactViewControllerDidCancel(_ controller: SelectContactViewController)
 }
 
+/// - Tag: SelectContactViewController
 class SelectContactViewController: PromptableViewController {
     private let viewModel: SelectContactViewModel
     private let searchResultsController: SearchResultsViewController

@@ -7,27 +7,53 @@
 
 import Foundation
 
+/// Loads tasks and questionnaires.
+/// Facilitates storing and uploading results to the backend.
+/// Publishes updates to the internal store via [TaskManagerListener](x-source-tag://TaskManagerListener)
+///
+/// # See also:
+/// [Task](x-source-tag://Task),
+/// [Questionnaire](x-source-tag://Questionnaire)
+///
+/// - Tag: TaskManaging
 protocol TaskManaging {
     init()
     
     var tasks: [Task] { get }
+    
+    /// Indicates that alls the tasks are uploaded to the backend in their current state
     var isSynced: Bool { get }
+    
     var hasUnfinishedTasks: Bool { get }
     
+    /// Returns the [Questionnaire](x-source-tag://Questionnaire) associated with a task
     func questionnaire(for task: Task) -> Questionnaire
+    
     func loadTasksAndQuestions(completion: @escaping () -> Void)
+    
+    /// Adds a listener
+    /// - parameter listener: The object conforming to [TaskManagerListener](x-source-tag://TaskManagerListener) that will receive updates. Will be stored with a weak reference
     func addListener(_ listener: TaskManagerListener)
     
+    /// Saves updates to a task if a task with the same uuid is already managed, or stores a new task.
     func save(_ task: Task)
-    func sync(completionHandler: ((Bool) -> Void)?)
+    
+    /// Uploads all the tasks to the backend
+    /// - parameter completionHandler: The closure to be called after the upload was finished.
+    func sync(completionHandler: ((_ success: Bool) -> Void)?)
 }
 
+/// - Tag: TaskManaging
 protocol TaskManagerListener: class {
+    /// Called after updates are made to the managed tasks
     func taskManagerDidUpdateTasks(_ taskManager: TaskManaging)
+    
+    /// Called after tasks were uploaded to the backend
     func taskManagerDidUpdateSyncState(_ taskManager: TaskManaging)
 }
 
 // Temporary implementation
+/// - Tag: TaskManager
 final class TaskManager: TaskManaging, Logging {
     
     private struct ListenerWrapper {

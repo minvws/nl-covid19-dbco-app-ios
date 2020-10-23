@@ -8,6 +8,9 @@
 import Contacts
 
 extension Answer.Value {
+    /// Create a correct .classificationDetails case for a specific [Task category](x-source-tag://Task.Contact.Category).
+    /// Makes use of [ClassificationHelper](x-source-tag://ClassificationHelper)
+    /// - parameter contactCategory: The [category](x-source-tag://Task.Contact.Category) to be used
     static func classificationDetails(contactCategory: Task.Contact.Category) -> Self {
         var livedTogetherRisk: Bool?
         var durationRisk: Bool?
@@ -24,6 +27,8 @@ extension Answer.Value {
 }
 
 extension Answer.Value {
+    /// Create a prefilled .contactDetails case.
+    /// - parameter contact: The CNContact to be used
     static func contactDetails(contact: CNContact) -> Self {
         return .contactDetails(firstName: contact.contactFirstName.value,
                                lastName: contact.contactLastName.value,

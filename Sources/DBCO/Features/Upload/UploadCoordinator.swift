@@ -11,7 +11,12 @@ protocol UploadCoordinatorDelegate: class {
     func uploadCoordinatorDidFinish(_ coordinator: UploadCoordinator)
 }
 
-class UploadCoordinator: Coordinator {
+/// Coordinator managing the flow of uploading tasks to the backend.
+/// Is very similar to [TaskOverviewCoordinator](x-source-tag://TaskOverviewCoordinator) but only displays unfinished tasks and only allows editing of existing tasks.
+/// Uses [UnfinishedTasksViewController](x-source-tag://UnfinishedTasksViewController) to display tasks.
+///
+/// - Tag: UploadCoordinator
+final class UploadCoordinator: Coordinator {
     
     private weak var delegate: UploadCoordinatorDelegate?
     private weak var presenter: UIViewController?

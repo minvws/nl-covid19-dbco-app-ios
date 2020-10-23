@@ -14,6 +14,14 @@ private extension Question {
     }
 }
 
+/// The ViewModel required for [ContactQuestionnaireViewController](x-source-tag://ContactQuestionnaireViewController).
+/// Can be used to update a task or to create a new task.
+///
+/// Uses the global [TaskManager](x-source-tag://TaskManaging) to get the appropriate questionnaire. For each question in the questionnaire a class conforming to [AnswerManaging](x-source-tag://AnswerManaging) is created to manage answers, prefilling the answer when possible.
+///
+/// Only questions needed for the task's category are displayed. A [Question](x-source-tag://Question) with type `.classificationDetails` can update the managed task's category, so displayed questions are highly dynamic.
+///
+/// - Tag: ContactQuestionnaireViewModel
 class ContactQuestionnaireViewModel {
     private var task: Task
     private var baseResult: QuestionnaireResult
@@ -234,6 +242,12 @@ protocol ContactQuestionnaireViewControllerDelegate: class {
     func contactQuestionnaireViewController(_ controller: ContactQuestionnaireViewController, wantsToInformContact task: Task, completionHandler: @escaping (_ success: Bool) -> Void)
 }
 
+/// Displays a [Questionnaire](x-source-tag://Questionnaire) for a contact task. Groups questions into sections displayed with [SectionView](x-source-tag://SectionView)
+///
+/// # See also
+/// [ContactQuestionnaireViewModel](x-source-tag://ContactQuestionnaireViewModel)
+///
+/// - Tag: ContactQuestionnaireViewController
 final class ContactQuestionnaireViewController: PromptableViewController {
     private let viewModel: ContactQuestionnaireViewModel
     private let scrollView = UIScrollView()

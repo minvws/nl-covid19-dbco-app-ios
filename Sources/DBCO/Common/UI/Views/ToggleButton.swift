@@ -7,6 +7,14 @@
 
 import UIKit
 
+/// Styled UIButton subclass that will toggle between highlighted states when tapped.
+/// When toggled it will send out a `.valueChanged` action to interested targets.
+/// 
+/// # See also:
+/// [DateToggleButton](x-source-tag://DateToggleButton),
+/// [ToggleGroup](x-source-tag://ToggleGroup)
+///
+/// - Tag: ToggleButton
 class ToggleButton: UIButton {
     
     override var isSelected: Bool {
@@ -94,6 +102,15 @@ class ToggleButton: UIButton {
     fileprivate let icon: UIImageView
 }
 
+/// ToggleButton subclass that displays and manages a date value.
+/// When toggled it will show a datepicker to change the date value.
+/// For this it creates an offscreen `UITextField` with a `UIDatePicker` as its `inputView`
+///
+/// # See also:
+/// [ToggleButton](x-source-tag://ToggleButton),
+/// [ToggleGroup](x-source-tag://ToggleGroup)
+///
+/// - Tag: DateToggleButton
 class DateToggleButton: ToggleButton {
     
     var date: Date?

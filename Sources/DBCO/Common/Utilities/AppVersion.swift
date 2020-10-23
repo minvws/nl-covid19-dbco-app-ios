@@ -9,9 +9,9 @@ import Foundation
 
 extension String {
     
-    // "GitHash" is set dynamically for the built app with a run script-phase
-
+    /// Localized string describing the app version.
     static var mainAppVersionTitle: String? {
+        // "GitHash" is set dynamically for the built app with a run script-phase
         guard let dictionary = Bundle.main.infoDictionary,
               let version = dictionary["CFBundleShortVersionString"] as? String,
               let build = dictionary["CFBundleVersion"] as? String,

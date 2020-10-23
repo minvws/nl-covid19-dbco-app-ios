@@ -9,15 +9,12 @@ import UIKit
 
 extension UIActivityViewController {
     
+    /// Initializes a sharing sheet with guidelines for a contact [Task](x-source-tag://Task)
     convenience init(contactTask: Task, completionHandler: ((_ success: Bool) -> Void)?) {
-        guard contactTask.taskType == .contact else {
-            fatalError()
-        }
-        
         // Actual contents to be shared are still being determined, this is a temporary implementation
         
         let url: NSURL
-        switch contactTask.contact.category {
+        switch contactTask.contact?.category ?? .category1 {
         case .category1:
             url = NSURL(string: "https://lci.rivm.nl/covid-19-huisgenoten")!
         case .category2a, .category2b:

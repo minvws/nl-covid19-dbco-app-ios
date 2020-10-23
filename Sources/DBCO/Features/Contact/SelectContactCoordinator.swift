@@ -14,6 +14,10 @@ protocol SelectContactCoordinatorDelegate: class {
     func selectContactCoordinatorDidCancel(_ coordinator: SelectContactCoordinator)
 }
 
+/// Coordinator managing the flow of querying for access to the phone's contacts, selecting a contact from the phone's contacts and prefilling the questionnaire for an existing or new task.
+/// Uses [ContactQuestionnaireViewController](x-source-tag://ContactQuestionnaireViewController)
+/// and [SelectContactViewController](x-source-tag://SelectContactViewController).
+/// - Tag: SelectContactCoordinator
 final class SelectContactCoordinator: Coordinator {
     
     private weak var delegate: SelectContactCoordinatorDelegate?

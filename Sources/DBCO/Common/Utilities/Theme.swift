@@ -150,7 +150,7 @@ final class Colors {
     }
 }
 
-
+/// - Tag: Theme
 struct Theme {
     static let fonts = Fonts()
     static let colors = Colors()
