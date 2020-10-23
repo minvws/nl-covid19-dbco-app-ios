@@ -26,6 +26,7 @@ struct CustomEmbeddable: Embeddable {
 
 extension UIView {
     
+    /// Returns a container with horizontal constraints to the readableContentGuide and vertical constraints to the normal top and bottom anchors.
     var readableWidth: Embeddable {
         return CustomEmbeddable(view: self,
                                 leadingAnchor: readableContentGuide.leadingAnchor,
@@ -34,6 +35,8 @@ extension UIView {
                                 bottomAnchor: bottomAnchor)
     }
     
+    /// Returns a container with horizontal constraints to the leading readableContentGuide and the trailing anchor and vertical constraints to the normal top and bottom anchors.
+    /// An example use is a separator within a `UITableViewCell` that has a left margin, but extends to the right off the screen.
     var readableIdentation: Embeddable {
         return CustomEmbeddable(view: self,
                                 leadingAnchor: readableContentGuide.leadingAnchor,
@@ -59,6 +62,20 @@ extension UILayoutGuide: Embeddable {
 
 extension UIView {
     
+    /// Convenience method for a common layout where a subview is added to a view and needs constraints for all four sides.
+    ///
+    /// - parameter embeddable: The container conforming to Embeddable to which the receiver will be added
+    /// - parameter insets: The insets that will be applied to the constraints
+    /// - parameter preservesSuperviewLayoutMargins: A Boolean value indicating whether the receiver also respects the margins of its container. Defaults to true
+    /// # Example uses:
+    /// ````
+    /// someView.embed(in: otherView)
+    /// someView.embed(in: otherView.safeAreaLayoutGuide)
+    /// someView.embed(in: otherView.safeAreaLayoutGuide, insets: .top(50) + .left(10))
+    /// someView.embed(in: otherView.readableWidth)
+    /// someView.embed(in: otherView.readableContentGuide)
+    /// ````
+    /// - Tag: Embed
     @discardableResult
     func embed(in embeddable: Embeddable, insets: UIEdgeInsets = .zero, preservesSuperviewLayoutMargins: Bool = true) -> Self {
         guard let view = embeddable.view else {
@@ -102,6 +119,23 @@ extension UIView {
         }
     }
     
+    /// Convenience method for a common layout where a subview is added to a view and needs constraints for to make the subview fill a specific side of the view, without setting a constraint to the opposing side.
+    ///
+    /// - parameter side: The side for which constraints should be created
+    /// - parameter embeddable: The container conforming to Embeddable to which the receiver will be added
+    /// - parameter width: If set, creates a width constraint with the specified constant on the receiver
+    /// - parameter height: If set, creates a height constraint with the specified constant on the receiver
+    /// - parameter insets: The insets that will be applied to the constraints
+    /// - parameter preservesSuperviewLayoutMargins: A Boolean value indicating whether the receiver also respects the margins of its container. Defaults to true
+    /// # Example uses:
+    /// ````
+    /// someView.snap(to: .left, of: otherView)
+    /// someView.snap(to: .top, of: otherView.safeAreaLayoutGuide)
+    /// someView.snap(to: .left, of: otherView.safeAreaLayoutGuide, insets: .top(50) + .left(10))
+    /// someView.snap(to: .right, of: otherView.readableWidth)
+    /// someView.snap(to: .bottom, of: otherView.readableContentGuide, height: 1)
+    /// ````
+    /// - Tag: Snap
     @discardableResult
     func snap(to side: Side, of embeddable: Embeddable, width: CGFloat? = nil, height: CGFloat? = nil, insets: UIEdgeInsets = .zero, preservesSuperviewLayoutMargins: Bool = true) -> Self {
         guard let view = embeddable.view else {
@@ -135,12 +169,20 @@ extension UIView {
 
 extension UIView {
     
+    /// Wraps the reciever in a new container view, making constraints to all four sides.
+    /// - parameter insets: The insets that should be applied to the constraints
+    /// # See also
+    /// [embed(in:)](x-source-tag://Embed)
     func withInsets(_ insets: UIEdgeInsets) -> UIView {
         let containingView = UIView(frame: .zero)
         embed(in: containingView, insets: insets)
         return containingView
     }
     
+    /// Wraps the reciever in a new container view, making constraints to all four sides of the container's ReadableContentGuide.
+    /// - parameter insets: The insets that should be applied to the constraints
+    /// # See also
+    /// [embed(in:)](x-source-tag://Embed)
     func wrappedInReadableContentGuide(insets: UIEdgeInsets = .zero) -> UIView {
         let containingView = UIView(frame: .zero)
         containingView.preservesSuperviewLayoutMargins = true
@@ -148,6 +190,10 @@ extension UIView {
         return containingView
     }
     
+    /// Wraps the reciever in a new container view, making constraints to all four sides of the container's readableWidth container.
+    /// - parameter insets: The insets that should be applied to the constraints
+    /// # See also
+    /// [embed(in:)](x-source-tag://Embed)
     func wrappedInReadableWidth(insets: UIEdgeInsets = .zero) -> UIView {
         let containingView = UIView(frame: .zero)
         containingView.preservesSuperviewLayoutMargins = true

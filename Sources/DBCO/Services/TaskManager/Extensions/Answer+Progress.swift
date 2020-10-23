@@ -9,6 +9,7 @@ import Foundation
 
 extension Answer {
 
+    /// A value in 0...1 indicating the progress of completing the answer
     var progress: Double {
         switch value {
         case .classificationDetails(let livedTogetherRisk, let durationRisk, let distanceRisk, let otherRisk):
@@ -50,6 +51,8 @@ extension Answer {
 
 extension QuestionnaireResult {
     
+    /// A value in 0...1 indicating the progress of completing the quesionnaire.
+    /// Used for calculating the [task's status](x-source-tag://Task.status)
     var progress: Double {
         answers.reduce(0) { $0 + ($1.progress / Double(answers.count)) }
     }

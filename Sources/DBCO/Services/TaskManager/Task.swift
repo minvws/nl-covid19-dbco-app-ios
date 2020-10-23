@@ -7,6 +7,14 @@
 
 import Foundation
 
+/// Represents an item on the user's "grocery list".
+/// Tasks are completed by filling out an associated [Questionnaire](x-source-tag://Questionnaire).
+/// Currently only the `contact` task is supported.
+///
+/// # See also:
+/// [TaskManager](x-source-tag://TaskManager)
+///
+/// - Tag: Task
 struct Task: Codable {
     enum Status: Equatable {
         case notStarted
@@ -23,7 +31,9 @@ struct Task: Codable {
         case contact
     }
     
+    /// - Tag: Task.Contact
     struct Contact: Codable {
+        /// - Tag: Task.Contact.Category
         enum Category: String, Codable {
             case category1 = "1"
             case category2a = "2a"
@@ -72,6 +82,7 @@ struct Task: Codable {
     
     var result: QuestionnaireResult?
     
+    /// - Tag: Task.status
     var status: Status {
         switch taskType {
         case .contact:

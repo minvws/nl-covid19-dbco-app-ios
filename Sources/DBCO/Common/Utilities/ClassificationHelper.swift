@@ -7,7 +7,7 @@
 
 import Foundation
 
-
+/// - Tag: ClassificatonHelper
 struct ClassificationHelper {
     enum Risk {
         case livedTogether

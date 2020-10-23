@@ -8,6 +8,8 @@
 import Foundation
 
 extension Task {
+    /// Searches for a .contactDetails answer in the results and returns the firstName and lastName combined.
+    /// Falls back to the value of `label` if no answer could be found
     var contactName: String? {
         result?.answers
             .compactMap {
@@ -23,6 +25,8 @@ extension Task {
             .first ?? label
     }
     
+    /// Searches for a .contactDetails answer in the results and returns the firstName.
+    /// Falls back to the value of `label` if answer could be found
     var contactFirstName: String? {
         result?.answers
             .compactMap {

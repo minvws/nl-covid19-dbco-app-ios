@@ -16,6 +16,7 @@ enum InputType {
     case date(formatter: DateFormatter)
 }
 
+/// - Tag: Editable
 protocol Editable {
     var value: String? { get set }
     
@@ -27,6 +28,7 @@ extension Editable {
     var placeholder: String? { return nil }
 }
 
+/// - Tag: InputFieldEditable
 protocol InputFieldEditable: Editable {
     var showValidationState: Bool { get }
     var inputType: InputType { get }

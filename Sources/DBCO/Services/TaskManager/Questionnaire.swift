@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// - Tag: AnswerTrigger
 enum AnswerTrigger: String, Codable {
     case setCommunicationToIndex = "communication_index"
     case setCommunicationToStaff = "communication_staff"
@@ -18,6 +19,7 @@ struct AnswerOption: Codable {
     let trigger: AnswerTrigger?
 }
 
+/// - Tag: Question
 struct Question: Codable {
     enum Group: String, Codable {
         case classification
@@ -62,12 +64,22 @@ struct Question: Codable {
     }
 }
 
+/// Represents the questionnaires needed to complete tasks.
+/// Questionnaires are linked to tasks via the taskType property.
+/// Currently only the `contact` task is supported.
+///
+/// # See also:
+/// [Task](x-source-tag://Task),
+/// [TaskManager](x-source-tag://TaskManager)
+///
+/// - Tag: Questionnaire
 struct Questionnaire: Codable {
     let uuid: UUID
     let taskType: Task.TaskType
     let questions: [Question]
 }
 
+/// - Tag: Answer
 struct Answer {
     let uuid: UUID
     let questionUuid: UUID
@@ -115,7 +127,16 @@ struct Answer {
     var value: Value
 }
 
+/// Represents a filled out questionnaire
+///
+/// # See also:
+/// [Questionnaire](x-source-tag://Questionnaire),
+/// [Task](x-source-tag://Task),
+/// [TaskManager](x-source-tag://TaskManager)
+///
+/// - Tag: QuestionnaireResult
 struct QuestionnaireResult {
+    /// The identifier of the [Questionnaire](x-source-tag://Questionnaire) this result belongs to
     let questionnaireUuid: UUID
     var answers: [Answer]
 }

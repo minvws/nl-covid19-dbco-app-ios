@@ -7,6 +7,11 @@
 
 import UIKit
 
+/// A styled UITextField subclass that binds to an object's field conforming to [InputFieldEditable](x-source-tag://InputFieldEditable) and automatically updates its value.
+/// InputField adjusts its input method based on the properties of the supplied [InputFieldEditable](x-source-tag://InputFieldEditable) field.
+///
+/// Currently supports the different system keyboards, a date picker (.wheels style) and a general picker wheel.
+/// - Tag: InputField
 class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     private weak var object: Object?
     private let path: WritableKeyPath<Object, Field>
