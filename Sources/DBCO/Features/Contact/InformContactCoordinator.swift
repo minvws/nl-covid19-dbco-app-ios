@@ -11,6 +11,7 @@ protocol InformContactCoordinatorDelegate: class {
     func informContactCoordinator(_ coordinator: InformContactCoordinator, didFinishWith task: Task)
 }
 
+/// Coordinator showing a prompt asking if the contact was informed if needed
 final class InformContactCoordinator: Coordinator, Logging {
     
     private weak var delegate: InformContactCoordinatorDelegate?

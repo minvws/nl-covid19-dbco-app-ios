@@ -33,6 +33,10 @@ struct Task: Codable {
     
     /// - Tag: Task.Contact
     struct Contact: Codable {
+        
+        /// # See also
+        /// [ClassificationHelper](x-source-tag://ClassificationHelper)
+        ///
         /// - Tag: Task.Contact.Category
         enum Category: String, Codable {
             case category1 = "1"

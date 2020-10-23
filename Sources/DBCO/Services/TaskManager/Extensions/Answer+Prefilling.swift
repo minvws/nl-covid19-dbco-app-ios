@@ -9,7 +9,7 @@ import Contacts
 
 extension Answer.Value {
     /// Create a correct .classificationDetails case for a specific [Task category](x-source-tag://Task.Contact.Category).
-    /// Makes use of [ClassificationHelper](x-source-tag://ClassificatonHelper)
+    /// Makes use of [ClassificationHelper](x-source-tag://ClassificationHelper)
     /// - parameter contactCategory: The [category](x-source-tag://Task.Contact.Category) to be used
     static func classificationDetails(contactCategory: Task.Contact.Category) -> Self {
         var livedTogetherRisk: Bool?

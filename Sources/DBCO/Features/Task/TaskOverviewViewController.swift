@@ -95,6 +95,7 @@ extension TaskOverviewViewModel: TaskManagerListener {
     }
 }
 
+/// - Tag: TaskOverviewViewController
 class TaskOverviewViewController: PromptableViewController {
     private let viewModel: TaskOverviewViewModel
     private let tableView = UITableView.createDefaultGrouped()

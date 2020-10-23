@@ -13,6 +13,7 @@ protocol PairViewControllerDelegate: class {
 
 class PairViewModel {}
 
+/// - Tag: PairViewController
 class PairViewController: UIViewController {
     private let viewModel: PairViewModel
     

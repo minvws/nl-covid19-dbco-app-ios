@@ -9,6 +9,7 @@
 import UIKit
 
 /// A collapsible container view for a with a header consisting of a title, a caption, a status indicator and a collapse indicator
+/// - Tag: SectionView
 class SectionView: UIView {
     
     /// Add your subviews to this view.

@@ -8,6 +8,11 @@
 import UIKit
 import Contacts
 
+/// Coordinator displaying the tasks for the index with [TaskOverviewViewController](x-source-tag://TaskOverviewViewController).
+/// Uses [SelectContactCoordinator](x-source-tag://SelectContactCoordinator) and [EditContactCoordinator](x-source-tag://EditContactCoordinator) for updating tasks.
+/// Uses [UploadCoordinator](x-source-tag://UploadCoordinator) to upload the tasks.
+///
+/// - Tag: TaskOverviewCoordinator
 final class TaskOverviewCoordinator: Coordinator {
     private let window: UIWindow
     private let overviewController: TaskOverviewViewController

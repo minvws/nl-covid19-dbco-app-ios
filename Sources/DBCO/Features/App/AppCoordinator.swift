@@ -7,47 +7,18 @@
 
 import UIKit
 
-class Coordinator: NSObject {
-    private(set) var children = [Coordinator]()
-    
-    /// A property that lets the parent of the coordinator associate an object to this coordinator.
-    var context: Any?
-    
-    func start() {
-        preconditionFailure("Override start() in your subclass")
-    }
-    
-    func addChildCoordinator(_ coordinator: Coordinator) {
-        if !children.contains(where: { $0 === coordinator }) {
-            children.append(coordinator)
-        }
-    }
-    
-    func removeChildCoordinator(_ coordinator: Coordinator) {
-        if let index = children.firstIndex(where: { $0 === coordinator }) {
-            children.remove(at: index)
-        }
-    }
-}
-
-extension Coordinator {
-    func startChildCoordinator(_ coordinator: Coordinator, context: Any? = nil) {
-        addChildCoordinator(coordinator)
-        coordinator.context = context
-        coordinator.start()
-    }
-}
-
+/// The root coordinator of the app. Will present the onboarding if needed and moves to the task overview.
 final class AppCoordinator: Coordinator {
     private let window: UIWindow
     private let taskManager = TaskManager()
     
-    
+    /// For use with iOS 13 and higher
     @available(iOS 13.0, *)
     init(scene: UIWindowScene) {
         window = UIWindow(windowScene: scene)
     }
     
+    /// For use with iOS 12.
     override init() {
         self.window = UIWindow(frame: UIScreen.main.bounds)
     }

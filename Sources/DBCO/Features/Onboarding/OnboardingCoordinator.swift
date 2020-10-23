@@ -12,6 +12,8 @@ protocol OnboardingCoordinatorDelegate: class {
     func onboardingCoordinatorDidFinish(_ coordinator: OnboardingCoordinator)
 }
 
+/// Coordinator managing the onboarding of the user and pairing with the backend. Temporarily also fetches the tasks and questionnaires.
+/// Uses [PairViewController](x-source-tag://PairViewController) and [OnboardingStepViewController](x-source-tag://OnboardingStepViewController)
 final class OnboardingCoordinator: Coordinator {
     private let window: UIWindow
     private let navigationController: NavigationController
