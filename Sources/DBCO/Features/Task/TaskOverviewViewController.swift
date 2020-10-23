@@ -14,6 +14,7 @@ protocol TaskOverviewViewControllerDelegate: class {
     func taskOverviewViewControllerDidRequestUpload(_ controller: TaskOverviewViewController)
 }
 
+/// - Tag: TaskOverviewViewModel
 class TaskOverviewViewModel {
     typealias SectionHeaderContent = (title: String, subtitle: String)
     typealias PromptFunction = (_ animated: Bool) -> Void

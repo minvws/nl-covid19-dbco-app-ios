@@ -14,6 +14,7 @@ extension CNContact {
     }
 }
 
+/// - Tag: SelectContactViewModel
 class SelectContactViewModel {
     
     private let contactStore = CNContactStore()

@@ -8,6 +8,10 @@
 
 import UIKit
 
+/// Represents the status of a task.
+/// For tasks that have not yet started it will show a warning icon.
+/// For in progress tasks a progress indicator.
+/// For completed tasks a checkmark.
 class StatusView: UIView {
     
     var status: Task.Status {

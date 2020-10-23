@@ -8,6 +8,16 @@
 
 import UIKit
 
+/// UIStackView subclass managing an array of [ToggleButton](x-source-tag://ToggleButton)s.
+/// Only one ToggleButton can be highlighted at any one time.
+/// When one of the managed buttons is toggled it will call the [selectionHandler](x-source-tag://ToggleGroup.didSelect)
+///
+/// # See also:
+/// [didSelect(handler:)](x-source-tag://ToggleGroup.didSelect),
+/// [DateToggleButton](x-source-tag://DateToggleButton),
+/// [ToggleButton](x-source-tag://ToggleButton)
+///
+/// - Tag: ToggleGroup
 class ToggleGroup: UIStackView {
     
     private var selectionHandler: ((Int) -> Void)?
@@ -33,6 +43,7 @@ class ToggleGroup: UIStackView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// - Tag: ToggleGroup.didSelect
     @discardableResult
     func didSelect(handler: @escaping (Int) -> Void) -> Self {
         selectionHandler = handler
