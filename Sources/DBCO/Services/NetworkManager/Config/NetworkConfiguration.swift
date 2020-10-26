@@ -63,8 +63,8 @@ struct NetworkConfiguration {
         )
     )
     
-    func tasksUrl(caseIdentifier: String) -> URL? {
-        return self.combine(path: Endpoint.tasks(caseIdentifier: caseIdentifier))
+    func caseUrl(identifier: String) -> URL? {
+        return self.combine(path: Endpoint.case(identifier: identifier))
     }
     
     var questionnairesUrl: URL? {

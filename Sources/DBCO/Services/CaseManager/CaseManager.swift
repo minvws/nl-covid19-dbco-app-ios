@@ -80,8 +80,8 @@ final class CaseManager: CaseManaging, Logging {
         let group = DispatchGroup()
         
         group.enter()
-        Services.networkManager.getTasks(caseIdentifier: "1234") { result in
-            self.tasks = (try? result.get()) ?? []
+        Services.networkManager.getCase(identifier: "1234") { result in
+            self.tasks = (try? result.get())?.tasks ?? []
             self.listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
             group.leave()
         }
