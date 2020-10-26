@@ -77,7 +77,7 @@
 "distanceRiskQuestion.answer.negative" = "Nee, denk het niet";
 
 "otherRiskQuestion" = "Is een of meerdere van deze dingen tijdens jullie ontmoeting gebeurd?";
-"otherRiskQuestion.description" = "* In je gezicht geniesd\n* Geknuffeld of gezoend\n* Ander lichamelijk contact";
+"otherRiskQuestion.description" = "<ul><li>In je gezicht geniesd</li><li>Geknuffeld of gezoend</li><li>Ander lichamelijk contact</li></ul>";
 "otherRiskQuestion.answer.positive" = "Ja, één of meer";
 "otherRiskQuestion.answer.negative" = "Nee, denk het niet";
 
