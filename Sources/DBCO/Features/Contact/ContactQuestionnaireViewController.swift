@@ -34,7 +34,8 @@ class ContactQuestionnaireViewModel {
         var updatedTask = task
         updatedTask.contact = Task.Contact(category: updatedCategory,
                                            communication: updatedContact.communication,
-                                           didInform: updatedContact.didInform)
+                                           didInform: updatedContact.didInform,
+                                           dateOfLastExposure: updatedContact.dateOfLastExposure)
         updatedTask.result = baseResult
         updatedTask.result?.answers = answerManagers.map(\.answer)
         
@@ -130,21 +131,24 @@ class ContactQuestionnaireViewModel {
     private func setCommunicationToIndex() {
         updatedContact = Task.Contact(category: updatedContact.category,
                                       communication: .index,
-                                      didInform: updatedContact.didInform)
+                                      didInform: updatedContact.didInform,
+                                      dateOfLastExposure: updatedContact.dateOfLastExposure)
         updateInformSectionContent()
     }
     
     private func setCommunicationToStaff() {
         updatedContact = Task.Contact(category: updatedContact.category,
                                       communication: .staff,
-                                      didInform: updatedContact.didInform)
+                                      didInform: updatedContact.didInform,
+                                      dateOfLastExposure: updatedContact.dateOfLastExposure)
         updateInformSectionContent()
     }
     
     func registerDidInform() {
         updatedContact = Task.Contact(category: updatedContact.category,
                                       communication: updatedContact.communication,
-                                      didInform: true)
+                                      didInform: true,
+                                      dateOfLastExposure: updatedContact.dateOfLastExposure)
     }
     
     private func updateClassification(with result: ClassificationHelper.Result) {
@@ -156,7 +160,8 @@ class ContactQuestionnaireViewModel {
             taskCategory = updatedCategory
             updatedContact = Task.Contact(category: taskCategory,
                                           communication: updatedContact.communication,
-                                          didInform: updatedContact.didInform)
+                                          didInform: updatedContact.didInform,
+                                          dateOfLastExposure: updatedContact.dateOfLastExposure)
         }
         
         answerManagers.forEach {

@@ -55,11 +55,13 @@ struct Task: Codable {
         let category: Category
         let communication: Communication
         let didInform: Bool
+        let dateOfLastExposure: Date?
         
-        init(category: Category, communication: Communication, didInform: Bool) {
+        init(category: Category, communication: Communication, didInform: Bool, dateOfLastExposure: Date?) {
             self.category = category
             self.communication = communication
             self.didInform = didInform
+            self.dateOfLastExposure = dateOfLastExposure
         }
         
         init(from decoder: Decoder) throws {
@@ -67,12 +69,14 @@ struct Task: Codable {
             
             category = try container.decode(Category.self, forKey: .category)
             communication = try container.decode(Communication.self, forKey: .communication)
+            dateOfLastExposure = try container.decode(Date?.self, forKey: .dateOfLastExposure)
             didInform = false
         }
         
         func encode(to encoder: Encoder) throws {
             try category.encode(to: encoder)
             try communication.encode(to: encoder)
+            try dateOfLastExposure?.encode(to: encoder)
         }
     }
     
@@ -125,7 +129,7 @@ struct Task: Codable {
         
         switch taskType {
         case .contact:
-            contact = Contact(category: .category3, communication: .none, didInform: false)
+            contact = Contact(category: .category3, communication: .none, didInform: false, dateOfLastExposure: nil)
         }
     }
     
@@ -152,6 +156,7 @@ struct Task: Codable {
         case taskType
         case category
         case communication
+        case dateOfLastExposure
     }
 }
 
