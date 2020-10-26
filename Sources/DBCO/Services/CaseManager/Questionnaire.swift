@@ -70,7 +70,7 @@ struct Question: Codable {
 ///
 /// # See also:
 /// [Task](x-source-tag://Task),
-/// [TaskManager](x-source-tag://TaskManager)
+/// [CaseManager](x-source-tag://CaseManager)
 ///
 /// - Tag: Questionnaire
 struct Questionnaire: Codable {
@@ -132,7 +132,7 @@ struct Answer {
 /// # See also:
 /// [Questionnaire](x-source-tag://Questionnaire),
 /// [Task](x-source-tag://Task),
-/// [TaskManager](x-source-tag://TaskManager)
+/// [CaseManager](x-source-tag://CaseManager)
 ///
 /// - Tag: QuestionnaireResult
 struct QuestionnaireResult {

@@ -10,7 +10,6 @@ import UIKit
 /// The root coordinator of the app. Will present the onboarding if needed and moves to the task overview.
 final class AppCoordinator: Coordinator {
     private let window: UIWindow
-    private let taskManager = TaskManager()
     
     /// For use with iOS 13 and higher
     @available(iOS 13.0, *)

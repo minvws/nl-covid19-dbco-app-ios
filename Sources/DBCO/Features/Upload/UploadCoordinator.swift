@@ -37,7 +37,7 @@ final class UploadCoordinator: Coordinator {
             self.delegate?.uploadCoordinatorDidFinish(self)
         }
         
-        if Services.taskManager.hasUnfinishedTasks {
+        if Services.caseManager.hasUnfinishedTasks {
             showUnfinishedTasks()
         } else {
             sync(animated: false)
@@ -57,7 +57,7 @@ final class UploadCoordinator: Coordinator {
     private func sync(animated: Bool) {
         navigationController.setViewControllers([LoadingViewController()], animated: animated)
         
-        Services.taskManager.sync { _ in
+        Services.caseManager.sync { _ in
             let viewModel = OnboardingStepViewModel(image: UIImage(named: "StartVisual")!,
                                                     title: "Bedankt voor het delen van de gegevens met de GGD",
                                                     message: "Wil je toch nog contactgegevens aanpassen, contacten toevoegen of een andere wijziging doorgeven dan kan dat.",
@@ -139,7 +139,7 @@ extension UploadCoordinator: InformContactCoordinatorDelegate {
     func informContactCoordinator(_ coordinator: InformContactCoordinator, didFinishWith task: Task) {
         removeChildCoordinator(coordinator)
         
-        Services.taskManager.save(task)
+        Services.caseManager.save(task)
     }
     
 }

@@ -82,7 +82,7 @@ extension OnboardingCoordinator: PairViewControllerDelegate {
         navigationController.navigationBar.isUserInteractionEnabled = false
         
         // Load task stubs
-        Services.taskManager.loadTasksAndQuestions {
+        Services.caseManager.loadTasksAndQuestions {
             controller.stopLoadingAnimation()
             self.navigationController.navigationBar.isUserInteractionEnabled = true
             

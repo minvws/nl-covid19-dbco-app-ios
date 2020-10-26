@@ -17,7 +17,7 @@ private extension Question {
 /// The ViewModel required for [ContactQuestionnaireViewController](x-source-tag://ContactQuestionnaireViewController).
 /// Can be used to update a task or to create a new task.
 ///
-/// Uses the global [TaskManager](x-source-tag://TaskManaging) to get the appropriate questionnaire. For each question in the questionnaire a class conforming to [AnswerManaging](x-source-tag://AnswerManaging) is created to manage answers, prefilling the answer when possible.
+/// Uses the global [CaseManager](x-source-tag://CaseManaging) to get the appropriate questionnaire. For each question in the questionnaire a class conforming to [AnswerManaging](x-source-tag://AnswerManaging) is created to manage answers, prefilling the answer when possible.
 ///
 /// Only questions needed for the task's category are displayed. A [Question](x-source-tag://Question) with type `.classificationDetails` can update the managed task's category, so displayed questions are highly dynamic.
 ///
@@ -70,7 +70,7 @@ class ContactQuestionnaireViewModel {
         self.informContent = ""
         self.informButtonType = .primary
         
-        let questionnaire = Services.taskManager.questionnaire(for: task)
+        let questionnaire = Services.caseManager.questionnaire(for: task)
         
         let questionsAndAnswers: [(question: Question, answer: Answer)] = {
             let currentAnswers = task.result?.answers ?? []

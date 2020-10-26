@@ -12,7 +12,7 @@ import Foundation
 /// Currently only the `contact` task is supported.
 ///
 /// # See also:
-/// [TaskManager](x-source-tag://TaskManager)
+/// [CaseManager](x-source-tag://CaseManager)
 ///
 /// - Tag: Task
 struct Task: Codable {
@@ -159,7 +159,7 @@ extension Task {
     static var emptyContactTask: Task {
         
         var task = Task(type: .contact)
-        let questionnaire = Services.taskManager.questionnaire(for: task)
+        let questionnaire = Services.caseManager.questionnaire(for: task)
         guard let classificationUuid = questionnaire.questions.first(where: { $0.questionType == .classificationDetails })?.uuid else {
             return task
         }

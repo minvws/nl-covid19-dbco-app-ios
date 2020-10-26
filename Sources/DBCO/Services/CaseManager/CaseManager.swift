@@ -9,14 +9,14 @@ import Foundation
 
 /// Loads tasks and questionnaires.
 /// Facilitates storing and uploading results to the backend.
-/// Publishes updates to the internal store via [TaskManagerListener](x-source-tag://TaskManagerListener)
+/// Publishes updates to the internal store via [CaseManagerListener](x-source-tag://CaseManagerListener)
 ///
 /// # See also:
 /// [Task](x-source-tag://Task),
 /// [Questionnaire](x-source-tag://Questionnaire)
 ///
-/// - Tag: TaskManaging
-protocol TaskManaging {
+/// - Tag: CaseManaging
+protocol CaseManaging {
     init()
     
     var tasks: [Task] { get }
@@ -32,8 +32,8 @@ protocol TaskManaging {
     func loadTasksAndQuestions(completion: @escaping () -> Void)
     
     /// Adds a listener
-    /// - parameter listener: The object conforming to [TaskManagerListener](x-source-tag://TaskManagerListener) that will receive updates. Will be stored with a weak reference
-    func addListener(_ listener: TaskManagerListener)
+    /// - parameter listener: The object conforming to [CaseManagerListener](x-source-tag://CaseManagerListener) that will receive updates. Will be stored with a weak reference
+    func addListener(_ listener: CaseManagerListener)
     
     /// Saves updates to a task if a task with the same uuid is already managed, or stores a new task.
     func save(_ task: Task)
@@ -43,28 +43,28 @@ protocol TaskManaging {
     func sync(completionHandler: ((_ success: Bool) -> Void)?)
 }
 
-/// - Tag: TaskManaging
-protocol TaskManagerListener: class {
+/// - Tag: CaseManagerListener
+protocol CaseManagerListener: class {
     /// Called after updates are made to the managed tasks
-    func taskManagerDidUpdateTasks(_ taskManager: TaskManaging)
+    func caseManagerDidUpdateTasks(_ caseManager: CaseManaging)
     
     /// Called after tasks were uploaded to the backend
-    func taskManagerDidUpdateSyncState(_ taskManager: TaskManaging)
+    func caseManagerDidUpdateSyncState(_ caseManager: CaseManaging)
 }
 
 // Temporary implementation
-/// - Tag: TaskManager
-final class TaskManager: TaskManaging, Logging {
+/// - Tag: CaseManager
+final class CaseManager: CaseManaging, Logging {
     
     private struct ListenerWrapper {
-        weak var listener: TaskManagerListener?
+        weak var listener: CaseManagerListener?
     }
     
     private var listeners = [ListenerWrapper]()
     
     private(set) var isSynced: Bool = false {
         didSet {
-            listeners.forEach { $0.listener?.taskManagerDidUpdateSyncState(self) }
+            listeners.forEach { $0.listener?.caseManagerDidUpdateSyncState(self) }
         }
     }
     
@@ -82,7 +82,7 @@ final class TaskManager: TaskManaging, Logging {
         group.enter()
         Services.networkManager.getTasks(caseIdentifier: "1234") { result in
             self.tasks = (try? result.get()) ?? []
-            self.listeners.forEach { $0.listener?.taskManagerDidUpdateTasks(self) }
+            self.listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
             group.leave()
         }
         
@@ -154,10 +154,10 @@ final class TaskManager: TaskManaging, Logging {
         
         isSynced = false
         
-        listeners.forEach { $0.listener?.taskManagerDidUpdateTasks(self) }
+        listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
     }
     
-    func addListener(_ listener: TaskManagerListener) {
+    func addListener(_ listener: CaseManagerListener) {
         listeners.append(ListenerWrapper(listener: listener))
     }
     

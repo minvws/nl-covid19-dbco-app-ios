@@ -38,7 +38,7 @@ class TaskOverviewViewModel {
         tableViewManager.itemForCellAtIndexPath = { [unowned self] in return sections[$0.section].tasks[$0.row] }
         tableViewManager.viewForHeaderInSection = { [unowned self] in return sections[$0].header }
         
-        Services.taskManager.addListener(self)
+        Services.caseManager.addListener(self)
     }
     
     func setupTableView(_ tableView: UITableView, tableHeaderBuilder: (() -> UIView?)?, sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?, selectedTaskHandler: @escaping (Task, IndexPath) -> Void) {
@@ -62,8 +62,8 @@ class TaskOverviewViewModel {
         sections = []
         sections.append((tableHeaderBuilder?(), []))
         
-        let otherContacts = Services.taskManager.tasks.filter { [.index, .none].contains($0.contact.communication) }
-        let staffContacts = Services.taskManager.tasks.filter { $0.contact.communication == .staff }
+        let otherContacts = Services.caseManager.tasks.filter { [.index, .none].contains($0.contact.communication) }
+        let staffContacts = Services.caseManager.tasks.filter { $0.contact.communication == .staff }
         
         let otherSectionHeader = SectionHeaderContent(.taskOverviewIndexContactsHeaderTitle, .taskOverviewIndexContactsHeaderSubtitle)
         let staffSectionHeader = SectionHeaderContent(.taskOverviewStaffContactsHeaderTitle, .taskOverviewStaffContactsHeaderSubtitle)
@@ -80,14 +80,14 @@ class TaskOverviewViewModel {
     }
 }
 
-extension TaskOverviewViewModel: TaskManagerListener {
-    func taskManagerDidUpdateTasks(_ taskManager: TaskManaging) {
+extension TaskOverviewViewModel: CaseManagerListener {
+    func caseManagerDidUpdateTasks(_ caseManager: CaseManaging) {
         buildSections()
         tableViewManager.reloadData()
     }
     
-    func taskManagerDidUpdateSyncState(_ taskManager: TaskManaging) {
-        if taskManager.isSynced {
+    func caseManagerDidUpdateSyncState(_ caseManager: CaseManaging) {
+        if caseManager.isSynced {
             hidePrompt?(true)
         } else {
             showPrompt?(true)
