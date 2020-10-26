@@ -14,28 +14,6 @@ import Foundation
 ///
 /// - Tag: Case
 struct Case: Codable {
-    enum CaseError: Error {
-        case dateDecodingError
-        case tasksDecodingError
-    }
-    
     let dateOfSymptomOnset: Date
     let tasks: [Task]
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        tasks = try container.decode([Task].self, forKey: .tasks)
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.calendar = .current
-        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
-        let dateString = try container.decode(String.self, forKey: .dateOfSymptomOnset)
-        guard let date = dateFormatter.date(from: dateString) else {
-            throw CaseError.dateDecodingError
-        }
-        
-        dateOfSymptomOnset = date
-    }
 }

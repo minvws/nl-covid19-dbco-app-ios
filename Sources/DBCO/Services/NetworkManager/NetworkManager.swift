@@ -254,7 +254,25 @@ class NetworkManager: NetworkManaging, Logging {
     private let session: URLSession
     private let sessionDelegate: URLSessionDelegate? // hold on to delegate to prevent deallocation
     
-    private lazy var jsonEncoder = JSONEncoder()
-    private lazy var jsonDecoder = JSONDecoder()
+    private lazy var dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = .current
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        return dateFormatter
+    }()
+    
+    private lazy var jsonEncoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .formatted(dateFormatter)
+        return encoder
+    }()
+    
+    private lazy var jsonDecoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        return decoder
+    }()
 }
 
