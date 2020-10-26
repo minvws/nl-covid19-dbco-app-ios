@@ -8,6 +8,7 @@
 "next" = "Next";
 "start" = "Start";
 "edit" = "Wijzig";
+"selectDate" = "Select date";
 
 /* MARK: - Onboarding */
 "onboarding.step1.title" = "Help the GGD with contact tracing";
@@ -87,6 +88,7 @@
 "contactInformationPhoneNumber" = "Telefoonnummer";
 "contactInformationEmailAddress" = "E-mailadres";
 "contactInformationBSN" = "Burgerservice nummer";
+"contactInformationLastExposure" = "Wanneer was de laatste ontmoeting?";
 
 /* MARK: - Informing contacts */
 "contactInformPromptTitle" = "Weet %@ wat er speelt?";

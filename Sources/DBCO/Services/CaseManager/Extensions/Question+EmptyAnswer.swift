@@ -24,6 +24,8 @@ extension Question {
                 return .open(nil)
             case .multipleChoice:
                 return .multipleChoice(nil)
+            case .lastExposureDate:
+                return .lastExposureDate(nil)
             }
         }()
         return Answer(uuid: UUID(), questionUuid: uuid, lastModified: Date(), value: value)

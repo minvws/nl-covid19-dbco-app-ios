@@ -88,13 +88,56 @@ final class CaseManager: CaseManaging, Logging {
         
         group.enter()
         Services.networkManager.getQuestionnaires { result in
-            self.questionnaires = (try? result.get()) ?? []
+            self.setQuestionnaires((try? result.get()) ?? [])
             group.leave()
         }
         
         group.notify(queue: .main, execute: completion)
     }
     
+    /// Set the questionnaires from the api call result
+    ///
+    /// The app injects a question of the `lastExposureDate` in the contact [Questionnaire](x-source-tag://Questionnaire) to support the `dateOfLastExposure` property at the [Task](x-source-tag://Task) level.
+    /// Answers to a question with this type should not be sent to the backend.
+    ///
+    /// # See also
+    /// [lastExposureDate](x-source-tag://lastExposureDate)
+    ///
+    /// - Tag: CaseManager.setQuestionnaires
+    private func setQuestionnaires(_ questionnaires: [Questionnaire]) {
+        func injectingLastExposureDateIfNeeded(_ questionnaire: Questionnaire) -> Questionnaire {
+            switch questionnaire.taskType {
+            case .contact:
+                var questions = questionnaire.questions
+                
+                let lastExposureQuestion = Question(uuid: UUID(),
+                                                    group: .contactDetails,
+                                                    questionType: .lastExposureDate,
+                                                    label: .contactInformationLastExposure,
+                                                    description: nil,
+                                                    relevantForCategories: [.category1, .category2a, .category2b, .category3],
+                                                    answerOptions: nil)
+                
+                // Find the index of the question modifying the communication type. (Via triggers)
+                let communicationQuestionIndex = questionnaire.questions
+                    .firstIndex { $0.answerOptions?.contains { $0.trigger == .setCommunicationToIndex } == true }
+                
+                if let index = communicationQuestionIndex {
+                    questions.insert(lastExposureQuestion, at: index)
+                } else {
+                    questions.append(lastExposureQuestion)
+                }
+                
+                return Questionnaire(uuid: questionnaire.uuid,
+                                     taskType: questionnaire.taskType,
+                                     questions: questions)
+            }
+        }
+        
+        self.questionnaires = questionnaires.map(injectingLastExposureDateIfNeeded)
+    }
+    
+    /// - Tag: CaseManager.questionnaire
     func questionnaire(for task: Task) -> Questionnaire {
         guard let questionnaire = questionnaires.first(where: { $0.taskType == task.taskType }) else {
             logError("Could not find applicable questionnaire")
@@ -111,11 +154,8 @@ final class CaseManager: CaseManaging, Logging {
         }
         
         let index = tasks.lastIndex { $0.uuid == task.uuid } ?? storeNewTask()
-            
-        guard let questionnaire = questionnaires.first(where: { $0.taskType == task.taskType }) else {
-            logError("Could not find applicable questionnaire")
-            fatalError()
-        }
+        
+        let questionnaire = self.questionnaire(for: task)
         
         // Update task type content
         switch tasks[index].taskType {

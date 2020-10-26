@@ -44,6 +44,8 @@ extension Answer {
             return value?.isEmpty == false ? 1 : 0
         case .multipleChoice(let value):
             return value != nil ? 1 : 0
+        case .lastExposureDate(let value):
+            return value != nil ? 1 : 0
         }
     }
     

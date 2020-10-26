@@ -100,6 +100,8 @@ class ContactQuestionnaireViewModel {
                 return OpenAnswerManager(question: question, answer: answer)
             case .multipleChoice:
                 return MultipleChoiceAnswerManager(question: question, answer: answer)
+            case .lastExposureDate:
+                return LastExposureDateAnswerManager(question: question, answer: answer, lastExposureDate: updatedContact.dateOfLastExposure)
             }
         }
         
@@ -108,6 +110,8 @@ class ContactQuestionnaireViewModel {
                 switch $0 {
                 case let classificationManager as ClassificationDetailsAnswerManager:
                     updateClassification(with: classificationManager.classification)
+                case let lastExposureManager as LastExposureDateAnswerManager:
+                    updateLastExposureDate(with: lastExposureManager.date.dateValue)
                 default:
                     break
                 }
@@ -169,6 +173,13 @@ class ContactQuestionnaireViewModel {
         }
         
         updateInformSectionContent()
+    }
+    
+    private func updateLastExposureDate(with date: Date?) {
+        updatedContact = Task.Contact(category: updatedContact.category,
+                                      communication: updatedContact.communication,
+                                      didInform: updatedContact.didInform,
+                                      dateOfLastExposure: date)
     }
     
     private func updateProgress(expandFirstUnfinishedSection: Bool = false) {
@@ -287,7 +298,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
             .touchUpInside(self, action: #selector(save))
         
         scrollView.embed(in: contentView)
-        scrollView.keyboardDismissMode = .interactive
+        scrollView.keyboardDismissMode = .onDrag
         
         let widthProviderView = UIView()
         widthProviderView.snap(to: .top, of: scrollView, height: 0)

@@ -54,6 +54,7 @@ extension String {
     static var next: String { return Localization.string(for: "next") }
     static var start: String { return Localization.string(for: "start") }
     static var edit: String { return Localization.string(for: "edit") }
+    static var selectDate: String { return Localization.string(for: "selectDate") }
     
     /* MARK: - Onboarding */
     static var onboardingStep1Title: String { return Localization.string(for: "onboarding.step1.title") }
@@ -133,6 +134,7 @@ extension String {
     static var contactInformationEmailAddress: String { return Localization.string(for: "contactInformationEmailAddress") }
     static var contactInformationBirthDate: String { return Localization.string(for: "contactInformationBirthDate") }
     static var contactInformationBSN: String { return Localization.string(for: "contactInformationBSN") }
+    static var contactInformationLastExposure: String { return Localization.string(for: "contactInformationLastExposure") }
     
     /* MARK: - Informing contacts */
     static func contactInformPromptTitle(firstName: String) -> String { return Localization.string(for: "contactInformPromptTitle", [firstName]) }

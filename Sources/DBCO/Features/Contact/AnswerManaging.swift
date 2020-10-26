@@ -231,6 +231,50 @@ class DateAnswerManager: AnswerManaging {
     }
 }
 
+/// AnswerManager for the .lastExposureDate question.
+/// Uses [InputField](x-source-tag://InputField) to display an editable date.
+///
+/// # See also
+/// [lastExposureDate](x-source-tag://lastExposureDate)
+class LastExposureDateAnswerManager: AnswerManaging {
+    
+    fileprivate(set) var date: GeneralDate { didSet { updateHandler?(self) } }
+    
+    private var baseAnswer: Answer
+    
+    var updateHandler: ((AnswerManaging) -> Void)?
+    
+    init(question: Question, answer: Answer, lastExposureDate: Date?) {
+        self.baseAnswer = answer
+        self.question = question
+        
+        if let lastExposureDate = lastExposureDate {
+            baseAnswer.value = .lastExposureDate(lastExposureDate)
+        }
+        
+        guard case .lastExposureDate(let date) = baseAnswer.value else {
+            fatalError()
+        }
+            
+        self.date = GeneralDate(label: question.label, date: date)
+    }
+    
+    let question: Question
+    
+    private(set) lazy var view: UIView = InputField(for: self, path: \.date)
+        .decorateWithDescriptionIfNeeded(description: question.description)
+    
+    var answer: Answer {
+        var answer = baseAnswer
+        answer.value = .lastExposureDate(date.dateValue)
+        return answer
+    }
+    
+    var hasValidAnswer: Bool {
+        return date.value != nil
+    }
+}
+
 /// AnswerManager for the .open question.
 /// Uses [InputTextView](x-source-tag://InputTextView) to display an editable text view
 class OpenAnswerManager: AnswerManaging {
