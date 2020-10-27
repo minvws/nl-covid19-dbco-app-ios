@@ -151,24 +151,4 @@ extension String {
     static var unfinishedTasksOverviewMessage: String { return Localization.string(for: "unfinishedTasksOverviewMessage") }
     static var uploadInProgressMessage: String { return Localization.string(for: "uploadInProgressMessage") }
     
-    // MARK: - Help
-    
-    static var helpTitle: String { return Localization.string(for: "helpTitle") }
-    static var helpSubtitle: String { return Localization.string(for: "helpSubtitle") }
-    static var helpAlsoRead: String { return Localization.string(for: "helpAlsoRead") }
-
-    static var helpFaqReasonTitle: String { return Localization.string(for: "help.faq.reason.title") }
-    static var helpFaqReasonDescription: String { return Localization.string(for: "help.faq.reason.description") }
-    static var helpFaqLocationTitle: String { return Localization.string(for: "help.faq.location.title") }
-    static var helpFaqLocationDescription: String { return Localization.string(for: "help.faq.location.description") }
-    static var helpFaqAnonymousTitle: String { return Localization.string(for: "help.faq.anonymous.title") }
-    static var helpFaqAnonymousDescription1: String { return Localization.string(for: "help.faq.anonymous.description_1") }
-    static var helpFaqAnonymousDescription2: String { return Localization.string(for: "help.faq.anonymous.description_2") }
-    static var helpFaqNotificationTitle: String { return Localization.string(for: "help.faq.notification.title") }
-    static var helpFaqNotificationDescription: String { return Localization.string(for: "help.faq.notification.description") }
-    static var helpFaqBluetoothTitle: String { return Localization.string(for: "help.faq.bluetooth.title") }
-    static var helpFaqBluetoothDescription: String { return Localization.string(for: "help.faq.bluetooth.description") }
-    static var helpFaqPowerUsageTitle: String { return Localization.string(for: "help.faq.power_usage.title") }
-    static var helpFaqPowerUsageDescription: String { return Localization.string(for: "help.faq.power_usage.description") }
-    
 }

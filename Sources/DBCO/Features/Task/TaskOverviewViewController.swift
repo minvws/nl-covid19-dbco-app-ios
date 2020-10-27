@@ -8,7 +8,6 @@
 import UIKit
 
 protocol TaskOverviewViewControllerDelegate: class {
-    func taskOverviewViewControllerDidRequestHelp(_ controller: TaskOverviewViewController)
     func taskOverviewViewControllerDidRequestAddContact(_ controller: TaskOverviewViewController)
     func taskOverviewViewController(_ controller: TaskOverviewViewController, didSelect task: Task)
     func taskOverviewViewControllerDidRequestUpload(_ controller: TaskOverviewViewController)
@@ -157,10 +156,6 @@ class TaskOverviewViewController: PromptableViewController {
         versionLabel.frame = CGRect(x: 0, y: 0, width: versionLabel.frame.width, height: 60.0)
         
         tableView.tableFooterView = versionLabel
-    }
-    
-    @objc private func openHelp() {
-        delegate?.taskOverviewViewControllerDidRequestHelp(self)
     }
     
     @objc private func requestContact() {
