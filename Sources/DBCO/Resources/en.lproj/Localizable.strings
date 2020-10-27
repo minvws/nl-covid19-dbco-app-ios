@@ -9,6 +9,7 @@
 "start" = "Start";
 "edit" = "Wijzig";
 "selectDate" = "Select date";
+"done" = "Done";
 
 /* MARK: - Onboarding */
 "onboarding.step1.title" = "Help the GGD with contact tracing";
@@ -104,3 +105,5 @@
 "unfinishedTasksOverviewTitle" = "Bijna klaar";
 "unfinishedTasksOverviewMessage" = "Kun je de gegevens van deze contacten controleren?";
 "uploadInProgressMessage" = "Versturen...";
+"uploadFinishedTitle" = "Bedankt voor het delen van de gegevens met de GGD";
+"uploadFinishedMessage" = "Wil je toch nog contactgegevens aanpassen, contacten toevoegen of een andere wijziging doorgeven dan kan dat.";

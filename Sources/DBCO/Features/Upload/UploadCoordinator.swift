@@ -59,9 +59,9 @@ final class UploadCoordinator: Coordinator {
         
         Services.caseManager.sync { _ in
             let viewModel = OnboardingStepViewModel(image: UIImage(named: "StartVisual")!,
-                                                    title: "Bedankt voor het delen van de gegevens met de GGD",
-                                                    message: "Wil je toch nog contactgegevens aanpassen, contacten toevoegen of een andere wijziging doorgeven dan kan dat.",
-                                                    buttonTitle: "Klaar")
+                                                    title: .uploadFinishedTitle,
+                                                    message: .uploadFinishedMessage,
+                                                    buttonTitle: .done)
             let stepController = OnboardingStepViewController(viewModel: viewModel)
             stepController.delegate = self
             
