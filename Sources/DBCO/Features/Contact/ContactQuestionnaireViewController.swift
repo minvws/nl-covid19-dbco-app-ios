@@ -17,7 +17,7 @@ private extension Question {
 /// The ViewModel required for [ContactQuestionnaireViewController](x-source-tag://ContactQuestionnaireViewController).
 /// Can be used to update a task or to create a new task.
 ///
-/// Uses the global [TaskManager](x-source-tag://TaskManaging) to get the appropriate questionnaire. For each question in the questionnaire a class conforming to [AnswerManaging](x-source-tag://AnswerManaging) is created to manage answers, prefilling the answer when possible.
+/// Uses the global [CaseManager](x-source-tag://CaseManaging) to get the appropriate questionnaire. For each question in the questionnaire a class conforming to [AnswerManaging](x-source-tag://AnswerManaging) is created to manage answers, prefilling the answer when possible.
 ///
 /// Only questions needed for the task's category are displayed. A [Question](x-source-tag://Question) with type `.classificationDetails` can update the managed task's category, so displayed questions are highly dynamic.
 ///
@@ -34,7 +34,8 @@ class ContactQuestionnaireViewModel {
         var updatedTask = task
         updatedTask.contact = Task.Contact(category: updatedCategory,
                                            communication: updatedContact.communication,
-                                           didInform: updatedContact.didInform)
+                                           didInform: updatedContact.didInform,
+                                           dateOfLastExposure: updatedContact.dateOfLastExposure)
         updatedTask.result = baseResult
         updatedTask.result?.answers = answerManagers.map(\.answer)
         
@@ -70,7 +71,7 @@ class ContactQuestionnaireViewModel {
         self.informContent = ""
         self.informButtonType = .primary
         
-        let questionnaire = Services.taskManager.questionnaire(for: task)
+        let questionnaire = Services.caseManager.questionnaire(for: task)
         
         let questionsAndAnswers: [(question: Question, answer: Answer)] = {
             let currentAnswers = task.result?.answers ?? []
@@ -99,6 +100,8 @@ class ContactQuestionnaireViewModel {
                 return OpenAnswerManager(question: question, answer: answer)
             case .multipleChoice:
                 return MultipleChoiceAnswerManager(question: question, answer: answer)
+            case .lastExposureDate:
+                return LastExposureDateAnswerManager(question: question, answer: answer, lastExposureDate: updatedContact.dateOfLastExposure)
             }
         }
         
@@ -107,6 +110,8 @@ class ContactQuestionnaireViewModel {
                 switch $0 {
                 case let classificationManager as ClassificationDetailsAnswerManager:
                     updateClassification(with: classificationManager.classification)
+                case let lastExposureManager as LastExposureDateAnswerManager:
+                    updateLastExposureDate(with: lastExposureManager.date.dateValue)
                 default:
                     break
                 }
@@ -130,21 +135,24 @@ class ContactQuestionnaireViewModel {
     private func setCommunicationToIndex() {
         updatedContact = Task.Contact(category: updatedContact.category,
                                       communication: .index,
-                                      didInform: updatedContact.didInform)
+                                      didInform: updatedContact.didInform,
+                                      dateOfLastExposure: updatedContact.dateOfLastExposure)
         updateInformSectionContent()
     }
     
     private func setCommunicationToStaff() {
         updatedContact = Task.Contact(category: updatedContact.category,
                                       communication: .staff,
-                                      didInform: updatedContact.didInform)
+                                      didInform: updatedContact.didInform,
+                                      dateOfLastExposure: updatedContact.dateOfLastExposure)
         updateInformSectionContent()
     }
     
     func registerDidInform() {
         updatedContact = Task.Contact(category: updatedContact.category,
                                       communication: updatedContact.communication,
-                                      didInform: true)
+                                      didInform: true,
+                                      dateOfLastExposure: updatedContact.dateOfLastExposure)
     }
     
     private func updateClassification(with result: ClassificationHelper.Result) {
@@ -156,7 +164,8 @@ class ContactQuestionnaireViewModel {
             taskCategory = updatedCategory
             updatedContact = Task.Contact(category: taskCategory,
                                           communication: updatedContact.communication,
-                                          didInform: updatedContact.didInform)
+                                          didInform: updatedContact.didInform,
+                                          dateOfLastExposure: updatedContact.dateOfLastExposure)
         }
         
         answerManagers.forEach {
@@ -164,6 +173,13 @@ class ContactQuestionnaireViewModel {
         }
         
         updateInformSectionContent()
+    }
+    
+    private func updateLastExposureDate(with date: Date?) {
+        updatedContact = Task.Contact(category: updatedContact.category,
+                                      communication: updatedContact.communication,
+                                      didInform: updatedContact.didInform,
+                                      dateOfLastExposure: date)
     }
     
     private func updateProgress(expandFirstUnfinishedSection: Bool = false) {
@@ -282,7 +298,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
             .touchUpInside(self, action: #selector(save))
         
         scrollView.embed(in: contentView)
-        scrollView.keyboardDismissMode = .interactive
+        scrollView.keyboardDismissMode = .onDrag
         
         let widthProviderView = UIView()
         widthProviderView.snap(to: .top, of: scrollView, height: 0)

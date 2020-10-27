@@ -117,7 +117,7 @@ extension TaskOverviewCoordinator: InformContactCoordinatorDelegate {
     func informContactCoordinator(_ coordinator: InformContactCoordinator, didFinishWith task: Task) {
         removeChildCoordinator(coordinator)
         
-        Services.taskManager.save(task)
+        Services.caseManager.save(task)
     }
     
 }

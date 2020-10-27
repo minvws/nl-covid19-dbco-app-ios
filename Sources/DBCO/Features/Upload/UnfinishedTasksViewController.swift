@@ -5,7 +5,6 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-
 import UIKit
 
 protocol UnfinishedTasksViewControllerDelegate: class {
@@ -32,7 +31,7 @@ class UnfinishedTasksViewModel {
         sections = []
         
         // Store unfisnished task identifiers now, so any completed tasks won't have to dissappear from the overview.
-        relevantTaskIdentifiers = Services.taskManager.tasks
+        relevantTaskIdentifiers = Services.caseManager.tasks
             .filter { $0.status != .completed }
             .map { $0.uuid }
         
@@ -41,7 +40,7 @@ class UnfinishedTasksViewModel {
         tableViewManager.itemForCellAtIndexPath = { [unowned self] in return sections[$0.section].tasks[$0.row] }
         tableViewManager.viewForHeaderInSection = { [unowned self] in return sections[$0].header }
         
-        Services.taskManager.addListener(self)
+        Services.caseManager.addListener(self)
     }
     
     func setupTableView(_ tableView: UITableView, tableHeaderBuilder: (() -> UIView?)?, sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?, selectedTaskHandler: @escaping (Task, IndexPath) -> Void) {
@@ -57,7 +56,7 @@ class UnfinishedTasksViewModel {
         sections = []
         sections.append((tableHeaderBuilder?(), []))
         
-        let tasks = Services.taskManager.tasks.filter { relevantTaskIdentifiers.contains($0.uuid) }
+        let tasks = Services.caseManager.tasks.filter { relevantTaskIdentifiers.contains($0.uuid) }
         
         let otherContacts = tasks.filter { [.index, .none].contains($0.contact.communication) }
         let staffContacts = tasks.filter { $0.contact.communication == .staff }
@@ -77,13 +76,13 @@ class UnfinishedTasksViewModel {
     }
 }
 
-extension UnfinishedTasksViewModel: TaskManagerListener {
-    func taskManagerDidUpdateTasks(_ taskManager: TaskManaging) {
+extension UnfinishedTasksViewModel: CaseManagerListener {
+    func caseManagerDidUpdateTasks(_ caseManager: CaseManaging) {
         buildSections()
         tableViewManager.reloadData()
     }
     
-    func taskManagerDidUpdateSyncState(_ taskManager: TaskManaging) {}
+    func caseManagerDidUpdateSyncState(_ caseManager: CaseManaging) {}
 }
 
 

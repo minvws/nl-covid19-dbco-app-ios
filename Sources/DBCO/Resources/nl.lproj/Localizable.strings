@@ -6,6 +6,7 @@
 "next" = "Volgende";
 "start" = "Beginnen";
 "edit" = "Wijzig";
+"selectDate" = "Selecteer datum";
 
 /* MARK: - Onboarding */
 "onboarding.step1.title" = "Help de GGD bij het contactonderzoek en breng je omgeving op de hoogte";
@@ -75,7 +76,7 @@
 "distanceRiskQuestion.answer.negative" = "Nee, denk het niet";
 
 "otherRiskQuestion" = "Is een of meerdere van deze dingen tijdens jullie ontmoeting gebeurd?";
-"otherRiskQuestion.description" = "* In je gezicht geniesd\n* Geknuffeld of gezoend\n* Ander lichamelijk contact";
+"otherRiskQuestion.description" = "<ul><li>In je gezicht geniesd</li><li>Geknuffeld of gezoend</li><li>Ander lichamelijk contact</li></ul>";
 "otherRiskQuestion.answer.positive" = "Ja, één of meer";
 "otherRiskQuestion.answer.negative" = "Nee, denk het niet";
 
@@ -85,6 +86,7 @@
 "contactInformationPhoneNumber" = "Telefoonnummer";
 "contactInformationEmailAddress" = "E-mailadres";
 "contactInformationBSN" = "Burgerservice nummer";
+"contactInformationLastExposure" = "Wanneer was de laatste ontmoeting?";
 
 /* MARK: - Informing contacts */
 "contactInformPromptTitle" = "Weet %@ wat er speelt?";

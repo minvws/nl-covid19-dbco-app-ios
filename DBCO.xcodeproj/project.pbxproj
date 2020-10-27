@@ -72,8 +72,9 @@
 		CDC7C89425385AD600FE7E05 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C89325385AD600FE7E05 /* Task.swift */; };
 		CDC7C898253873CE00FE7E05 /* Envelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C897253873CE00FE7E05 /* Envelope.swift */; };
 		CDC7C89E25387E2000FE7E05 /* Questionnaire.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C89D25387E2000FE7E05 /* Questionnaire.swift */; };
-		CDC7C8A225387E4400FE7E05 /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C8A125387E4400FE7E05 /* TaskManager.swift */; };
+		CDC7C8A225387E4400FE7E05 /* CaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C8A125387E4400FE7E05 /* CaseManager.swift */; };
 		CDDC05642543120D0079C2F4 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDDC05632543120D0079C2F4 /* Coordinator.swift */; };
+		CDDC056C2546CD460079C2F4 /* Case.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDDC056B2546CD460079C2F4 /* Case.swift */; };
 		CDE30E64251BC02100862A40 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E63251BC02100862A40 /* TextField.swift */; };
 		CDE30E69251C89FF00862A40 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E68251C89FF00862A40 /* NavigationController.swift */; };
 		CDE30E6C251CE15800862A40 /* ContactValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E6B251CE15800862A40 /* ContactValues.swift */; };
@@ -171,8 +172,9 @@
 		CDC7C89325385AD600FE7E05 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		CDC7C897253873CE00FE7E05 /* Envelope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Envelope.swift; sourceTree = "<group>"; };
 		CDC7C89D25387E2000FE7E05 /* Questionnaire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Questionnaire.swift; sourceTree = "<group>"; };
-		CDC7C8A125387E4400FE7E05 /* TaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
+		CDC7C8A125387E4400FE7E05 /* CaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseManager.swift; sourceTree = "<group>"; };
 		CDDC05632543120D0079C2F4 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		CDDC056B2546CD460079C2F4 /* Case.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case.swift; sourceTree = "<group>"; };
 		CDE30E63251BC02100862A40 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		CDE30E68251C89FF00862A40 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		CDE30E6B251CE15800862A40 /* ContactValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactValues.swift; sourceTree = "<group>"; };
@@ -329,15 +331,16 @@
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
-		CDA0F67625398C8B009FD2A9 /* TaskManager */ = {
+		CDA0F67625398C8B009FD2A9 /* CaseManager */ = {
 			isa = PBXGroup;
 			children = (
 				CDA0F67F2539AA2A009FD2A9 /* Extensions */,
 				CDC7C89325385AD600FE7E05 /* Task.swift */,
 				CDC7C89D25387E2000FE7E05 /* Questionnaire.swift */,
-				CDC7C8A125387E4400FE7E05 /* TaskManager.swift */,
+				CDC7C8A125387E4400FE7E05 /* CaseManager.swift */,
+				CDDC056B2546CD460079C2F4 /* Case.swift */,
 			);
-			path = TaskManager;
+			path = CaseManager;
 			sourceTree = "<group>";
 		};
 		CDA0F67F2539AA2A009FD2A9 /* Extensions */ = {
@@ -434,7 +437,7 @@
 			children = (
 				CDC7C86125376AB200FE7E05 /* Services.swift */,
 				CDC7C8672538411300FE7E05 /* NetworkManager */,
-				CDA0F67625398C8B009FD2A9 /* TaskManager */,
+				CDA0F67625398C8B009FD2A9 /* CaseManager */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -667,7 +670,7 @@
 				CDC272EF2514B46B00AE7BB6 /* RequestContactsAuthorizationViewModel.swift in Sources */,
 				CDADF7EE2535B6A500424492 /* Label.swift in Sources */,
 				CD7282C6250F9D2400D68911 /* TaskOverviewCoordinator.swift in Sources */,
-				CDC7C8A225387E4400FE7E05 /* TaskManager.swift in Sources */,
+				CDC7C8A225387E4400FE7E05 /* CaseManager.swift in Sources */,
 				CDA0F6852539AA66009FD2A9 /* Task+ContactName.swift in Sources */,
 				CDC7C8872538498700FE7E05 /* JSONDecoder+Decoding.swift in Sources */,
 				CDE30E64251BC02100862A40 /* TextField.swift in Sources */,
@@ -699,6 +702,7 @@
 				CDA0F6892539AAB8009FD2A9 /* Answer+Progress.swift in Sources */,
 				CD29635B25191972008443AF /* Haptic.swift in Sources */,
 				CDFCF907250FA6E80062269A /* ViewController.swift in Sources */,
+				CDDC056C2546CD460079C2F4 /* Case.swift in Sources */,
 				CDA0F6962539F1A3009FD2A9 /* LabeledInputView.swift in Sources */,
 				CD29636125191AA8008443AF /* Theme.swift in Sources */,
 				CDC7C86225376AB200FE7E05 /* Services.swift in Sources */,

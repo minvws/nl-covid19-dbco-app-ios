@@ -19,7 +19,7 @@ struct Endpoint {
 
     // MARK: - API
 
-    static func tasks(caseIdentifier: String) -> Path { Path(components: "cases", caseIdentifier, "tasks") }
+    static func `case`(identifier: String) -> Path { Path(components: "cases", identifier) }
     
     static let questionnaires = Path(components: "questionnaires")
 }

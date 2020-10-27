@@ -51,7 +51,7 @@ enum HTTPContentType: String {
 protocol NetworkManaging {
     init(configuration: NetworkConfiguration)
     
-    func getTasks(caseIdentifier: String, completion: @escaping (Result<[Task], NetworkError>) -> ())
+    func getCase(identifier: String, completion: @escaping (Result<Case, NetworkError>) -> ())
     func getQuestionnaires(completion: @escaping (Result<[Questionnaire], NetworkError>) -> ())
 }
 
@@ -66,13 +66,13 @@ class NetworkManager: NetworkManaging, Logging {
                                   delegateQueue: nil)
     }
     
-    func getTasks(caseIdentifier: String, completion: @escaping (Result<[Task], NetworkError>) -> ()) {
-        let urlRequest = constructRequest(url: configuration.tasksUrl(caseIdentifier: caseIdentifier),
+    func getCase(identifier: String, completion: @escaping (Result<Case, NetworkError>) -> ()) {
+        let urlRequest = constructRequest(url: configuration.caseUrl(identifier: identifier),
                                           method: .GET)
         
-        func open(result: Result<Envelope<Task>, NetworkError>) {
+        func open(result: Result<Envelope<Case>, NetworkError>) {
             DispatchQueue.main.async {
-                completion(result.map { $0.items })
+                completion(result.map { $0.item })
             }
         }
 
@@ -83,7 +83,7 @@ class NetworkManager: NetworkManaging, Logging {
         let urlRequest = constructRequest(url: configuration.questionnairesUrl,
                                           method: .GET)
         
-        func open(result: Result<Envelope<Questionnaire>, NetworkError>) {
+        func open(result: Result<ArrayEnvelope<Questionnaire>, NetworkError>) {
             DispatchQueue.main.async {
                 completion(result.map { $0.items })
             }
@@ -254,7 +254,25 @@ class NetworkManager: NetworkManaging, Logging {
     private let session: URLSession
     private let sessionDelegate: URLSessionDelegate? // hold on to delegate to prevent deallocation
     
-    private lazy var jsonEncoder = JSONEncoder()
-    private lazy var jsonDecoder = JSONDecoder()
+    private lazy var dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = .current
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        return dateFormatter
+    }()
+    
+    private lazy var jsonEncoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .formatted(dateFormatter)
+        return encoder
+    }()
+    
+    private lazy var jsonDecoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        return decoder
+    }()
 }
 

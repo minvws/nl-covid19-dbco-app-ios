@@ -34,6 +34,16 @@ struct Question: Codable {
         case contactDetailsFull = "contactdetails_full"
         case open
         case multipleChoice = "multiplechoice"
+        
+        /// This case is not supported in the API.
+        /// The app injects a question of this type in the contact [Questionnaire](x-source-tag://Questionnaire) to support the dateOfLastExposure property at the Task level.
+        /// Answers to a question with this type should not be sent to the backend.
+        ///
+        /// # See also
+        /// [setQuestionnaires(_ questionnaires: [Questionnaire])](x-source-tag://CaseManager.setQuestionnaires)
+        ///
+        /// - Tag: lastExposureDate
+        case lastExposureDate
     }
 
     let uuid: UUID
@@ -43,6 +53,16 @@ struct Question: Codable {
     let description: String?
     let relevantForCategories: [Task.Contact.Category]
     let answerOptions: [AnswerOption]?
+    
+    init(uuid: UUID, group: Group, questionType: QuestionType, label: String?, description: String?, relevantForCategories: [Task.Contact.Category], answerOptions: [AnswerOption]?) {
+        self.uuid = uuid
+        self.group = group
+        self.questionType = questionType
+        self.label = label
+        self.description = description
+        self.relevantForCategories = relevantForCategories
+        self.answerOptions = answerOptions
+    }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -70,7 +90,7 @@ struct Question: Codable {
 ///
 /// # See also:
 /// [Task](x-source-tag://Task),
-/// [TaskManager](x-source-tag://TaskManager)
+/// [CaseManager](x-source-tag://CaseManager)
 ///
 /// - Tag: Questionnaire
 struct Questionnaire: Codable {
@@ -102,6 +122,9 @@ struct Answer {
         case open(String?)
         case multipleChoice(AnswerOption?)
         
+        /// See [lastExposureDate](x-source-tag://lastExposureDate)
+        case lastExposureDate(Date?)
+        
         var description: String {
             switch self {
             case .classificationDetails(let livedTogetherRisk, let durationRisk, let distanceRisk, let otherRisk):
@@ -112,6 +135,8 @@ struct Answer {
                 return "contactDetailsFull(\(String(describing: firstName)), \(String(describing: lastName)), \(String(describing: email)), \(String(describing: phoneNumber)))"
             case .date(let date):
                 return "date(\(String(describing: date)))"
+            case .lastExposureDate(let date):
+                return "lastExposureDate(\(String(describing: date)))"
             case .open(let value):
                 return "open(\(String(describing: value)))"
             case .multipleChoice(let option):
@@ -132,7 +157,7 @@ struct Answer {
 /// # See also:
 /// [Questionnaire](x-source-tag://Questionnaire),
 /// [Task](x-source-tag://Task),
-/// [TaskManager](x-source-tag://TaskManager)
+/// [CaseManager](x-source-tag://CaseManager)
 ///
 /// - Tag: QuestionnaireResult
 struct QuestionnaireResult {

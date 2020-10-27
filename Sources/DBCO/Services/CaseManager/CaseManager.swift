@@ -9,14 +9,14 @@ import Foundation
 
 /// Loads tasks and questionnaires.
 /// Facilitates storing and uploading results to the backend.
-/// Publishes updates to the internal store via [TaskManagerListener](x-source-tag://TaskManagerListener)
+/// Publishes updates to the internal store via [CaseManagerListener](x-source-tag://CaseManagerListener)
 ///
 /// # See also:
 /// [Task](x-source-tag://Task),
 /// [Questionnaire](x-source-tag://Questionnaire)
 ///
-/// - Tag: TaskManaging
-protocol TaskManaging {
+/// - Tag: CaseManaging
+protocol CaseManaging {
     init()
     
     var tasks: [Task] { get }
@@ -32,8 +32,8 @@ protocol TaskManaging {
     func loadTasksAndQuestions(completion: @escaping () -> Void)
     
     /// Adds a listener
-    /// - parameter listener: The object conforming to [TaskManagerListener](x-source-tag://TaskManagerListener) that will receive updates. Will be stored with a weak reference
-    func addListener(_ listener: TaskManagerListener)
+    /// - parameter listener: The object conforming to [CaseManagerListener](x-source-tag://CaseManagerListener) that will receive updates. Will be stored with a weak reference
+    func addListener(_ listener: CaseManagerListener)
     
     /// Saves updates to a task if a task with the same uuid is already managed, or stores a new task.
     func save(_ task: Task)
@@ -43,28 +43,28 @@ protocol TaskManaging {
     func sync(completionHandler: ((_ success: Bool) -> Void)?)
 }
 
-/// - Tag: TaskManaging
-protocol TaskManagerListener: class {
+/// - Tag: CaseManagerListener
+protocol CaseManagerListener: class {
     /// Called after updates are made to the managed tasks
-    func taskManagerDidUpdateTasks(_ taskManager: TaskManaging)
+    func caseManagerDidUpdateTasks(_ caseManager: CaseManaging)
     
     /// Called after tasks were uploaded to the backend
-    func taskManagerDidUpdateSyncState(_ taskManager: TaskManaging)
+    func caseManagerDidUpdateSyncState(_ caseManager: CaseManaging)
 }
 
 // Temporary implementation
-/// - Tag: TaskManager
-final class TaskManager: TaskManaging, Logging {
+/// - Tag: CaseManager
+final class CaseManager: CaseManaging, Logging {
     
     private struct ListenerWrapper {
-        weak var listener: TaskManagerListener?
+        weak var listener: CaseManagerListener?
     }
     
     private var listeners = [ListenerWrapper]()
     
     private(set) var isSynced: Bool = false {
         didSet {
-            listeners.forEach { $0.listener?.taskManagerDidUpdateSyncState(self) }
+            listeners.forEach { $0.listener?.caseManagerDidUpdateSyncState(self) }
         }
     }
     
@@ -80,21 +80,64 @@ final class TaskManager: TaskManaging, Logging {
         let group = DispatchGroup()
         
         group.enter()
-        Services.networkManager.getTasks(caseIdentifier: "1234") { result in
-            self.tasks = (try? result.get()) ?? []
-            self.listeners.forEach { $0.listener?.taskManagerDidUpdateTasks(self) }
+        Services.networkManager.getCase(identifier: "1234") { result in
+            self.tasks = (try? result.get())?.tasks ?? []
+            self.listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
             group.leave()
         }
         
         group.enter()
         Services.networkManager.getQuestionnaires { result in
-            self.questionnaires = (try? result.get()) ?? []
+            self.setQuestionnaires((try? result.get()) ?? [])
             group.leave()
         }
         
         group.notify(queue: .main, execute: completion)
     }
     
+    /// Set the questionnaires from the api call result
+    ///
+    /// The app injects a question of the `lastExposureDate` in the contact [Questionnaire](x-source-tag://Questionnaire) to support the `dateOfLastExposure` property at the [Task](x-source-tag://Task) level.
+    /// Answers to a question with this type should not be sent to the backend.
+    ///
+    /// # See also
+    /// [lastExposureDate](x-source-tag://lastExposureDate)
+    ///
+    /// - Tag: CaseManager.setQuestionnaires
+    private func setQuestionnaires(_ questionnaires: [Questionnaire]) {
+        func injectingLastExposureDateIfNeeded(_ questionnaire: Questionnaire) -> Questionnaire {
+            switch questionnaire.taskType {
+            case .contact:
+                var questions = questionnaire.questions
+                
+                let lastExposureQuestion = Question(uuid: UUID(),
+                                                    group: .contactDetails,
+                                                    questionType: .lastExposureDate,
+                                                    label: .contactInformationLastExposure,
+                                                    description: nil,
+                                                    relevantForCategories: [.category1, .category2a, .category2b, .category3],
+                                                    answerOptions: nil)
+                
+                // Find the index of the question modifying the communication type. (Via triggers)
+                let communicationQuestionIndex = questionnaire.questions
+                    .firstIndex { $0.answerOptions?.contains { $0.trigger == .setCommunicationToIndex } == true }
+                
+                if let index = communicationQuestionIndex {
+                    questions.insert(lastExposureQuestion, at: index)
+                } else {
+                    questions.append(lastExposureQuestion)
+                }
+                
+                return Questionnaire(uuid: questionnaire.uuid,
+                                     taskType: questionnaire.taskType,
+                                     questions: questions)
+            }
+        }
+        
+        self.questionnaires = questionnaires.map(injectingLastExposureDateIfNeeded)
+    }
+    
+    /// - Tag: CaseManager.questionnaire
     func questionnaire(for task: Task) -> Questionnaire {
         guard let questionnaire = questionnaires.first(where: { $0.taskType == task.taskType }) else {
             logError("Could not find applicable questionnaire")
@@ -111,11 +154,8 @@ final class TaskManager: TaskManaging, Logging {
         }
         
         let index = tasks.lastIndex { $0.uuid == task.uuid } ?? storeNewTask()
-            
-        guard let questionnaire = questionnaires.first(where: { $0.taskType == task.taskType }) else {
-            logError("Could not find applicable questionnaire")
-            fatalError()
-        }
+        
+        let questionnaire = self.questionnaire(for: task)
         
         // Update task type content
         switch tasks[index].taskType {
@@ -154,10 +194,10 @@ final class TaskManager: TaskManaging, Logging {
         
         isSynced = false
         
-        listeners.forEach { $0.listener?.taskManagerDidUpdateTasks(self) }
+        listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
     }
     
-    func addListener(_ listener: TaskManagerListener) {
+    func addListener(_ listener: CaseManagerListener) {
         listeners.append(ListenerWrapper(listener: listener))
     }
     

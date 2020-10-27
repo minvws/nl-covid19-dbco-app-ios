@@ -70,11 +70,22 @@ struct GeneralDate: ContactValue {
     }
     
     var dateValue: Date? {
-        guard let value = value else {
-            return nil
+        get {
+            guard let value = value else {
+                return nil
+            }
+            
+            return GeneralDate.dateFormatter.date(from: value)
         }
         
-        return GeneralDate.dateFormatter.date(from: value)
+        set {
+            guard let date = newValue else {
+                self.value = nil
+                return
+            }
+            
+            self.value = GeneralDate.dateFormatter.string(from: date)
+        }
     }
         
     static let dateFormatter: DateFormatter = {

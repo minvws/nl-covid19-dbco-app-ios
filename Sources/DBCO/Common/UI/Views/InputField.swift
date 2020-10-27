@@ -51,6 +51,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         addTarget(self, action: #selector(handleEditingDidBegin), for: .editingDidBegin)
         
         label.text = object?[keyPath: path].label
+        label.font = object?[keyPath: path].labelFont
         placeholder = object?[keyPath: path].placeholder
         
         text = object?[keyPath: path].value

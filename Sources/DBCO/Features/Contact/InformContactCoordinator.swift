@@ -46,7 +46,8 @@ final class InformContactCoordinator: Coordinator, Logging {
             var updatedTask = self.task
             updatedTask.contact = Task.Contact(category: updatedTask.contact.category,
                                                communication: updatedTask.contact.communication,
-                                               didInform: true)
+                                               didInform: true,
+                                               dateOfLastExposure: updatedTask.contact.dateOfLastExposure)
             self.delegate?.informContactCoordinator(self, didFinishWith: updatedTask)
         })
         
@@ -70,7 +71,8 @@ final class InformContactCoordinator: Coordinator, Logging {
             if success {
                 updatedTask.contact = Task.Contact(category: updatedTask.contact.category,
                                                    communication: updatedTask.contact.communication,
-                                                   didInform: true)
+                                                   didInform: true,
+                                                   dateOfLastExposure: updatedTask.contact.dateOfLastExposure)
             }
             
             self.delegate?.informContactCoordinator(self, didFinishWith: updatedTask)
