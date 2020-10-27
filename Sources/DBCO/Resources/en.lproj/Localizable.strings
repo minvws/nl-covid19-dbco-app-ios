@@ -60,7 +60,11 @@
 "informContactTitle.index" = "Vertel dat je besmet bent en deel de leefregels van het RIVM";
 "informContactTitle.staff" = "Wil je ook zelf contact opnemen?";
 
-"informContactGuidelines.close" = "Dit zijn de belangrijkste leefregels voor deze persoon:<ul><li>Blijf thuis, ontvang geen bezoek - alle huisgenoten blijven thuis</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li></ul>";
+"informContactGuidelines.close" = "Dit zijn de belangrijkste leefregels voor deze persoon:<ul><li>Blijf thuis, ontvang geen bezoek - alle huisgenoten blijven thuis%@%@</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li></ul>";
+"informContactGuidelines.close.untilDate" = " - <b>tot %@</b>";
+"informContactGuidelines.close.dateFormat" = "d MMMM";
+"informContactGuidelines.close.dayRemaining" = " (nog 1 dag)";
+"informContactGuidelines.close.daysRemaining" = " (nog %@ dagen)";
 "informContactGuidelines.other" = "Dit zijn de belangrijkste leefregels voor deze persoon:<ul><li>Houd 1,5 meter afstand en vermijd bezoek aan drukke plekken</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li></ul>";
 
 "informContactShareGuidelines" = "Leefregels delen";

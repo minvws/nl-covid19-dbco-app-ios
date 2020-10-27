@@ -106,7 +106,11 @@ extension String {
     static var informContactTitleIndex: String { return Localization.string(for: "informContactTitle.index") }
     static var informContactTitleStaff: String { return Localization.string(for: "informContactTitle.staff") }
     
-    static var informContactGuidelinesClose: String { return Localization.string(for: "informContactGuidelines.close") }
+    static func informContactGuidelinesClose(untilDate: String, daysRemaining: String) -> String { return Localization.string(for: "informContactGuidelines.close", [untilDate, daysRemaining]) }
+    static func informContactGuidelinesCloseUntilDate(date: String) -> String { return Localization.string(for: "informContactGuidelines.close.untilDate", [date]) }
+    static var informContactGuidelinesCloseDateFormat: String { return Localization.string(for: "informContactGuidelines.close.dateFormat") }
+    static var informContactGuidelinesCloseDayRemaining: String { return Localization.string(for: "informContactGuidelines.close.dayRemaining") }
+    static func informContactGuidelinesCloseDaysRemaining(daysRemaining: String) -> String { return Localization.string(for: "informContactGuidelines.close.daysRemaining", [daysRemaining]) }
     static var informContactGuidelinesOther: String { return Localization.string(for: "informContactGuidelines.other") }
     static var informContactShareGuidelines: String { return Localization.string(for: "informContactShareGuidelines") }
     
