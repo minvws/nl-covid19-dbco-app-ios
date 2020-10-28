@@ -106,10 +106,10 @@ struct Answer {
     let lastModified: Date
     
     enum Value: CustomStringConvertible, Equatable {
-        case classificationDetails(livedTogetherRisk: Bool?,
-                                   durationRisk: Bool?,
-                                   distanceRisk: Bool?,
-                                   otherRisk: Bool?)
+        case classificationDetails(category1Risk: Bool?,
+                                   category2aRisk: Bool?,
+                                   category2bRisk: Bool?,
+                                   category3Risk: Bool?)
         case contactDetails(firstName: String?,
                             lastName: String?,
                             email: String?,
@@ -127,8 +127,8 @@ struct Answer {
         
         var description: String {
             switch self {
-            case .classificationDetails(let livedTogetherRisk, let durationRisk, let distanceRisk, let otherRisk):
-                return "classificationDetails(\(String(describing: livedTogetherRisk)), \(String(describing: durationRisk)), \(String(describing: distanceRisk)), \(String(describing: otherRisk)))"
+            case .classificationDetails(let category1Risk, let category2aRisk, let category2bRisk, let category3Risk):
+                return "classificationDetails(\(String(describing: category1Risk)), \(String(describing: category2aRisk)), \(String(describing: category2bRisk)), \(String(describing: category3Risk)))"
             case .contactDetails(let firstName, let lastName, let email, let phoneNumber):
                 return "contactDetails(\(String(describing: firstName)), \(String(describing: lastName)), \(String(describing: email)), \(String(describing: phoneNumber)))"
             case .contactDetailsFull(let firstName, let lastName, let email, let phoneNumber):

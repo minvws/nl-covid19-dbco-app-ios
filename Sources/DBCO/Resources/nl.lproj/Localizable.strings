@@ -68,22 +68,22 @@
 
 "informContactShareGuidelines" = "Leefregels delen";
 
-"livedTogetherRiskQuestion" = "Woon je in hetzelfde huis of ben je langer dan 12 uur op dezelfde plek geweest?";
-"livedTogetherRiskQuestion.answer.positive" = "Ja";
-"livedTogetherRiskQuestion.answer.negative" = "Nee";
+"category1RiskQuestion" = "Woon je in hetzelfde huis of ben je langer dan 12 uur op dezelfde plek geweest?";
+"category1RiskQuestion.answer.positive" = "Ja";
+"category1RiskQuestion.answer.negative" = "Nee";
 
-"durationRiskQuestion" = "Hoe lang waren jullie waarschijnlijk bij elkaar in de buurt?";
-"durationRiskQuestion.answer.positive" = "Langer dan 15 minuten";
-"durationRiskQuestion.answer.negative" = "Korter dan 15 minuten";
+"category2aRiskQuestion" = "Was je langer dan 15 minuten op 1,5 meter afstand?";
+"category2aRiskQuestion.answer.positive" = "Ja, denk het wel";
+"category2aRiskQuestion.answer.negative" = "Nee, denk het niet";
 
-"distanceRiskQuestion" = "Zijn jullie binnen 1,5 meter van elkaar geweest?";
-"distanceRiskQuestion.answer.positive" = "Ja, denk het wel";
-"distanceRiskQuestion.answer.negative" = "Nee, denk het niet";
+"category2bRiskQuestion" = "Heb je een of meerdere van deze dingen tijdens jullie ontmoeting gedaan?";
+"category2bRiskQuestion.description" = "<ul><li>Binnen anderhalve meter van de ander gehoest of geniesd</li><li>Geknuffeld of gezoend</li><li>Ander lichamelijk contact</li></ul>";
+"category2bRiskQuestion.answer.positive" = "Ja, denk het wel";
+"category2bRiskQuestion.answer.negative" = "Nee, denk het niet";
 
-"otherRiskQuestion" = "Is een of meerdere van deze dingen tijdens jullie ontmoeting gebeurd?";
-"otherRiskQuestion.description" = "<ul><li>In je gezicht geniesd</li><li>Geknuffeld of gezoend</li><li>Ander lichamelijk contact</li></ul>";
-"otherRiskQuestion.answer.positive" = "Ja, één of meer";
-"otherRiskQuestion.answer.negative" = "Nee, denk het niet";
+"category3RiskQuestion" = "Was je langer dan 15 minuten in dezelfde ruimte?";
+"category3RiskQuestion.answer.positive" = "Ja, denk het wel";
+"category3RiskQuestion.answer.negative" = "Nee, denk het niet";
 
 "contactFallbackTitle" = "Contact toevoegen";
 "contactInformationFirstName" = "Voornaam";

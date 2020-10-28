@@ -12,17 +12,17 @@ extension Answer.Value {
     /// Makes use of [ClassificationHelper](x-source-tag://ClassificationHelper)
     /// - parameter contactCategory: The [category](x-source-tag://Task.Contact.Category) to be used
     static func classificationDetails(contactCategory: Task.Contact.Category) -> Self {
-        var livedTogetherRisk: Bool?
-        var durationRisk: Bool?
-        var distanceRisk: Bool?
-        var otherRisk: Bool?
+        var category1Risk: Bool?
+        var category2aRisk: Bool?
+        var category2bRisk: Bool?
+        var category3Risk: Bool?
         
-        ClassificationHelper.setValues(for: contactCategory, livedTogetherRisk: &livedTogetherRisk, durationRisk: &durationRisk, distanceRisk: &distanceRisk, otherRisk: &otherRisk)
+        ClassificationHelper.setValues(for: contactCategory, category1Risk: &category1Risk, category2aRisk: &category2aRisk, category2bRisk: &category2bRisk, category3Risk: &category3Risk)
         
-        return .classificationDetails(livedTogetherRisk: livedTogetherRisk,
-                                      durationRisk: durationRisk,
-                                      distanceRisk: distanceRisk,
-                                      otherRisk: otherRisk)
+        return .classificationDetails(category1Risk: category1Risk,
+                                      category2aRisk: category2aRisk,
+                                      category2bRisk: category2bRisk,
+                                      category3Risk: category3Risk)
     }
 }
 
