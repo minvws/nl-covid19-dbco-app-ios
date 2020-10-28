@@ -115,22 +115,22 @@ extension String {
     static var informContactGuidelinesOther: String { return Localization.string(for: "informContactGuidelines.other") }
     static var informContactShareGuidelines: String { return Localization.string(for: "informContactShareGuidelines") }
     
-    static var livedTogetherRiskQuestion: String { return Localization.string(for: "livedTogetherRiskQuestion") }
-    static var livedTogetherRiskQuestionAnswerPositive: String { return Localization.string(for: "livedTogetherRiskQuestion.answer.positive") }
-    static var livedTogetherRiskQuestionAnswerNegative: String { return Localization.string(for: "livedTogetherRiskQuestion.answer.negative") }
+    static var category1RiskQuestion: String { return Localization.string(for: "category1RiskQuestion") }
+    static var category1RiskQuestionAnswerPositive: String { return Localization.string(for: "category1RiskQuestion.answer.positive") }
+    static var category1RiskQuestionAnswerNegative: String { return Localization.string(for: "category1RiskQuestion.answer.negative") }
     
-    static var durationRiskQuestion: String { return Localization.string(for: "durationRiskQuestion") }
-    static var durationRiskQuestionAnswerPositive: String { return Localization.string(for: "durationRiskQuestion.answer.positive") }
-    static var durationRiskQuestionAnswerNegative: String { return Localization.string(for: "durationRiskQuestion.answer.negative") }
+    static var category2aRiskQuestion: String { return Localization.string(for: "category2aRiskQuestion") }
+    static var category2aRiskQuestionAnswerPositive: String { return Localization.string(for: "category2aRiskQuestion.answer.positive") }
+    static var category2aRiskQuestionAnswerNegative: String { return Localization.string(for: "category2aRiskQuestion.answer.negative") }
     
-    static var distanceRiskQuestion: String { return Localization.string(for: "distanceRiskQuestion") }
-    static var distanceRiskQuestionAnswerPositive: String { return Localization.string(for: "distanceRiskQuestion.answer.positive") }
-    static var distanceRiskQuestionAnswerNegative: String { return Localization.string(for: "distanceRiskQuestion.answer.negative") }
+    static var category2bRiskQuestion: String { return Localization.string(for: "category2bRiskQuestion") }
+    static var category2bRiskQuestionDescription: String { return Localization.string(for: "category2bRiskQuestion.description") }
+    static var category2bRiskQuestionAnswerPositive: String { return Localization.string(for: "category2bRiskQuestion.answer.positive") }
+    static var category2bRiskQuestionAnswerNegative: String { return Localization.string(for: "category2bRiskQuestion.answer.negative") }
     
-    static var otherRiskQuestion: String { return Localization.string(for: "otherRiskQuestion") }
-    static var otherRiskQuestionDescription: String { return Localization.string(for: "otherRiskQuestion.description") }
-    static var otherRiskQuestionAnswerPositive: String { return Localization.string(for: "otherRiskQuestion.answer.positive") }
-    static var otherRiskQuestionAnswerNegative: String { return Localization.string(for: "otherRiskQuestion.answer.negative") }
+    static var category3RiskQuestion: String { return Localization.string(for: "category3RiskQuestion") }
+    static var category3RiskQuestionAnswerPositive: String { return Localization.string(for: "category3RiskQuestion.answer.positive") }
+    static var category3RiskQuestionAnswerNegative: String { return Localization.string(for: "category3RiskQuestion.answer.negative") }
     
     static var contactFallbackTitle: String { return Localization.string(for: "contactFallbackTitle") }
     static var contactInformationFirstName: String { return Localization.string(for: "contactInformationFirstName") }

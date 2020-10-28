@@ -25,10 +25,10 @@ protocol AnswerManaging: class {
 class ClassificationDetailsAnswerManager: AnswerManaging {
     private var baseAnswer: Answer
     
-    private var livedTogetherRisk: Bool?    { didSet { determineGroupVisibility() } }
-    private var durationRisk: Bool?         { didSet { determineGroupVisibility() } }
-    private var distanceRisk: Bool?         { didSet { determineGroupVisibility() } }
-    private var otherRisk: Bool?            { didSet { determineGroupVisibility() } }
+    private var category1Risk: Bool?    { didSet { determineGroupVisibility() } }
+    private var category2aRisk: Bool?         { didSet { determineGroupVisibility() } }
+    private var category2bRisk: Bool?         { didSet { determineGroupVisibility() } }
+    private var category3Risk: Bool?            { didSet { determineGroupVisibility() } }
     
     private(set) var classification: ClassificationHelper.Result
     
@@ -42,24 +42,24 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
             baseAnswer.value = .classificationDetails(contactCategory: contactCategory)
         }
         
-        guard case .classificationDetails(let livedTogetherRisk, let durationRisk, let distanceRisk, let otherRisk) = baseAnswer.value else {
+        guard case .classificationDetails(let category1Risk, let category2aRisk, let category2bRisk, let category3Risk) = baseAnswer.value else {
             fatalError()
         }
         
-        self.livedTogetherRisk = livedTogetherRisk
-        self.durationRisk = durationRisk
-        self.distanceRisk = distanceRisk
-        self.otherRisk = otherRisk
+        self.category1Risk = category1Risk
+        self.category2aRisk = category2aRisk
+        self.category2bRisk = category2bRisk
+        self.category3Risk = category3Risk
         
-        classification = .needsAssessmentFor(.livedTogether)
+        classification = .needsAssessmentFor(.category1)
         determineGroupVisibility()
     }
     
     private func determineClassification() {
-        classification = ClassificationHelper.classificationResult(for: livedTogetherRisk,
-                                                                   durationRisk: durationRisk,
-                                                                   distanceRisk: distanceRisk,
-                                                                   otherRisk: otherRisk)
+        classification = ClassificationHelper.classificationResult(for: category1Risk,
+                                                                   category2aRisk: category2aRisk,
+                                                                   category2bRisk: category2bRisk,
+                                                                   category3Risk: category3Risk)
         
         updateHandler?(self)
     }
@@ -67,15 +67,15 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
     private func determineGroupVisibility() {
         determineClassification()
         
-        let risks = ClassificationHelper.visibleRisks(for: livedTogetherRisk,
-                                                      durationRisk: durationRisk,
-                                                      distanceRisk: distanceRisk,
-                                                      otherRisk: otherRisk)
+        let risks = ClassificationHelper.visibleRisks(for: category1Risk,
+                                                      category2aRisk: category2aRisk,
+                                                      category2bRisk: category2bRisk,
+                                                      category3Risk: category3Risk)
         
-        livedTogetherRiskGroup.isHidden = !risks.contains(.livedTogether)
-        durationRiskGroup.isHidden = !risks.contains(.duration)
-        distanceRiskGroup.isHidden = !risks.contains(.distance)
-        otherRiskGroup.isHidden = !risks.contains(.other)
+        category1RiskGroup.isHidden = !risks.contains(.category1)
+        category2aRiskGroup.isHidden = !risks.contains(.category2a)
+        category2bRiskGroup.isHidden = !risks.contains(.category2b)
+        category3RiskGroup.isHidden = !risks.contains(.category3)
     }
     
     let question: Question
@@ -87,10 +87,10 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         case .success(let category):
             answer.value = .classificationDetails(contactCategory: category)
         case .needsAssessmentFor(_):
-            answer.value = .classificationDetails(livedTogetherRisk: livedTogetherRisk,
-                                                  durationRisk: durationRisk,
-                                                  distanceRisk: distanceRisk,
-                                                  otherRisk: otherRisk)
+            answer.value = .classificationDetails(category1Risk: category1Risk,
+                                                  category2aRisk: category2aRisk,
+                                                  category2bRisk: category2bRisk,
+                                                  category3Risk: category3Risk)
         }
         
         return answer
@@ -105,37 +105,37 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         }
     }
     
-    private lazy var livedTogetherRiskGroup =
-        ToggleGroup(label: .livedTogetherRiskQuestion,
-                    ToggleButton(title: .livedTogetherRiskQuestionAnswerNegative, selected: livedTogetherRisk == false),
-                    ToggleButton(title: .livedTogetherRiskQuestionAnswerPositive, selected: livedTogetherRisk == true))
-        .didSelect { [unowned self] in self.livedTogetherRisk = $0 == 1 }
+    private lazy var category1RiskGroup =
+        ToggleGroup(label: .category1RiskQuestion,
+                    ToggleButton(title: .category1RiskQuestionAnswerNegative, selected: category1Risk == false),
+                    ToggleButton(title: .category1RiskQuestionAnswerPositive, selected: category1Risk == true))
+        .didSelect { [unowned self] in self.category1Risk = $0 == 1 }
     
-    private lazy var durationRiskGroup =
-        ToggleGroup(label: .durationRiskQuestion,
-                    ToggleButton(title: .durationRiskQuestionAnswerPositive, selected: durationRisk == true),
-                    ToggleButton(title: .durationRiskQuestionAnswerNegative, selected: durationRisk == false))
-        .didSelect { [unowned self] in self.durationRisk = $0 == 0 }
+    private lazy var category2aRiskGroup =
+        ToggleGroup(label: .category2aRiskQuestion,
+                    ToggleButton(title: .category2aRiskQuestionAnswerPositive, selected: category2aRisk == true),
+                    ToggleButton(title: .category2aRiskQuestionAnswerNegative, selected: category2aRisk == false))
+        .didSelect { [unowned self] in self.category2aRisk = $0 == 0 }
     
-    private lazy var distanceRiskGroup =
-        ToggleGroup(label: .distanceRiskQuestion,
-                    ToggleButton(title: .distanceRiskQuestionAnswerPositive, selected: distanceRisk == true),
-                    ToggleButton(title: .distanceRiskQuestionAnswerNegative, selected: distanceRisk == false))
-        .didSelect { [unowned self] in self.distanceRisk = $0 == 0 }
+    private lazy var category2bRiskGroup =
+        ToggleGroup(label: .category2bRiskQuestion,
+                    ToggleButton(title: .category2bRiskQuestionAnswerPositive, selected: category2bRisk == true),
+                    ToggleButton(title: .category2bRiskQuestionAnswerNegative, selected: category2bRisk == false))
+        .didSelect { [unowned self] in self.category2bRisk = $0 == 0 }
+        .decorateWithDescriptionIfNeeded(description: .category2bRiskQuestionDescription)
     
-    private lazy var otherRiskGroup =
-        ToggleGroup(label: .otherRiskQuestion,
-                    ToggleButton(title: .otherRiskQuestionAnswerPositive, selected: otherRisk == true),
-                    ToggleButton(title: .otherRiskQuestionAnswerNegative, selected: otherRisk == false))
-        .didSelect { [unowned self] in self.otherRisk = $0 == 0 }
-        .decorateWithDescriptionIfNeeded(description: .otherRiskQuestionDescription)
+    private lazy var category3RiskGroup =
+        ToggleGroup(label: .category3RiskQuestion,
+                    ToggleButton(title: .category3RiskQuestionAnswerPositive, selected: category3Risk == true),
+                    ToggleButton(title: .category3RiskQuestionAnswerNegative, selected: category3Risk == false))
+        .didSelect { [unowned self] in self.category3Risk = $0 == 0 }
     
     private(set) lazy var view: UIView =
         VStack(spacing: 24,
-               livedTogetherRiskGroup,
-               durationRiskGroup,
-               distanceRiskGroup,
-               otherRiskGroup)
+               category1RiskGroup,
+               category2aRiskGroup,
+               category2bRiskGroup,
+               category3RiskGroup)
 }
 
 /// AnswerManager for the .contactDetails question.
