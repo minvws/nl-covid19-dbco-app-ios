@@ -323,9 +323,26 @@ class MultipleChoiceAnswerManager: AnswerManaging {
     private var buttons: ToggleGroup!
     private var selectedButtonIndex: Int?
  
-    init(question: Question, answer: Answer) {
+    init(question: Question, answer: Answer, contact: Task.Contact) {
         self.baseAnswer = answer
         self.question = question
+        
+        // Prefill communcation triggers
+        do {
+            let option = question.answerOptions?.first(where: { $0.trigger == .setCommunicationToIndex })
+            
+            if let indexCommunicationOption = option, contact.communication == .index {
+                baseAnswer.value = .multipleChoice(indexCommunicationOption)
+            }
+        }
+        
+        do {
+            let option = question.answerOptions?.first(where: { $0.trigger == .setCommunicationToStaff })
+            
+            if let staffCommunicationOption = option, contact.communication == .staff {
+                baseAnswer.value = .multipleChoice(staffCommunicationOption)
+            }
+        }
         
         guard case .multipleChoice(let option) = baseAnswer.value else {
             fatalError()

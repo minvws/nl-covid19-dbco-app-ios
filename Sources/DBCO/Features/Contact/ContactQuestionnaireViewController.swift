@@ -99,7 +99,7 @@ class ContactQuestionnaireViewModel {
             case .open:
                 return OpenAnswerManager(question: question, answer: answer)
             case .multipleChoice:
-                return MultipleChoiceAnswerManager(question: question, answer: answer)
+                return MultipleChoiceAnswerManager(question: question, answer: answer, contact: task.contact)
             case .lastExposureDate:
                 return LastExposureDateAnswerManager(question: question, answer: answer, lastExposureDate: updatedContact.dateOfLastExposure)
             }
