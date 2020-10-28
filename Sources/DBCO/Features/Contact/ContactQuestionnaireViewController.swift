@@ -237,13 +237,20 @@ class ContactQuestionnaireViewModel {
                 
                 let untilDateString = String.informContactGuidelinesCloseUntilDate(date: dateFormatter.string(from: untilDate))
                 
-                let daysRemaining = Int(ceil(untilDate.timeIntervalSince(Date()) / (24 * 3600)))
-                let daysRemainingString: String
+                let calendar = Calendar.current
+                let components = calendar.dateComponents([.day], from: Date(), to: untilDate)
                 
-                if daysRemaining > 1 {
-                    daysRemainingString = .informContactGuidelinesCloseDaysRemaining(daysRemaining: String(daysRemaining))
-                } else {
-                    daysRemainingString = .informContactGuidelinesCloseDayRemaining
+                var daysRemainingString = ""
+                
+                if let daysRemaining = components.day {
+                    switch daysRemaining {
+                    case 1:
+                        daysRemainingString = .informContactGuidelinesCloseDayRemaining
+                    case 2...:
+                        daysRemainingString = .informContactGuidelinesCloseDaysRemaining(daysRemaining: String(daysRemaining))
+                    default:
+                        daysRemainingString = ""
+                    }
                 }
                 
                 informContent = .informContactGuidelinesClose(untilDate: untilDateString,
