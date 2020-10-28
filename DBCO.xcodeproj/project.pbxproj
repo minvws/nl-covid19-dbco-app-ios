@@ -23,6 +23,7 @@
 		CD3B23252541A7CF00A91851 /* UIActivityViewController+ContactTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3B23242541A7CF00A91851 /* UIActivityViewController+ContactTask.swift */; };
 		CD3B23292541ADA900A91851 /* InformContactCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3B23282541ADA900A91851 /* InformContactCoordinator.swift */; };
 		CD421872251B4819004544B3 /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD421871251B4819004544B3 /* TaskTableViewCell.swift */; };
+		CD47A4042549766C005B8801 /* SectionedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD47A4032549766C005B8801 /* SectionedScrollView.swift */; };
 		CD49BAEB2525CE7C0079D018 /* PromptableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD49BAEA2525CE7C0079D018 /* PromptableViewController.swift */; };
 		CD65CD812535F77400BB761A /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD65CD802535F77400BB761A /* LoadingViewController.swift */; };
 		CD65CD8525360F5C00BB761A /* UnfinishedTasksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD65CD8425360F5C00BB761A /* UnfinishedTasksViewController.swift */; };
@@ -114,6 +115,7 @@
 		CD3B23242541A7CF00A91851 /* UIActivityViewController+ContactTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIActivityViewController+ContactTask.swift"; sourceTree = "<group>"; };
 		CD3B23282541ADA900A91851 /* InformContactCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformContactCoordinator.swift; sourceTree = "<group>"; };
 		CD421871251B4819004544B3 /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
+		CD47A4032549766C005B8801 /* SectionedScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionedScrollView.swift; sourceTree = "<group>"; };
 		CD49BAEA2525CE7C0079D018 /* PromptableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptableViewController.swift; sourceTree = "<group>"; };
 		CD65CD802535F77400BB761A /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		CD65CD8425360F5C00BB761A /* UnfinishedTasksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfinishedTasksViewController.swift; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 				CDA525FB252F0FAA004E923A /* ToggleButton.swift */,
 				CDA52600252F1752004E923A /* ToggleGroup.swift */,
 				CDADF7ED2535B6A500424492 /* Label.swift */,
+				CD47A4032549766C005B8801 /* SectionedScrollView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -672,6 +675,7 @@
 				CDC7C8772538469B00FE7E05 /* NetworkManagerURLSessionDelegate.swift in Sources */,
 				CDC7C89425385AD600FE7E05 /* Task.swift in Sources */,
 				CDC7C88C2538507100FE7E05 /* Logging.swift in Sources */,
+				CD47A4042549766C005B8801 /* SectionedScrollView.swift in Sources */,
 				CDA0F6892539AAB8009FD2A9 /* Answer+Progress.swift in Sources */,
 				CD29635B25191972008443AF /* Haptic.swift in Sources */,
 				CDFCF907250FA6E80062269A /* ViewController.swift in Sources */,
