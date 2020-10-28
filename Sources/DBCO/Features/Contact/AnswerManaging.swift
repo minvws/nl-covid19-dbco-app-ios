@@ -26,9 +26,9 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
     private var baseAnswer: Answer
     
     private var category1Risk: Bool?    { didSet { determineGroupVisibility() } }
-    private var category2aRisk: Bool?         { didSet { determineGroupVisibility() } }
-    private var category2bRisk: Bool?         { didSet { determineGroupVisibility() } }
-    private var category3Risk: Bool?            { didSet { determineGroupVisibility() } }
+    private var category2aRisk: Bool?   { didSet { determineGroupVisibility() } }
+    private var category2bRisk: Bool?   { didSet { determineGroupVisibility() } }
+    private var category3Risk: Bool?    { didSet { determineGroupVisibility() } }
     
     private(set) var classification: ClassificationHelper.Result
     
