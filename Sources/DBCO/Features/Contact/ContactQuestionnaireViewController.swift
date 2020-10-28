@@ -200,6 +200,9 @@ class ContactQuestionnaireViewModel {
         detailsSectionView?.isCompleted = contactDetailsManagers.allSatisfy(\.hasValidAnswer)
         informSectionView?.isCompleted = otherManagers.allSatisfy(\.hasValidAnswer) && updatedContact.didInform
         
+        detailsSectionView?.isEnabled = classificationManagers.allSatisfy(\.hasValidAnswer)
+        informSectionView?.isEnabled = classificationManagers.allSatisfy(\.hasValidAnswer)
+        
         if expandFirstUnfinishedSection {
             let sections = [classificationSectionView, detailsSectionView, informSectionView].compactMap { $0 }
             sections.forEach { $0.collapse(animated: false) }

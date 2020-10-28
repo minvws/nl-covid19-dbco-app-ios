@@ -39,6 +39,10 @@ class SectionView: UIView {
         didSet { updateHeaderForOffset() }
     }
     
+    var isEnabled: Bool = true {
+        didSet { updateEnabled() }
+    }
+    
     init(title: String, caption: String, index: Int) {
         super.init(frame: .zero)
         
@@ -59,6 +63,7 @@ class SectionView: UIView {
         icon.image = UIImage(named: "EditContact/Section\(index)")
         icon.highlightedImage = UIImage(named: "EditContact/SectionCompleted")
         icon.setContentHuggingPriority(.required, for: .horizontal)
+        icon.tintColor = Theme.colors.primary
         
         collapseIndicator.image =  UIImage(named: "EditContact/SectionCollapse")
         collapseIndicator.setContentHuggingPriority(.required, for: .horizontal)
@@ -163,6 +168,23 @@ class SectionView: UIView {
         let clampedOffset = min(max(offset, 0), frame.height - headerContainerView.frame.height)
         
         headerContainerView.transform = CGAffineTransform(translationX: 0, y: clampedOffset)
+    }
+    
+    private func updateEnabled() {
+        isUserInteractionEnabled = isEnabled
+        
+        if isEnabled {
+            icon.tintColor = Theme.colors.primary
+            icon.isHighlighted = isCompleted
+            
+            titleLabel.textColor = .black
+        } else {
+            collapse(animated: false)
+            icon.tintColor = Theme.colors.captionGray
+            icon.isHighlighted = false
+            
+            titleLabel.textColor = Theme.colors.captionGray
+        }
     }
     
     private let contentContainerView = UIView()
