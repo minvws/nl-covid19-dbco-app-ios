@@ -39,7 +39,8 @@ final class InformContactCoordinator: Coordinator, Logging {
     }
     
     private func promptInform() {
-        let alert = UIAlertController(title: .contactInformPromptTitle, message: .contactInformPromptMessage, preferredStyle: .alert)
+        let firstName = task.contactFirstName ?? ""
+        let alert = UIAlertController(title: .contactInformPromptTitle(firstName: firstName), message: nil, preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: .contantInformOptionDone, style: .default) { _ in
             var updatedTask = self.task

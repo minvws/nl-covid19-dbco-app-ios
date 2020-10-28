@@ -134,8 +134,7 @@ extension String {
     static var contactInformationLastExposure: String { return Localization.string(for: "contactInformationLastExposure") }
     
     /* MARK: - Informing contacts */
-    static var contactInformPromptTitle: String { return Localization.string(for: "contactInformPromptTitle") }
-    static var contactInformPromptMessage: String { return Localization.string(for: "contactInformPromptMessage") }
+    static func contactInformPromptTitle(firstName: String) -> String { return Localization.string(for: "contactInformPromptTitle", [firstName]) }
     static var contantInformOptionDone: String { return Localization.string(for: "contantInformOptionDone") }
     static var contantInformOptionInformLater: String { return Localization.string(for: "contantInformOptionInformLater") }
     static var contantInformOptionInformNow: String { return Localization.string(for: "contantInformOptionInformNow") }
