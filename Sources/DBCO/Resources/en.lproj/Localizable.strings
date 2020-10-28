@@ -88,7 +88,8 @@
 "contactInformationLastExposure" = "Wanneer was de laatste ontmoeting?";
 
 /* MARK: - Informing contacts */
-"contactInformPromptTitle" = "Weet %@ wat er speelt?";
+"contactInformPromptTitle" = "Heb je deze persoon laten weten dat je besmet bent?";
+"contactInformPromptMessage" = "Het is belangrijk dat je zo snel mogelijk contact opneemt.";
 "contantInformOptionDone" = "Ja";
 "contantInformOptionInformLater" = "Nee, doe ik later";
 "contantInformOptionInformNow" = "Nee, nu informeren";
