@@ -55,6 +55,7 @@ extension String {
     static var start: String { return Localization.string(for: "start") }
     static var edit: String { return Localization.string(for: "edit") }
     static var selectDate: String { return Localization.string(for: "selectDate") }
+    static var done: String { return Localization.string(for: "done") }
     
     /* MARK: - Onboarding */
     static var onboardingStep1Title: String { return Localization.string(for: "onboarding.step1.title") }
@@ -106,7 +107,11 @@ extension String {
     static var informContactTitleIndex: String { return Localization.string(for: "informContactTitle.index") }
     static var informContactTitleStaff: String { return Localization.string(for: "informContactTitle.staff") }
     
-    static var informContactGuidelinesClose: String { return Localization.string(for: "informContactGuidelines.close") }
+    static func informContactGuidelinesClose(untilDate: String, daysRemaining: String) -> String { return Localization.string(for: "informContactGuidelines.close", [untilDate, daysRemaining]) }
+    static func informContactGuidelinesCloseUntilDate(date: String) -> String { return Localization.string(for: "informContactGuidelines.close.untilDate", [date]) }
+    static var informContactGuidelinesCloseDateFormat: String { return Localization.string(for: "informContactGuidelines.close.dateFormat") }
+    static var informContactGuidelinesCloseDayRemaining: String { return Localization.string(for: "informContactGuidelines.close.dayRemaining") }
+    static func informContactGuidelinesCloseDaysRemaining(daysRemaining: String) -> String { return Localization.string(for: "informContactGuidelines.close.daysRemaining", [daysRemaining]) }
     static var informContactGuidelinesOther: String { return Localization.string(for: "informContactGuidelines.other") }
     static var informContactShareGuidelines: String { return Localization.string(for: "informContactShareGuidelines") }
     
@@ -146,25 +151,7 @@ extension String {
     static var unfinishedTasksOverviewTitle: String { return Localization.string(for: "unfinishedTasksOverviewTitle") }
     static var unfinishedTasksOverviewMessage: String { return Localization.string(for: "unfinishedTasksOverviewMessage") }
     static var uploadInProgressMessage: String { return Localization.string(for: "uploadInProgressMessage") }
-    
-    // MARK: - Help
-    
-    static var helpTitle: String { return Localization.string(for: "helpTitle") }
-    static var helpSubtitle: String { return Localization.string(for: "helpSubtitle") }
-    static var helpAlsoRead: String { return Localization.string(for: "helpAlsoRead") }
-
-    static var helpFaqReasonTitle: String { return Localization.string(for: "help.faq.reason.title") }
-    static var helpFaqReasonDescription: String { return Localization.string(for: "help.faq.reason.description") }
-    static var helpFaqLocationTitle: String { return Localization.string(for: "help.faq.location.title") }
-    static var helpFaqLocationDescription: String { return Localization.string(for: "help.faq.location.description") }
-    static var helpFaqAnonymousTitle: String { return Localization.string(for: "help.faq.anonymous.title") }
-    static var helpFaqAnonymousDescription1: String { return Localization.string(for: "help.faq.anonymous.description_1") }
-    static var helpFaqAnonymousDescription2: String { return Localization.string(for: "help.faq.anonymous.description_2") }
-    static var helpFaqNotificationTitle: String { return Localization.string(for: "help.faq.notification.title") }
-    static var helpFaqNotificationDescription: String { return Localization.string(for: "help.faq.notification.description") }
-    static var helpFaqBluetoothTitle: String { return Localization.string(for: "help.faq.bluetooth.title") }
-    static var helpFaqBluetoothDescription: String { return Localization.string(for: "help.faq.bluetooth.description") }
-    static var helpFaqPowerUsageTitle: String { return Localization.string(for: "help.faq.power_usage.title") }
-    static var helpFaqPowerUsageDescription: String { return Localization.string(for: "help.faq.power_usage.description") }
+    static var uploadFinishedTitle: String { return Localization.string(for: "uploadFinishedTitle") }
+    static var uploadFinishedMessage: String { return Localization.string(for: "uploadFinishedMessage") }
     
 }

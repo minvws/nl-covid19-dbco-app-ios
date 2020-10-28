@@ -180,6 +180,8 @@ class ContactQuestionnaireViewModel {
                                       communication: updatedContact.communication,
                                       didInform: updatedContact.didInform,
                                       dateOfLastExposure: date)
+        
+        updateInformSectionContent()
     }
     
     private func updateProgress(expandFirstUnfinishedSection: Bool = false) {
@@ -222,7 +224,30 @@ class ContactQuestionnaireViewModel {
         
         switch updatedContact.category {
         case .category1, .category2a, .category2b:
-            informContent = .informContactGuidelinesClose
+            if let date = updatedContact.dateOfLastExposure {
+                let untilDate = date.addingTimeInterval(10 * 24 * 3600) // 10 days
+                
+                let dateFormatter = DateFormatter()
+                dateFormatter.calendar = .current
+                dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+                dateFormatter.dateFormat = .informContactGuidelinesCloseDateFormat
+                
+                let untilDateString = String.informContactGuidelinesCloseUntilDate(date: dateFormatter.string(from: untilDate))
+                
+                let daysRemaining = Int(ceil(untilDate.timeIntervalSince(Date()) / (24 * 3600)))
+                let daysRemainingString: String
+                
+                if daysRemaining > 1 {
+                    daysRemainingString = .informContactGuidelinesCloseDaysRemaining(daysRemaining: String(daysRemaining))
+                } else {
+                    daysRemainingString = .informContactGuidelinesCloseDayRemaining
+                }
+                
+                informContent = .informContactGuidelinesClose(untilDate: untilDateString,
+                                                              daysRemaining: daysRemainingString)
+            } else {
+                informContent = .informContactGuidelinesClose(untilDate: "", daysRemaining: "")
+            }
         case .category3:
             informContent = .informContactGuidelinesOther
         case .other:

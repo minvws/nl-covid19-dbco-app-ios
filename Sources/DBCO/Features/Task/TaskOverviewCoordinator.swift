@@ -47,10 +47,6 @@ final class TaskOverviewCoordinator: Coordinator {
         startChildCoordinator(UploadCoordinator(presenter: overviewController, delegate: self))
     }
     
-    private func openHelp() {
-        startChildCoordinator(HelpCoordinator(presenter: overviewController, delegate: self))
-    }
-    
     private func selectContact(for task: Task) {
         startChildCoordinator(SelectContactCoordinator(presenter: overviewController, contactTask: task, delegate: self))
     }
@@ -70,14 +66,6 @@ final class TaskOverviewCoordinator: Coordinator {
 }
 
 // MARK: - Coordinator delegates
-extension TaskOverviewCoordinator: HelpCoordinatorDelegate {
-    
-    func helpCoordinatorDidFinish(_ coordinator: HelpCoordinator) {
-        removeChildCoordinator(coordinator)
-    }
-    
-}
-
 extension TaskOverviewCoordinator: SelectContactCoordinatorDelegate {
 
     func selectContactCoordinator(_ coordinator: SelectContactCoordinator, didFinishWith task: Task) {
@@ -124,10 +112,6 @@ extension TaskOverviewCoordinator: InformContactCoordinatorDelegate {
 
 // MARK: - ViewController delegates
 extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
-    
-    func taskOverviewViewControllerDidRequestHelp(_ controller: TaskOverviewViewController) {
-        openHelp()
-    }
     
     func taskOverviewViewControllerDidRequestAddContact(_ controller: TaskOverviewViewController) {
         addContact()
