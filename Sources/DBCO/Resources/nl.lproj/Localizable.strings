@@ -30,14 +30,6 @@
 "task.contact.caption.completed" = "Gegevens toegevoegd";
 "task.contact.caption.incomplete" = "Vul gegevens aan";
 
-/* MARK: - Request Contacts Permission */
-"requestPermssion.contacts.title" = "Contacten delen gaat sneller als we toestemming hebben";
-"requestPermssion.contacts.body" = "Je beslist zelf welke contactgegevens je deelt met de GGD.";
-"requestPermssion.contacts.body.denied" = "Ga naar instellingen om toestemming te geven.";
-"requestPermssion.contacts.allowButtonTitle" = "Geef Toestemming";
-"requestPermssion.contacts.continueButtonTitle" = "Ik doe alles met de hand";
-"requestPermssion.contacts.settingsButtonTitle" = "Naar Instellingen";
-
 /* MARK: - Contact Selection */
 "selectContactTitle" = "Selecteer contact";
 "selectContactSearch" = "Zoeken";

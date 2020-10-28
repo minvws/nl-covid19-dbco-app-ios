@@ -45,32 +45,19 @@ final class SelectContactCoordinator: Coordinator {
             presentNavigationController(with: selectController)
             
         case .notDetermined:
-            let viewModel = RequestContactsAuthorizationViewModel(currentStatus: currentStatus)
-            let authorizationController = RequestAuthorizationViewController(viewModel: viewModel)
-            authorizationController.delegate = self
-            
-            presentNavigationController(with: authorizationController)
+            CNContactStore().requestAccess(for: .contacts) { authorized, error in
+                DispatchQueue.main.async {
+                    if authorized {
+                        self.continueAfterAuthorization()
+                    } else {
+                        self.continueWithoutAuthorization()
+                    }
+                }
+            }
             
         case .denied, .restricted: fallthrough
         @unknown default:
-            let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-            
-            actionSheet.addAction(
-                UIAlertAction(title: .selectContactFromContactsFallback, style: .default) { _ in
-                    self.continueWithSystemContactPicker()
-                })
-            
-            actionSheet.addAction(
-                UIAlertAction(title: .selectContactAddManuallyFallback, style: .default) { _ in
-                    self.continueManually()
-                })
-            
-            actionSheet.addAction(
-                UIAlertAction(title: .cancel, style: .cancel) { _ in
-                    self.callDelegate()
-                })
-            
-            presenter?.present(actionSheet, animated: true)
+            continueWithoutAuthorization()
         }
     }
     
@@ -98,7 +85,28 @@ final class SelectContactCoordinator: Coordinator {
         let selectController = SelectContactViewController(viewModel: viewModel)
         selectController.delegate = self
         
-        navigationController.setViewControllers([selectController], animated: true)
+        presentNavigationController(with: selectController)
+    }
+    
+    private func continueWithoutAuthorization() {
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        actionSheet.addAction(
+            UIAlertAction(title: .selectContactFromContactsFallback, style: .default) { _ in
+                self.continueWithSystemContactPicker()
+            })
+        
+        actionSheet.addAction(
+            UIAlertAction(title: .selectContactAddManuallyFallback, style: .default) { _ in
+                self.continueManually()
+            })
+        
+        actionSheet.addAction(
+            UIAlertAction(title: .cancel, style: .cancel) { _ in
+                self.callDelegate()
+            })
+        
+        presenter?.present(actionSheet, animated: true)
     }
     
     private func continueWithSystemContactPicker() {
@@ -115,36 +123,6 @@ final class SelectContactCoordinator: Coordinator {
         
         presentNavigationController(with: editController)
     }
-}
-
-extension SelectContactCoordinator: RequestAuthorizationViewControllerDelegate {
-    
-    func requestAuthorization(for controller: RequestAuthorizationViewController) {
-        CNContactStore().requestAccess(for: .contacts) { authorized, error in
-            DispatchQueue.main.async {
-                if authorized {
-                    self.continueAfterAuthorization()
-                }
-            }
-        }
-    }
-    
-    func redirectToSettings(for controller: RequestAuthorizationViewController) {
-        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-    }
-    
-    func continueWithoutAuthorization(for controller: RequestAuthorizationViewController) {
-        let editViewModel = ContactQuestionnaireViewModel(task: task, showCancelButton: true)
-        let editController = ContactQuestionnaireViewController(viewModel: editViewModel)
-        editController.delegate = self
-        
-        navigationController.setViewControllers([editController], animated: true)
-    }
-    
-    func currentAutorizationStatus(for controller: RequestAuthorizationViewController) -> AuthorizationStatusConvertible {
-        return CNContactStore.authorizationStatus(for: .contacts)
-    }
-    
 }
 
 extension SelectContactCoordinator: SelectContactViewControllerDelegate {

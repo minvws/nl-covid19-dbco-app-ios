@@ -32,14 +32,6 @@
 "task.contact.caption.completed" = "Details added";
 "task.contact.caption.incomplete" = "Enter details";
 
-/* MARK: - Request Contacts Permission */
-"requestPermssion.contacts.title" = "Sharing contacts is faster when we have access.";
-"requestPermssion.contacts.body" = "You decide which contact details are shared with the GGD.";
-"requestPermssion.contacts.body.denied" = "Allow aceess in the settings app";
-"requestPermssion.contacts.allowButtonTitle" = "Allow access";
-"requestPermssion.contacts.continueButtonTitle" = "I'll add everything manually";
-"requestPermssion.contacts.settingsButtonTitle" = "Go to settings";
-
 /* MARK: - Contact Selection */
 "selectContactTitle" = "Select contact";
 "selectContactSearch" = "Search";
