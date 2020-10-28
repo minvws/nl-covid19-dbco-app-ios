@@ -47,9 +47,9 @@ struct ClassificationHelper {
     }
 
     private static func classification(for category1Risk: Bool?,
-                               category2aRisk: Bool?,
-                               category2bRisk: Bool?,
-                               category3Risk: Bool?) -> (result: Result, visibleRisks: [Risk]) {
+                                       category2aRisk: Bool?,
+                                       category2bRisk: Bool?,
+                                       category3Risk: Bool?) -> (result: Result, visibleRisks: [Risk]) {
         
         switch category1Risk {
         case .some(true):
