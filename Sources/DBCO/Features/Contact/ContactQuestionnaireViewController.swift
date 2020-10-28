@@ -99,7 +99,7 @@ class ContactQuestionnaireViewModel {
             case .open:
                 return OpenAnswerManager(question: question, answer: answer)
             case .multipleChoice:
-                return MultipleChoiceAnswerManager(question: question, answer: answer)
+                return MultipleChoiceAnswerManager(question: question, answer: answer, contact: task.contact)
             case .lastExposureDate:
                 return LastExposureDateAnswerManager(question: question, answer: answer, lastExposureDate: updatedContact.dateOfLastExposure)
             }
@@ -200,6 +200,9 @@ class ContactQuestionnaireViewModel {
         detailsSectionView?.isCompleted = contactDetailsManagers.allSatisfy(\.hasValidAnswer)
         informSectionView?.isCompleted = otherManagers.allSatisfy(\.hasValidAnswer) && updatedContact.didInform
         
+        detailsSectionView?.isEnabled = classificationManagers.allSatisfy(\.hasValidAnswer)
+        informSectionView?.isEnabled = classificationManagers.allSatisfy(\.hasValidAnswer)
+        
         if expandFirstUnfinishedSection {
             let sections = [classificationSectionView, detailsSectionView, informSectionView].compactMap { $0 }
             sections.forEach { $0.collapse(animated: false) }
@@ -298,7 +301,7 @@ protocol ContactQuestionnaireViewControllerDelegate: class {
 /// - Tag: ContactQuestionnaireViewController
 final class ContactQuestionnaireViewController: PromptableViewController {
     private let viewModel: ContactQuestionnaireViewModel
-    private let scrollView = UIScrollView()
+    private var scrollView: UIScrollView!
     
     weak var delegate: ContactQuestionnaireViewControllerDelegate?
     
@@ -328,13 +331,6 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         
         promptView = Button(title: .save)
             .touchUpInside(self, action: #selector(save))
-        
-        scrollView.embed(in: contentView)
-        scrollView.keyboardDismissMode = .onDrag
-        
-        let widthProviderView = UIView()
-        widthProviderView.snap(to: .top, of: scrollView, height: 0)
-        widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         
         // Type
         let classificationSectionView = SectionView(title: .contactTypeSectionTitle, caption: .contactTypeSectionMessage, index: 1)
@@ -372,11 +368,16 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         viewModel.classificationSectionView = classificationSectionView
         viewModel.detailsSectionView = contactDetailsSection
         viewModel.informSectionView = informContactSection
+
+        scrollView = SectionedScrollView(classificationSectionView,
+                                         contactDetailsSection,
+                                         informContactSection)
+        scrollView.embed(in: contentView)
+        scrollView.keyboardDismissMode = .onDrag
         
-        VStack(classificationSectionView,
-               contactDetailsSection,
-               informContactSection)
-            .embed(in: scrollView)
+        let widthProviderView = UIView()
+        widthProviderView.snap(to: .top, of: scrollView, height: 0)
+        widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         
         registerForKeyboardNotifications()
     }

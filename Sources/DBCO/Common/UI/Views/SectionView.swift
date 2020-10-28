@@ -5,7 +5,6 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-
 import UIKit
 
 /// A collapsible container view for a with a header consisting of a title, a caption, a status indicator and a collapse indicator
@@ -36,19 +35,35 @@ class SectionView: UIView {
         set { captionLabel.text = newValue }
     }
     
+    var offset: CGFloat = 0 {
+        didSet { updateHeaderForOffset() }
+    }
+    
+    var isEnabled: Bool = true {
+        didSet { updateEnabled() }
+    }
+    
     init(title: String, caption: String, index: Int) {
         super.init(frame: .zero)
         
-        VStack(headerContainerView, contentContainerView)
+        clipsToBounds = true
+        
+        let outerStack = VStack(headerContainerView, contentContainerView)
             .embed(in: self)
         
         // Header
-        headerContainerView.backgroundColor = .white
-        headerContainerView.layer.zPosition = 1
+        let headerBackgroundView = UIView()
+        headerBackgroundView.backgroundColor = .white
+        // Make the background view extend above the header.
+        // This helps obscure the content when animating from a scrolled state.
+        headerBackgroundView.embed(in: headerContainerView, insets: .top(-100))
         
+        outerStack.bringSubviewToFront(headerContainerView) // header should overlay content
+
         icon.image = UIImage(named: "EditContact/Section\(index)")
         icon.highlightedImage = UIImage(named: "EditContact/SectionCompleted")
         icon.setContentHuggingPriority(.required, for: .horizontal)
+        icon.tintColor = Theme.colors.primary
         
         collapseIndicator.image =  UIImage(named: "EditContact/SectionCollapse")
         collapseIndicator.setContentHuggingPriority(.required, for: .horizontal)
@@ -138,6 +153,37 @@ class SectionView: UIView {
             }
         } else {
             applyAnimatedState()
+        }
+    }
+    
+    /// Makes the header stick to the top of the screen
+    ///
+    /// - Tag: SectionView.updateForOffset
+    private func updateHeaderForOffset() {
+        headerContainerView.transform = .identity
+        
+        guard !isCollapsed else { return }
+        guard traitCollection.verticalSizeClass == .regular else { return }
+        
+        let clampedOffset = min(max(offset, 0), frame.height - headerContainerView.frame.height)
+        
+        headerContainerView.transform = CGAffineTransform(translationX: 0, y: clampedOffset)
+    }
+    
+    private func updateEnabled() {
+        isUserInteractionEnabled = isEnabled
+        
+        if isEnabled {
+            icon.tintColor = Theme.colors.primary
+            icon.isHighlighted = isCompleted
+            
+            titleLabel.textColor = .black
+        } else {
+            collapse(animated: false)
+            icon.tintColor = Theme.colors.captionGray
+            icon.isHighlighted = false
+            
+            titleLabel.textColor = Theme.colors.captionGray
         }
     }
     
