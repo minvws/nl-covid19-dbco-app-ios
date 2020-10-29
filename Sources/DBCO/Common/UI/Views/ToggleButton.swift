@@ -39,6 +39,7 @@ class ToggleButton: UIButton {
         addTarget(self, action: #selector(toggle), for: .touchUpInside)
         addTarget(self, action: #selector(touchDownAnimation), for: .touchDown)
         
+        icon.tintColor = Theme.colors.primary
         icon.contentMode = .center
         icon.snap(to: .right, of: self, insets: .right(16))
         
