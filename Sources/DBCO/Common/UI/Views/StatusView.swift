@@ -38,6 +38,7 @@ class StatusView: UIView {
         isOpaque = false
         imageView.image = UIImage(named: "Status/Warning")
         imageView.highlightedImage = UIImage(named: "Status/Completed")
+        imageView.tintColor = Theme.colors.ok
         imageView.embed(in: self)
     }
     
