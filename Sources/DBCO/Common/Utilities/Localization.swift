@@ -70,10 +70,10 @@ extension String {
     static var taskOverviewDoneButtonTitle: String { return Localization.string(for: "taskOverviewDoneButtonTitle") }
     static var taskOverviewAddContactButtonTitle: String { return Localization.string(for: "taskOverviewAddContactButtonTitle") }
     
-    static var taskOverviewIndexContactsHeaderTitle: String { return Localization.string(for: "taskOverviewIndexContactsHeader.title") }
-    static var taskOverviewIndexContactsHeaderSubtitle: String { return Localization.string(for: "taskOverviewIndexContactsHeader.subtitle") }
-    static var taskOverviewStaffContactsHeaderTitle: String { return Localization.string(for: "taskOverviewStaffContactsHeader.title") }
-    static var taskOverviewStaffContactsHeaderSubtitle: String { return Localization.string(for: "taskOverviewStaffContactsHeader.subtitle") }
+    static var taskOverviewUninformedContactsHeaderTitle: String { return Localization.string(for: "taskOverviewUninformedContactsHeader.title") }
+    static var taskOverviewUninformedContactsHeaderSubtitle: String { return Localization.string(for: "taskOverviewUninformedContactsHeader.subtitle") }
+    static var taskOverviewInformedContactsHeaderTitle: String { return Localization.string(for: "taskOverviewInformedContactsHeader.title") }
+    static var taskOverviewInformedContactsHeaderSubtitle: String { return Localization.string(for: "taskOverviewInformedContactsHeader.subtitle") }
     
     static var taskContactCaptionCompleted: String { return Localization.string(for: "task.contact.caption.completed") }
     static var taskContactCaptionIncomplete: String { return Localization.string(for: "task.contact.caption.incomplete") }
@@ -143,13 +143,19 @@ extension String {
     
     /* MARK: - Informing contacts */
     static func contactInformPromptTitle(firstName: String) -> String { return Localization.string(for: "contactInformPromptTitle", [firstName]) }
-    static var contantInformOptionDone: String { return Localization.string(for: "contantInformOptionDone") }
-    static var contantInformOptionInformLater: String { return Localization.string(for: "contantInformOptionInformLater") }
-    static var contantInformOptionInformNow: String { return Localization.string(for: "contantInformOptionInformNow") }
+    static var contactInformOptionDone: String { return Localization.string(for: "contactInformOptionDone") }
+    static var contactInformOptionInformLater: String { return Localization.string(for: "contactInformOptionInformLater") }
+    static var contactInformOptionInformNow: String { return Localization.string(for: "contactInformOptionInformNow") }
     
     /* MARK: - Uploading */
     static var unfinishedTasksOverviewTitle: String { return Localization.string(for: "unfinishedTasksOverviewTitle") }
     static var unfinishedTasksOverviewMessage: String { return Localization.string(for: "unfinishedTasksOverviewMessage") }
+    
+    static var unfinishedTaskOverviewIndexContactsHeaderTitle: String { return Localization.string(for: "unfinishedTaskOverviewIndexContactsHeader.title") }
+    static var unfinishedTaskOverviewIndexContactsHeaderSubtitle: String { return Localization.string(for: "unfinishedTaskOverviewIndexContactsHeader.subtitle") }
+    static var unfinishedTaskOverviewStaffContactsHeaderTitle: String { return Localization.string(for: "unfinishedTaskOverviewStaffContactsHeader.title") }
+    static var unfinishedTaskOverviewStaffContactsHeaderSubtitle: String { return Localization.string(for: "unfinishedTaskOverviewStaffContactsHeader.subtitle") }
+    
     static var uploadInProgressMessage: String { return Localization.string(for: "uploadInProgressMessage") }
     static var uploadFinishedTitle: String { return Localization.string(for: "uploadFinishedTitle") }
     static var uploadFinishedMessage: String { return Localization.string(for: "uploadFinishedMessage") }

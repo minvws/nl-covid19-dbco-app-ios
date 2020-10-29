@@ -51,30 +51,38 @@ class TaskOverviewViewModel {
     
     func setHidePrompt(_ hidePrompt: @escaping PromptFunction) {
         self.hidePrompt = hidePrompt
+        
+        if Services.caseManager.isSynced {
+            hidePrompt(false)
+        }
     }
     
     func setShowPrompt(_ showPrompt: @escaping PromptFunction) {
         self.showPrompt = showPrompt
+        
+        if !Services.caseManager.isSynced {
+            showPrompt(false)
+        }
     }
     
     private func buildSections() {
         sections = []
         sections.append((tableHeaderBuilder?(), []))
         
-        let otherContacts = Services.caseManager.tasks.filter { [.index, .none].contains($0.contact.communication) }
-        let staffContacts = Services.caseManager.tasks.filter { $0.contact.communication == .staff }
+        let uninformedContacts = Services.caseManager.tasks.filter { !$0.isOrCanBeInformed }
+        let informedContacts = Services.caseManager.tasks.filter { $0.isOrCanBeInformed }
         
-        let otherSectionHeader = SectionHeaderContent(.taskOverviewIndexContactsHeaderTitle, .taskOverviewIndexContactsHeaderSubtitle)
-        let staffSectionHeader = SectionHeaderContent(.taskOverviewStaffContactsHeaderTitle, .taskOverviewStaffContactsHeaderSubtitle)
+        let uninformedSectionHeader = SectionHeaderContent(.taskOverviewUninformedContactsHeaderTitle, .taskOverviewUninformedContactsHeaderSubtitle)
+        let informedSectionHeader = SectionHeaderContent(.taskOverviewInformedContactsHeaderTitle, .taskOverviewInformedContactsHeaderSubtitle)
         
-        if !otherContacts.isEmpty {
-            sections.append((header: sectionHeaderBuilder?(otherSectionHeader),
-                             tasks: otherContacts))
+        if !uninformedContacts.isEmpty {
+            sections.append((header: sectionHeaderBuilder?(uninformedSectionHeader),
+                             tasks: uninformedContacts))
         }
         
-        if !staffContacts.isEmpty {
-            sections.append((header: sectionHeaderBuilder?(staffSectionHeader),
-                             tasks: staffContacts))
+        if !informedContacts.isEmpty {
+            sections.append((header: sectionHeaderBuilder?(informedSectionHeader),
+                             tasks: informedContacts))
         }
     }
 }

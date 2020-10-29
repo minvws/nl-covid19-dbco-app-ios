@@ -19,13 +19,13 @@
 /* MARK: - Task Overview */
 "taskOverviewTitle" = "Mijn contacten";
 "taskOverviewHeaderText" = "Vul de contactgegevens aan van deze contacten die je samen met de GGD in kaart hebt gebracht. Doe dit snel. <a href=\"app://readmore\">Lees meer</a>";
-"taskOverviewDoneButtonTitle" = "Verstuur gegevens";
+"taskOverviewDoneButtonTitle" = "Verstuur gegevens naar GGD";
 "taskOverviewAddContactButtonTitle" = "+ Contact toevoegen";
 
-"taskOverviewIndexContactsHeader.title" = "Jij informeert deze contacten";
-"taskOverviewIndexContactsHeader.subtitle" = "Vul zo veel mogelijk contactgegevens aan";
-"taskOverviewStaffContactsHeader.title" = "De GGD informeert deze contacten";
-"taskOverviewStaffContactsHeader.subtitle" = "Vul zo veel mogelijk contactgegevens aan";
+"taskOverviewUninformedContactsHeader.title" = "Vul contactgegevens aan";
+"taskOverviewUninformedContactsHeader.subtitle" = "En informeer je contacten";
+"taskOverviewInformedContactsHeader.title" = "Behandelde contacten";
+"taskOverviewInformedContactsHeader.subtitle" = "Contacten die zijn of worden geinformeerd";
 
 "task.contact.caption.completed" = "Gegevens toegevoegd";
 "task.contact.caption.incomplete" = "Vul gegevens aan";
@@ -95,13 +95,19 @@
 
 /* MARK: - Informing contacts */
 "contactInformPromptTitle" = "Weet %@ wat er speelt?";
-"contantInformOptionDone" = "Ja";
-"contantInformOptionInformLater" = "Nee, doe ik later";
-"contantInformOptionInformNow" = "Nee, nu informeren";
+"contactInformOptionDone" = "Ja";
+"contactInformOptionInformLater" = "Nee, doe ik later";
+"contactInformOptionInformNow" = "Nee, nu informeren";
 
 /* MARK: - Uploading */
 "unfinishedTasksOverviewTitle" = "Bijna klaar";
 "unfinishedTasksOverviewMessage" = "Kun je de gegevens van deze contacten controleren?";
+
+"unfinishedTaskOverviewIndexContactsHeader.title" = "Nog niet geinformeerde contacten";
+"unfinishedTaskOverviewIndexContactsHeader.subtitle" = "Informeer en vul contactgegevens aan";
+"unfinishedTaskOverviewStaffContactsHeader.title" = "De GGD informeert deze contacten";
+"unfinishedTaskOverviewStaffContactsHeader.subtitle" = "Geef een e-mail en telefoonnummer door";
+
 "uploadInProgressMessage" = "Versturen...";
 "uploadFinishedTitle" = "Bedankt voor het delen van de gegevens met de GGD";
-"uploadFinishedMessage" = "Wil je toch nog contactgegevens aanpassen, contacten toevoegen of een andere wijziging doorgeven dan kan dat.";
+"uploadFinishedMessage" = "Je kunt nog contactgegevens aanpassen, contacten toevoegen of een andere aanpassing doorgeven.";

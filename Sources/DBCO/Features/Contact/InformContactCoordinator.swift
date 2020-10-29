@@ -42,7 +42,7 @@ final class InformContactCoordinator: Coordinator, Logging {
         let firstName = task.contactFirstName ?? ""
         let alert = UIAlertController(title: .contactInformPromptTitle(firstName: firstName), message: nil, preferredStyle: .alert)
         
-        alert.addAction(UIAlertAction(title: .contantInformOptionDone, style: .default) { _ in
+        alert.addAction(UIAlertAction(title: .contactInformOptionDone, style: .default) { _ in
             var updatedTask = self.task
             updatedTask.contact = Task.Contact(category: updatedTask.contact.category,
                                                communication: updatedTask.contact.communication,
@@ -51,11 +51,11 @@ final class InformContactCoordinator: Coordinator, Logging {
             self.delegate?.informContactCoordinator(self, didFinishWith: updatedTask)
         })
         
-        alert.addAction(UIAlertAction(title: .contantInformOptionInformLater, style: .default) { _ in
+        alert.addAction(UIAlertAction(title: .contactInformOptionInformLater, style: .default) { _ in
             self.delegate?.informContactCoordinator(self, didFinishWith: self.task)
         })
         
-        alert.addAction(UIAlertAction(title: .contantInformOptionInformNow, style: .default) { _ in
+        alert.addAction(UIAlertAction(title: .contactInformOptionInformNow, style: .default) { _ in
             self.inform()
         })
         
