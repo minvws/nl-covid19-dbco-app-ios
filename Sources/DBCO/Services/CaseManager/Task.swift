@@ -95,8 +95,8 @@ struct Task: Codable {
         switch taskType {
         case .contact:
             if let questionnaireProgress = result?.progress {
-                // task progress = questionnaire progress * 0.9 + didInform * 0.1
-                let progress = (questionnaireProgress * 0.9) + (contact.didInform ? 0.1 : 0.0)
+                // task progress = questionnaire progress * 0.9 + isOrCanBeInformed * 0.1
+                let progress = (questionnaireProgress * 0.9) + (isOrCanBeInformed ? 0.1 : 0.0)
                 return abs(progress - 1) < 0.01 ? .completed : .inProgress(progress)
             } else {
                 return .notStarted
