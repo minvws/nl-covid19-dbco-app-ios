@@ -95,8 +95,21 @@ extension String {
     static var informContactSectionMessageIndex: String { return Localization.string(for: "informContactSection.message.index") }
     static var informContactSectionMessageStaff: String { return Localization.string(for: "informContactSection.message.staff") }
     
-    static var informContactTitleIndex: String { return Localization.string(for: "informContactTitle.index") }
-    static var informContactTitleStaff: String { return Localization.string(for: "informContactTitle.staff") }
+    static func informContactTitleIndex(firstName: String?) -> String {
+        if let firstName = firstName {
+            return Localization.string(for: "informContactTitle.index.knownName", [firstName, firstName])
+        } else {
+            return Localization.string(for: "informContactTitle.index.unknownName")
+        }
+    }
+    
+    static func informContactTitleStaff(firstName: String?) -> String {
+        if let firstName = firstName {
+            return Localization.string(for: "informContactTitle.staff.knownName", [firstName, firstName])
+        } else {
+            return Localization.string(for: "informContactTitle.staff.unknownName")
+        }
+    }
     
     static func informContactGuidelinesClose(untilDate: String, daysRemaining: String) -> String { return Localization.string(for: "informContactGuidelines.close", [untilDate, daysRemaining]) }
     static func informContactGuidelinesCloseUntilDate(date: String) -> String { return Localization.string(for: "informContactGuidelines.close.untilDate", [date]) }
@@ -104,7 +117,16 @@ extension String {
     static var informContactGuidelinesCloseDayRemaining: String { return Localization.string(for: "informContactGuidelines.close.dayRemaining") }
     static func informContactGuidelinesCloseDaysRemaining(daysRemaining: String) -> String { return Localization.string(for: "informContactGuidelines.close.daysRemaining", [daysRemaining]) }
     static var informContactGuidelinesOther: String { return Localization.string(for: "informContactGuidelines.other") }
-    static var informContactShareGuidelines: String { return Localization.string(for: "informContactShareGuidelines") }
+    
+    static var informContactCopyGuidelines: String { return Localization.string(for: "informContactCopyGuidelines") }
+    
+    static func informContactCall(firstName: String?) -> String {
+        if let firstName = firstName {
+            return Localization.string(for: "informContactCall.knownName", [firstName])
+        } else {
+            return Localization.string(for: "informContactCall.unknownName")
+        }
+    }
     
     static var category1RiskQuestion: String { return Localization.string(for: "category1RiskQuestion") }
     static var category1RiskQuestionAnswerPositive: String { return Localization.string(for: "category1RiskQuestion.answer.positive") }
