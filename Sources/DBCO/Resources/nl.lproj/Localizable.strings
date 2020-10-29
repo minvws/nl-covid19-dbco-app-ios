@@ -18,7 +18,6 @@
 
 /* MARK: - Task Overview */
 "taskOverviewTitle" = "Mijn contacten";
-"taskOverviewHeaderText" = "Vul de contactgegevens aan van deze contacten die je samen met de GGD in kaart hebt gebracht. Doe dit snel. <a href=\"app://readmore\">Lees meer</a>";
 "taskOverviewDoneButtonTitle" = "Verstuur gegevens naar GGD";
 "taskOverviewAddContactButtonTitle" = "+ Contact toevoegen";
 
@@ -88,8 +87,13 @@
 /* MARK: - Informing contacts */
 "contactInformPromptTitle" = "Weet %@ wat er speelt?";
 "contactInformOptionDone" = "Ja";
-"contactInformOptionInformLater" = "Nee, doe ik later";
-"contactInformOptionInformNow" = "Nee, nu informeren";
+"contactInformActionInformLater" = "Nee, doe ik later";
+"contactInformActionInformNow" = "Nee, nu informeren";
+
+"contactMissingDetailsPromptTitle" = "Heb je geen telefoonnummer of e-mailadres van %@";
+"contactMissingDetailsPromptMessage" = "De GGD kan alleen contact opnemen als ze een e-mail adres of telefoonnummer hebben.";
+"contactMissingDetailsActionIgnore" = "Nee, heb ik niet";
+"contactMissingDetailsActionFillIn" = "Invullen";
 
 /* MARK: - Uploading */
 "unfinishedTasksOverviewTitle" = "Bijna klaar";

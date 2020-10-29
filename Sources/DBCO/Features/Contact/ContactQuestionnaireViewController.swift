@@ -49,7 +49,12 @@ class ContactQuestionnaireViewModel {
     
     weak var classificationSectionView: SectionView?    { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
     weak var detailsSectionView: SectionView?           { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
-    weak var informSectionView: SectionView?            { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
+    weak var informSectionView: SectionView?            {
+        didSet {
+            updateProgress(expandFirstUnfinishedSection: true)
+            updateInformSectionContent()
+        }
+    }
     
     private var informTitle: String                     { didSet { informTitleHandler?(informTitle) } }
     private var informContent: String                   { didSet { informContentHandler?(informContent) } }
@@ -385,7 +390,62 @@ final class ContactQuestionnaireViewController: PromptableViewController {
     private var contactDetailsSection: SectionView!
     
     @objc private func save() {
-        delegate?.contactQuestionnaireViewController(self, didSave: viewModel.updatedTask)
+        let task = viewModel.updatedTask
+        let firstName = task.contactFirstName ?? ""
+        
+        switch task.contact.communication {
+        case .index where task.contact.didInform,
+             .staff where task.isOrCanBeInformed,
+             .none:
+            delegate?.contactQuestionnaireViewController(self, didSave: viewModel.updatedTask)
+        case .index:
+            let alert = UIAlertController(title: .contactInformPromptTitle(firstName: firstName), message: nil, preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: .contactInformOptionDone, style: .default) { _ in
+                self.viewModel.registerDidInform()
+                self.delegate?.contactQuestionnaireViewController(self, didSave: self.viewModel.updatedTask)
+            })
+            
+            alert.addAction(UIAlertAction(title: .contactInformActionInformLater, style: .default) { _ in
+                self.delegate?.contactQuestionnaireViewController(self, didSave: self.viewModel.updatedTask)
+            })
+            
+            alert.addAction(UIAlertAction(title: .contactInformActionInformNow, style: .default) { _ in
+                // Scroll to the inform section
+                let informSection = self.viewModel.informSectionView!
+                
+                self.viewModel.classificationSectionView?.collapse(animated: true)
+                self.viewModel.detailsSectionView?.collapse(animated: true)
+                informSection.expand(animated: true)
+                
+                self.scrollView.scrollRectToVisible(informSection.frame, animated: true)
+            })
+            
+            present(alert, animated: true)
+        case .staff:
+            let alert = UIAlertController(title: .contactMissingDetailsPromptTitle(firstName: firstName), message: .contactMissingDetailsPromptMessage, preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: .contactMissingDetailsActionIgnore, style: .default) { _ in
+                self.delegate?.contactQuestionnaireViewController(self, didSave: self.viewModel.updatedTask)
+            })
+            
+            alert.addAction(UIAlertAction(title: .contactMissingDetailsActionFillIn, style: .default) { _ in
+                // Scroll to contact details section
+                let detailsSection = self.viewModel.detailsSectionView!
+                
+                self.viewModel.classificationSectionView?.collapse(animated: true)
+                self.viewModel.informSectionView?.collapse(animated: true)
+                detailsSection.expand(animated: true)
+                
+                // Only interested in the top part
+                var adjustedFrame = detailsSection.frame
+                adjustedFrame.size.height /= 2
+                
+                self.scrollView.scrollRectToVisible(adjustedFrame, animated: true)
+            })
+            
+            present(alert, animated: true)
+        }
     }
     
     @objc private func cancel() {

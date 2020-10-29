@@ -66,7 +66,6 @@ extension String {
     
     /* MARK: - Task Overview */
     static var taskOverviewTitle: String { return Localization.string(for: "taskOverviewTitle") }
-    static var taskOverviewHeaderText: String { return Localization.string(for: "taskOverviewHeaderText") }
     static var taskOverviewDoneButtonTitle: String { return Localization.string(for: "taskOverviewDoneButtonTitle") }
     static var taskOverviewAddContactButtonTitle: String { return Localization.string(for: "taskOverviewAddContactButtonTitle") }
     
@@ -136,8 +135,13 @@ extension String {
     /* MARK: - Informing contacts */
     static func contactInformPromptTitle(firstName: String) -> String { return Localization.string(for: "contactInformPromptTitle", [firstName]) }
     static var contactInformOptionDone: String { return Localization.string(for: "contactInformOptionDone") }
-    static var contactInformOptionInformLater: String { return Localization.string(for: "contactInformOptionInformLater") }
-    static var contactInformOptionInformNow: String { return Localization.string(for: "contactInformOptionInformNow") }
+    static var contactInformActionInformLater: String { return Localization.string(for: "contactInformActionInformLater") }
+    static var contactInformActionInformNow: String { return Localization.string(for: "contactInformActionInformNow") }
+    
+    static func contactMissingDetailsPromptTitle(firstName: String) -> String { return Localization.string(for: "contactMissingDetailsPromptTitle", [firstName]) }
+    static var contactMissingDetailsPromptMessage: String { return Localization.string(for: "contactMissingDetailsPromptMessage") }
+    static var contactMissingDetailsActionIgnore: String { return Localization.string(for: "contactMissingDetailsActionIgnore") }
+    static var contactMissingDetailsActionFillIn: String { return Localization.string(for: "contactMissingDetailsActionFillIn") }
     
     /* MARK: - Uploading */
     static var unfinishedTasksOverviewTitle: String { return Localization.string(for: "unfinishedTasksOverviewTitle") }
