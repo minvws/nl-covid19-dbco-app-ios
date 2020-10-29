@@ -39,4 +39,32 @@ extension Task {
             }
             .first ?? label
     }
+    
+    /// Searches for a .contactDetails answer in the results and returns the phoneNumber.
+    var contactPhoneNumber: String? {
+        result?.answers
+            .compactMap {
+                switch $0.value {
+                case .contactDetails(_, _, _, let phoneNumber):
+                    return phoneNumber
+                default:
+                    return nil
+                }
+            }
+            .first
+    }
+    
+    /// Searches for a .contactDetails answer in the results and returns the email.
+    var contactEmail: String? {
+        result?.answers
+            .compactMap {
+                switch $0.value {
+                case .contactDetails(_, _, let email, _):
+                    return email
+                default:
+                    return nil
+                }
+            }
+            .first
+    }
 }

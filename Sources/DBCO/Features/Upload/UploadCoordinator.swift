@@ -77,17 +77,14 @@ final class UploadCoordinator: Coordinator {
         startChildCoordinator(EditContactCoordinator(presenter: navigationController, contactTask: task, delegate: self))
     }
     
-    private func informContactIfNeeded(for task: Task) {
-        startChildCoordinator(InformContactCoordinator(presenter: navigationController, contactTask: task, delegate: self))
-    }
-    
 }
 
 extension UploadCoordinator: SelectContactCoordinatorDelegate {
     
     func selectContactCoordinator(_ coordinator: SelectContactCoordinator, didFinishWith task: Task) {
         removeChildCoordinator(coordinator)
-        informContactIfNeeded(for: task)
+        
+        Services.caseManager.save(task)
     }
     
     func selectContactCoordinatorDidCancel(_ coordinator: SelectContactCoordinator) {
@@ -125,21 +122,12 @@ extension UploadCoordinator: EditContactCoordinatorDelegate {
     
     func editContactCoordinator(_ coordinator: EditContactCoordinator, didFinishContactTask task: Task) {
         removeChildCoordinator(coordinator)
-        informContactIfNeeded(for: task)
+        
+        Services.caseManager.save(task)
     }
     
     func editContactCoordinatorDidCancel(_ coordinator: EditContactCoordinator) {
         removeChildCoordinator(coordinator)
-    }
-    
-}
-
-extension UploadCoordinator: InformContactCoordinatorDelegate {
-    
-    func informContactCoordinator(_ coordinator: InformContactCoordinator, didFinishWith task: Task) {
-        removeChildCoordinator(coordinator)
-        
-        Services.caseManager.save(task)
     }
     
 }

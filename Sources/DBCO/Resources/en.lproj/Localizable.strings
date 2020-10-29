@@ -20,7 +20,6 @@
 
 /* MARK: - Task Overview */
 "taskOverviewTitle" = "My contacts";
-"taskOverviewHeaderText" = "Add details for the contacts you discussed together with the GGD. This is urgent. <a href=\"app://readmore\">Read more</a>";
 "taskOverviewDoneButtonTitle" = "Send data";
 "taskOverviewAddContactButtonTitle" = "+ Add contact";
 
@@ -89,13 +88,24 @@
 
 /* MARK: - Informing contacts */
 "contactInformPromptTitle" = "Weet %@ wat er speelt?";
-"contantInformOptionDone" = "Ja";
-"contantInformOptionInformLater" = "Nee, doe ik later";
-"contantInformOptionInformNow" = "Nee, nu informeren";
+"contactInformOptionDone" = "Ja";
+"contactInformActionInformLater" = "Nee, doe ik later";
+"contactInformActionInformNow" = "Nee, nu informeren";
+
+"contactMissingDetailsPromptTitle" = "Heb je geen telefoonnummer of e-mailadres van %@";
+"contactMissingDetailsPromptMessage" = "De GGD kan alleen contact opnemen als ze een e-mail adres of telefoonnummer hebben.";
+"contactMissingDetailsActionIgnore" = "Nee, heb ik niet";
+"contactMissingDetailsActionFillIn" = "Invullen";
 
 /* MARK: - Uploading */
 "unfinishedTasksOverviewTitle" = "Bijna klaar";
 "unfinishedTasksOverviewMessage" = "Kun je de gegevens van deze contacten controleren?";
+
+"unfinishedTaskOverviewIndexContactsHeader.title" = "Nog niet geinformeerde contacten";
+"unfinishedTaskOverviewIndexContactsHeader.subtitle" = "Informeer en vul contactgegevens aan";
+"unfinishedTaskOverviewStaffContactsHeader.title" = "De GGD informeert deze contacten";
+"unfinishedTaskOverviewStaffContactsHeader.subtitle" = "Geef een e-mail en telefoonnummer door";
+
 "uploadInProgressMessage" = "Versturen...";
 "uploadFinishedTitle" = "Bedankt voor het delen van de gegevens met de GGD";
-"uploadFinishedMessage" = "Wil je toch nog contactgegevens aanpassen, contacten toevoegen of een andere wijziging doorgeven dan kan dat.";
+"uploadFinishedMessage" = "Je kunt nog contactgegevens aanpassen, contacten toevoegen of een andere aanpassing doorgeven.";

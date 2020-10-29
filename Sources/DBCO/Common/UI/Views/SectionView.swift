@@ -120,6 +120,8 @@ class SectionView: UIView {
     }
     
     func expand(animated: Bool) {
+        guard isEnabled else { return }
+        
         collapseIndicator.transform = CGAffineTransform(rotationAngle: .pi - 0.000001) // set that rotation to something very close to, but not quite 180 degrees so animating back to 0 reverses the rotation
         
         func applyAnimatedState() {

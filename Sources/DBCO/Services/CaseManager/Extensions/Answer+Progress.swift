@@ -25,19 +25,23 @@ extension Answer {
                 return 0
             }
         case .contactDetails(let firstName, let lastName, let email, let phoneNumber):
-            let valueCount = [firstName, lastName, email, phoneNumber]
+            let values = [firstName?.nilIfEmpty,
+                          lastName?.nilIfEmpty,
+                          email?.nilIfEmpty ?? phoneNumber?.nilIfEmpty]
+            let validValueCount = values
                 .compactMap { $0 }
-                .filter { !$0.isEmpty }
                 .count
             
-            return Double(valueCount) / 4
+            return Double(validValueCount) / Double(values.count)
         case .contactDetailsFull(let firstName, let lastName, let email, let phoneNumber):
-            let valueCount = [firstName, lastName, email, phoneNumber]
+            let values = [firstName?.nilIfEmpty,
+                          lastName?.nilIfEmpty,
+                          email?.nilIfEmpty ?? phoneNumber?.nilIfEmpty]
+            let validValueCount = values
                 .compactMap { $0 }
-                .filter { !$0.isEmpty }
                 .count
             
-            return Double(valueCount) / 4
+            return Double(validValueCount) / Double(values.count)
         case .date(let value):
             return value != nil ? 1 : 0
         case .open(let value):

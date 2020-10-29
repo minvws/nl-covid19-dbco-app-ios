@@ -32,7 +32,7 @@ class UnfinishedTasksViewModel {
         
         // Store unfisnished task identifiers now, so any completed tasks won't have to dissappear from the overview.
         relevantTaskIdentifiers = Services.caseManager.tasks
-            .filter { $0.status != .completed }
+            .filter { !$0.isOrCanBeInformed }
             .map { $0.uuid }
         
         tableViewManager.numberOfSections = { [unowned self] in return sections.count }
@@ -61,8 +61,8 @@ class UnfinishedTasksViewModel {
         let otherContacts = tasks.filter { [.index, .none].contains($0.contact.communication) }
         let staffContacts = tasks.filter { $0.contact.communication == .staff }
         
-        let otherSectionHeader = SectionHeaderContent(.taskOverviewIndexContactsHeaderTitle, .taskOverviewIndexContactsHeaderSubtitle)
-        let staffSectionHeader = SectionHeaderContent(.taskOverviewStaffContactsHeaderTitle, .taskOverviewStaffContactsHeaderSubtitle)
+        let otherSectionHeader = SectionHeaderContent(.unfinishedTaskOverviewIndexContactsHeaderTitle, .unfinishedTaskOverviewIndexContactsHeaderSubtitle)
+        let staffSectionHeader = SectionHeaderContent(.unfinishedTaskOverviewStaffContactsHeaderTitle, .unfinishedTaskOverviewStaffContactsHeaderSubtitle)
         
         if !otherContacts.isEmpty {
             sections.append((header: sectionHeaderBuilder?(otherSectionHeader),

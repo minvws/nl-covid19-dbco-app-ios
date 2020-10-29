@@ -58,10 +58,6 @@ final class TaskOverviewCoordinator: Coordinator {
     private func editContact(for task: Task) {
         startChildCoordinator(EditContactCoordinator(presenter: overviewController, contactTask: task, delegate: self))
     }
-    
-    private func informContactIfNeeded(for task: Task) {
-        startChildCoordinator(InformContactCoordinator(presenter: overviewController, contactTask: task, delegate: self))
-    }
 
 }
 
@@ -70,7 +66,8 @@ extension TaskOverviewCoordinator: SelectContactCoordinatorDelegate {
 
     func selectContactCoordinator(_ coordinator: SelectContactCoordinator, didFinishWith task: Task) {
         removeChildCoordinator(coordinator)
-        informContactIfNeeded(for: task)
+        
+        Services.caseManager.save(task)
     }
     
     func selectContactCoordinatorDidCancel(_ coordinator: SelectContactCoordinator) {
@@ -83,7 +80,8 @@ extension TaskOverviewCoordinator: EditContactCoordinatorDelegate {
     
     func editContactCoordinator(_ coordinator: EditContactCoordinator, didFinishContactTask task: Task) {
         removeChildCoordinator(coordinator)
-        informContactIfNeeded(for: task)
+        
+        Services.caseManager.save(task)
     }
     
     func editContactCoordinatorDidCancel(_ coordinator: EditContactCoordinator) {
@@ -96,16 +94,6 @@ extension TaskOverviewCoordinator: UploadCoordinatorDelegate {
     
     func uploadCoordinatorDidFinish(_ coordinator: UploadCoordinator) {
         removeChildCoordinator(coordinator)
-    }
-    
-}
-
-extension TaskOverviewCoordinator: InformContactCoordinatorDelegate {
-    
-    func informContactCoordinator(_ coordinator: InformContactCoordinator, didFinishWith task: Task) {
-        removeChildCoordinator(coordinator)
-        
-        Services.caseManager.save(task)
     }
     
 }

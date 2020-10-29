@@ -62,7 +62,7 @@ final class CaseManager: CaseManaging, Logging {
     
     private var listeners = [ListenerWrapper]()
     
-    private(set) var isSynced: Bool = false {
+    private(set) var isSynced: Bool = true {
         didSet {
             listeners.forEach { $0.listener?.caseManagerDidUpdateSyncState(self) }
         }
