@@ -78,14 +78,6 @@ extension String {
     static var taskContactCaptionCompleted: String { return Localization.string(for: "task.contact.caption.completed") }
     static var taskContactCaptionIncomplete: String { return Localization.string(for: "task.contact.caption.incomplete") }
     
-    // MARK: - Request Contacts Permission
-    static var requestPermissionContactsTitle: String { return Localization.string(for: "requestPermssion.contacts.title") }
-    static var requestPermissionContactsBody: String { return Localization.string(for: "requestPermssion.contacts.body") }
-    static var requestPermissionContactsBodyDenied: String { return Localization.string(for: "requestPermssion.contacts.body.denied") }
-    static var requestPermissionContactsAllowButtonTitle: String { return Localization.string(for: "requestPermssion.contacts.allowButtonTitle") }
-    static var requestPermissionContactsContinueButtonTitle: String { return Localization.string(for: "requestPermssion.contacts.continueButtonTitle") }
-    static var requestPermissionContactsSettingsButtonTitle: String { return Localization.string(for: "requestPermssion.contacts.settingsButtonTitle") }
-    
     // MARK: - Contact Selection
     static var selectContactTitle: String { return Localization.string(for: "selectContactTitle") }
     static var selectContactSearch: String { return Localization.string(for: "selectContactSearch") }
