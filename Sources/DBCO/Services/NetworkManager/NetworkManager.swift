@@ -7,56 +7,8 @@
 
 import Foundation
 
-enum NetworkResponseHandleError: Error {
-    case cannotUnzip
-    case invalidSignature
-    case cannotDeserialize
-}
-
-enum NetworkError: Error {
-    case invalidRequest
-    case serverNotReachable
-    case invalidResponse
-    case responseCached
-    case serverError
-    case resourceNotFound
-    case encodingError
-    case redirection
-}
-
-extension NetworkResponseHandleError {
-    var asNetworkError: NetworkError {
-        switch self {
-        case .cannotDeserialize:
-            return .invalidResponse
-        case .cannotUnzip:
-            return .invalidResponse
-        case .invalidSignature:
-            return .invalidResponse
-        }
-    }
-}
-
-enum HTTPHeaderKey: String {
-    case contentType = "Content-Type"
-    case acceptedContentType = "Accept"
-}
-
-enum HTTPContentType: String {
-    case all = "*/*"
-    case json = "application/json"
-}
-
-/// - Tag: NetworkManaging
-protocol NetworkManaging {
-    init(configuration: NetworkConfiguration)
-    
-    func getCase(identifier: String, completion: @escaping (Result<Case, NetworkError>) -> ())
-    func getQuestionnaires(completion: @escaping (Result<[Questionnaire], NetworkError>) -> ())
-}
-
 class NetworkManager: NetworkManaging, Logging {
-    let loggingCategory: String = "Network"
+    private(set) var loggingCategory: String = "Network"
     
     required init(configuration: NetworkConfiguration) {
         self.configuration = configuration
@@ -133,6 +85,11 @@ class NetworkManager: NetworkManaging, Logging {
     }
 
     // MARK: - Download Data
+    func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
+        session
+            .dataTask(with: request, completionHandler: completionHandler)
+            .resume()
+    }
     
     private func data(request: Result<URLRequest, NetworkError>, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> ()) {
         switch request {
@@ -144,13 +101,12 @@ class NetworkManager: NetworkManaging, Logging {
     }
 
     private func data(request: URLRequest, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> ()) {
-        session.dataTask(with: request) { data, response, error in
+        dataTask(with: request) { data, response, error in
             self.handleNetworkResponse(data,
                                        response: response,
                                        error: error,
                                        completion: completion)
         }
-        .resume()
     }
     
     private func decodedJSONData<Object: Decodable>(request: Result<URLRequest, NetworkError>, completion: @escaping (Result<Object, NetworkError>) -> ()) {
