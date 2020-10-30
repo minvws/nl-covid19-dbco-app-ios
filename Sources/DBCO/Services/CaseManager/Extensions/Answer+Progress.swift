@@ -53,6 +53,20 @@ extension Answer {
         }
     }
     
+    var isEssential: Bool {
+        switch value {
+        case .classificationDetails,
+             .contactDetails,
+             .contactDetailsFull,
+             .lastExposureDate:
+            return true
+        case .date,
+             .open,
+             .multipleChoice:
+            return false
+        }
+    }
+    
 }
 
 extension QuestionnaireResult {
@@ -60,7 +74,8 @@ extension QuestionnaireResult {
     /// A value in 0...1 indicating the progress of completing the quesionnaire.
     /// Used for calculating the [task's status](x-source-tag://Task.status)
     var progress: Double {
-        answers.reduce(0) { $0 + ($1.progress / Double(answers.count)) }
+        let essentialAnswers = answers.filter(\.isEssential)
+        return essentialAnswers.reduce(0) { $0 + ($1.progress / Double(essentialAnswers.count)) }
     }
     
 }

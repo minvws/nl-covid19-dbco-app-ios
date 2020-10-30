@@ -201,8 +201,20 @@ class ContactQuestionnaireViewModel {
         let classificationManagers = relevantManagers.filter { $0.question.group == .classification }
         let contactDetailsManagers = relevantManagers.filter { $0.question.group == .contactDetails }
         
-        classificationSectionView?.isCompleted = classificationManagers.allSatisfy(\.hasValidAnswer)
-        detailsSectionView?.isCompleted = contactDetailsManagers.allSatisfy(\.hasValidAnswer)
+        func isCompleted(_ answer: Answer) -> Bool {
+            return abs(answer.progress - 1) < 0.01
+        }
+        
+        classificationSectionView?.isCompleted = classificationManagers
+            .map(\.answer)
+            .filter(\.isEssential)
+            .allSatisfy(isCompleted)
+        
+        detailsSectionView?.isCompleted = contactDetailsManagers
+            .map(\.answer)
+            .filter(\.isEssential)
+            .allSatisfy(isCompleted)
+        
         informSectionView?.isCompleted = updatedTask.isOrCanBeInformed
         
         detailsSectionView?.isEnabled = classificationManagers.allSatisfy(\.hasValidAnswer)
@@ -212,6 +224,10 @@ class ContactQuestionnaireViewModel {
             let sections = [classificationSectionView, detailsSectionView, informSectionView].compactMap { $0 }
             sections.forEach { $0.collapse(animated: false) }
             sections.first { !$0.isCompleted }?.expand(animated: false)
+            
+            if sections.allSatisfy(\.isCollapsed) {
+                informSectionView?.expand(animated: false)
+            }
         }
         
         updateInformSectionContent()

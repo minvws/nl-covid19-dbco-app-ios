@@ -128,7 +128,7 @@
           "group": "contactdetails",
           "questionType": "multiplechoice",
           "label": "Geldt een of meer van deze dingen voor deze persoon?",
-          "description": "<ul><li>Student</li><li>70 jaar of ouder</li><li>Gezondheidsklachten of extra gezondheidsrisico's</li><li>Woont in een zorginstelling of asielzoekerscentrum (bijvoorbeeld bejaardentehuis)</li><li>Spreekt slecht of geen Nederlands</li></ul><li>Werkt in de zorg, onderwijs of een contactberoep (bijvoorbeeld kapper)</li></ul>",
+          "description": "<ul><li>Student</li><li>70 jaar of ouder</li><li>Gezondheidsklachten of extra gezondheidsrisico's</li><li>Woont in een zorginstelling of asielzoekerscentrum (bijvoorbeeld bejaardentehuis)</li><li>Spreekt slecht of geen Nederlands</li><li>Werkt in de zorg, onderwijs of een contactberoep (bijvoorbeeld kapper)</li></ul>",
           "relevantForCategories": [
             {
               "category": "1"

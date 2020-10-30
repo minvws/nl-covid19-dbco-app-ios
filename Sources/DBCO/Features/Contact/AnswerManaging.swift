@@ -190,11 +190,7 @@ class ContactDetailsAnswerManager: AnswerManaging {
     }
     
     var hasValidAnswer: Bool {
-        return
-            firstName.value != nil &&
-            lastName.value != nil &&
-            email.value != nil &&
-            phoneNumber.value != nil
+        return answer.progress > 0
     }
 }
 
