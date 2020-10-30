@@ -73,6 +73,10 @@
 		CDC7C8A225387E4400FE7E05 /* CaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C8A125387E4400FE7E05 /* CaseManager.swift */; };
 		CDDC05642543120D0079C2F4 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDDC05632543120D0079C2F4 /* Coordinator.swift */; };
 		CDDC056C2546CD460079C2F4 /* Case.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDDC056B2546CD460079C2F4 /* Case.swift */; };
+		CDE25F61254B315100E9AE49 /* LocalMockNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE25F60254B315100E9AE49 /* LocalMockNetworkManager.swift */; };
+		CDE25F65254B316F00E9AE49 /* NetworkManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE25F64254B316F00E9AE49 /* NetworkManaging.swift */; };
+		CDE25F6C254B39B600E9AE49 /* Mocks in Resources */ = {isa = PBXBuildFile; fileRef = CDE25F6B254B39B600E9AE49 /* Mocks */; };
+		CDE25F8F254C21B900E9AE49 /* String+SHA256.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE25F8E254C21B900E9AE49 /* String+SHA256.swift */; };
 		CDE30E64251BC02100862A40 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E63251BC02100862A40 /* TextField.swift */; };
 		CDE30E69251C89FF00862A40 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E68251C89FF00862A40 /* NavigationController.swift */; };
 		CDE30E6C251CE15800862A40 /* ContactValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E6B251CE15800862A40 /* ContactValues.swift */; };
@@ -147,7 +151,7 @@
 		CDADF7DD2534773800424492 /* UIToolbar+Done.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIToolbar+Done.swift"; sourceTree = "<group>"; };
 		CDADF7ED2535B6A500424492 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		CDADF7F22535E34400424492 /* UploadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadCoordinator.swift; sourceTree = "<group>"; };
-		CDC4A8E4250B87E5001BABC6 /* DBCO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DBCO.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CDC4A8E4250B87E5001BABC6 /* Oplossing 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Oplossing 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDC4A8E7250B87E5001BABC6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CDC4A8E9250B87E5001BABC6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		CDC4A8F0250B87E6001BABC6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -168,6 +172,10 @@
 		CDC7C8A125387E4400FE7E05 /* CaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseManager.swift; sourceTree = "<group>"; };
 		CDDC05632543120D0079C2F4 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		CDDC056B2546CD460079C2F4 /* Case.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case.swift; sourceTree = "<group>"; };
+		CDE25F60254B315100E9AE49 /* LocalMockNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMockNetworkManager.swift; sourceTree = "<group>"; };
+		CDE25F64254B316F00E9AE49 /* NetworkManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManaging.swift; sourceTree = "<group>"; };
+		CDE25F6B254B39B600E9AE49 /* Mocks */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Mocks; sourceTree = "<group>"; };
+		CDE25F8E254C21B900E9AE49 /* String+SHA256.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+SHA256.swift"; sourceTree = "<group>"; };
 		CDE30E63251BC02100862A40 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		CDE30E68251C89FF00862A40 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		CDE30E6B251CE15800862A40 /* ContactValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactValues.swift; sourceTree = "<group>"; };
@@ -369,7 +377,7 @@
 		CDC4A8E5250B87E5001BABC6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CDC4A8E4250B87E5001BABC6 /* DBCO.app */,
+				CDC4A8E4250B87E5001BABC6 /* Oplossing 2.app */,
 				CD756C32252B3D36005FEDA0 /* DBCOTests.xctest */,
 			);
 			name = Products;
@@ -390,6 +398,7 @@
 		CDC4A8FB250B8945001BABC6 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CDE25F6B254B39B600E9AE49 /* Mocks */,
 				CDC4A8F0250B87E6001BABC6 /* Assets.xcassets */,
 				CD29636325191C7C008443AF /* Colors.xcassets */,
 				CDC4A8F5250B87E6001BABC6 /* Info.plist */,
@@ -414,7 +423,9 @@
 			isa = PBXGroup;
 			children = (
 				CDC7C897253873CE00FE7E05 /* Envelope.swift */,
+				CDE25F64254B316F00E9AE49 /* NetworkManaging.swift */,
 				CDC7C8682538412600FE7E05 /* NetworkManager.swift */,
+				CDE25F60254B315100E9AE49 /* LocalMockNetworkManager.swift */,
 				CDC7C8762538469B00FE7E05 /* NetworkManagerURLSessionDelegate.swift */,
 				CDC7C87A2538481C00FE7E05 /* Config */,
 				CDC7C8812538497C00FE7E05 /* Extensions */,
@@ -470,6 +481,7 @@
 				CDFCF9162510ECC70062269A /* UIView+Embed.swift */,
 				CD756C73252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift */,
 				CDADF7DD2534773800424492 /* UIToolbar+Done.swift */,
+				CDE25F8E254C21B900E9AE49 /* String+SHA256.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -510,7 +522,7 @@
 			);
 			name = DBCO;
 			productName = DBCO;
-			productReference = CDC4A8E4250B87E5001BABC6 /* DBCO.app */;
+			productReference = CDC4A8E4250B87E5001BABC6 /* Oplossing 2.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -564,6 +576,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDE25F6C254B39B600E9AE49 /* Mocks in Resources */,
 				CDC4A8F4250B87E6001BABC6 /* LaunchScreen.storyboard in Resources */,
 				CD29636425191C80008443AF /* Colors.xcassets in Resources */,
 				CDE30E782521D92600862A40 /* Localizable.strings in Resources */,
@@ -633,9 +646,11 @@
 				CD7282C6250F9D2400D68911 /* TaskOverviewCoordinator.swift in Sources */,
 				CDC7C8A225387E4400FE7E05 /* CaseManager.swift in Sources */,
 				CDA0F6852539AA66009FD2A9 /* Task+ContactName.swift in Sources */,
+				CDE25F8F254C21B900E9AE49 /* String+SHA256.swift in Sources */,
 				CDC7C8872538498700FE7E05 /* JSONDecoder+Decoding.swift in Sources */,
 				CDE30E64251BC02100862A40 /* TextField.swift in Sources */,
 				CDADF7F32535E34400424492 /* UploadCoordinator.swift in Sources */,
+				CDE25F61254B315100E9AE49 /* LocalMockNetworkManager.swift in Sources */,
 				CD65CD812535F77400BB761A /* LoadingViewController.swift in Sources */,
 				CD2AC0762530601900E8AF78 /* InputTextView.swift in Sources */,
 				CD421872251B4819004544B3 /* TaskTableViewCell.swift in Sources */,
@@ -644,6 +659,7 @@
 				CD2AC08A25308B6500E8AF78 /* StatusView.swift in Sources */,
 				CDFCF9152510EBC40062269A /* NSAttributedString+Extension.swift in Sources */,
 				CDC4A8E8250B87E5001BABC6 /* AppDelegate.swift in Sources */,
+				CDE25F65254B316F00E9AE49 /* NetworkManaging.swift in Sources */,
 				CD756C70252DC629005FEDA0 /* SeparatorView.swift in Sources */,
 				CD9C7F52254AC25300A78EEF /* Task+Informed.swift in Sources */,
 				CD2963522518F291008443AF /* ContactQuestionnaireViewController.swift in Sources */,
@@ -741,7 +757,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DBCO.app/DBCO";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Oplossing 2.app/Oplossing 2";
 			};
 			name = Debug;
 		};
@@ -761,7 +777,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DBCO.app/DBCO";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Oplossing 2.app/Oplossing 2";
 			};
 			name = Release;
 		};
@@ -815,6 +831,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
@@ -836,7 +853,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Oplossing 2";
 				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO Ad Hoc";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -859,7 +876,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DBCO.app/DBCO";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Oplossing 2.app/Oplossing 2";
 			};
 			name = "Ad Hoc";
 		};
@@ -913,6 +930,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = USERTEST_MOCKS;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
@@ -934,7 +952,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Oplossing 2";
 				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO App Store";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -957,7 +975,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DBCO.app/DBCO";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Oplossing 2.app/Oplossing 2";
 			};
 			name = "App Store";
 		};
@@ -1018,7 +1036,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG USERTEST_MOCKS";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1095,7 +1113,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco.debug;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Oplossing 2";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1116,7 +1134,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco.debug;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Oplossing 2";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

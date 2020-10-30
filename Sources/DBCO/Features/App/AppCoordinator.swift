@@ -23,6 +23,10 @@ final class AppCoordinator: Coordinator {
     }
     
     override func start() {
+        #if USERTEST_MOCKS
+        Services.use(LocalMockNetworkManager.self)
+        #endif
+        
         let startCoordinator = OnboardingCoordinator(window: window)
         startCoordinator.delegate = self
         startChildCoordinator(startCoordinator)

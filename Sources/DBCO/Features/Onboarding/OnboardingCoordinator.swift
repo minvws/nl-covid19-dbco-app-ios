@@ -5,7 +5,6 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-
 import UIKit
 
 protocol OnboardingCoordinatorDelegate: class {
@@ -82,19 +81,31 @@ extension OnboardingCoordinator: PairViewControllerDelegate {
         navigationController.navigationBar.isUserInteractionEnabled = false
         
         // Load task stubs
-        Services.caseManager.loadTasksAndQuestions {
-            controller.stopLoadingAnimation()
-            self.navigationController.navigationBar.isUserInteractionEnabled = true
-            
-            self.didPair = true
-            
-            let viewModel = OnboardingStepViewModel(image: UIImage(named: "StartVisual")!,
-                                                    title: .onboardingStep3Title,
-                                                    message: .onboardingStep3Message,
-                                                    buttonTitle: .start)
-            let stepController = OnboardingStepViewController(viewModel: viewModel)
-            stepController.delegate = self
-            self.navigationController.setViewControllers([stepController], animated: true)
+        // This is all temporary code until until pairing with the API is available.
+        Services.caseManager.loadTasksAndQuestions(pairingCode: code) { success, error in
+            if success {
+                controller.stopLoadingAnimation()
+                self.navigationController.navigationBar.isUserInteractionEnabled = true
+                
+                self.didPair = true
+                
+                let viewModel = OnboardingStepViewModel(image: UIImage(named: "StartVisual")!,
+                                                        title: .onboardingStep3Title,
+                                                        message: .onboardingStep3Message,
+                                                        buttonTitle: .start)
+                let stepController = OnboardingStepViewController(viewModel: viewModel)
+                stepController.delegate = self
+                self.navigationController.setViewControllers([stepController], animated: true)
+            } else {
+                controller.stopLoadingAnimation()
+                self.navigationController.navigationBar.isUserInteractionEnabled = true
+                
+                let alert = UIAlertController(title: .onboardingLoadingErrorTitle, message: .onboardingLoadingErrorMessage, preferredStyle: .alert)
+                
+                alert.addAction(UIAlertAction(title: .ok, style: .default, handler: nil))
+                
+                controller.present(alert, animated: true)
+            }
         }
     }
     
