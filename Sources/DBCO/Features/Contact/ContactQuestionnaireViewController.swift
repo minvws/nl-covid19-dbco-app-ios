@@ -224,6 +224,10 @@ class ContactQuestionnaireViewModel {
             let sections = [classificationSectionView, detailsSectionView, informSectionView].compactMap { $0 }
             sections.forEach { $0.collapse(animated: false) }
             sections.first { !$0.isCompleted }?.expand(animated: false)
+            
+            if sections.allSatisfy(\.isCollapsed) {
+                informSectionView?.expand(animated: false)
+            }
         }
         
         updateInformSectionContent()
