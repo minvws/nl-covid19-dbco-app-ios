@@ -29,7 +29,7 @@ protocol CaseManaging {
     /// Returns the [Questionnaire](x-source-tag://Questionnaire) associated with a task
     func questionnaire(for task: Task) -> Questionnaire
     
-    func loadTasksAndQuestions(completion: @escaping () -> Void)
+    func loadTasksAndQuestions(pairingCode: String, completion: @escaping (_ success: Bool, _ error: NetworkError?) -> Void)
     
     /// Adds a listener
     /// - parameter listener: The object conforming to [CaseManagerListener](x-source-tag://CaseManagerListener) that will receive updates. Will be stored with a weak reference
@@ -75,24 +75,36 @@ final class CaseManager: CaseManaging, Logging {
         tasks.contains { $0.status != .completed }
     }
     
-    func loadTasksAndQuestions(completion: @escaping () -> Void) {
-        // Temporary implementation
-        let group = DispatchGroup()
+    func loadTasksAndQuestions(pairingCode: String, completion: @escaping (Bool, NetworkError?) -> Void) {
+        // This is all temporary code until until pairing with the API is available.
         
-        group.enter()
-        Services.networkManager.getCase(identifier: "1234") { result in
-            self.tasks = (try? result.get())?.tasks ?? []
-            self.listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
-            group.leave()
+        DispatchQueue.main.asyncAfter(deadline: .now() + .random(in: 0.1...0.5)) {
+            if let validCodes = Bundle.main.infoDictionary?["ValidCodes"] as? [String] {
+                guard validCodes.contains(pairingCode.sha256) else {
+                    completion(false, .invalidRequest)
+                    return
+                }
+            }
+        
+            let group = DispatchGroup()
+            
+            group.enter()
+            Services.networkManager.getCase(identifier: "1234") { result in
+                self.tasks = (try? result.get())?.tasks ?? []
+                self.listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
+                group.leave()
+            }
+            
+            group.enter()
+            Services.networkManager.getQuestionnaires { result in
+                self.setQuestionnaires((try? result.get()) ?? [])
+                group.leave()
+            }
+            
+            group.notify(queue: .main) {
+                completion(true, nil)
+            }
         }
-        
-        group.enter()
-        Services.networkManager.getQuestionnaires { result in
-            self.setQuestionnaires((try? result.get()) ?? [])
-            group.leave()
-        }
-        
-        group.notify(queue: .main, execute: completion)
     }
     
     /// Set the questionnaires from the api call result
