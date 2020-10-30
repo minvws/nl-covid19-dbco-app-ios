@@ -143,7 +143,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         case .picker:
             object?[keyPath: path].value = pickerOptions?[optionPicker!.selectedRow(inComponent: 0)].identifier
         default:
-            object?[keyPath: path].value = text
+            object?[keyPath: path].value = text?.isEmpty == false ? text : nil
         }
         
         updateValidationStateIfNeeded()

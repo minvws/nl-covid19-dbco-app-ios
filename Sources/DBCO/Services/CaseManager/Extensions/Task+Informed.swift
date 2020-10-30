@@ -18,7 +18,7 @@ extension Task {
             return contact.didInform
         case .staff:
             // The GGD can only contact when there's a email or phoneNumber filled in
-            return contactEmail?.nilIfEmpty != nil || contactPhoneNumber?.nilIfEmpty != nil
+            return contactEmail != nil || contactPhoneNumber != nil
         case .none:
             return false
         }
