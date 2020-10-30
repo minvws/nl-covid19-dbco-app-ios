@@ -56,6 +56,7 @@ extension String {
     static var edit: String { return Localization.string(for: "edit") }
     static var selectDate: String { return Localization.string(for: "selectDate") }
     static var done: String { return Localization.string(for: "done") }
+    static var ok: String { return Localization.string(for: "ok") }
     
     /* MARK: - Onboarding */
     static var onboardingStep1Title: String { return Localization.string(for: "onboarding.step1.title") }
@@ -63,6 +64,9 @@ extension String {
     static var onboardingStep2Title: String { return Localization.string(for: "onboarding.step2.title") }
     static var onboardingStep3Title: String { return Localization.string(for: "onboarding.step3.title") }
     static var onboardingStep3Message: String { return Localization.string(for: "onboarding.step3.message") }
+    
+    static var onboardingLoadingErrorTitle: String { return Localization.string(for: "onboardingLoadingErrorTitle") }
+    static var onboardingLoadingErrorMessage: String { return Localization.string(for: "onboardingLoadingErrorMessage") }
     
     /* MARK: - Task Overview */
     static var taskOverviewTitle: String { return Localization.string(for: "taskOverviewTitle") }

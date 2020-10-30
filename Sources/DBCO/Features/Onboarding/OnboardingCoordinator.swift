@@ -100,9 +100,9 @@ extension OnboardingCoordinator: PairViewControllerDelegate {
                 controller.stopLoadingAnimation()
                 self.navigationController.navigationBar.isUserInteractionEnabled = true
                 
-                let alert = UIAlertController(title: "Kon de gegevens niet ophalen", message: "Controleer de code en probeer het opnieuw.", preferredStyle: .alert)
+                let alert = UIAlertController(title: .onboardingLoadingErrorTitle, message: .onboardingLoadingErrorMessage, preferredStyle: .alert)
                 
-                alert.addAction(UIAlertAction(title: "Oké", style: .default, handler: nil))
+                alert.addAction(UIAlertAction(title: .ok, style: .default, handler: nil))
                 
                 controller.present(alert, animated: true)
             }
