@@ -182,7 +182,10 @@ class ContactDetailsAnswerManager: AnswerManaging {
     
     var answer: Answer {
         var answer = baseAnswer
-        answer.value = .contactDetails(firstName: firstName.value, lastName: lastName.value, email: email.value, phoneNumber: phoneNumber.value)
+        answer.value = .contactDetails(firstName: firstName.value,
+                                       lastName: lastName.value,
+                                       email: email.value,
+                                       phoneNumber: phoneNumber.value)
         return answer
     }
     

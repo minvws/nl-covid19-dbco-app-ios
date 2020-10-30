@@ -45,7 +45,7 @@ class InputTextView<Object: AnyObject, Field: Editable>: UIView {
         }
         
         textView.textChanged { [weak self] in
-            self?.object?[keyPath: path].value = $0
+            self?.object?[keyPath: path].value = $0?.isEmpty == false ? $0 : nil
         }
     }
     

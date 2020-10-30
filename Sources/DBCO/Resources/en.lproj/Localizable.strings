@@ -49,20 +49,24 @@
 "contactDetailsSection.title" = "Contactgegevens";
 "contactDetailsSection.message" = "Vul zo veel mogelijk gegevens aan";
 "informContactSection.title" = "Informeren";
-"informContactSection.message.index" = "Neem contact op met deze persoon";
+"informContactSection.message.index" = "De GGD informeert dit contact niet";
 "informContactSection.message.staff" = "De GGD neemt contact op";
 
-"informContactTitle.index" = "Vertel dat je besmet bent en deel de leefregels van het RIVM";
-"informContactTitle.staff" = "Wil je ook zelf contact opnemen?";
+"informContactTitle.index.knownName" = "De GGD neemt <u>geen</u> contact op met %@. Deel jij deze leefregels met %@?";
+"informContactTitle.index.unknownName" = "De GGD neemt <u>geen</u> contact op met dit contact. Deel jij deze leefregels?";
+"informContactTitle.staff.knownName" = "De GGD neemt contact op met %@. Dit zijn de leefregels voor %@.";
+"informContactTitle.staff.unknownName" = "De GGD neemt contact op met dit contact. Dit zijn de leefregels.";
 
-"informContactGuidelines.close" = "Dit zijn de belangrijkste leefregels voor deze persoon:<ul><li>Blijf thuis, ontvang geen bezoek - alle huisgenoten blijven thuis%@%@</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li></ul>";
+"informContactGuidelines.close" = "<ul><li>Blijf thuis, ontvang geen bezoek - alle huisgenoten blijven thuis%@%@</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li><li>Alle leefregels staan op <a href=\"https://www.rivm.nl\">www.rivm.nl/een-redelijk-lange-link</a></li></ul>";
 "informContactGuidelines.close.untilDate" = " - <b>tot %@</b>";
 "informContactGuidelines.close.dateFormat" = "d MMMM";
 "informContactGuidelines.close.dayRemaining" = " (nog 1 dag)";
 "informContactGuidelines.close.daysRemaining" = " (nog %@ dagen)";
-"informContactGuidelines.other" = "Dit zijn de belangrijkste leefregels voor deze persoon:<ul><li>Houd 1,5 meter afstand en vermijd bezoek aan drukke plekken</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li></ul>";
+"informContactGuidelines.other" = "<ul><li>Houd 1,5 meter afstand en vermijd bezoek aan drukke plekken</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li><li>Alle leefregels staan op <a href=\"https://www.rivm.nl\">www.rivm.nl/een-redelijk-lange-link</a></li></ul>";
 
-"informContactShareGuidelines" = "Leefregels delen";
+"informContactCopyGuidelines" = "Kopieer leefregels";
+"informContactCall.knownName" = "Bel %@";
+"informContactCall.unknownName" = "Bel contact";
 
 "category1RiskQuestion" = "Woon je in hetzelfde huis of ben je langer dan 12 uur op dezelfde plek geweest?";
 "category1RiskQuestion.answer.positive" = "Ja";
