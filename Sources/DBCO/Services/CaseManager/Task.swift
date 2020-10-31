@@ -141,7 +141,7 @@ extension Task: Codable {
         source = try container.decode(Source.self, forKey: .source)
         label = try container.decode(String?.self, forKey: .label)
         taskContext = try container.decode(String?.self, forKey: .taskContext)
-        result = try container.decode(QuestionnaireResult?.self, forKey: .result)
+        result = try? container.decode(QuestionnaireResult?.self, forKey: .result)
         
         taskType = try container.decode(TaskType.self, forKey: .taskType)
         
