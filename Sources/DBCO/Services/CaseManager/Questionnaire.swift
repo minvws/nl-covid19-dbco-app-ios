@@ -20,7 +20,7 @@ struct AnswerOption: Codable {
 }
 
 /// - Tag: Question
-struct Question: Codable {
+struct Question {
     enum Group: String, Codable {
         case classification
         case contactDetails = "contactdetails"
@@ -63,6 +63,19 @@ struct Question: Codable {
         self.relevantForCategories = relevantForCategories
         self.answerOptions = answerOptions
     }
+}
+
+extension Question: Codable {
+    
+    private enum CodingKeys: String, CodingKey {
+        case uuid
+        case group
+        case questionType
+        case label
+        case description
+        case relevantForCategories
+        case answerOptions
+    }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -82,6 +95,27 @@ struct Question: Codable {
         
         answerOptions = try? container.decode([AnswerOption]?.self, forKey: .answerOptions)
     }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(uuid, forKey: .uuid)
+        try container.encode(group, forKey: .group)
+        try container.encode(questionType, forKey: .questionType)
+        try container.encode(label, forKey: .label)
+        try container.encode(description, forKey: .description)
+        
+        struct CategoryWrapper: Codable {
+            let category: Task.Contact.Category
+        }
+        
+        let categories = relevantForCategories.map(CategoryWrapper.init)
+        
+        try container.encode(categories, forKey: .relevantForCategories)
+        
+        try container.encode(answerOptions, forKey: .answerOptions)
+    }
+    
 }
 
 /// Represents the questionnaires needed to complete tasks.
@@ -100,12 +134,12 @@ struct Questionnaire: Codable {
 }
 
 /// - Tag: Answer
-struct Answer {
+struct Answer: Codable {
     let uuid: UUID
     let questionUuid: UUID
     let lastModified: Date
     
-    enum Value: CustomStringConvertible, Equatable {
+    enum Value: CustomStringConvertible, Equatable{
         case classificationDetails(category1Risk: Bool?,
                                    category2aRisk: Bool?,
                                    category2bRisk: Bool?,
@@ -152,6 +186,88 @@ struct Answer {
     var value: Value
 }
 
+extension Answer.Value: Codable {
+    private enum CodingKeys: String, CodingKey {
+        case type
+        case firstName
+        case lastName
+        case email
+        case phoneNumber
+        case value
+        case category1Risk
+        case category2aRisk
+        case category2bRisk
+        case category3Risk
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let type = try container.decode(Question.QuestionType.self, forKey: .type)
+        
+        switch type {
+        case .classificationDetails:
+            self = .classificationDetails(category1Risk: try container.decode(Bool?.self, forKey: .category1Risk),
+                                          category2aRisk: try container.decode(Bool?.self, forKey: .category2aRisk),
+                                          category2bRisk: try container.decode(Bool?.self, forKey: .category2bRisk),
+                                          category3Risk: try container.decode(Bool?.self, forKey: .category3Risk))
+        case .contactDetails:
+            self = .contactDetails(firstName: try container.decode(String?.self, forKey: .firstName),
+                                   lastName: try container.decode(String?.self, forKey: .lastName),
+                                   email: try container.decode(String?.self, forKey: .email),
+                                   phoneNumber: try container.decode(String?.self, forKey: .phoneNumber))
+        case .contactDetailsFull:
+            self = .contactDetailsFull(firstName: try container.decode(String?.self, forKey: .firstName),
+                                       lastName: try container.decode(String?.self, forKey: .lastName),
+                                       email: try container.decode(String?.self, forKey: .email),
+                                       phoneNumber: try container.decode(String?.self, forKey: .phoneNumber))
+        case .date:
+            self = .date(try container.decode(Date?.self, forKey: .value))
+        case .open:
+            self = .open(try container.decode(String?.self, forKey: .value))
+        case .multipleChoice:
+            self = .multipleChoice(try container.decode(AnswerOption?.self, forKey: .value))
+        case .lastExposureDate:
+            self = .lastExposureDate(try container.decode(Date?.self, forKey: .value))
+        }
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case .classificationDetails(let category1Risk, let category2aRisk, let category2bRisk, let category3Risk):
+            try container.encode(Question.QuestionType.classificationDetails, forKey: .type)
+            try container.encode(category1Risk, forKey: .category1Risk)
+            try container.encode(category2aRisk, forKey: .category2aRisk)
+            try container.encode(category2bRisk, forKey: .category2bRisk)
+            try container.encode(category3Risk, forKey: .category3Risk)
+        case .contactDetails(let firstName, let lastName, let email, let phoneNumber):
+            try container.encode(Question.QuestionType.contactDetails, forKey: .type)
+            try container.encode(firstName, forKey: .firstName)
+            try container.encode(lastName, forKey: .lastName)
+            try container.encode(email, forKey: .email)
+            try container.encode(phoneNumber, forKey: .phoneNumber)
+        case .contactDetailsFull(let firstName, let lastName, let email, let phoneNumber):
+            try container.encode(Question.QuestionType.contactDetailsFull, forKey: .type)
+            try container.encode(firstName, forKey: .firstName)
+            try container.encode(lastName, forKey: .lastName)
+            try container.encode(email, forKey: .email)
+            try container.encode(phoneNumber, forKey: .phoneNumber)
+        case .date(let date):
+            try container.encode(Question.QuestionType.date, forKey: .type)
+            try container.encode(date, forKey: .value)
+        case .lastExposureDate(let date):
+            try container.encode(Question.QuestionType.lastExposureDate, forKey: .type)
+            try container.encode(date, forKey: .value)
+        case .open(let value):
+            try container.encode(Question.QuestionType.open, forKey: .type)
+            try container.encode(value, forKey: .value)
+        case .multipleChoice(let option):
+            try container.encode(Question.QuestionType.multipleChoice, forKey: .type)
+            try container.encode(option, forKey: .value)
+        }
+    }
+}
+
 /// Represents a filled out questionnaire
 ///
 /// # See also:
@@ -160,7 +276,7 @@ struct Answer {
 /// [CaseManager](x-source-tag://CaseManager)
 ///
 /// - Tag: QuestionnaireResult
-struct QuestionnaireResult {
+struct QuestionnaireResult: Codable {
     /// The identifier of the [Questionnaire](x-source-tag://Questionnaire) this result belongs to
     let questionnaireUuid: UUID
     var answers: [Answer]

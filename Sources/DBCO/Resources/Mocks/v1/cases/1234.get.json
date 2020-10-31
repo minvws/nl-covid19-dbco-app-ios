@@ -10,7 +10,8 @@
           "taskContext": null,
           "category": "1",
           "communication": "staff",
-          "dateOfLastExposure": "2020-10-30"
+          "dateOfLastExposure": "2020-10-30",
+          "result": null
         },
         {
           "uuid": "123e4567-e89b-22d3-a456-426614172000",
@@ -20,7 +21,8 @@
           "taskContext": null,
           "category": "1",
           "communication": "staff",
-          "dateOfLastExposure": "2020-10-30"
+          "dateOfLastExposure": "2020-10-30",
+          "result": null
         }
       ]
   }
