@@ -508,8 +508,9 @@ final class ContactQuestionnaireViewController: PromptableViewController {
     
     @objc private func informContact() {
         if let phoneNumber = viewModel.updatedTask.contactPhoneNumber {
-            let url = URL(string: "tel:\(phoneNumber)")!
-            delegate?.contactQuestionnaireViewController(self, wantsToOpen: url)
+            if let url = URL(string: "tel:\(phoneNumber)") {
+                delegate?.contactQuestionnaireViewController(self, wantsToOpen: url)
+            }
         } else {
             scrollToDetailsSection()
         }
