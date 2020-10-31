@@ -19,10 +19,12 @@ import Foundation
 protocol CaseManaging {
     init()
     
-    var tasks: [Task] { get }
+    var isPaired: Bool { get }
     
     /// Indicates that alls the tasks are uploaded to the backend in their current state
     var isSynced: Bool { get }
+    
+    var tasks: [Task] { get }
     
     var hasUnfinishedTasks: Bool { get }
     
@@ -56,20 +58,35 @@ protocol CaseManagerListener: class {
 /// - Tag: CaseManager
 final class CaseManager: CaseManaging, Logging {
     
+    private struct Constants {
+        static let keychainService = "UserTest-Mocks"
+    }
+    
     private struct ListenerWrapper {
         weak var listener: CaseManagerListener?
     }
     
     private var listeners = [ListenerWrapper]()
     
+    @UserDefaults(key: "isSynced")
     private(set) var isSynced: Bool = true {
         didSet {
             listeners.forEach { $0.listener?.caseManagerDidUpdateSyncState(self) }
         }
     }
     
-    private var questionnaires = [Questionnaire]()
-    private(set) var tasks = [Task]()
+    @Keychain(name: "questionnaires", service: Constants.keychainService)
+    private var questionnaires: [Questionnaire] = []
+    
+    @Keychain(name: "tasks", service: Constants.keychainService)
+    private(set) var tasks: [Task] = []
+    
+    @UserDefaults(key: "didPair")
+    private(set) var didPair: Bool = false
+    
+    var isPaired: Bool {
+        return $tasks.exists && $questionnaires.exists && didPair
+    }
     
     var hasUnfinishedTasks: Bool {
         tasks.contains { $0.status != .completed }
@@ -77,6 +94,10 @@ final class CaseManager: CaseManaging, Logging {
     
     func loadTasksAndQuestions(pairingCode: String, completion: @escaping (Bool, NetworkError?) -> Void) {
         // This is all temporary code until until pairing with the API is available.
+        
+        // Clear existing data
+        tasks = []
+        questionnaires = []
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .random(in: 0.1...0.5)) {
             if let validCodes = Bundle.main.infoDictionary?["ValidCodes"] as? [String] {
@@ -102,6 +123,7 @@ final class CaseManager: CaseManaging, Logging {
             }
             
             group.notify(queue: .main) {
+                self.didPair = true
                 completion(true, nil)
             }
         }
