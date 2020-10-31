@@ -123,6 +123,7 @@ extension String {
     static var informContactGuidelinesOther: String { return Localization.string(for: "informContactGuidelines.other") }
     
     static var informContactCopyGuidelines: String { return Localization.string(for: "informContactCopyGuidelines") }
+    static var informContactCopyGuidelinesAction: String { return Localization.string(for: "informContactCopyGuidelinesAction") }
     
     static func informContactCall(firstName: String?) -> String {
         if let firstName = firstName {

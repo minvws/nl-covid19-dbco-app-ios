@@ -65,6 +65,7 @@
 "informContactGuidelines.other" = "<ul><li>Houd 1,5 meter afstand en vermijd bezoek aan drukke plekken</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li><li>Alle leefregels staan op <a href=\"https://www.rivm.nl\">www.rivm.nl/een-redelijk-lange-link</a></li></ul>";
 
 "informContactCopyGuidelines" = "Kopieer leefregels";
+"informContactCopyGuidelinesAction" = "Gekopieerd!";
 "informContactCall.knownName" = "Bel %@";
 "informContactCall.unknownName" = "Bel contact";
 

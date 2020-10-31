@@ -516,8 +516,10 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         }
     }
     
-    @objc private func copyGuidelines() {
+    @objc private func copyGuidelines(_ sender: Button) {
         UIPasteboard.general.string = viewModel.copyableGuidelines
+        
+        sender.flashTitle(.informContactCopyGuidelinesAction)
     }
     
     // MARK: - Keyboard handling
