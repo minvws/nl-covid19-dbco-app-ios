@@ -86,6 +86,9 @@
 "category3RiskQuestion.answer.positive" = "Ja, denk het wel";
 "category3RiskQuestion.answer.negative" = "Nee, denk het niet";
 
+"otherCategoryTitle" = "Dit contact heeft geen extra risico op besmetting gelopen";
+"otherCategoryMessage" = "Je hoeft deze persoon dus niet te laten weten dat je besmet bent.";
+
 "contactFallbackTitle" = "Contact toevoegen";
 "contactInformationFirstName" = "Voornaam";
 "contactInformationLastName" = "Achternaam";

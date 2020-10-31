@@ -150,6 +150,9 @@ extension String {
     static var category3RiskQuestionAnswerPositive: String { return Localization.string(for: "category3RiskQuestion.answer.positive") }
     static var category3RiskQuestionAnswerNegative: String { return Localization.string(for: "category3RiskQuestion.answer.negative") }
     
+    static var otherCategoryTitle: String { return Localization.string(for: "otherCategoryTitle") }
+    static var otherCategoryMessage: String { return Localization.string(for: "otherCategoryMessage") }
+    
     static var contactFallbackTitle: String { return Localization.string(for: "contactFallbackTitle") }
     static var contactInformationFirstName: String { return Localization.string(for: "contactInformationFirstName") }
     static var contactInformationLastName: String { return Localization.string(for: "contactInformationLastName") }

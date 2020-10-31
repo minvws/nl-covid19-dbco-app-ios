@@ -76,6 +76,7 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         category2aRiskGroup.isHidden = !risks.contains(.category2a)
         category2bRiskGroup.isHidden = !risks.contains(.category2b)
         category3RiskGroup.isHidden = !risks.contains(.category3)
+        otherCategoryView.isHidden = classification.category != .other
     }
     
     let question: Question
@@ -98,9 +99,9 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
     
     var hasValidAnswer: Bool {
         switch classification {
-        case .success:
+        case .success(let category) where category != .other:
             return true
-        case .needsAssessmentFor(_):
+        default:
             return false
         }
     }
@@ -130,12 +131,26 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
                     ToggleButton(title: .category3RiskQuestionAnswerNegative, selected: category3Risk == false))
         .didSelect { [unowned self] in self.category3Risk = $0 == 0 }
     
+    private lazy var otherCategoryView: UIView = {
+        let containerView = UIView()
+        containerView.backgroundColor = Theme.colors.tertiary
+        containerView.layer.cornerRadius = 8
+        
+        VStack(spacing: 16,
+               Label(bodyBold: .otherCategoryTitle).multiline(),
+               Label(body: .otherCategoryMessage, textColor: Theme.colors.captionGray).multiline())
+            .embed(in: containerView, insets: .leftRight(16) + .topBottom(24))
+        
+        return containerView
+    }()
+    
     private(set) lazy var view: UIView =
         VStack(spacing: 24,
                category1RiskGroup,
                category2aRiskGroup,
                category2bRiskGroup,
-               category3RiskGroup)
+               category3RiskGroup,
+               otherCategoryView)
 }
 
 /// AnswerManager for the .contactDetails question.
