@@ -104,8 +104,9 @@ final class CaseManager: CaseManaging, Logging {
         // This is all temporary code until until pairing with the API is available.
         
         // Clear existing data
-        tasks = []
-        questionnaires = []
+        $tasks.clearData()
+        $questionnaires.clearData()
+        $dateOfSymptomOnset.clearData()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .random(in: 0.1...0.5)) {
             if let validCodes = Bundle.main.infoDictionary?["ValidCodes"] as? [String] {
