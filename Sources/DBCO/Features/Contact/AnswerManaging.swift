@@ -318,7 +318,7 @@ class LastExposureDateAnswerManager: AnswerManaging {
     
     static let displayDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateStyle = .long
+        formatter.dateStyle = .full
         formatter.timeStyle = .none
         formatter.calendar = Calendar.current
         formatter.locale = Locale.current
