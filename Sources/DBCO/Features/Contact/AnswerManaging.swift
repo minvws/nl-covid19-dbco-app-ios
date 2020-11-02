@@ -252,41 +252,90 @@ class DateAnswerManager: AnswerManaging {
 /// [lastExposureDate](x-source-tag://lastExposureDate)
 class LastExposureDateAnswerManager: AnswerManaging {
     
-    fileprivate(set) var date: GeneralDate { didSet { updateHandler?(self) } }
-    
     private var baseAnswer: Answer
     
     var updateHandler: ((AnswerManaging) -> Void)?
     
-    init(question: Question, answer: Answer, lastExposureDate: Date?) {
+    private(set) var options: Options { didSet { updateHandler?(self) } }
+    
+    init(question: Question, answer: Answer, lastExposureDate: String?) {
         self.baseAnswer = answer
         self.question = question
         
+        // Dates should range from 2 days before symptom onset to today
+        let endDate = Date()
+        let startDate = Calendar.current.date(byAdding: .day, value: -2, to: Services.caseManager.dateOfSymptomOnset) ?? endDate
+        
+        let numberOfDays = Calendar.current.dateComponents([.day], from: startDate, to: endDate).day ?? 0
+        
+        let dateOptions = (0...numberOfDays)
+            .compactMap { Calendar.current.date(byAdding: .day, value: $0, to: startDate) }
+            .map { AnswerOption(label: Self.displayDateFormatter.string(from: $0),
+                                value: Self.valueDateFormatter.string(from: $0),
+                                trigger: nil) }
+        
+        
+        self.answerOptions = [AnswerOption(label: "Eerder", value: "earlier", trigger: nil)] + dateOptions
+        
         if let lastExposureDate = lastExposureDate {
-            baseAnswer.value = .lastExposureDate(lastExposureDate)
+            if let option = answerOptions.first(where: { $0.value == lastExposureDate }) {
+                baseAnswer.value = .lastExposureDate(option)
+            }
         }
         
-        guard case .lastExposureDate(let date) = baseAnswer.value else {
+        guard case .lastExposureDate(let option) = baseAnswer.value else {
             fatalError()
         }
-            
-        self.date = GeneralDate(label: question.label, date: date)
+        
+        self.options = Options(label: question.label,
+                                value: option?.value,
+                                options: answerOptions.map { ($0.value, $0.label) })
+        self.options.labelFont = Theme.fonts.bodyBold
     }
     
     let question: Question
+    private let answerOptions: [AnswerOption]
     
-    private(set) lazy var view: UIView = InputField(for: self, path: \.date)
-        .decorateWithDescriptionIfNeeded(description: question.description)
+    private(set) lazy var view: UIView = {
+        return InputField(for: self, path: \.options)
+            .decorateWithDescriptionIfNeeded(description: question.description)
+    }()
     
     var answer: Answer {
+        let selectedOption = answerOptions.first { $0.value == options.value }
         var answer = baseAnswer
-        answer.value = .lastExposureDate(date.dateValue)
+        answer.value = .lastExposureDate(selectedOption)
         return answer
     }
     
     var hasValidAnswer: Bool {
-        return date.value != nil
+        guard case .lastExposureDate(let value) = answer.value else {
+            return false
+        }
+        
+        return value != nil
     }
+    
+    static let displayDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .full
+        formatter.timeStyle = .none
+        formatter.calendar = Calendar.current
+        formatter.locale = Locale.current
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        
+        return formatter
+    }()
+    
+    static let valueDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar.current
+        formatter.locale = Locale.current
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.dateFormat = "yyyy-MM-dd"
+        
+        return formatter
+    }()
 }
 
 /// AnswerManager for the .open question.

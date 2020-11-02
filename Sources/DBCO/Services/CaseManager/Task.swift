@@ -55,9 +55,9 @@ struct Task {
         let category: Category
         let communication: Communication
         let didInform: Bool
-        let dateOfLastExposure: Date?
+        let dateOfLastExposure: String?
         
-        init(category: Category, communication: Communication, didInform: Bool, dateOfLastExposure: Date?) {
+        init(category: Category, communication: Communication, didInform: Bool, dateOfLastExposure: String?) {
             self.category = category
             self.communication = communication
             self.didInform = didInform
@@ -111,7 +111,7 @@ extension Task.Contact: Codable {
         
         category = try container.decode(Category.self, forKey: .category)
         communication = try container.decode(Communication.self, forKey: .communication)
-        dateOfLastExposure = try container.decode(Date?.self, forKey: .dateOfLastExposure)
+        dateOfLastExposure = try container.decode(String?.self, forKey: .dateOfLastExposure)
         didInform = (try? container.decode(Bool?.self, forKey: .didInform)) ?? false
     }
     

@@ -157,7 +157,7 @@ struct Answer: Codable {
         case multipleChoice(AnswerOption?)
         
         /// See [lastExposureDate](x-source-tag://lastExposureDate)
-        case lastExposureDate(Date?)
+        case lastExposureDate(AnswerOption?)
         
         var description: String {
             switch self {
@@ -169,8 +169,8 @@ struct Answer: Codable {
                 return "contactDetailsFull(\(String(describing: firstName)), \(String(describing: lastName)), \(String(describing: email)), \(String(describing: phoneNumber)))"
             case .date(let date):
                 return "date(\(String(describing: date)))"
-            case .lastExposureDate(let date):
-                return "lastExposureDate(\(String(describing: date)))"
+            case .lastExposureDate(let option):
+                return "lastExposureDate(\(String(describing: option)))"
             case .open(let value):
                 return "open(\(String(describing: value)))"
             case .multipleChoice(let option):
@@ -227,7 +227,7 @@ extension Answer.Value: Codable {
         case .multipleChoice:
             self = .multipleChoice(try container.decode(AnswerOption?.self, forKey: .value))
         case .lastExposureDate:
-            self = .lastExposureDate(try container.decode(Date?.self, forKey: .value))
+            self = .lastExposureDate(try container.decode(AnswerOption?.self, forKey: .value))
         }
     }
     

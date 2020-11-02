@@ -21,7 +21,7 @@ class KeychainItem<T: Codable> {
         }
         
         set {
-            try? save(value: newValue)
+            try? store(value: newValue)
         }
     }
     
@@ -52,6 +52,10 @@ class KeychainItem<T: Codable> {
     init(name: String, service: String?) {
         self.name = name
         self.service = service
+    }
+    
+    func clearData() {
+        value = nil
     }
     
     // JSONDecoder/Encoder doesn't like fragments
@@ -91,10 +95,15 @@ class KeychainItem<T: Codable> {
         }
     }
     
-    fileprivate func save(value: T?) throws {
+    fileprivate func store(value: T?) throws {
         guard let value = value else {
             if exists {
-                try delete()
+                // Delete the existing item from the keychain.
+                let query = baseQuery()
+                let status = SecItemDelete(query as CFDictionary)
+                
+                // Throw an error if an unexpected status was returned.
+                guard status == noErr || status == errSecItemNotFound else { throw KeychainError.unhandledError(status: status) }
             }
             
             return
@@ -132,15 +141,6 @@ class KeychainItem<T: Codable> {
         }
     }
     
-    fileprivate func delete() throws {
-        // Delete the existing item from the keychain.
-        let query = baseQuery()
-        let status = SecItemDelete(query as CFDictionary)
-        
-        // Throw an error if an unexpected status was returned.
-        guard status == noErr || status == errSecItemNotFound else { throw KeychainError.unhandledError(status: status) }
-    }
-    
     private func baseQuery() -> [String: AnyObject] {
         var query = [String: AnyObject]()
         query[kSecClass as String] = kSecClassGenericPassword
@@ -165,17 +165,11 @@ class CachedKeychainItem<T: Codable>: KeychainItem<T> {
         
         set {
             cachedValue = newValue
-            try? save(value: newValue)
+            try? store(value: newValue)
         }
     }
     
     private var cachedValue: T?
-    
-    override func delete() throws {
-        cachedValue = nil
-        
-        try super.delete()
-    }
     
     func clearCache() {
         cachedValue = nil

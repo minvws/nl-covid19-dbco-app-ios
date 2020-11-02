@@ -24,6 +24,7 @@ protocol CaseManaging {
     /// Indicates that alls the tasks are uploaded to the backend in their current state
     var isSynced: Bool { get }
     
+    var dateOfSymptomOnset: Date { get }
     var tasks: [Task] { get }
     
     var hasUnfinishedTasks: Bool { get }
@@ -81,11 +82,18 @@ final class CaseManager: CaseManaging, Logging {
     @Keychain(name: "tasks", service: Constants.keychainService)
     private(set) var tasks: [Task] = []
     
+    @Keychain(name: "dateOfSymptomOnset", service: Constants.keychainService)
+    private(set) var dateOfSymptomOnset: Date = Date()
+    
     @UserDefaults(key: "didPair")
     private(set) var didPair: Bool = false
     
     var isPaired: Bool {
-        return $tasks.exists && $questionnaires.exists && didPair
+        return
+            $tasks.exists &&
+            $questionnaires.exists &&
+            $dateOfSymptomOnset.exists &&
+            didPair
     }
     
     var hasUnfinishedTasks: Bool {
@@ -96,8 +104,9 @@ final class CaseManager: CaseManaging, Logging {
         // This is all temporary code until until pairing with the API is available.
         
         // Clear existing data
-        tasks = []
-        questionnaires = []
+        $tasks.clearData()
+        $questionnaires.clearData()
+        $dateOfSymptomOnset.clearData()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .random(in: 0.1...0.5)) {
             if let validCodes = Bundle.main.infoDictionary?["ValidCodes"] as? [String] {
@@ -112,6 +121,7 @@ final class CaseManager: CaseManaging, Logging {
             group.enter()
             Services.networkManager.getCase(identifier: "1234") { result in
                 self.tasks = (try? result.get())?.tasks ?? []
+                self.dateOfSymptomOnset = (try? result.get())?.dateOfSymptomOnset ?? Date()
                 self.listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
                 group.leave()
             }

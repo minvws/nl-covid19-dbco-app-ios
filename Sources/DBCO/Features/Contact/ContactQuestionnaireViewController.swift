@@ -117,7 +117,7 @@ class ContactQuestionnaireViewModel {
                 case let classificationManager as ClassificationDetailsAnswerManager:
                     updateClassification(with: classificationManager.classification)
                 case let lastExposureManager as LastExposureDateAnswerManager:
-                    updateLastExposureDate(with: lastExposureManager.date.dateValue)
+                    updateLastExposureDate(with: lastExposureManager.options.value)
                 default:
                     break
                 }
@@ -181,11 +181,11 @@ class ContactQuestionnaireViewModel {
         updateInformSectionContent()
     }
     
-    private func updateLastExposureDate(with date: Date?) {
+    private func updateLastExposureDate(with value: String?) {
         updatedContact = Task.Contact(category: updatedContact.category,
                                       communication: updatedContact.communication,
                                       didInform: updatedContact.didInform,
-                                      dateOfLastExposure: date)
+                                      dateOfLastExposure: value)
         
         updateInformSectionContent()
     }
@@ -210,7 +210,9 @@ class ContactQuestionnaireViewModel {
             .filter(\.isEssential)
             .allSatisfy(isCompleted)
         
-        detailsSectionView?.isCompleted = contactDetailsManagers
+        let hasValidCommunication = updatedContact.communication != .none
+        
+        detailsSectionView?.isCompleted = hasValidCommunication && contactDetailsManagers
             .map(\.answer)
             .filter(\.isEssential)
             .allSatisfy(isCompleted)
@@ -263,7 +265,8 @@ class ContactQuestionnaireViewModel {
         
         switch updatedContact.category {
         case .category1, .category2a, .category2b:
-            if let date = updatedContact.dateOfLastExposure {
+            if let dateValue = updatedContact.dateOfLastExposure,
+               let date = LastExposureDateAnswerManager.valueDateFormatter.date(from: dateValue)  {
                 let untilDate = date.addingTimeInterval(10 * 24 * 3600) // 10 days
                 
                 let dateFormatter = DateFormatter()

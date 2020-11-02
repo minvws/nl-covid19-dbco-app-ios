@@ -21,17 +21,22 @@ import Foundation
         self.defaultValue = defaultValue
     }
     
+    // JSONDecoder/Encoder doesn't like fragments
+    private struct Wrapped: Codable {
+        let value: T
+    }
+    
     var wrappedValue: T {
         get {
             guard let data = Foundation.UserDefaults.standard.object(forKey: key) as? Data else {
                 return defaultValue
             }
             
-            let value = try? JSONDecoder().decode(T.self, from: data)
-            return value ?? defaultValue
+            let wrapped = try? JSONDecoder().decode(Wrapped.self, from: data)
+            return wrapped?.value ?? defaultValue
         }
         set {
-            let data = try? JSONEncoder().encode(newValue)
+            let data = try? JSONEncoder().encode(Wrapped(value: newValue))
             
             Foundation.UserDefaults.standard.set(data, forKey: key)
         }

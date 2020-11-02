@@ -5,7 +5,7 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import Foundation
+import UIKit
 import Contacts
 
 protocol ContactValue {
@@ -111,6 +111,7 @@ struct Text: ContactValue {
 struct Options: ContactValue {
     var label: String?
     var value: String?
+    var labelFont: UIFont? = Theme.fonts.subhead
     let inputType: InputType
     
     init(label: String?, value: String?, options: [InputType.PickerOption]) {
