@@ -50,6 +50,7 @@ class Button: UIButton {
         super.init(frame: .zero)
 
         self.setTitle(title, for: .normal)
+        self.title = title
         self.titleLabel?.font = Theme.fonts.headline
 
         self.layer.cornerRadius = 10
@@ -73,6 +74,19 @@ class Button: UIButton {
     func touchUpInside(_ target: Any?, action: Selector) -> Self {
         super.addTarget(target, action: action, for: .touchUpInside)
         return self
+    }
+    
+    func flashTitle(_ title: String, duration: TimeInterval = 2) {
+        guard !isFlashingTitle else { return }
+        
+        let currentTitle = self.title
+        self.title = title
+        
+        isFlashingTitle = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+            self.title = currentTitle
+            self.isFlashingTitle = false
+        }
     }
 
     // MARK: - Overrides
@@ -131,4 +145,6 @@ class Button: UIButton {
             self.transform = CGAffineTransform.identity
         })
     }
+    
+    private var isFlashingTitle: Bool = false
 }

@@ -15,14 +15,16 @@ extension Task {
             .compactMap {
                 switch $0.value {
                 case .contactDetails(let firstName, let lastName, _, _):
-                    return [firstName, lastName]
+                    let fullName = [firstName, lastName]
                         .compactMap { $0 }
                         .joined(separator: " ")
+                    
+                    return fullName.isEmpty ? nil : fullName
                 default:
                     return nil
                 }
             }
-            .first ?? label
+            .first ?? label ?? .contactFallbackTitle
     }
     
     /// Searches for a .contactDetails answer in the results and returns the firstName.

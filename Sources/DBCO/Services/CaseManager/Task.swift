@@ -15,7 +15,7 @@ import Foundation
 /// [CaseManager](x-source-tag://CaseManager)
 ///
 /// - Tag: Task
-struct Task: Codable {
+struct Task {
     enum Status: Equatable {
         case notStarted
         case inProgress(Double)
@@ -32,7 +32,7 @@ struct Task: Codable {
     }
     
     /// - Tag: Task.Contact
-    struct Contact: Codable {
+    struct Contact {
         
         /// # See also
         /// [ClassificationHelper](x-source-tag://ClassificationHelper)
@@ -63,21 +63,6 @@ struct Task: Codable {
             self.didInform = didInform
             self.dateOfLastExposure = dateOfLastExposure
         }
-        
-        init(from decoder: Decoder) throws {
-            let container = try decoder.container(keyedBy: CodingKeys.self)
-            
-            category = try container.decode(Category.self, forKey: .category)
-            communication = try container.decode(Communication.self, forKey: .communication)
-            dateOfLastExposure = try container.decode(Date?.self, forKey: .dateOfLastExposure)
-            didInform = false
-        }
-        
-        func encode(to encoder: Encoder) throws {
-            try category.encode(to: encoder)
-            try communication.encode(to: encoder)
-            try dateOfLastExposure?.encode(to: encoder)
-        }
     }
     
     let uuid: UUID
@@ -104,22 +89,6 @@ struct Task: Codable {
         }
     }
     
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        
-        uuid = try container.decode(UUID.self, forKey: .uuid)
-        source = try container.decode(Source.self, forKey: .source)
-        label = try container.decode(String?.self, forKey: .label)
-        taskContext = try container.decode(String?.self, forKey: .taskContext)
-        
-        taskType = try container.decode(TaskType.self, forKey: .taskType)
-        
-        switch taskType {
-        case .contact:
-            contact = try Contact(from: decoder)
-        }
-    }
-    
     init(type: TaskType) {
         self.uuid = UUID()
         self.taskType = type
@@ -133,19 +102,69 @@ struct Task: Codable {
         }
     }
     
+}
+
+extension Task.Contact: Codable {
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        category = try container.decode(Category.self, forKey: .category)
+        communication = try container.decode(Communication.self, forKey: .communication)
+        dateOfLastExposure = try container.decode(Date?.self, forKey: .dateOfLastExposure)
+        didInform = (try? container.decode(Bool?.self, forKey: .didInform)) ?? false
+    }
+    
     func encode(to encoder: Encoder) throws {
-        try uuid.encode(to: encoder)
-        try source.encode(to: encoder)
-        try label?.encode(to: encoder)
-        try taskContext?.encode(to: encoder)
-        try taskType.encode(to: encoder)
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(category, forKey: .category)
+        try container.encode(communication, forKey: .communication)
+        try container.encode(dateOfLastExposure, forKey: .dateOfLastExposure)
+        try container.encode(didInform, forKey: .didInform)
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case category
+        case communication
+        case dateOfLastExposure
+        case didInform
+    }
+    
+}
+
+extension Task: Codable {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        uuid = try container.decode(UUID.self, forKey: .uuid)
+        source = try container.decode(Source.self, forKey: .source)
+        label = try container.decode(String?.self, forKey: .label)
+        taskContext = try container.decode(String?.self, forKey: .taskContext)
+        result = try? container.decode(QuestionnaireResult?.self, forKey: .result)
+        
+        taskType = try container.decode(TaskType.self, forKey: .taskType)
         
         switch taskType {
         case .contact:
-            try contact.category.encode(to: encoder)
-            try contact.communication.encode(to: encoder)
+            contact = try Contact(from: decoder)
         }
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
         
+        try container.encode(uuid, forKey: .uuid)
+        try container.encode(source, forKey: .source)
+        try container.encode(label, forKey: .label)
+        try container.encode(taskContext, forKey: .taskContext)
+        try container.encode(result, forKey: .result)
+        try container.encode(taskType, forKey: .taskType)
+        
+        switch taskType {
+        case .contact:
+            try contact?.encode(to: encoder)
+        }
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -157,6 +176,8 @@ struct Task: Codable {
         case category
         case communication
         case dateOfLastExposure
+        case didInform
+        case result
     }
 }
 

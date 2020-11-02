@@ -27,9 +27,13 @@ final class AppCoordinator: Coordinator {
         Services.use(LocalMockNetworkManager.self)
         #endif
         
-        let startCoordinator = OnboardingCoordinator(window: window)
-        startCoordinator.delegate = self
-        startChildCoordinator(startCoordinator)
+        if Services.caseManager.isPaired {
+            startChildCoordinator(TaskOverviewCoordinator(window: window))
+        } else {
+            let onboardingCoordinator = OnboardingCoordinator(window: window)
+            onboardingCoordinator.delegate = self
+            startChildCoordinator(onboardingCoordinator)
+        }
     }
 
 }

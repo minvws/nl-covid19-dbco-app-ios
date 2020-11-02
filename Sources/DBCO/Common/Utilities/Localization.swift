@@ -123,6 +123,7 @@ extension String {
     static var informContactGuidelinesOther: String { return Localization.string(for: "informContactGuidelines.other") }
     
     static var informContactCopyGuidelines: String { return Localization.string(for: "informContactCopyGuidelines") }
+    static var informContactCopyGuidelinesAction: String { return Localization.string(for: "informContactCopyGuidelinesAction") }
     
     static func informContactCall(firstName: String?) -> String {
         if let firstName = firstName {
@@ -148,6 +149,9 @@ extension String {
     static var category3RiskQuestion: String { return Localization.string(for: "category3RiskQuestion") }
     static var category3RiskQuestionAnswerPositive: String { return Localization.string(for: "category3RiskQuestion.answer.positive") }
     static var category3RiskQuestionAnswerNegative: String { return Localization.string(for: "category3RiskQuestion.answer.negative") }
+    
+    static var otherCategoryTitle: String { return Localization.string(for: "otherCategoryTitle") }
+    static var otherCategoryMessage: String { return Localization.string(for: "otherCategoryMessage") }
     
     static var contactFallbackTitle: String { return Localization.string(for: "contactFallbackTitle") }
     static var contactInformationFirstName: String { return Localization.string(for: "contactInformationFirstName") }

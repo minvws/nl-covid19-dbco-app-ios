@@ -80,6 +80,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             text.map(dateFormatter.date)?.map { datePicker.date = $0 }
             datePicker.datePickerMode = .date
             datePicker.tintColor = .black
+            datePicker.maximumDate = Date()
             datePicker.addTarget(self, action: #selector(handleDateValueChanged), for: .valueChanged)
             
             if #available(iOS 13.4, *) {
@@ -154,14 +155,19 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     }
     
     @objc private func handleDateValueChanged(_ datePicker: UIDatePicker) {
-        guard case .date(let formatter) = object?[keyPath: path].inputType else { return }
-
-        object?[keyPath: path].value = formatter.string(from: datePicker.date)
-        text = formatter.string(from: datePicker.date)
+        setDateValueIfNeeded()
     }
     
     @objc private func done() {
         resignFirstResponder()
+        setDateValueIfNeeded()
+    }
+    
+    private func setDateValueIfNeeded() {
+        guard case .date(let formatter) = object?[keyPath: path].inputType, let datePicker = datePicker else { return }
+
+        object?[keyPath: path].value = formatter.string(from: datePicker.date)
+        text = formatter.string(from: datePicker.date)
     }
     
     private func updateValidationStateIfNeeded() {

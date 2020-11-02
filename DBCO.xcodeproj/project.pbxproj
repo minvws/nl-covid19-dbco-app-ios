@@ -71,6 +71,8 @@
 		CDC7C898253873CE00FE7E05 /* Envelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C897253873CE00FE7E05 /* Envelope.swift */; };
 		CDC7C89E25387E2000FE7E05 /* Questionnaire.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C89D25387E2000FE7E05 /* Questionnaire.swift */; };
 		CDC7C8A225387E4400FE7E05 /* CaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C8A125387E4400FE7E05 /* CaseManager.swift */; };
+		CDD68BA6254D511D00E96E9C /* KeychainItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD68BA5254D511D00E96E9C /* KeychainItem.swift */; };
+		CDD68BAA254D60BC00E96E9C /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD68BA9254D60BC00E96E9C /* UserDefaults.swift */; };
 		CDDC05642543120D0079C2F4 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDDC05632543120D0079C2F4 /* Coordinator.swift */; };
 		CDDC056C2546CD460079C2F4 /* Case.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDDC056B2546CD460079C2F4 /* Case.swift */; };
 		CDE25F61254B315100E9AE49 /* LocalMockNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE25F60254B315100E9AE49 /* LocalMockNetworkManager.swift */; };
@@ -170,6 +172,8 @@
 		CDC7C897253873CE00FE7E05 /* Envelope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Envelope.swift; sourceTree = "<group>"; };
 		CDC7C89D25387E2000FE7E05 /* Questionnaire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Questionnaire.swift; sourceTree = "<group>"; };
 		CDC7C8A125387E4400FE7E05 /* CaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseManager.swift; sourceTree = "<group>"; };
+		CDD68BA5254D511D00E96E9C /* KeychainItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainItem.swift; sourceTree = "<group>"; };
+		CDD68BA9254D60BC00E96E9C /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		CDDC05632543120D0079C2F4 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		CDDC056B2546CD460079C2F4 /* Case.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case.swift; sourceTree = "<group>"; };
 		CDE25F60254B315100E9AE49 /* LocalMockNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMockNetworkManager.swift; sourceTree = "<group>"; };
@@ -229,6 +233,8 @@
 				CD29636025191AA8008443AF /* Theme.swift */,
 				CD6860C9253B31190061C318 /* ClassificationHelper.swift */,
 				CDDC05632543120D0079C2F4 /* Coordinator.swift */,
+				CDD68BA5254D511D00E96E9C /* KeychainItem.swift */,
+				CDD68BA9254D60BC00E96E9C /* UserDefaults.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -624,6 +630,7 @@
 			files = (
 				CDC7C8692538412600FE7E05 /* NetworkManager.swift in Sources */,
 				CDFCF9192510FC760062269A /* SelfSizingTableView.swift in Sources */,
+				CDD68BA6254D511D00E96E9C /* KeychainItem.swift in Sources */,
 				CDE30E72251E278200862A40 /* EditContactCoordinator.swift in Sources */,
 				CDA0F6912539F0D9009FD2A9 /* AnswerManaging.swift in Sources */,
 				CD756C50252C6AC9005FEDA0 /* OnboardingStepViewController.swift in Sources */,
@@ -653,6 +660,7 @@
 				CDE25F61254B315100E9AE49 /* LocalMockNetworkManager.swift in Sources */,
 				CD65CD812535F77400BB761A /* LoadingViewController.swift in Sources */,
 				CD2AC0762530601900E8AF78 /* InputTextView.swift in Sources */,
+				CDD68BAA254D60BC00E96E9C /* UserDefaults.swift in Sources */,
 				CD421872251B4819004544B3 /* TaskTableViewCell.swift in Sources */,
 				CDC7C86F2538429B00FE7E05 /* NetworkConfiguration.swift in Sources */,
 				CDA525FC252F0FAA004E923A /* ToggleButton.swift in Sources */,

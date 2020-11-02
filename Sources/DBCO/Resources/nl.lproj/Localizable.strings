@@ -63,6 +63,7 @@
 "informContactGuidelines.other" = "<ul><li>Houd 1,5 meter afstand en vermijd bezoek aan drukke plekken</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li><li>Alle leefregels staan op <a href=\"https://www.rivm.nl\">www.rivm.nl/een-redelijk-lange-link</a></li></ul>";
 
 "informContactCopyGuidelines" = "Kopieer leefregels";
+"informContactCopyGuidelinesAction" = "Gekopieerd!";
 "informContactCall.knownName" = "Bel %@";
 "informContactCall.unknownName" = "Bel contact";
 
@@ -82,6 +83,9 @@
 "category3RiskQuestion" = "Was je langer dan 15 minuten in dezelfde ruimte?";
 "category3RiskQuestion.answer.positive" = "Ja, denk het wel";
 "category3RiskQuestion.answer.negative" = "Nee, denk het niet";
+
+"otherCategoryTitle" = "Dit contact heeft geen extra risico op besmetting gelopen";
+"otherCategoryMessage" = "Je hoeft deze persoon dus niet te laten weten dat je besmet bent.";
 
 "contactFallbackTitle" = "Contact toevoegen";
 "contactInformationFirstName" = "Voornaam";
