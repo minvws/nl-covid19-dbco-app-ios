@@ -210,7 +210,9 @@ class ContactQuestionnaireViewModel {
             .filter(\.isEssential)
             .allSatisfy(isCompleted)
         
-        detailsSectionView?.isCompleted = contactDetailsManagers
+        let hasValidCommunication = updatedContact.communication != .none
+        
+        detailsSectionView?.isCompleted = hasValidCommunication && contactDetailsManagers
             .map(\.answer)
             .filter(\.isEssential)
             .allSatisfy(isCompleted)
