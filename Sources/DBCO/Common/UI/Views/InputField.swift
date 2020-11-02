@@ -103,6 +103,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             pickerOptions?
                 .firstIndex { $0.identifier == selectedIdentifier }
                 .map { picker.selectRow($0, inComponent: 0, animated: false) }
+            
+            text = pickerOptions?.first { $0.identifier == selectedIdentifier }?.value
 
             inputView = picker
             inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))

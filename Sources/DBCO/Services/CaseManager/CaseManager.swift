@@ -24,6 +24,7 @@ protocol CaseManaging {
     /// Indicates that alls the tasks are uploaded to the backend in their current state
     var isSynced: Bool { get }
     
+    var dateOfSymptomOnset: Date { get }
     var tasks: [Task] { get }
     
     var hasUnfinishedTasks: Bool { get }
@@ -81,11 +82,18 @@ final class CaseManager: CaseManaging, Logging {
     @Keychain(name: "tasks", service: Constants.keychainService)
     private(set) var tasks: [Task] = []
     
+    @Keychain(name: "dateOfSymptomOnset", service: Constants.keychainService)
+    private(set) var dateOfSymptomOnset: Date = Date()
+    
     @UserDefaults(key: "didPair")
     private(set) var didPair: Bool = false
     
     var isPaired: Bool {
-        return $tasks.exists && $questionnaires.exists && didPair
+        return
+            $tasks.exists &&
+            $questionnaires.exists &&
+            $dateOfSymptomOnset.exists &&
+            didPair
     }
     
     var hasUnfinishedTasks: Bool {
@@ -112,6 +120,7 @@ final class CaseManager: CaseManaging, Logging {
             group.enter()
             Services.networkManager.getCase(identifier: "1234") { result in
                 self.tasks = (try? result.get())?.tasks ?? []
+                self.dateOfSymptomOnset = (try? result.get())?.dateOfSymptomOnset ?? Date()
                 self.listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
                 group.leave()
             }
