@@ -104,6 +104,7 @@ extension String {
     static var contactTypeSectionMessage: String { return Localization.string(for: "contactTypeSection.message") }
     static var contactDetailsSectionTitle: String { return Localization.string(for: "contactDetailsSection.title") }
     static var contactDetailsSectionMessage: String { return Localization.string(for: "contactDetailsSection.message") }
+    
     static var informContactSectionTitle: String { return Localization.string(for: "informContactSection.title") }
     static var informContactSectionMessageIndex: String { return Localization.string(for: "informContactSection.message.index") }
     static var informContactSectionMessageStaff: String { return Localization.string(for: "informContactSection.message.staff") }
@@ -170,6 +171,7 @@ extension String {
     static var contactInformationBirthDate: String { return Localization.string(for: "contactInformationBirthDate") }
     static var contactInformationBSN: String { return Localization.string(for: "contactInformationBSN") }
     static var contactInformationLastExposure: String { return Localization.string(for: "contactInformationLastExposure") }
+    static var contactInformationLastExposureEarlier: String { return Localization.string(for: "contactInformationLastExposure.earlier") }
     
     /* MARK: - Informing contacts */
     static func contactInformPromptTitle(firstName: String) -> String { return Localization.string(for: "contactInformPromptTitle", [firstName]) }

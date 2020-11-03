@@ -275,7 +275,7 @@ class LastExposureDateAnswerManager: AnswerManaging {
                                 trigger: nil) }
         
         
-        self.answerOptions = [AnswerOption(label: "Eerder", value: "earlier", trigger: nil)] + dateOptions
+        self.answerOptions = [AnswerOption(label: .contactInformationLastExposureEarlier, value: "earlier", trigger: nil)] + dateOptions
         
         if let lastExposureDate = lastExposureDate {
             if let option = answerOptions.first(where: { $0.value == lastExposureDate }) {
