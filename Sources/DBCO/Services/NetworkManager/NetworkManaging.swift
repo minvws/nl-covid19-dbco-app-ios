@@ -51,6 +51,7 @@ enum HTTPContentType: String {
 protocol NetworkManaging {
     init(configuration: NetworkConfiguration)
     
+    func getAppConfiguration(completion: @escaping (Result<AppConfiguration, NetworkError>) -> ())
     func getCase(identifier: String, completion: @escaping (Result<Case, NetworkError>) -> ())
     func getQuestionnaires(completion: @escaping (Result<[Questionnaire], NetworkError>) -> ())
 }

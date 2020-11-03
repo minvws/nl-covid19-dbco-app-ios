@@ -57,6 +57,15 @@ extension String {
     static var selectDate: String { return Localization.string(for: "selectDate") }
     static var done: String { return Localization.string(for: "done") }
     static var ok: String { return Localization.string(for: "ok") }
+    static var errorTitle: String { return Localization.string(for: "error.title") }
+    
+    // MARK: - Update App
+
+    static var updateAppErrorMessage: String { return Localization.string(for: "updateApp.error.message") }
+    static var updateAppTitle: String { return Localization.string(for: "updateApp.title") }
+    
+    static var updateAppContent: String { return Localization.string(for: "updateApp.content") }
+    static var updateAppButton: String { return Localization.string(for: "updateApp.button") }
     
     /* MARK: - Onboarding */
     static var onboardingStep1Title: String { return Localization.string(for: "onboarding.step1.title") }

@@ -19,6 +19,8 @@ struct Endpoint {
 
     // MARK: - API
 
+    static let appConfiguration = Path(components: "config")
+    
     static func `case`(identifier: String) -> Path { Path(components: "cases", identifier) }
     
     static let questionnaires = Path(components: "questionnaires")

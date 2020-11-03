@@ -11,6 +11,7 @@ import Foundation
 final class Services {
     private static var networkManagingType: NetworkManaging.Type = NetworkManager.self
     private static var caseManagingType: CaseManaging.Type = CaseManager.self
+    private static var configManagingType: ConfigManaging.Type = ConfigManager.self
     
     /// Override the [NetworkManaging](x-source-tag://NetworkManaging) type that will be instantiated
     /// - parameter networkManager: The type conforming to [NetworkManaging](x-source-tag://NetworkManaging) to be used as the global networkManager
@@ -24,6 +25,13 @@ final class Services {
         caseManagingType = caseManager
     }
     
+    /// Override the [ConfigManaging](x-source-tag://ConfigManaging) type that will be instantiated
+    /// - parameter configManager: The type conforming to [ConfigManaging](x-source-tag://ConfigManaging) to be used as the global configManager
+    static func use(_ configManager: ConfigManaging.Type) {
+        configManagingType = configManager
+    }
+    
     static private(set) var networkManager: NetworkManaging = networkManagingType.init(configuration: .test)
     static private(set) var caseManager: CaseManaging = caseManagingType.init()
+    static private(set) var configManager: ConfigManaging = configManagingType.init()
 }

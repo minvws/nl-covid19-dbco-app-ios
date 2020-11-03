@@ -390,7 +390,7 @@ class MultipleChoiceAnswerManager: AnswerManaging {
         self.baseAnswer = answer
         self.question = question
         
-        // Prefill communcation triggers
+        // Prefill communication triggers
         do {
             let option = question.answerOptions?.first(where: { $0.trigger == .setCommunicationToIndex })
             

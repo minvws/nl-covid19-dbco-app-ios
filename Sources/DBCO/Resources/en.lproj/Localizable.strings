@@ -11,6 +11,14 @@
 "selectDate" = "Selecteer datum";
 "done" = "Klaar";
 "ok" = "Oké";
+"error.title" = "Er ging iets mis";
+
+/* MARK: - Update App */
+"updateApp.error.message" = "De App Store kan niet geopend worden.";
+"updateApp.title" = "De app heeft een update nodig";
+
+"updateApp.content" = "Update de app om te zorgen dat deze goed blijft werken.";
+"updateApp.button" = "Updaten";
 
 /* MARK: - Onboarding */
 "onboarding.step1.title" = "Help de GGD bij het contactonderzoek en breng je omgeving op de hoogte";
