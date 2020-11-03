@@ -14,15 +14,28 @@ protocol AppVersionInformation {
     var appStoreURL: URL? { get }
 }
 
-struct AppConfiguration: AppVersionInformation, Codable {
+struct AppConfiguration: AppVersionInformation, Decodable {
     let minimumVersion: String
     let minimumVersionMessage: String?
     let appStoreURL: URL?
     
     enum CodingKeys: String, CodingKey {
-        case minimumVersion = "iOSMinimumVersion"
-        case minimumVersionMessage = "iOSMinimumVersionMessage"
-        case appStoreURL = "iOSAppStoreURL"
+        case minimumVersion = "iosMinimumVersion"
+        case minimumVersionMessage = "iosMinimumVersionMessage"
+        case appStoreURL = "iosAppStoreURL"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        minimumVersion = try container.decode(String.self, forKey: .minimumVersion)
+        minimumVersionMessage = try? container.decode(String?.self, forKey: .minimumVersionMessage)
+        
+        if let appStoreURLString = try? container.decode(String?.self, forKey: .appStoreURL) {
+            appStoreURL = URL(string: appStoreURLString)
+        } else {
+            appStoreURL = nil
+        }
     }
 }
 
