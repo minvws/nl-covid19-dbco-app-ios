@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "CDC4A8E3250B87E5001BABC6"
-               BuildableName = "DBCO.app"
+               BuildableName = "Oplossing 2.app"
                BlueprintName = "DBCO"
                ReferencedContainer = "container:DBCO.xcodeproj">
             </BuildableReference>
@@ -55,7 +55,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CDC4A8E3250B87E5001BABC6"
-            BuildableName = "DBCO.app"
+            BuildableName = "Oplossing 2.app"
             BlueprintName = "DBCO"
             ReferencedContainer = "container:DBCO.xcodeproj">
          </BuildableReference>
@@ -72,7 +72,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CDC4A8E3250B87E5001BABC6"
-            BuildableName = "DBCO.app"
+            BuildableName = "Oplossing 2.app"
             BlueprintName = "DBCO"
             ReferencedContainer = "container:DBCO.xcodeproj">
          </BuildableReference>
@@ -82,7 +82,7 @@
       buildConfiguration = "Debug">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Release"
+      buildConfiguration = "App Store"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

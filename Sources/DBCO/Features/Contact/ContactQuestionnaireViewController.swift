@@ -14,17 +14,28 @@ private extension Question {
     }
 }
 
+/// The ViewModel required for [ContactQuestionnaireViewController](x-source-tag://ContactQuestionnaireViewController).
+/// Can be used to update a task or to create a new task.
+///
+/// Uses the global [CaseManager](x-source-tag://CaseManaging) to get the appropriate questionnaire. For each question in the questionnaire a class conforming to [AnswerManaging](x-source-tag://AnswerManaging) is created to manage answers, prefilling the answer when possible.
+///
+/// Only questions needed for the task's category are displayed. A [Question](x-source-tag://Question) with type `.classificationDetails` can update the managed task's category, so displayed questions are highly dynamic.
+///
+/// - Tag: ContactQuestionnaireViewModel
 class ContactQuestionnaireViewModel {
     private var task: Task
     private var baseResult: QuestionnaireResult
     private var updatedClassification: ClassificationHelper.Result
+    private var updatedContact: Task.Contact { didSet { updateProgress() } }
     
     var updatedTask: Task {
         let updatedCategory = updatedClassification.category ?? task.contact.category
         
         var updatedTask = task
         updatedTask.contact = Task.Contact(category: updatedCategory,
-                                           communication: task.contact.communication)
+                                           communication: updatedContact.communication,
+                                           didInform: updatedContact.didInform,
+                                           dateOfLastExposure: updatedContact.dateOfLastExposure)
         updatedTask.result = baseResult
         updatedTask.result?.answers = answerManagers.map(\.answer)
         
@@ -40,14 +51,33 @@ class ContactQuestionnaireViewModel {
     weak var detailsSectionView: SectionView?           { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
     weak var informSectionView: SectionView?            { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
     
+    private var informTitle: String                     { didSet { informTitleHandler?(informTitle) } }
+    private var informContent: String                   { didSet { informContentHandler?(informContent) } }
+    private var informButtonTitle: String               { didSet { informButtonTitleHandler?(informButtonTitle) } }
+    private var informButtonHidden: Bool                { didSet { informButtonHiddenHandler?(informButtonHidden) } }
+    private var informButtonType: Button.ButtonType     { didSet { informButtonTypeHandler?(informButtonType) } }
+    
+    var informTitleHandler: ((String) -> Void)?                 { didSet { informTitleHandler?(informTitle) } }
+    var informContentHandler: ((String) -> Void)?               { didSet { informContentHandler?(informContent) } }
+    var informButtonTitleHandler: ((String) -> Void)?           { didSet { informButtonTitleHandler?(informButtonTitle) } }
+    var informButtonHiddenHandler: ((Bool) -> Void)?            { didSet { informButtonHiddenHandler?(informButtonHidden) } }
+    var informButtonTypeHandler: ((Button.ButtonType) -> Void)? { didSet { informButtonTypeHandler?(informButtonType) } }
+    
     init(task: Task?, contact: CNContact? = nil, showCancelButton: Bool = false) {
         let initialCategory = task?.contact.category
         let task = task ?? Task.emptyContactTask
         self.task = task
+        self.updatedContact = task.contact
         self.title = task.contactName ?? .contactFallbackTitle
         self.showCancelButton = showCancelButton
         
-        let questionnaire = Services.taskManager.questionnaire(for: task)
+        self.informTitle = ""
+        self.informContent = ""
+        self.informButtonTitle = ""
+        self.informButtonHidden = true
+        self.informButtonType = .primary
+        
+        let questionnaire = Services.caseManager.questionnaire(for: task)
         
         let questionsAndAnswers: [(question: Question, answer: Answer)] = {
             let currentAnswers = task.result?.answers ?? []
@@ -75,7 +105,9 @@ class ContactQuestionnaireViewModel {
             case .open:
                 return OpenAnswerManager(question: question, answer: answer)
             case .multipleChoice:
-                return MultipleChoiceAnswerManager(question: question, answer: answer)
+                return MultipleChoiceAnswerManager(question: question, answer: answer, contact: task.contact)
+            case .lastExposureDate:
+                return LastExposureDateAnswerManager(question: question, answer: answer, lastExposureDate: updatedContact.dateOfLastExposure)
             }
         }
         
@@ -84,8 +116,17 @@ class ContactQuestionnaireViewModel {
                 switch $0 {
                 case let classificationManager as ClassificationDetailsAnswerManager:
                     updateClassification(with: classificationManager.classification)
+                case let lastExposureManager as LastExposureDateAnswerManager:
+                    updateLastExposureDate(with: lastExposureManager.options.value)
                 default:
                     break
+                }
+                
+                if case .multipleChoice(let option) = $0.answer.value, let trigger = option?.trigger {
+                    switch trigger {
+                    case .setCommunicationToIndex: setCommunicationToIndex()
+                    case .setCommunicationToStaff: setCommunicationToStaff()
+                    }
                 }
                 
                 updateProgress()
@@ -93,6 +134,31 @@ class ContactQuestionnaireViewModel {
         }
         
         self.title = updatedTask.contactName ?? .contactFallbackTitle
+        
+        updateInformSectionContent()
+    }
+    
+    private func setCommunicationToIndex() {
+        updatedContact = Task.Contact(category: updatedContact.category,
+                                      communication: .index,
+                                      didInform: updatedContact.didInform,
+                                      dateOfLastExposure: updatedContact.dateOfLastExposure)
+        updateInformSectionContent()
+    }
+    
+    private func setCommunicationToStaff() {
+        updatedContact = Task.Contact(category: updatedContact.category,
+                                      communication: .staff,
+                                      didInform: updatedContact.didInform,
+                                      dateOfLastExposure: updatedContact.dateOfLastExposure)
+        updateInformSectionContent()
+    }
+    
+    func registerDidInform() {
+        updatedContact = Task.Contact(category: updatedContact.category,
+                                      communication: updatedContact.communication,
+                                      didInform: true,
+                                      dateOfLastExposure: updatedContact.dateOfLastExposure)
     }
     
     private func updateClassification(with result: ClassificationHelper.Result) {
@@ -102,11 +168,26 @@ class ContactQuestionnaireViewModel {
         
         if case .success(let updatedCategory) = result {
             taskCategory = updatedCategory
+            updatedContact = Task.Contact(category: taskCategory,
+                                          communication: updatedContact.communication,
+                                          didInform: updatedContact.didInform,
+                                          dateOfLastExposure: updatedContact.dateOfLastExposure)
         }
         
         answerManagers.forEach {
             $0.view.isHidden = !$0.question.isRelevant(in: taskCategory)
         }
+        
+        updateInformSectionContent()
+    }
+    
+    private func updateLastExposureDate(with value: String?) {
+        updatedContact = Task.Contact(category: updatedContact.category,
+                                      communication: updatedContact.communication,
+                                      didInform: updatedContact.didInform,
+                                      dateOfLastExposure: value)
+        
+        updateInformSectionContent()
     }
     
     private func updateProgress(expandFirstUnfinishedSection: Bool = false) {
@@ -119,16 +200,108 @@ class ContactQuestionnaireViewModel {
         let relevantManagers = answerManagers.filter { $0.question.isRelevant(in: taskCategory) }
         let classificationManagers = relevantManagers.filter { $0.question.group == .classification }
         let contactDetailsManagers = relevantManagers.filter { $0.question.group == .contactDetails }
-        let otherManagers = relevantManagers.filter { $0.question.group == .other }
         
-        classificationSectionView?.isCompleted = classificationManagers.allSatisfy(\.hasValidAnswer)
-        detailsSectionView?.isCompleted = contactDetailsManagers.allSatisfy(\.hasValidAnswer)
-        informSectionView?.isCompleted = otherManagers.allSatisfy(\.hasValidAnswer)
+        func isCompleted(_ answer: Answer) -> Bool {
+            return abs(answer.progress - 1) < 0.01
+        }
+        
+        classificationSectionView?.isCompleted = classificationManagers
+            .map(\.answer)
+            .filter(\.isEssential)
+            .allSatisfy(isCompleted)
+        
+        let hasValidCommunication = updatedContact.communication != .none
+        
+        detailsSectionView?.isCompleted = hasValidCommunication && contactDetailsManagers
+            .map(\.answer)
+            .filter(\.isEssential)
+            .allSatisfy(isCompleted)
+        
+        informSectionView?.isCompleted = updatedTask.isOrCanBeInformed
+        
+        detailsSectionView?.isEnabled = classificationManagers.allSatisfy(\.hasValidAnswer)
+        informSectionView?.isEnabled = classificationManagers.allSatisfy(\.hasValidAnswer)
         
         if expandFirstUnfinishedSection {
             let sections = [classificationSectionView, detailsSectionView, informSectionView].compactMap { $0 }
             sections.forEach { $0.collapse(animated: false) }
             sections.first { !$0.isCompleted }?.expand(animated: false)
+            
+            if sections.allSatisfy(\.isCollapsed) {
+                informSectionView?.expand(animated: false)
+            }
+        }
+        
+        updateInformSectionContent()
+    }
+    
+    private func updateInformSectionContent() {
+        let firstName = updatedTask.contactFirstName
+        
+        func setInformButtonTitle() {
+            if updatedTask.contactPhoneNumber != nil {
+                informButtonTitle = .informContactCall(firstName: firstName)
+                informButtonHidden = false
+            } else {
+                informButtonHidden = true
+            }
+        }
+        
+        switch updatedContact.communication {
+        case .index:
+            informSectionView?.caption = .informContactSectionMessageIndex
+            informTitle = .informContactTitleIndex(firstName: firstName)
+            informButtonType = .primary
+            setInformButtonTitle()
+        case .staff:
+            informSectionView?.caption = .informContactSectionMessageStaff
+            informTitle = .informContactTitleStaff(firstName: firstName)
+            informButtonType = .secondary
+            setInformButtonTitle()
+        case .none:
+            // TODO: https://egeniq.atlassian.net/browse/DBCO-131
+            break
+        }
+        
+        switch updatedContact.category {
+        case .category1, .category2a, .category2b:
+            if let dateValue = updatedContact.dateOfLastExposure,
+               let date = LastExposureDateAnswerManager.valueDateFormatter.date(from: dateValue)  {
+                let untilDate = date.addingTimeInterval(10 * 24 * 3600) // 10 days
+                
+                let dateFormatter = DateFormatter()
+                dateFormatter.calendar = .current
+                dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+                dateFormatter.dateFormat = .informContactGuidelinesCloseDateFormat
+                
+                let untilDateString = String.informContactGuidelinesCloseUntilDate(date: dateFormatter.string(from: untilDate))
+                
+                let calendar = Calendar.current
+                let components = calendar.dateComponents([.day], from: Date(), to: untilDate)
+                
+                var daysRemainingString = ""
+                
+                if let daysRemaining = components.day {
+                    switch daysRemaining {
+                    case 1:
+                        daysRemainingString = .informContactGuidelinesCloseDayRemaining
+                    case 2...:
+                        daysRemainingString = .informContactGuidelinesCloseDaysRemaining(daysRemaining: String(daysRemaining))
+                    default:
+                        daysRemainingString = ""
+                    }
+                }
+                
+                informContent = .informContactGuidelinesClose(untilDate: untilDateString,
+                                                              daysRemaining: daysRemainingString)
+            } else {
+                informContent = .informContactGuidelinesClose(untilDate: "", daysRemaining: "")
+            }
+        case .category3:
+            informContent = .informContactGuidelinesOther
+        case .other:
+            // TODO: https://egeniq.atlassian.net/browse/DBCO-131
+            break
         }
     }
     
@@ -151,16 +324,30 @@ class ContactQuestionnaireViewModel {
             .filter { $0.question.group == .contactDetails }
             .map(view(manager:))
     }
+    
+    var copyableGuidelines: String {
+        // Parse the html then return the plaintext string
+        NSAttributedString
+            .makeFromHtml(text: informContent, font: Theme.fonts.body, textColor: .black)
+            .string
+    }
 }
 
 protocol ContactQuestionnaireViewControllerDelegate: class {
     func contactQuestionnaireViewControllerDidCancel(_ controller: ContactQuestionnaireViewController)
     func contactQuestionnaireViewController(_ controller: ContactQuestionnaireViewController, didSave contactTask: Task)
+    func contactQuestionnaireViewController(_ controller: ContactQuestionnaireViewController, wantsToOpen url: URL)
 }
 
+/// Displays a [Questionnaire](x-source-tag://Questionnaire) for a contact task. Groups questions into sections displayed with [SectionView](x-source-tag://SectionView)
+///
+/// # See also
+/// [ContactQuestionnaireViewModel](x-source-tag://ContactQuestionnaireViewModel)
+///
+/// - Tag: ContactQuestionnaireViewController
 final class ContactQuestionnaireViewController: PromptableViewController {
     private let viewModel: ContactQuestionnaireViewModel
-    private let scrollView = UIScrollView()
+    private var scrollView: UIScrollView!
     
     weak var delegate: ContactQuestionnaireViewControllerDelegate?
     
@@ -191,41 +378,6 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         promptView = Button(title: .save)
             .touchUpInside(self, action: #selector(save))
         
-        scrollView.embed(in: contentView)
-        scrollView.keyboardDismissMode = .interactive
-        
-        let widthProviderView = UIView()
-        widthProviderView.snap(to: .top, of: scrollView, height: 0)
-        widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
-        
-        func groupHeaderLabel(title: String) -> UILabel {
-            let label = UILabel()
-            label.font = Theme.fonts.bodyBold
-            label.numberOfLines = 0
-            label.text = title
-            
-            return label
-        }
-        
-        func listItem(text: String.SubSequence) -> UIView {
-            let label = UILabel()
-            label.font = Theme.fonts.body
-            label.textColor = Theme.colors.captionGray
-            label.numberOfLines = 0
-            label.text = String(text)
-            
-            let icon = UIImageView(image: UIImage(named: "ListItem"))
-            icon.setContentHuggingPriority(.required, for: .horizontal)
-            
-            return HStack(spacing: 12, icon.withInsets(.topBottom(7)), label)
-                .alignment(.top)
-        }
-        
-        func list(from multilineText: String) -> UIView {
-            return VStack(spacing: 8, multilineText.split(separator: "\n").map(listItem))
-        }
-        
-        
         // Type
         let classificationSectionView = SectionView(title: .contactTypeSectionTitle, caption: .contactTypeSectionMessage, index: 1)
         classificationSectionView.expand(animated: false)
@@ -241,17 +393,45 @@ final class ContactQuestionnaireViewController: PromptableViewController {
             .embed(in: contactDetailsSection.contentView.readableWidth)
         
         // Inform
-        let informContactSection = SectionView(title: .informContactSectionTitle, caption: .informContactSectionMessage, index: 3)
+        let informContactSection = SectionView(title: .informContactSectionTitle, caption: .informContactSectionMessageIndex, index: 3)
         informContactSection.collapse(animated: false)
+        
+        let informTitleLabel = Label(bodyBold: "").multiline()
+        let informTextView = TextView().linkTouched { [unowned self] in
+            delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0)
+        }
+        
+        let informButton = Button(title: "", style: .primary)
+            .touchUpInside(self, action: #selector(informContact))
+        
+        viewModel.informTitleHandler = { informTitleLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
+        viewModel.informContentHandler = { informTextView.html($0, textColor: Theme.colors.captionGray) }
+        viewModel.informButtonTitleHandler = { informButton.title = $0 }
+        viewModel.informButtonHiddenHandler = { informButton.isHidden = $0 }
+        viewModel.informButtonTypeHandler = { informButton.style = $0 }
+        
+        VStack(VStack(spacing: 16,
+                      informTitleLabel,
+                      informTextView),
+               VStack(spacing: 16,
+                      Button(title: .informContactCopyGuidelines, style: .secondary)
+                          .touchUpInside(self, action: #selector(copyGuidelines)),
+                      informButton))
+            .embed(in: informContactSection.contentView.readableWidth)
         
         viewModel.classificationSectionView = classificationSectionView
         viewModel.detailsSectionView = contactDetailsSection
         viewModel.informSectionView = informContactSection
+
+        scrollView = SectionedScrollView(classificationSectionView,
+                                         contactDetailsSection,
+                                         informContactSection)
+        scrollView.embed(in: contentView)
+        scrollView.keyboardDismissMode = .onDrag
         
-        VStack(classificationSectionView,
-               contactDetailsSection,
-               informContactSection)
-            .embed(in: scrollView)
+        let widthProviderView = UIView()
+        widthProviderView.snap(to: .top, of: scrollView, height: 0)
+        widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         
         registerForKeyboardNotifications()
     }
@@ -259,11 +439,90 @@ final class ContactQuestionnaireViewController: PromptableViewController {
     private var contactDetailsSection: SectionView!
     
     @objc private func save() {
-        delegate?.contactQuestionnaireViewController(self, didSave: viewModel.updatedTask)
+        let task = viewModel.updatedTask
+        let firstName = task.contactFirstName ?? ""
+        
+        switch task.contact.communication {
+        case .index where task.contact.didInform,
+             .staff where task.isOrCanBeInformed,
+             .none:
+            delegate?.contactQuestionnaireViewController(self, didSave: viewModel.updatedTask)
+        case .index:
+            let alert = UIAlertController(title: .contactInformPromptTitle(firstName: firstName), message: nil, preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: .contactInformOptionDone, style: .default) { _ in
+                self.viewModel.registerDidInform()
+                self.delegate?.contactQuestionnaireViewController(self, didSave: self.viewModel.updatedTask)
+            })
+            
+            alert.addAction(UIAlertAction(title: .contactInformActionInformLater, style: .default) { _ in
+                self.delegate?.contactQuestionnaireViewController(self, didSave: self.viewModel.updatedTask)
+            })
+            
+            alert.addAction(UIAlertAction(title: .contactInformActionInformNow, style: .default) { _ in
+                self.scrollToInformSection()
+            })
+            
+            present(alert, animated: true)
+        case .staff:
+            let alert = UIAlertController(title: .contactMissingDetailsPromptTitle(firstName: firstName), message: .contactMissingDetailsPromptMessage, preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: .contactMissingDetailsActionIgnore, style: .default) { _ in
+                self.delegate?.contactQuestionnaireViewController(self, didSave: self.viewModel.updatedTask)
+            })
+            
+            alert.addAction(UIAlertAction(title: .contactMissingDetailsActionFillIn, style: .default) { _ in
+                self.scrollToDetailsSection()
+            })
+            
+            present(alert, animated: true)
+        }
+    }
+    
+    private func scrollToDetailsSection() {
+        // Scroll to contact details section
+        let detailsSection = viewModel.detailsSectionView!
+        
+        viewModel.classificationSectionView?.collapse(animated: true)
+        viewModel.informSectionView?.collapse(animated: true)
+        detailsSection.expand(animated: true)
+        
+        // Only interested in the top part
+        var adjustedFrame = detailsSection.frame
+        adjustedFrame.size.height /= 2
+        
+        scrollView.scrollRectToVisible(adjustedFrame, animated: true)
+    }
+    
+    private func scrollToInformSection() {
+        // Scroll to the inform section
+        let informSection = viewModel.informSectionView!
+        
+        viewModel.classificationSectionView?.collapse(animated: true)
+        viewModel.detailsSectionView?.collapse(animated: true)
+        informSection.expand(animated: true)
+        
+        scrollView.scrollRectToVisible(informSection.frame, animated: true)
     }
     
     @objc private func cancel() {
         delegate?.contactQuestionnaireViewControllerDidCancel(self)
+    }
+    
+    @objc private func informContact() {
+        if let phoneNumber = viewModel.updatedTask.contactPhoneNumber {
+            if let url = URL(string: "tel:\(phoneNumber)") {
+                delegate?.contactQuestionnaireViewController(self, wantsToOpen: url)
+            }
+        } else {
+            scrollToDetailsSection()
+        }
+    }
+    
+    @objc private func copyGuidelines(_ sender: Button) {
+        UIPasteboard.general.string = viewModel.copyableGuidelines
+        
+        sender.flashTitle(.informContactCopyGuidelinesAction)
     }
     
     // MARK: - Keyboard handling

@@ -14,6 +14,7 @@ extension CNContact {
     }
 }
 
+/// - Tag: SelectContactViewModel
 class SelectContactViewModel {
     
     private let contactStore = CNContactStore()
@@ -27,10 +28,6 @@ class SelectContactViewModel {
     init(suggestedName: String? = nil) {
         let keys = [
             CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
-            CNContactBirthdayKey as CNKeyDescriptor,
-            CNContactPhoneNumbersKey as CNKeyDescriptor,
-            CNContactEmailAddressesKey as CNKeyDescriptor,
-            CNContactPostalAddressesKey as CNKeyDescriptor,
             CNContactTypeKey as CNKeyDescriptor
         ]
         
@@ -49,7 +46,11 @@ class SelectContactViewModel {
             contacts = []
         }
         
-        if let suggestedNameParts = suggestedName?.lowercased().split(separator: " ") {
+        let suggestedName = suggestedName?
+            .lowercased()
+            .replacingOccurrences(of: ".", with: "")
+        
+        if let suggestedNameParts = suggestedName?.split(separator: " ") {
             var maxMatchedParts = 0
             
             func calculateMatchedParts(for contact: CNContact) -> Int {
@@ -118,9 +119,31 @@ class SelectContactViewModel {
         }
     }
     
+    private func loadFullContact(_ selectedContactHandler: @escaping (CNContact, IndexPath) -> Void) -> (CNContact, IndexPath) -> Void {
+        return { [contactStore] contact, indexPath in
+            let keys = [
+                CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
+                CNContactBirthdayKey as CNKeyDescriptor,
+                CNContactPhoneNumbersKey as CNKeyDescriptor,
+                CNContactEmailAddressesKey as CNKeyDescriptor,
+                CNContactPostalAddressesKey as CNKeyDescriptor
+            ]
+            
+            let fullContact: CNContact
+            
+            do {
+                fullContact = try contactStore.unifiedContact(withIdentifier: contact.identifier, keysToFetch: keys)
+            } catch {
+                fullContact = contact
+            }
+            
+            selectedContactHandler(fullContact, indexPath)
+        }
+    }
+    
     func setupContactsTableView(_ tableView: UITableView, sectionHeaderViewBuilder: @escaping (String) -> UIView, selectedContactHandler: @escaping (CNContact, IndexPath) -> Void) {
         contactTableViewManager.manage(tableView)
-        contactTableViewManager.didSelectItem = selectedContactHandler
+        contactTableViewManager.didSelectItem = loadFullContact(selectedContactHandler)
         contactTableViewManager.viewForHeaderInSection = { [unowned self] section in
             guard let title = contactTableViewManager.titleForHeaderInSection?(section) else {
                 return nil
@@ -132,9 +155,8 @@ class SelectContactViewModel {
     
     func setupSearchTableView(_ tableView: UITableView, selectedContactHandler: @escaping (CNContact, IndexPath) -> Void) {
         searchTableViewManager.manage(tableView)
-        searchTableViewManager.didSelectItem = selectedContactHandler
+        searchTableViewManager.didSelectItem = loadFullContact(selectedContactHandler)
     }
-    
     
 }
 
@@ -144,6 +166,7 @@ protocol SelectContactViewControllerDelegate: class {
     func selectContactViewControllerDidCancel(_ controller: SelectContactViewController)
 }
 
+/// - Tag: SelectContactViewController
 class SelectContactViewController: PromptableViewController {
     private let viewModel: SelectContactViewModel
     private let searchResultsController: SearchResultsViewController
@@ -191,11 +214,8 @@ class SelectContactViewController: PromptableViewController {
         viewModel.setupContactsTableView(
             tableView,
             sectionHeaderViewBuilder: {
-                let label = UILabel()
-                label.text = $0.uppercased()
-                label.font = Theme.fonts.caption1
-                label.textColor = Theme.colors.primary
-                return label.wrappedInReadableContentGuide(insets: .top(10) + .bottom(5))
+                Label(caption1: $0.uppercased(), textColor: Theme.colors.primary)
+                    .wrappedInReadableContentGuide(insets: .top(10) + .bottom(5))
             },
             selectedContactHandler: { [weak self] contact, _ in
                 guard let self = self else { return }

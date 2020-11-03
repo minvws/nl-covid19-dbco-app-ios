@@ -8,6 +8,10 @@
 
 import UIKit
 
+/// Represents the status of a task.
+/// For tasks that have not yet started it will show a warning icon.
+/// For in progress tasks a progress indicator.
+/// For completed tasks a checkmark.
 class StatusView: UIView {
     
     var status: Task.Status {
@@ -31,8 +35,10 @@ class StatusView: UIView {
     }
     
     private func setup() {
+        isOpaque = false
         imageView.image = UIImage(named: "Status/Warning")
         imageView.highlightedImage = UIImage(named: "Status/Completed")
+        imageView.tintColor = Theme.colors.ok
         imageView.embed(in: self)
     }
     
@@ -56,13 +62,13 @@ class StatusView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        guard case .inProgress(let progress) = status else { return }
         guard let context = UIGraphicsGetCurrentContext() else { return }
         
-        let clampedProgress = min(max(CGFloat(progress), 0), 1)
+        context.clear(rect)
         
-        UIColor.white.setFill()
-        context.fill(rect)
+        guard case .inProgress(let progress) = status else { return }
+        
+        let clampedProgress = min(max(CGFloat(progress), 0), 1)
     
         context.addEllipse(in: bounds.inset(by: .all(1)))
         context.setLineWidth(2)

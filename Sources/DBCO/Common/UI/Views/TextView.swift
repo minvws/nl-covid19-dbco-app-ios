@@ -7,16 +7,24 @@
 
 import UIKit
 
+/// Styled subclass of UITextView that can handle (simple) html.
+/// Auto expands to fit its content.
+/// By default the content is not editable or selectable.
+/// Can listen to selected links and updated text.
+///
+/// # See also:
+/// [linkTouched(handler:)](x-source-tag://TextView.linkTouched),
+/// [textChanged(handler:)](x-source-tag://TextView.textChanged)
 class TextView: UITextView, UITextViewDelegate {
     
     private var linkHandlers = [(URL) -> Void]()
     private var textChangedHandlers = [(String?) -> Void]()
     
-    init(htmlText: String) {
+    init(htmlText: String, font: UIFont = Theme.fonts.body, textColor: UIColor = Theme.colors.captionGray, boldTextColor: UIColor = .black) {
         super.init(frame: .zero, textContainer: nil)
         setup()
         
-        attributedText = .makeFromHtml(text: htmlText, font: Theme.fonts.body, textColor: Theme.colors.captionGray)
+        html(htmlText, font: font, textColor: textColor, boldTextColor: boldTextColor)
     }
     
     init(text: String? = nil) {
@@ -43,6 +51,7 @@ class TextView: UITextView, UITextViewDelegate {
         font = Theme.fonts.body
         isScrollEnabled = false
         isEditable = false
+        isSelectable = false
         backgroundColor = nil
         layer.cornerRadius = 0
         textContainer.lineFragmentPadding = 0
@@ -56,20 +65,38 @@ class TextView: UITextView, UITextViewDelegate {
         let superSize = super.intrinsicContentSize
         
         if isEditable {
-            return CGSize(width: 200, height: max(114, superSize.height))
+            return CGSize(width: 200, height: max(48, superSize.height))
         } else {
             return superSize
         }
     }
     
+    /// Sets the content to the supplied html string.
+    @discardableResult
+    func html(_ htmlText: String?, font: UIFont = Theme.fonts.body, textColor: UIColor = Theme.colors.captionGray, boldTextColor: UIColor = .black) -> Self {
+        attributedText = .makeFromHtml(text: htmlText, font: font, textColor: textColor, boldTextColor: boldTextColor)
+        return self
+    }
+    
+    /// Add a listener for selected links. Calling this method will set `isSelectable` to `true`
+    ///
+    /// - parameter handler: The closure to be called when the user selects a link
+    /// - Tag: TextView.linkTouched
     @discardableResult
     func linkTouched(handler: @escaping (URL) -> Void) -> Self {
+        isSelectable = true
         linkHandlers.append(handler)
         return self
     }
     
+    /// Add a listener for updated text. Calling this method will set `isSelectable` and `isEditable` to `true`
+    ///
+    /// - parameter handler: The closure to be called when the text is updated
+    /// - Tag: TextView.textChanged
     @discardableResult
     func textChanged(handler: @escaping (String?) -> Void) -> Self {
+        isSelectable = true
+        isEditable = true
         textChangedHandlers.append(handler)
         return self
     }

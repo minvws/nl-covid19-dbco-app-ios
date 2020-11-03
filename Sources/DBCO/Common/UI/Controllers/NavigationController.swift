@@ -7,6 +7,8 @@
 
 import UIKit
 
+/// A styled UINavigationController subclass.
+/// Conforms to [DismissActionable](x-source-tag://DismissActionable)
 class NavigationController: UINavigationController, DismissActionable {
     var onDismissed: ((NavigationController) -> Void)?
     

@@ -6,6 +6,9 @@
 "next" = "Volgende";
 "start" = "Beginnen";
 "edit" = "Wijzig";
+"selectDate" = "Selecteer datum";
+"done" = "Klaar";
+"ok" = "Oké";
 
 /* MARK: - Onboarding */
 "onboarding.step1.title" = "Help de GGD bij het contactonderzoek en breng je omgeving op de hoogte";
@@ -13,62 +16,76 @@
 "onboarding.step2.title" = "Vul de code in die je hebt gekregen van de GGD-medewerker";
 "onboarding.step3.title" = "Voeg de gegevens van je contacten toe";
 "onboarding.step3.message" = "De GGD heeft contactgegevens nodig van mensen die jij hebt ontmoet. Via deze app kun je die het snelst delen.\n\nDe gegevens worden alleen gedeeld wanneer je helemaal klaar bent.";
+"onboardingLoadingErrorTitle" = "Kon de gegevens niet ophalen";
+"onboardingLoadingErrorMessage" = "Controleer de code en probeer het opnieuw.";
 
 /* MARK: - Task Overview */
 "taskOverviewTitle" = "Mijn contacten";
-"taskOverviewHeaderText" = "Vul de contactgegevens aan van deze contacten die je samen met de GGD in kaart hebt gebracht. Doe dit snel. <a href=\"app://readmore\">Lees meer</a>";
-"taskOverviewDoneButtonTitle" = "Verstuur gegevens";
+"taskOverviewDoneButtonTitle" = "Verstuur gegevens naar GGD";
 "taskOverviewAddContactButtonTitle" = "+ Contact toevoegen";
 
-"taskOverviewIndexContactsHeader.title" = "Jij informeert deze contacten";
-"taskOverviewIndexContactsHeader.subtitle" = "Vul zo veel mogelijk contactgegevens aan";
-"taskOverviewStaffContactsHeader.title" = "De GGD informeert deze contacten";
-"taskOverviewStaffContactsHeader.subtitle" = "Vul zo veel mogelijk contactgegevens aan";
+"taskOverviewUninformedContactsHeader.title" = "Vul contactgegevens aan";
+"taskOverviewUninformedContactsHeader.subtitle" = "En informeer je contacten";
+"taskOverviewInformedContactsHeader.title" = "Behandelde contacten";
+"taskOverviewInformedContactsHeader.subtitle" = "Contacten die zijn of worden geinformeerd";
 
 "task.contact.caption.completed" = "Gegevens toegevoegd";
 "task.contact.caption.incomplete" = "Vul gegevens aan";
-
-/* MARK: - Request Contacts Permission */
-"requestPermssion.contacts.title" = "Contacten delen gaat sneller als we toestemming hebben";
-"requestPermssion.contacts.body" = "Je beslist zelf welke contactgegevens je deelt met de GGD.";
-"requestPermssion.contacts.body.denied" = "Ga naar instellingen om toestemming te geven.";
-"requestPermssion.contacts.allowButtonTitle" = "Geef Toestemming";
-"requestPermssion.contacts.continueButtonTitle" = "Ik doe alles met de hand";
-"requestPermssion.contacts.settingsButtonTitle" = "Naar Instellingen";
 
 /* MARK: - Contact Selection */
 "selectContactTitle" = "Selecteer contact";
 "selectContactSearch" = "Zoeken";
 "selectContactAddManually" = "+ Handmatig toevoegen";
-"selectContactSuggestions" = "Waarschijnlijk zoek je";
-"selectContactOtherContacts" = "Andere contacten";
+"selectContactSuggestions" = "Suggesties";
+"selectContactOtherContacts" = "Alle contacten";
 "selectContactFromContactsFallback" = "Uit contacten";
 "selectContactAddManuallyFallback" = "Handmatig toevoegen";
 
 // MARK: - Editing Contacts
-"contactTypeSection.title" = "Aard van het contact";
-"contactTypeSection.message" = "Vragen over jullie ontmoeting";
+"contactTypeSection.title" = "Soort contact";
+"contactTypeSection.message" = "Beantwoord vragen over ontmoeting";
 "contactDetailsSection.title" = "Contactgegevens";
-"contactDetailsSection.message" = "Vul contactgegevens aan";
+"contactDetailsSection.message" = "Vul zo veel mogelijk gegevens aan";
 "informContactSection.title" = "Informeren";
-"informContactSection.message" = "Deel het handelingsperspectief";
+"informContactSection.message.index" = "De GGD informeert dit contact niet";
+"informContactSection.message.staff" = "De GGD neemt contact op";
 
-"livedTogetherRiskQuestion" = "Woon je in hetzelfde huis of ben je langer dan 12 uur op dezelfde plek geweest?";
-"livedTogetherRiskQuestion.answer.positive" = "Ja";
-"livedTogetherRiskQuestion.answer.negative" = "Nee";
+"informContactTitle.index.knownName" = "De GGD neemt <u>geen</u> contact op met %@. Deel jij deze leefregels met %@?";
+"informContactTitle.index.unknownName" = "De GGD neemt <u>geen</u> contact op met dit contact. Deel jij deze leefregels?";
+"informContactTitle.staff.knownName" = "De GGD neemt contact op met %@. Dit zijn de leefregels voor %@.";
+"informContactTitle.staff.unknownName" = "De GGD neemt contact op met dit contact. Dit zijn de leefregels.";
 
-"durationRiskQuestion" = "Hoe lang waren jullie waarschijnlijk bij elkaar in de buurt?";
-"durationRiskQuestion.answer.positive" = "Langer dan 15 minuten";
-"durationRiskQuestion.answer.negative" = "Korter dan 15 minuten";
+"informContactGuidelines.close" = "<ul><li>Blijf thuis, ontvang geen bezoek - alle huisgenoten blijven thuis%@%@</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li><li>Alle leefregels staan op <a href=\"https://www.rivm.nl\">www.rivm.nl/een-redelijk-lange-link</a></li></ul>";
+"informContactGuidelines.close.untilDate" = " - <b>tot %@</b>";
+"informContactGuidelines.close.dateFormat" = "d MMMM";
+"informContactGuidelines.close.dayRemaining" = " (nog 1 dag)";
+"informContactGuidelines.close.daysRemaining" = " (nog %@ dagen)";
+"informContactGuidelines.other" = "<ul><li>Houd 1,5 meter afstand en vermijd bezoek aan drukke plekken</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li><li>Alle leefregels staan op <a href=\"https://www.rivm.nl\">www.rivm.nl/een-redelijk-lange-link</a></li></ul>";
 
-"distanceRiskQuestion" = "Zijn jullie binnen 1,5 meter van elkaar geweest?";
-"distanceRiskQuestion.answer.positive" = "Ja, denk het wel";
-"distanceRiskQuestion.answer.negative" = "Nee, denk het niet";
+"informContactCopyGuidelines" = "Kopieer leefregels";
+"informContactCopyGuidelinesAction" = "Gekopieerd!";
+"informContactCall.knownName" = "Bel %@";
+"informContactCall.unknownName" = "Bel contact";
 
-"otherRiskQuestion" = "Is een of meerdere van deze dingen tijdens jullie ontmoeting gebeurd?";
-"otherRiskQuestion.description" = "* In je gezicht geniesd\n* Geknuffeld of gezoend\n* Ander lichamelijk contact";
-"otherRiskQuestion.answer.positive" = "Ja, één of meer";
-"otherRiskQuestion.answer.negative" = "Nee, denk het niet";
+"category1RiskQuestion" = "Woon je in hetzelfde huis of ben je langer dan 12 uur op dezelfde plek geweest?";
+"category1RiskQuestion.answer.positive" = "Ja";
+"category1RiskQuestion.answer.negative" = "Nee";
+
+"category2aRiskQuestion" = "Was je langer dan 15 minuten op 1,5 meter afstand?";
+"category2aRiskQuestion.answer.positive" = "Ja, denk het wel";
+"category2aRiskQuestion.answer.negative" = "Nee, denk het niet";
+
+"category2bRiskQuestion" = "Heb je een of meerdere van deze dingen tijdens jullie ontmoeting gedaan?";
+"category2bRiskQuestion.description" = "<ul><li>Binnen anderhalve meter van de ander gehoest of geniesd</li><li>Geknuffeld of gezoend</li><li>Ander lichamelijk contact</li></ul>";
+"category2bRiskQuestion.answer.positive" = "Ja, denk het wel";
+"category2bRiskQuestion.answer.negative" = "Nee, denk het niet";
+
+"category3RiskQuestion" = "Was je langer dan 15 minuten in dezelfde ruimte?";
+"category3RiskQuestion.answer.positive" = "Ja, denk het wel";
+"category3RiskQuestion.answer.negative" = "Nee, denk het niet";
+
+"otherCategoryTitle" = "Dit contact heeft geen extra risico op besmetting gelopen";
+"otherCategoryMessage" = "Je hoeft deze persoon dus niet te laten weten dat je besmet bent.";
 
 "contactFallbackTitle" = "Contact toevoegen";
 "contactInformationFirstName" = "Voornaam";
@@ -76,34 +93,28 @@
 "contactInformationPhoneNumber" = "Telefoonnummer";
 "contactInformationEmailAddress" = "E-mailadres";
 "contactInformationBSN" = "Burgerservice nummer";
+"contactInformationLastExposure" = "Wanneer was de laatste ontmoeting?";
+
+/* MARK: - Informing contacts */
+"contactInformPromptTitle" = "Weet %@ wat er speelt?";
+"contactInformOptionDone" = "Ja";
+"contactInformActionInformLater" = "Nee, doe ik later";
+"contactInformActionInformNow" = "Nee, nu informeren";
+
+"contactMissingDetailsPromptTitle" = "Heb je geen telefoonnummer of e-mailadres van %@";
+"contactMissingDetailsPromptMessage" = "De GGD kan alleen contact opnemen als ze een e-mail adres of telefoonnummer hebben.";
+"contactMissingDetailsActionIgnore" = "Nee, heb ik niet";
+"contactMissingDetailsActionFillIn" = "Invullen";
 
 /* MARK: - Uploading */
 "unfinishedTasksOverviewTitle" = "Bijna klaar";
 "unfinishedTasksOverviewMessage" = "Kun je de gegevens van deze contacten controleren?";
+
+"unfinishedTaskOverviewIndexContactsHeader.title" = "Nog niet geinformeerde contacten";
+"unfinishedTaskOverviewIndexContactsHeader.subtitle" = "Informeer en vul contactgegevens aan";
+"unfinishedTaskOverviewStaffContactsHeader.title" = "De GGD informeert deze contacten";
+"unfinishedTaskOverviewStaffContactsHeader.subtitle" = "Geef een e-mail en telefoonnummer door";
+
 "uploadInProgressMessage" = "Versturen...";
-
-/* MARK: - Help */
-"helpTitle" = "Over de app";
-"helpSubtitle" = "Veelgestelde vragen";
-"helpAlsoRead" = "Lees ook";
-
-"help.faq.notification.title" = "Wanneer krijg ik een melding van de app?";
-"help.faq.location.title" = "Kan de app mijn locatie zien?";
-"help.faq.location.description" = "Nee, de app ziet via bluetooth alleen of je in de buurt bent van andere mensen die de app ook op hun telefoon hebben. De app ziet nooit waar je bent.<br><br>Bluetooth is bedoeld om een draadloze verbinding te maken tussen 2 apparaten die bij elkaar in de buurt zijn. Zoals je telefoon en een geluidsbox of koptelefoon.<br><br>De app kan de afstand tussen 2 telefoons schatten door de sterkte van het bluetoothsignaal.
-";
-"help.faq.anonymous.title" = "Hoe kan de app anoniem zijn?";
-"help.faq.anonymous.description_1" = "De app wisselt codes uit met andere telefoons. In deze codes staan geen persoonsgegevens of locatiegegevens. Ze zijn helemaal willekeurig. Het uitwisselen van codes gebeurt op het moment dat je dicht bij een persoon bent die ook de app heeft.";
-"help.faq.anonymous.description_2" = "Blijkt deze persoon later corona te hebben? Dan kan diegene samen met de GGD zijn of haar codes aan een lijst met codes van besmette personen toevoegen. Zo kan de besmetting bevestigd worden.<br><br>Daarna wordt er een melding verstuurd naar alle andere mensen die deze codes op hun telefoon hebben. In deze melding staat alleen wanneer ze in de buurt zijn geweest van een besmet persoon. Niet wie dit is en waar ze die persoon zijn tegengekomen.";
-"help.bluetooth.title" = "Werkt bluetooth door muren heen?";
-
-"help.faq.reason.title" = "Waarom is deze app belangrijk?";
-"help.faq.reason.description" = "De app kan je snel waarschuwen nadat je in de buurt bent geweest van iemand die corona heeft. Al voordat je klachten krijgt. Je kunt namelijk corona hebben en besmettelijk zijn zonder dat je het zelf doorhebt.<br><br>Als je via de app een waarschuwing krijgt, lees je in de app wat je kunt doen. En of je je moet laten testen. Zo voorkom je dat je onbewust mensen in je omgeving besmet.<br><br>Ben je getest en heb je corona? Dan kun je samen met de GGD de mensen waarschuwen die lang bij jou in de buurt zijn geweest. Ook onbekenden. In een restaurant, bioscoop of wachtkamer. Zolang deze mensen ook de app gebruiken.<br><br>Dankzij CoronaMelder kunnen we sneller ingrijpen en nieuwe besmettingen voorkomen. Alleen samen krijgen we corona onder controle.";
-
-"help.faq.notification.description" = "Je krijgt een melding nadat je extra kans op besmetting hebt gelopen. Dit gebeurt als je minstens 15 minuten dicht bij iemand bent geweest die later corona blijkt te hebben. En natuurlijk alleen als die persoon ook de app gebruikt.<br><br>Of je een melding krijgt hangt af van de sterkte van het bluetoothsignaal. En van de duur van jullie contact.<br><br>Fietste er iemand voorbij op straat? Dan krijg je later geen melding. Jullie waren dicht bij elkaar, dus het bluetooth-signaal was sterk. Maar het contact duurde zo kort dat de kans op besmetting heel erg klein is.<br><br>Zat je dicht bij iemand in de trein of op kantoor? Dan kun je later wel een melding krijgen. Het bluetoothsignaal was sterk genoeg en jullie waren langere tijd dicht bij elkaar in de buurt.";
-"help.faq.bluetooth.title" = "Werkt bluetooth door muren heen?";
-"help.faq.bluetooth.description" = "Ja, maar het signaal wordt dan erg zwak. Bluetooth werkt het beste als jouw telefoon in dezelfde ruimte is als de telefoon van een andere persoon.<br><br>De kans is bijvoorbeeld heel klein dat je app het bluetoothsignaal van je buren ontvangt.<br><br>En daardoor is de kans ook heel klein dat je een melding krijgt als je buurman corona blijkt te hebben en jullie niet in dezelfde ruimte zijn geweest.";
-"help.faq.power_usage.title" = "Hoeveel stroom gebruikt de app?";
-"help.faq.power_usage.description" = "De app maakt gebruikt van Bluetooth Low Energy (lage-energiebluetooth). Dit is een speciale vorm van bluetooth die heel weinig stroom gebruikt. Hoeveel procent dit precies van je telefoonbatterij vraagt verschilt per telefoon.";
-
-
-
+"uploadFinishedTitle" = "Bedankt voor het delen van de gegevens met de GGD";
+"uploadFinishedMessage" = "Je kunt nog contactgegevens aanpassen, contacten toevoegen of een andere aanpassing doorgeven.";

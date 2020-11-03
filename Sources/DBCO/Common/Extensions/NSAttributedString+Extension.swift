@@ -9,10 +9,13 @@ import UIKit
 
 public extension NSAttributedString {
 
-    static func makeFromHtml(text: String, font: UIFont, textColor: UIColor, textAlignment: NSTextAlignment = .left, lineHeight: CGFloat? = nil, underlineColor: UIColor? = nil) -> NSAttributedString {
-
+    static func makeFromHtml(text: String?, font: UIFont, textColor: UIColor, boldTextColor: UIColor? = nil, textAlignment: NSTextAlignment = .left, lineHeight: CGFloat? = nil, underlineColor: UIColor? = nil) -> NSAttributedString {
+        let text = text ?? ""
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = textAlignment
+        paragraphStyle.paragraphSpacing = 8
+        
+        let listParagraphStyle = NSMutableParagraphStyle()
         
         // create custom tabstops to align lists
         let tabInterval: CGFloat = 20
@@ -22,9 +25,11 @@ public extension NSAttributedString {
             tabStops.append(NSTextTab(textAlignment: .natural, location: CGFloat(i)*tabInterval))
         }
         
-        paragraphStyle.tabStops = tabStops
-        paragraphStyle.headIndent = tabInterval
-        paragraphStyle.paragraphSpacing = 8
+        listParagraphStyle.alignment = textAlignment
+        listParagraphStyle.paragraphSpacing = 8
+        listParagraphStyle.tabStops = tabStops
+        listParagraphStyle.headIndent = tabInterval
+        listParagraphStyle.firstLineHeadIndent = 0
         
         var attributes: [Key: Any] = [
             .foregroundColor: textColor,
@@ -51,15 +56,21 @@ public extension NSAttributedString {
                 guard let currentFont = value as? UIFont else { return }
 
                 let newFont: UIFont
+                let newColor: UIColor
 
                 if let boldFont = boldFont, currentFont.fontDescriptor.symbolicTraits.contains(.traitBold) {
                     newFont = boldFont
+                    newColor = boldTextColor ?? textColor
                 } else {
                     newFont = font
+                    newColor = textColor
                 }
 
                 attributedTitle.removeAttribute(.font, range: range)
+                attributedTitle.removeAttribute(.foregroundColor, range: range)
+                
                 attributedTitle.addAttribute(.font, value: newFont, range: range)
+                attributedTitle.addAttribute(.foregroundColor, value: newColor, range: range)
             }
             
             // Replace added bullets with styled bullets
@@ -69,7 +80,7 @@ public extension NSAttributedString {
                 .foregroundColor: Theme.colors.primary,
                 .baselineOffset: (font.xHeight - bulletFont.xHeight) / 2
             ]
-            
+            let listBulletCharacter = "\u{25CF}"
             let currentText = attributedTitle.string
             var searchRange = NSRange(location: 0, length:currentText.count)
             var foundRange = NSRange()
@@ -78,9 +89,30 @@ public extension NSAttributedString {
                 foundRange = (currentText as NSString).range(of: "•", options: [], range: searchRange)
                 if foundRange.location != NSNotFound {
                     searchRange.location = foundRange.location + foundRange.length
-                    attributedTitle.replaceCharacters(in: foundRange, with: NSAttributedString(string: "\u{25CF}", attributes: bulletAttributes))
+                    attributedTitle.replaceCharacters(in: foundRange, with: NSAttributedString(string: listBulletCharacter, attributes: bulletAttributes))
                 } else {
                     break
+                }
+            }
+            
+            // Replace list paragraph style
+            var previousParagraphIsListStart = false
+            attributedTitle.enumerateAttribute(.paragraphStyle, in: fullRange, options: []) { value, range, finished in
+                let text = attributedTitle.string as NSString
+                if text.substring(with: range).starts(with: listBulletCharacter) {
+                    var startRange = range
+                    if range.location > 0 {
+                        // adjust the range so the style is set before the line starts so indentations are properly calculated
+                        startRange.location -= 1
+                        startRange.length += 1
+                    }
+                    attributedTitle.removeAttribute(.paragraphStyle, range: startRange)
+                    attributedTitle.addAttribute(.paragraphStyle, value: listParagraphStyle, range: startRange)
+                    previousParagraphIsListStart  = true
+                } else if previousParagraphIsListStart {
+                    attributedTitle.removeAttribute(.paragraphStyle, range: range)
+                    attributedTitle.addAttribute(.paragraphStyle, value: listParagraphStyle, range: range)
+                    previousParagraphIsListStart  = false
                 }
             }
 

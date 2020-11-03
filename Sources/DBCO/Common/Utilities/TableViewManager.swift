@@ -17,6 +17,10 @@ protocol Configurable {
     func configure(_ input: Item)
 }
 
+/// Helper class that proxies UITableViewDataSource and UITableViewDelegate to optional closures, configuring the cells in a typeSafe manner.
+/// Requires that cells conform to Reusable and Configurable.
+///
+/// For example usages see: [TaskOverviewViewModel](x-source-tag://TaskOverviewViewModel) or [SelectContactViewModel](x-source-tag://SelectContactViewModel)
 class TableViewManager<Cell: UITableViewCell & Reusable & Configurable>: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     var numberOfSections: (() -> Int)?
@@ -27,9 +31,11 @@ class TableViewManager<Cell: UITableViewCell & Reusable & Configurable>: NSObjec
     var viewForHeaderInSection: ((_ section: Int) -> UIView?)?
     var viewForFooterInSection: ((_ section: Int) -> UIView?)?
 
-    
     weak var tableView: UITableView?
     
+    /// Start managing a table view. Will register the required cell class and set the delegate and datasource to the supplied table view.
+    ///
+    /// - parameter tableView: The UITableView to be proxied
     func manage(_ tableView: UITableView) {
         tableView.delegate = self
         tableView.dataSource = self
@@ -38,10 +44,12 @@ class TableViewManager<Cell: UITableViewCell & Reusable & Configurable>: NSObjec
         self.tableView = tableView
     }
     
+    /// Reload the table view, querying the closures for data.
     func reloadData() {
         tableView?.reloadData()
     }
     
+    // MARK: - UITableViewDataSource, UITableViewDelegate
     func numberOfSections(in tableView: UITableView) -> Int {
         return numberOfSections?() ?? 1
     }

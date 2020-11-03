@@ -7,6 +7,8 @@
 
 import UIKit
 
+/// A styled wrapped for UITextView that binds to an object's field conforming to [Editable](x-source-tag://Editable) and automatically updates its value.
+/// - Tag: InputTextView
 class InputTextView<Object: AnyObject, Field: Editable>: UIView {
     private weak var object: Object?
     
@@ -43,7 +45,7 @@ class InputTextView<Object: AnyObject, Field: Editable>: UIView {
         }
         
         textView.textChanged { [weak self] in
-            self?.object?[keyPath: path].value = $0
+            self?.object?[keyPath: path].value = $0?.isEmpty == false ? $0 : nil
         }
     }
     

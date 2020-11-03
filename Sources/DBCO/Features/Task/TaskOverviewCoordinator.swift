@@ -8,6 +8,11 @@
 import UIKit
 import Contacts
 
+/// Coordinator displaying the tasks for the index with [TaskOverviewViewController](x-source-tag://TaskOverviewViewController).
+/// Uses [SelectContactCoordinator](x-source-tag://SelectContactCoordinator) and [EditContactCoordinator](x-source-tag://EditContactCoordinator) for updating tasks.
+/// Uses [UploadCoordinator](x-source-tag://UploadCoordinator) to upload the tasks.
+///
+/// - Tag: TaskOverviewCoordinator
 final class TaskOverviewCoordinator: Coordinator {
     private let window: UIWindow
     private let overviewController: TaskOverviewViewController
@@ -28,22 +33,23 @@ final class TaskOverviewCoordinator: Coordinator {
     }
     
     override func start() {
-        let snapshotView = window.snapshotView(afterScreenUpdates: true)!
-        
-        window.rootViewController = navigationController
-        navigationController.view.addSubview(snapshotView)
-        
-        UIView.transition(with: window, duration: 0.5, options: [.transitionFlipFromRight]) {
-            snapshotView.removeFromSuperview()
+        if window.rootViewController == nil {
+            window.rootViewController = navigationController
+            window.makeKeyAndVisible()
+        } else {
+            let snapshotView = window.snapshotView(afterScreenUpdates: true)!
+            
+            window.rootViewController = navigationController
+            navigationController.view.addSubview(snapshotView)
+            
+            UIView.transition(with: window, duration: 0.5, options: [.transitionFlipFromRight]) {
+                snapshotView.removeFromSuperview()
+            }
         }
     }
     
     private func upload() {
         startChildCoordinator(UploadCoordinator(presenter: overviewController, delegate: self))
-    }
-    
-    private func openHelp() {
-        startChildCoordinator(HelpCoordinator(presenter: overviewController, delegate: self))
     }
     
     private func selectContact(for task: Task) {
@@ -61,19 +67,12 @@ final class TaskOverviewCoordinator: Coordinator {
 }
 
 // MARK: - Coordinator delegates
-extension TaskOverviewCoordinator: HelpCoordinatorDelegate {
-    
-    func helpCoordinatorDidFinish(_ coordinator: HelpCoordinator) {
-        removeChildCoordinator(coordinator)
-    }
-    
-}
-
 extension TaskOverviewCoordinator: SelectContactCoordinatorDelegate {
 
     func selectContactCoordinator(_ coordinator: SelectContactCoordinator, didFinishWith task: Task) {
         removeChildCoordinator(coordinator)
-        Services.taskManager.save(task)
+        
+        Services.caseManager.save(task)
     }
     
     func selectContactCoordinatorDidCancel(_ coordinator: SelectContactCoordinator) {
@@ -87,7 +86,7 @@ extension TaskOverviewCoordinator: EditContactCoordinatorDelegate {
     func editContactCoordinator(_ coordinator: EditContactCoordinator, didFinishContactTask task: Task) {
         removeChildCoordinator(coordinator)
         
-        Services.taskManager.save(task)
+        Services.caseManager.save(task)
     }
     
     func editContactCoordinatorDidCancel(_ coordinator: EditContactCoordinator) {
@@ -106,10 +105,6 @@ extension TaskOverviewCoordinator: UploadCoordinatorDelegate {
 
 // MARK: - ViewController delegates
 extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
-    
-    func taskOverviewViewControllerDidRequestHelp(_ controller: TaskOverviewViewController) {
-        openHelp()
-    }
     
     func taskOverviewViewControllerDidRequestAddContact(_ controller: TaskOverviewViewController) {
         addContact()

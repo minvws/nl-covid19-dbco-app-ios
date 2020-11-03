@@ -5,7 +5,7 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import Foundation
+import UIKit
 import Contacts
 
 protocol ContactValue {
@@ -70,11 +70,22 @@ struct GeneralDate: ContactValue {
     }
     
     var dateValue: Date? {
-        guard let value = value else {
-            return nil
+        get {
+            guard let value = value else {
+                return nil
+            }
+            
+            return GeneralDate.dateFormatter.date(from: value)
         }
         
-        return GeneralDate.dateFormatter.date(from: value)
+        set {
+            guard let date = newValue else {
+                self.value = nil
+                return
+            }
+            
+            self.value = GeneralDate.dateFormatter.string(from: date)
+        }
     }
         
     static let dateFormatter: DateFormatter = {
@@ -100,6 +111,7 @@ struct Text: ContactValue {
 struct Options: ContactValue {
     var label: String?
     var value: String?
+    var labelFont: UIFont? = Theme.fonts.subhead
     let inputType: InputType
     
     init(label: String?, value: String?, options: [InputType.PickerOption]) {

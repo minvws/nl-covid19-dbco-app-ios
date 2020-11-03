@@ -13,6 +13,8 @@ protocol EditContactCoordinatorDelegate: class {
     func editContactCoordinatorDidCancel(_ coordinator: EditContactCoordinator)
 }
 
+/// Coordinator managing the flow of editing a contact task. Presents [ContactQuestionnaireViewController](x-source-tag://ContactQuestionnaireViewController) in a modal fashion.
+/// - Tag: EditContactCoordinator
 final class EditContactCoordinator: Coordinator {
     
     private weak var delegate: EditContactCoordinatorDelegate?
@@ -57,6 +59,10 @@ extension EditContactCoordinator: ContactQuestionnaireViewControllerDelegate {
     func contactQuestionnaireViewController(_ controller: ContactQuestionnaireViewController, didSave contactTask: Task) {
         self.updatedTask = contactTask
         navigationController.dismiss(animated: true)
+    }
+    
+    func contactQuestionnaireViewController(_ controller: ContactQuestionnaireViewController, wantsToOpen url: URL) {
+        UIApplication.shared.open(url)
     }
     
 }

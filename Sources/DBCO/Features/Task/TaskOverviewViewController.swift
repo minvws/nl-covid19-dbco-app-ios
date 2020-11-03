@@ -8,12 +8,12 @@
 import UIKit
 
 protocol TaskOverviewViewControllerDelegate: class {
-    func taskOverviewViewControllerDidRequestHelp(_ controller: TaskOverviewViewController)
     func taskOverviewViewControllerDidRequestAddContact(_ controller: TaskOverviewViewController)
     func taskOverviewViewController(_ controller: TaskOverviewViewController, didSelect task: Task)
     func taskOverviewViewControllerDidRequestUpload(_ controller: TaskOverviewViewController)
 }
 
+/// - Tag: TaskOverviewViewModel
 class TaskOverviewViewModel {
     typealias SectionHeaderContent = (title: String, subtitle: String)
     typealias PromptFunction = (_ animated: Bool) -> Void
@@ -37,7 +37,7 @@ class TaskOverviewViewModel {
         tableViewManager.itemForCellAtIndexPath = { [unowned self] in return sections[$0.section].tasks[$0.row] }
         tableViewManager.viewForHeaderInSection = { [unowned self] in return sections[$0].header }
         
-        Services.taskManager.addListener(self)
+        Services.caseManager.addListener(self)
     }
     
     func setupTableView(_ tableView: UITableView, tableHeaderBuilder: (() -> UIView?)?, sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?, selectedTaskHandler: @escaping (Task, IndexPath) -> Void) {
@@ -51,42 +51,50 @@ class TaskOverviewViewModel {
     
     func setHidePrompt(_ hidePrompt: @escaping PromptFunction) {
         self.hidePrompt = hidePrompt
+        
+        if Services.caseManager.isSynced {
+            hidePrompt(false)
+        }
     }
     
     func setShowPrompt(_ showPrompt: @escaping PromptFunction) {
         self.showPrompt = showPrompt
+        
+        if !Services.caseManager.isSynced {
+            showPrompt(false)
+        }
     }
     
     private func buildSections() {
         sections = []
         sections.append((tableHeaderBuilder?(), []))
         
-        let otherContacts = Services.taskManager.tasks.filter { [.index, .none].contains($0.contact.communication) }
-        let staffContacts = Services.taskManager.tasks.filter { $0.contact.communication == .staff }
+        let uninformedContacts = Services.caseManager.tasks.filter { !$0.isOrCanBeInformed }
+        let informedContacts = Services.caseManager.tasks.filter { $0.isOrCanBeInformed }
         
-        let otherSectionHeader = SectionHeaderContent(.taskOverviewIndexContactsHeaderTitle, .taskOverviewIndexContactsHeaderSubtitle)
-        let staffSectionHeader = SectionHeaderContent(.taskOverviewStaffContactsHeaderTitle, .taskOverviewStaffContactsHeaderSubtitle)
+        let uninformedSectionHeader = SectionHeaderContent(.taskOverviewUninformedContactsHeaderTitle, .taskOverviewUninformedContactsHeaderSubtitle)
+        let informedSectionHeader = SectionHeaderContent(.taskOverviewInformedContactsHeaderTitle, .taskOverviewInformedContactsHeaderSubtitle)
         
-        if !otherContacts.isEmpty {
-            sections.append((header: sectionHeaderBuilder?(otherSectionHeader),
-                             tasks: otherContacts))
+        if !uninformedContacts.isEmpty {
+            sections.append((header: sectionHeaderBuilder?(uninformedSectionHeader),
+                             tasks: uninformedContacts))
         }
         
-        if !staffContacts.isEmpty {
-            sections.append((header: sectionHeaderBuilder?(staffSectionHeader),
-                             tasks: staffContacts))
+        if !informedContacts.isEmpty {
+            sections.append((header: sectionHeaderBuilder?(informedSectionHeader),
+                             tasks: informedContacts))
         }
     }
 }
 
-extension TaskOverviewViewModel: TaskManagerListener {
-    func taskManagerDidUpdateTasks(_ taskManager: TaskManaging) {
+extension TaskOverviewViewModel: CaseManagerListener {
+    func caseManagerDidUpdateTasks(_ caseManager: CaseManaging) {
         buildSections()
         tableViewManager.reloadData()
     }
     
-    func taskManagerDidUpdateSyncState(_ taskManager: TaskManaging) {
-        if taskManager.isSynced {
+    func caseManagerDidUpdateSyncState(_ caseManager: CaseManaging) {
+        if caseManager.isSynced {
             hidePrompt?(true)
         } else {
             showPrompt?(true)
@@ -94,6 +102,7 @@ extension TaskOverviewViewModel: TaskManagerListener {
     }
 }
 
+/// - Tag: TaskOverviewViewController
 class TaskOverviewViewController: PromptableViewController {
     private let viewModel: TaskOverviewViewModel
     private let tableView = UITableView.createDefaultGrouped()
@@ -155,10 +164,6 @@ class TaskOverviewViewController: PromptableViewController {
         versionLabel.frame = CGRect(x: 0, y: 0, width: versionLabel.frame.width, height: 60.0)
         
         tableView.tableFooterView = versionLabel
-    }
-    
-    @objc private func openHelp() {
-        delegate?.taskOverviewViewControllerDidRequestHelp(self)
     }
     
     @objc private func requestContact() {

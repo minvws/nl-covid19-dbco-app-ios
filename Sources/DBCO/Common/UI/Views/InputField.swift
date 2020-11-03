@@ -7,6 +7,11 @@
 
 import UIKit
 
+/// A styled UITextField subclass that binds to an object's field conforming to [InputFieldEditable](x-source-tag://InputFieldEditable) and automatically updates its value.
+/// InputField adjusts its input method based on the properties of the supplied [InputFieldEditable](x-source-tag://InputFieldEditable) field.
+///
+/// Currently supports the different system keyboards, a date picker (.wheels style) and a general picker wheel.
+/// - Tag: InputField
 class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     private weak var object: Object?
     private let path: WritableKeyPath<Object, Field>
@@ -46,6 +51,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         addTarget(self, action: #selector(handleEditingDidBegin), for: .editingDidBegin)
         
         label.text = object?[keyPath: path].label
+        label.font = object?[keyPath: path].labelFont
         placeholder = object?[keyPath: path].placeholder
         
         text = object?[keyPath: path].value
@@ -74,6 +80,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             text.map(dateFormatter.date)?.map { datePicker.date = $0 }
             datePicker.datePickerMode = .date
             datePicker.tintColor = .black
+            datePicker.maximumDate = Date()
             datePicker.addTarget(self, action: #selector(handleDateValueChanged), for: .valueChanged)
             
             if #available(iOS 13.4, *) {
@@ -96,6 +103,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             pickerOptions?
                 .firstIndex { $0.identifier == selectedIdentifier }
                 .map { picker.selectRow($0, inComponent: 0, animated: false) }
+            
+            text = pickerOptions?.first { $0.identifier == selectedIdentifier }?.value
 
             inputView = picker
             inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
@@ -137,7 +146,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         case .picker:
             object?[keyPath: path].value = pickerOptions?[optionPicker!.selectedRow(inComponent: 0)].identifier
         default:
-            object?[keyPath: path].value = text
+            object?[keyPath: path].value = text?.isEmpty == false ? text : nil
         }
         
         updateValidationStateIfNeeded()
@@ -148,14 +157,19 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     }
     
     @objc private func handleDateValueChanged(_ datePicker: UIDatePicker) {
-        guard case .date(let formatter) = object?[keyPath: path].inputType else { return }
-
-        object?[keyPath: path].value = formatter.string(from: datePicker.date)
-        text = formatter.string(from: datePicker.date)
+        setDateValueIfNeeded()
     }
     
     @objc private func done() {
         resignFirstResponder()
+        setDateValueIfNeeded()
+    }
+    
+    private func setDateValueIfNeeded() {
+        guard case .date(let formatter) = object?[keyPath: path].inputType, let datePicker = datePicker else { return }
+
+        object?[keyPath: path].value = formatter.string(from: datePicker.date)
+        text = formatter.string(from: datePicker.date)
     }
     
     private func updateValidationStateIfNeeded() {

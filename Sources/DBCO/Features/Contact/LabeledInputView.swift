@@ -41,27 +41,9 @@ extension LabeledInputView {
         
         isLabelHidden = true
         
-        func listItem(text: String.SubSequence) -> UIView {
-            if text.starts(with: "*") {
-                let icon = UIImageView(image: UIImage(named: "ListItem"))
-                icon.setContentHuggingPriority(.required, for: .horizontal)
-                
-                return HStack(spacing: 12,
-                              icon.withInsets(.topBottom(7)),
-                              Label(body: String(text).trimmingCharacters(in: CharacterSet(charactersIn: "* ")), textColor: Theme.colors.captionGray).multiline())
-                    .alignment(.top)
-            } else {
-                return Label(body: String(text), textColor: Theme.colors.captionGray).multiline()
-            }
-        }
-        
-        func list(from multilineText: String) -> UIView {
-            return VStack(spacing: 8, multilineText.split(separator: "\n").map(listItem))
-        }
-        
         return VStack(spacing: 16,
                       Label(bodyBold: labelText).multiline().hideIfEmpty(),
-                      list(from: description),
-                      self)
+                      VStack(TextView(htmlText: description),
+                             self))
     }
 }

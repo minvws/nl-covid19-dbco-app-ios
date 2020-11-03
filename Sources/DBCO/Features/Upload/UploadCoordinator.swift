@@ -11,7 +11,12 @@ protocol UploadCoordinatorDelegate: class {
     func uploadCoordinatorDidFinish(_ coordinator: UploadCoordinator)
 }
 
-class UploadCoordinator: Coordinator {
+/// Coordinator managing the flow of uploading tasks to the backend.
+/// Is very similar to [TaskOverviewCoordinator](x-source-tag://TaskOverviewCoordinator) but only displays unfinished tasks and only allows editing of existing tasks.
+/// Uses [UnfinishedTasksViewController](x-source-tag://UnfinishedTasksViewController) to display tasks.
+///
+/// - Tag: UploadCoordinator
+final class UploadCoordinator: Coordinator {
     
     private weak var delegate: UploadCoordinatorDelegate?
     private weak var presenter: UIViewController?
@@ -32,7 +37,7 @@ class UploadCoordinator: Coordinator {
             self.delegate?.uploadCoordinatorDidFinish(self)
         }
         
-        if Services.taskManager.hasUnfinishedTasks {
+        if Services.caseManager.hasUnfinishedTasks {
             showUnfinishedTasks()
         } else {
             sync(animated: false)
@@ -52,11 +57,11 @@ class UploadCoordinator: Coordinator {
     private func sync(animated: Bool) {
         navigationController.setViewControllers([LoadingViewController()], animated: animated)
         
-        Services.taskManager.sync { _ in
+        Services.caseManager.sync { _ in
             let viewModel = OnboardingStepViewModel(image: UIImage(named: "StartVisual")!,
-                                                    title: "Bedankt voor het delen van de gegevens met de GGD",
-                                                    message: "Wil je toch nog contactgegevens aanpassen, contacten toevoegen of een andere wijziging doorgeven dan kan dat.",
-                                                    buttonTitle: "Klaar")
+                                                    title: .uploadFinishedTitle,
+                                                    message: .uploadFinishedMessage,
+                                                    buttonTitle: .done)
             let stepController = OnboardingStepViewController(viewModel: viewModel)
             stepController.delegate = self
             
@@ -78,7 +83,8 @@ extension UploadCoordinator: SelectContactCoordinatorDelegate {
     
     func selectContactCoordinator(_ coordinator: SelectContactCoordinator, didFinishWith task: Task) {
         removeChildCoordinator(coordinator)
-        Services.taskManager.save(task)
+        
+        Services.caseManager.save(task)
     }
     
     func selectContactCoordinatorDidCancel(_ coordinator: SelectContactCoordinator) {
@@ -117,7 +123,7 @@ extension UploadCoordinator: EditContactCoordinatorDelegate {
     func editContactCoordinator(_ coordinator: EditContactCoordinator, didFinishContactTask task: Task) {
         removeChildCoordinator(coordinator)
         
-        Services.taskManager.save(task)
+        Services.caseManager.save(task)
     }
     
     func editContactCoordinatorDidCancel(_ coordinator: EditContactCoordinator) {
