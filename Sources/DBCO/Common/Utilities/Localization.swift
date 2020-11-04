@@ -186,6 +186,7 @@ extension String {
     static var contactPromptNameFallback: String { return Localization.string(for: "contactPromptNameFallback") }
     
     static func contactInformPromptTitle(firstName: String) -> String { return Localization.string(for: "contactInformPromptTitle", [firstName]) }
+    static var contactInformPromptMessage: String { return Localization.string(for: "contactInformPromptMessage") }
     static var contactInformOptionDone: String { return Localization.string(for: "contactInformOptionDone") }
     static var contactInformActionInformLater: String { return Localization.string(for: "contactInformActionInformLater") }
     static var contactInformActionInformNow: String { return Localization.string(for: "contactInformActionInformNow") }

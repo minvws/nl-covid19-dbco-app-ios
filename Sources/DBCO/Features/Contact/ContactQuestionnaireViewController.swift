@@ -478,7 +478,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
              .none:
             delegate?.contactQuestionnaireViewController(self, didSave: viewModel.updatedTask)
         case .index:
-            let alert = UIAlertController(title: .contactInformPromptTitle(firstName: firstName), message: nil, preferredStyle: .alert)
+            let alert = UIAlertController(title: .contactInformPromptTitle(firstName: firstName), message: .contactInformPromptMessage, preferredStyle: .alert)
             
             alert.addAction(UIAlertAction(title: .contactInformOptionDone, style: .default) { _ in
                 self.viewModel.registerDidInform()
