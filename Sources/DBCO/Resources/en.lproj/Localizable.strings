@@ -107,12 +107,14 @@
 "contactInformationLastExposure.earlier" = "Eerder";
 
 /* MARK: - Informing contacts */
+"contactPromptNameFallback" = "dit contact";
+
 "contactInformPromptTitle" = "Weet %@ wat er speelt?";
 "contactInformOptionDone" = "Ja";
 "contactInformActionInformLater" = "Nee, doe ik later";
 "contactInformActionInformNow" = "Nee, nu informeren";
 
-"contactMissingDetailsPromptTitle" = "Heb je geen telefoonnummer of e-mailadres van %@";
+"contactMissingDetailsPromptTitle" = "Heb je geen telefoonnummer of e-mailadres van %@?";
 "contactMissingDetailsPromptMessage" = "De GGD kan alleen contact opnemen als ze een e-mail adres of telefoonnummer hebben.";
 "contactMissingDetailsActionIgnore" = "Nee, heb ik niet";
 "contactMissingDetailsActionFillIn" = "Invullen";

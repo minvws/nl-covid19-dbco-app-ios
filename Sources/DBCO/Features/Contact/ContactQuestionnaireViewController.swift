@@ -454,7 +454,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
     
     @objc private func save() {
         let task = viewModel.updatedTask
-        let firstName = task.contactFirstName ?? ""
+        let firstName = task.contactFirstName ?? .contactPromptNameFallback
         
         switch task.contact.communication {
         case .index where task.contact.didInform,

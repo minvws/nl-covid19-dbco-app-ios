@@ -105,6 +105,8 @@
 "contactInformationLastExposure.earlier" = "Eerder";
 
 /* MARK: - Informing contacts */
+"contactPromptNameFallback" = "dit contact";
+
 "contactInformPromptTitle" = "Weet %@ wat er speelt?";
 "contactInformOptionDone" = "Ja";
 "contactInformActionInformLater" = "Nee, doe ik later";
