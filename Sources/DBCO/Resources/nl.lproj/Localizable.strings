@@ -55,21 +55,24 @@
 "contactTypeSection.message" = "Beantwoord vragen over ontmoeting";
 "contactDetailsSection.title" = "Contactgegevens";
 "contactDetailsSection.message" = "Vul zo veel mogelijk gegevens aan";
-"informContactSection.title" = "Informeren";
-"informContactSection.message.index" = "De GGD informeert dit contact niet";
-"informContactSection.message.staff" = "De GGD neemt contact op";
+"informContactSection.title" = "Informatie voor dit contact";
+"informContactSection.message" = "De leefregels voor deze persoon";
 
-"informContactTitle.index.knownName" = "De GGD neemt <u>geen</u> contact op met %@. Deel jij deze leefregels met %@?";
-"informContactTitle.index.unknownName" = "De GGD neemt <u>geen</u> contact op met dit contact. Deel jij deze leefregels?";
-"informContactTitle.staff.knownName" = "De GGD neemt contact op met %@. Dit zijn de leefregels voor %@.";
-"informContactTitle.staff.unknownName" = "De GGD neemt contact op met dit contact. Dit zijn de leefregels.";
+"informContactTitle.index" = "De GGD neemt <u>geen</u> contact op met %@. Deel jij deze leefregels?";
+"informContactTitle.staff" = "De GGD neemt contact op met %@. Dit zijn de leefregels voor deze persoon.";
 
-"informContactGuidelines.close" = "<ul><li>Blijf thuis, ontvang geen bezoek - alle huisgenoten blijven thuis%@%@</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li><li>Alle leefregels staan op <a href=\"https://www.rivm.nl\">www.rivm.nl/een-redelijk-lange-link</a></li></ul>";
-"informContactGuidelines.close.untilDate" = " - <b>tot %@</b>";
-"informContactGuidelines.close.dateFormat" = "d MMMM";
-"informContactGuidelines.close.dayRemaining" = " (nog 1 dag)";
-"informContactGuidelines.close.daysRemaining" = " (nog %@ dagen)";
-"informContactGuidelines.other" = "<ul><li>Houd 1,5 meter afstand en vermijd bezoek aan drukke plekken</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li><li>Alle leefregels staan op <a href=\"https://www.rivm.nl\">www.rivm.nl/een-redelijk-lange-link</a></li></ul>";
+"informContactGuidelines.category1" = "<ul><li>Blijf thuis tot <b>10 dagen</b> na het laatste contact met de besmette persoon en ontvang geen bezoek</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li></ul>";
+"informContactGuidelines.category2" = "<ul><li>Blijf thuis, ontvang geen bezoek - alle huisgenoten blijven thuis%@%@</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li></ul>";
+"informContactGuidelines.category2.untilDate" = " - <b>tot %@</b>";
+"informContactGuidelines.category2.dateFormat" = "d MMMM";
+"informContactGuidelines.category2.dayRemaining" = " (nog 1 dag)";
+"informContactGuidelines.category2.daysRemaining" = " (nog %@ dagen)";
+"informContactGuidelines.category3" = "<ul><li>Houd 1,5 meter afstand en vermijd bezoek aan drukke plekken</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li></ul>";
+
+"informContactLink.category1" = "Alle leefregels staan op <a href=\"https://lci.rivm.nl/covid-19-huisgenoten\">lci.rivm.nl/covid-19-huisgenoten</a>";
+"informContactLink.category2a" = "Alle leefregels staan op <a href=\"https://lci.rivm.nl/covid-19-nauwe-contacten\">lci.rivm.nl/covid-19-nauwe-contacten</a>";
+"informContactLink.category2b" = "Alle leefregels staan op <a href=\"https://lci.rivm.nl/covid-19-nauwe-contacten\">lci.rivm.nl/covid-19-nauwe-contacten</a>";
+"informContactLink.category3" = "Alle leefregels staan op <a href=\"https://lci.rivm.nl/covid-19-overige-contacten\">lci.rivm.nl/covid-19-overige-contacten</a>";
 
 "informContactCopyGuidelines" = "Kopieer leefregels";
 "informContactCopyGuidelinesAction" = "Gekopieerd!";
@@ -80,11 +83,11 @@
 "category1RiskQuestion.answer.positive" = "Ja";
 "category1RiskQuestion.answer.negative" = "Nee";
 
-"category2aRiskQuestion" = "Was je langer dan 15 minuten op 1,5 meter afstand?";
+"category2aRiskQuestion" = "Was je langer dan 15 minuten op minder dan 1,5 meter afstand van elkaar?";
 "category2aRiskQuestion.answer.positive" = "Ja, denk het wel";
 "category2aRiskQuestion.answer.negative" = "Nee, denk het niet";
 
-"category2bRiskQuestion" = "Heb je een of meerdere van deze dingen tijdens jullie ontmoeting gedaan?";
+"category2bRiskQuestion" = "Heb je één of meerdere van deze dingen tijdens jullie ontmoeting gedaan?";
 "category2bRiskQuestion.description" = "<ul><li>Binnen anderhalve meter van de ander gehoest of geniesd</li><li>Geknuffeld of gezoend</li><li>Ander lichamelijk contact</li></ul>";
 "category2bRiskQuestion.answer.positive" = "Ja, denk het wel";
 "category2bRiskQuestion.answer.negative" = "Nee, denk het niet";

@@ -53,6 +53,7 @@ class ContactQuestionnaireViewModel {
     
     @Bindable private(set) var informTitle: String
     @Bindable private(set) var informContent: String
+    @Bindable private(set) var informLink: String
     @Bindable private(set) var informButtonTitle: String
     @Bindable private(set) var informButtonHidden: Bool
     @Bindable private(set) var informButtonType: Button.ButtonType
@@ -68,6 +69,7 @@ class ContactQuestionnaireViewModel {
         
         self.informTitle = ""
         self.informContent = ""
+        self.informLink = ""
         self.informButtonTitle = ""
         self.informButtonHidden = true
         self.informButtonType = .secondary
@@ -262,13 +264,11 @@ class ContactQuestionnaireViewModel {
         
         switch updatedContact.communication {
         case .index, .none:
-            informSectionView?.caption = .informContactSectionMessageIndex
             informTitle = .informContactTitleIndex(firstName: firstName)
             informButtonType = .primary
             promptButtonType = .secondary
             setInformButtonTitle()
         case .staff:
-            informSectionView?.caption = .informContactSectionMessageStaff
             informTitle = .informContactTitleStaff(firstName: firstName)
             informButtonType = .secondary
             promptButtonType = .primary
@@ -276,7 +276,9 @@ class ContactQuestionnaireViewModel {
         }
         
         switch updatedContact.category {
-        case .category1, .category2a, .category2b:
+        case .category1:
+            informContent = .informContactGuidelinesCategory1
+        case .category2a, .category2b:
             if let dateValue = updatedContact.dateOfLastExposure,
                let date = LastExposureDateAnswerManager.valueDateFormatter.date(from: dateValue)  {
                 let untilDate = date.addingTimeInterval(10 * 24 * 3600) // 10 days
@@ -304,17 +306,19 @@ class ContactQuestionnaireViewModel {
                     }
                 }
                 
-                informContent = .informContactGuidelinesClose(untilDate: untilDateString,
+                informContent = .informContactGuidelinesCategory2(untilDate: untilDateString,
                                                               daysRemaining: daysRemainingString)
             } else {
-                informContent = .informContactGuidelinesClose(untilDate: "", daysRemaining: "")
+                informContent = .informContactGuidelinesCategory2(untilDate: "", daysRemaining: "")
             }
         case .category3:
-            informContent = .informContactGuidelinesOther
+            informContent = .informContactGuidelinesCategory3
         case .other:
             // Section won't be visible in this case
             break
         }
+        
+        informLink = .informContactLink(category: updatedContact.category)
     }
     
     private func view(manager: AnswerManaging) -> UIView {
@@ -339,9 +343,15 @@ class ContactQuestionnaireViewModel {
     
     var copyableGuidelines: String {
         // Parse the html then return the plaintext string
-        NSAttributedString
+        let content = NSAttributedString
             .makeFromHtml(text: informContent, font: Theme.fonts.body, textColor: .black)
             .string
+        
+        let link = NSAttributedString
+            .makeFromHtml(text: informLink, font: Theme.fonts.body, textColor: .black)
+            .string
+        
+        return [content, link].joined(separator: "\n")
     }
 }
 
@@ -406,11 +416,14 @@ final class ContactQuestionnaireViewController: PromptableViewController {
             .embed(in: contactDetailsSection.contentView.readableWidth)
         
         // Inform
-        let informContactSection = SectionView(title: .informContactSectionTitle, caption: .informContactSectionMessageIndex, index: 3)
+        let informContactSection = SectionView(title: .informContactSectionTitle, caption: .informContactSectionMessage, index: 3)
         informContactSection.collapse(animated: false)
         
         let informTitleLabel = Label(bodyBold: "").multiline()
         let informTextView = TextView().linkTouched { [unowned self] in
+            delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0)
+        }
+        let informLinkView = TextView().linkTouched { [unowned self] in
             delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0)
         }
         
@@ -419,14 +432,17 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         
         viewModel.$informTitle.binding = { informTitleLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
         viewModel.$informContent.binding = { informTextView.html($0, textColor: Theme.colors.captionGray) }
+        viewModel.$informLink.binding = { informLinkView.html($0, textColor: Theme.colors.captionGray) }
         viewModel.$informButtonTitle.binding = { informButton.title = $0 }
         viewModel.$informButtonHidden.binding = { informButton.isHidden = $0 }
         viewModel.$informButtonType.binding = { informButton.style = $0 }
         viewModel.$promptButtonType.binding = { promptButton.style = $0 }
         
-        VStack(VStack(spacing: 16,
+        VStack(spacing: 24,
+               VStack(spacing: 16,
                       informTitleLabel,
-                      informTextView),
+                      informTextView,
+                      informLinkView),
                VStack(spacing: 16,
                       Button(title: .informContactCopyGuidelines, style: .secondary)
                           .touchUpInside(self, action: #selector(copyGuidelines)),
