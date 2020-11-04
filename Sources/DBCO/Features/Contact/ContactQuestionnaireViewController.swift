@@ -201,35 +201,51 @@ class ContactQuestionnaireViewModel {
         let classificationManagers = relevantManagers.filter { $0.question.group == .classification }
         let contactDetailsManagers = relevantManagers.filter { $0.question.group == .contactDetails }
         
+        let hasCommunicationTypeQuestion = contactDetailsManagers.contains { $0.question.answerOptions?.contains { $0.trigger == .setCommunicationToIndex } == true }
+        let hasValidCommunication = updatedContact.communication != .none || !hasCommunicationTypeQuestion // true is there is a valid answer or, there is no question for a valid answer
+        
         func isCompleted(_ answer: Answer) -> Bool {
             return abs(answer.progress - 1) < 0.01
         }
         
-        classificationSectionView?.isCompleted = classificationManagers
+        let classificationCompleted = classificationManagers
             .map(\.answer)
             .filter(\.isEssential)
             .allSatisfy(isCompleted)
         
-        let hasCommunicationTypeQuestion = contactDetailsManagers.contains { $0.question.answerOptions?.contains { $0.trigger == .setCommunicationToIndex } == true }
-        let hasValidCommunication = updatedContact.communication != .none || !hasCommunicationTypeQuestion // true is there is a valid answer or, there is no question for a valid answer
-        
-        detailsSectionView?.isCompleted = hasValidCommunication && contactDetailsManagers
+        let detailsCompleted = hasValidCommunication && contactDetailsManagers
             .map(\.answer)
             .filter(\.isEssential)
             .allSatisfy(isCompleted)
         
+        let allDetailsFilledIn =  contactDetailsManagers
+            .map(\.answer)
+            .allSatisfy(isCompleted)
+        
+        classificationSectionView?.isCompleted = classificationCompleted
+        detailsSectionView?.isCompleted = detailsCompleted
         informSectionView?.isCompleted = updatedTask.isOrCanBeInformed
         
         detailsSectionView?.isEnabled = classificationManagers.allSatisfy(\.hasValidAnswer)
+        
+        let informSectionWasDisabled = informSectionView?.isEnabled == false
         informSectionView?.isEnabled = hasValidCommunication && classificationManagers.allSatisfy(\.hasValidAnswer)
         
         if expandFirstUnfinishedSection {
             let sections = [classificationSectionView, detailsSectionView, informSectionView].compactMap { $0 }
             sections.forEach { $0.collapse(animated: false) }
-            sections.first { !$0.isCompleted }?.expand(animated: false)
             
-            if sections.allSatisfy(\.isCollapsed) {
+            if !classificationCompleted {
+                classificationSectionView?.expand(animated: false)
+            } else if !allDetailsFilledIn {
+                detailsSectionView?.expand(animated: false)
+            } else if sections.allSatisfy(\.isCollapsed) {
                 informSectionView?.expand(animated: false)
+            }
+        } else {
+            // Expand inform section if it became enabled
+            if informSectionWasDisabled && (informSectionView?.isEnabled == true) {
+                informSectionView?.expand(animated: true)
             }
         }
         

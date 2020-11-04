@@ -53,12 +53,18 @@
           "label": "Waar ken je deze persoon van?",
           "description": null,
           "relevantForCategories": [
-            {
-              "category": "2a"
-            },
-            {
-              "category": "2b"
-            }
+              {
+                "category": "1"
+              },
+              {
+                "category": "2a"
+              },
+              {
+                "category": "2b"
+              },
+              {
+                "category": "3"
+              }
           ],
           "answerOptions": [
             {
@@ -112,6 +118,27 @@
           ]
         },
         {
+          "uuid": "37d818ef-9499-4b9a-9770-725467368388",
+          "group": "contactdetails",
+          "questionType": "open",
+          "label": "Heb je nog een opmerking?",
+          "description": null,
+          "relevantForCategories": [
+            {
+              "category": "1"
+            },
+            {
+              "category": "2a"
+            },
+            {
+              "category": "2b"
+            },
+            {
+              "category": "3"
+            }
+          ]
+        },
+        {
           "uuid": "37d818ed-9499-4b9a-9771-725467368391",
           "group": "contactdetails",
           "questionType": "multiplechoice",
@@ -126,6 +153,9 @@
             },
             {
               "category": "2b"
+            },
+            {
+              "category": "3"
             }
           ],
           "answerOptions": [
