@@ -210,7 +210,8 @@ class ContactQuestionnaireViewModel {
             .filter(\.isEssential)
             .allSatisfy(isCompleted)
         
-        let hasValidCommunication = updatedContact.communication != .none
+        let hasCommunicationTypeQuestion = contactDetailsManagers.contains { $0.question.answerOptions?.contains { $0.trigger == .setCommunicationToIndex } == true }
+        let hasValidCommunication = updatedContact.communication != .none || !hasCommunicationTypeQuestion // true is there is a valid answer or, there is no question for a valid answer
         
         detailsSectionView?.isCompleted = hasValidCommunication && contactDetailsManagers
             .map(\.answer)
@@ -220,7 +221,7 @@ class ContactQuestionnaireViewModel {
         informSectionView?.isCompleted = updatedTask.isOrCanBeInformed
         
         detailsSectionView?.isEnabled = classificationManagers.allSatisfy(\.hasValidAnswer)
-        informSectionView?.isEnabled = classificationManagers.allSatisfy(\.hasValidAnswer)
+        informSectionView?.isEnabled = hasValidCommunication && classificationManagers.allSatisfy(\.hasValidAnswer)
         
         if expandFirstUnfinishedSection {
             let sections = [classificationSectionView, detailsSectionView, informSectionView].compactMap { $0 }
@@ -248,7 +249,7 @@ class ContactQuestionnaireViewModel {
         }
         
         switch updatedContact.communication {
-        case .index:
+        case .index, .none:
             informSectionView?.caption = .informContactSectionMessageIndex
             informTitle = .informContactTitleIndex(firstName: firstName)
             informButtonType = .primary
@@ -258,9 +259,6 @@ class ContactQuestionnaireViewModel {
             informTitle = .informContactTitleStaff(firstName: firstName)
             informButtonType = .secondary
             setInformButtonTitle()
-        case .none:
-            // TODO: https://egeniq.atlassian.net/browse/DBCO-131
-            break
         }
         
         switch updatedContact.category {
@@ -300,7 +298,7 @@ class ContactQuestionnaireViewModel {
         case .category3:
             informContent = .informContactGuidelinesOther
         case .other:
-            // TODO: https://egeniq.atlassian.net/browse/DBCO-131
+            // Section won't be visible in this case
             break
         }
     }
