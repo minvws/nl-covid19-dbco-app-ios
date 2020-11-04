@@ -5,6 +5,7 @@
 /* MARK: - General */
 "save" = "Opslaan";
 "cancel" = "Annuleren";
+"close" = "Sluiten";
 "next" = "Volgende";
 "start" = "Beginnen";
 "edit" = "Wijzig";

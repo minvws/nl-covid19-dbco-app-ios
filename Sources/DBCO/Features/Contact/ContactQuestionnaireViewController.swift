@@ -51,17 +51,12 @@ class ContactQuestionnaireViewModel {
     weak var detailsSectionView: SectionView?           { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
     weak var informSectionView: SectionView?            { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
     
-    private var informTitle: String                     { didSet { informTitleHandler?(informTitle) } }
-    private var informContent: String                   { didSet { informContentHandler?(informContent) } }
-    private var informButtonTitle: String               { didSet { informButtonTitleHandler?(informButtonTitle) } }
-    private var informButtonHidden: Bool                { didSet { informButtonHiddenHandler?(informButtonHidden) } }
-    private var informButtonType: Button.ButtonType     { didSet { informButtonTypeHandler?(informButtonType) } }
-    
-    var informTitleHandler: ((String) -> Void)?                 { didSet { informTitleHandler?(informTitle) } }
-    var informContentHandler: ((String) -> Void)?               { didSet { informContentHandler?(informContent) } }
-    var informButtonTitleHandler: ((String) -> Void)?           { didSet { informButtonTitleHandler?(informButtonTitle) } }
-    var informButtonHiddenHandler: ((Bool) -> Void)?            { didSet { informButtonHiddenHandler?(informButtonHidden) } }
-    var informButtonTypeHandler: ((Button.ButtonType) -> Void)? { didSet { informButtonTypeHandler?(informButtonType) } }
+    @Bindable private(set) var informTitle: String
+    @Bindable private(set) var informContent: String
+    @Bindable private(set) var informButtonTitle: String
+    @Bindable private(set) var informButtonHidden: Bool
+    @Bindable private(set) var informButtonType: Button.ButtonType
+    @Bindable private(set) var promptButtonType: Button.ButtonType
     
     init(task: Task?, contact: CNContact? = nil, showCancelButton: Bool = false) {
         let initialCategory = task?.contact.category
@@ -75,7 +70,8 @@ class ContactQuestionnaireViewModel {
         self.informContent = ""
         self.informButtonTitle = ""
         self.informButtonHidden = true
-        self.informButtonType = .primary
+        self.informButtonType = .secondary
+        self.promptButtonType = .primary
         
         let questionnaire = Services.caseManager.questionnaire(for: task)
         
@@ -269,11 +265,13 @@ class ContactQuestionnaireViewModel {
             informSectionView?.caption = .informContactSectionMessageIndex
             informTitle = .informContactTitleIndex(firstName: firstName)
             informButtonType = .primary
+            promptButtonType = .secondary
             setInformButtonTitle()
         case .staff:
             informSectionView?.caption = .informContactSectionMessageStaff
             informTitle = .informContactTitleStaff(firstName: firstName)
             informButtonType = .secondary
+            promptButtonType = .primary
             setInformButtonTitle()
         }
         
@@ -388,9 +386,10 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         if viewModel.showCancelButton {
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
         }
-        
-        promptView = Button(title: .save)
+        let promptButton = Button(title: .close)
             .touchUpInside(self, action: #selector(save))
+        
+        promptView = promptButton
         
         // Type
         let classificationSectionView = SectionView(title: .contactTypeSectionTitle, caption: .contactTypeSectionMessage, index: 1)
@@ -418,11 +417,12 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         let informButton = Button(title: "", style: .primary)
             .touchUpInside(self, action: #selector(informContact))
         
-        viewModel.informTitleHandler = { informTitleLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
-        viewModel.informContentHandler = { informTextView.html($0, textColor: Theme.colors.captionGray) }
-        viewModel.informButtonTitleHandler = { informButton.title = $0 }
-        viewModel.informButtonHiddenHandler = { informButton.isHidden = $0 }
-        viewModel.informButtonTypeHandler = { informButton.style = $0 }
+        viewModel.$informTitle.binding = { informTitleLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
+        viewModel.$informContent.binding = { informTextView.html($0, textColor: Theme.colors.captionGray) }
+        viewModel.$informButtonTitle.binding = { informButton.title = $0 }
+        viewModel.$informButtonHidden.binding = { informButton.isHidden = $0 }
+        viewModel.$informButtonType.binding = { informButton.style = $0 }
+        viewModel.$promptButtonType.binding = { promptButton.style = $0 }
         
         VStack(VStack(spacing: 16,
                       informTitleLabel,
