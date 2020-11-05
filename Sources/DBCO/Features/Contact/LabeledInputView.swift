@@ -43,7 +43,7 @@ extension LabeledInputView {
         
         return VStack(spacing: 16,
                       Label(bodyBold: labelText).multiline().hideIfEmpty(),
-                      VStack(TextView(htmlText: description),
-                             self))
+                      TextView(htmlText: description),
+                      self)
     }
 }

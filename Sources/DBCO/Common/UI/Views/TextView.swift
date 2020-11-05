@@ -65,7 +65,7 @@ class TextView: UITextView, UITextViewDelegate {
         let superSize = super.intrinsicContentSize
         
         if isEditable {
-            return CGSize(width: 200, height: max(48, superSize.height))
+            return CGSize(width: 200, height: max(114, superSize.height))
         } else {
             return superSize
         }
