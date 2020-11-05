@@ -88,6 +88,7 @@
 		CDE30E72251E278200862A40 /* EditContactCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E71251E278200862A40 /* EditContactCoordinator.swift */; };
 		CDE30E782521D92600862A40 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CDE30E7A2521D92600862A40 /* Localizable.strings */; };
 		CDE30E8725232FE200862A40 /* InputFieldEditable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E8625232FE200862A40 /* InputFieldEditable.swift */; };
+		CDF817272552BEF100C60771 /* Bindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF817262552BEF100C60771 /* Bindable.swift */; };
 		CDFCF907250FA6E80062269A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF906250FA6E80062269A /* ViewController.swift */; };
 		CDFCF90C2510C47E0062269A /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF90B2510C47E0062269A /* Localization.swift */; };
 		CDFCF9152510EBC40062269A /* NSAttributedString+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF9142510EB4D0062269A /* NSAttributedString+Extension.swift */; };
@@ -195,6 +196,7 @@
 		CDE30E7C2521D92B00862A40 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CDE30E7E2521D97000862A40 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		CDE30E8625232FE200862A40 /* InputFieldEditable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputFieldEditable.swift; sourceTree = "<group>"; };
+		CDF817262552BEF100C60771 /* Bindable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bindable.swift; sourceTree = "<group>"; };
 		CDFCF906250FA6E80062269A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		CDFCF90B2510C47E0062269A /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
 		CDFCF9142510EB4D0062269A /* NSAttributedString+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Extension.swift"; sourceTree = "<group>"; };
@@ -241,6 +243,7 @@
 				CDDC05632543120D0079C2F4 /* Coordinator.swift */,
 				CDD68BA5254D511D00E96E9C /* KeychainItem.swift */,
 				CDD68BA9254D60BC00E96E9C /* UserDefaults.swift */,
+				CDF817262552BEF100C60771 /* Bindable.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -663,6 +666,7 @@
 				CDDC05642543120D0079C2F4 /* Coordinator.swift in Sources */,
 				CD29634C2518CE8E008443AF /* TableViewManager.swift in Sources */,
 				CDC7C87E2538487B00FE7E05 /* HTTPMethod.swift in Sources */,
+				CDF817272552BEF100C60771 /* Bindable.swift in Sources */,
 				CDE30E69251C89FF00862A40 /* NavigationController.swift in Sources */,
 				CD5DA76425516301003660CC /* ConfigManager.swift in Sources */,
 				CD756C78252DDF30005FEDA0 /* SectionView.swift in Sources */,

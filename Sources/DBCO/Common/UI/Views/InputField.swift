@@ -30,6 +30,11 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     
     private func setup() {
         delegate = self
+        
+        dropdownIconView.image = UIImage(named: "DropdownIndicator")
+        dropdownIconView.contentMode = .right
+        dropdownIconView.isUserInteractionEnabled = false
+        dropdownIconView.isHidden = true
 
         validationIconView.image = UIImage(named: "Validation/Invalid")
         validationIconView.highlightedImage = UIImage(named: "Validation/Valid")
@@ -45,6 +50,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         iconContainerView.frame.size.width = 100 // To prevent some constraint errors before layout
         
         addSubview(iconContainerView)
+        addSubview(dropdownIconView)
         
         addTarget(self, action: #selector(handleEditingDidEnd), for: .editingDidEndOnExit)
         addTarget(self, action: #selector(handleEditingDidEnd), for: .editingDidEnd)
@@ -109,6 +115,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             inputView = picker
             inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
             optionPicker = picker
+            
+            dropdownIconView.isHidden = false
         }
     }
     
@@ -116,6 +124,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         super.layoutSubviews()
 
         iconContainerView.frame = backgroundView.frame.inset(by: .leftRight(12))
+        dropdownIconView.frame = backgroundView.frame.inset(by: .leftRight(12))
     }
     
     override var text: String? {
@@ -185,6 +194,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     private var pickerOptions: [InputType.PickerOption]?
     private var textWidthLabel = UILabel()
     private var validationIconView = UIImageView()
+    private var dropdownIconView = UIImageView()
     private lazy var iconContainerView = UIStackView()
     
     // MARK: - Delegate implementations

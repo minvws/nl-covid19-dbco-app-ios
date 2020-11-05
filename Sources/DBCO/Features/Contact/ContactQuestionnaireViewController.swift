@@ -51,17 +51,13 @@ class ContactQuestionnaireViewModel {
     weak var detailsSectionView: SectionView?           { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
     weak var informSectionView: SectionView?            { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
     
-    private var informTitle: String                     { didSet { informTitleHandler?(informTitle) } }
-    private var informContent: String                   { didSet { informContentHandler?(informContent) } }
-    private var informButtonTitle: String               { didSet { informButtonTitleHandler?(informButtonTitle) } }
-    private var informButtonHidden: Bool                { didSet { informButtonHiddenHandler?(informButtonHidden) } }
-    private var informButtonType: Button.ButtonType     { didSet { informButtonTypeHandler?(informButtonType) } }
-    
-    var informTitleHandler: ((String) -> Void)?                 { didSet { informTitleHandler?(informTitle) } }
-    var informContentHandler: ((String) -> Void)?               { didSet { informContentHandler?(informContent) } }
-    var informButtonTitleHandler: ((String) -> Void)?           { didSet { informButtonTitleHandler?(informButtonTitle) } }
-    var informButtonHiddenHandler: ((Bool) -> Void)?            { didSet { informButtonHiddenHandler?(informButtonHidden) } }
-    var informButtonTypeHandler: ((Button.ButtonType) -> Void)? { didSet { informButtonTypeHandler?(informButtonType) } }
+    @Bindable private(set) var informTitle: String
+    @Bindable private(set) var informContent: String
+    @Bindable private(set) var informLink: String
+    @Bindable private(set) var informButtonTitle: String
+    @Bindable private(set) var informButtonHidden: Bool
+    @Bindable private(set) var informButtonType: Button.ButtonType
+    @Bindable private(set) var promptButtonType: Button.ButtonType
     
     init(task: Task?, contact: CNContact? = nil, showCancelButton: Bool = false) {
         let initialCategory = task?.contact.category
@@ -73,9 +69,11 @@ class ContactQuestionnaireViewModel {
         
         self.informTitle = ""
         self.informContent = ""
+        self.informLink = ""
         self.informButtonTitle = ""
         self.informButtonHidden = true
-        self.informButtonType = .primary
+        self.informButtonType = .secondary
+        self.promptButtonType = .primary
         
         let questionnaire = Services.caseManager.questionnaire(for: task)
         
@@ -201,34 +199,51 @@ class ContactQuestionnaireViewModel {
         let classificationManagers = relevantManagers.filter { $0.question.group == .classification }
         let contactDetailsManagers = relevantManagers.filter { $0.question.group == .contactDetails }
         
+        let hasCommunicationTypeQuestion = contactDetailsManagers.contains { $0.question.answerOptions?.contains { $0.trigger == .setCommunicationToIndex } == true }
+        let hasValidCommunication = updatedContact.communication != .none || !hasCommunicationTypeQuestion // true is there is a valid answer or, there is no question for a valid answer
+        
         func isCompleted(_ answer: Answer) -> Bool {
             return abs(answer.progress - 1) < 0.01
         }
         
-        classificationSectionView?.isCompleted = classificationManagers
+        let classificationCompleted = classificationManagers
             .map(\.answer)
             .filter(\.isEssential)
             .allSatisfy(isCompleted)
         
-        let hasValidCommunication = updatedContact.communication != .none
-        
-        detailsSectionView?.isCompleted = hasValidCommunication && contactDetailsManagers
+        let detailsCompleted = hasValidCommunication && contactDetailsManagers
             .map(\.answer)
             .filter(\.isEssential)
             .allSatisfy(isCompleted)
         
+        let allDetailsFilledIn =  contactDetailsManagers
+            .map(\.answer)
+            .allSatisfy(isCompleted)
+        
+        classificationSectionView?.isCompleted = classificationCompleted
+        detailsSectionView?.isCompleted = detailsCompleted
         informSectionView?.isCompleted = updatedTask.isOrCanBeInformed
         
         detailsSectionView?.isEnabled = classificationManagers.allSatisfy(\.hasValidAnswer)
-        informSectionView?.isEnabled = classificationManagers.allSatisfy(\.hasValidAnswer)
+        
+        let informSectionWasDisabled = informSectionView?.isEnabled == false
+        informSectionView?.isEnabled = hasValidCommunication && classificationManagers.allSatisfy(\.hasValidAnswer)
         
         if expandFirstUnfinishedSection {
             let sections = [classificationSectionView, detailsSectionView, informSectionView].compactMap { $0 }
             sections.forEach { $0.collapse(animated: false) }
-            sections.first { !$0.isCompleted }?.expand(animated: false)
             
-            if sections.allSatisfy(\.isCollapsed) {
+            if !classificationCompleted {
+                classificationSectionView?.expand(animated: false)
+            } else if !allDetailsFilledIn {
+                detailsSectionView?.expand(animated: false)
+            } else if sections.allSatisfy(\.isCollapsed) {
                 informSectionView?.expand(animated: false)
+            }
+        } else {
+            // Expand inform section if it became enabled
+            if informSectionWasDisabled && (informSectionView?.isEnabled == true) {
+                informSectionView?.expand(animated: true)
             }
         }
         
@@ -248,23 +263,22 @@ class ContactQuestionnaireViewModel {
         }
         
         switch updatedContact.communication {
-        case .index:
-            informSectionView?.caption = .informContactSectionMessageIndex
+        case .index, .none:
             informTitle = .informContactTitleIndex(firstName: firstName)
             informButtonType = .primary
+            promptButtonType = .secondary
             setInformButtonTitle()
         case .staff:
-            informSectionView?.caption = .informContactSectionMessageStaff
             informTitle = .informContactTitleStaff(firstName: firstName)
             informButtonType = .secondary
+            promptButtonType = .primary
             setInformButtonTitle()
-        case .none:
-            // TODO: https://egeniq.atlassian.net/browse/DBCO-131
-            break
         }
         
         switch updatedContact.category {
-        case .category1, .category2a, .category2b:
+        case .category1:
+            informContent = .informContactGuidelinesCategory1
+        case .category2a, .category2b:
             if let dateValue = updatedContact.dateOfLastExposure,
                let date = LastExposureDateAnswerManager.valueDateFormatter.date(from: dateValue)  {
                 let untilDate = date.addingTimeInterval(10 * 24 * 3600) // 10 days
@@ -292,17 +306,19 @@ class ContactQuestionnaireViewModel {
                     }
                 }
                 
-                informContent = .informContactGuidelinesClose(untilDate: untilDateString,
+                informContent = .informContactGuidelinesCategory2(untilDate: untilDateString,
                                                               daysRemaining: daysRemainingString)
             } else {
-                informContent = .informContactGuidelinesClose(untilDate: "", daysRemaining: "")
+                informContent = .informContactGuidelinesCategory2(untilDate: "", daysRemaining: "")
             }
         case .category3:
-            informContent = .informContactGuidelinesOther
+            informContent = .informContactGuidelinesCategory3
         case .other:
-            // TODO: https://egeniq.atlassian.net/browse/DBCO-131
+            // Section won't be visible in this case
             break
         }
+        
+        informLink = .informContactLink(category: updatedContact.category)
     }
     
     private func view(manager: AnswerManaging) -> UIView {
@@ -327,9 +343,15 @@ class ContactQuestionnaireViewModel {
     
     var copyableGuidelines: String {
         // Parse the html then return the plaintext string
-        NSAttributedString
+        let content = NSAttributedString
             .makeFromHtml(text: informContent, font: Theme.fonts.body, textColor: .black)
             .string
+        
+        let link = NSAttributedString
+            .makeFromHtml(text: informLink, font: Theme.fonts.body, textColor: .black)
+            .string
+        
+        return [content, link].joined(separator: "\n")
     }
 }
 
@@ -374,9 +396,10 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         if viewModel.showCancelButton {
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
         }
-        
-        promptView = Button(title: .save)
+        let promptButton = Button(title: .close)
             .touchUpInside(self, action: #selector(save))
+        
+        promptView = promptButton
         
         // Type
         let classificationSectionView = SectionView(title: .contactTypeSectionTitle, caption: .contactTypeSectionMessage, index: 1)
@@ -393,26 +416,33 @@ final class ContactQuestionnaireViewController: PromptableViewController {
             .embed(in: contactDetailsSection.contentView.readableWidth)
         
         // Inform
-        let informContactSection = SectionView(title: .informContactSectionTitle, caption: .informContactSectionMessageIndex, index: 3)
+        let informContactSection = SectionView(title: .informContactSectionTitle, caption: .informContactSectionMessage, index: 3)
         informContactSection.collapse(animated: false)
         
         let informTitleLabel = Label(bodyBold: "").multiline()
         let informTextView = TextView().linkTouched { [unowned self] in
             delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0)
         }
+        let informLinkView = TextView().linkTouched { [unowned self] in
+            delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0)
+        }
         
         let informButton = Button(title: "", style: .primary)
             .touchUpInside(self, action: #selector(informContact))
         
-        viewModel.informTitleHandler = { informTitleLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
-        viewModel.informContentHandler = { informTextView.html($0, textColor: Theme.colors.captionGray) }
-        viewModel.informButtonTitleHandler = { informButton.title = $0 }
-        viewModel.informButtonHiddenHandler = { informButton.isHidden = $0 }
-        viewModel.informButtonTypeHandler = { informButton.style = $0 }
+        viewModel.$informTitle.binding = { informTitleLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
+        viewModel.$informContent.binding = { informTextView.html($0, textColor: Theme.colors.captionGray) }
+        viewModel.$informLink.binding = { informLinkView.html($0, textColor: Theme.colors.captionGray) }
+        viewModel.$informButtonTitle.binding = { informButton.title = $0 }
+        viewModel.$informButtonHidden.binding = { informButton.isHidden = $0 }
+        viewModel.$informButtonType.binding = { informButton.style = $0 }
+        viewModel.$promptButtonType.binding = { promptButton.style = $0 }
         
-        VStack(VStack(spacing: 16,
+        VStack(spacing: 24,
+               VStack(spacing: 16,
                       informTitleLabel,
-                      informTextView),
+                      informTextView,
+                      informLinkView),
                VStack(spacing: 16,
                       Button(title: .informContactCopyGuidelines, style: .secondary)
                           .touchUpInside(self, action: #selector(copyGuidelines)),
@@ -440,7 +470,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
     
     @objc private func save() {
         let task = viewModel.updatedTask
-        let firstName = task.contactFirstName ?? ""
+        let firstName = task.contactFirstName ?? .contactPromptNameFallback
         
         switch task.contact.communication {
         case .index where task.contact.didInform,
@@ -448,7 +478,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
              .none:
             delegate?.contactQuestionnaireViewController(self, didSave: viewModel.updatedTask)
         case .index:
-            let alert = UIAlertController(title: .contactInformPromptTitle(firstName: firstName), message: nil, preferredStyle: .alert)
+            let alert = UIAlertController(title: .contactInformPromptTitle(firstName: firstName), message: .contactInformPromptMessage, preferredStyle: .alert)
             
             alert.addAction(UIAlertAction(title: .contactInformOptionDone, style: .default) { _ in
                 self.viewModel.registerDidInform()
