@@ -57,6 +57,15 @@ extension String {
     static var selectDate: String { return Localization.string(for: "selectDate") }
     static var done: String { return Localization.string(for: "done") }
     static var ok: String { return Localization.string(for: "ok") }
+    static var errorTitle: String { return Localization.string(for: "error.title") }
+    
+    // MARK: - Update App
+
+    static var updateAppErrorMessage: String { return Localization.string(for: "updateApp.error.message") }
+    static var updateAppTitle: String { return Localization.string(for: "updateApp.title") }
+    
+    static var updateAppContent: String { return Localization.string(for: "updateApp.content") }
+    static var updateAppButton: String { return Localization.string(for: "updateApp.button") }
     
     /* MARK: - Onboarding */
     static var onboardingStep1Title: String { return Localization.string(for: "onboarding.step1.title") }
@@ -95,6 +104,7 @@ extension String {
     static var contactTypeSectionMessage: String { return Localization.string(for: "contactTypeSection.message") }
     static var contactDetailsSectionTitle: String { return Localization.string(for: "contactDetailsSection.title") }
     static var contactDetailsSectionMessage: String { return Localization.string(for: "contactDetailsSection.message") }
+    
     static var informContactSectionTitle: String { return Localization.string(for: "informContactSection.title") }
     static var informContactSectionMessageIndex: String { return Localization.string(for: "informContactSection.message.index") }
     static var informContactSectionMessageStaff: String { return Localization.string(for: "informContactSection.message.staff") }
@@ -161,6 +171,7 @@ extension String {
     static var contactInformationBirthDate: String { return Localization.string(for: "contactInformationBirthDate") }
     static var contactInformationBSN: String { return Localization.string(for: "contactInformationBSN") }
     static var contactInformationLastExposure: String { return Localization.string(for: "contactInformationLastExposure") }
+    static var contactInformationLastExposureEarlier: String { return Localization.string(for: "contactInformationLastExposure.earlier") }
     
     /* MARK: - Informing contacts */
     static func contactInformPromptTitle(firstName: String) -> String { return Localization.string(for: "contactInformPromptTitle", [firstName]) }

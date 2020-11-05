@@ -23,6 +23,9 @@
 		CD421872251B4819004544B3 /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD421871251B4819004544B3 /* TaskTableViewCell.swift */; };
 		CD47A4042549766C005B8801 /* SectionedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD47A4032549766C005B8801 /* SectionedScrollView.swift */; };
 		CD49BAEB2525CE7C0079D018 /* PromptableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD49BAEA2525CE7C0079D018 /* PromptableViewController.swift */; };
+		CD5DA75E255162EE003660CC /* ConfigManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5DA75D255162EE003660CC /* ConfigManaging.swift */; };
+		CD5DA76425516301003660CC /* ConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5DA76325516301003660CC /* ConfigManager.swift */; };
+		CD5DA76F2551859C003660CC /* AppUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5DA76E2551859C003660CC /* AppUpdateViewController.swift */; };
 		CD65CD812535F77400BB761A /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD65CD802535F77400BB761A /* LoadingViewController.swift */; };
 		CD65CD8525360F5C00BB761A /* UnfinishedTasksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD65CD8425360F5C00BB761A /* UnfinishedTasksViewController.swift */; };
 		CD6860CA253B31190061C318 /* ClassificationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6860C9253B31190061C318 /* ClassificationHelper.swift */; };
@@ -119,6 +122,9 @@
 		CD421871251B4819004544B3 /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
 		CD47A4032549766C005B8801 /* SectionedScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionedScrollView.swift; sourceTree = "<group>"; };
 		CD49BAEA2525CE7C0079D018 /* PromptableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptableViewController.swift; sourceTree = "<group>"; };
+		CD5DA75D255162EE003660CC /* ConfigManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigManaging.swift; sourceTree = "<group>"; };
+		CD5DA76325516301003660CC /* ConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigManager.swift; sourceTree = "<group>"; };
+		CD5DA76E2551859C003660CC /* AppUpdateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdateViewController.swift; sourceTree = "<group>"; };
 		CD65CD802535F77400BB761A /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		CD65CD8425360F5C00BB761A /* UnfinishedTasksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfinishedTasksViewController.swift; sourceTree = "<group>"; };
 		CD6860C9253B31190061C318 /* ClassificationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassificationHelper.swift; sourceTree = "<group>"; };
@@ -270,9 +276,27 @@
 			path = Controllers;
 			sourceTree = "<group>";
 		};
+		CD5DA75C255162D8003660CC /* ConfigManager */ = {
+			isa = PBXGroup;
+			children = (
+				CD5DA75D255162EE003660CC /* ConfigManaging.swift */,
+				CD5DA76325516301003660CC /* ConfigManager.swift */,
+			);
+			path = ConfigManager;
+			sourceTree = "<group>";
+		};
+		CD5DA76725518567003660CC /* AppUpdate */ = {
+			isa = PBXGroup;
+			children = (
+				CD5DA76E2551859C003660CC /* AppUpdateViewController.swift */,
+			);
+			path = AppUpdate;
+			sourceTree = "<group>";
+		};
 		CD7282BB250F728000D68911 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				CD5DA76725518567003660CC /* AppUpdate */,
 				CD7282BD250F72A900D68911 /* App */,
 				CDA5C11625135A07009440D1 /* Contact */,
 				CD756C48252C6860005FEDA0 /* Onboarding */,
@@ -419,6 +443,7 @@
 			isa = PBXGroup;
 			children = (
 				CDC7C86125376AB200FE7E05 /* Services.swift */,
+				CD5DA75C255162D8003660CC /* ConfigManager */,
 				CDC7C8672538411300FE7E05 /* NetworkManager */,
 				CDA0F67625398C8B009FD2A9 /* CaseManager */,
 			);
@@ -639,6 +664,7 @@
 				CD29634C2518CE8E008443AF /* TableViewManager.swift in Sources */,
 				CDC7C87E2538487B00FE7E05 /* HTTPMethod.swift in Sources */,
 				CDE30E69251C89FF00862A40 /* NavigationController.swift in Sources */,
+				CD5DA76425516301003660CC /* ConfigManager.swift in Sources */,
 				CD756C78252DDF30005FEDA0 /* SectionView.swift in Sources */,
 				CD1824EE2524B3E4006EB272 /* InputField.swift in Sources */,
 				CDA5C11125123DC9009440D1 /* AppVersion.swift in Sources */,
@@ -656,6 +682,7 @@
 				CDE25F8F254C21B900E9AE49 /* String+SHA256.swift in Sources */,
 				CDC7C8872538498700FE7E05 /* JSONDecoder+Decoding.swift in Sources */,
 				CDE30E64251BC02100862A40 /* TextField.swift in Sources */,
+				CD5DA75E255162EE003660CC /* ConfigManaging.swift in Sources */,
 				CDADF7F32535E34400424492 /* UploadCoordinator.swift in Sources */,
 				CDE25F61254B315100E9AE49 /* LocalMockNetworkManager.swift in Sources */,
 				CD65CD812535F77400BB761A /* LoadingViewController.swift in Sources */,
@@ -669,6 +696,7 @@
 				CDC4A8E8250B87E5001BABC6 /* AppDelegate.swift in Sources */,
 				CDE25F65254B316F00E9AE49 /* NetworkManaging.swift in Sources */,
 				CD756C70252DC629005FEDA0 /* SeparatorView.swift in Sources */,
+				CD5DA76F2551859C003660CC /* AppUpdateViewController.swift in Sources */,
 				CD9C7F52254AC25300A78EEF /* Task+Informed.swift in Sources */,
 				CD2963522518F291008443AF /* ContactQuestionnaireViewController.swift in Sources */,
 				CD29635825191941008443AF /* Button.swift in Sources */,

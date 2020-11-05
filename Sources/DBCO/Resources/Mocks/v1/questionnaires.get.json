@@ -47,18 +47,6 @@
           ]
         },
         {
-          "uuid": "37d818ed-9499-4b9a-9771-725467368389",
-          "group": "contactdetails",
-          "questionType": "open",
-          "label": "Beroep",
-          "description": null,
-          "relevantForCategories": [
-            {
-              "category": "1"
-            }
-          ]
-        },
-        {
           "uuid": "37d818ed-9499-4b9a-9771-725467368390",
           "group": "contactdetails",
           "questionType": "multiplechoice",

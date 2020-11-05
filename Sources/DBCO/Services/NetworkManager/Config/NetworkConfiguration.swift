@@ -63,6 +63,10 @@ struct NetworkConfiguration {
         )
     )
     
+    var appConfigurationUrl: URL? {
+        return self.combine(path: Endpoint.appConfiguration)
+    }
+    
     func caseUrl(identifier: String) -> URL? {
         return self.combine(path: Endpoint.case(identifier: identifier))
     }
