@@ -25,6 +25,21 @@ class NetworkManager: NetworkManaging, Logging {
         decodedJSONData(request: urlRequest, completion: completion)
     }
     
+    func pair(code: String, deviceName: String, completion: @escaping (Result<Pairing, NetworkError>) -> ()) {
+        struct PairBody: Encodable {
+            let pairingCode: String
+            let deviceName: String
+            let deviceType = "iOS"
+        }
+        
+        let urlRequest = constructRequest(url: configuration.pairingsUrl,
+                                          method: .POST,
+                                          body: PairBody(pairingCode: code,
+                                                         deviceName: deviceName))
+        
+        decodedJSONData(request: urlRequest, completion: completion)
+    }
+    
     func getCase(identifier: String, completion: @escaping (Result<Case, NetworkError>) -> ()) {
         let urlRequest = constructRequest(url: configuration.caseUrl(identifier: identifier),
                                           method: .GET)
