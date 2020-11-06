@@ -75,7 +75,7 @@ class ContactQuestionnaireViewModel {
         self.informButtonType = .secondary
         self.promptButtonType = .primary
         
-        let questionnaire = Services.caseManager.questionnaire(for: task)
+        let questionnaire = try! Services.caseManager.questionnaire(for: task)
         
         let questionsAndAnswers: [(question: Question, answer: Answer)] = {
             let currentAnswers = task.result?.answers ?? []

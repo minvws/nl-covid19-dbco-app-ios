@@ -8,10 +8,10 @@
 
 import Foundation
 
-struct Pairing: Codable {
+struct Pairing: Codable, Equatable {
     let signingKey: String
-    let caseUuid: String
-    let expiresAt: String
+    let caseUuid: UUID
+    let expiresAt: Date
     
     enum RootKeys: String, CodingKey {
         case `case`
@@ -21,5 +21,17 @@ struct Pairing: Codable {
     enum CaseKeys: String, CodingKey {
         case caseUuid = "id"
         case expiresAt
+    }
+}
+
+extension UUID {
+    static var empty: UUID {
+        return UUID(uuidString: "00000000-0000-0000-0000-000000000000")!
+    }
+}
+
+extension Pairing {
+    static var empty: Pairing {
+        Pairing(signingKey: "", caseUuid: .empty, expiresAt: Date(timeIntervalSinceReferenceDate: 0))
     }
 }

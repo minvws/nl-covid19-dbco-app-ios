@@ -30,6 +30,7 @@ class NetworkManager: NetworkManaging, Logging {
             let pairingCode: String
             let deviceName: String
             let deviceType = "iOS"
+            let sealedClientPublicKey = "todo"
         }
         
         let urlRequest = constructRequest(url: configuration.pairingsUrl,
