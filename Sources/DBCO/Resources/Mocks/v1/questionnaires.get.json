@@ -142,8 +142,8 @@
           "uuid": "37d818ed-9499-4b9a-9771-725467368391",
           "group": "contactdetails",
           "questionType": "multiplechoice",
-          "label": "Geldt een of meer van deze dingen voor deze persoon?",
-          "description": "<ul><li>Student</li><li>70 jaar of ouder</li><li>Gezondheidsklachten of extra gezondheidsrisico's</li><li>Woont in een zorginstelling of asielzoekerscentrum (bijvoorbeeld bejaardentehuis)</li><li>Spreekt slecht of geen Nederlands</li><li>Werkt in de zorg, onderwijs of een contactberoep (bijvoorbeeld kapper)</li></ul>",
+          "label": "Geldt één of meer van deze dingen voor deze persoon?",
+          "description": "<ul><li>Student</li><li>70 jaar of ouder</li><li>Gezondheidsklachten of extra gezondheidsrisico's</li><li>Woont in een asielzoekerscentrum</li><li>Spreekt slecht of geen Nederlands</li><li>Werkt in de zorg, onderwijs of een contactberoep (bijvoorbeeld kapper)</li></ul>",
           "relevantForCategories": [
             {
               "category": "1"
@@ -160,7 +160,7 @@
           ],
           "answerOptions": [
             {
-              "label": "Ja, \u00e9\u00e9n of meerdere dingen",
+              "label": "Ja, één of meer",
               "value": "Ja",
               "trigger": "communication_staff"
             },

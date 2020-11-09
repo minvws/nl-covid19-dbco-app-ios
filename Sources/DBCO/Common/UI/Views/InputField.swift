@@ -42,7 +42,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         validationIconView.setContentCompressionResistancePriority(.required, for: .horizontal)
         textWidthLabel.alpha = 0
         
-        iconContainerView.addArrangedSubview(UIStackView(horizontal: [textWidthLabel, validationIconView], spacing: 5).alignment(.center))
+        iconContainerView.addArrangedSubview(HStack(spacing: 5, textWidthLabel, validationIconView).alignment(.center))
         iconContainerView.axis = .vertical
         iconContainerView.alignment = .leading
         iconContainerView.isUserInteractionEnabled = false

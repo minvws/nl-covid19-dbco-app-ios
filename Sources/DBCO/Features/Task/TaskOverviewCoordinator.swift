@@ -13,7 +13,9 @@ import Contacts
 /// Uses [UploadCoordinator](x-source-tag://UploadCoordinator) to upload the tasks.
 ///
 /// - Tag: TaskOverviewCoordinator
-final class TaskOverviewCoordinator: Coordinator {
+final class TaskOverviewCoordinator: Coordinator, Logging {
+    var loggingCategory: String = "TaskOverviewCoordinator"
+    
     private let window: UIWindow
     private let overviewController: TaskOverviewViewController
     private let navigationController: NavigationController
@@ -49,18 +51,26 @@ final class TaskOverviewCoordinator: Coordinator {
     }
     
     private func upload() {
+        guard Services.caseManager.isPaired else { return }
+        
         startChildCoordinator(UploadCoordinator(presenter: overviewController, delegate: self))
     }
     
     private func selectContact(for task: Task) {
+        guard Services.caseManager.isPaired else { return }
+        
         startChildCoordinator(SelectContactCoordinator(presenter: overviewController, contactTask: task, delegate: self))
     }
     
     private func addContact() {
+        guard Services.caseManager.isPaired else { return }
+        
         startChildCoordinator(SelectContactCoordinator(presenter: overviewController, contactTask: nil, delegate: self))
     }
     
     private func editContact(for task: Task) {
+        guard Services.caseManager.isPaired else { return }
+        
         startChildCoordinator(EditContactCoordinator(presenter: overviewController, contactTask: task, delegate: self))
     }
 
@@ -72,7 +82,11 @@ extension TaskOverviewCoordinator: SelectContactCoordinatorDelegate {
     func selectContactCoordinator(_ coordinator: SelectContactCoordinator, didFinishWith task: Task) {
         removeChildCoordinator(coordinator)
         
-        Services.caseManager.save(task)
+        do {
+            try Services.caseManager.save(task)
+        } catch let error {
+            logError("Could not save task: \(error)")
+        }
     }
     
     func selectContactCoordinatorDidCancel(_ coordinator: SelectContactCoordinator) {
@@ -86,7 +100,11 @@ extension TaskOverviewCoordinator: EditContactCoordinatorDelegate {
     func editContactCoordinator(_ coordinator: EditContactCoordinator, didFinishContactTask task: Task) {
         removeChildCoordinator(coordinator)
         
-        Services.caseManager.save(task)
+        do {
+            try Services.caseManager.save(task)
+        } catch let error {
+            logError("Could not save task: \(error)")
+        }
     }
     
     func editContactCoordinatorDidCancel(_ coordinator: EditContactCoordinator) {
