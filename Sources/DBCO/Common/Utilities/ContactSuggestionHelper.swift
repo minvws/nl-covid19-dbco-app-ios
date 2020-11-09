@@ -8,17 +8,24 @@
 import Foundation
 import Contacts
 
+protocol NameRepresentable {
+    var fullName: String { get }
+}
+
+extension CNContact: NameRepresentable {}
+
 struct ContactSuggestionHelper {
     
-    static func suggestions(for name: String, in contacts: [CNContact]) -> [CNContact] {
+    static func suggestions<T: NameRepresentable>(for name: String, in contacts: [T]) -> [T] {
         let name = name
             .lowercased()
             .replacingOccurrences(of: ".", with: "")
+            .replacingOccurrences(of: ",", with: "")
         
         let suggestedNameParts = name.split(separator: " ")
         var maxMatchedParts = 0
         
-        func calculateMatchedParts(for contact: CNContact) -> (count: Int, maxMatchLength: Int) {
+        func calculateMatchedParts(for contact: T) -> (count: Int, maxMatchLength: Int) {
             var matchedParts: Int = 0
             var contactNameParts = contact.fullName.lowercased().split(separator: " ")
             var maxMatchLength = 0
