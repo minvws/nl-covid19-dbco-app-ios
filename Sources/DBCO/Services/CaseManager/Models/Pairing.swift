@@ -8,40 +8,6 @@
 
 import Foundation
 
-@propertyWrapper struct ISO8601DateFormat: Codable, Equatable {
-    enum DateFormatError: Error {
-        case couldNotParseDate
-    }
-    
-    private var value: Date
-    private let dateFormatter = ISO8601DateFormatter()
-    
-    init(wrappedValue: Date) {
-        value = wrappedValue
-    }
-    
-    var wrappedValue: Date {
-        get { value }
-        set { value = newValue }
-    }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let valueString = try container.decode(String.self)
-        
-        guard let date = dateFormatter.date(from: valueString) else {
-            throw DateFormatError.couldNotParseDate
-        }
-        
-        value = date
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        let valueString = dateFormatter.string(from: value)
-        try valueString.encode(to: encoder)
-    }
-}
-
 struct Pairing: Codable, Equatable {
     struct Case: Codable, Equatable {
         let uuid: UUID
