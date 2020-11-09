@@ -126,7 +126,7 @@ final class CaseManager: CaseManaging, Logging {
                 case .success(let pairing):
                     self.appData = AppData(version: AppData.Constants.currentVersion,
                                            pairing: pairing,
-                                           dateOfSymptomOnset: Date(timeIntervalSinceReferenceDate: 0),
+                                           dateOfSymptomOnset: .distantPast,
                                            tasks: [],
                                            questionnaires: [])
                     
