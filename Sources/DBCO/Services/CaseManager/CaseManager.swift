@@ -27,8 +27,6 @@ protocol CaseManaging {
     var dateOfSymptomOnset: Date { get }
     var tasks: [Task] { get }
     
-    var hasUnfinishedTasks: Bool { get }
-    
     /// Returns the [Questionnaire](x-source-tag://Questionnaire) associated with a task
     func questionnaire(for task: Task) -> Questionnaire
     
@@ -94,10 +92,6 @@ final class CaseManager: CaseManaging, Logging {
             $questionnaires.exists &&
             $dateOfSymptomOnset.exists &&
             didPair
-    }
-    
-    var hasUnfinishedTasks: Bool {
-        tasks.contains { $0.status != .completed }
     }
     
     func loadTasksAndQuestions(pairingCode: String, completion: @escaping (Bool, NetworkError?) -> Void) {
