@@ -82,7 +82,7 @@ extension OnboardingCoordinator: PairViewControllerDelegate {
         
         // Load task stubs
         // This is all temporary code until until pairing with the API is available.
-        Services.caseManager.loadTasksAndQuestions(pairingCode: code) { success, error in
+        Services.caseManager.pair(pairingCode: code) { success, error in
             if success {
                 controller.stopLoadingAnimation()
                 self.navigationController.navigationBar.isUserInteractionEnabled = true

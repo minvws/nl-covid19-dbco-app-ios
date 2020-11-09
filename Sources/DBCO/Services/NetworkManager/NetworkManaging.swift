@@ -52,6 +52,7 @@ protocol NetworkManaging {
     init(configuration: NetworkConfiguration)
     
     func getAppConfiguration(completion: @escaping (Result<AppConfiguration, NetworkError>) -> ())
+    func pair(code: String, deviceName: String, completion: @escaping (Result<Pairing, NetworkError>) -> ())
     func getCase(identifier: String, completion: @escaping (Result<Case, NetworkError>) -> ())
     func getQuestionnaires(completion: @escaping (Result<[Questionnaire], NetworkError>) -> ())
 }
