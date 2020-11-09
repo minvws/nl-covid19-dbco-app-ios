@@ -147,8 +147,8 @@ final class CaseManager: CaseManaging, Logging {
         
         func loadTasksIfNeeded() {
             guard appData.tasks.isEmpty else { return loadQuestionnairesIfNeeded() }
-            
-            Services.networkManager.getCase(identifier: self.appData.pairing.caseUuid.uuidString) {
+            let identifier = self.appData.pairing.case.uuid.uuidString
+            Services.networkManager.getCase(identifier: identifier) {
                 switch $0 {
                 case .success(let result):
                     self.tasks = result.tasks

@@ -8,20 +8,53 @@
 
 import Foundation
 
+@propertyWrapper struct ISO8601DateFormat: Codable, Equatable {
+    enum DateFormatError: Error {
+        case couldNotParseDate
+    }
+    
+    private var value: Date
+    private let dateFormatter = ISO8601DateFormatter()
+    
+    init(wrappedValue: Date) {
+        value = wrappedValue
+    }
+    
+    var wrappedValue: Date {
+        get { value }
+        set { value = newValue }
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let valueString = try container.decode(String.self)
+        
+        guard let date = dateFormatter.date(from: valueString) else {
+            throw DateFormatError.couldNotParseDate
+        }
+        
+        value = date
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        let valueString = dateFormatter.string(from: value)
+        try valueString.encode(to: encoder)
+    }
+}
+
 struct Pairing: Codable, Equatable {
+    struct Case: Codable, Equatable {
+        let uuid: UUID
+        @ISO8601DateFormat var expiresAt: Date
+        
+        enum CodingKeys: String, CodingKey {
+            case uuid = "id"
+            case expiresAt
+        }
+    }
+    
     let signingKey: String
-    let caseUuid: UUID
-    let expiresAt: Date
-    
-    enum RootKeys: String, CodingKey {
-        case `case`
-        case signingKey
-    }
-    
-    enum CaseKeys: String, CodingKey {
-        case caseUuid = "id"
-        case expiresAt
-    }
+    let `case`: Case
 }
 
 extension UUID {
@@ -32,6 +65,6 @@ extension UUID {
 
 extension Pairing {
     static var empty: Pairing {
-        Pairing(signingKey: "", caseUuid: .empty, expiresAt: Date(timeIntervalSinceReferenceDate: 0))
+        Pairing(signingKey: "", case: Case(uuid: .empty, expiresAt: Date(timeIntervalSinceReferenceDate: 0)))
     }
 }
