@@ -123,17 +123,21 @@ struct Options: ContactValue {
 
 extension CNContact {
     
+    private func setToNilIfEmpty(_ value: String) -> String? {
+        return value.isEmpty ? nil : value
+    }
+    
     var contactFirstName: FirstName {
-        FirstName(value: isKeyAvailable(CNContactGivenNameKey) ? givenName : nil)
+        FirstName(value: isKeyAvailable(CNContactGivenNameKey) ? setToNilIfEmpty(givenName) : nil)
     }
     
     var contactLastName: LastName {
-        LastName(value: isKeyAvailable(CNContactFamilyNameKey) ? familyName : nil)
+        LastName(value: isKeyAvailable(CNContactFamilyNameKey) ? setToNilIfEmpty(familyName) : nil)
     }
     
     var contactPhoneNumbers: [PhoneNumber] {
         if isKeyAvailable(CNContactPhoneNumbersKey) {
-            return phoneNumbers.map { PhoneNumber(value: $0.value.stringValue)  }
+            return phoneNumbers.map { PhoneNumber(value: setToNilIfEmpty($0.value.stringValue))  }
         }
         
         return []
@@ -141,7 +145,7 @@ extension CNContact {
     
     var contactEmailAddresses: [EmailAddress] {
         if isKeyAvailable(CNContactEmailAddressesKey) {
-            return emailAddresses.map { EmailAddress(value: $0.value as String)  }
+            return emailAddresses.map { EmailAddress(value: setToNilIfEmpty($0.value as String)) }
         }
         
         return []

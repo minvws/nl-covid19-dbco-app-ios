@@ -24,7 +24,7 @@ extension AppData {
     static var empty: AppData {
         AppData(version: Constants.currentVersion,
                 pairing: .empty,
-                dateOfSymptomOnset: Date(timeIntervalSinceReferenceDate: 0),
+                dateOfSymptomOnset: .distantPast,
                 tasks: [],
                 questionnaires: [])
     }

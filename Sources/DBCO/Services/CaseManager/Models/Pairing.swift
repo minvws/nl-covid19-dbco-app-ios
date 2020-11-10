@@ -31,6 +31,6 @@ extension UUID {
 
 extension Pairing {
     static var empty: Pairing {
-        Pairing(signingKey: "", case: Case(uuid: .empty, expiresAt: Date(timeIntervalSinceReferenceDate: 0)))
+        return Pairing(signingKey: "", case: Case(uuid: .empty, expiresAt: .distantPast))
     }
 }

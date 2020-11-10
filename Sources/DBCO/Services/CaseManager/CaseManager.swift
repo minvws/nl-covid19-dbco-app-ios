@@ -37,8 +37,6 @@ protocol CaseManaging {
     var dateOfSymptomOnset: Date { get }
     var tasks: [Task] { get }
     
-    var hasUnfinishedTasks: Bool { get }
-    
     /// Returns the [Questionnaire](x-source-tag://Questionnaire) associated with a task.
     /// Throws an `notPaired` error when called befored paired.
     /// Throws an `questionnaireNotFound` error when there's no suitable questionnaire  for the supplied task
@@ -119,10 +117,6 @@ final class CaseManager: CaseManaging, Logging {
         $appData.exists && !pairingHash.isEmpty
     }
     
-    var hasUnfinishedTasks: Bool {
-        tasks.contains { $0.status != .completed }
-    }
-    
     func pair(pairingCode: String, completion: @escaping (Bool, CaseManagingError?) -> Void) {
         func pairIfNeeded() {
             guard !isPaired else { return loadTasksIfNeeded() }
@@ -132,7 +126,7 @@ final class CaseManager: CaseManaging, Logging {
                 case .success(let pairing):
                     self.appData = AppData(version: AppData.Constants.currentVersion,
                                            pairing: pairing,
-                                           dateOfSymptomOnset: Date(timeIntervalSinceReferenceDate: 0),
+                                           dateOfSymptomOnset: .distantPast,
                                            tasks: [],
                                            questionnaires: [])
                     

@@ -39,7 +39,7 @@ final class UploadCoordinator: Coordinator, Logging {
             self.delegate?.uploadCoordinatorDidFinish(self)
         }
         
-        if Services.caseManager.hasUnfinishedTasks {
+        if Services.caseManager.tasks.contains(where: { !$0.isOrCanBeInformed } ) {
             showUnfinishedTasks()
         } else {
             sync(animated: false)

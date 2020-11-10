@@ -20,6 +20,8 @@
 		CD29636425191C80008443AF /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD29636325191C7C008443AF /* Colors.xcassets */; };
 		CD2AC0762530601900E8AF78 /* InputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2AC0752530601900E8AF78 /* InputTextView.swift */; };
 		CD2AC08A25308B6500E8AF78 /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2AC08925308B6500E8AF78 /* StatusView.swift */; };
+		CD2F7CB1255949F300F2F73A /* ContactSuggestionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2F7CB0255949F300F2F73A /* ContactSuggestionHelper.swift */; };
+		CD2F7CB525594BDA00F2F73A /* ContactSuggestionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2F7CB425594BDA00F2F73A /* ContactSuggestionTests.swift */; };
 		CD2F7CAB255943E400F2F73A /* ISO8601DateFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2F7CAA255943E400F2F73A /* ISO8601DateFormat.swift */; };
 		CD3DA9432555565800F738EE /* Pairing.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3DA93A255554A700F738EE /* Pairing.swift */; };
 		CD3DA94925556ACF00F738EE /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3DA94825556ACF00F738EE /* AppData.swift */; };
@@ -123,6 +125,8 @@
 		CD29636325191C7C008443AF /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		CD2AC0752530601900E8AF78 /* InputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextView.swift; sourceTree = "<group>"; };
 		CD2AC08925308B6500E8AF78 /* StatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusView.swift; sourceTree = "<group>"; };
+		CD2F7CB0255949F300F2F73A /* ContactSuggestionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactSuggestionHelper.swift; sourceTree = "<group>"; };
+		CD2F7CB425594BDA00F2F73A /* ContactSuggestionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactSuggestionTests.swift; sourceTree = "<group>"; };
 		CD2F7CAA255943E400F2F73A /* ISO8601DateFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISO8601DateFormat.swift; sourceTree = "<group>"; };
 		CD3DA93A255554A700F738EE /* Pairing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pairing.swift; sourceTree = "<group>"; };
 		CD3DA94825556ACF00F738EE /* AppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
@@ -250,6 +254,7 @@
 				CDD68BA5254D511D00E96E9C /* KeychainItem.swift */,
 				CDD68BA9254D60BC00E96E9C /* UserDefaults.swift */,
 				CDF817262552BEF100C60771 /* Bindable.swift */,
+				CD2F7CB0255949F300F2F73A /* ContactSuggestionHelper.swift */,
 				CD2F7CAA255943E400F2F73A /* ISO8601DateFormat.swift */,
 			);
 			path = Utilities;
@@ -352,6 +357,7 @@
 			isa = PBXGroup;
 			children = (
 				CD756C34252B3D36005FEDA0 /* DBCOTests.swift */,
+				CD2F7CB425594BDA00F2F73A /* ContactSuggestionTests.swift */,
 				CD756C36252B3D37005FEDA0 /* Info.plist */,
 			);
 			path = DBCOTests;
@@ -665,6 +671,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD2F7CB525594BDA00F2F73A /* ContactSuggestionTests.swift in Sources */,
 				CD756C35252B3D36005FEDA0 /* DBCOTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -676,6 +683,7 @@
 				CDC7C8692538412600FE7E05 /* NetworkManager.swift in Sources */,
 				CDFCF9192510FC760062269A /* SelfSizingTableView.swift in Sources */,
 				CDD68BA6254D511D00E96E9C /* KeychainItem.swift in Sources */,
+				CD2F7CB1255949F300F2F73A /* ContactSuggestionHelper.swift in Sources */,
 				CDE30E72251E278200862A40 /* EditContactCoordinator.swift in Sources */,
 				CDA0F6912539F0D9009FD2A9 /* AnswerManaging.swift in Sources */,
 				CD756C50252C6AC9005FEDA0 /* OnboardingStepViewController.swift in Sources */,

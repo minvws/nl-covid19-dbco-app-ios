@@ -155,7 +155,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         case .picker:
             object?[keyPath: path].value = pickerOptions?[optionPicker!.selectedRow(inComponent: 0)].identifier
         default:
-            object?[keyPath: path].value = text?.isEmpty == false ? text : nil
+            let trimmedText = text?.trimmingCharacters(in: CharacterSet(charactersIn: " "))
+            object?[keyPath: path].value = trimmedText?.isEmpty == false ? trimmedText : nil
         }
         
         updateValidationStateIfNeeded()
