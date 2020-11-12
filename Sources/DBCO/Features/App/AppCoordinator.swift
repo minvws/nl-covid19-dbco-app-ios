@@ -24,11 +24,13 @@ final class AppCoordinator: Coordinator {
     }
     
     override func start() {
-        window.tintColor = Theme.colors.primary
-        
         #if USERTEST_MOCKS
         Services.use(LocalMockNetworkManager.self)
         #endif
+        
+        LogHandler.setup()
+        
+        window.tintColor = Theme.colors.primary
         
         // Check if the app is the minimum version. If not, show the app update screen
         checkForRequiredUpdates()

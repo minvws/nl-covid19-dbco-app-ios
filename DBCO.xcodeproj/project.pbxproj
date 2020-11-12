@@ -25,6 +25,8 @@
 		CD2F7CAB255943E400F2F73A /* ISO8601DateFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2F7CAA255943E400F2F73A /* ISO8601DateFormat.swift */; };
 		CD3DA9432555565800F738EE /* Pairing.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3DA93A255554A700F738EE /* Pairing.swift */; };
 		CD3DA94925556ACF00F738EE /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3DA94825556ACF00F738EE /* AppData.swift */; };
+		CD40366A255C13B10037BCF1 /* CocoaLumberjackSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CD403669255C13B10037BCF1 /* CocoaLumberjackSwift */; };
+		CD40366C255C13B10037BCF1 /* CocoaLumberjack in Frameworks */ = {isa = PBXBuildFile; productRef = CD40366B255C13B10037BCF1 /* CocoaLumberjack */; };
 		CD421872251B4819004544B3 /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD421871251B4819004544B3 /* TaskTableViewCell.swift */; };
 		CD47A4042549766C005B8801 /* SectionedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD47A4032549766C005B8801 /* SectionedScrollView.swift */; };
 		CD49BAEB2525CE7C0079D018 /* PromptableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD49BAEA2525CE7C0079D018 /* PromptableViewController.swift */; };
@@ -226,6 +228,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD40366C255C13B10037BCF1 /* CocoaLumberjack in Frameworks */,
+				CD40366A255C13B10037BCF1 /* CocoaLumberjackSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -578,6 +582,10 @@
 			dependencies = (
 			);
 			name = DBCO;
+			packageProductDependencies = (
+				CD403669255C13B10037BCF1 /* CocoaLumberjackSwift */,
+				CD40366B255C13B10037BCF1 /* CocoaLumberjack */,
+			);
 			productName = DBCO;
 			productReference = CDC4A8E4250B87E5001BABC6 /* Oplossing 2.app */;
 			productType = "com.apple.product-type.application";
@@ -611,6 +619,9 @@
 				nl,
 			);
 			mainGroup = CDC4A8DB250B87E5001BABC6;
+			packageReferences = (
+				CD403668255C13B10037BCF1 /* XCRemoteSwiftPackageReference "CocoaLumberjack" */,
+			);
 			productRefGroup = CDC4A8E5250B87E5001BABC6 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -896,6 +907,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LOG_LEVEL = debug;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -995,6 +1007,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LOG_LEVEL = error;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1100,6 +1113,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LOG_LEVEL = debug;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1157,6 +1171,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LOG_LEVEL = debug;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1180,6 +1195,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco.debug;
 				PRODUCT_NAME = "Oplossing 2";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1246,6 +1262,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CD403668255C13B10037BCF1 /* XCRemoteSwiftPackageReference "CocoaLumberjack" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CocoaLumberjack/CocoaLumberjack.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.7.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CD403669255C13B10037BCF1 /* CocoaLumberjackSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CD403668255C13B10037BCF1 /* XCRemoteSwiftPackageReference "CocoaLumberjack" */;
+			productName = CocoaLumberjackSwift;
+		};
+		CD40366B255C13B10037BCF1 /* CocoaLumberjack */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CD403668255C13B10037BCF1 /* XCRemoteSwiftPackageReference "CocoaLumberjack" */;
+			productName = CocoaLumberjack;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CDC4A8DC250B87E5001BABC6 /* Project object */;
 }
