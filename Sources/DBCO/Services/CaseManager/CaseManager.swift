@@ -8,9 +8,8 @@
 import UIKit
 
 enum CaseManagingError: Error {
-    case notPaired
+    case noCaseData
     case questionnaireNotFound
-    case couldNotPair(NetworkError)
     case couldNotLoadTasks(NetworkError)
     case couldNotLoadQuestionnaires(NetworkError)
 }
@@ -25,11 +24,10 @@ enum CaseManagingError: Error {
 ///
 /// - Tag: CaseManaging
 protocol CaseManaging {
-    typealias RetryHandler = () -> Void
     
     init()
     
-    var isPaired: Bool { get }
+    var hasCaseData: Bool { get }
     
     /// Indicates that alls the tasks are uploaded to the backend in their current state
     var isSynced: Bool { get }
@@ -42,11 +40,11 @@ protocol CaseManaging {
     /// Throws an `questionnaireNotFound` error when there's no suitable questionnaire  for the supplied task
     func questionnaire(for task: Task) throws -> Questionnaire
     
-    func pair(pairingCode: String, completion: @escaping (_ success: Bool, _ error: CaseManagingError?) -> Void)
+    func loadCaseData(completion: @escaping (_ success: Bool, _ error: CaseManagingError?) -> Void)
     
-    /// Clears all stored data. Using any method or property except for `isPaired` on CaseManager before pairing again is an invalid operation.
+    /// Clears all stored data. Using any method or property except for `hasCaseData` on CaseManager before pairing and loading the data again is an invalid operation.
     /// Throws an `notPaired` error when called befored paired.
-    func unpair() throws
+    func removeCaseData() throws
     
     /// Adds a listener
     /// - parameter listener: The object conforming to [CaseManagerListener](x-source-tag://CaseManagerListener) that will receive updates. Will be stored with a weak reference
@@ -85,11 +83,8 @@ final class CaseManager: CaseManaging, Logging {
     
     private var listeners = [ListenerWrapper]()
     
-    @Keychain(name: "appData", service: Constants.keychainService)
+    @Keychain(name: "appData", service: Constants.keychainService, clearOnReinstall: true)
     private var appData: AppData = .empty
-    
-    @UserDefaults(key: "pairingHash")
-    private(set) var pairingHash: String = ""
     
     @UserDefaults(key: "isSynced")
     private(set) var isSynced: Bool = true {
@@ -113,35 +108,22 @@ final class CaseManager: CaseManaging, Logging {
         set { appData.dateOfSymptomOnset = newValue }
     }
     
-    var isPaired: Bool {
-        $appData.exists && !pairingHash.isEmpty
+    var hasCaseData: Bool {
+        $appData.exists
     }
     
-    func pair(pairingCode: String, completion: @escaping (Bool, CaseManagingError?) -> Void) {
-        func pairIfNeeded() {
-            guard !isPaired else { return loadTasksIfNeeded() }
-            
-            Services.networkManager.pair(code: pairingCode, deviceName: UIDevice.current.name) {
-                switch $0 {
-                case .success(let pairing):
-                    self.appData = AppData(version: AppData.Constants.currentVersion,
-                                           pairing: pairing,
-                                           dateOfSymptomOnset: .distantPast,
-                                           tasks: [],
-                                           questionnaires: [])
-                    
-                    self.pairingHash = pairingCode.sha256
-                    
-                    loadTasksIfNeeded()
-                case .failure(let error):
-                    completion(false, .couldNotPair(error))
-                }
-            }
-        }
-        
+    func loadCaseData(completion: @escaping (Bool, CaseManagingError?) -> Void) {
         func loadTasksIfNeeded() {
             guard appData.tasks.isEmpty else { return loadQuestionnairesIfNeeded() }
-            let identifier = self.appData.pairing.case.uuid.uuidString
+            
+            let identifier: String
+            
+            do {
+                identifier = try Services.pairingManager.caseToken()
+            } catch {
+                return completion(false, .noCaseData)
+            }
+            
             Services.networkManager.getCase(identifier: identifier) {
                 switch $0 {
                 case .success(let result):
@@ -175,12 +157,11 @@ final class CaseManager: CaseManaging, Logging {
             self.listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
         }
         
-        pairIfNeeded()
+        loadTasksIfNeeded()
     }
     
-    func unpair() throws {
+    func removeCaseData() throws {
         $appData.clearData()
-        pairingHash = ""
     }
     
     /// Set the questionnaires from the api call result
@@ -227,7 +208,7 @@ final class CaseManager: CaseManaging, Logging {
     
     /// - Tag: CaseManager.questionnaire
     func questionnaire(for task: Task) throws -> Questionnaire {
-        guard isPaired else { throw CaseManagingError.notPaired }
+        guard hasCaseData else { throw CaseManagingError.noCaseData }
         
         guard let questionnaire = questionnaires.first(where: { $0.taskType == task.taskType }) else {
             logError("Could not find applicable questionnaire")
@@ -238,7 +219,7 @@ final class CaseManager: CaseManaging, Logging {
     }
     
     func save(_ task: Task) throws {
-        guard isPaired else { throw CaseManagingError.notPaired }
+        guard hasCaseData else { throw CaseManagingError.noCaseData }
         
         func storeNewTask() -> Int {
             tasks.append(task)
@@ -294,7 +275,7 @@ final class CaseManager: CaseManaging, Logging {
     }
     
     func sync(completionHandler: ((Bool) -> Void)?) throws {
-        guard isPaired else { throw CaseManagingError.notPaired }
+        guard hasCaseData else { throw CaseManagingError.noCaseData }
         
         // Fake doing some work
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {

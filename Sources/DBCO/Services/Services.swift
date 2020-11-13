@@ -12,6 +12,7 @@ final class Services {
     private static var networkManagingType: NetworkManaging.Type = NetworkManager.self
     private static var caseManagingType: CaseManaging.Type = CaseManager.self
     private static var configManagingType: ConfigManaging.Type = ConfigManager.self
+    private static var pairingManagingType: PairingManaging.Type = PairingManager.self
     
     /// Override the [NetworkManaging](x-source-tag://NetworkManaging) type that will be instantiated
     /// - parameter networkManager: The type conforming to [NetworkManaging](x-source-tag://NetworkManaging) to be used as the global networkManager
@@ -31,7 +32,14 @@ final class Services {
         configManagingType = configManager
     }
     
+    /// Override the [PairingManaging](x-source-tag://PairingManaging) type that will be instantiated
+    /// - parameter pairingManaging: The type conforming to [PairingManaging](x-source-tag://PairingManaging) to be used as the global configManager
+    static func use(_ pairingManager: PairingManaging.Type) {
+        pairingManagingType = pairingManager
+    }
+    
     static private(set) var networkManager: NetworkManaging = networkManagingType.init(configuration: .test)
     static private(set) var caseManager: CaseManaging = caseManagingType.init()
     static private(set) var configManager: ConfigManaging = configManagingType.init()
+    static private(set) var pairingManager: PairingManaging = pairingManagingType.init()
 }

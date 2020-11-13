@@ -13,7 +13,6 @@ struct AppData: Codable {
     }
     
     let version: String
-    let pairing: Pairing
     
     var dateOfSymptomOnset: Date
     var tasks: [Task]
@@ -23,7 +22,6 @@ struct AppData: Codable {
 extension AppData {
     static var empty: AppData {
         AppData(version: Constants.currentVersion,
-                pairing: .empty,
                 dateOfSymptomOnset: .distantPast,
                 tasks: [],
                 questionnaires: [])

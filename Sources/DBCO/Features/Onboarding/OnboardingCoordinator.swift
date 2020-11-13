@@ -76,37 +76,65 @@ extension OnboardingCoordinator: OnboardingStepViewControllerDelegate {
 
 extension OnboardingCoordinator: PairViewControllerDelegate {
     
+
+    
     func pairViewController(_ controller: PairViewController, wantsToPairWith code: String) {
         controller.startLoadingAnimation()
         navigationController.navigationBar.isUserInteractionEnabled = false
         
-        // Load task stubs
-        // This is all temporary code until until pairing with the API is available.
-        Services.caseManager.pair(pairingCode: code) { success, error in
-            if success {
-                controller.stopLoadingAnimation()
-                self.navigationController.navigationBar.isUserInteractionEnabled = true
-                
-                self.didPair = true
-                
-                let viewModel = OnboardingStepViewModel(image: UIImage(named: "StartVisual")!,
-                                                        title: .onboardingStep3Title,
-                                                        message: .onboardingStep3Message,
-                                                        buttonTitle: .start)
-                let stepController = OnboardingStepViewController(viewModel: viewModel)
-                stepController.delegate = self
-                self.navigationController.setViewControllers([stepController], animated: true)
-            } else {
-                controller.stopLoadingAnimation()
-                self.navigationController.navigationBar.isUserInteractionEnabled = true
-                
-                let alert = UIAlertController(title: .onboardingLoadingErrorTitle, message: .onboardingLoadingErrorMessage, preferredStyle: .alert)
-                
-                alert.addAction(UIAlertAction(title: .ok, style: .default, handler: nil))
-                
-                controller.present(alert, animated: true)
+        // Pair and load case data
+        // This code is temporary untill pull to refresh for tasks is implemented
+        func errorAlert() {
+            controller.stopLoadingAnimation()
+            self.navigationController.navigationBar.isUserInteractionEnabled = true
+            
+            let alert = UIAlertController(title: .onboardingLoadingErrorTitle, message: .onboardingLoadingErrorMessage, preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: .ok, style: .default, handler: nil))
+            
+            controller.present(alert, animated: true)
+        }
+        
+        func pairIfNeeded(pairdingCode: String) {
+            guard !Services.pairingManager.isPaired else { return loadCaseIfNeeded() }
+            
+            Services.pairingManager.pair(pairingCode: code) { success, error in
+                if success {
+                    loadCaseIfNeeded()
+                } else {
+                    errorAlert()
+                }
             }
         }
+        
+        func loadCaseIfNeeded() {
+            guard !Services.caseManager.hasCaseData else { return finish() }
+            
+            Services.caseManager.loadCaseData { success, error in
+                if success {
+                    finish()
+                } else {
+                    errorAlert()
+                }
+            }
+        }
+        
+        func finish() {
+            controller.stopLoadingAnimation()
+            self.navigationController.navigationBar.isUserInteractionEnabled = true
+            
+            self.didPair = true
+            
+            let viewModel = OnboardingStepViewModel(image: UIImage(named: "StartVisual")!,
+                                                    title: .onboardingStep3Title,
+                                                    message: .onboardingStep3Message,
+                                                    buttonTitle: .start)
+            let stepController = OnboardingStepViewController(viewModel: viewModel)
+            stepController.delegate = self
+            self.navigationController.setViewControllers([stepController], animated: true)
+        }
+        
+        pairIfNeeded(pairdingCode: code)
     }
     
 }

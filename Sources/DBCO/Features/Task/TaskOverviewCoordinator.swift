@@ -51,25 +51,25 @@ final class TaskOverviewCoordinator: Coordinator, Logging {
     }
     
     private func upload() {
-        guard Services.caseManager.isPaired else { return }
+        guard Services.caseManager.hasCaseData else { return }
         
         startChildCoordinator(UploadCoordinator(presenter: overviewController, delegate: self))
     }
     
     private func selectContact(for task: Task) {
-        guard Services.caseManager.isPaired else { return }
+        guard Services.caseManager.hasCaseData else { return }
         
         startChildCoordinator(SelectContactCoordinator(presenter: overviewController, contactTask: task, delegate: self))
     }
     
     private func addContact() {
-        guard Services.caseManager.isPaired else { return }
+        guard Services.caseManager.hasCaseData else { return }
         
         startChildCoordinator(SelectContactCoordinator(presenter: overviewController, contactTask: nil, delegate: self))
     }
     
     private func editContact(for task: Task) {
-        guard Services.caseManager.isPaired else { return }
+        guard Services.caseManager.hasCaseData else { return }
         
         startChildCoordinator(EditContactCoordinator(presenter: overviewController, contactTask: task, delegate: self))
     }
