@@ -76,13 +76,13 @@ final class UploadCoordinator: Coordinator, Logging {
     }
     
     private func selectContact(for task: Task) {
-        guard Services.caseManager.isPaired else { return }
+        guard Services.caseManager.hasCaseData else { return }
         
         startChildCoordinator(SelectContactCoordinator(presenter: navigationController, contactTask: task, delegate: self))
     }
     
     private func editContact(for task: Task) {
-        guard Services.caseManager.isPaired else { return }
+        guard Services.caseManager.hasCaseData else { return }
         
         startChildCoordinator(EditContactCoordinator(presenter: navigationController, contactTask: task, delegate: self))
     }

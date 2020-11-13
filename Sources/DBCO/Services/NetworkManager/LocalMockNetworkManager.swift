@@ -10,14 +10,14 @@ import Foundation
 class LocalMockNetworkManager: NetworkManager {
     override var loggingCategory: String { "MockNetwork" }
     
-    override func pair(code: String, deviceName: String, completion: @escaping (Result<Pairing, NetworkError>) -> ()) {
+    override func pair(code: String, sealedClientPublicKey: Data, completion: @escaping (Result<PairResponse, NetworkError>) -> ()) {
         if let validCodes = Bundle.main.infoDictionary?["ValidCodes"] as? [String] {
             guard validCodes.contains(code.sha256) else {
                 return completion(.failure(.invalidRequest))
             }
         }
                         
-        super.pair(code: code, deviceName: deviceName, completion: completion)
+        super.pair(code: code, sealedClientPublicKey: sealedClientPublicKey, completion: completion)
     }
 
     override func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {

@@ -25,18 +25,16 @@ class NetworkManager: NetworkManaging, Logging {
         decodedJSONData(request: urlRequest, completion: completion)
     }
     
-    func pair(code: String, deviceName: String, completion: @escaping (Result<Pairing, NetworkError>) -> ()) {
+    func pair(code: String, sealedClientPublicKey: Data, completion: @escaping (Result<PairResponse, NetworkError>) -> ()) {
         struct PairBody: Encodable {
             let pairingCode: String
-            let deviceName: String
-            let deviceType = "iOS"
-            let sealedClientPublicKey = "todo"
+            let sealedClientPublicKey: Data
         }
         
         let urlRequest = constructRequest(url: configuration.pairingsUrl,
                                           method: .POST,
                                           body: PairBody(pairingCode: code,
-                                                         deviceName: deviceName))
+                                                         sealedClientPublicKey: sealedClientPublicKey))
         
         decodedJSONData(request: urlRequest, completion: completion)
     }
