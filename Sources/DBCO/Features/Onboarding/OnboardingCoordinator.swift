@@ -76,8 +76,6 @@ extension OnboardingCoordinator: OnboardingStepViewControllerDelegate {
 
 extension OnboardingCoordinator: PairViewControllerDelegate {
     
-
-    
     func pairViewController(_ controller: PairViewController, wantsToPairWith code: String) {
         controller.startLoadingAnimation()
         navigationController.navigationBar.isUserInteractionEnabled = false

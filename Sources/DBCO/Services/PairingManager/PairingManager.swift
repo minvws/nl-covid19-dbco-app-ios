@@ -37,6 +37,10 @@ protocol PairingManaging {
 class PairingManager: PairingManaging, Logging {
     let loggingCategory = "PairingManager"
     
+    private struct Constants {
+        static let encodedHAPublicKey = "I8uOsrNAccb4/4xJUHOKKWZ4ZDW5JygzEMZMB5xwHAM="
+    }
+    
     private let sodium = Sodium()
     
     struct Pairing: Codable {
@@ -77,7 +81,7 @@ class PairingManager: PairingManaging, Logging {
     func pair(pairingCode: String, completion: @escaping (_ success: Bool, _ error: PairingManagingError?) -> Void) {
         guard !$pairing.exists else { return completion(false, .alreadyPaired) }
         
-        guard let haPublicKeyData = Data(base64Encoded: "I8uOsrNAccb4/4xJUHOKKWZ4ZDW5JygzEMZMB5xwHAM=") else {
+        guard let haPublicKeyData = Data(base64Encoded: Constants.encodedHAPublicKey) else {
             fatalError("Invalid stored health authority public key")
         }
         
