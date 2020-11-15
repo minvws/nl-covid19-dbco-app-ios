@@ -169,10 +169,15 @@ class PairingManager: PairingManaging, Logging {
         
         logDebug("Resulting JSON: \(String(data: Data(decodedBytes), encoding: .utf8) ?? "")")
         
-        let value = try jsonDecoder.decode(T.self, from: Data(decodedBytes))
-        logDebug("Opened value: \(value)")
-        
-        return value
+        do {
+            let value = try jsonDecoder.decode(T.self, from: Data(decodedBytes))
+            logDebug("Opened value: \(value)")
+            
+            return value
+        } catch let error {
+            self.logError("Error Deserializing \(T.self): \(error)")
+            throw error
+        }
     }
     
     private lazy var dateFormatter: DateFormatter = {

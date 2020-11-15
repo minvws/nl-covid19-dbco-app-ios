@@ -58,6 +58,7 @@ extension String {
     static var selectDate: String { return Localization.string(for: "selectDate") }
     static var done: String { return Localization.string(for: "done") }
     static var ok: String { return Localization.string(for: "ok") }
+    static var tryAgain: String { return Localization.string(for: "tryAgain") }
     static var errorTitle: String { return Localization.string(for: "error.title") }
     
     // MARK: - Update App
@@ -89,6 +90,9 @@ extension String {
     
     static var taskContactCaptionCompleted: String { return Localization.string(for: "task.contact.caption.completed") }
     static var taskContactCaptionIncomplete: String { return Localization.string(for: "task.contact.caption.incomplete") }
+    
+    static var taskLoadingErrorTitle: String { return Localization.string(for: "taskLoadingErrorTitle") }
+    static var taskLoadingErrorMessage: String { return Localization.string(for: "taskLoadingErrorMessage") }
     
     // MARK: - Contact Selection
     static var selectContactTitle: String { return Localization.string(for: "selectContactTitle") }
