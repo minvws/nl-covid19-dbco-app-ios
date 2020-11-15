@@ -5,7 +5,7 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import CocoaLumberjackSwift
+import CocoaLumberjack
 import Foundation
 
 public protocol Logging {
