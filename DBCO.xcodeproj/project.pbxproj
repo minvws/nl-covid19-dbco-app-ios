@@ -50,6 +50,7 @@
 		CD756C74252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C73252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift */; };
 		CD756C78252DDF30005FEDA0 /* SectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C77252DDF30005FEDA0 /* SectionView.swift */; };
 		CD7FACA1251B3FCD00AB8142 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7FACA0251B3FCD00AB8142 /* TextView.swift */; };
+		CD8F957925616F23004729A4 /* Certificates.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8F957825616F23004729A4 /* Certificates.swift */; };
 		CD9C7F3F2549B2B600A78EEF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CD9C7F412549B2B600A78EEF /* InfoPlist.strings */; };
 		CD9C7F52254AC25300A78EEF /* Task+Informed.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9C7F51254AC25300A78EEF /* Task+Informed.swift */; };
 		CDA0F6812539AA42009FD2A9 /* Answer+Prefilling.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA0F6802539AA42009FD2A9 /* Answer+Prefilling.swift */; };
@@ -168,6 +169,7 @@
 		CD756C73252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIResponder+CurrentFirstResponder.swift"; sourceTree = "<group>"; };
 		CD756C77252DDF30005FEDA0 /* SectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionView.swift; sourceTree = "<group>"; };
 		CD7FACA0251B3FCD00AB8142 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
+		CD8F957825616F23004729A4 /* Certificates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Certificates.swift; sourceTree = "<group>"; };
 		CD9C7F402549B2B600A78EEF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CD9C7F442549B2B900A78EEF /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CD9C7F51254AC25300A78EEF /* Task+Informed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Informed.swift"; sourceTree = "<group>"; };
@@ -540,6 +542,7 @@
 		CDC7C87A2538481C00FE7E05 /* Config */ = {
 			isa = PBXGroup;
 			children = (
+				CD8F957825616F23004729A4 /* Certificates.swift */,
 				CDC7C872253842A200FE7E05 /* Endpoint.swift */,
 				CDC7C86E2538429B00FE7E05 /* NetworkConfiguration.swift */,
 				CDC7C87B2538482400FE7E05 /* HTTPMethod.swift */,
@@ -883,6 +886,7 @@
 				CDE30E6C251CE15800862A40 /* ContactValues.swift in Sources */,
 				CD29634F2518ED51008443AF /* UIEdgeInsets+Convenience.swift in Sources */,
 				CD7282C3250F9AFE00D68911 /* TaskOverviewViewController.swift in Sources */,
+				CD8F957925616F23004729A4 /* Certificates.swift in Sources */,
 				CDC7C8842538498400FE7E05 /* Encodable+AnyEncodable.swift in Sources */,
 				CDFCF9172510ECC70062269A /* UIView+Embed.swift in Sources */,
 				CD756C5E252C9A7F005FEDA0 /* PairViewController.swift in Sources */,
