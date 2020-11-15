@@ -1,0 +1,6 @@
+framework module Pods_DBCOTests {
+  umbrella header "Pods-DBCOTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A6A1EA99F603F8A68B3CFE6 /* Pods_DBCO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13C8941476779FBFFBD8A4C7 /* Pods_DBCO.framework */; };
+		91E5A9010414FC25C0F3B864 /* Pods_DBCOTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C5D22DA740F30F804D7F95E /* Pods_DBCOTests.framework */; };
 		CD1824EE2524B3E4006EB272 /* InputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1824ED2524B3E4006EB272 /* InputField.swift */; };
 		CD2963442514BF4E008443AF /* SelectContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2963432514BF4E008443AF /* SelectContactViewController.swift */; };
 		CD2963472514E129008443AF /* ContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2963462514E129008443AF /* ContactTableViewCell.swift */; };
@@ -95,8 +97,6 @@
 		CDE30E72251E278200862A40 /* EditContactCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E71251E278200862A40 /* EditContactCoordinator.swift */; };
 		CDE30E782521D92600862A40 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CDE30E7A2521D92600862A40 /* Localizable.strings */; };
 		CDE30E8725232FE200862A40 /* InputFieldEditable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E8625232FE200862A40 /* InputFieldEditable.swift */; };
-		CDF6B8FC255C11630009D1F7 /* Clibsodium in Frameworks */ = {isa = PBXBuildFile; productRef = CDF6B8FB255C11630009D1F7 /* Clibsodium */; };
-		CDF6B8FE255C11630009D1F7 /* Sodium in Frameworks */ = {isa = PBXBuildFile; productRef = CDF6B8FD255C11630009D1F7 /* Sodium */; };
 		CDF817272552BEF100C60771 /* Bindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF817262552BEF100C60771 /* Bindable.swift */; };
 		CDFCF907250FA6E80062269A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF906250FA6E80062269A /* ViewController.swift */; };
 		CDFCF90C2510C47E0062269A /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF90B2510C47E0062269A /* Localization.swift */; };
@@ -116,6 +116,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		049B33A27415B972962D11C7 /* Pods-DBCO.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.debug.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.debug.xcconfig"; sourceTree = "<group>"; };
+		0960A2CA9D203990D48CA127 /* Pods-DBCO.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.release.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.release.xcconfig"; sourceTree = "<group>"; };
+		13C8941476779FBFFBD8A4C7 /* Pods_DBCO.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DBCO.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		15DD27ADC58F767AEF653836 /* Pods-DBCOTests.ad hoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc.xcconfig"; sourceTree = "<group>"; };
+		3C5D22DA740F30F804D7F95E /* Pods_DBCOTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DBCOTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F26983E3C652AB213ED4047 /* Pods-DBCO.ad hoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc.xcconfig"; sourceTree = "<group>"; };
+		95E9699EAF5C5557EB9A0265 /* Pods-DBCO.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.app store.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.app store.xcconfig"; sourceTree = "<group>"; };
+		9C3C39BFCF985C619EF17EFA /* Pods-DBCOTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.debug.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.debug.xcconfig"; sourceTree = "<group>"; };
+		C604B6AA2DE456A21DA9EE15 /* Pods-DBCOTests.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.app store.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.app store.xcconfig"; sourceTree = "<group>"; };
 		CD1824ED2524B3E4006EB272 /* InputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputField.swift; sourceTree = "<group>"; };
 		CD2963432514BF4E008443AF /* SelectContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectContactViewController.swift; sourceTree = "<group>"; };
 		CD2963462514E129008443AF /* ContactTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactTableViewCell.swift; sourceTree = "<group>"; };
@@ -218,6 +227,7 @@
 		CDFCF9142510EB4D0062269A /* NSAttributedString+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Extension.swift"; sourceTree = "<group>"; };
 		CDFCF9162510ECC70062269A /* UIView+Embed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Embed.swift"; sourceTree = "<group>"; };
 		CDFCF9182510FC760062269A /* SelfSizingTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingTableView.swift; sourceTree = "<group>"; };
+		F20D8B2429FE08BE228E7DCD /* Pods-DBCOTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.release.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -225,6 +235,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91E5A9010414FC25C0F3B864 /* Pods_DBCOTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,14 +243,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CDF6B8FC255C11630009D1F7 /* Clibsodium in Frameworks */,
-				CDF6B8FE255C11630009D1F7 /* Sodium in Frameworks */,
+				6A6A1EA99F603F8A68B3CFE6 /* Pods_DBCO.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		35FAB9ED859F6BC96F95E9A7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				13C8941476779FBFFBD8A4C7 /* Pods_DBCO.framework */,
+				3C5D22DA740F30F804D7F95E /* Pods_DBCOTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		CD29635D25191975008443AF /* UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -452,6 +471,8 @@
 				CDC4A8E6250B87E5001BABC6 /* DBCO */,
 				CD756C33252B3D36005FEDA0 /* DBCOTests */,
 				CDC4A8E5250B87E5001BABC6 /* Products */,
+				FACABF24BF0118C18E8CE5EC /* Pods */,
+				35FAB9ED859F6BC96F95E9A7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -569,6 +590,21 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		FACABF24BF0118C18E8CE5EC /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				049B33A27415B972962D11C7 /* Pods-DBCO.debug.xcconfig */,
+				0960A2CA9D203990D48CA127 /* Pods-DBCO.release.xcconfig */,
+				95E9699EAF5C5557EB9A0265 /* Pods-DBCO.app store.xcconfig */,
+				4F26983E3C652AB213ED4047 /* Pods-DBCO.ad hoc.xcconfig */,
+				9C3C39BFCF985C619EF17EFA /* Pods-DBCOTests.debug.xcconfig */,
+				F20D8B2429FE08BE228E7DCD /* Pods-DBCOTests.release.xcconfig */,
+				C604B6AA2DE456A21DA9EE15 /* Pods-DBCOTests.app store.xcconfig */,
+				15DD27ADC58F767AEF653836 /* Pods-DBCOTests.ad hoc.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -576,6 +612,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CD756C3B252B3D37005FEDA0 /* Build configuration list for PBXNativeTarget "DBCOTests" */;
 			buildPhases = (
+				240B2E2577A7CDC7B0D793D4 /* [CP] Check Pods Manifest.lock */,
 				CD756C2E252B3D36005FEDA0 /* Sources */,
 				CD756C2F252B3D36005FEDA0 /* Frameworks */,
 				CD756C30252B3D36005FEDA0 /* Resources */,
@@ -594,20 +631,18 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CDC4A8F8250B87E6001BABC6 /* Build configuration list for PBXNativeTarget "DBCO" */;
 			buildPhases = (
+				34080FC9F24951AD3F5AD83E /* [CP] Check Pods Manifest.lock */,
 				CDC4A8E0250B87E5001BABC6 /* Sources */,
 				CDC4A8E1250B87E5001BABC6 /* Frameworks */,
 				CDC4A8E2250B87E5001BABC6 /* Resources */,
 				CDA5C115251250F1009440D1 /* Set GitHash to info.plist in built app */,
+				9DFFE35177E7B2B179A1028C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = DBCO;
-			packageProductDependencies = (
-				CDF6B8FB255C11630009D1F7 /* Clibsodium */,
-				CDF6B8FD255C11630009D1F7 /* Sodium */,
-			);
 			productName = DBCO;
 			productReference = CDC4A8E4250B87E5001BABC6 /* Oplossing 2.app */;
 			productType = "com.apple.product-type.application";
@@ -641,9 +676,6 @@
 				nl,
 			);
 			mainGroup = CDC4A8DB250B87E5001BABC6;
-			packageReferences = (
-				CDF6B8FA255C11630009D1F7 /* XCRemoteSwiftPackageReference "swift-sodium" */,
-			);
 			productRefGroup = CDC4A8E5250B87E5001BABC6 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -678,6 +710,67 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		240B2E2577A7CDC7B0D793D4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DBCOTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		34080FC9F24951AD3F5AD83E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DBCO-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9DFFE35177E7B2B179A1028C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DBCO/Pods-DBCO-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DBCO/Pods-DBCO-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DBCO/Pods-DBCO-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		CDA5C115251250F1009440D1 /* Set GitHash to info.plist in built app */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -846,6 +939,7 @@
 /* Begin XCBuildConfiguration section */
 		CD756C39252B3D37005FEDA0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9C3C39BFCF985C619EF17EFA /* Pods-DBCOTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -866,6 +960,7 @@
 		};
 		CD756C3A252B3D37005FEDA0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F20D8B2429FE08BE228E7DCD /* Pods-DBCOTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -944,11 +1039,12 @@
 		};
 		CD756C3F252B4316005FEDA0 /* Ad Hoc */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F26983E3C652AB213ED4047 /* Pods-DBCO.ad hoc.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 43;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -965,6 +1061,7 @@
 		};
 		CD756C40252B4316005FEDA0 /* Ad Hoc */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 15DD27ADC58F767AEF653836 /* Pods-DBCOTests.ad hoc.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -1043,11 +1140,12 @@
 		};
 		CD756C44252B44E6005FEDA0 /* App Store */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 95E9699EAF5C5557EB9A0265 /* Pods-DBCO.app store.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 43;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1064,6 +1162,7 @@
 		};
 		CD756C45252B44E6005FEDA0 /* App Store */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C604B6AA2DE456A21DA9EE15 /* Pods-DBCOTests.app store.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -1204,11 +1303,12 @@
 		};
 		CDC4A8F9250B87E6001BABC6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 049B33A27415B972962D11C7 /* Pods-DBCO.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 43;
 				DEVELOPMENT_TEAM = 5598UZ23ZV;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1226,11 +1326,12 @@
 		};
 		CDC4A8FA250B87E6001BABC6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0960A2CA9D203990D48CA127 /* Pods-DBCO.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 43;
 				DEVELOPMENT_TEAM = 5598UZ23ZV;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1282,30 +1383,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		CDF6B8FA255C11630009D1F7 /* XCRemoteSwiftPackageReference "swift-sodium" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/jedisct1/swift-sodium.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		CDF6B8FB255C11630009D1F7 /* Clibsodium */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = CDF6B8FA255C11630009D1F7 /* XCRemoteSwiftPackageReference "swift-sodium" */;
-			productName = Clibsodium;
-		};
-		CDF6B8FD255C11630009D1F7 /* Sodium */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = CDF6B8FA255C11630009D1F7 /* XCRemoteSwiftPackageReference "swift-sodium" */;
-			productName = Sodium;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CDC4A8DC250B87E5001BABC6 /* Project object */;
 }
