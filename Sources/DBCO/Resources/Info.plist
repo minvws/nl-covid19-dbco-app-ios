@@ -22,6 +22,8 @@
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NETWORK_CONFIGURATION</key>
+	<string>$(NETWORK_CONFIGURATION)</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Contacten delen gaat sneller als we toestemming hebben, je beslist zelf welke contactgegevens je deelt met de GGD.</string>
 	<key>UIApplicationSceneManifest</key>

@@ -38,7 +38,26 @@ final class Services {
         pairingManagingType = pairingManager
     }
     
-    static private(set) var networkManager: NetworkManaging = networkManagingType.init(configuration: .test)
+    static private(set) var networkManager: NetworkManaging = {
+        let networkConfiguration: NetworkConfiguration
+
+        let configurations: [String: NetworkConfiguration] = [
+            NetworkConfiguration.development.name: NetworkConfiguration.development,
+            NetworkConfiguration.test.name: NetworkConfiguration.test,
+            NetworkConfiguration.acceptance.name: NetworkConfiguration.acceptance,
+            NetworkConfiguration.production.name: NetworkConfiguration.production
+        ]
+
+        let fallbackConfiguration = NetworkConfiguration.test
+
+        if let networkConfigurationValue = Bundle.main.infoDictionary?["NETWORK_CONFIGURATION"] as? String {
+            networkConfiguration = configurations[networkConfigurationValue] ?? fallbackConfiguration
+        } else {
+            networkConfiguration = fallbackConfiguration
+        }
+        
+        return networkManagingType.init(configuration: networkConfiguration)
+    }()
     static private(set) var caseManager: CaseManaging = caseManagingType.init()
     static private(set) var configManager: ConfigManaging = configManagingType.init()
     static private(set) var pairingManager: PairingManaging = pairingManagingType.init()
