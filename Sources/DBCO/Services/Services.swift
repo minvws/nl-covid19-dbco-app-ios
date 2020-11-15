@@ -12,6 +12,7 @@ final class Services {
     private static var networkManagingType: NetworkManaging.Type = NetworkManager.self
     private static var caseManagingType: CaseManaging.Type = CaseManager.self
     private static var configManagingType: ConfigManaging.Type = ConfigManager.self
+    private static var pairingManagingType: PairingManaging.Type = PairingManager.self
     
     /// Override the [NetworkManaging](x-source-tag://NetworkManaging) type that will be instantiated
     /// - parameter networkManager: The type conforming to [NetworkManaging](x-source-tag://NetworkManaging) to be used as the global networkManager
@@ -31,7 +32,33 @@ final class Services {
         configManagingType = configManager
     }
     
-    static private(set) var networkManager: NetworkManaging = networkManagingType.init(configuration: .test)
+    /// Override the [PairingManaging](x-source-tag://PairingManaging) type that will be instantiated
+    /// - parameter pairingManaging: The type conforming to [PairingManaging](x-source-tag://PairingManaging) to be used as the global configManager
+    static func use(_ pairingManager: PairingManaging.Type) {
+        pairingManagingType = pairingManager
+    }
+    
+    static private(set) var networkManager: NetworkManaging = {
+        let networkConfiguration: NetworkConfiguration
+
+        let configurations: [String: NetworkConfiguration] = [
+            NetworkConfiguration.development.name: NetworkConfiguration.development,
+            NetworkConfiguration.test.name: NetworkConfiguration.test,
+            NetworkConfiguration.acceptance.name: NetworkConfiguration.acceptance,
+            NetworkConfiguration.production.name: NetworkConfiguration.production
+        ]
+
+        let fallbackConfiguration = NetworkConfiguration.test
+
+        if let networkConfigurationValue = Bundle.main.infoDictionary?["NETWORK_CONFIGURATION"] as? String {
+            networkConfiguration = configurations[networkConfigurationValue] ?? fallbackConfiguration
+        } else {
+            networkConfiguration = fallbackConfiguration
+        }
+        
+        return networkManagingType.init(configuration: networkConfiguration)
+    }()
     static private(set) var caseManager: CaseManaging = caseManagingType.init()
     static private(set) var configManager: ConfigManaging = configManagingType.init()
+    static private(set) var pairingManager: PairingManaging = pairingManagingType.init()
 }

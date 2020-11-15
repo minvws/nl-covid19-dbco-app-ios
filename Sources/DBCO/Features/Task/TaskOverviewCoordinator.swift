@@ -48,28 +48,56 @@ final class TaskOverviewCoordinator: Coordinator, Logging {
                 snapshotView.removeFromSuperview()
             }
         }
+        
+        // If initial loading of case data failed try again here and present the user with an error when the request fails again.
+        func loadCaseDataIfNeeded() {
+            guard !Services.caseManager.hasCaseData else { return }
+            
+            Services.caseManager.loadCaseData { success, error in
+                if !success {
+                    showLoadingError()
+                }
+            }
+        }
+        
+        func showLoadingError() {
+            let alert = UIAlertController(title: .taskLoadingErrorTitle, message: .taskLoadingErrorMessage, preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: .tryAgain, style: .default) { _ in
+                loadCaseDataIfNeeded()
+            })
+            
+            navigationController.present(alert, animated: true)
+        }
+        
+        loadCaseDataIfNeeded()
     }
     
     private func upload() {
-        guard Services.caseManager.isPaired else { return }
+        guard Services.caseManager.hasCaseData else {
+            return
+        }
         
         startChildCoordinator(UploadCoordinator(presenter: overviewController, delegate: self))
     }
     
     private func selectContact(for task: Task) {
-        guard Services.caseManager.isPaired else { return }
+        guard Services.caseManager.hasCaseData else { return }
         
         startChildCoordinator(SelectContactCoordinator(presenter: overviewController, contactTask: task, delegate: self))
     }
     
     private func addContact() {
-        guard Services.caseManager.isPaired else { return }
+        guard Services.caseManager.hasCaseData else {
+            logWarning("Cannot add contact before case data is fetched")
+            return
+        }
         
         startChildCoordinator(SelectContactCoordinator(presenter: overviewController, contactTask: nil, delegate: self))
     }
     
     private func editContact(for task: Task) {
-        guard Services.caseManager.isPaired else { return }
+        guard Services.caseManager.hasCaseData else { return }
         
         startChildCoordinator(EditContactCoordinator(presenter: overviewController, contactTask: task, delegate: self))
     }
