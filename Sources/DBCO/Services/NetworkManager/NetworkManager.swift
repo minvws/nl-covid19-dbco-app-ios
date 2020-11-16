@@ -43,11 +43,36 @@ class NetworkManager: NetworkManaging, Logging {
         let urlRequest = constructRequest(url: configuration.caseUrl(identifier: identifier),
                                           method: .GET)
         
-        func open(result: Result<Sealed<Envelope<Case>>, NetworkError>) {
-            completion(result.map { $0.value.item })
+        struct CaseResponse: Decodable {
+            let sealedCase: Sealed<Case>
+        }
+        
+        func open(result: Result<CaseResponse, NetworkError>) {
+            completion(result.map { $0.sealedCase.value })
         }
 
         decodedJSONData(request: urlRequest, completion: open)
+    }
+    
+    func putCase(identifier: String, value: Case, completion: @escaping (Result<Void, NetworkError>) -> ()) {
+        struct CaseBody: Encodable {
+            let sealedCase: Sealed<Case>
+        }
+        
+        let urlRequest = constructRequest(url: configuration.caseUrl(identifier: identifier),
+                                          method: .PUT,
+                                          body: CaseBody(sealedCase: .init(value)))
+        
+        data(request: urlRequest) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    completion(.success(()))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+        }
     }
     
     func getQuestionnaires(completion: @escaping (Result<[Questionnaire], NetworkError>) -> ()) {

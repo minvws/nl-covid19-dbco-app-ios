@@ -12,7 +12,7 @@ struct Sealed<T: Codable>: Codable {
     let value: T
     
     enum CodingKeys: String, CodingKey {
-        case cipherText
+        case ciphertext
         case nonce
     }
     
@@ -23,7 +23,7 @@ struct Sealed<T: Codable>: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        let cipherText = try container.decode(String.self, forKey: .cipherText)
+        let cipherText = try container.decode(String.self, forKey: .ciphertext)
         let nonce = try container.decode(String.self, forKey: .nonce)
         
         value = try Services.pairingManager.open(cipherText: cipherText, nonce: nonce)
@@ -34,7 +34,7 @@ struct Sealed<T: Codable>: Codable {
         
         let sealed = try Services.pairingManager.seal(value)
         
-        try container.encode(sealed.ciperText, forKey: .cipherText)
+        try container.encode(sealed.ciperText, forKey: .ciphertext)
         try container.encode(sealed.nonce, forKey: .nonce)
     }
 }

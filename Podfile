@@ -7,6 +7,7 @@ target 'DBCO' do
 
   # Pods for DBCO
   pod 'Sodium', '~> 0.8.0'
+  pod 'CocoaLumberjack/Swift', '~> 3.7.0'
 
   target 'DBCOTests' do
     inherit! :search_paths
