@@ -116,24 +116,21 @@ final class CaseManager: CaseManaging, Logging {
         func loadTasksIfNeeded() {
             guard appData.tasks.isEmpty else { return loadQuestionnairesIfNeeded() }
             
-            let identifier: String
-            
             do {
-                identifier = try Services.pairingManager.caseToken()
+                let identifier = try Services.pairingManager.caseToken()
+                Services.networkManager.getCase(identifier: identifier) {
+                    switch $0 {
+                    case .success(let result):
+                        self.tasks = result.tasks
+                        self.dateOfSymptomOnset = result.dateOfSymptomOnset
+                        
+                        loadQuestionnairesIfNeeded()
+                    case .failure(let error):
+                        completion(false, .couldNotLoadTasks(error))
+                    }
+                }
             } catch {
                 return completion(false, .noCaseData)
-            }
-            
-            Services.networkManager.getCase(identifier: identifier) {
-                switch $0 {
-                case .success(let result):
-                    self.tasks = result.tasks
-                    self.dateOfSymptomOnset = result.dateOfSymptomOnset
-                    
-                    loadQuestionnairesIfNeeded()
-                case .failure(let error):
-                    completion(false, .couldNotLoadTasks(error))
-                }
             }
         }
         
@@ -277,10 +274,22 @@ final class CaseManager: CaseManaging, Logging {
     func sync(completionHandler: ((Bool) -> Void)?) throws {
         guard hasCaseData else { throw CaseManagingError.noCaseData }
         
-        // Fake doing some work
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            self.isSynced = true
-            completionHandler?(true)
+        do {
+            let value = Case(dateOfSymptomOnset: dateOfSymptomOnset, tasks: tasks)
+            let identifier = try Services.pairingManager.caseToken()
+            Services.networkManager.putCase(identifier: identifier, value: value) {
+                switch $0 {
+                case .success:
+                    self.isSynced = true
+                    completionHandler?(true)
+                case .failure(let error):
+                    self.logError("Could not sync case: \(error)")
+                    completionHandler?(false)
+                }
+            }
+        } catch {
+            completionHandler?(false)
+            return
         }
     }
     
