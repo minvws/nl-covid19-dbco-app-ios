@@ -41,7 +41,7 @@ struct ArrayEnvelope<Item: Envelopable & Decodable>: Decodable {
     }
 }
 
-struct Envelope<Item: Envelopable & Decodable>: Decodable {
+struct Envelope<Item: Envelopable & Codable>: Codable {
     let item: Item
     
     struct CodingKeys: CodingKey {
@@ -68,6 +68,11 @@ struct Envelope<Item: Envelopable & Decodable>: Decodable {
     
     init(from decoder: Decoder) throws {
         item = try decoder.container(keyedBy: CodingKeys.self).decode(Item.self, forKey: .item)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(item, forKey: .item)
     }
 }
 

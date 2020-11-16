@@ -33,7 +33,7 @@ final class AppCoordinator: Coordinator {
         // Check if the app is the minimum version. If not, show the app update screen
         checkForRequiredUpdates()
         
-        if Services.pairingManager.isPaired && Services.caseManager.hasCaseData {
+        if Services.pairingManager.isPaired {
             startChildCoordinator(TaskOverviewCoordinator(window: window))
         } else {
             let onboardingCoordinator = OnboardingCoordinator(window: window)

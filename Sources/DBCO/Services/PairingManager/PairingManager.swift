@@ -39,6 +39,7 @@ class PairingManager: PairingManaging, Logging {
     
     private struct Constants {
         static let encodedHAPublicKey = "I8uOsrNAccb4/4xJUHOKKWZ4ZDW5JygzEMZMB5xwHAM="
+        static let keychainService = "PairingManager"
     }
     
     private let sodium = Sodium()
@@ -57,7 +58,7 @@ class PairingManager: PairingManaging, Logging {
         }
     }
     
-    @Keychain(name: "pairing", service: "PairingManager", clearOnReinstall: true)
+    @Keychain(name: "pairing", service: Constants.keychainService, clearOnReinstall: true)
     private var pairing: Pairing = .empty
     
     required init() {}
@@ -132,12 +133,71 @@ class PairingManager: PairingManaging, Logging {
     }
     
     func seal<T: Encodable>(_ value: T) throws -> (ciperText: String, nonce: String) {
-        // TODO
-        throw PairingManagingError.notPaired
+        guard isPaired else { throw PairingManagingError.notPaired }
+        
+        logDebug("Sealing \(value)")
+        let encodedValue = try jsonEncoder.encode(value)
+        logDebug("Resulting JSON: \(String(data: encodedValue, encoding: .utf8) ?? "")")
+        guard let (cipherText, nonce) = sodium.secretBox.seal(message: Bytes(encodedValue), secretKey: pairing.tx) else {
+            logError("Could not seal \(value)")
+            throw PairingManagingError.encryptionError
+        }
+        
+        let encodedCipherText = Data(cipherText).base64EncodedString()
+        let encodedNonce = Data(nonce).base64EncodedString()
+        logDebug("Sealed! cipherText: \(encodedCipherText), nonce: \(encodedNonce)")
+        
+        return (encodedCipherText, encodedNonce)
     }
     
     func open<T: Decodable>(cipherText: String, nonce: String) throws -> T {
-        // TODO
-        throw PairingManagingError.notPaired
+        guard isPaired else { throw PairingManagingError.notPaired }
+        
+        logDebug("Opening cipherText: \(cipherText), nonce: \(nonce)")
+        
+        guard let decodedCipherText = Data(base64Encoded: cipherText),
+              let decodedNonce = Data(base64Encoded: nonce) else {
+            throw PairingManagingError.encryptionError
+        }
+        
+        guard let decodedBytes = sodium.secretBox.open(authenticatedCipherText: Bytes(decodedCipherText),
+                                                       secretKey: pairing.rx,
+                                                       nonce: Bytes(decodedNonce)) else {
+            logError("Could not open value for \(T.self)")
+            throw PairingManagingError.encryptionError
+        }
+        
+        logDebug("Resulting JSON: \(String(data: Data(decodedBytes), encoding: .utf8) ?? "")")
+        
+        do {
+            let value = try jsonDecoder.decode(T.self, from: Data(decodedBytes))
+            logDebug("Opened value: \(value)")
+            
+            return value
+        } catch let error {
+            self.logError("Error Deserializing \(T.self): \(error)")
+            throw error
+        }
     }
+    
+    private lazy var dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = .current
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        return dateFormatter
+    }()
+    
+    private lazy var jsonEncoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .formatted(dateFormatter)
+        return encoder
+    }()
+    
+    private lazy var jsonDecoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        return decoder
+    }()
 }

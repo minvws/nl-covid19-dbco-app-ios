@@ -79,9 +79,7 @@ extension OnboardingCoordinator: PairViewControllerDelegate {
     func pairViewController(_ controller: PairViewController, wantsToPairWith code: String) {
         controller.startLoadingAnimation()
         navigationController.navigationBar.isUserInteractionEnabled = false
-        
-        // Pair and load case data
-        // This code is temporary untill pull to refresh for tasks is implemented
+    
         func errorAlert() {
             controller.stopLoadingAnimation()
             self.navigationController.navigationBar.isUserInteractionEnabled = true
@@ -93,22 +91,8 @@ extension OnboardingCoordinator: PairViewControllerDelegate {
             controller.present(alert, animated: true)
         }
         
-        func pairIfNeeded(pairdingCode: String) {
-            guard !Services.pairingManager.isPaired else { return loadCaseIfNeeded() }
-            
+        func pair(pairdingCode: String) {
             Services.pairingManager.pair(pairingCode: code) { success, error in
-                if success {
-                    loadCaseIfNeeded()
-                } else {
-                    errorAlert()
-                }
-            }
-        }
-        
-        func loadCaseIfNeeded() {
-            guard !Services.caseManager.hasCaseData else { return finish() }
-            
-            Services.caseManager.loadCaseData { success, error in
                 if success {
                     finish()
                 } else {
@@ -130,9 +114,12 @@ extension OnboardingCoordinator: PairViewControllerDelegate {
             let stepController = OnboardingStepViewController(viewModel: viewModel)
             stepController.delegate = self
             self.navigationController.setViewControllers([stepController], animated: true)
+            
+            // Load case data. If it fails, the task overview will try again.
+            Services.caseManager.loadCaseData(completion: { _, _ in })
         }
         
-        pairIfNeeded(pairdingCode: code)
+        pair(pairdingCode: code)
     }
     
 }

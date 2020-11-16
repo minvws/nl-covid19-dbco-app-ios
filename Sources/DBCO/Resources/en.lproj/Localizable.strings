@@ -12,6 +12,7 @@
 "selectDate" = "Selecteer datum";
 "done" = "Klaar";
 "ok" = "Oké";
+"tryAgain" = "Opnieuw proberen";
 "error.title" = "Er ging iets mis";
 
 /* MARK: - Update App */
@@ -42,6 +43,9 @@
 
 "task.contact.caption.completed" = "Gegevens toegevoegd";
 "task.contact.caption.incomplete" = "Vul gegevens aan";
+
+"taskLoadingErrorTitle" = "Kon de gegevens niet ophalen";
+"taskLoadingErrorMessage" = "Controleer de internetverbinding en probeer het opnieuw.";
 
 /* MARK: - Contact Selection */
 "selectContactTitle" = "Selecteer contact";
