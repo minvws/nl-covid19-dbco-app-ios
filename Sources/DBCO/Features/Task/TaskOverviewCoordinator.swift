@@ -173,4 +173,12 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
         upload()
     }
     
+    func taskOverviewViewControllerDidRequestShareLogs(_ controller: TaskOverviewViewController) {
+        guard let shareLogs = Bundle.main.infoDictionary?["SHARE_LOGS_ENABLED"] as? String, shareLogs == "YES" else { return }
+        
+        let activityViewController = UIActivityViewController(activityItems: LogHandler.logFiles(),
+                                                              applicationActivities: nil)
+        controller.present(activityViewController, animated: true, completion: nil)
+    }
+    
 }
