@@ -109,7 +109,7 @@ final class CaseManager: CaseManaging, Logging {
     }
     
     var hasCaseData: Bool {
-        $appData.exists
+        $appData.exists && !questionnaires.isEmpty
     }
     
     func loadCaseData(completion: @escaping (Bool, CaseManagingError?) -> Void) {

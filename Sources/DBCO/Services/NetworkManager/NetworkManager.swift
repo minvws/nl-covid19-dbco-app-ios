@@ -43,8 +43,12 @@ class NetworkManager: NetworkManaging, Logging {
         let urlRequest = constructRequest(url: configuration.caseUrl(identifier: identifier),
                                           method: .GET)
         
-        func open(result: Result<Sealed<Envelope<Case>>, NetworkError>) {
-            completion(result.map { $0.value.item })
+        struct CaseResponse: Decodable {
+            let sealedCase: Sealed<Case>
+        }
+        
+        func open(result: Result<CaseResponse, NetworkError>) {
+            completion(result.map { $0.sealedCase.value })
         }
 
         decodedJSONData(request: urlRequest, completion: open)
