@@ -13,22 +13,66 @@ class NetworkManager: NetworkManaging, Logging {
     required init(configuration: NetworkConfiguration) {
         self.configuration = configuration
         self.sessionDelegate = NetworkManagerURLSessionDelegate(configuration: configuration)
-        self.session = URLSession(configuration: .default,
+        self.session = URLSession(configuration: .ephemeral,
                                   delegate: sessionDelegate,
                                   delegateQueue: nil)
+    }
+    
+    func getAppConfiguration(completion: @escaping (Result<AppConfiguration, NetworkError>) -> ()) {
+        let urlRequest = constructRequest(url: configuration.appConfigurationUrl,
+                                          method: .GET)
+
+        decodedJSONData(request: urlRequest, completion: completion)
+    }
+    
+    func pair(code: String, sealedClientPublicKey: Data, completion: @escaping (Result<PairResponse, NetworkError>) -> ()) {
+        struct PairBody: Encodable {
+            let pairingCode: String
+            let sealedClientPublicKey: Data
+        }
+        
+        let urlRequest = constructRequest(url: configuration.pairingsUrl,
+                                          method: .POST,
+                                          body: PairBody(pairingCode: code,
+                                                         sealedClientPublicKey: sealedClientPublicKey))
+        
+        decodedJSONData(request: urlRequest, completion: completion)
     }
     
     func getCase(identifier: String, completion: @escaping (Result<Case, NetworkError>) -> ()) {
         let urlRequest = constructRequest(url: configuration.caseUrl(identifier: identifier),
                                           method: .GET)
         
-        func open(result: Result<Envelope<Case>, NetworkError>) {
-            DispatchQueue.main.async {
-                completion(result.map { $0.item })
-            }
+        struct CaseResponse: Decodable {
+            let sealedCase: Sealed<Case>
+        }
+        
+        func open(result: Result<CaseResponse, NetworkError>) {
+            completion(result.map { $0.sealedCase.value })
         }
 
         decodedJSONData(request: urlRequest, completion: open)
+    }
+    
+    func putCase(identifier: String, value: Case, completion: @escaping (Result<Void, NetworkError>) -> ()) {
+        struct CaseBody: Encodable {
+            let sealedCase: Sealed<Case>
+        }
+        
+        let urlRequest = constructRequest(url: configuration.caseUrl(identifier: identifier),
+                                          method: .PUT,
+                                          body: CaseBody(sealedCase: .init(value)))
+        
+        data(request: urlRequest) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    completion(.success(()))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+        }
     }
     
     func getQuestionnaires(completion: @escaping (Result<[Questionnaire], NetworkError>) -> ()) {
@@ -36,9 +80,7 @@ class NetworkManager: NetworkManaging, Logging {
                                           method: .GET)
         
         func open(result: Result<ArrayEnvelope<Questionnaire>, NetworkError>) {
-            DispatchQueue.main.async {
-                completion(result.map { $0.items })
-            }
+            completion(result.map { $0.items })
         }
         
         decodedJSONData(request: urlRequest, completion: open)
@@ -111,7 +153,11 @@ class NetworkManager: NetworkManaging, Logging {
     
     private func decodedJSONData<Object: Decodable>(request: Result<URLRequest, NetworkError>, completion: @escaping (Result<Object, NetworkError>) -> ()) {
         data(request: request) { result in
-            completion(self.jsonResponseHandler(result: result))
+            let decodedResult: Result<Object, NetworkError> = self.jsonResponseHandler(result: result)
+            
+            DispatchQueue.main.async {
+                completion(decodedResult)
+            }
         }
     }
 

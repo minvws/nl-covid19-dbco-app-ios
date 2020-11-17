@@ -1,0 +1,29 @@
+{
+  "case": {
+      "dateOfSymptomOnset": "2020-10-29",
+      "tasks": [
+        {
+          "uuid": "123e4567-e89b-12d3-a456-426614172000",
+          "taskType": "contact",
+          "source": "portal",
+          "label": "Huisgenoot 1",
+          "taskContext": null,
+          "category": "1",
+          "communication": "staff",
+          "dateOfLastExposure": "2020-10-30",
+          "result": null
+        },
+        {
+          "uuid": "123e4567-e89b-22d3-a456-426614172000",
+          "taskType": "contact",
+          "source": "portal",
+          "label": "Huisgenoot 2",
+          "taskContext": null,
+          "category": "1",
+          "communication": "staff",
+          "dateOfLastExposure": "2020-10-30",
+          "result": null
+        }
+      ]
+  }
+}
