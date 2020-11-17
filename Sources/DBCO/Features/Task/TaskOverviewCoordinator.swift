@@ -56,28 +56,29 @@ final class TaskOverviewCoordinator: Coordinator, Logging {
             }
         }
         
-        // If initial loading of case data failed try again here and present the user with an error when the request fails again.
-        func loadCaseDataIfNeeded() {
-            guard !Services.caseManager.hasCaseData else { return }
-            
-            Services.caseManager.loadCaseData { success, error in
-                if !success {
-                    showLoadingError()
+        loadCaseData(userInitiated: false)
+    }
+    
+    private func loadCaseData(userInitiated: Bool, completionHandler: (() -> Void)? = nil) {
+        Services.caseManager.loadCaseData(userInitiated: userInitiated) { success, error in
+            if success {
+                completionHandler?()
+            } else {
+                let alert = UIAlertController(title: .taskLoadingErrorTitle, message: .taskLoadingErrorMessage, preferredStyle: .alert)
+                
+                alert.addAction(UIAlertAction(title: .tryAgain, style: .default) { _ in
+                    self.loadCaseData(userInitiated: userInitiated, completionHandler: completionHandler)
+                })
+                
+                if Services.caseManager.hasCaseData {
+                    alert.addAction(UIAlertAction(title: .cancel, style: .cancel) { _ in
+                        completionHandler?()
+                    })
                 }
+                
+                self.navigationController.present(alert, animated: true)
             }
         }
-        
-        func showLoadingError() {
-            let alert = UIAlertController(title: .taskLoadingErrorTitle, message: .taskLoadingErrorMessage, preferredStyle: .alert)
-            
-            alert.addAction(UIAlertAction(title: .tryAgain, style: .default) { _ in
-                loadCaseDataIfNeeded()
-            })
-            
-            navigationController.present(alert, animated: true)
-        }
-        
-        loadCaseDataIfNeeded()
     }
     
     private func upload() {
@@ -178,6 +179,15 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
     
     func taskOverviewViewControllerDidRequestUpload(_ controller: TaskOverviewViewController) {
         upload()
+    }
+    
+    func taskOverviewViewControllerDidRequestRefresh(_ controller: TaskOverviewViewController) {
+        loadCaseData(userInitiated: true) {
+            // Delay for a bit to make it feel more like something is happening
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                controller.isLoading = false
+            }
+        }
     }
     
     func taskOverviewViewControllerDidRequestDebugMenu(_ controller: TaskOverviewViewController) {

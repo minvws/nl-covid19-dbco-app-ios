@@ -41,7 +41,7 @@ protocol CaseManaging {
     /// Throws an `questionnaireNotFound` error when there's no suitable questionnaire  for the supplied task
     func questionnaire(for taskType: Task.TaskType) throws -> Questionnaire
     
-    func loadCaseData(completion: @escaping (_ success: Bool, _ error: CaseManagingError?) -> Void)
+    func loadCaseData(userInitiated: Bool, completion: @escaping (_ success: Bool, _ error: CaseManagingError?) -> Void)
     
     /// Clears all stored data. Using any method or property except for `hasCaseData` on CaseManager before pairing and loading the data again is an invalid operation.
     /// Throws an `notPaired` error when called befored paired.
@@ -118,17 +118,17 @@ final class CaseManager: CaseManaging, Logging {
         $appData.exists && !questionnaires.isEmpty
     }
     
-    private var shouldLoadTasks: Bool {
-        return appData.tasks.isEmpty
+    private func shouldLoadTasks(userInitiated: Bool) -> Bool {
+        return appData.tasks.isEmpty || userInitiated
     }
     
     private var shouldLoadQuestionnaires: Bool {
         return appData.questionnaires.isEmpty
     }
     
-    func loadCaseData(completion: @escaping (Bool, CaseManagingError?) -> Void) {
+    func loadCaseData(userInitiated: Bool, completion: @escaping (Bool, CaseManagingError?) -> Void) {
         func loadTasksIfNeeded() {
-            guard shouldLoadTasks else { return loadQuestionnairesIfNeeded() }
+            guard shouldLoadTasks(userInitiated: userInitiated) else { return loadQuestionnairesIfNeeded() }
             
             do {
                 let identifier = try Services.pairingManager.caseToken()
@@ -221,13 +221,13 @@ final class CaseManager: CaseManaging, Logging {
     /// Set the tasks from the api call result
     ///
     /// Updates existing tasks if the user has not yet started them and adds any new tasks
-    private func setTasks(_ newTasks: [Task]) {
+    private func setTasks(_ fetchedTasks: [Task]) {
         guard !tasks.isEmpty else {
-            tasks = newTasks
+            tasks = fetchedTasks
             return
         }
         
-        newTasks.forEach { task in
+        fetchedTasks.forEach { task in
             if let existingTaskIndex = tasks.firstIndex(where: { $0.uuid == task.uuid }) {
                 if tasks[existingTaskIndex].status == .notStarted {
                     tasks[existingTaskIndex] = task

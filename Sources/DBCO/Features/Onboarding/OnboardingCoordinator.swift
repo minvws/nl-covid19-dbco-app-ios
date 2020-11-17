@@ -116,7 +116,7 @@ extension OnboardingCoordinator: PairViewControllerDelegate {
             self.navigationController.setViewControllers([stepController], animated: true)
             
             // Load case data. If it fails, the task overview will try again.
-            Services.caseManager.loadCaseData(completion: { _, _ in })
+            Services.caseManager.loadCaseData(userInitiated: false, completion: { _, _ in })
         }
         
         pair(pairdingCode: code)
