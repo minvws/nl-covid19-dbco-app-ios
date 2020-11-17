@@ -11,6 +11,7 @@ protocol TaskOverviewViewControllerDelegate: class {
     func taskOverviewViewControllerDidRequestAddContact(_ controller: TaskOverviewViewController)
     func taskOverviewViewController(_ controller: TaskOverviewViewController, didSelect task: Task)
     func taskOverviewViewControllerDidRequestUpload(_ controller: TaskOverviewViewController)
+    func taskOverviewViewControllerDidRequestShareLogs(_ controller: TaskOverviewViewController)
 }
 
 /// - Tag: TaskOverviewViewModel
@@ -146,8 +147,8 @@ class TaskOverviewViewController: PromptableViewController {
         
         let sectionHeaderBuilder = { (title: String, subtitle: String) -> UIView in
             VStack(spacing: 4,
-                   Label(bodyBold: title),
-                   Label(subhead: subtitle, textColor: Theme.colors.captionGray))
+                   Label(bodyBold: title).multiline(),
+                   Label(subhead: subtitle, textColor: Theme.colors.captionGray).multiline())
                 .wrappedInReadableWidth(insets: .top(20) + .bottom(16))
         }
         
@@ -162,6 +163,12 @@ class TaskOverviewViewController: PromptableViewController {
         versionLabel.textAlignment = .center
         versionLabel.sizeToFit()
         versionLabel.frame = CGRect(x: 0, y: 0, width: versionLabel.frame.width, height: 60.0)
+        versionLabel.isUserInteractionEnabled = true
+        
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(shareLogs))
+        gestureRecognizer.numberOfTapsRequired = 4
+        
+        versionLabel.addGestureRecognizer(gestureRecognizer)
         
         tableView.tableFooterView = versionLabel
     }
@@ -172,6 +179,10 @@ class TaskOverviewViewController: PromptableViewController {
     
     @objc private func upload() {
         delegate?.taskOverviewViewControllerDidRequestUpload(self)
+    }
+    
+    @objc private func shareLogs() {
+        delegate?.taskOverviewViewControllerDidRequestShareLogs(self)
     }
 
 }

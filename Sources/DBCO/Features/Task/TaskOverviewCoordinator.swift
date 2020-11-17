@@ -13,7 +13,9 @@ import Contacts
 /// Uses [UploadCoordinator](x-source-tag://UploadCoordinator) to upload the tasks.
 ///
 /// - Tag: TaskOverviewCoordinator
-final class TaskOverviewCoordinator: Coordinator {
+final class TaskOverviewCoordinator: Coordinator, Logging {
+    var loggingCategory: String = "TaskOverviewCoordinator"
+    
     private let window: UIWindow
     private let overviewController: TaskOverviewViewController
     private let navigationController: NavigationController
@@ -46,21 +48,57 @@ final class TaskOverviewCoordinator: Coordinator {
                 snapshotView.removeFromSuperview()
             }
         }
+        
+        // If initial loading of case data failed try again here and present the user with an error when the request fails again.
+        func loadCaseDataIfNeeded() {
+            guard !Services.caseManager.hasCaseData else { return }
+            
+            Services.caseManager.loadCaseData { success, error in
+                if !success {
+                    showLoadingError()
+                }
+            }
+        }
+        
+        func showLoadingError() {
+            let alert = UIAlertController(title: .taskLoadingErrorTitle, message: .taskLoadingErrorMessage, preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: .tryAgain, style: .default) { _ in
+                loadCaseDataIfNeeded()
+            })
+            
+            navigationController.present(alert, animated: true)
+        }
+        
+        loadCaseDataIfNeeded()
     }
     
     private func upload() {
+        guard Services.caseManager.hasCaseData else {
+            return
+        }
+        
         startChildCoordinator(UploadCoordinator(presenter: overviewController, delegate: self))
     }
     
     private func selectContact(for task: Task) {
+        guard Services.caseManager.hasCaseData else { return }
+        
         startChildCoordinator(SelectContactCoordinator(presenter: overviewController, contactTask: task, delegate: self))
     }
     
     private func addContact() {
+        guard Services.caseManager.hasCaseData else {
+            logWarning("Cannot add contact before case data is fetched")
+            return
+        }
+        
         startChildCoordinator(SelectContactCoordinator(presenter: overviewController, contactTask: nil, delegate: self))
     }
     
     private func editContact(for task: Task) {
+        guard Services.caseManager.hasCaseData else { return }
+        
         startChildCoordinator(EditContactCoordinator(presenter: overviewController, contactTask: task, delegate: self))
     }
 
@@ -72,7 +110,11 @@ extension TaskOverviewCoordinator: SelectContactCoordinatorDelegate {
     func selectContactCoordinator(_ coordinator: SelectContactCoordinator, didFinishWith task: Task) {
         removeChildCoordinator(coordinator)
         
-        Services.caseManager.save(task)
+        do {
+            try Services.caseManager.save(task)
+        } catch let error {
+            logError("Could not save task: \(error)")
+        }
     }
     
     func selectContactCoordinatorDidCancel(_ coordinator: SelectContactCoordinator) {
@@ -86,7 +128,11 @@ extension TaskOverviewCoordinator: EditContactCoordinatorDelegate {
     func editContactCoordinator(_ coordinator: EditContactCoordinator, didFinishContactTask task: Task) {
         removeChildCoordinator(coordinator)
         
-        Services.caseManager.save(task)
+        do {
+            try Services.caseManager.save(task)
+        } catch let error {
+            logError("Could not save task: \(error)")
+        }
     }
     
     func editContactCoordinatorDidCancel(_ coordinator: EditContactCoordinator) {
@@ -125,6 +171,14 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
     
     func taskOverviewViewControllerDidRequestUpload(_ controller: TaskOverviewViewController) {
         upload()
+    }
+    
+    func taskOverviewViewControllerDidRequestShareLogs(_ controller: TaskOverviewViewController) {
+        guard let shareLogs = Bundle.main.infoDictionary?["SHARE_LOGS_ENABLED"] as? String, shareLogs == "YES" else { return }
+        
+        let activityViewController = UIActivityViewController(activityItems: LogHandler.logFiles(),
+                                                              applicationActivities: nil)
+        controller.present(activityViewController, animated: true, completion: nil)
     }
     
 }

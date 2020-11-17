@@ -128,8 +128,8 @@ class UnfinishedTasksViewController: PromptableViewController {
         
         let sectionHeaderBuilder = { (title: String, subtitle: String) -> UIView in
             VStack(spacing: 4,
-                   Label(bodyBold: title),
-                   Label(subhead: subtitle, textColor: Theme.colors.captionGray))
+                   Label(bodyBold: title).multiline(),
+                   Label(subhead: subtitle, textColor: Theme.colors.captionGray).multiline())
                 .wrappedInReadableWidth(insets: .top(20) + .bottom(16))
         }
         

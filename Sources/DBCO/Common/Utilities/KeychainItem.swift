@@ -181,14 +181,22 @@ class CachedKeychainItem<T: Codable>: KeychainItem<T> {
     let projectedValue: CachedKeychainItem<T>
     private let defaultValue: T
     
-    init(wrappedValue: T, name: String, service: String? = nil) {
+    init(wrappedValue: T, name: String, service: String? = nil, clearOnReinstall: Bool = false) {
         projectedValue = .init(name: name, service: service)
         self.defaultValue = wrappedValue
+        
+        if clearOnReinstall {
+            let key = (name + (service ?? "")).sha256
+            
+            if !Foundation.UserDefaults.standard.bool(forKey: key) {
+                projectedValue.clearData()
+                Foundation.UserDefaults.standard.set(true, forKey: key)
+            }
+        }
     }
     
-    init(name: String, service: String? = nil, defaultValue: T) {
-        projectedValue = .init(name: name, service: service)
-        self.defaultValue = defaultValue
+    init(name: String, service: String? = nil, clearOnReinstall: Bool = false, defaultValue: T) {
+        self.init(wrappedValue: defaultValue, name: name, service: service, clearOnReinstall: clearOnReinstall)
     }
 
     var wrappedValue: T {

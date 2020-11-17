@@ -275,7 +275,7 @@ class LastExposureDateAnswerManager: AnswerManaging {
                                 trigger: nil) }
         
         
-        self.answerOptions = [AnswerOption(label: "Eerder", value: "earlier", trigger: nil)] + dateOptions
+        self.answerOptions = [AnswerOption(label: .contactInformationLastExposureEarlier, value: "earlier", trigger: nil)] + dateOptions
         
         if let lastExposureDate = lastExposureDate {
             if let option = answerOptions.first(where: { $0.value == lastExposureDate }) {
@@ -390,7 +390,7 @@ class MultipleChoiceAnswerManager: AnswerManaging {
         self.baseAnswer = answer
         self.question = question
         
-        // Prefill communcation triggers
+        // Prefill communication triggers
         do {
             let option = question.answerOptions?.first(where: { $0.trigger == .setCommunicationToIndex })
             
