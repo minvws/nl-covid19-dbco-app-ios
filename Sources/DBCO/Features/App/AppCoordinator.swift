@@ -24,10 +24,6 @@ final class AppCoordinator: Coordinator {
     }
     
     override func start() {
-        #if USERTEST_MOCKS
-        Services.use(LocalMockNetworkManager.self)
-        #endif
-        
         LogHandler.setup()
         
         window.tintColor = Theme.colors.primary
