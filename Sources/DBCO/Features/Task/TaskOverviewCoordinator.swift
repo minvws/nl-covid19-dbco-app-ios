@@ -193,7 +193,6 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
             controller.present(alert, animated: true)
         }
         
-        
         var actions = [UIAlertAction]()
         
         if let shareLogs = Bundle.main.infoDictionary?["SHARE_LOGS_ENABLED"] as? String, shareLogs == "YES" {

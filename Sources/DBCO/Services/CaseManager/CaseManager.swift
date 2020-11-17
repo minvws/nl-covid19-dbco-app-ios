@@ -118,16 +118,24 @@ final class CaseManager: CaseManaging, Logging {
         $appData.exists && !questionnaires.isEmpty
     }
     
+    private var shouldLoadTasks: Bool {
+        return appData.tasks.isEmpty
+    }
+    
+    private var shouldLoadQuestionnaires: Bool {
+        return appData.questionnaires.isEmpty
+    }
+    
     func loadCaseData(completion: @escaping (Bool, CaseManagingError?) -> Void) {
         func loadTasksIfNeeded() {
-            guard appData.tasks.isEmpty else { return loadQuestionnairesIfNeeded() }
+            guard shouldLoadTasks else { return loadQuestionnairesIfNeeded() }
             
             do {
                 let identifier = try Services.pairingManager.caseToken()
                 Services.networkManager.getCase(identifier: identifier) {
                     switch $0 {
                     case .success(let result):
-                        self.tasks = result.tasks
+                        self.setTasks(result.tasks)
                         self.dateOfSymptomOnset = result.dateOfSymptomOnset
                         self.windowExpiresAt = result.windowExpiresAt
                         
@@ -142,7 +150,7 @@ final class CaseManager: CaseManaging, Logging {
         }
         
         func loadQuestionnairesIfNeeded() {
-            guard appData.questionnaires.isEmpty else { return finish() }
+            guard shouldLoadQuestionnaires else { return finish() }
             
             Services.networkManager.getQuestionnaires {
                 switch $0 {
@@ -208,6 +216,26 @@ final class CaseManager: CaseManaging, Logging {
         }
         
         self.questionnaires = questionnaires.map(injectingLastExposureDateIfNeeded)
+    }
+    
+    /// Set the tasks from the api call result
+    ///
+    /// Updates existing tasks if the user has not yet started them and adds any new tasks
+    private func setTasks(_ newTasks: [Task]) {
+        guard !tasks.isEmpty else {
+            tasks = newTasks
+            return
+        }
+        
+        newTasks.forEach { task in
+            if let existingTaskIndex = tasks.firstIndex(where: { $0.uuid == task.uuid }) {
+                if tasks[existingTaskIndex].status == .notStarted {
+                    tasks[existingTaskIndex] = task
+                }
+            } else {
+                tasks.append(task)
+            }
+        }
     }
     
     /// - Tag: CaseManager.questionnaire
