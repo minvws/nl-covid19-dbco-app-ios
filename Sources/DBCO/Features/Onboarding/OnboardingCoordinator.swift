@@ -79,34 +79,47 @@ extension OnboardingCoordinator: PairViewControllerDelegate {
     func pairViewController(_ controller: PairViewController, wantsToPairWith code: String) {
         controller.startLoadingAnimation()
         navigationController.navigationBar.isUserInteractionEnabled = false
+    
+        func errorAlert() {
+            controller.stopLoadingAnimation()
+            self.navigationController.navigationBar.isUserInteractionEnabled = true
+            
+            let alert = UIAlertController(title: .onboardingLoadingErrorTitle, message: .onboardingLoadingErrorMessage, preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: .ok, style: .default, handler: nil))
+            
+            controller.present(alert, animated: true)
+        }
         
-        // Load task stubs
-        // This is all temporary code until until pairing with the API is available.
-        Services.caseManager.loadTasksAndQuestions(pairingCode: code) { success, error in
-            if success {
-                controller.stopLoadingAnimation()
-                self.navigationController.navigationBar.isUserInteractionEnabled = true
-                
-                self.didPair = true
-                
-                let viewModel = OnboardingStepViewModel(image: UIImage(named: "StartVisual")!,
-                                                        title: .onboardingStep3Title,
-                                                        message: .onboardingStep3Message,
-                                                        buttonTitle: .start)
-                let stepController = OnboardingStepViewController(viewModel: viewModel)
-                stepController.delegate = self
-                self.navigationController.setViewControllers([stepController], animated: true)
-            } else {
-                controller.stopLoadingAnimation()
-                self.navigationController.navigationBar.isUserInteractionEnabled = true
-                
-                let alert = UIAlertController(title: .onboardingLoadingErrorTitle, message: .onboardingLoadingErrorMessage, preferredStyle: .alert)
-                
-                alert.addAction(UIAlertAction(title: .ok, style: .default, handler: nil))
-                
-                controller.present(alert, animated: true)
+        func pair(pairdingCode: String) {
+            Services.pairingManager.pair(pairingCode: code) { success, error in
+                if success {
+                    finish()
+                } else {
+                    errorAlert()
+                }
             }
         }
+        
+        func finish() {
+            controller.stopLoadingAnimation()
+            self.navigationController.navigationBar.isUserInteractionEnabled = true
+            
+            self.didPair = true
+            
+            let viewModel = OnboardingStepViewModel(image: UIImage(named: "StartVisual")!,
+                                                    title: .onboardingStep3Title,
+                                                    message: .onboardingStep3Message,
+                                                    buttonTitle: .start)
+            let stepController = OnboardingStepViewController(viewModel: viewModel)
+            stepController.delegate = self
+            self.navigationController.setViewControllers([stepController], animated: true)
+            
+            // Load case data. If it fails, the task overview will try again.
+            Services.caseManager.loadCaseData(completion: { _, _ in })
+        }
+        
+        pair(pairdingCode: code)
     }
     
 }

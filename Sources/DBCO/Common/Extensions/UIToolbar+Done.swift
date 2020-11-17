@@ -12,6 +12,7 @@ extension UIToolbar {
         let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 100, height: 35))
         toolBar.setItems([UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), UIBarButtonItem(barButtonSystemItem: .done, target: target, action: selector)], animated: false)
         toolBar.barTintColor = .white
+        toolBar.tintColor = Theme.colors.primary
         toolBar.sizeToFit()
         
         return toolBar

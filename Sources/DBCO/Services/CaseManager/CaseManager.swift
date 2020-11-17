@@ -5,7 +5,14 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import Foundation
+import UIKit
+
+enum CaseManagingError: Error {
+    case noCaseData
+    case questionnaireNotFound
+    case couldNotLoadTasks(NetworkError)
+    case couldNotLoadQuestionnaires(NetworkError)
+}
 
 /// Loads tasks and questionnaires.
 /// Facilitates storing and uploading results to the backend.
@@ -17,9 +24,10 @@ import Foundation
 ///
 /// - Tag: CaseManaging
 protocol CaseManaging {
+    
     init()
     
-    var isPaired: Bool { get }
+    var hasCaseData: Bool { get }
     
     /// Indicates that alls the tasks are uploaded to the backend in their current state
     var isSynced: Bool { get }
@@ -27,23 +35,30 @@ protocol CaseManaging {
     var dateOfSymptomOnset: Date { get }
     var tasks: [Task] { get }
     
-    var hasUnfinishedTasks: Bool { get }
+    /// Returns the [Questionnaire](x-source-tag://Questionnaire) associated with a task.
+    /// Throws an `notPaired` error when called befored paired.
+    /// Throws an `questionnaireNotFound` error when there's no suitable questionnaire  for the supplied task
+    func questionnaire(for task: Task) throws -> Questionnaire
     
-    /// Returns the [Questionnaire](x-source-tag://Questionnaire) associated with a task
-    func questionnaire(for task: Task) -> Questionnaire
+    func loadCaseData(completion: @escaping (_ success: Bool, _ error: CaseManagingError?) -> Void)
     
-    func loadTasksAndQuestions(pairingCode: String, completion: @escaping (_ success: Bool, _ error: NetworkError?) -> Void)
+    /// Clears all stored data. Using any method or property except for `hasCaseData` on CaseManager before pairing and loading the data again is an invalid operation.
+    /// Throws an `notPaired` error when called befored paired.
+    func removeCaseData() throws
     
     /// Adds a listener
     /// - parameter listener: The object conforming to [CaseManagerListener](x-source-tag://CaseManagerListener) that will receive updates. Will be stored with a weak reference
     func addListener(_ listener: CaseManagerListener)
     
     /// Saves updates to a task if a task with the same uuid is already managed, or stores a new task.
-    func save(_ task: Task)
+    /// Throws an `notPaired` error when called befored paired.
+    func save(_ task: Task) throws
     
-    /// Uploads all the tasks to the backend
+    /// Uploads all the tasks to the backend.
+    /// Throws an `notPaired` error when called befored paired.
+    ///
     /// - parameter completionHandler: The closure to be called after the upload was finished.
-    func sync(completionHandler: ((_ success: Bool) -> Void)?)
+    func sync(completionHandler: ((_ success: Bool) -> Void)?) throws
 }
 
 /// - Tag: CaseManagerListener
@@ -55,7 +70,6 @@ protocol CaseManagerListener: class {
     func caseManagerDidUpdateSyncState(_ caseManager: CaseManaging)
 }
 
-// Temporary implementation
 /// - Tag: CaseManager
 final class CaseManager: CaseManaging, Logging {
     
@@ -69,6 +83,9 @@ final class CaseManager: CaseManaging, Logging {
     
     private var listeners = [ListenerWrapper]()
     
+    @Keychain(name: "appData", service: Constants.keychainService, clearOnReinstall: true)
+    private var appData: AppData = .empty
+    
     @UserDefaults(key: "isSynced")
     private(set) var isSynced: Bool = true {
         didSet {
@@ -76,67 +93,72 @@ final class CaseManager: CaseManaging, Logging {
         }
     }
     
-    @Keychain(name: "questionnaires", service: Constants.keychainService)
-    private var questionnaires: [Questionnaire] = []
-    
-    @Keychain(name: "tasks", service: Constants.keychainService)
-    private(set) var tasks: [Task] = []
-    
-    @Keychain(name: "dateOfSymptomOnset", service: Constants.keychainService)
-    private(set) var dateOfSymptomOnset: Date = Date()
-    
-    @UserDefaults(key: "didPair")
-    private(set) var didPair: Bool = false
-    
-    var isPaired: Bool {
-        return
-            $tasks.exists &&
-            $questionnaires.exists &&
-            $dateOfSymptomOnset.exists &&
-            didPair
+    private(set) var tasks: [Task] {
+        get { appData.tasks }
+        set { appData.tasks = newValue }
     }
     
-    var hasUnfinishedTasks: Bool {
-        tasks.contains { $0.status != .completed }
+    private var questionnaires: [Questionnaire] {
+        get { appData.questionnaires }
+        set { appData.questionnaires = newValue }
     }
     
-    func loadTasksAndQuestions(pairingCode: String, completion: @escaping (Bool, NetworkError?) -> Void) {
-        // This is all temporary code until until pairing with the API is available.
-        
-        // Clear existing data
-        $tasks.clearData()
-        $questionnaires.clearData()
-        $dateOfSymptomOnset.clearData()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + .random(in: 0.1...0.5)) {
-            if let validCodes = Bundle.main.infoDictionary?["ValidCodes"] as? [String] {
-                guard validCodes.contains(pairingCode.sha256) else {
-                    completion(false, .invalidRequest)
-                    return
+    private(set) var dateOfSymptomOnset: Date {
+        get { appData.dateOfSymptomOnset }
+        set { appData.dateOfSymptomOnset = newValue }
+    }
+    
+    var hasCaseData: Bool {
+        $appData.exists && !questionnaires.isEmpty
+    }
+    
+    func loadCaseData(completion: @escaping (Bool, CaseManagingError?) -> Void) {
+        func loadTasksIfNeeded() {
+            guard appData.tasks.isEmpty else { return loadQuestionnairesIfNeeded() }
+            
+            do {
+                let identifier = try Services.pairingManager.caseToken()
+                Services.networkManager.getCase(identifier: identifier) {
+                    switch $0 {
+                    case .success(let result):
+                        self.tasks = result.tasks
+                        self.dateOfSymptomOnset = result.dateOfSymptomOnset
+                        
+                        loadQuestionnairesIfNeeded()
+                    case .failure(let error):
+                        completion(false, .couldNotLoadTasks(error))
+                    }
                 }
-            }
-        
-            let group = DispatchGroup()
-            
-            group.enter()
-            Services.networkManager.getCase(identifier: "1234") { result in
-                self.tasks = (try? result.get())?.tasks ?? []
-                self.dateOfSymptomOnset = (try? result.get())?.dateOfSymptomOnset ?? Date()
-                self.listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
-                group.leave()
-            }
-            
-            group.enter()
-            Services.networkManager.getQuestionnaires { result in
-                self.setQuestionnaires((try? result.get()) ?? [])
-                group.leave()
-            }
-            
-            group.notify(queue: .main) {
-                self.didPair = true
-                completion(true, nil)
+            } catch {
+                return completion(false, .noCaseData)
             }
         }
+        
+        func loadQuestionnairesIfNeeded() {
+            guard appData.questionnaires.isEmpty else { return finish() }
+            
+            Services.networkManager.getQuestionnaires {
+                switch $0 {
+                case .success(let questionnaires):
+                    self.setQuestionnaires(questionnaires)
+                    
+                    finish()
+                case .failure(let error):
+                    completion(false, .couldNotLoadQuestionnaires(error))
+                }
+            }
+        }
+        
+        func finish() {
+            completion(true, nil)
+            self.listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
+        }
+        
+        loadTasksIfNeeded()
+    }
+    
+    func removeCaseData() throws {
+        $appData.clearData()
     }
     
     /// Set the questionnaires from the api call result
@@ -182,16 +204,20 @@ final class CaseManager: CaseManaging, Logging {
     }
     
     /// - Tag: CaseManager.questionnaire
-    func questionnaire(for task: Task) -> Questionnaire {
+    func questionnaire(for task: Task) throws -> Questionnaire {
+        guard hasCaseData else { throw CaseManagingError.noCaseData }
+        
         guard let questionnaire = questionnaires.first(where: { $0.taskType == task.taskType }) else {
             logError("Could not find applicable questionnaire")
-            fatalError()
+            throw CaseManagingError.questionnaireNotFound
         }
         
         return questionnaire
     }
     
-    func save(_ task: Task) {
+    func save(_ task: Task) throws {
+        guard hasCaseData else { throw CaseManagingError.noCaseData }
+        
         func storeNewTask() -> Int {
             tasks.append(task)
             return tasks.count - 1
@@ -199,7 +225,7 @@ final class CaseManager: CaseManaging, Logging {
         
         let index = tasks.lastIndex { $0.uuid == task.uuid } ?? storeNewTask()
         
-        let questionnaire = self.questionnaire(for: task)
+        let questionnaire = try self.questionnaire(for: task)
         
         // Update task type content
         switch tasks[index].taskType {
@@ -245,11 +271,25 @@ final class CaseManager: CaseManaging, Logging {
         listeners.append(ListenerWrapper(listener: listener))
     }
     
-    func sync(completionHandler: ((Bool) -> Void)?) {
-        // Fake doing some work
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            self.isSynced = true
-            completionHandler?(true)
+    func sync(completionHandler: ((Bool) -> Void)?) throws {
+        guard hasCaseData else { throw CaseManagingError.noCaseData }
+        
+        do {
+            let value = Case(dateOfSymptomOnset: dateOfSymptomOnset, tasks: tasks)
+            let identifier = try Services.pairingManager.caseToken()
+            Services.networkManager.putCase(identifier: identifier, value: value) {
+                switch $0 {
+                case .success:
+                    self.isSynced = true
+                    completionHandler?(true)
+                case .failure(let error):
+                    self.logError("Could not sync case: \(error)")
+                    completionHandler?(false)
+                }
+            }
+        } catch {
+            completionHandler?(false)
+            return
         }
     }
     

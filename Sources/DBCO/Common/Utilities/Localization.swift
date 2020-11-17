@@ -51,12 +51,22 @@ extension String {
     /* MARK: - General */
     static var save: String { return Localization.string(for: "save") }
     static var cancel: String { return Localization.string(for: "cancel") }
+    static var close: String { return Localization.string(for: "close") }
     static var next: String { return Localization.string(for: "next") }
     static var start: String { return Localization.string(for: "start") }
     static var edit: String { return Localization.string(for: "edit") }
     static var selectDate: String { return Localization.string(for: "selectDate") }
     static var done: String { return Localization.string(for: "done") }
     static var ok: String { return Localization.string(for: "ok") }
+    static var tryAgain: String { return Localization.string(for: "tryAgain") }
+    static var errorTitle: String { return Localization.string(for: "error.title") }
+    
+    // MARK: - Update App
+    static var updateAppErrorMessage: String { return Localization.string(for: "updateApp.error.message") }
+    static var updateAppTitle: String { return Localization.string(for: "updateApp.title") }
+    
+    static var updateAppContent: String { return Localization.string(for: "updateApp.content") }
+    static var updateAppButton: String { return Localization.string(for: "updateApp.button") }
     
     /* MARK: - Onboarding */
     static var onboardingStep1Title: String { return Localization.string(for: "onboarding.step1.title") }
@@ -81,6 +91,9 @@ extension String {
     static var taskContactCaptionCompleted: String { return Localization.string(for: "task.contact.caption.completed") }
     static var taskContactCaptionIncomplete: String { return Localization.string(for: "task.contact.caption.incomplete") }
     
+    static var taskLoadingErrorTitle: String { return Localization.string(for: "taskLoadingErrorTitle") }
+    static var taskLoadingErrorMessage: String { return Localization.string(for: "taskLoadingErrorMessage") }
+    
     // MARK: - Contact Selection
     static var selectContactTitle: String { return Localization.string(for: "selectContactTitle") }
     static var selectContactSearch: String { return Localization.string(for: "selectContactSearch") }
@@ -95,32 +108,42 @@ extension String {
     static var contactTypeSectionMessage: String { return Localization.string(for: "contactTypeSection.message") }
     static var contactDetailsSectionTitle: String { return Localization.string(for: "contactDetailsSection.title") }
     static var contactDetailsSectionMessage: String { return Localization.string(for: "contactDetailsSection.message") }
+    
     static var informContactSectionTitle: String { return Localization.string(for: "informContactSection.title") }
-    static var informContactSectionMessageIndex: String { return Localization.string(for: "informContactSection.message.index") }
-    static var informContactSectionMessageStaff: String { return Localization.string(for: "informContactSection.message.staff") }
+    static var informContactSectionMessage: String { return Localization.string(for: "informContactSection.message") }
     
     static func informContactTitleIndex(firstName: String?) -> String {
-        if let firstName = firstName {
-            return Localization.string(for: "informContactTitle.index.knownName", [firstName, firstName])
-        } else {
-            return Localization.string(for: "informContactTitle.index.unknownName")
-        }
+        let firstName = firstName ?? .contactPromptNameFallback
+        return Localization.string(for: "informContactTitle.index", [firstName])
     }
     
     static func informContactTitleStaff(firstName: String?) -> String {
-        if let firstName = firstName {
-            return Localization.string(for: "informContactTitle.staff.knownName", [firstName, firstName])
-        } else {
-            return Localization.string(for: "informContactTitle.staff.unknownName")
-        }
+        let firstName = firstName ?? .contactPromptNameFallback
+        return Localization.string(for: "informContactTitle.staff", [firstName])
     }
     
-    static func informContactGuidelinesClose(untilDate: String, daysRemaining: String) -> String { return Localization.string(for: "informContactGuidelines.close", [untilDate, daysRemaining]) }
-    static func informContactGuidelinesCloseUntilDate(date: String) -> String { return Localization.string(for: "informContactGuidelines.close.untilDate", [date]) }
-    static var informContactGuidelinesCloseDateFormat: String { return Localization.string(for: "informContactGuidelines.close.dateFormat") }
-    static var informContactGuidelinesCloseDayRemaining: String { return Localization.string(for: "informContactGuidelines.close.dayRemaining") }
-    static func informContactGuidelinesCloseDaysRemaining(daysRemaining: String) -> String { return Localization.string(for: "informContactGuidelines.close.daysRemaining", [daysRemaining]) }
-    static var informContactGuidelinesOther: String { return Localization.string(for: "informContactGuidelines.other") }
+    static var informContactGuidelinesCategory1: String { return Localization.string(for: "informContactGuidelines.category1") }
+    static func informContactGuidelinesCategory2(untilDate: String, daysRemaining: String) -> String { return Localization.string(for: "informContactGuidelines.category2", [untilDate, daysRemaining]) }
+    static func informContactGuidelinesCloseUntilDate(date: String) -> String { return Localization.string(for: "informContactGuidelines.category2.untilDate", [date]) }
+    static var informContactGuidelinesCloseDateFormat: String { return Localization.string(for: "informContactGuidelines.category2.dateFormat") }
+    static var informContactGuidelinesCloseDayRemaining: String { return Localization.string(for: "informContactGuidelines.category2.dayRemaining") }
+    static func informContactGuidelinesCloseDaysRemaining(daysRemaining: String) -> String { return Localization.string(for: "informContactGuidelines.category2.daysRemaining", [daysRemaining]) }
+    static var informContactGuidelinesCategory3: String { return Localization.string(for: "informContactGuidelines.category3") }
+    
+    static func informContactLink(category: Task.Contact.Category) -> String {
+        switch category {
+        case .category1:
+            return Localization.string(for: "informContactLink.category1")
+        case .category2a:
+            return Localization.string(for: "informContactLink.category2a")
+        case .category2b:
+            return Localization.string(for: "informContactLink.category2b")
+        case .category3:
+            return Localization.string(for: "informContactLink.category3")
+        default:
+            return ""
+        }
+    }
     
     static var informContactCopyGuidelines: String { return Localization.string(for: "informContactCopyGuidelines") }
     static var informContactCopyGuidelinesAction: String { return Localization.string(for: "informContactCopyGuidelinesAction") }
@@ -161,9 +184,13 @@ extension String {
     static var contactInformationBirthDate: String { return Localization.string(for: "contactInformationBirthDate") }
     static var contactInformationBSN: String { return Localization.string(for: "contactInformationBSN") }
     static var contactInformationLastExposure: String { return Localization.string(for: "contactInformationLastExposure") }
+    static var contactInformationLastExposureEarlier: String { return Localization.string(for: "contactInformationLastExposure.earlier") }
     
     /* MARK: - Informing contacts */
+    static var contactPromptNameFallback: String { return Localization.string(for: "contactPromptNameFallback") }
+    
     static func contactInformPromptTitle(firstName: String) -> String { return Localization.string(for: "contactInformPromptTitle", [firstName]) }
+    static var contactInformPromptMessage: String { return Localization.string(for: "contactInformPromptMessage") }
     static var contactInformOptionDone: String { return Localization.string(for: "contactInformOptionDone") }
     static var contactInformActionInformLater: String { return Localization.string(for: "contactInformActionInformLater") }
     static var contactInformActionInformNow: String { return Localization.string(for: "contactInformActionInformNow") }

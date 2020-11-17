@@ -98,6 +98,7 @@ public extension NSAttributedString {
             // Replace list paragraph style
             var previousParagraphIsListStart = false
             attributedTitle.enumerateAttribute(.paragraphStyle, in: fullRange, options: []) { value, range, finished in
+                
                 let text = attributedTitle.string as NSString
                 if text.substring(with: range).starts(with: listBulletCharacter) {
                     var startRange = range
@@ -114,6 +115,12 @@ public extension NSAttributedString {
                     attributedTitle.addAttribute(.paragraphStyle, value: listParagraphStyle, range: range)
                     previousParagraphIsListStart  = false
                 }
+            }
+            
+            // remove any trailing newlines
+            while attributedTitle.string.hasSuffix("\n") {
+                let range = NSRange(location: attributedTitle.string.count - 1, length: 1)
+                attributedTitle.replaceCharacters(in: range, with: "")
             }
 
             return attributedTitle
