@@ -75,7 +75,9 @@ protocol CaseManagerListener: class {
 final class CaseManager: CaseManaging, Logging {
     
     private struct Constants {
-        static let keychainService = "UserTest-Mocks"
+        static let keychainService = "CaseManager"
+        static let normalFetchInterval = TimeInterval(60)
+        static let userInitiatedFetchInterval = TimeInterval(10)
     }
     
     private struct ListenerWrapper {
@@ -118,8 +120,16 @@ final class CaseManager: CaseManaging, Logging {
         $appData.exists && !questionnaires.isEmpty
     }
     
+    private var fetchDate = Date.distantPast
+    
     private func shouldLoadTasks(userInitiated: Bool) -> Bool {
-        return appData.tasks.isEmpty || userInitiated
+        if appData.tasks.isEmpty {
+            return true
+        } else if userInitiated {
+            return fetchDate.timeIntervalSinceNow + Constants.userInitiatedFetchInterval < 0
+        } else {
+            return fetchDate.timeIntervalSinceNow + Constants.normalFetchInterval < 0
+        }
     }
     
     private var shouldLoadQuestionnaires: Bool {
@@ -128,7 +138,10 @@ final class CaseManager: CaseManaging, Logging {
     
     func loadCaseData(userInitiated: Bool, completion: @escaping (Bool, CaseManagingError?) -> Void) {
         func loadTasksIfNeeded() {
-            guard shouldLoadTasks(userInitiated: userInitiated) else { return loadQuestionnairesIfNeeded() }
+            guard shouldLoadTasks(userInitiated: userInitiated) else {
+                logDebug("No task loading needed. Skipping.")
+                return loadQuestionnairesIfNeeded()
+            }
             
             do {
                 let identifier = try Services.pairingManager.caseToken()
@@ -139,6 +152,8 @@ final class CaseManager: CaseManaging, Logging {
                         self.dateOfSymptomOnset = result.dateOfSymptomOnset
                         self.windowExpiresAt = result.windowExpiresAt
                         
+                        self.fetchDate = Date()
+            
                         loadQuestionnairesIfNeeded()
                     case .failure(let error):
                         completion(false, .couldNotLoadTasks(error))
@@ -150,7 +165,10 @@ final class CaseManager: CaseManaging, Logging {
         }
         
         func loadQuestionnairesIfNeeded() {
-            guard shouldLoadQuestionnaires else { return finish() }
+            guard shouldLoadQuestionnaires else {
+                logDebug("No questionnaire loading needed. Skipping.")
+                return finish()
+            }
             
             Services.networkManager.getQuestionnaires {
                 switch $0 {
