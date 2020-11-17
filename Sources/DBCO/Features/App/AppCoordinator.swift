@@ -58,6 +58,10 @@ final class AppCoordinator: Coordinator {
         }
     }
     
+    func refreshCaseDataIfNeeded() {
+        Services.caseManager.loadCaseData(userInitiated: false) { _, _ in }
+    }
+    
     private func showRequiredUpdate(with versionInformation: AppVersionInformation) {
         guard var topController = window.rootViewController else { return }
 
