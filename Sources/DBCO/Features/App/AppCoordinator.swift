@@ -24,10 +24,6 @@ final class AppCoordinator: Coordinator {
     }
     
     override func start() {
-        #if USERTEST_MOCKS
-        Services.use(LocalMockNetworkManager.self)
-        #endif
-        
         LogHandler.setup()
         
         window.tintColor = Theme.colors.primary
@@ -36,7 +32,7 @@ final class AppCoordinator: Coordinator {
         checkForRequiredUpdates()
         
         if Services.pairingManager.isPaired {
-            startChildCoordinator(TaskOverviewCoordinator(window: window))
+            startChildCoordinator(TaskOverviewCoordinator(window: window, delegate: self))
         } else {
             let onboardingCoordinator = OnboardingCoordinator(window: window)
             onboardingCoordinator.delegate = self
@@ -62,6 +58,10 @@ final class AppCoordinator: Coordinator {
         }
     }
     
+    func refreshCaseDataIfNeeded() {
+        Services.caseManager.loadCaseData(userInitiated: false) { _, _ in }
+    }
+    
     private func showRequiredUpdate(with versionInformation: AppVersionInformation) {
         guard var topController = window.rootViewController else { return }
 
@@ -85,7 +85,7 @@ extension AppCoordinator: OnboardingCoordinatorDelegate {
     func onboardingCoordinatorDidFinish(_ coordinator: OnboardingCoordinator) {
         removeChildCoordinator(coordinator)
         
-        startChildCoordinator(TaskOverviewCoordinator(window: window))
+        startChildCoordinator(TaskOverviewCoordinator(window: window, delegate: self))
     }
     
 }
@@ -94,6 +94,20 @@ extension AppCoordinator: AppUpdateViewControllerDelegate {
     
     func appUpdateViewController(_ controller: AppUpdateViewController, wantsToOpen url: URL) {
         UIApplication.shared.open(url)
+    }
+    
+}
+
+extension AppCoordinator: TaskOverviewCoordinatorDelegate {
+    
+    func taskOverviewCoordinatorDidRequestReset(_ coordinator: TaskOverviewCoordinator) {
+    
+        Services.pairingManager.unpair()
+        try? Services.caseManager.removeCaseData()
+        
+        removeChildCoordinator(coordinator)
+        
+        start()
     }
     
 }

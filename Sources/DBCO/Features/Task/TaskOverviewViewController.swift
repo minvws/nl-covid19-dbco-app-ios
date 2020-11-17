@@ -11,7 +11,8 @@ protocol TaskOverviewViewControllerDelegate: class {
     func taskOverviewViewControllerDidRequestAddContact(_ controller: TaskOverviewViewController)
     func taskOverviewViewController(_ controller: TaskOverviewViewController, didSelect task: Task)
     func taskOverviewViewControllerDidRequestUpload(_ controller: TaskOverviewViewController)
-    func taskOverviewViewControllerDidRequestShareLogs(_ controller: TaskOverviewViewController)
+    func taskOverviewViewControllerDidRequestRefresh(_ controller: TaskOverviewViewController)
+    func taskOverviewViewControllerDidRequestDebugMenu(_ controller: TaskOverviewViewController)
 }
 
 /// - Tag: TaskOverviewViewModel
@@ -107,6 +108,7 @@ extension TaskOverviewViewModel: CaseManagerListener {
 class TaskOverviewViewController: PromptableViewController {
     private let viewModel: TaskOverviewViewModel
     private let tableView = UITableView.createDefaultGrouped()
+    private let refreshControl = UIRefreshControl()
     
     weak var delegate: TaskOverviewViewControllerDelegate?
     
@@ -133,11 +135,14 @@ class TaskOverviewViewController: PromptableViewController {
         
         viewModel.setHidePrompt { [unowned self] in hidePrompt(animated: $0) }
         viewModel.setShowPrompt { [unowned self] in showPrompt(animated: $0) }
+        
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
     
     private func setupTableView() {
         tableView.embed(in: contentView, preservesSuperviewLayoutMargins: false)
         tableView.delaysContentTouches = false
+        tableView.refreshControl = refreshControl
         
         let tableHeaderBuilder = { [unowned self] in
             Button(title: .taskOverviewAddContactButtonTitle, style: .secondary)
@@ -165,7 +170,7 @@ class TaskOverviewViewController: PromptableViewController {
         versionLabel.frame = CGRect(x: 0, y: 0, width: versionLabel.frame.width, height: 60.0)
         versionLabel.isUserInteractionEnabled = true
         
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(shareLogs))
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openDebugMenu))
         gestureRecognizer.numberOfTapsRequired = 4
         
         versionLabel.addGestureRecognizer(gestureRecognizer)
@@ -181,8 +186,17 @@ class TaskOverviewViewController: PromptableViewController {
         delegate?.taskOverviewViewControllerDidRequestUpload(self)
     }
     
-    @objc private func shareLogs() {
-        delegate?.taskOverviewViewControllerDidRequestShareLogs(self)
+    @objc private func refresh() {
+        delegate?.taskOverviewViewControllerDidRequestRefresh(self)
+    }
+    
+    @objc private func openDebugMenu() {
+        delegate?.taskOverviewViewControllerDidRequestDebugMenu(self)
+    }
+    
+    var isLoading: Bool {
+        get { refreshControl.isRefreshing }
+        set { newValue ? refreshControl.beginRefreshing() : refreshControl.endRefreshing() }
     }
 
 }

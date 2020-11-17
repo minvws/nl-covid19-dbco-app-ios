@@ -186,7 +186,7 @@ extension Task {
         
         var task = Task(type: .contact)
         
-        guard let questionnaire = try? Services.caseManager.questionnaire(for: task) else { return task }
+        guard let questionnaire = try? Services.caseManager.questionnaire(for: task.taskType) else { return task }
         
         guard let classificationUuid = questionnaire.questions.first(where: { $0.questionType == .classificationDetails })?.uuid else {
             return task

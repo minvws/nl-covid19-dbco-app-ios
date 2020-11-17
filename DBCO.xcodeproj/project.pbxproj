@@ -88,9 +88,7 @@
 		CDD68BAA254D60BC00E96E9C /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD68BA9254D60BC00E96E9C /* UserDefaults.swift */; };
 		CDDC05642543120D0079C2F4 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDDC05632543120D0079C2F4 /* Coordinator.swift */; };
 		CDDC056C2546CD460079C2F4 /* Case.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDDC056B2546CD460079C2F4 /* Case.swift */; };
-		CDE25F61254B315100E9AE49 /* LocalMockNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE25F60254B315100E9AE49 /* LocalMockNetworkManager.swift */; };
 		CDE25F65254B316F00E9AE49 /* NetworkManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE25F64254B316F00E9AE49 /* NetworkManaging.swift */; };
-		CDE25F6C254B39B600E9AE49 /* Mocks in Resources */ = {isa = PBXBuildFile; fileRef = CDE25F6B254B39B600E9AE49 /* Mocks */; };
 		CDE25F8F254C21B900E9AE49 /* String+SHA256.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE25F8E254C21B900E9AE49 /* String+SHA256.swift */; };
 		CDE30E64251BC02100862A40 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E63251BC02100862A40 /* TextField.swift */; };
 		CDE30E69251C89FF00862A40 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E68251C89FF00862A40 /* NavigationController.swift */; };
@@ -212,9 +210,7 @@
 		CDD68BA9254D60BC00E96E9C /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		CDDC05632543120D0079C2F4 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		CDDC056B2546CD460079C2F4 /* Case.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case.swift; sourceTree = "<group>"; };
-		CDE25F60254B315100E9AE49 /* LocalMockNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMockNetworkManager.swift; sourceTree = "<group>"; };
 		CDE25F64254B316F00E9AE49 /* NetworkManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManaging.swift; sourceTree = "<group>"; };
-		CDE25F6B254B39B600E9AE49 /* Mocks */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Mocks; sourceTree = "<group>"; };
 		CDE25F8E254C21B900E9AE49 /* String+SHA256.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+SHA256.swift"; sourceTree = "<group>"; };
 		CDE30E63251BC02100862A40 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		CDE30E68251C89FF00862A40 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
@@ -504,7 +500,6 @@
 		CDC4A8FB250B8945001BABC6 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				CDE25F6B254B39B600E9AE49 /* Mocks */,
 				CDC4A8F0250B87E6001BABC6 /* Assets.xcassets */,
 				CD29636325191C7C008443AF /* Colors.xcassets */,
 				CDC4A8F5250B87E6001BABC6 /* Info.plist */,
@@ -533,7 +528,6 @@
 				CDC7C897253873CE00FE7E05 /* Envelope.swift */,
 				CDE25F64254B316F00E9AE49 /* NetworkManaging.swift */,
 				CDC7C8682538412600FE7E05 /* NetworkManager.swift */,
-				CDE25F60254B315100E9AE49 /* LocalMockNetworkManager.swift */,
 				CDC7C8762538469B00FE7E05 /* NetworkManagerURLSessionDelegate.swift */,
 				CDC7C87A2538481C00FE7E05 /* Config */,
 				CDC7C8812538497C00FE7E05 /* Extensions */,
@@ -705,7 +699,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CDE25F6C254B39B600E9AE49 /* Mocks in Resources */,
 				CDC4A8F4250B87E6001BABC6 /* LaunchScreen.storyboard in Resources */,
 				CD29636425191C80008443AF /* Colors.xcassets in Resources */,
 				CDE30E782521D92600862A40 /* Localizable.strings in Resources */,
@@ -847,7 +840,6 @@
 				CD4036A1255D42F70037BCF1 /* PairingManager.swift in Sources */,
 				CD5DA75E255162EE003660CC /* ConfigManaging.swift in Sources */,
 				CDADF7F32535E34400424492 /* UploadCoordinator.swift in Sources */,
-				CDE25F61254B315100E9AE49 /* LocalMockNetworkManager.swift in Sources */,
 				CD65CD812535F77400BB761A /* LoadingViewController.swift in Sources */,
 				CD2AC0762530601900E8AF78 /* InputTextView.swift in Sources */,
 				CDD68BAA254D60BC00E96E9C /* UserDefaults.swift in Sources */,
@@ -996,6 +988,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				NETWORK_CONFIGURATION = Development;
+				RESET_ENABLED = YES;
 				SDKROOT = iphoneos;
 				SHARE_LOGS_ENABLED = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -1141,6 +1134,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				NETWORK_CONFIGURATION = ACC;
+				RESET_ENABLED = YES;
 				SDKROOT = iphoneos;
 				SHARE_LOGS_ENABLED = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
@@ -1245,6 +1239,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				NETWORK_CONFIGURATION = Production;
+				RESET_ENABLED = NO;
 				SDKROOT = iphoneos;
 				SHARE_LOGS_ENABLED = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
@@ -1356,6 +1351,7 @@
 				MTL_FAST_MATH = YES;
 				NETWORK_CONFIGURATION = Development;
 				ONLY_ACTIVE_ARCH = YES;
+				RESET_ENABLED = YES;
 				SDKROOT = iphoneos;
 				SHARE_LOGS_ENABLED = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -1415,6 +1411,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				NETWORK_CONFIGURATION = Development;
+				RESET_ENABLED = YES;
 				SDKROOT = iphoneos;
 				SHARE_LOGS_ENABLED = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;

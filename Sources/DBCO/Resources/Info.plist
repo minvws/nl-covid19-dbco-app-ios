@@ -73,5 +73,7 @@
 	</array>
 	<key>SHARE_LOGS_ENABLED</key>
 	<string>$(SHARE_LOGS_ENABLED)</string>
+	<key>RESET_ENABLED</key>
+	<string>$(RESET_ENABLED)</string>
 </dict>
 </plist>

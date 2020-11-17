@@ -33,14 +33,15 @@ protocol CaseManaging {
     var isSynced: Bool { get }
     
     var dateOfSymptomOnset: Date { get }
+    var windowExpiresAt: Date { get }
     var tasks: [Task] { get }
     
-    /// Returns the [Questionnaire](x-source-tag://Questionnaire) associated with a task.
+    /// Returns the [Questionnaire](x-source-tag://Questionnaire) associated with a task type.
     /// Throws an `notPaired` error when called befored paired.
     /// Throws an `questionnaireNotFound` error when there's no suitable questionnaire  for the supplied task
-    func questionnaire(for task: Task) throws -> Questionnaire
+    func questionnaire(for taskType: Task.TaskType) throws -> Questionnaire
     
-    func loadCaseData(completion: @escaping (_ success: Bool, _ error: CaseManagingError?) -> Void)
+    func loadCaseData(userInitiated: Bool, completion: @escaping (_ success: Bool, _ error: CaseManagingError?) -> Void)
     
     /// Clears all stored data. Using any method or property except for `hasCaseData` on CaseManager before pairing and loading the data again is an invalid operation.
     /// Throws an `notPaired` error when called befored paired.
@@ -74,7 +75,9 @@ protocol CaseManagerListener: class {
 final class CaseManager: CaseManaging, Logging {
     
     private struct Constants {
-        static let keychainService = "UserTest-Mocks"
+        static let keychainService = "CaseManager"
+        static let normalFetchInterval = TimeInterval(60)
+        static let userInitiatedFetchInterval = TimeInterval(10)
     }
     
     private struct ListenerWrapper {
@@ -108,22 +111,49 @@ final class CaseManager: CaseManaging, Logging {
         set { appData.dateOfSymptomOnset = newValue }
     }
     
+    private(set) var windowExpiresAt: Date {
+        get { appData.windowExpiresAt }
+        set { appData.windowExpiresAt = newValue }
+    }
+    
     var hasCaseData: Bool {
         $appData.exists && !questionnaires.isEmpty
     }
     
-    func loadCaseData(completion: @escaping (Bool, CaseManagingError?) -> Void) {
+    private var fetchDate = Date.distantPast
+    
+    private func shouldLoadTasks(userInitiated: Bool) -> Bool {
+        if appData.tasks.isEmpty {
+            return true
+        } else if userInitiated {
+            return fetchDate.timeIntervalSinceNow + Constants.userInitiatedFetchInterval < 0
+        } else {
+            return fetchDate.timeIntervalSinceNow + Constants.normalFetchInterval < 0
+        }
+    }
+    
+    private var shouldLoadQuestionnaires: Bool {
+        return appData.questionnaires.isEmpty
+    }
+    
+    func loadCaseData(userInitiated: Bool, completion: @escaping (Bool, CaseManagingError?) -> Void) {
         func loadTasksIfNeeded() {
-            guard appData.tasks.isEmpty else { return loadQuestionnairesIfNeeded() }
+            guard shouldLoadTasks(userInitiated: userInitiated) else {
+                logDebug("No task loading needed. Skipping.")
+                return loadQuestionnairesIfNeeded()
+            }
             
             do {
                 let identifier = try Services.pairingManager.caseToken()
                 Services.networkManager.getCase(identifier: identifier) {
                     switch $0 {
                     case .success(let result):
-                        self.tasks = result.tasks
+                        self.setTasks(result.tasks)
                         self.dateOfSymptomOnset = result.dateOfSymptomOnset
+                        self.windowExpiresAt = result.windowExpiresAt
                         
+                        self.fetchDate = Date()
+            
                         loadQuestionnairesIfNeeded()
                     case .failure(let error):
                         completion(false, .couldNotLoadTasks(error))
@@ -135,7 +165,10 @@ final class CaseManager: CaseManaging, Logging {
         }
         
         func loadQuestionnairesIfNeeded() {
-            guard appData.questionnaires.isEmpty else { return finish() }
+            guard shouldLoadQuestionnaires else {
+                logDebug("No questionnaire loading needed. Skipping.")
+                return finish()
+            }
             
             Services.networkManager.getQuestionnaires {
                 switch $0 {
@@ -203,11 +236,31 @@ final class CaseManager: CaseManaging, Logging {
         self.questionnaires = questionnaires.map(injectingLastExposureDateIfNeeded)
     }
     
+    /// Set the tasks from the api call result
+    ///
+    /// Updates existing tasks if the user has not yet started them and adds any new tasks
+    private func setTasks(_ fetchedTasks: [Task]) {
+        guard !tasks.isEmpty else {
+            tasks = fetchedTasks
+            return
+        }
+        
+        fetchedTasks.forEach { task in
+            if let existingTaskIndex = tasks.firstIndex(where: { $0.uuid == task.uuid }) {
+                if tasks[existingTaskIndex].status == .notStarted {
+                    tasks[existingTaskIndex] = task
+                }
+            } else {
+                tasks.append(task)
+            }
+        }
+    }
+    
     /// - Tag: CaseManager.questionnaire
-    func questionnaire(for task: Task) throws -> Questionnaire {
+    func questionnaire(for taskType: Task.TaskType) throws -> Questionnaire {
         guard hasCaseData else { throw CaseManagingError.noCaseData }
         
-        guard let questionnaire = questionnaires.first(where: { $0.taskType == task.taskType }) else {
+        guard let questionnaire = questionnaires.first(where: { $0.taskType == taskType }) else {
             logError("Could not find applicable questionnaire")
             throw CaseManagingError.questionnaireNotFound
         }
@@ -225,7 +278,7 @@ final class CaseManager: CaseManaging, Logging {
         
         let index = tasks.lastIndex { $0.uuid == task.uuid } ?? storeNewTask()
         
-        let questionnaire = try self.questionnaire(for: task)
+        let questionnaire = try self.questionnaire(for: task.taskType)
         
         // Update task type content
         switch tasks[index].taskType {
@@ -275,7 +328,7 @@ final class CaseManager: CaseManaging, Logging {
         guard hasCaseData else { throw CaseManagingError.noCaseData }
         
         do {
-            let value = Case(dateOfSymptomOnset: dateOfSymptomOnset, tasks: tasks)
+            let value = Case(dateOfSymptomOnset: dateOfSymptomOnset, windowExpiresAt: windowExpiresAt, tasks: tasks)
             let identifier = try Services.pairingManager.caseToken()
             Services.networkManager.putCase(identifier: identifier, value: value) {
                 switch $0 {

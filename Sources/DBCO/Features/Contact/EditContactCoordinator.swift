@@ -15,7 +15,9 @@ protocol EditContactCoordinatorDelegate: class {
 
 /// Coordinator managing the flow of editing a contact task. Presents [ContactQuestionnaireViewController](x-source-tag://ContactQuestionnaireViewController) in a modal fashion.
 /// - Tag: EditContactCoordinator
-final class EditContactCoordinator: Coordinator {
+final class EditContactCoordinator: Coordinator, Logging {
+    
+    let loggingCategory = "EditContactCoordinator"
     
     private weak var delegate: EditContactCoordinatorDelegate?
     private weak var presenter: UIViewController?
@@ -31,7 +33,13 @@ final class EditContactCoordinator: Coordinator {
     }
     
     override func start() {
-        let viewModel = ContactQuestionnaireViewModel(task: task, showCancelButton: true)
+        guard let questionnaire = try? Services.caseManager.questionnaire(for: task.taskType) else {
+            logError("Could not get questionnaire for contact task")
+            delegate?.editContactCoordinatorDidCancel(self)
+            return
+        }
+        
+        let viewModel = ContactQuestionnaireViewModel(task: task, questionnaire: questionnaire, showCancelButton: true)
         let editController = ContactQuestionnaireViewController(viewModel: viewModel)
         editController.delegate = self
 

@@ -15,6 +15,7 @@ struct AppData: Codable {
     let version: String
     
     var dateOfSymptomOnset: Date
+    var windowExpiresAt: Date
     var tasks: [Task]
     var questionnaires: [Questionnaire]
 }
@@ -23,6 +24,7 @@ extension AppData {
     static var empty: AppData {
         AppData(version: Constants.currentVersion,
                 dateOfSymptomOnset: .distantPast,
+                windowExpiresAt: .distantFuture,
                 tasks: [],
                 questionnaires: [])
     }
