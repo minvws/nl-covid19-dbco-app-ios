@@ -59,7 +59,7 @@ class ContactQuestionnaireViewModel {
     @Bindable private(set) var informButtonType: Button.ButtonType
     @Bindable private(set) var promptButtonType: Button.ButtonType
     
-    init(task: Task?, contact: CNContact? = nil, showCancelButton: Bool = false) {
+    init(task: Task?, questionnaire: Questionnaire, contact: CNContact? = nil, showCancelButton: Bool = false) {
         let initialCategory = task?.contact.category
         let task = task ?? Task.emptyContactTask
         self.task = task
@@ -74,8 +74,6 @@ class ContactQuestionnaireViewModel {
         self.informButtonHidden = true
         self.informButtonType = .secondary
         self.promptButtonType = .primary
-        
-        let questionnaire = try! Services.caseManager.questionnaire(for: task)
         
         let questionsAndAnswers: [(question: Question, answer: Answer)] = {
             let currentAnswers = task.result?.answers ?? []

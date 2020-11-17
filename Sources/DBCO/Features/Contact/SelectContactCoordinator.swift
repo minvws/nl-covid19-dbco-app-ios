@@ -18,13 +18,16 @@ protocol SelectContactCoordinatorDelegate: class {
 /// Uses [ContactQuestionnaireViewController](x-source-tag://ContactQuestionnaireViewController)
 /// and [SelectContactViewController](x-source-tag://SelectContactViewController).
 /// - Tag: SelectContactCoordinator
-final class SelectContactCoordinator: Coordinator {
+final class SelectContactCoordinator: Coordinator, Logging {
+    
+    let loggingCategory = "SelectContactCoordinato"
     
     private weak var delegate: SelectContactCoordinatorDelegate?
     private weak var presenter: UIViewController?
     private let navigationController: NavigationController
     private let task: Task?
     private var updatedTask: Task?
+    private var questionnaire: Questionnaire!
     
     init(presenter: UIViewController, contactTask: Task?, delegate: SelectContactCoordinatorDelegate) {
         self.delegate = delegate
@@ -34,6 +37,14 @@ final class SelectContactCoordinator: Coordinator {
     }
     
     override func start() {
+        guard let questionnaire = try? Services.caseManager.questionnaire(for: .contact) else {
+            logError("Could not get questionnaire for contact task")
+            delegate?.selectContactCoordinatorDidCancel(self)
+            return
+        }
+        
+        self.questionnaire = questionnaire
+        
         let currentStatus = CNContactStore.authorizationStatus(for: .contacts)
         
         switch currentStatus {
@@ -117,7 +128,7 @@ final class SelectContactCoordinator: Coordinator {
     }
     
     private func continueManually() {
-        let editViewModel = ContactQuestionnaireViewModel(task: task, showCancelButton: true)
+        let editViewModel = ContactQuestionnaireViewModel(task: task, questionnaire: questionnaire, showCancelButton: true)
         let editController = ContactQuestionnaireViewController(viewModel: editViewModel)
         editController.delegate = self
         
@@ -128,7 +139,7 @@ final class SelectContactCoordinator: Coordinator {
 extension SelectContactCoordinator: SelectContactViewControllerDelegate {
     
     func selectContactViewController(_ controller: SelectContactViewController, didSelect contact: CNContact) {
-        let viewModel = ContactQuestionnaireViewModel(task: task, contact: contact)
+        let viewModel = ContactQuestionnaireViewModel(task: task, questionnaire: questionnaire, contact: contact)
         let detailsController = ContactQuestionnaireViewController(viewModel: viewModel)
         detailsController.delegate = self
         
@@ -136,7 +147,7 @@ extension SelectContactCoordinator: SelectContactViewControllerDelegate {
     }
     
     func selectContactViewControllerDidRequestManualInput(_ controller: SelectContactViewController) {
-        let viewModel = ContactQuestionnaireViewModel(task: task)
+        let viewModel = ContactQuestionnaireViewModel(task: task, questionnaire: questionnaire)
         let detailsController = ContactQuestionnaireViewController(viewModel: viewModel)
         detailsController.delegate = self
         
@@ -176,7 +187,7 @@ extension SelectContactCoordinator: CNContactPickerDelegate {
     
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
         picker.dismiss(animated: true) {
-            let viewModel = ContactQuestionnaireViewModel(task: self.task, contact: contact, showCancelButton: true)
+            let viewModel = ContactQuestionnaireViewModel(task: self.task, questionnaire: self.questionnaire, contact: contact, showCancelButton: true)
             let editController = ContactQuestionnaireViewController(viewModel: viewModel)
             editController.delegate = self
             

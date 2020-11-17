@@ -35,10 +35,10 @@ protocol CaseManaging {
     var dateOfSymptomOnset: Date { get }
     var tasks: [Task] { get }
     
-    /// Returns the [Questionnaire](x-source-tag://Questionnaire) associated with a task.
+    /// Returns the [Questionnaire](x-source-tag://Questionnaire) associated with a task type.
     /// Throws an `notPaired` error when called befored paired.
     /// Throws an `questionnaireNotFound` error when there's no suitable questionnaire  for the supplied task
-    func questionnaire(for task: Task) throws -> Questionnaire
+    func questionnaire(for taskType: Task.TaskType) throws -> Questionnaire
     
     func loadCaseData(completion: @escaping (_ success: Bool, _ error: CaseManagingError?) -> Void)
     
@@ -204,10 +204,10 @@ final class CaseManager: CaseManaging, Logging {
     }
     
     /// - Tag: CaseManager.questionnaire
-    func questionnaire(for task: Task) throws -> Questionnaire {
+    func questionnaire(for taskType: Task.TaskType) throws -> Questionnaire {
         guard hasCaseData else { throw CaseManagingError.noCaseData }
         
-        guard let questionnaire = questionnaires.first(where: { $0.taskType == task.taskType }) else {
+        guard let questionnaire = questionnaires.first(where: { $0.taskType == taskType }) else {
             logError("Could not find applicable questionnaire")
             throw CaseManagingError.questionnaireNotFound
         }
@@ -225,7 +225,7 @@ final class CaseManager: CaseManaging, Logging {
         
         let index = tasks.lastIndex { $0.uuid == task.uuid } ?? storeNewTask()
         
-        let questionnaire = try self.questionnaire(for: task)
+        let questionnaire = try self.questionnaire(for: task.taskType)
         
         // Update task type content
         switch tasks[index].taskType {
