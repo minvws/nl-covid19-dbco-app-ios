@@ -33,6 +33,7 @@ protocol CaseManaging {
     var isSynced: Bool { get }
     
     var dateOfSymptomOnset: Date { get }
+    var windowExpiresAt: Date { get }
     var tasks: [Task] { get }
     
     /// Returns the [Questionnaire](x-source-tag://Questionnaire) associated with a task type.
@@ -108,6 +109,11 @@ final class CaseManager: CaseManaging, Logging {
         set { appData.dateOfSymptomOnset = newValue }
     }
     
+    private(set) var windowExpiresAt: Date {
+        get { appData.windowExpiresAt }
+        set { appData.windowExpiresAt = newValue }
+    }
+    
     var hasCaseData: Bool {
         $appData.exists && !questionnaires.isEmpty
     }
@@ -123,6 +129,7 @@ final class CaseManager: CaseManaging, Logging {
                     case .success(let result):
                         self.tasks = result.tasks
                         self.dateOfSymptomOnset = result.dateOfSymptomOnset
+                        self.windowExpiresAt = result.windowExpiresAt
                         
                         loadQuestionnairesIfNeeded()
                     case .failure(let error):
@@ -275,7 +282,7 @@ final class CaseManager: CaseManaging, Logging {
         guard hasCaseData else { throw CaseManagingError.noCaseData }
         
         do {
-            let value = Case(dateOfSymptomOnset: dateOfSymptomOnset, tasks: tasks)
+            let value = Case(dateOfSymptomOnset: dateOfSymptomOnset, windowExpiresAt: windowExpiresAt, tasks: tasks)
             let identifier = try Services.pairingManager.caseToken()
             Services.networkManager.putCase(identifier: identifier, value: value) {
                 switch $0 {

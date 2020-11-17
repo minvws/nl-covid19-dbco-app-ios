@@ -32,7 +32,7 @@ final class AppCoordinator: Coordinator {
         checkForRequiredUpdates()
         
         if Services.pairingManager.isPaired {
-            startChildCoordinator(TaskOverviewCoordinator(window: window))
+            startChildCoordinator(TaskOverviewCoordinator(window: window, delegate: self))
         } else {
             let onboardingCoordinator = OnboardingCoordinator(window: window)
             onboardingCoordinator.delegate = self
@@ -81,7 +81,7 @@ extension AppCoordinator: OnboardingCoordinatorDelegate {
     func onboardingCoordinatorDidFinish(_ coordinator: OnboardingCoordinator) {
         removeChildCoordinator(coordinator)
         
-        startChildCoordinator(TaskOverviewCoordinator(window: window))
+        startChildCoordinator(TaskOverviewCoordinator(window: window, delegate: self))
     }
     
 }
@@ -90,6 +90,20 @@ extension AppCoordinator: AppUpdateViewControllerDelegate {
     
     func appUpdateViewController(_ controller: AppUpdateViewController, wantsToOpen url: URL) {
         UIApplication.shared.open(url)
+    }
+    
+}
+
+extension AppCoordinator: TaskOverviewCoordinatorDelegate {
+    
+    func taskOverviewCoordinatorDidRequestReset(_ coordinator: TaskOverviewCoordinator) {
+    
+        Services.pairingManager.unpair()
+        try? Services.caseManager.removeCaseData()
+        
+        removeChildCoordinator(coordinator)
+        
+        start()
     }
     
 }
