@@ -15,7 +15,7 @@ import Foundation
 /// [CaseManager](x-source-tag://CaseManager)
 ///
 /// - Tag: Task
-struct Task {
+struct Task: Equatable {
     enum Status: Equatable {
         case notStarted
         case inProgress(Double)
@@ -32,7 +32,7 @@ struct Task {
     }
     
     /// - Tag: Task.Contact
-    struct Contact {
+    struct Contact: Equatable {
         
         /// # See also
         /// [ClassificationHelper](x-source-tag://ClassificationHelper)

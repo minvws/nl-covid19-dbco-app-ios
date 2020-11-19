@@ -40,4 +40,8 @@ import Foundation
         let valueString = dateFormatter.string(from: value)
         try valueString.encode(to: encoder)
     }
+    
+    static func == (lhs: ISO8601DateFormat, rhs: ISO8601DateFormat) -> Bool {
+        return lhs.value == rhs.value
+    }
 }
