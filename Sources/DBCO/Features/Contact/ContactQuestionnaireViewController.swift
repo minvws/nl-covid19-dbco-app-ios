@@ -36,8 +36,8 @@ class ContactQuestionnaireViewModel {
                                            communication: updatedContact.communication,
                                            didInform: updatedContact.didInform,
                                            dateOfLastExposure: updatedContact.dateOfLastExposure)
-        updatedTask.result = baseResult
-        updatedTask.result?.answers = answerManagers.map(\.answer)
+        updatedTask.questionnaireResult = baseResult
+        updatedTask.questionnaireResult?.answers = answerManagers.map(\.answer)
         
         return updatedTask
     }
@@ -76,7 +76,7 @@ class ContactQuestionnaireViewModel {
         self.promptButtonType = .primary
         
         let questionsAndAnswers: [(question: Question, answer: Answer)] = {
-            let currentAnswers = task.result?.answers ?? []
+            let currentAnswers = task.questionnaireResult?.answers ?? []
             
             return questionnaire.questions.map { question in
                 (question, currentAnswers.first { $0.questionUuid == question.uuid } ?? question.emptyAnswer)

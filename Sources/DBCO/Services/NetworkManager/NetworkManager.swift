@@ -272,12 +272,14 @@ class NetworkManager: NetworkManaging, Logging {
     private lazy var jsonEncoder: JSONEncoder = {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .formatted(dateFormatter)
+        encoder.target = .api
         return encoder
     }()
     
     private lazy var jsonDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        decoder.source = .api
         return decoder
     }()
 }

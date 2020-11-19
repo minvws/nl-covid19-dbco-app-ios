@@ -71,6 +71,7 @@
 		CDC4A8EA250B87E5001BABC6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC4A8E9250B87E5001BABC6 /* SceneDelegate.swift */; };
 		CDC4A8F1250B87E6001BABC6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CDC4A8F0250B87E6001BABC6 /* Assets.xcassets */; };
 		CDC4A8F4250B87E6001BABC6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CDC4A8F2250B87E6001BABC6 /* LaunchScreen.storyboard */; };
+		CDC6726A2566824300222DCC /* Codable+UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC672692566824300222DCC /* Codable+UserInfo.swift */; };
 		CDC7C86225376AB200FE7E05 /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C86125376AB200FE7E05 /* Services.swift */; };
 		CDC7C8692538412600FE7E05 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C8682538412600FE7E05 /* NetworkManager.swift */; };
 		CDC7C86F2538429B00FE7E05 /* NetworkConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C86E2538429B00FE7E05 /* NetworkConfiguration.swift */; };
@@ -193,6 +194,7 @@
 		CDC4A8F0250B87E6001BABC6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CDC4A8F3250B87E6001BABC6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CDC4A8F5250B87E6001BABC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CDC672692566824300222DCC /* Codable+UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+UserInfo.swift"; sourceTree = "<group>"; };
 		CDC7C86125376AB200FE7E05 /* Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
 		CDC7C8682538412600FE7E05 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		CDC7C86E2538429B00FE7E05 /* NetworkConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConfiguration.swift; sourceTree = "<group>"; };
@@ -551,6 +553,7 @@
 			children = (
 				CDC7C8822538497C00FE7E05 /* Encodable+AnyEncodable.swift */,
 				CDC7C8832538497C00FE7E05 /* JSONDecoder+Decoding.swift */,
+				CDC672692566824300222DCC /* Codable+UserInfo.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -851,6 +854,7 @@
 				CDC4A8E8250B87E5001BABC6 /* AppDelegate.swift in Sources */,
 				CDE25F65254B316F00E9AE49 /* NetworkManaging.swift in Sources */,
 				CD756C70252DC629005FEDA0 /* SeparatorView.swift in Sources */,
+				CDC6726A2566824300222DCC /* Codable+UserInfo.swift in Sources */,
 				CD5DA76F2551859C003660CC /* AppUpdateViewController.swift in Sources */,
 				CD9C7F52254AC25300A78EEF /* Task+Informed.swift in Sources */,
 				CD2963522518F291008443AF /* ContactQuestionnaireViewController.swift in Sources */,

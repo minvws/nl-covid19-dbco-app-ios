@@ -73,13 +73,13 @@ struct Task {
     
     var contact: Contact!
     
-    var result: QuestionnaireResult?
+    var questionnaireResult: QuestionnaireResult?
     
     /// - Tag: Task.status
     var status: Status {
         switch taskType {
         case .contact:
-            if let questionnaireProgress = result?.progress {
+            if let questionnaireProgress = questionnaireResult?.progress {
                 // task progress = questionnaire progress * 0.9 + isOrCanBeInformed * 0.1
                 let progress = (questionnaireProgress * 0.9) + (isOrCanBeInformed ? 0.1 : 0.0)
                 return abs(progress - 1) < 0.01 ? .completed : .inProgress(progress)
@@ -141,7 +141,7 @@ extension Task: Codable {
         source = try container.decode(Source.self, forKey: .source)
         label = try container.decode(String?.self, forKey: .label)
         taskContext = try container.decode(String?.self, forKey: .taskContext)
-        result = try? container.decode(QuestionnaireResult?.self, forKey: .result)
+        questionnaireResult = try? container.decode(QuestionnaireResult?.self, forKey: .questionnaireResult)
         
         taskType = try container.decode(TaskType.self, forKey: .taskType)
         
@@ -158,7 +158,7 @@ extension Task: Codable {
         try container.encode(source, forKey: .source)
         try container.encode(label, forKey: .label)
         try container.encode(taskContext, forKey: .taskContext)
-        try container.encode(result, forKey: .result)
+        try container.encode(questionnaireResult, forKey: .questionnaireResult)
         try container.encode(taskType, forKey: .taskType)
         
         switch taskType {
@@ -177,7 +177,7 @@ extension Task: Codable {
         case communication
         case dateOfLastExposure
         case didInform
-        case result
+        case questionnaireResult
     }
 }
 
@@ -192,7 +192,7 @@ extension Task {
             return task
         }
         
-        task.result = QuestionnaireResult(questionnaireUuid: questionnaire.uuid,
+        task.questionnaireResult = QuestionnaireResult(questionnaireUuid: questionnaire.uuid,
                                           answers: [
                                             Answer(uuid: UUID(),
                                                    questionUuid: classificationUuid,

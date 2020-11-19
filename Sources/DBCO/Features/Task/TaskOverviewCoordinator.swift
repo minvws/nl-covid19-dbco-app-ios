@@ -63,7 +63,7 @@ final class TaskOverviewCoordinator: Coordinator, Logging {
         super.removeChildCoordinator(coordinator)
         
         // Overview became visible so: 
-        loadCaseData(userInitiated: false)
+        Services.caseManager.loadCaseData(userInitiated: false) { _, _ in }
     }
     
     private func loadCaseData(userInitiated: Bool, completionHandler: (() -> Void)? = nil) {
@@ -174,7 +174,7 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
     func taskOverviewViewController(_ controller: TaskOverviewViewController, didSelect task: Task) {
         switch task.taskType {
         case .contact:
-            if task.result != nil {
+            if task.questionnaireResult != nil {
                 // edit flow
                 editContact(for: task)
             } else {
