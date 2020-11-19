@@ -118,9 +118,9 @@ class NetworkManager: NetworkManaging, Logging {
         }
 
         logDebug("--REQUEST--")
-        if let url = request.url { print(url.debugDescription) }
-        if let allHTTPHeaderFields = request.allHTTPHeaderFields {print(allHTTPHeaderFields.debugDescription) }
-        if let httpBody = request.httpBody { print(String(data: httpBody, encoding: .utf8)!) }
+        if let url = request.url { logDebug(url.debugDescription) }
+        if let allHTTPHeaderFields = request.allHTTPHeaderFields { logDebug(allHTTPHeaderFields.debugDescription) }
+        if let httpBody = request.httpBody { logDebug(String(data: httpBody, encoding: .utf8)!) }
         logDebug("--END REQUEST--")
 
         return .success(request)
@@ -182,6 +182,10 @@ class NetworkManager: NetworkManaging, Logging {
             }.joined(separator: "\n")
 
             logDebug("Response headers: \n\(headers)")
+            
+            if let objectData = object as? Data, let body = String(data: objectData, encoding: .utf8) {
+                logDebug("Resonse body: \n\(body)")
+            }
         } else if let error = error {
             logDebug("Error with response: \(error)")
         }

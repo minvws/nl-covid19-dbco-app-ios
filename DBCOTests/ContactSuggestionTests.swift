@@ -7,7 +7,7 @@
 
 import XCTest
 import Contacts
-@testable import Oplossing_2
+@testable import GGD_Contact
 
 class ContactSuggestionTests: XCTestCase {
     
