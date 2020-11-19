@@ -5,7 +5,6 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-
 import UIKit
 
 /// UIStackView subclass managing an array of [ToggleButton](x-source-tag://ToggleButton)s.

@@ -10,6 +10,7 @@ import Foundation
 class ConfigManager: ConfigManaging {
     required init() {}
     
+    // swiftlint:disable:next force_cast
     let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
     
     func checkUpdateRequired(completion: @escaping (UpdateState) -> Void) {
@@ -20,7 +21,6 @@ class ConfigManager: ConfigManaging {
             
             return components.joined(separator: ".")
         }
-        
         
         Services.networkManager.getAppConfiguration { [appVersion] result in
             switch result {

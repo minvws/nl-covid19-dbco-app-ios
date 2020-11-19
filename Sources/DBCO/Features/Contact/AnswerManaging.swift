@@ -25,10 +25,12 @@ protocol AnswerManaging: class {
 class ClassificationDetailsAnswerManager: AnswerManaging {
     private var baseAnswer: Answer
     
+    // swiftlint:disable opening_brace
     private var category1Risk: Bool?    { didSet { determineGroupVisibility() } }
     private var category2aRisk: Bool?   { didSet { determineGroupVisibility() } }
     private var category2bRisk: Bool?   { didSet { determineGroupVisibility() } }
     private var category3Risk: Bool?    { didSet { determineGroupVisibility() } }
+    // swiftlint:enable opening_brace
     
     private(set) var classification: ClassificationHelper.Result
     
@@ -87,7 +89,7 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         switch classification {
         case .success(let category):
             answer.value = .classificationDetails(contactCategory: category)
-        case .needsAssessmentFor(_):
+        case .needsAssessmentFor:
             answer.value = .classificationDetails(category1Risk: category1Risk,
                                                   category2aRisk: category2aRisk,
                                                   category2bRisk: category2bRisk,
@@ -156,10 +158,12 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
 /// AnswerManager for the .contactDetails question.
 /// Uses [InputField](x-source-tag://InputField) to question the firstName, lastName, email and phoneNumber of the index
 class ContactDetailsAnswerManager: AnswerManaging {
+    // swiftlint:disable opening_brace
     private(set) var firstName = FirstName()        { didSet { updateHandler?(self) } }
     private(set) var lastName = LastName()          { didSet { updateHandler?(self) } }
     private(set) var email = EmailAddress()         { didSet { updateHandler?(self) } }
     private(set) var phoneNumber = PhoneNumber()    { didSet { updateHandler?(self) } }
+    // swiftlint:enable opening_brace
     
     private var baseAnswer: Answer
     
@@ -273,7 +277,6 @@ class LastExposureDateAnswerManager: AnswerManaging {
             .map { AnswerOption(label: Self.displayDateFormatter.string(from: $0),
                                 value: Self.valueDateFormatter.string(from: $0),
                                 trigger: nil) }
-        
         
         self.answerOptions = [AnswerOption(label: .contactInformationLastExposureEarlier, value: "earlier", trigger: nil)] + dateOptions
         
@@ -420,7 +423,7 @@ class MultipleChoiceAnswerManager: AnswerManaging {
         } else {
             self.selectedButtonIndex = question.answerOptions?.firstIndex { $0.value == option?.value }
             
-            self.buttons = ToggleGroup(label: question.label, answerOptions.map { ToggleButton(title: $0.label, selected: $0.value == option?.value) } )
+            self.buttons = ToggleGroup(label: question.label, answerOptions.map { ToggleButton(title: $0.label, selected: $0.value == option?.value) })
                 .didSelect { [unowned self] in
                     selectedButtonIndex = $0
                     updateHandler?(self)

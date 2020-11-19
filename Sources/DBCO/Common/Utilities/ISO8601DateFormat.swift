@@ -5,7 +5,6 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-
 import Foundation
 
 @propertyWrapper struct ISO8601DateFormat: Codable, Equatable {

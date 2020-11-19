@@ -137,7 +137,7 @@ extension CNContact {
     
     var contactPhoneNumbers: [PhoneNumber] {
         if isKeyAvailable(CNContactPhoneNumbersKey) {
-            return phoneNumbers.map { PhoneNumber(value: setToNilIfEmpty($0.value.stringValue))  }
+            return phoneNumbers.map { PhoneNumber(value: setToNilIfEmpty($0.value.stringValue)) }
         }
         
         return []

@@ -119,4 +119,3 @@ struct NetworkConfiguration {
         return characterSet
     }()
 }
-

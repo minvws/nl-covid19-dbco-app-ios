@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 protocol AppVersionInformation {
     var minimumVersion: String { get }
     var minimumVersionMessage: String? { get }

@@ -96,4 +96,3 @@ extension Text: InputFieldEditable {
 }
 
 extension Options: InputFieldEditable {}
-

@@ -39,9 +39,9 @@ extension JSONDecoder.KeyDecodingStrategy {
             var key = AnyCodingKey(codingKeys.last!)
 
             if let firstChar = key.stringValue.first {
-                let i = key.stringValue.startIndex
+                let index = key.stringValue.startIndex
                 key.stringValue.replaceSubrange(
-                    i ... i, with: String(firstChar).lowercased()
+                    index ... index, with: String(firstChar).lowercased()
                 )
             }
             return key

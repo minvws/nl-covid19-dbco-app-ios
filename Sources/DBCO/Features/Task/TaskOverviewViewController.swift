@@ -34,10 +34,10 @@ class TaskOverviewViewModel {
         
         sections = []
         
-        tableViewManager.numberOfSections = { [unowned self] in return sections.count }
-        tableViewManager.numberOfRowsInSection = { [unowned self] in return sections[$0].tasks.count }
-        tableViewManager.itemForCellAtIndexPath = { [unowned self] in return sections[$0.section].tasks[$0.row] }
-        tableViewManager.viewForHeaderInSection = { [unowned self] in return sections[$0].header }
+        tableViewManager.numberOfSections = { [unowned self] in return self.sections.count }
+        tableViewManager.numberOfRowsInSection = { [unowned self] in return self.sections[$0].tasks.count }
+        tableViewManager.itemForCellAtIndexPath = { [unowned self] in return self.sections[$0.section].tasks[$0.row] }
+        tableViewManager.viewForHeaderInSection = { [unowned self] in return self.sections[$0].header }
         
         Services.caseManager.addListener(self)
     }
@@ -133,8 +133,8 @@ class TaskOverviewViewController: PromptableViewController {
         promptView = Button(title: .taskOverviewDoneButtonTitle)
             .touchUpInside(self, action: #selector(upload))
         
-        viewModel.setHidePrompt { [unowned self] in hidePrompt(animated: $0) }
-        viewModel.setShowPrompt { [unowned self] in showPrompt(animated: $0) }
+        viewModel.setHidePrompt { [unowned self] in self.hidePrompt(animated: $0) }
+        viewModel.setShowPrompt { [unowned self] in self.showPrompt(animated: $0) }
         
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }

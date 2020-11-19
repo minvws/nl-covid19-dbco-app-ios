@@ -47,9 +47,11 @@ class ContactQuestionnaireViewModel {
     
     private var answerManagers: [AnswerManaging]
     
+    // swiftlint:disable opening_brace
     weak var classificationSectionView: SectionView?    { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
     weak var detailsSectionView: SectionView?           { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
     weak var informSectionView: SectionView?            { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
+    // swiftlint:enable opening_brace
     
     @Bindable private(set) var informTitle: String
     @Bindable private(set) var informContent: String
@@ -214,7 +216,7 @@ class ContactQuestionnaireViewModel {
             .filter(\.isEssential)
             .allSatisfy(isCompleted)
         
-        let allDetailsFilledIn =  contactDetailsManagers
+        let allDetailsFilledIn = contactDetailsManagers
             .map(\.answer)
             .allSatisfy(isCompleted)
         
@@ -278,7 +280,7 @@ class ContactQuestionnaireViewModel {
             informContent = .informContactGuidelinesCategory1
         case .category2a, .category2b:
             if let dateValue = updatedContact.dateOfLastExposure,
-               let date = LastExposureDateAnswerManager.valueDateFormatter.date(from: dateValue)  {
+               let date = LastExposureDateAnswerManager.valueDateFormatter.date(from: dateValue) {
                 let untilDate = date.addingTimeInterval(10 * 24 * 3600) // 10 days
                 
                 let dateFormatter = DateFormatter()

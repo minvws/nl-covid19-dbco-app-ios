@@ -60,16 +60,16 @@ class PromptableViewController: ViewController {
     }
     
     var contentView: UIView {
-        return (view as! PromptView).contentView
+        return (view as! PromptView).contentView // swiftlint:disable:this force_cast
     }
     
     var promptView: UIView? {
         get {
-            (view as! PromptView).promptView
+            (view as? PromptView)?.promptView
         }
         
         set {
-            (view as! PromptView).promptView = newValue
+            (view as? PromptView)?.promptView = newValue
         }
     }
     
@@ -78,6 +78,8 @@ class PromptableViewController: ViewController {
     }
     
     func hidePrompt(animated: Bool = true) {
+        guard let view = view as? PromptView else { return }
+        
         guard animated else {
             promptView?.isHidden = true
             view.layoutIfNeeded()
@@ -94,7 +96,7 @@ class PromptableViewController: ViewController {
         let originalFrame = view.frame
         
         var frame = view.frame
-        frame.size.height += (view as! PromptView).promptContainerView.frame.height
+        frame.size.height += view.promptContainerView.frame.height
         view.frame = frame
         
         UIView.animate(
@@ -110,6 +112,8 @@ class PromptableViewController: ViewController {
     }
     
     func showPrompt(animated: Bool = true) {
+        guard let view = view as? PromptView else { return }
+        
         guard animated else {
             promptView?.isHidden = false
             view.layoutIfNeeded()
@@ -131,7 +135,7 @@ class PromptableViewController: ViewController {
         view.layoutIfNeeded()
         
         var frame = view.frame
-        frame.size.height += (view as! PromptView).promptContainerView.frame.height
+        frame.size.height += view.promptContainerView.frame.height
         view.frame = frame
         
         view.layoutIfNeeded()

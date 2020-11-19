@@ -87,10 +87,10 @@ final class CaseManager: CaseManaging, Logging {
     private var listeners = [ListenerWrapper]()
     
     @Keychain(name: "appData", service: Constants.keychainService, clearOnReinstall: true)
-    private var appData: AppData = .empty
+    private var appData: AppData = .empty // swiftlint:disable:this let_var_whitespace
     
     @UserDefaults(key: "isSynced")
-    private(set) var isSynced: Bool = true {
+    private(set) var isSynced: Bool = true { // swiftlint:disable:this let_var_whitespace
         didSet {
             listeners.forEach { $0.listener?.caseManagerDidUpdateSyncState(self) }
         }

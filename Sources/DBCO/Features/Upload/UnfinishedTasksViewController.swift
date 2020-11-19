@@ -85,7 +85,6 @@ extension UnfinishedTasksViewModel: CaseManagerListener {
     func caseManagerDidUpdateSyncState(_ caseManager: CaseManaging) {}
 }
 
-
 /// - Tag: UnfinishedTasksViewControllers
 class UnfinishedTasksViewController: PromptableViewController {
     private let viewModel: UnfinishedTasksViewModel
