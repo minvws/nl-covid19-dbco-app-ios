@@ -88,8 +88,7 @@ extension String {
     static var taskOverviewInformedContactsHeaderTitle: String { return Localization.string(for: "taskOverviewInformedContactsHeader.title") }
     static var taskOverviewInformedContactsHeaderSubtitle: String { return Localization.string(for: "taskOverviewInformedContactsHeader.subtitle") }
     
-    static var taskContactCaptionCompleted: String { return Localization.string(for: "task.contact.caption.completed") }
-    static var taskContactCaptionIncomplete: String { return Localization.string(for: "task.contact.caption.incomplete") }
+    static var taskContactUnknownName: String { return Localization.string(for: "taskContactUnknownName") }
     
     static var taskLoadingErrorTitle: String { return Localization.string(for: "taskLoadingErrorTitle") }
     static var taskLoadingErrorMessage: String { return Localization.string(for: "taskLoadingErrorMessage") }

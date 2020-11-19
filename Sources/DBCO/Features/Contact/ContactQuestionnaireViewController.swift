@@ -396,7 +396,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         if viewModel.showCancelButton {
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
         }
-        let promptButton = Button(title: .close)
+        let promptButton = Button(title: .save)
             .touchUpInside(self, action: #selector(save))
         
         promptView = promptButton

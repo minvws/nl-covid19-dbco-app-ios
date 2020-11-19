@@ -41,8 +41,7 @@
 "taskOverviewInformedContactsHeader.title" = "Behandelde contacten";
 "taskOverviewInformedContactsHeader.subtitle" = "Contacten die zijn of worden geinformeerd";
 
-"task.contact.caption.completed" = "Gegevens toegevoegd";
-"task.contact.caption.incomplete" = "Vul gegevens aan";
+"taskContactUnknownName" = "Geen naam bekend";
 
 "taskLoadingErrorTitle" = "Kon de gegevens niet ophalen";
 "taskLoadingErrorMessage" = "Controleer de internetverbinding en probeer het opnieuw.";
