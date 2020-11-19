@@ -285,12 +285,6 @@ final class CaseManager: CaseManaging, Logging {
         
         let questionnaire = try self.questionnaire(for: task.taskType)
         
-        // Update task type content
-        switch tasks[index].taskType {
-        case .contact:
-            tasks[index].contact = task.contact
-        }
-        
         let currentAnswers = tasks[index].questionnaireResult?.answers ?? []
         let newAnswers = task.questionnaireResult?.answers ?? []
         
@@ -318,9 +312,21 @@ final class CaseManager: CaseManaging, Logging {
             .filter { $0.relevantForCategories.contains(tasks[index].contact.category) }
             .map(answerForQuestion)
         
-        tasks[index].questionnaireResult = QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: answers)
+        var updatedTask = tasks[index]
         
-        isSynced = false
+        // Update task results
+        updatedTask.questionnaireResult = QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: answers)
+        
+        // Update task type content
+        switch updatedTask.taskType {
+        case .contact:
+            updatedTask.contact = task.contact
+        }
+        
+        // If the updatedTask is the same as the current task, data is still synced
+        isSynced = tasks[index] == updatedTask
+        
+        tasks[index] = updatedTask
         
         listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
     }

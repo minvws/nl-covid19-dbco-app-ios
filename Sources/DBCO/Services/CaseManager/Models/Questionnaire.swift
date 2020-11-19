@@ -134,7 +134,7 @@ struct Questionnaire: Codable {
 }
 
 /// - Tag: Answer
-struct Answer: Codable {
+struct Answer: Codable, Equatable {
     let uuid: UUID
     let questionUuid: UUID
     @ISO8601DateFormat var lastModified: Date
@@ -314,7 +314,7 @@ extension Answer.Value: Codable {
 /// [CaseManager](x-source-tag://CaseManager)
 ///
 /// - Tag: QuestionnaireResult
-struct QuestionnaireResult: Codable {
+struct QuestionnaireResult: Codable, Equatable {
     /// The identifier of the [Questionnaire](x-source-tag://Questionnaire) this result belongs to
     let questionnaireUuid: UUID
     var answers: [Answer]
