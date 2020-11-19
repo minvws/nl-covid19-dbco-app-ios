@@ -144,6 +144,8 @@ final class CaseManager: CaseManaging, Logging {
             }
             
             do {
+                fetchDate = Date() // Set the fetchdate here to prevent multiple request
+                
                 let identifier = try Services.pairingManager.caseToken()
                 Services.networkManager.getCase(identifier: identifier) {
                     switch $0 {
@@ -152,7 +154,7 @@ final class CaseManager: CaseManaging, Logging {
                         self.dateOfSymptomOnset = result.dateOfSymptomOnset
                         self.windowExpiresAt = result.windowExpiresAt
                         
-                        self.fetchDate = Date()
+                        self.fetchDate = Date() // Set the fetchdate here again to the actual date
             
                         loadQuestionnairesIfNeeded()
                     case .failure(let error):

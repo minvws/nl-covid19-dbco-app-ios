@@ -59,6 +59,13 @@ final class TaskOverviewCoordinator: Coordinator, Logging {
         loadCaseData(userInitiated: false)
     }
     
+    override func removeChildCoordinator(_ coordinator: Coordinator) {
+        super.removeChildCoordinator(coordinator)
+        
+        // Overview became visible so: 
+        loadCaseData(userInitiated: false)
+    }
+    
     private func loadCaseData(userInitiated: Bool, completionHandler: (() -> Void)? = nil) {
         Services.caseManager.loadCaseData(userInitiated: userInitiated) { success, error in
             if success {
@@ -182,6 +189,7 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
     }
     
     func taskOverviewViewControllerDidRequestRefresh(_ controller: TaskOverviewViewController) {
+        logDebug("Pulled to refresh")
         loadCaseData(userInitiated: true) {
             // Delay for a bit to make it feel more like something is happening
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
