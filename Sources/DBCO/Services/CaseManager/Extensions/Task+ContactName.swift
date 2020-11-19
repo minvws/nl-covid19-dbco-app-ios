@@ -24,7 +24,7 @@ extension Task {
                     return nil
                 }
             }
-            .first ?? label ?? .contactFallbackTitle
+            .first ?? label ?? .taskContactUnknownName
     }
     
     /// Searches for a .contactDetails answer in the results and returns the firstName.
