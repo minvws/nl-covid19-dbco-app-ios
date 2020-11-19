@@ -291,8 +291,8 @@ final class CaseManager: CaseManaging, Logging {
             tasks[index].contact = task.contact
         }
         
-        let currentAnswers = tasks[index].result?.answers ?? []
-        let newAnswers = task.result?.answers ?? []
+        let currentAnswers = tasks[index].questionnaireResult?.answers ?? []
+        let newAnswers = task.questionnaireResult?.answers ?? []
         
         // Ensure we have (empty) answers for all necessary questions
         // Updating existing any answers
@@ -318,7 +318,7 @@ final class CaseManager: CaseManaging, Logging {
             .filter { $0.relevantForCategories.contains(tasks[index].contact.category) }
             .map(answerForQuestion)
         
-        tasks[index].result = QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: answers)
+        tasks[index].questionnaireResult = QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: answers)
         
         isSynced = false
         

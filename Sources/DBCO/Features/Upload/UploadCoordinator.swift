@@ -112,7 +112,7 @@ extension UploadCoordinator: UnfinishedTasksViewControllerDelegate {
     func unfinishedTasksViewController(_ controller: UnfinishedTasksViewController, didSelect task: Task) {
         switch task.taskType {
         case .contact:
-            if task.result != nil {
+            if task.questionnaireResult != nil {
                 // edit flow
                 editContact(for: task)
             } else {

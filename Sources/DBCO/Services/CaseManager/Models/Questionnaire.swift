@@ -137,9 +137,9 @@ struct Questionnaire: Codable {
 struct Answer: Codable {
     let uuid: UUID
     let questionUuid: UUID
-    let lastModified: Date
+    @ISO8601DateFormat var lastModified: Date
     
-    enum Value: CustomStringConvertible, Equatable{
+    enum Value: CustomStringConvertible, Equatable {
         case classificationDetails(category1Risk: Bool?,
                                    category2aRisk: Bool?,
                                    category2bRisk: Bool?,
@@ -195,8 +195,8 @@ extension Answer.Value: Codable {
         case phoneNumber
         case value
         case category1Risk
-        case category2aRisk
-        case category2bRisk
+        case category2ARisk
+        case category2BRisk
         case category3Risk
     }
     
@@ -207,8 +207,8 @@ extension Answer.Value: Codable {
         switch type {
         case .classificationDetails:
             self = .classificationDetails(category1Risk: try container.decode(Bool?.self, forKey: .category1Risk),
-                                          category2aRisk: try container.decode(Bool?.self, forKey: .category2aRisk),
-                                          category2bRisk: try container.decode(Bool?.self, forKey: .category2bRisk),
+                                          category2aRisk: try container.decode(Bool?.self, forKey: .category2ARisk),
+                                          category2bRisk: try container.decode(Bool?.self, forKey: .category2BRisk),
                                           category3Risk: try container.decode(Bool?.self, forKey: .category3Risk))
         case .contactDetails:
             self = .contactDetails(firstName: try container.decode(String?.self, forKey: .firstName),
@@ -232,13 +232,22 @@ extension Answer.Value: Codable {
     }
     
     func encode(to encoder: Encoder) throws {
+        switch encoder.target {
+        case .internalStorage, .unknown:
+            try encodeForLocalStorage(to: encoder)
+        case .api:
+            try encodeForAPI(to: encoder)
+        }
+    }
+    
+    private func encodeForLocalStorage(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         switch self {
         case .classificationDetails(let category1Risk, let category2aRisk, let category2bRisk, let category3Risk):
             try container.encode(Question.QuestionType.classificationDetails, forKey: .type)
             try container.encode(category1Risk, forKey: .category1Risk)
-            try container.encode(category2aRisk, forKey: .category2aRisk)
-            try container.encode(category2bRisk, forKey: .category2bRisk)
+            try container.encode(category2aRisk, forKey: .category2ARisk)
+            try container.encode(category2bRisk, forKey: .category2BRisk)
             try container.encode(category3Risk, forKey: .category3Risk)
         case .contactDetails(let firstName, let lastName, let email, let phoneNumber):
             try container.encode(Question.QuestionType.contactDetails, forKey: .type)
@@ -266,6 +275,35 @@ extension Answer.Value: Codable {
             try container.encode(option, forKey: .value)
         }
     }
+    
+    private func encodeForAPI(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case .classificationDetails(let category1Risk, let category2aRisk, let category2bRisk, let category3Risk):
+            try container.encode(category1Risk ?? false, forKey: .category1Risk)
+            try container.encode(category2aRisk ?? false, forKey: .category2ARisk)
+            try container.encode(category2bRisk ?? false, forKey: .category2BRisk)
+            try container.encode(category3Risk ?? false, forKey: .category3Risk)
+        case .contactDetails(let firstName, let lastName, let email, let phoneNumber):
+            try container.encode(firstName, forKey: .firstName)
+            try container.encode(lastName, forKey: .lastName)
+            try container.encode(email, forKey: .email)
+            try container.encode(phoneNumber, forKey: .phoneNumber)
+        case .contactDetailsFull(let firstName, let lastName, let email, let phoneNumber):
+            try container.encode(firstName, forKey: .firstName)
+            try container.encode(lastName, forKey: .lastName)
+            try container.encode(email, forKey: .email)
+            try container.encode(phoneNumber, forKey: .phoneNumber)
+        case .date(let date):
+            try container.encode(date, forKey: .value)
+        case .lastExposureDate(let date):
+            try container.encode(date?.value, forKey: .value)
+        case .open(let value):
+            try container.encode(value, forKey: .value)
+        case .multipleChoice(let option):
+            try container.encode(option?.value, forKey: .value)
+        }
+    }
 }
 
 /// Represents a filled out questionnaire
@@ -280,4 +318,27 @@ struct QuestionnaireResult: Codable {
     /// The identifier of the [Questionnaire](x-source-tag://Questionnaire) this result belongs to
     let questionnaireUuid: UUID
     var answers: [Answer]
+    
+    func encode(to encoder: Encoder) throws {
+        func isValidAnswerForAPI(_ answer: Answer) -> Bool {
+            switch answer.value {
+            case .lastExposureDate:
+                return false
+            default:
+                return true
+            }
+        }
+        
+        var encodableAnswers: [Answer]
+        switch encoder.target {
+        case .internalStorage, .unknown:
+            encodableAnswers = answers
+        case .api:
+            encodableAnswers = answers.filter(isValidAnswerForAPI)
+        }
+        
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(questionnaireUuid, forKey: .questionnaireUuid)
+        try container.encode(encodableAnswers, forKey: .answers)
+    }
 }
