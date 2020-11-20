@@ -323,8 +323,8 @@ final class CaseManager: CaseManaging, Logging {
             updatedTask.contact = task.contact
         }
         
-        // If the updatedTask is the same as the current task, data is still synced
-        isSynced = tasks[index] == updatedTask
+        // If the data was synced and the updatedTask is the same as the current task, data is still synced
+        isSynced = isSynced && tasks[index] == updatedTask
         
         tasks[index] = updatedTask
         
