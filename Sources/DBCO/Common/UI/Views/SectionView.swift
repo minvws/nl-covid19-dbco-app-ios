@@ -65,7 +65,7 @@ class SectionView: UIView {
         icon.setContentHuggingPriority(.required, for: .horizontal)
         icon.tintColor = Theme.colors.primary
         
-        collapseIndicator.image =  UIImage(named: "EditContact/SectionCollapse")
+        collapseIndicator.image = UIImage(named: "EditContact/SectionCollapse")
         collapseIndicator.setContentHuggingPriority(.required, for: .horizontal)
         
         titleLabel.text = title

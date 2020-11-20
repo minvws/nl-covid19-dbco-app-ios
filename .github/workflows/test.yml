@@ -6,17 +6,17 @@ on:
       - main
 
 jobs:
-  # swiftlint:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Checkout
-  #     uses: actions/checkout@v1
-  #   - name: Run SwiftLint for changes in this pull request
-  #     uses: norio-nomura/action-swiftlint@3.1.0
-  #     with:
-  #       args: --force-exclude
-  #     env:
-  #       DIFF_BASE: ${{ github.base_ref }}
+  swiftlint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Run SwiftLint for changes in this pull request
+      uses: norio-nomura/action-swiftlint@3.1.0
+      with:
+        args: --force-exclude
+      env:
+        DIFF_BASE: ${{ github.base_ref }}
   test:
     runs-on: macOS-latest
     # needs: swiftlint # only run tests (which is resource intensive) after swiftlint passes

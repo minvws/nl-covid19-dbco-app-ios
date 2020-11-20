@@ -185,7 +185,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     private func updateValidationStateIfNeeded() {
         guard object?[keyPath: path].showValidationState == true else { return }
         
-        // TODO: Placeholder implementation
+        // Placeholder implementation (fixed in DBCO-64)
         iconContainerView.isHidden = text?.isEmpty == true
         validationIconView.isHighlighted = true
     }

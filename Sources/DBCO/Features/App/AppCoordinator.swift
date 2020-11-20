@@ -41,8 +41,9 @@ final class AppCoordinator: Coordinator {
     }
     
     private var isCheckingForRequiredUpdates = false
+    
     func checkForRequiredUpdates() {
-        guard !isCheckingForRequiredUpdates else { return}
+        guard !isCheckingForRequiredUpdates else { return }
         
         isCheckingForRequiredUpdates = true
         

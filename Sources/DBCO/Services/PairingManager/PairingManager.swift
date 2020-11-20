@@ -60,6 +60,7 @@ class PairingManager: PairingManaging, Logging {
     
     @Keychain(name: "pairing", service: Constants.keychainService, clearOnReinstall: true)
     private var pairing: Pairing = .empty
+    // swiftlint:disable:previous let_var_whitespace
     
     required init() {}
     

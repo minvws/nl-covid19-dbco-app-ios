@@ -18,14 +18,14 @@ class NetworkManager: NetworkManaging, Logging {
                                   delegateQueue: nil)
     }
     
-    func getAppConfiguration(completion: @escaping (Result<AppConfiguration, NetworkError>) -> ()) {
+    func getAppConfiguration(completion: @escaping (Result<AppConfiguration, NetworkError>) -> Void) {
         let urlRequest = constructRequest(url: configuration.appConfigurationUrl,
                                           method: .GET)
 
         decodedJSONData(request: urlRequest, completion: completion)
     }
     
-    func pair(code: String, sealedClientPublicKey: Data, completion: @escaping (Result<PairResponse, NetworkError>) -> ()) {
+    func pair(code: String, sealedClientPublicKey: Data, completion: @escaping (Result<PairResponse, NetworkError>) -> Void) {
         struct PairBody: Encodable {
             let pairingCode: String
             let sealedClientPublicKey: Data
@@ -39,7 +39,7 @@ class NetworkManager: NetworkManaging, Logging {
         decodedJSONData(request: urlRequest, completion: completion)
     }
     
-    func getCase(identifier: String, completion: @escaping (Result<Case, NetworkError>) -> ()) {
+    func getCase(identifier: String, completion: @escaping (Result<Case, NetworkError>) -> Void) {
         let urlRequest = constructRequest(url: configuration.caseUrl(identifier: identifier),
                                           method: .GET)
         
@@ -54,7 +54,7 @@ class NetworkManager: NetworkManaging, Logging {
         decodedJSONData(request: urlRequest, completion: open)
     }
     
-    func putCase(identifier: String, value: Case, completion: @escaping (Result<Void, NetworkError>) -> ()) {
+    func putCase(identifier: String, value: Case, completion: @escaping (Result<Void, NetworkError>) -> Void) {
         struct CaseBody: Encodable {
             let sealedCase: Sealed<Case>
         }
@@ -75,7 +75,7 @@ class NetworkManager: NetworkManaging, Logging {
         }
     }
     
-    func getQuestionnaires(completion: @escaping (Result<[Questionnaire], NetworkError>) -> ()) {
+    func getQuestionnaires(completion: @escaping (Result<[Questionnaire], NetworkError>) -> Void) {
         let urlRequest = constructRequest(url: configuration.questionnairesUrl,
                                           method: .GET)
         
@@ -133,7 +133,7 @@ class NetworkManager: NetworkManaging, Logging {
             .resume()
     }
     
-    private func data(request: Result<URLRequest, NetworkError>, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> ()) {
+    private func data(request: Result<URLRequest, NetworkError>, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) {
         switch request {
         case let .success(request):
             data(request: request, completion: completion)
@@ -142,7 +142,7 @@ class NetworkManager: NetworkManaging, Logging {
         }
     }
 
-    private func data(request: URLRequest, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> ()) {
+    private func data(request: URLRequest, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) {
         dataTask(with: request) { data, response, error in
             self.handleNetworkResponse(data,
                                        response: response,
@@ -151,7 +151,7 @@ class NetworkManager: NetworkManaging, Logging {
         }
     }
     
-    private func decodedJSONData<Object: Decodable>(request: Result<URLRequest, NetworkError>, completion: @escaping (Result<Object, NetworkError>) -> ()) {
+    private func decodedJSONData<Object: Decodable>(request: Result<URLRequest, NetworkError>, completion: @escaping (Result<Object, NetworkError>) -> Void) {
         data(request: request) { result in
             let decodedResult: Result<Object, NetworkError> = self.jsonResponseHandler(result: result)
             
@@ -167,7 +167,7 @@ class NetworkManager: NetworkManaging, Logging {
     private func handleNetworkResponse<Object>(_ object: Object?,
                                                response: URLResponse?,
                                                error: Error?,
-                                               completion: @escaping (Result<(URLResponse, Object), NetworkError>) -> ()) {
+                                               completion: @escaping (Result<(URLResponse, Object), NetworkError>) -> Void) {
         if error != nil {
             completion(.failure(.invalidResponse))
             return
@@ -258,7 +258,8 @@ class NetworkManager: NetworkManaging, Logging {
 
     private let configuration: NetworkConfiguration
     private let session: URLSession
-    private let sessionDelegate: URLSessionDelegate? // hold on to delegate to prevent deallocation
+    // swiftlint:disable:next weak_delegate
+    private let sessionDelegate: URLSessionDelegate? // swiftlint ignore: this // hold on to delegate to prevent deallocation
     
     private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -283,4 +284,3 @@ class NetworkManager: NetworkManaging, Logging {
         return decoder
     }()
 }
-

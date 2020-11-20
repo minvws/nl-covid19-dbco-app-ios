@@ -83,7 +83,7 @@ public final class LogHandler: Logging {
     }
 
     public static func logFiles() -> [URL] {
-        guard let fileLogger = DDLog.allLoggers.filter({ $0 is DDFileLogger }).first as? DDFileLogger else {
+        guard let fileLogger = DDLog.allLoggers.first(where: { $0 is DDFileLogger }) as? DDFileLogger else {
             #if DEBUG
                 assertionFailure("File Logger Not Found")
             #endif

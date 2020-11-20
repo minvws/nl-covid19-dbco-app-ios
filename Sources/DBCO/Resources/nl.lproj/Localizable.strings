@@ -22,7 +22,7 @@
 
 /* MARK: - Onboarding */
 "onboarding.step1.title" = "Help de GGD bij het contactonderzoek en breng je contacten op de hoogte";
-"onboarding.step1.message" = "Je kunt via deze app gegevens van je contacten met de GGD delen. Dit doe je als je corona hebt of denkt te hebben. Zo zorg je dat het contactonderzoek sneller gaat.";
+"onboarding.step1.message" = "Je kunt via deze app gegevens van je contacten met de GGD delen. Dit doe je als je corona hebt of denkt te hebben. Zo help je de GGD met het sneller en beter uitvoeren van bron- en contactonderzoek.";
 "onboarding.step2.title" = "Vul de code in die je hebt gekregen van de GGD-medewerker";
 "onboarding.step3.title" = "Voeg de gegevens van je contacten toe";
 "onboarding.step3.message" = "De GGD heeft contactgegevens nodig van mensen die jij hebt ontmoet, omdat je hen misschien hebt besmet. Via deze app kun je gemakkelijk gegevens delen. Je bepaalt zelf welke gegevens je deelt en wanneer je dat doet.";

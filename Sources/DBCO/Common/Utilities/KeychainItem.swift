@@ -92,8 +92,8 @@ class KeychainItem<T: Codable> {
         
         if let password = try? decoder.decode(Wrapped.self, from: passwordData) {
             return password.value
-        } else if T.self is String.Type, let password = String(data: passwordData, encoding: .utf8) {
-            return password as! T
+        } else if T.self is String.Type, let password = String(data: passwordData, encoding: .utf8), let value = password as? T {
+            return value
         } else {
             throw KeychainError.unexpectedData
         }
