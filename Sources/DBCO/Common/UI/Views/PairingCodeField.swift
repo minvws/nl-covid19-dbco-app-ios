@@ -120,4 +120,10 @@ extension PairingCodeField: UITextFieldDelegate {
         return false
     }
     
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        // Fix cursor position to end
+        selectedTextRange = textField.textRange(from: textField.endOfDocument,
+                                                to: textField.endOfDocument)
+    }
+    
 }
