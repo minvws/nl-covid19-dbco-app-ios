@@ -23,7 +23,7 @@ final class OnboardingCoordinator: Coordinator {
     init(window: UIWindow) {
         self.window = window
         
-        let viewModel = OnboardingStepViewModel(image: UIImage(named: "StartVisual")!,
+        let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding1")!,
                                                 title: .onboardingStep1Title,
                                                 message: .onboardingStep1Message,
                                                 buttonTitle: .next)
@@ -107,7 +107,7 @@ extension OnboardingCoordinator: PairViewControllerDelegate {
             
             self.didPair = true
             
-            let viewModel = OnboardingStepViewModel(image: UIImage(named: "StartVisual")!,
+            let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding2")!,
                                                     title: .onboardingStep3Title,
                                                     message: .onboardingStep3Message,
                                                     buttonTitle: .start)

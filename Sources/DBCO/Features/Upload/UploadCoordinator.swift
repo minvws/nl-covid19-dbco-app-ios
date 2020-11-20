@@ -61,7 +61,7 @@ final class UploadCoordinator: Coordinator, Logging {
         
         do {
             try Services.caseManager.sync { _ in
-                let viewModel = OnboardingStepViewModel(image: UIImage(named: "StartVisual")!,
+                let viewModel = OnboardingStepViewModel(image: UIImage(named: "UploadSuccess")!,
                                                         title: .uploadFinishedTitle,
                                                         message: .uploadFinishedMessage,
                                                         buttonTitle: .done)
