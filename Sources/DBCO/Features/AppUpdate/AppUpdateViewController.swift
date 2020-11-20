@@ -13,7 +13,7 @@ class AppUpdateViewModel {
     let updateURL: URL?
     
     init(versionInformation: AppVersionInformation) {
-        image = UIImage(named: "StartVisual")!
+        image = UIImage(named: "Onboarding2")!
         message = versionInformation.minimumVersionMessage ?? .updateAppContent
         updateURL = versionInformation.appStoreURL
     }
