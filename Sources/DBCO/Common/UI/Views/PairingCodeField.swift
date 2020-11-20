@@ -122,8 +122,12 @@ extension PairingCodeField: UITextFieldDelegate {
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
         // Fix cursor position to end
-        selectedTextRange = textField.textRange(from: textField.endOfDocument,
-                                                to: textField.endOfDocument)
+        let endRange = textField.textRange(from: textField.endOfDocument,
+                                           to: textField.endOfDocument)
+        
+        guard selectedTextRange != endRange else { return }
+        
+        selectedTextRange = endRange
     }
     
 }
