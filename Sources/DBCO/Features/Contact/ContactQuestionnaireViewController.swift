@@ -540,7 +540,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
     }
     
     @objc private func informContact() {
-        if let phoneNumber = viewModel.updatedTask.contactPhoneNumber {
+        if let phoneNumber = viewModel.updatedTask.contactPhoneNumber?.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) {
             if let url = URL(string: "tel:\(phoneNumber)") {
                 delegate?.contactQuestionnaireViewController(self, wantsToOpen: url)
             }

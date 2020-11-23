@@ -52,6 +52,7 @@
 		CD8F957925616F23004729A4 /* Certificates.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8F957825616F23004729A4 /* Certificates.swift */; };
 		CD9C7F3F2549B2B600A78EEF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CD9C7F412549B2B600A78EEF /* InfoPlist.strings */; };
 		CD9C7F52254AC25300A78EEF /* Task+Informed.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9C7F51254AC25300A78EEF /* Task+Informed.swift */; };
+		CDA07ECC256C0FD900DEF3FF /* Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA07ECB256C0FD900DEF3FF /* Validator.swift */; };
 		CDA0F6812539AA42009FD2A9 /* Answer+Prefilling.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA0F6802539AA42009FD2A9 /* Answer+Prefilling.swift */; };
 		CDA0F6852539AA66009FD2A9 /* Task+ContactName.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA0F6842539AA66009FD2A9 /* Task+ContactName.swift */; };
 		CDA0F6892539AAB8009FD2A9 /* Answer+Progress.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA0F6882539AAB8009FD2A9 /* Answer+Progress.swift */; };
@@ -172,6 +173,7 @@
 		CD9C7F402549B2B600A78EEF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CD9C7F442549B2B900A78EEF /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CD9C7F51254AC25300A78EEF /* Task+Informed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Informed.swift"; sourceTree = "<group>"; };
+		CDA07ECB256C0FD900DEF3FF /* Validator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validator.swift; sourceTree = "<group>"; };
 		CDA0F6802539AA42009FD2A9 /* Answer+Prefilling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Answer+Prefilling.swift"; sourceTree = "<group>"; };
 		CDA0F6842539AA66009FD2A9 /* Task+ContactName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+ContactName.swift"; sourceTree = "<group>"; };
 		CDA0F6882539AAB8009FD2A9 /* Answer+Progress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Answer+Progress.swift"; sourceTree = "<group>"; };
@@ -283,6 +285,7 @@
 				CDF817262552BEF100C60771 /* Bindable.swift */,
 				CD2F7CB0255949F300F2F73A /* ContactSuggestionHelper.swift */,
 				CD2F7CAA255943E400F2F73A /* ISO8601DateFormat.swift */,
+				CDA07ECB256C0FD900DEF3FF /* Validator.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -839,6 +842,7 @@
 				CD5DA76425516301003660CC /* ConfigManager.swift in Sources */,
 				CD756C78252DDF30005FEDA0 /* SectionView.swift in Sources */,
 				CD1824EE2524B3E4006EB272 /* InputField.swift in Sources */,
+				CDA07ECC256C0FD900DEF3FF /* Validator.swift in Sources */,
 				CDA5C11125123DC9009440D1 /* AppVersion.swift in Sources */,
 				CD6860CA253B31190061C318 /* ClassificationHelper.swift in Sources */,
 				CDA52601252F1752004E923A /* ToggleGroup.swift in Sources */,
