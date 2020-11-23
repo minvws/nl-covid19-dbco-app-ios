@@ -11,6 +11,7 @@
 "done" = "Klaar";
 "ok" = "Oké";
 "tryAgain" = "Opnieuw proberen";
+"delete" = "Verwijderen";
 "error.title" = "Er ging iets mis";
 
 /* MARK: - Update App */
@@ -32,6 +33,7 @@
 /* MARK: - Task Overview */
 "taskOverviewTitle" = "Mijn contacten";
 "taskOverviewDoneButtonTitle" = "Deel gegevens met GGD";
+"taskOverviewDeleteDataButtonTitle" = "Gegevens verwijderen";
 "taskOverviewAddContactButtonTitle" = "+ Contact toevoegen";
 
 "taskOverviewUninformedContactsHeader.title" = "Vul contactgegevens aan";
@@ -43,6 +45,9 @@
 
 "taskLoadingErrorTitle" = "Kon de gegevens niet ophalen";
 "taskLoadingErrorMessage" = "Controleer de internetverbinding en probeer het opnieuw.";
+
+"deleteDataPromptMessage" = "De periode voor het delen van gegevens met de GGD is verlopen. Kies voor \"verwijderen\" om al de opgeslagen gegevens in de app te verwijderen.";
+"windowExpiredMessage" = "De periode voor het delen van gegevens met de GGD is verlopen.";
 
 /* MARK: - Contact Selection */
 "selectContactTitle" = "Selecteer contact";
