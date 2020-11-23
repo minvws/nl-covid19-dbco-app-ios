@@ -13,6 +13,7 @@ protocol TaskOverviewViewControllerDelegate: class {
     func taskOverviewViewControllerDidRequestUpload(_ controller: TaskOverviewViewController)
     func taskOverviewViewControllerDidRequestRefresh(_ controller: TaskOverviewViewController)
     func taskOverviewViewControllerDidRequestDebugMenu(_ controller: TaskOverviewViewController)
+    func taskOverviewViewControllerDidRequestReset(_ controller: TaskOverviewViewController)
 }
 
 /// - Tag: TaskOverviewViewModel
@@ -28,6 +29,11 @@ class TaskOverviewViewModel {
     
     private var hidePrompt: PromptFunction?
     private var showPrompt: PromptFunction?
+    
+    @Bindable private(set) var isDoneButtonHidden: Bool = false
+    @Bindable private(set) var isResetButtonHidden: Bool = true
+    @Bindable private(set) var isAddContactButtonHidden: Bool = false
+    @Bindable private(set) var isWindowExpiredMessageHidden: Bool = true
     
     init() {
         tableViewManager = .init()
@@ -48,13 +54,15 @@ class TaskOverviewViewModel {
         self.tableHeaderBuilder = tableHeaderBuilder
         self.sectionHeaderBuilder = sectionHeaderBuilder
         
+        tableView.allowsSelection = !Services.caseManager.isWindowExpired
+        
         buildSections()
     }
     
     func setHidePrompt(_ hidePrompt: @escaping PromptFunction) {
         self.hidePrompt = hidePrompt
         
-        if Services.caseManager.isSynced {
+        if Services.caseManager.isSynced && !Services.caseManager.isWindowExpired {
             hidePrompt(false)
         }
     }
@@ -62,7 +70,7 @@ class TaskOverviewViewModel {
     func setShowPrompt(_ showPrompt: @escaping PromptFunction) {
         self.showPrompt = showPrompt
         
-        if !Services.caseManager.isSynced {
+        if !Services.caseManager.isSynced || Services.caseManager.isWindowExpired {
             showPrompt(false)
         }
     }
@@ -102,6 +110,17 @@ extension TaskOverviewViewModel: CaseManagerListener {
             showPrompt?(true)
         }
     }
+    
+    func caseManagerWindowExpired(_ caseManager: CaseManaging) {
+        isDoneButtonHidden = true
+        isResetButtonHidden = false
+        isAddContactButtonHidden = true
+        isWindowExpiredMessageHidden = false
+        
+        tableViewManager.tableView?.allowsSelection = false
+        
+        showPrompt?(true)
+    }
 }
 
 /// - Tag: TaskOverviewViewController
@@ -130,8 +149,16 @@ class TaskOverviewViewController: PromptableViewController {
         
         setupTableView()
         
-        promptView = Button(title: .taskOverviewDoneButtonTitle)
+        let doneButton = Button(title: .taskOverviewDoneButtonTitle)
             .touchUpInside(self, action: #selector(upload))
+        
+        let resetButton = Button(title: .taskOverviewDeleteDataButtonTitle, style: .secondary)
+            .touchUpInside(self, action: #selector(reset))
+        
+        promptView = VStack(doneButton, resetButton)
+        
+        viewModel.$isDoneButtonHidden.binding = { doneButton.isHidden = $0 }
+        viewModel.$isResetButtonHidden.binding = { resetButton.isHidden = $0 }
         
         viewModel.setHidePrompt { [unowned self] in self.hidePrompt(animated: $0) }
         viewModel.setShowPrompt { [unowned self] in self.showPrompt(animated: $0) }
@@ -144,9 +171,26 @@ class TaskOverviewViewController: PromptableViewController {
         tableView.delaysContentTouches = false
         tableView.refreshControl = refreshControl
         
-        let tableHeaderBuilder = { [unowned self] in
-            Button(title: .taskOverviewAddContactButtonTitle, style: .secondary)
+        let tableHeaderBuilder = { [unowned self] () -> UIView in
+            let addContactButton = Button(title: .taskOverviewAddContactButtonTitle, style: .secondary)
                 .touchUpInside(self, action: #selector(requestContact))
+            
+            let iconView = UIImageView(image: UIImage(named: "Warning"))
+            iconView.contentMode = .center
+            iconView.setContentHuggingPriority(.required, for: .horizontal)
+            iconView.tintColor = Theme.colors.primary
+            
+            let windowExpiredMessage =
+                HStack(spacing: 8,
+                       iconView.withInsets(.top(2)),
+                       Label(subhead: .windowExpiredMessage,
+                             textColor: Theme.colors.primary).multiline())
+                .alignment(.top)
+            
+            self.viewModel.$isAddContactButtonHidden.binding = { addContactButton.isHidden = $0 }
+            self.viewModel.$isWindowExpiredMessageHidden.binding = { windowExpiredMessage.isHidden = $0 }
+            
+            return VStack(addContactButton, windowExpiredMessage)
                 .wrappedInReadableWidth(insets: .top(16))
         }
         
@@ -192,6 +236,10 @@ class TaskOverviewViewController: PromptableViewController {
     
     @objc private func openDebugMenu() {
         delegate?.taskOverviewViewControllerDidRequestDebugMenu(self)
+    }
+    
+    @objc private func reset() {
+        delegate?.taskOverviewViewControllerDidRequestReset(self)
     }
     
     var isLoading: Bool {

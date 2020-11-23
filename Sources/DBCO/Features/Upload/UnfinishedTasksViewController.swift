@@ -83,6 +83,8 @@ extension UnfinishedTasksViewModel: CaseManagerListener {
     }
     
     func caseManagerDidUpdateSyncState(_ caseManager: CaseManaging) {}
+    
+    func caseManagerWindowExpired(_ caseManager: CaseManaging) {}
 }
 
 /// - Tag: UnfinishedTasksViewControllers

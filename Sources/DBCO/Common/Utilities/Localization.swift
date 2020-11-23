@@ -59,6 +59,7 @@ extension String {
     static var done: String { return Localization.string(for: "done") }
     static var ok: String { return Localization.string(for: "ok") }
     static var tryAgain: String { return Localization.string(for: "tryAgain") }
+    static var delete: String { return Localization.string(for: "delete") }
     static var errorTitle: String { return Localization.string(for: "error.title") }
     
     // MARK: - Update App
@@ -81,6 +82,7 @@ extension String {
     /* MARK: - Task Overview */
     static var taskOverviewTitle: String { return Localization.string(for: "taskOverviewTitle") }
     static var taskOverviewDoneButtonTitle: String { return Localization.string(for: "taskOverviewDoneButtonTitle") }
+    static var taskOverviewDeleteDataButtonTitle: String { return Localization.string(for: "taskOverviewDeleteDataButtonTitle") }
     static var taskOverviewAddContactButtonTitle: String { return Localization.string(for: "taskOverviewAddContactButtonTitle") }
     
     static var taskOverviewUninformedContactsHeaderTitle: String { return Localization.string(for: "taskOverviewUninformedContactsHeader.title") }
@@ -92,6 +94,9 @@ extension String {
     
     static var taskLoadingErrorTitle: String { return Localization.string(for: "taskLoadingErrorTitle") }
     static var taskLoadingErrorMessage: String { return Localization.string(for: "taskLoadingErrorMessage") }
+    
+    static var deleteDataPromptMessage: String { return Localization.string(for: "deleteDataPromptMessage") }
+    static var windowExpiredMessage: String { return Localization.string(for: "windowExpiredMessage") }
     
     // MARK: - Contact Selection
     static var selectContactTitle: String { return Localization.string(for: "selectContactTitle") }
