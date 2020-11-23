@@ -237,4 +237,16 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
         controller.present(alert, animated: true)
     }
     
+    func taskOverviewViewControllerDidRequestReset(_ controller: TaskOverviewViewController) {
+        let alert = UIAlertController(title: .taskOverviewDeleteDataButtonTitle, message: .deleteDataPromptMessage, preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: .delete, style: .destructive) { _ in
+            self.delegate?.taskOverviewCoordinatorDidRequestReset(self)
+        })
+        
+        alert.addAction(UIAlertAction(title: .cancel, style: .cancel, handler: nil))
+        
+        controller.present(alert, animated: true)
+    }
+    
 }

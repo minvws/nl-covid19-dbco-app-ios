@@ -12,6 +12,7 @@ enum CaseManagingError: Error {
     case questionnaireNotFound
     case couldNotLoadTasks(NetworkError)
     case couldNotLoadQuestionnaires(NetworkError)
+    case windowExpired
 }
 
 /// Loads tasks and questionnaires.
@@ -32,8 +33,10 @@ protocol CaseManaging {
     /// Indicates that alls the tasks are uploaded to the backend in their current state
     var isSynced: Bool { get }
     
+    /// Indicates that tasks can no longer be uploaded to the backedn
+    var isWindowExpired: Bool { get }
+    
     var dateOfSymptomOnset: Date { get }
-    var windowExpiresAt: Date { get }
     var tasks: [Task] { get }
     
     /// Returns the [Questionnaire](x-source-tag://Questionnaire) associated with a task type.
@@ -69,6 +72,9 @@ protocol CaseManagerListener: class {
     
     /// Called after tasks were uploaded to the backend
     func caseManagerDidUpdateSyncState(_ caseManager: CaseManaging)
+    
+    /// Called when the window for uploading data has expired
+    func caseManagerWindowExpired(_ caseManager: CaseManaging)
 }
 
 /// - Tag: CaseManager
@@ -113,8 +119,17 @@ final class CaseManager: CaseManaging, Logging {
     
     private(set) var windowExpiresAt: Date {
         get { appData.windowExpiresAt }
-        set { appData.windowExpiresAt = newValue }
+        set {
+            appData.windowExpiresAt = newValue
+            setWindowExpiryTimer()
+        }
     }
+    
+    var isWindowExpired: Bool {
+        return appData.windowExpiresAt.timeIntervalSinceNow < 0
+    }
+    
+    private var windowExpiryTimer: Timer?
     
     var hasCaseData: Bool {
         $appData.exists && !questionnaires.isEmpty
@@ -261,6 +276,27 @@ final class CaseManager: CaseManaging, Logging {
         }
     }
     
+    private func setWindowExpiryTimer() {
+        guard $appData.exists else { return }
+        
+        windowExpiryTimer?.invalidate()
+        
+        guard !isWindowExpired else {
+            listeners.forEach { $0.listener?.caseManagerWindowExpired(self) }
+            return
+        }
+        
+        windowExpiryTimer = Timer(fire: windowExpiresAt, interval: 0, repeats: false) { [weak self] timer in
+            timer.invalidate()
+            
+            guard let self = self else { return }
+            
+            self.listeners.forEach { $0.listener?.caseManagerWindowExpired(self) }
+        }
+        
+        RunLoop.main.add(windowExpiryTimer!, forMode: .common)
+    }
+    
     /// - Tag: CaseManager.questionnaire
     func questionnaire(for taskType: Task.TaskType) throws -> Questionnaire {
         guard hasCaseData else { throw CaseManagingError.noCaseData }
@@ -333,10 +369,18 @@ final class CaseManager: CaseManaging, Logging {
     
     func addListener(_ listener: CaseManagerListener) {
         listeners.append(ListenerWrapper(listener: listener))
+        
+        if isWindowExpired {
+            // call listener immediately for expired window
+            listener.caseManagerWindowExpired(self)
+        } else {
+            setWindowExpiryTimer()
+        }
     }
     
     func sync(completionHandler: ((Bool) -> Void)?) throws {
         guard hasCaseData else { throw CaseManagingError.noCaseData }
+        guard !isWindowExpired else { throw CaseManagingError.windowExpired }
         
         do {
             let value = Case(dateOfSymptomOnset: dateOfSymptomOnset, windowExpiresAt: windowExpiresAt, tasks: tasks)
