@@ -87,6 +87,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             datePicker.datePickerMode = .date
             datePicker.tintColor = .black
             datePicker.maximumDate = Date()
+            datePicker.minimumDate = Calendar.current.date(byAdding: .year, value: -120, to: Date())
             datePicker.addTarget(self, action: #selector(handleDateValueChanged), for: .valueChanged)
             
             if #available(iOS 13.4, *) {
@@ -183,11 +184,18 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     }
     
     private func updateValidationStateIfNeeded() {
-        guard object?[keyPath: path].showValidationState == true else { return }
+        guard let validator = object?[keyPath: path].validator else { return }
         
-        // Placeholder implementation (fixed in DBCO-64)
-        iconContainerView.isHidden = text?.isEmpty == true
-        validationIconView.isHighlighted = true
+        switch validator.validate(object?[keyPath: path].value) {
+        case .invalid:
+            iconContainerView.isHidden = false
+            validationIconView.isHighlighted = false
+        case .valid:
+            iconContainerView.isHidden = false
+            validationIconView.isHighlighted = true
+        case .unknown:
+            iconContainerView.isHidden = true
+        }
     }
     
     private var datePicker: UIDatePicker?

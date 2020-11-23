@@ -137,7 +137,11 @@ extension CNContact {
     
     var contactPhoneNumbers: [PhoneNumber] {
         if isKeyAvailable(CNContactPhoneNumbersKey) {
-            return phoneNumbers.map { PhoneNumber(value: setToNilIfEmpty($0.value.stringValue)) }
+            let invalidCharacters = PhoneNumberValidator.validCharacters.inverted
+            return phoneNumbers.map { PhoneNumber(value:
+                                                    setToNilIfEmpty($0.value.stringValue)?
+                                                    .components(separatedBy: invalidCharacters)
+                                                    .joined()) }
         }
         
         return []
