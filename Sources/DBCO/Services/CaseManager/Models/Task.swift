@@ -73,10 +73,14 @@ struct Task: Equatable {
     
     var contact: Contact!
     
+    var deletedByIndex: Bool
+    
     var questionnaireResult: QuestionnaireResult?
     
     /// - Tag: Task.status
     var status: Status {
+        guard !deletedByIndex else { return .completed }
+        
         switch taskType {
         case .contact:
             if let questionnaireProgress = questionnaireResult?.progress {
@@ -95,10 +99,11 @@ struct Task: Equatable {
         self.source = .app
         self.label = nil
         self.taskContext = nil
+        self.deletedByIndex = false
         
         switch taskType {
         case .contact:
-            contact = Contact(category: .category3, communication: .none, didInform: false, dateOfLastExposure: nil)
+            contact = Contact(category: .other, communication: .none, didInform: false, dateOfLastExposure: nil)
         }
     }
     
@@ -149,6 +154,8 @@ extension Task: Codable {
         case .contact:
             contact = try Contact(from: decoder)
         }
+        
+        deletedByIndex = (try? container.decode(Bool?.self, forKey: .deletedByIndex)) ?? false
     }
     
     func encode(to encoder: Encoder) throws {
@@ -158,13 +165,18 @@ extension Task: Codable {
         try container.encode(source, forKey: .source)
         try container.encode(label, forKey: .label)
         try container.encode(taskContext, forKey: .taskContext)
-        try container.encode(questionnaireResult, forKey: .questionnaireResult)
         try container.encode(taskType, forKey: .taskType)
+        try container.encode(deletedByIndex, forKey: .deletedByIndex)
         
         switch taskType {
         case .contact:
             try contact?.encode(to: encoder)
         }
+        
+        // Don't encode result data for deleted tasks when sending to the api
+        guard !(encoder.target == .api && deletedByIndex) else { return }
+        
+        try container.encode(questionnaireResult, forKey: .questionnaireResult)
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -178,6 +190,7 @@ extension Task: Codable {
         case dateOfLastExposure
         case didInform
         case questionnaireResult
+        case deletedByIndex
     }
 }
 

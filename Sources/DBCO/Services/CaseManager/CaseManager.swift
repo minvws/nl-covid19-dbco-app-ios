@@ -359,6 +359,11 @@ final class CaseManager: CaseManaging, Logging {
             updatedTask.contact = task.contact
         }
         
+        // Update deletion
+        if task.deletedByIndex {
+            updatedTask.deletedByIndex = true
+        }
+        
         // If the data was synced and the updatedTask is the same as the current task, data is still synced
         isSynced = isSynced && tasks[index] == updatedTask
         

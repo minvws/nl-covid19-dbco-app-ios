@@ -79,8 +79,10 @@ class TaskOverviewViewModel {
         sections = []
         sections.append((tableHeaderBuilder?(), []))
         
-        let uninformedContacts = Services.caseManager.tasks.filter { !$0.isOrCanBeInformed }
-        let informedContacts = Services.caseManager.tasks.filter { $0.isOrCanBeInformed }
+        let tasks = Services.caseManager.tasks.filter { !$0.deletedByIndex }
+        
+        let uninformedContacts = tasks.filter { !$0.isOrCanBeInformed }
+        let informedContacts = tasks.filter { $0.isOrCanBeInformed }
         
         let uninformedSectionHeader = SectionHeaderContent(.taskOverviewUninformedContactsHeaderTitle, .taskOverviewUninformedContactsHeaderSubtitle)
         let informedSectionHeader = SectionHeaderContent(.taskOverviewInformedContactsHeaderTitle, .taskOverviewInformedContactsHeaderSubtitle)
