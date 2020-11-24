@@ -24,6 +24,7 @@ private extension Question {
 /// - Tag: ContactQuestionnaireViewModel
 class ContactQuestionnaireViewModel {
     private var task: Task
+    let didCreateNewTask: Bool
     private var baseResult: QuestionnaireResult
     private var updatedClassification: ClassificationHelper.Result
     private var updatedContact: Task.Contact { didSet { updateProgress() } }
@@ -60,8 +61,11 @@ class ContactQuestionnaireViewModel {
     @Bindable private(set) var informButtonHidden: Bool
     @Bindable private(set) var informButtonType: Button.ButtonType
     @Bindable private(set) var promptButtonType: Button.ButtonType
+    @Bindable private(set) var promptButtonTitle: String
     
     init(task: Task?, questionnaire: Questionnaire, contact: CNContact? = nil, showCancelButton: Bool = false) {
+        self.didCreateNewTask = task == nil
+        
         let initialCategory = task?.contact.category
         let task = task ?? Task.emptyContactTask
         self.task = task
@@ -76,6 +80,7 @@ class ContactQuestionnaireViewModel {
         self.informButtonHidden = true
         self.informButtonType = .secondary
         self.promptButtonType = .primary
+        self.promptButtonTitle = .save
         
         let questionsAndAnswers: [(question: Question, answer: Answer)] = {
             let currentAnswers = task.questionnaireResult?.answers ?? []
@@ -275,6 +280,8 @@ class ContactQuestionnaireViewModel {
             setInformButtonTitle()
         }
         
+        promptButtonTitle = .save
+        
         switch updatedContact.category {
         case .category1:
             informContent = .informContactGuidelinesCategory1
@@ -314,8 +321,8 @@ class ContactQuestionnaireViewModel {
         case .category3:
             informContent = .informContactGuidelinesCategory3
         case .other:
-            // Section won't be visible in this case
-            break
+            promptButtonType = .secondary
+            promptButtonTitle = didCreateNewTask ? .cancel : .delete
         }
         
         informLink = .informContactLink(category: updatedContact.category)
@@ -437,6 +444,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         viewModel.$informButtonHidden.binding = { informButton.isHidden = $0 }
         viewModel.$informButtonType.binding = { informButton.style = $0 }
         viewModel.$promptButtonType.binding = { promptButton.style = $0 }
+        viewModel.$promptButtonTitle.binding = { promptButton.title = $0 }
         
         VStack(spacing: 24,
                VStack(spacing: 16,
@@ -469,8 +477,20 @@ final class ContactQuestionnaireViewController: PromptableViewController {
     private var contactDetailsSection: SectionView!
     
     @objc private func save() {
-        let task = viewModel.updatedTask
+        var task = viewModel.updatedTask
         let firstName = task.contactFirstName ?? .contactPromptNameFallback
+        
+        guard task.contact.category != .other else { // if task is not valid and should be deleted
+            if viewModel.didCreateNewTask {
+                delegate?.contactQuestionnaireViewControllerDidCancel(self)
+            } else {
+                // mark task as deleted
+                task.deletedByIndex = true
+                delegate?.contactQuestionnaireViewController(self, didSave: task)
+            }
+            
+            return
+        }
         
         switch task.contact.communication {
         case .index where task.contact.didInform,
