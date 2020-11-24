@@ -29,7 +29,7 @@ final class AppCoordinator: Coordinator {
         window.tintColor = Theme.colors.primary
         
         // Check if the app is the minimum version. If not, show the app update screen
-        checkForRequiredUpdates()
+        updateConfiguration()
         
         if Services.pairingManager.isPaired {
             startChildCoordinator(TaskOverviewCoordinator(window: window, delegate: self))
@@ -40,22 +40,22 @@ final class AppCoordinator: Coordinator {
         }
     }
     
-    private var isCheckingForRequiredUpdates = false
+    private var isUpdatingConfiguration = false
     
-    func checkForRequiredUpdates() {
-        guard !isCheckingForRequiredUpdates else { return }
+    func updateConfiguration() {
+        guard !isUpdatingConfiguration else { return }
         
-        isCheckingForRequiredUpdates = true
+        isUpdatingConfiguration = true
         
-        Services.configManager.checkUpdateRequired { [unowned self] in
-            switch $0 {
+        Services.configManager.update { [unowned self] updateState, _ in
+            switch updateState {
             case .updateRequired(let versionInformation):
                 showRequiredUpdate(with: versionInformation)
             case .noActionNeeded:
                 break
             }
             
-            isCheckingForRequiredUpdates = false
+            isUpdatingConfiguration = false
         }
     }
     

@@ -7,13 +7,19 @@
 
 import Foundation
 
-class ConfigManager: ConfigManaging {
+class ConfigManager: ConfigManaging, Logging {
+    let loggingCategory = "ConfigManager"
+    
     required init() {}
     
     // swiftlint:disable:next force_cast
     let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
     
-    func checkUpdateRequired(completion: @escaping (UpdateState) -> Void) {
+    var featureFlags: FeatureFlags = AppConfiguration.Flags(enableContactCalling: false,
+                                                            enablePerspectiveSharing: false,
+                                                            enablePerspectiveCopy: false)
+    
+    func update(completion: @escaping (UpdateState, FeatureFlags) -> Void) {
         func fullVersionString(_ version: String) -> String {
             var components = version.split(separator: ".")
             let missingComponents = max(0, 3 - components.count)
@@ -22,19 +28,22 @@ class ConfigManager: ConfigManaging {
             return components.joined(separator: ".")
         }
         
-        Services.networkManager.getAppConfiguration { [appVersion] result in
+        Services.networkManager.getAppConfiguration { result in
             switch result {
             case .success(let configuration):
                 let requiredVersion = fullVersionString(configuration.minimumVersion)
-                let currentVersion = fullVersionString(appVersion)
+                let currentVersion = fullVersionString(self.appVersion)
+                
+                self.logDebug("Updated feature flags: \(configuration.featureFlags)")
+                self.featureFlags = configuration.featureFlags
                 
                 if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
-                    completion(.updateRequired(configuration))
+                    completion(.updateRequired(configuration), self.featureFlags)
                 } else {
-                    completion(.noActionNeeded)
+                    completion(.noActionNeeded, self.featureFlags)
                 }
             case .failure:
-                completion(.noActionNeeded)
+                completion(.noActionNeeded, self.featureFlags)
             }
         }
     }
