@@ -49,6 +49,8 @@ extension String {
     static func appVersionTitle(_ version: String, _ build: String) -> String { return Localization.string(for: "appVersionTitle", [version, build]) }
     
     /* MARK: - General */
+    static var yes: String { return Localization.string(for: "yes") }
+    static var no: String { return Localization.string(for: "no") }
     static var save: String { return Localization.string(for: "save") }
     static var cancel: String { return Localization.string(for: "cancel") }
     static var close: String { return Localization.string(for: "close") }
@@ -195,6 +197,8 @@ extension String {
     static var contactInformationBSN: String { return Localization.string(for: "contactInformationBSN") }
     static var contactInformationLastExposure: String { return Localization.string(for: "contactInformationLastExposure") }
     static var contactInformationLastExposureEarlier: String { return Localization.string(for: "contactInformationLastExposure.earlier") }
+    
+    static var contactDeletePromptTitle: String { return Localization.string(for: "contactDeletePromptTitle") }
     
     /* MARK: - Informing contacts */
     static var contactPromptNameFallback: String { return Localization.string(for: "contactPromptNameFallback") }

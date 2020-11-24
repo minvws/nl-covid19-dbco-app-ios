@@ -484,9 +484,17 @@ final class ContactQuestionnaireViewController: PromptableViewController {
             if viewModel.didCreateNewTask {
                 delegate?.contactQuestionnaireViewControllerDidCancel(self)
             } else {
-                // mark task as deleted
-                task.deletedByIndex = true
-                delegate?.contactQuestionnaireViewController(self, didSave: task)
+                let alert = UIAlertController(title: .contactDeletePromptTitle, message: nil, preferredStyle: .alert)
+                
+                alert.addAction(UIAlertAction(title: .no, style: .default))
+                
+                alert.addAction(UIAlertAction(title: .yes, style: .default) { _ in
+                    // mark task as deleted
+                    task.deletedByIndex = true
+                    self.delegate?.contactQuestionnaireViewController(self, didSave: task)
+                })
+                
+                present(alert, animated: true)
             }
             
             return
