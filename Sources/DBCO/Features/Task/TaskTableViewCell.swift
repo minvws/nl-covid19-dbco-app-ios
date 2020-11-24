@@ -26,7 +26,7 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
     }
     
     private func configureForContactDetails(task: Task) {
-        titleLabel.text = task.contactName
+        titleLabel.text = task.contactName ?? .taskContactUnknownName
         titleLabel.font = Theme.fonts.bodyBold
         
         subtitleLabel.text = task.taskContext
