@@ -1,6 +1,8 @@
 "appVersionTitle" = "Versie %@ (%@)";
 
 /* MARK: - General */
+"yes" = "Ja";
+"no" = "Nee";
 "save" = "Opslaan";
 "cancel" = "Annuleren";
 "close" = "Sluiten";
@@ -115,6 +117,8 @@
 "contactInformationBSN" = "Burgerservice nummer";
 "contactInformationLastExposure" = "Wanneer was de laatste ontmoeting?";
 "contactInformationLastExposure.earlier" = "Eerder";
+
+"contactDeletePromptTitle" = "Weet je zeker dat je dit contact wilt verwijderen?";
 
 /* MARK: - Informing contacts */
 "contactPromptNameFallback" = "dit contact";

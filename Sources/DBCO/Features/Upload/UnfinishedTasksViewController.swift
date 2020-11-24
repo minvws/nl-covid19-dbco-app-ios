@@ -32,6 +32,7 @@ class UnfinishedTasksViewModel {
         
         // Store unfisnished task identifiers now, so any completed tasks won't have to dissappear from the overview.
         relevantTaskIdentifiers = Services.caseManager.tasks
+            .filter { !$0.deletedByIndex }
             .filter { !$0.isOrCanBeInformed }
             .map { $0.uuid }
         
