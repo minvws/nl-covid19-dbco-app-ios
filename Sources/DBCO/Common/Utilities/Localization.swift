@@ -200,6 +200,8 @@ extension String {
     
     static var contactDeletePromptTitle: String { return Localization.string(for: "contactDeletePromptTitle") }
     
+    static var contactQuestionDisabledMessage: String { return Localization.string(for: "contactQuestionDisabledMessage") }
+    
     /* MARK: - Informing contacts */
     static var contactPromptNameFallback: String { return Localization.string(for: "contactPromptNameFallback") }
     

@@ -229,13 +229,39 @@ final class CaseManager: CaseManaging, Logging {
             case .contact:
                 var questions = questionnaire.questions
                 
+                // Modify the classification and communication questionsto be disabled when the task source is .portal
+                func shouldBeDisabledForPortalTasks(_ offset: Int, _ question: Question) -> Bool {
+                    return
+                        (question.questionType == .classificationDetails) ||
+                        (question.answerOptions?.contains { $0.trigger == .setCommunicationToIndex } == true)
+                }
+                
+                let classificationIndices = questionnaire.questions
+                    .enumerated()
+                    .filter(shouldBeDisabledForPortalTasks)
+                    .map { $0.offset }
+                
+                for index in classificationIndices {
+                    let question = questions[index]
+                    questions[index] = Question(uuid: question.uuid,
+                                                group: question.group,
+                                                questionType: question.questionType,
+                                                label: question.label,
+                                                description: question.description,
+                                                relevantForCategories: question.relevantForCategories,
+                                                answerOptions: question.answerOptions,
+                                                disabledForSources: [.portal])
+                }
+                
+                // Insert a .lastExposureDate question
                 let lastExposureQuestion = Question(uuid: UUID(),
                                                     group: .contactDetails,
                                                     questionType: .lastExposureDate,
                                                     label: .contactInformationLastExposure,
                                                     description: nil,
                                                     relevantForCategories: [.category1, .category2a, .category2b, .category3],
-                                                    answerOptions: nil)
+                                                    answerOptions: nil,
+                                                    disabledForSources: [])
                 
                 // Find the index of the question modifying the communication type. (Via triggers)
                 let communicationQuestionIndex = questionnaire.questions

@@ -14,6 +14,8 @@ protocol AnswerManaging: class {
     var answer: Answer { get }
     var view: UIView { get }
     
+    var isEnabled: Bool { get set }
+    
     var hasValidAnswer: Bool { get }
     
     var updateHandler: ((AnswerManaging) -> Void)? { get set }
@@ -99,6 +101,15 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         return answer
     }
     
+    var isEnabled: Bool = true {
+        didSet {
+            category1RiskGroup.isEnabled = isEnabled
+            category2aRiskGroup.isEnabled = isEnabled
+            category2bRiskGroupUndecorated.isEnabled = isEnabled
+            category3RiskGroup.isEnabled = isEnabled
+        }
+    }
+    
     var hasValidAnswer: Bool {
         switch classification {
         case .success(let category) where category != .other:
@@ -120,12 +131,15 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
                     ToggleButton(title: .category2aRiskQuestionAnswerNegative, selected: category2aRisk == false))
         .didSelect { [unowned self] in self.category2aRisk = $0 == 0 }
     
-    private lazy var category2bRiskGroup =
+    private lazy var category2bRiskGroupUndecorated =
         ToggleGroup(label: .category2bRiskQuestion,
                     ToggleButton(title: .category2bRiskQuestionAnswerPositive, selected: category2bRisk == true),
                     ToggleButton(title: .category2bRiskQuestionAnswerNegative, selected: category2bRisk == false))
         .didSelect { [unowned self] in self.category2bRisk = $0 == 0 }
-        .decorateWithDescriptionIfNeeded(description: .category2bRiskQuestionDescription)
+    
+    private lazy var category2bRiskGroup =
+        category2bRiskGroupUndecorated
+            .decorateWithDescriptionIfNeeded(description: .category2bRiskQuestionDescription)
     
     private lazy var category3RiskGroup =
         ToggleGroup(label: .category3RiskQuestion,
@@ -208,6 +222,8 @@ class ContactDetailsAnswerManager: AnswerManaging {
         return answer
     }
     
+    var isEnabled: Bool = true
+    
     var hasValidAnswer: Bool {
         return answer.progress > 0
     }
@@ -243,6 +259,8 @@ class DateAnswerManager: AnswerManaging {
         answer.value = .date(date.dateValue)
         return answer
     }
+    
+    var isEnabled: Bool = true
     
     var hasValidAnswer: Bool {
         return date.value != nil
@@ -311,6 +329,8 @@ class LastExposureDateAnswerManager: AnswerManaging {
         return answer
     }
     
+    var isEnabled: Bool = true
+    
     var hasValidAnswer: Bool {
         guard case .lastExposureDate(let value) = answer.value else {
             return false
@@ -371,6 +391,8 @@ class OpenAnswerManager: AnswerManaging {
         answer.value = .open(text.value)
         return answer
     }
+    
+    var isEnabled: Bool = true
     
     var hasValidAnswer: Bool {
         return text.value != nil
@@ -458,6 +480,12 @@ class MultipleChoiceAnswerManager: AnswerManaging {
             var answer = baseAnswer
             answer.value = .multipleChoice(nil)
             return answer
+        }
+    }
+    
+    var isEnabled: Bool = true {
+        didSet {
+            buttons?.isEnabled = isEnabled
         }
     }
     

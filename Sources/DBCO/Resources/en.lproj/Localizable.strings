@@ -122,6 +122,8 @@
 
 "contactDeletePromptTitle" = "Weet je zeker dat je dit contact wilt verwijderen?";
 
+"contactQuestionDisabledMessage" = "Ingevuld door een GGD-medewerker";
+
 /* MARK: - Informing contacts */
 "contactPromptNameFallback" = "dit contact";
 
