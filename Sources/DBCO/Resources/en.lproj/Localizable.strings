@@ -50,7 +50,11 @@
 "taskLoadingErrorTitle" = "Kon de gegevens niet ophalen";
 "taskLoadingErrorMessage" = "Controleer de internetverbinding en probeer het opnieuw.";
 
-"deleteDataPromptMessage" = "De periode voor het delen van gegevens met de GGD is verlopen. Kies voor \"verwijderen\" om al de opgeslagen gegevens in de app te verwijderen.";
+"deleteDataPromptTitle" = "Wil je de gegevens verwijderen?";
+"deleteDataPromptMessage" = "Zo worden alle gegevens verwijderd van de contacten die in deze app staan.";
+"deleteDataPromptOptionCancel" = "Ga terug";
+"deleteDataPromptOptionDelete" = "Verwijder";
+
 "windowExpiredMessage" = "De periode voor het delen van gegevens met de GGD is verlopen.";
 
 /* MARK: - Contact Selection */
