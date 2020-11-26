@@ -60,6 +60,7 @@ class ContactQuestionnaireViewModel {
     @Bindable private(set) var informLink: String
     @Bindable private(set) var informButtonTitle: String
     @Bindable private(set) var informButtonHidden: Bool
+    @Bindable private(set) var copyButtonHidden: Bool
     @Bindable private(set) var informButtonType: Button.ButtonType
     @Bindable private(set) var promptButtonType: Button.ButtonType
     @Bindable private(set) var promptButtonTitle: String
@@ -77,6 +78,7 @@ class ContactQuestionnaireViewModel {
         self.informTitle = ""
         self.informContent = ""
         self.informLink = ""
+        self.copyButtonHidden = true
         self.informButtonTitle = ""
         self.informButtonHidden = true
         self.informButtonType = .secondary
@@ -266,13 +268,15 @@ class ContactQuestionnaireViewModel {
         let firstName = updatedTask.contactFirstName
         
         func setInformButtonTitle() {
-            if updatedTask.contactPhoneNumber != nil {
+            if updatedTask.contactPhoneNumber != nil && Services.configManager.featureFlags.enableContactCalling {
                 informButtonTitle = .informContactCall(firstName: firstName)
                 informButtonHidden = false
             } else {
                 informButtonHidden = true
             }
         }
+        
+        copyButtonHidden = !Services.configManager.featureFlags.enablePerspectiveCopy
         
         switch updatedContact.communication {
         case .index, .none:
@@ -444,9 +448,13 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         let informButton = Button(title: "", style: .primary)
             .touchUpInside(self, action: #selector(informContact))
         
+        let copyButton = Button(title: .informContactCopyGuidelines, style: .secondary)
+            .touchUpInside(self, action: #selector(copyGuidelines))
+        
         viewModel.$informTitle.binding = { informTitleLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
         viewModel.$informContent.binding = { informTextView.html($0, textColor: Theme.colors.captionGray) }
         viewModel.$informLink.binding = { informLinkView.html($0, textColor: Theme.colors.captionGray) }
+        viewModel.$copyButtonHidden.binding = { copyButton.isHidden = $0 }
         viewModel.$informButtonTitle.binding = { informButton.title = $0 }
         viewModel.$informButtonHidden.binding = { informButton.isHidden = $0 }
         viewModel.$informButtonType.binding = { informButton.style = $0 }
@@ -459,8 +467,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
                       informTextView,
                       informLinkView),
                VStack(spacing: 16,
-                      Button(title: .informContactCopyGuidelines, style: .secondary)
-                          .touchUpInside(self, action: #selector(copyGuidelines)),
+                      copyButton,
                       informButton))
             .embed(in: informContactSection.contentView.readableWidth)
         
