@@ -24,10 +24,11 @@ private extension Question {
 /// - Tag: ContactQuestionnaireViewModel
 class ContactQuestionnaireViewModel {
     private var task: Task
-    let didCreateNewTask: Bool
     private var baseResult: QuestionnaireResult
     private var updatedClassification: ClassificationHelper.Result
     private var updatedContact: Task.Contact { didSet { updateProgress() } }
+
+    let didCreateNewTask: Bool
     
     var updatedTask: Task {
         let updatedCategory = updatedClassification.category ?? task.contact.category
@@ -98,22 +99,28 @@ class ContactQuestionnaireViewModel {
         self.updatedClassification = .success(task.contact.category)
         
         self.answerManagers = questionsAndAnswers.compactMap { question, answer in
+            let manager: AnswerManaging
+            
             switch answer.value {
             case .classificationDetails:
-                return ClassificationDetailsAnswerManager(question: question, answer: answer, contactCategory: initialCategory)
+                manager = ClassificationDetailsAnswerManager(question: question, answer: answer, contactCategory: initialCategory)
             case .contactDetails:
-                return ContactDetailsAnswerManager(question: question, answer: answer, contact: contact)
+                manager = ContactDetailsAnswerManager(question: question, answer: answer, contact: contact)
             case .contactDetailsFull:
-                return ContactDetailsAnswerManager(question: question, answer: answer, contact: contact)
+                manager = ContactDetailsAnswerManager(question: question, answer: answer, contact: contact)
             case .date:
-                return DateAnswerManager(question: question, answer: answer)
+                manager = DateAnswerManager(question: question, answer: answer)
             case .open:
-                return OpenAnswerManager(question: question, answer: answer)
+                manager = OpenAnswerManager(question: question, answer: answer)
             case .multipleChoice:
-                return MultipleChoiceAnswerManager(question: question, answer: answer, contact: task.contact)
+                manager = MultipleChoiceAnswerManager(question: question, answer: answer, contact: task.contact)
             case .lastExposureDate:
-                return LastExposureDateAnswerManager(question: question, answer: answer, lastExposureDate: updatedContact.dateOfLastExposure)
+                manager = LastExposureDateAnswerManager(question: question, answer: answer, lastExposureDate: updatedContact.dateOfLastExposure)
             }
+            
+            manager.isEnabled = !question.disabledForSources.contains(task.source)
+            
+            return manager
         }
         
         answerManagers.forEach {

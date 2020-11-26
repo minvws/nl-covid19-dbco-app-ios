@@ -54,7 +54,18 @@ struct Question {
     let relevantForCategories: [Task.Contact.Category]
     let answerOptions: [AnswerOption]?
     
-    init(uuid: UUID, group: Group, questionType: QuestionType, label: String?, description: String?, relevantForCategories: [Task.Contact.Category], answerOptions: [AnswerOption]?) {
+    /// This property is not supported in the API.
+    /// The app defines this propery to support disabling the classification- and communication type- questions for tasks coming from the portal,
+    /// without having to create too much specific business logic.
+    /// This might be a good candidate to move to the questionnaire spec at some point
+    ///
+    /// # See also
+    /// [setQuestionnaires(_ questionnaires: [Questionnaire])](x-source-tag://CaseManager.setQuestionnaires)
+    ///
+    /// - Tag: disabledForSources
+    let disabledForSources: [Task.Source]
+    
+    init(uuid: UUID, group: Group, questionType: QuestionType, label: String?, description: String?, relevantForCategories: [Task.Contact.Category], answerOptions: [AnswerOption]?, disabledForSources: [Task.Source]) {
         self.uuid = uuid
         self.group = group
         self.questionType = questionType
@@ -62,6 +73,7 @@ struct Question {
         self.description = description
         self.relevantForCategories = relevantForCategories
         self.answerOptions = answerOptions
+        self.disabledForSources = disabledForSources
     }
 }
 
@@ -75,6 +87,7 @@ extension Question: Codable {
         case description
         case relevantForCategories
         case answerOptions
+        case disabledForSources
     }
     
     init(from decoder: Decoder) throws {
@@ -94,6 +107,8 @@ extension Question: Codable {
         relevantForCategories = categories.map { $0.category }
         
         answerOptions = try? container.decode([AnswerOption]?.self, forKey: .answerOptions)
+        
+        disabledForSources = (try? container.decode([Task.Source]?.self, forKey: .disabledForSources)) ?? []
     }
     
     func encode(to encoder: Encoder) throws {
@@ -114,6 +129,7 @@ extension Question: Codable {
         try container.encode(categories, forKey: .relevantForCategories)
         
         try container.encode(answerOptions, forKey: .answerOptions)
+        try container.encode(disabledForSources, forKey: .disabledForSources)
     }
     
 }
