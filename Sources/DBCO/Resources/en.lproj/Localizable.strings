@@ -100,7 +100,7 @@
 "category2aRiskQuestion.answer.negative" = "Nee, denk het niet";
 
 "category2bRiskQuestion" = "Heb je één of meerdere van deze dingen tijdens jullie ontmoeting gedaan?";
-"category2bRiskQuestion.description" = "<ul><li>Binnen anderhalve meter van de ander gehoest of geniesd</li><li>Geknuffeld of gezoend</li><li>Ander lichamelijk contact</li></ul>";
+"category2bRiskQuestion.description" = "<ul><li>Binnen anderhalve meter van de ander gehoest of geniesd</li><li>Geknuffeld of gezoend</li><li>Seksueel contact</li></ul>";
 "category2bRiskQuestion.answer.positive" = "Ja, denk het wel";
 "category2bRiskQuestion.answer.negative" = "Nee, denk het niet";
 
