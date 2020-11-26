@@ -97,7 +97,11 @@ extension String {
     static var taskLoadingErrorTitle: String { return Localization.string(for: "taskLoadingErrorTitle") }
     static var taskLoadingErrorMessage: String { return Localization.string(for: "taskLoadingErrorMessage") }
     
+    static var deleteDataPromptTitle: String { return Localization.string(for: "deleteDataPromptTitle") }
     static var deleteDataPromptMessage: String { return Localization.string(for: "deleteDataPromptMessage") }
+    static var deleteDataPromptOptionCancel: String { return Localization.string(for: "deleteDataPromptOptionCancel") }
+    static var deleteDataPromptOptionDelete: String { return Localization.string(for: "deleteDataPromptOptionDelete") }
+    
     static var windowExpiredMessage: String { return Localization.string(for: "windowExpiredMessage") }
     
     // MARK: - Contact Selection

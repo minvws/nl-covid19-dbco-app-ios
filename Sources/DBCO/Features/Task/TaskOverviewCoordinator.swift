@@ -238,13 +238,13 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
     }
     
     func taskOverviewViewControllerDidRequestReset(_ controller: TaskOverviewViewController) {
-        let alert = UIAlertController(title: .taskOverviewDeleteDataButtonTitle, message: .deleteDataPromptMessage, preferredStyle: .alert)
+        let alert = UIAlertController(title: .deleteDataPromptTitle, message: .deleteDataPromptMessage, preferredStyle: .alert)
         
-        alert.addAction(UIAlertAction(title: .delete, style: .destructive) { _ in
+        alert.addAction(UIAlertAction(title: .deleteDataPromptOptionDelete, style: .destructive) { _ in
             self.delegate?.taskOverviewCoordinatorDidRequestReset(self)
         })
         
-        alert.addAction(UIAlertAction(title: .cancel, style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: .deleteDataPromptOptionCancel, style: .cancel, handler: nil))
         
         controller.present(alert, animated: true)
     }
