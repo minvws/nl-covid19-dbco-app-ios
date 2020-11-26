@@ -11,6 +11,7 @@ protocol PrivacyConsentViewControllerDelegate: class {
     func privacyConsentViewControllerWantsToContinue(_ controller: PrivacyConsentViewController)
     func privacyConsentViewController(_ controller: PrivacyConsentViewController, wantsToOpen url: URL)
 }
+
 class PrivacyConsentViewModel {
     let buttonTitle: String
     
@@ -72,15 +73,15 @@ class PrivacyConsentViewController: PromptableViewController {
             VStack(spacing: 24,
                    VStack(spacing: 24,
                        VStack(spacing: 16,
-                              Label(title2: "Zo gaat de GGD om met je gegevens").multiline(),
-                              TextView(htmlText: "Om de GGD Contact-app te gebruiken moet je akkoord gaan met de <a href=\"https://ggdcontact.nl/nl/privacy\">privacyverklaring</a>. Belangrijk om te weten:", textColor: Theme.colors.captionGray)
+                              Label(title2: .onboardingConsentTitle).multiline(),
+                              TextView(htmlText: .onboardingConsentMessage, textColor: Theme.colors.captionGray)
                                 .linkTouched { [unowned self] in self.open($0) }),
                        VStack(spacing: 16,
-                              listItem("Gegevens worden versleuteld en via een veilige verbinding gedeeld"),
-                              listItem("Gegevens worden pas met de GGD gedeeld als jij laat weten dat je klaar bent"),
-                              listItem("Alleen gegevens die je zelf invoert worden gedeeld"),
-                              listItem("Je kunt na het delen zelf de gegevens verwijderen"))),
-                   ConsentButton(title: "Ik heb de privacyverklaring gelezen en ga hiermee akkoord", selected: false).valueChanged(self, action: #selector(consentValueChanged)))
+                              listItem(.onboardingConsentItem1),
+                              listItem(.onboardingConsentItem2),
+                              listItem(.onboardingConsentItem3),
+                              listItem(.onboardingConsentItem4))),
+                   ConsentButton(title: .onboardingConsentButtonTitle, selected: false).valueChanged(self, action: #selector(consentValueChanged)))
                 .distribution(.equalSpacing)
                 .embed(in: scrollView.readableWidth, insets: margin)
         
