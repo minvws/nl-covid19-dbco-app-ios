@@ -89,7 +89,7 @@
 "informContactCall.knownName" = "Bel %@";
 "informContactCall.unknownName" = "Bel contact";
 
-"category1RiskQuestion" = "Woon je in hetzelfde huis of ben je langer dan 12 uur op dezelfde plek geweest?";
+"category1RiskQuestion" = "Woon je in hetzelfde huis?";
 "category1RiskQuestion.answer.positive" = "Ja";
 "category1RiskQuestion.answer.negative" = "Nee";
 
