@@ -45,7 +45,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard scene.activationState == .background else { return }
         
-        appCoordinator?.checkForRequiredUpdates()
+        appCoordinator?.updateConfiguration()
         appCoordinator?.refreshCaseDataIfNeeded()
     }
 
