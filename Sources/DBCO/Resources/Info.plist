@@ -28,6 +28,10 @@
 	<string>$(NETWORK_CONFIGURATION)</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Contacten delen gaat sneller als we toestemming hebben, je beslist zelf welke contactgegevens je deelt met de GGD.</string>
+	<key>RESET_ENABLED</key>
+	<string>$(RESET_ENABLED)</string>
+	<key>SHARE_LOGS_ENABLED</key>
+	<string>$(SHARE_LOGS_ENABLED)</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -71,9 +75,5 @@
 		<string>a6f3cb251db58a4cceaaec27090241216e69bdf8b28900dbcacb0cdf1f8c9813</string>
 		<string>022819c49acf699b5030995565cdb86bb183e23ed155300980e86baada1b908a</string>
 	</array>
-	<key>SHARE_LOGS_ENABLED</key>
-	<string>$(SHARE_LOGS_ENABLED)</string>
-	<key>RESET_ENABLED</key>
-	<string>$(RESET_ENABLED)</string>
 </dict>
 </plist>
