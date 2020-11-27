@@ -39,7 +39,7 @@ class PairingCodeField: UITextField {
     
     private func setup() {
         let attributes: [NSAttributedString.Key: Any] = [
-            .kern: 11,
+            .kern: Constants.kerning,
             .font: UIFont.monospacedDigitSystemFont(ofSize: 22, weight: .regular)
         ]
         
@@ -55,6 +55,7 @@ class PairingCodeField: UITextField {
         
         textContentType = .oneTimeCode
         keyboardType = .numberPad
+        autocorrectionType = .no
         
         delegate = self
     }
@@ -65,10 +66,10 @@ class PairingCodeField: UITextField {
     }
     
     private func updatePlaceholder(textLength: Int = 0) {
-        let fullPlaceholder = "000-000-000"
+        let fullPlaceholder = "000-000-000-000"
         
         let text = NSMutableAttributedString(string: fullPlaceholder, attributes: [
-            .kern: 11,
+            .kern: Constants.kerning,
             .font: UIFont.monospacedDigitSystemFont(ofSize: 22, weight: .regular)
         ])
         
@@ -84,6 +85,10 @@ class PairingCodeField: UITextField {
     }
     
     private let placeholderLabel = UILabel()
+    
+    private struct Constants {
+        static let kerning: CGFloat = UIScreen.main.bounds.width < 330 ? 5.5 : 9
+    }
 }
 
 extension PairingCodeField: UITextFieldDelegate {
@@ -93,11 +98,13 @@ extension PairingCodeField: UITextFieldDelegate {
         
         let text = (self.text ?? "") as NSString
         
+        let allowedCharacters = CharacterSet(charactersIn: "0123456789")
+        
         let trimmedCode = text
             .replacingCharacters(in: range, with: string)
-            .components(separatedBy: CharacterSet.decimalDigits.inverted)
+            .components(separatedBy: allowedCharacters.inverted)
             .joined()
-            .prefix(9)
+            .prefix(12)
         
         var codeWithSeparators = String()
         String(trimmedCode).enumerated().forEach { index, character in
@@ -111,7 +118,7 @@ extension PairingCodeField: UITextFieldDelegate {
 
         updatePlaceholder(textLength: codeWithSeparators.count)
         
-        if trimmedCode.count == 9 {
+        if trimmedCode.count == 12 {
             pairingCode = String(trimmedCode)
         } else {
             pairingCode = nil
