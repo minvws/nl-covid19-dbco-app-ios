@@ -238,6 +238,7 @@ class ContactQuestionnaireViewModel {
         detailsSectionView?.isCompleted = detailsCompleted
         informSectionView?.isCompleted = updatedTask.isOrCanBeInformed
         
+        let detailsSectionWasDisabled = detailsSectionView?.isEnabled == false
         detailsSectionView?.isEnabled = classificationManagers.allSatisfy(\.hasValidAnswer)
         
         let informSectionWasDisabled = informSectionView?.isEnabled == false
@@ -254,11 +255,10 @@ class ContactQuestionnaireViewModel {
             } else if sections.allSatisfy(\.isCollapsed) {
                 informSectionView?.expand(animated: false)
             }
-        } else {
-            // Expand inform section if it became enabled
-            if informSectionWasDisabled && (informSectionView?.isEnabled == true) {
-                informSectionView?.expand(animated: true)
-            }
+        } else if detailsSectionWasDisabled && (detailsSectionView?.isEnabled == true) { // Expand details section if it became enabled
+            detailsSectionView?.expand(animated: true)
+        } else if informSectionWasDisabled && (informSectionView?.isEnabled == true) { // Expand inform section if it became enabled
+            informSectionView?.expand(animated: true)
         }
         
         updateInformSectionContent()
