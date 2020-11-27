@@ -78,6 +78,14 @@ extension String {
     static var onboardingStep3Title: String { return Localization.string(for: "onboarding.step3.title") }
     static var onboardingStep3Message: String { return Localization.string(for: "onboarding.step3.message") }
     
+    static var onboardingConsentTitle: String { return Localization.string(for: "onboarding.consent.title") }
+    static var onboardingConsentMessage: String { return Localization.string(for: "onboarding.consent.message") }
+    static var onboardingConsentItem1: String { return Localization.string(for: "onboarding.consent.item1") }
+    static var onboardingConsentItem2: String { return Localization.string(for: "onboarding.consent.item2") }
+    static var onboardingConsentItem3: String { return Localization.string(for: "onboarding.consent.item3") }
+    static var onboardingConsentItem4: String { return Localization.string(for: "onboarding.consent.item4") }
+    static var onboardingConsentButtonTitle: String { return Localization.string(for: "onboarding.consent.buttonTitle") }
+    
     static var onboardingLoadingErrorTitle: String { return Localization.string(for: "onboardingLoadingErrorTitle") }
     static var onboardingLoadingErrorMessage: String { return Localization.string(for: "onboardingLoadingErrorMessage") }
     
