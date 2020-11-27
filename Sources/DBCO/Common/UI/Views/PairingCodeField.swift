@@ -66,7 +66,7 @@ class PairingCodeField: UITextField {
     }
     
     private func updatePlaceholder(textLength: Int = 0) {
-        let fullPlaceholder = "000-000-000-000"
+        let fullPlaceholder = "0000-0000-0000"
         
         let text = NSMutableAttributedString(string: fullPlaceholder, attributes: [
             .kern: Constants.kerning,
@@ -87,7 +87,7 @@ class PairingCodeField: UITextField {
     private let placeholderLabel = UILabel()
     
     private struct Constants {
-        static let kerning: CGFloat = UIScreen.main.bounds.width < 330 ? 5.5 : 9
+        static let kerning: CGFloat = UIScreen.main.bounds.width < 330 ? 6.5 : 10.5
     }
 }
 
@@ -108,7 +108,7 @@ extension PairingCodeField: UITextFieldDelegate {
         
         var codeWithSeparators = String()
         String(trimmedCode).enumerated().forEach { index, character in
-            if index % 3 == 0, index > 0 {
+            if index % 4 == 0, index > 0 {
                 codeWithSeparators.append("-")
             }
             codeWithSeparators.append(character)
