@@ -19,7 +19,7 @@ jobs:
         DIFF_BASE: ${{ github.base_ref }}
   test:
     runs-on: macOS-latest
-    # needs: swiftlint # only run tests (which is resource intensive) after swiftlint passes
+    needs: swiftlint # only run tests (which is resource intensive) after swiftlint passes
     steps:
     - name: Checkout
       uses: actions/checkout@v2
