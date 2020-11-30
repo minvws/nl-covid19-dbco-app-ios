@@ -6,6 +6,7 @@
  */
 
 import UIKit
+import SafariServices
 
 protocol OnboardingCoordinatorDelegate: class {
     func onboardingCoordinatorDidFinish(_ coordinator: OnboardingCoordinator)
@@ -79,7 +80,9 @@ extension OnboardingCoordinator: PrivacyConsentViewControllerDelegate {
     }
     
     func privacyConsentViewController(_ controller: PrivacyConsentViewController, wantsToOpen url: URL) {
-        UIApplication.shared.open(url)
+        let safariController = SFSafariViewController(url: url)
+        safariController.preferredControlTintColor = Theme.colors.primary
+        navigationController.present(safariController, animated: true)
     }
     
 }
