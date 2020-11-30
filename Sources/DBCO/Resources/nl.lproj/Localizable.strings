@@ -30,7 +30,7 @@
 "onboarding.step3.title" = "Voeg de gegevens van je contacten toe";
 "onboarding.step3.message" = "De GGD heeft contactgegevens nodig van mensen die jij hebt ontmoet, omdat je hen misschien hebt besmet. Via deze app kun je gemakkelijk gegevens delen. Je bepaalt zelf welke gegevens je deelt en wanneer je dat doet.";
 "onboarding.consent.title" = "Zo gaat de GGD om met je gegevens";
-"onboarding.consent.message" = "Om de GGD Contact-app te gebruiken moet je akkoord gaan met de <a href=\"https://ggdcontact.nl/nl/privacy\">privacyverklaring</a>. Belangrijk om te weten:";
+"onboarding.consent.message" = "Om de GGD Contact-app te gebruiken moet je akkoord gaan met de <a href=\"https://ggdcontact.nl/nl/privacy-in-app\">privacyverklaring</a>. Belangrijk om te weten:";
 "onboarding.consent.item1" = "Gegevens worden versleuteld en via een veilige verbinding gedeeld";
 "onboarding.consent.item2" = "Gegevens worden pas met de GGD gedeeld als jij laat weten dat je klaar bent";
 "onboarding.consent.item3" = "Alleen gegevens die je zelf invoert worden gedeeld";
