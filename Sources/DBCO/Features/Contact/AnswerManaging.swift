@@ -356,8 +356,8 @@ class LastExposureDateAnswerManager: AnswerManaging {
         containerView.isHidden = true
         
         VStack(spacing: 16,
-               Label(bodyBold: "Je hoeft geen gegevens te delen van deze persoon").multiline(),
-               Label(body: "Jullie waren namelijk bij elkaar in de buurt toen je nog niet besmettelijk was", textColor: Theme.colors.captionGray).multiline())
+               Label(bodyBold: .earlierExposureDateTitle).multiline(),
+               Label(body: .earlierExposureDateMessage, textColor: Theme.colors.captionGray).multiline())
             .embed(in: containerView, insets: .leftRight(16) + .topBottom(24))
         
         return containerView

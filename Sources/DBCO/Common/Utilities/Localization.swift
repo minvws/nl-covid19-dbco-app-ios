@@ -210,6 +210,9 @@ extension String {
     static var contactInformationLastExposure: String { return Localization.string(for: "contactInformationLastExposure") }
     static var contactInformationLastExposureEarlier: String { return Localization.string(for: "contactInformationLastExposure.earlier") }
     
+    static var earlierExposureDateTitle: String { return Localization.string(for: "earlierExposureDateTitle") }
+    static var earlierExposureDateMessage: String { return Localization.string(for: "earlierExposureDateMessage") }
+    
     static var contactDeletePromptTitle: String { return Localization.string(for: "contactDeletePromptTitle") }
     
     static var contactQuestionDisabledMessage: String { return Localization.string(for: "contactQuestionDisabledMessage") }
