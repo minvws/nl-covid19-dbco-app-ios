@@ -5,7 +5,6 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-
 import UIKit
 
 /// UIStackView subclass managing an array of [ToggleButton](x-source-tag://ToggleButton)s.
@@ -19,8 +18,6 @@ import UIKit
 ///
 /// - Tag: ToggleGroup
 class ToggleGroup: UIStackView {
-    
-    private var selectionHandler: ((Int) -> Void)?
     
     convenience init(label: String? = nil, _ buttons: ToggleButton ...) {
         self.init(label: label, buttons)
@@ -37,10 +34,25 @@ class ToggleGroup: UIStackView {
         
         buttons.forEach(addArrangedSubview)
         buttons.forEach { $0.addTarget(self, action: #selector(handleToggle), for: .valueChanged) }
+        
+        addArrangedSubview(disabledIndicatorView)
     }
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    var isEnabled: Bool = true {
+        didSet {
+            arrangedSubviews.forEach {
+                if let button = $0 as? ToggleButton {
+                    button.isEnabled = isEnabled
+                    button.isHidden = button.isSelected ? false : !isEnabled
+                }
+            }
+            
+            disabledIndicatorView.isHidden = isEnabled
+        }
     }
     
     /// - Tag: ToggleGroup.didSelect
@@ -51,6 +63,24 @@ class ToggleGroup: UIStackView {
     }
     
     // MARK: - Private
+    private var selectionHandler: ((Int) -> Void)?
+    
+    private let disabledIndicatorView: UIView = {
+        let iconView = UIImageView(image: UIImage(named: "Warning"))
+        iconView.contentMode = .center
+        iconView.setContentHuggingPriority(.required, for: .horizontal)
+        iconView.tintColor = Theme.colors.primary
+        
+        let stack = HStack(spacing: 6,
+                           iconView,
+                           Label(subhead: .contactQuestionDisabledMessage,
+                                 textColor: Theme.colors.primary).multiline())
+        
+        stack.isHidden = true
+        
+        return stack
+    }()
+    
     @objc private func handleToggle(_ sender: ToggleButton) {
         guard sender.isSelected else {
             sender.isSelected = true

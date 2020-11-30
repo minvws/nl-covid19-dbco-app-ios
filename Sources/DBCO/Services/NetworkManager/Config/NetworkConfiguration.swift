@@ -13,11 +13,18 @@ struct NetworkConfiguration {
         let host: String
         let port: Int?
         let path: [String]
+        let sslSignature: Certificate.Signature? // SSL pinning certificate, nil = no pinning
         let tokenParams: [String: String]
     }
 
     let name: String
     let api: EndpointConfiguration
+    
+    func sslSignature(forHost host: String) -> Certificate.Signature? {
+        if api.host == host { return api.sslSignature }
+
+        return nil
+    }
 
     static let development = NetworkConfiguration(
         name: "Development",
@@ -26,6 +33,7 @@ struct NetworkConfiguration {
             host: "public.testing.dbco.egeniq.com",
             port: nil,
             path: ["v1"],
+            sslSignature: nil,
             tokenParams: [:]
         )
     )
@@ -37,6 +45,7 @@ struct NetworkConfiguration {
             host: "public.testing.dbco.egeniq.com",
             port: nil,
             path: ["v1"],
+            sslSignature: nil,
             tokenParams: [:]
         )
     )
@@ -48,6 +57,7 @@ struct NetworkConfiguration {
             host: "public.testing.dbco.egeniq.com",
             port: nil,
             path: ["v1"],
+            sslSignature: Certificate.SSL.apiSignature,
             tokenParams: [:]
         )
     )
@@ -59,9 +69,18 @@ struct NetworkConfiguration {
             host: "public.testing.dbco.egeniq.com",
             port: nil,
             path: ["v1"],
+            sslSignature: Certificate.SSL.apiSignature,
             tokenParams: [:]
         )
     )
+    
+    var appConfigurationUrl: URL? {
+        return self.combine(path: Endpoint.appConfiguration)
+    }
+    
+    var pairingsUrl: URL? {
+        return self.combine(path: Endpoint.pairings)
+    }
     
     func caseUrl(identifier: String) -> URL? {
         return self.combine(path: Endpoint.case(identifier: identifier))
@@ -100,4 +119,3 @@ struct NetworkConfiguration {
         return characterSet
     }()
 }
-

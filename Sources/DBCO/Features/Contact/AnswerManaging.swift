@@ -14,6 +14,8 @@ protocol AnswerManaging: class {
     var answer: Answer { get }
     var view: UIView { get }
     
+    var isEnabled: Bool { get set }
+    
     var hasValidAnswer: Bool { get }
     
     var updateHandler: ((AnswerManaging) -> Void)? { get set }
@@ -25,10 +27,12 @@ protocol AnswerManaging: class {
 class ClassificationDetailsAnswerManager: AnswerManaging {
     private var baseAnswer: Answer
     
+    // swiftlint:disable opening_brace
     private var category1Risk: Bool?    { didSet { determineGroupVisibility() } }
     private var category2aRisk: Bool?   { didSet { determineGroupVisibility() } }
     private var category2bRisk: Bool?   { didSet { determineGroupVisibility() } }
     private var category3Risk: Bool?    { didSet { determineGroupVisibility() } }
+    // swiftlint:enable opening_brace
     
     private(set) var classification: ClassificationHelper.Result
     
@@ -76,6 +80,7 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         category2aRiskGroup.isHidden = !risks.contains(.category2a)
         category2bRiskGroup.isHidden = !risks.contains(.category2b)
         category3RiskGroup.isHidden = !risks.contains(.category3)
+        otherCategoryView.isHidden = classification.category != .other
     }
     
     let question: Question
@@ -86,7 +91,7 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         switch classification {
         case .success(let category):
             answer.value = .classificationDetails(contactCategory: category)
-        case .needsAssessmentFor(_):
+        case .needsAssessmentFor:
             answer.value = .classificationDetails(category1Risk: category1Risk,
                                                   category2aRisk: category2aRisk,
                                                   category2bRisk: category2bRisk,
@@ -96,11 +101,20 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         return answer
     }
     
+    var isEnabled: Bool = true {
+        didSet {
+            category1RiskGroup.isEnabled = isEnabled
+            category2aRiskGroup.isEnabled = isEnabled
+            category2bRiskGroupUndecorated.isEnabled = isEnabled
+            category3RiskGroup.isEnabled = isEnabled
+        }
+    }
+    
     var hasValidAnswer: Bool {
         switch classification {
-        case .success:
+        case .success(let category) where category != .other:
             return true
-        case .needsAssessmentFor(_):
+        default:
             return false
         }
     }
@@ -117,12 +131,15 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
                     ToggleButton(title: .category2aRiskQuestionAnswerNegative, selected: category2aRisk == false))
         .didSelect { [unowned self] in self.category2aRisk = $0 == 0 }
     
-    private lazy var category2bRiskGroup =
+    private lazy var category2bRiskGroupUndecorated =
         ToggleGroup(label: .category2bRiskQuestion,
                     ToggleButton(title: .category2bRiskQuestionAnswerPositive, selected: category2bRisk == true),
                     ToggleButton(title: .category2bRiskQuestionAnswerNegative, selected: category2bRisk == false))
         .didSelect { [unowned self] in self.category2bRisk = $0 == 0 }
-        .decorateWithDescriptionIfNeeded(description: .category2bRiskQuestionDescription)
+    
+    private lazy var category2bRiskGroup =
+        category2bRiskGroupUndecorated
+            .decorateWithDescriptionIfNeeded(description: .category2bRiskQuestionDescription)
     
     private lazy var category3RiskGroup =
         ToggleGroup(label: .category3RiskQuestion,
@@ -130,21 +147,37 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
                     ToggleButton(title: .category3RiskQuestionAnswerNegative, selected: category3Risk == false))
         .didSelect { [unowned self] in self.category3Risk = $0 == 0 }
     
+    private lazy var otherCategoryView: UIView = {
+        let containerView = UIView()
+        containerView.backgroundColor = Theme.colors.tertiary
+        containerView.layer.cornerRadius = 8
+        
+        VStack(spacing: 16,
+               Label(bodyBold: .otherCategoryTitle).multiline(),
+               Label(body: .otherCategoryMessage, textColor: Theme.colors.captionGray).multiline())
+            .embed(in: containerView, insets: .leftRight(16) + .topBottom(24))
+        
+        return containerView
+    }()
+    
     private(set) lazy var view: UIView =
         VStack(spacing: 24,
                category1RiskGroup,
                category2aRiskGroup,
                category2bRiskGroup,
-               category3RiskGroup)
+               category3RiskGroup,
+               otherCategoryView)
 }
 
 /// AnswerManager for the .contactDetails question.
 /// Uses [InputField](x-source-tag://InputField) to question the firstName, lastName, email and phoneNumber of the index
 class ContactDetailsAnswerManager: AnswerManaging {
+    // swiftlint:disable opening_brace
     private(set) var firstName = FirstName()        { didSet { updateHandler?(self) } }
     private(set) var lastName = LastName()          { didSet { updateHandler?(self) } }
     private(set) var email = EmailAddress()         { didSet { updateHandler?(self) } }
     private(set) var phoneNumber = PhoneNumber()    { didSet { updateHandler?(self) } }
+    // swiftlint:enable opening_brace
     
     private var baseAnswer: Answer
     
@@ -189,6 +222,8 @@ class ContactDetailsAnswerManager: AnswerManaging {
         return answer
     }
     
+    var isEnabled: Bool = true
+    
     var hasValidAnswer: Bool {
         return answer.progress > 0
     }
@@ -225,6 +260,8 @@ class DateAnswerManager: AnswerManaging {
         return answer
     }
     
+    var isEnabled: Bool = true
+    
     var hasValidAnswer: Bool {
         return date.value != nil
     }
@@ -237,41 +274,91 @@ class DateAnswerManager: AnswerManaging {
 /// [lastExposureDate](x-source-tag://lastExposureDate)
 class LastExposureDateAnswerManager: AnswerManaging {
     
-    fileprivate(set) var date: GeneralDate { didSet { updateHandler?(self) } }
-    
     private var baseAnswer: Answer
     
     var updateHandler: ((AnswerManaging) -> Void)?
     
-    init(question: Question, answer: Answer, lastExposureDate: Date?) {
+    private(set) var options: Options { didSet { updateHandler?(self) } }
+    
+    init(question: Question, answer: Answer, lastExposureDate: String?) {
         self.baseAnswer = answer
         self.question = question
         
+        // Dates should range from 2 days before symptom onset to today
+        let endDate = Date()
+        let startDate = Calendar.current.date(byAdding: .day, value: -2, to: Services.caseManager.dateOfSymptomOnset) ?? endDate
+        
+        let numberOfDays = Calendar.current.dateComponents([.day], from: startDate, to: endDate).day ?? 0
+        
+        let dateOptions = (0...numberOfDays)
+            .compactMap { Calendar.current.date(byAdding: .day, value: $0, to: startDate) }
+            .map { AnswerOption(label: Self.displayDateFormatter.string(from: $0),
+                                value: Self.valueDateFormatter.string(from: $0),
+                                trigger: nil) }
+        
+        self.answerOptions = [AnswerOption(label: .contactInformationLastExposureEarlier, value: "earlier", trigger: nil)] + dateOptions
+        
         if let lastExposureDate = lastExposureDate {
-            baseAnswer.value = .lastExposureDate(lastExposureDate)
+            if let option = answerOptions.first(where: { $0.value == lastExposureDate }) {
+                baseAnswer.value = .lastExposureDate(option)
+            }
         }
         
-        guard case .lastExposureDate(let date) = baseAnswer.value else {
+        guard case .lastExposureDate(let option) = baseAnswer.value else {
             fatalError()
         }
-            
-        self.date = GeneralDate(label: question.label, date: date)
+        
+        self.options = Options(label: question.label,
+                                value: option?.value,
+                                options: answerOptions.map { ($0.value, $0.label) })
+        self.options.labelFont = Theme.fonts.bodyBold
     }
     
     let question: Question
+    private let answerOptions: [AnswerOption]
     
-    private(set) lazy var view: UIView = InputField(for: self, path: \.date)
-        .decorateWithDescriptionIfNeeded(description: question.description)
+    private(set) lazy var view: UIView = {
+        return InputField(for: self, path: \.options)
+            .decorateWithDescriptionIfNeeded(description: question.description)
+    }()
     
     var answer: Answer {
+        let selectedOption = answerOptions.first { $0.value == options.value }
         var answer = baseAnswer
-        answer.value = .lastExposureDate(date.dateValue)
+        answer.value = .lastExposureDate(selectedOption)
         return answer
     }
     
+    var isEnabled: Bool = true
+    
     var hasValidAnswer: Bool {
-        return date.value != nil
+        guard case .lastExposureDate(let value) = answer.value else {
+            return false
+        }
+        
+        return value != nil
     }
+    
+    static let displayDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .full
+        formatter.timeStyle = .none
+        formatter.calendar = Calendar.current
+        formatter.locale = Locale.current
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        
+        return formatter
+    }()
+    
+    static let valueDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar.current
+        formatter.locale = Locale.current
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.dateFormat = "yyyy-MM-dd"
+        
+        return formatter
+    }()
 }
 
 /// AnswerManager for the .open question.
@@ -305,6 +392,8 @@ class OpenAnswerManager: AnswerManaging {
         return answer
     }
     
+    var isEnabled: Bool = true
+    
     var hasValidAnswer: Bool {
         return text.value != nil
     }
@@ -326,7 +415,7 @@ class MultipleChoiceAnswerManager: AnswerManaging {
         self.baseAnswer = answer
         self.question = question
         
-        // Prefill communcation triggers
+        // Prefill communication triggers
         do {
             let option = question.answerOptions?.first(where: { $0.trigger == .setCommunicationToIndex })
             
@@ -356,7 +445,7 @@ class MultipleChoiceAnswerManager: AnswerManaging {
         } else {
             self.selectedButtonIndex = question.answerOptions?.firstIndex { $0.value == option?.value }
             
-            self.buttons = ToggleGroup(label: question.label, answerOptions.map { ToggleButton(title: $0.label, selected: $0.value == option?.value) } )
+            self.buttons = ToggleGroup(label: question.label, answerOptions.map { ToggleButton(title: $0.label, selected: $0.value == option?.value) })
                 .didSelect { [unowned self] in
                     selectedButtonIndex = $0
                     updateHandler?(self)
@@ -391,6 +480,12 @@ class MultipleChoiceAnswerManager: AnswerManaging {
             var answer = baseAnswer
             answer.value = .multipleChoice(nil)
             return answer
+        }
+    }
+    
+    var isEnabled: Bool = true {
+        didSet {
+            buttons?.isEnabled = isEnabled
         }
     }
     

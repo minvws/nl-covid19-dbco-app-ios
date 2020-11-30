@@ -18,9 +18,11 @@ import UIKit
 class ToggleButton: UIButton {
     
     override var isSelected: Bool {
-        didSet {
-            applySelectedState()
-        }
+        didSet { applyState() }
+    }
+    
+    override var isEnabled: Bool {
+        didSet { applyState() }
     }
     
     var useHapticFeedback = true
@@ -67,16 +69,24 @@ class ToggleButton: UIButton {
         setTitleColor(.black, for: .normal)
         contentHorizontalAlignment = .left
         
-        applySelectedState()
+        applyState()
     }
     
-    private func applySelectedState() {
-        if isSelected {
+    private func applyState() {
+        switch (isSelected, isEnabled) {
+        case (true, true):
             layer.borderWidth = 2
             layer.borderColor = Theme.colors.primary.cgColor
+            icon.tintColor = Theme.colors.primary
             icon.isHighlighted = true
-        } else {
+        case (true, false):
+            layer.borderWidth = 2
+            layer.borderColor = Theme.colors.disabledBorder.cgColor
+            icon.tintColor = Theme.colors.disabledIcon
+            icon.isHighlighted = true
+        default:
             layer.borderWidth = 0
+            icon.tintColor = Theme.colors.primary
             icon.isHighlighted = false
         }
     }

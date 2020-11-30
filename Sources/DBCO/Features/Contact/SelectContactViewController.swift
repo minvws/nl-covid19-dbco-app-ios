@@ -46,36 +46,8 @@ class SelectContactViewModel {
             contacts = []
         }
         
-        let suggestedName = suggestedName?
-            .lowercased()
-            .replacingOccurrences(of: ".", with: "")
-        
-        if let suggestedNameParts = suggestedName?.split(separator: " ") {
-            var maxMatchedParts = 0
-            
-            func calculateMatchedParts(for contact: CNContact) -> Int {
-                var matchedParts: Int = 0
-                var contactNameParts = contact.fullName.lowercased().split(separator: " ")
-                
-                for part in suggestedNameParts {
-                    if let matchedIndex = contactNameParts.firstIndex(where: { $0.starts(with: part) }) {
-                        contactNameParts.remove(at: matchedIndex)
-                        matchedParts += 1
-                    }
-                }
-                
-                maxMatchedParts = max(matchedParts, maxMatchedParts)
-                
-                return matchedParts
-            }
-            
-            let sortedSuggestions = contacts
-                .map { (contact: $0, matchedParts: calculateMatchedParts(for: $0)) }
-                .filter { $0.matchedParts > 1 }
-                .sorted { $0.matchedParts > $1.matchedParts }
-                .prefix { $0.matchedParts == maxMatchedParts }
-            
-            suggestedContacts = sortedSuggestions.map { $0.contact }
+        if let name = suggestedName {
+            suggestedContacts = ContactSuggestionHelper.suggestions(for: name, in: contacts)
         } else {
             suggestedContacts = []
         }
@@ -98,8 +70,8 @@ class SelectContactViewModel {
         contactTableViewManager.itemForCellAtIndexPath = { sections[$0.section].contacts[$0.row] }
         contactTableViewManager.titleForHeaderInSection = { sections.count > 1 ? sections[$0].title : nil }
         
-        searchTableViewManager.numberOfRowsInSection = { [unowned self] _ in searchResults.count }
-        searchTableViewManager.itemForCellAtIndexPath = { [unowned self] in searchResults[$0.row] }
+        searchTableViewManager.numberOfRowsInSection = { [unowned self] _ in self.searchResults.count }
+        searchTableViewManager.itemForCellAtIndexPath = { [unowned self] in self.searchResults[$0.row] }
         
     }
     
@@ -145,7 +117,7 @@ class SelectContactViewModel {
         contactTableViewManager.manage(tableView)
         contactTableViewManager.didSelectItem = loadFullContact(selectedContactHandler)
         contactTableViewManager.viewForHeaderInSection = { [unowned self] section in
-            guard let title = contactTableViewManager.titleForHeaderInSection?(section) else {
+            guard let title = self.contactTableViewManager.titleForHeaderInSection?(section) else {
                 return nil
             }
             

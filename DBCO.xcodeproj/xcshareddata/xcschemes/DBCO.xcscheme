@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1200"
+   LastUpgradeVersion = "1220"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "CDC4A8E3250B87E5001BABC6"
-               BuildableName = "Oplossing 2.app"
+               BuildableName = "GGD Contact.app"
                BlueprintName = "DBCO"
                ReferencedContainer = "container:DBCO.xcodeproj">
             </BuildableReference>
@@ -55,7 +55,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CDC4A8E3250B87E5001BABC6"
-            BuildableName = "Oplossing 2.app"
+            BuildableName = "GGD Contact.app"
             BlueprintName = "DBCO"
             ReferencedContainer = "container:DBCO.xcodeproj">
          </BuildableReference>
@@ -72,7 +72,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CDC4A8E3250B87E5001BABC6"
-            BuildableName = "Oplossing 2.app"
+            BuildableName = "GGD Contact.app"
             BlueprintName = "DBCO"
             ReferencedContainer = "container:DBCO.xcodeproj">
          </BuildableReference>

@@ -11,6 +11,9 @@ protocol TaskOverviewViewControllerDelegate: class {
     func taskOverviewViewControllerDidRequestAddContact(_ controller: TaskOverviewViewController)
     func taskOverviewViewController(_ controller: TaskOverviewViewController, didSelect task: Task)
     func taskOverviewViewControllerDidRequestUpload(_ controller: TaskOverviewViewController)
+    func taskOverviewViewControllerDidRequestRefresh(_ controller: TaskOverviewViewController)
+    func taskOverviewViewControllerDidRequestDebugMenu(_ controller: TaskOverviewViewController)
+    func taskOverviewViewControllerDidRequestReset(_ controller: TaskOverviewViewController)
 }
 
 /// - Tag: TaskOverviewViewModel
@@ -27,15 +30,20 @@ class TaskOverviewViewModel {
     private var hidePrompt: PromptFunction?
     private var showPrompt: PromptFunction?
     
+    @Bindable private(set) var isDoneButtonHidden: Bool = false
+    @Bindable private(set) var isResetButtonHidden: Bool = true
+    @Bindable private(set) var isAddContactButtonHidden: Bool = false
+    @Bindable private(set) var isWindowExpiredMessageHidden: Bool = true
+    
     init() {
         tableViewManager = .init()
         
         sections = []
         
-        tableViewManager.numberOfSections = { [unowned self] in return sections.count }
-        tableViewManager.numberOfRowsInSection = { [unowned self] in return sections[$0].tasks.count }
-        tableViewManager.itemForCellAtIndexPath = { [unowned self] in return sections[$0.section].tasks[$0.row] }
-        tableViewManager.viewForHeaderInSection = { [unowned self] in return sections[$0].header }
+        tableViewManager.numberOfSections = { [unowned self] in return self.sections.count }
+        tableViewManager.numberOfRowsInSection = { [unowned self] in return self.sections[$0].tasks.count }
+        tableViewManager.itemForCellAtIndexPath = { [unowned self] in return self.sections[$0.section].tasks[$0.row] }
+        tableViewManager.viewForHeaderInSection = { [unowned self] in return self.sections[$0].header }
         
         Services.caseManager.addListener(self)
     }
@@ -46,13 +54,15 @@ class TaskOverviewViewModel {
         self.tableHeaderBuilder = tableHeaderBuilder
         self.sectionHeaderBuilder = sectionHeaderBuilder
         
+        tableView.allowsSelection = !Services.caseManager.isWindowExpired
+        
         buildSections()
     }
     
     func setHidePrompt(_ hidePrompt: @escaping PromptFunction) {
         self.hidePrompt = hidePrompt
         
-        if Services.caseManager.isSynced {
+        if Services.caseManager.isSynced && !Services.caseManager.isWindowExpired {
             hidePrompt(false)
         }
     }
@@ -60,7 +70,7 @@ class TaskOverviewViewModel {
     func setShowPrompt(_ showPrompt: @escaping PromptFunction) {
         self.showPrompt = showPrompt
         
-        if !Services.caseManager.isSynced {
+        if !Services.caseManager.isSynced || Services.caseManager.isWindowExpired {
             showPrompt(false)
         }
     }
@@ -69,8 +79,10 @@ class TaskOverviewViewModel {
         sections = []
         sections.append((tableHeaderBuilder?(), []))
         
-        let uninformedContacts = Services.caseManager.tasks.filter { !$0.isOrCanBeInformed }
-        let informedContacts = Services.caseManager.tasks.filter { $0.isOrCanBeInformed }
+        let tasks = Services.caseManager.tasks.filter { !$0.deletedByIndex }
+        
+        let uninformedContacts = tasks.filter { !$0.isOrCanBeInformed }
+        let informedContacts = tasks.filter { $0.isOrCanBeInformed }
         
         let uninformedSectionHeader = SectionHeaderContent(.taskOverviewUninformedContactsHeaderTitle, .taskOverviewUninformedContactsHeaderSubtitle)
         let informedSectionHeader = SectionHeaderContent(.taskOverviewInformedContactsHeaderTitle, .taskOverviewInformedContactsHeaderSubtitle)
@@ -100,12 +112,24 @@ extension TaskOverviewViewModel: CaseManagerListener {
             showPrompt?(true)
         }
     }
+    
+    func caseManagerWindowExpired(_ caseManager: CaseManaging) {
+        isDoneButtonHidden = true
+        isResetButtonHidden = false
+        isAddContactButtonHidden = true
+        isWindowExpiredMessageHidden = false
+        
+        tableViewManager.tableView?.allowsSelection = false
+        
+        showPrompt?(true)
+    }
 }
 
 /// - Tag: TaskOverviewViewController
 class TaskOverviewViewController: PromptableViewController {
     private let viewModel: TaskOverviewViewModel
     private let tableView = UITableView.createDefaultGrouped()
+    private let refreshControl = UIRefreshControl()
     
     weak var delegate: TaskOverviewViewControllerDelegate?
     
@@ -127,27 +151,55 @@ class TaskOverviewViewController: PromptableViewController {
         
         setupTableView()
         
-        promptView = Button(title: .taskOverviewDoneButtonTitle)
+        let doneButton = Button(title: .taskOverviewDoneButtonTitle)
             .touchUpInside(self, action: #selector(upload))
         
-        viewModel.setHidePrompt { [unowned self] in hidePrompt(animated: $0) }
-        viewModel.setShowPrompt { [unowned self] in showPrompt(animated: $0) }
+        let resetButton = Button(title: .taskOverviewDeleteDataButtonTitle, style: .secondary)
+            .touchUpInside(self, action: #selector(reset))
+        
+        promptView = VStack(doneButton, resetButton)
+        
+        viewModel.$isDoneButtonHidden.binding = { doneButton.isHidden = $0 }
+        viewModel.$isResetButtonHidden.binding = { resetButton.isHidden = $0 }
+        
+        viewModel.setHidePrompt { [unowned self] in self.hidePrompt(animated: $0) }
+        viewModel.setShowPrompt { [unowned self] in self.showPrompt(animated: $0) }
+        
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
     
     private func setupTableView() {
         tableView.embed(in: contentView, preservesSuperviewLayoutMargins: false)
         tableView.delaysContentTouches = false
+        tableView.refreshControl = refreshControl
         
-        let tableHeaderBuilder = { [unowned self] in
-            Button(title: .taskOverviewAddContactButtonTitle, style: .secondary)
+        let tableHeaderBuilder = { [unowned self] () -> UIView in
+            let addContactButton = Button(title: .taskOverviewAddContactButtonTitle, style: .secondary)
                 .touchUpInside(self, action: #selector(requestContact))
+            
+            let iconView = UIImageView(image: UIImage(named: "Warning"))
+            iconView.contentMode = .center
+            iconView.setContentHuggingPriority(.required, for: .horizontal)
+            iconView.tintColor = Theme.colors.primary
+            
+            let windowExpiredMessage =
+                HStack(spacing: 8,
+                       iconView.withInsets(.top(2)),
+                       Label(subhead: .windowExpiredMessage,
+                             textColor: Theme.colors.primary).multiline())
+                .alignment(.top)
+            
+            self.viewModel.$isAddContactButtonHidden.binding = { addContactButton.isHidden = $0 }
+            self.viewModel.$isWindowExpiredMessageHidden.binding = { windowExpiredMessage.isHidden = $0 }
+            
+            return VStack(addContactButton, windowExpiredMessage)
                 .wrappedInReadableWidth(insets: .top(16))
         }
         
         let sectionHeaderBuilder = { (title: String, subtitle: String) -> UIView in
             VStack(spacing: 4,
-                   Label(bodyBold: title),
-                   Label(subhead: subtitle, textColor: Theme.colors.captionGray))
+                   Label(bodyBold: title).multiline(),
+                   Label(subhead: subtitle, textColor: Theme.colors.captionGray).multiline())
                 .wrappedInReadableWidth(insets: .top(20) + .bottom(16))
         }
         
@@ -162,6 +214,12 @@ class TaskOverviewViewController: PromptableViewController {
         versionLabel.textAlignment = .center
         versionLabel.sizeToFit()
         versionLabel.frame = CGRect(x: 0, y: 0, width: versionLabel.frame.width, height: 60.0)
+        versionLabel.isUserInteractionEnabled = true
+        
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openDebugMenu))
+        gestureRecognizer.numberOfTapsRequired = 4
+        
+        versionLabel.addGestureRecognizer(gestureRecognizer)
         
         tableView.tableFooterView = versionLabel
     }
@@ -172,6 +230,23 @@ class TaskOverviewViewController: PromptableViewController {
     
     @objc private func upload() {
         delegate?.taskOverviewViewControllerDidRequestUpload(self)
+    }
+    
+    @objc private func refresh() {
+        delegate?.taskOverviewViewControllerDidRequestRefresh(self)
+    }
+    
+    @objc private func openDebugMenu() {
+        delegate?.taskOverviewViewControllerDidRequestDebugMenu(self)
+    }
+    
+    @objc private func reset() {
+        delegate?.taskOverviewViewControllerDidRequestReset(self)
+    }
+    
+    var isLoading: Bool {
+        get { refreshControl.isRefreshing }
+        set { newValue ? refreshControl.beginRefreshing() : refreshControl.endRefreshing() }
     }
 
 }

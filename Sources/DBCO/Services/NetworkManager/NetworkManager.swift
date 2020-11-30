@@ -13,32 +13,74 @@ class NetworkManager: NetworkManaging, Logging {
     required init(configuration: NetworkConfiguration) {
         self.configuration = configuration
         self.sessionDelegate = NetworkManagerURLSessionDelegate(configuration: configuration)
-        self.session = URLSession(configuration: .default,
+        self.session = URLSession(configuration: .ephemeral,
                                   delegate: sessionDelegate,
                                   delegateQueue: nil)
     }
     
-    func getCase(identifier: String, completion: @escaping (Result<Case, NetworkError>) -> ()) {
+    func getAppConfiguration(completion: @escaping (Result<AppConfiguration, NetworkError>) -> Void) {
+        let urlRequest = constructRequest(url: configuration.appConfigurationUrl,
+                                          method: .GET)
+
+        decodedJSONData(request: urlRequest, completion: completion)
+    }
+    
+    func pair(code: String, sealedClientPublicKey: Data, completion: @escaping (Result<PairResponse, NetworkError>) -> Void) {
+        struct PairBody: Encodable {
+            let pairingCode: String
+            let sealedClientPublicKey: Data
+        }
+        
+        let urlRequest = constructRequest(url: configuration.pairingsUrl,
+                                          method: .POST,
+                                          body: PairBody(pairingCode: code,
+                                                         sealedClientPublicKey: sealedClientPublicKey))
+        
+        decodedJSONData(request: urlRequest, completion: completion)
+    }
+    
+    func getCase(identifier: String, completion: @escaping (Result<Case, NetworkError>) -> Void) {
         let urlRequest = constructRequest(url: configuration.caseUrl(identifier: identifier),
                                           method: .GET)
         
-        func open(result: Result<Envelope<Case>, NetworkError>) {
-            DispatchQueue.main.async {
-                completion(result.map { $0.item })
-            }
+        struct CaseResponse: Decodable {
+            let sealedCase: Sealed<Case>
+        }
+        
+        func open(result: Result<CaseResponse, NetworkError>) {
+            completion(result.map { $0.sealedCase.value })
         }
 
         decodedJSONData(request: urlRequest, completion: open)
     }
     
-    func getQuestionnaires(completion: @escaping (Result<[Questionnaire], NetworkError>) -> ()) {
+    func putCase(identifier: String, value: Case, completion: @escaping (Result<Void, NetworkError>) -> Void) {
+        struct CaseBody: Encodable {
+            let sealedCase: Sealed<Case>
+        }
+        
+        let urlRequest = constructRequest(url: configuration.caseUrl(identifier: identifier),
+                                          method: .PUT,
+                                          body: CaseBody(sealedCase: .init(value)))
+        
+        data(request: urlRequest) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    completion(.success(()))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
+    
+    func getQuestionnaires(completion: @escaping (Result<[Questionnaire], NetworkError>) -> Void) {
         let urlRequest = constructRequest(url: configuration.questionnairesUrl,
                                           method: .GET)
         
         func open(result: Result<ArrayEnvelope<Questionnaire>, NetworkError>) {
-            DispatchQueue.main.async {
-                completion(result.map { $0.items })
-            }
+            completion(result.map { $0.items })
         }
         
         decodedJSONData(request: urlRequest, completion: open)
@@ -76,9 +118,9 @@ class NetworkManager: NetworkManaging, Logging {
         }
 
         logDebug("--REQUEST--")
-        if let url = request.url { print(url.debugDescription) }
-        if let allHTTPHeaderFields = request.allHTTPHeaderFields {print(allHTTPHeaderFields.debugDescription) }
-        if let httpBody = request.httpBody { print(String(data: httpBody, encoding: .utf8)!) }
+        if let url = request.url { logDebug(url.debugDescription) }
+        if let allHTTPHeaderFields = request.allHTTPHeaderFields { logDebug(allHTTPHeaderFields.debugDescription) }
+        if let httpBody = request.httpBody { logDebug(String(data: httpBody, encoding: .utf8)!) }
         logDebug("--END REQUEST--")
 
         return .success(request)
@@ -91,7 +133,7 @@ class NetworkManager: NetworkManaging, Logging {
             .resume()
     }
     
-    private func data(request: Result<URLRequest, NetworkError>, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> ()) {
+    private func data(request: Result<URLRequest, NetworkError>, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) {
         switch request {
         case let .success(request):
             data(request: request, completion: completion)
@@ -100,7 +142,7 @@ class NetworkManager: NetworkManaging, Logging {
         }
     }
 
-    private func data(request: URLRequest, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> ()) {
+    private func data(request: URLRequest, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) {
         dataTask(with: request) { data, response, error in
             self.handleNetworkResponse(data,
                                        response: response,
@@ -109,9 +151,13 @@ class NetworkManager: NetworkManaging, Logging {
         }
     }
     
-    private func decodedJSONData<Object: Decodable>(request: Result<URLRequest, NetworkError>, completion: @escaping (Result<Object, NetworkError>) -> ()) {
+    private func decodedJSONData<Object: Decodable>(request: Result<URLRequest, NetworkError>, completion: @escaping (Result<Object, NetworkError>) -> Void) {
         data(request: request) { result in
-            completion(self.jsonResponseHandler(result: result))
+            let decodedResult: Result<Object, NetworkError> = self.jsonResponseHandler(result: result)
+            
+            DispatchQueue.main.async {
+                completion(decodedResult)
+            }
         }
     }
 
@@ -121,7 +167,7 @@ class NetworkManager: NetworkManaging, Logging {
     private func handleNetworkResponse<Object>(_ object: Object?,
                                                response: URLResponse?,
                                                error: Error?,
-                                               completion: @escaping (Result<(URLResponse, Object), NetworkError>) -> ()) {
+                                               completion: @escaping (Result<(URLResponse, Object), NetworkError>) -> Void) {
         if error != nil {
             completion(.failure(.invalidResponse))
             return
@@ -136,6 +182,10 @@ class NetworkManager: NetworkManaging, Logging {
             }.joined(separator: "\n")
 
             logDebug("Response headers: \n\(headers)")
+            
+            if let objectData = object as? Data, let body = String(data: objectData, encoding: .utf8) {
+                logDebug("Resonse body: \n\(body)")
+            }
         } else if let error = error {
             logDebug("Error with response: \(error)")
         }
@@ -208,7 +258,8 @@ class NetworkManager: NetworkManaging, Logging {
 
     private let configuration: NetworkConfiguration
     private let session: URLSession
-    private let sessionDelegate: URLSessionDelegate? // hold on to delegate to prevent deallocation
+    // swiftlint:disable:next weak_delegate
+    private let sessionDelegate: URLSessionDelegate? // swiftlint ignore: this // hold on to delegate to prevent deallocation
     
     private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -222,13 +273,14 @@ class NetworkManager: NetworkManaging, Logging {
     private lazy var jsonEncoder: JSONEncoder = {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .formatted(dateFormatter)
+        encoder.target = .api
         return encoder
     }()
     
     private lazy var jsonDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        decoder.source = .api
         return decoder
     }()
 }
-

@@ -5,7 +5,7 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import Foundation
+import UIKit
 import Contacts
 
 protocol ContactValue {
@@ -111,6 +111,7 @@ struct Text: ContactValue {
 struct Options: ContactValue {
     var label: String?
     var value: String?
+    var labelFont: UIFont? = Theme.fonts.subhead
     let inputType: InputType
     
     init(label: String?, value: String?, options: [InputType.PickerOption]) {
@@ -122,17 +123,25 @@ struct Options: ContactValue {
 
 extension CNContact {
     
+    private func setToNilIfEmpty(_ value: String) -> String? {
+        return value.isEmpty ? nil : value
+    }
+    
     var contactFirstName: FirstName {
-        FirstName(value: isKeyAvailable(CNContactGivenNameKey) ? givenName : nil)
+        FirstName(value: isKeyAvailable(CNContactGivenNameKey) ? setToNilIfEmpty(givenName) : nil)
     }
     
     var contactLastName: LastName {
-        LastName(value: isKeyAvailable(CNContactFamilyNameKey) ? familyName : nil)
+        LastName(value: isKeyAvailable(CNContactFamilyNameKey) ? setToNilIfEmpty(familyName) : nil)
     }
     
     var contactPhoneNumbers: [PhoneNumber] {
         if isKeyAvailable(CNContactPhoneNumbersKey) {
-            return phoneNumbers.map { PhoneNumber(value: $0.value.stringValue)  }
+            let invalidCharacters = PhoneNumberValidator.validCharacters.inverted
+            return phoneNumbers.map { PhoneNumber(value:
+                                                    setToNilIfEmpty($0.value.stringValue)?
+                                                    .components(separatedBy: invalidCharacters)
+                                                    .joined()) }
         }
         
         return []
@@ -140,7 +149,7 @@ extension CNContact {
     
     var contactEmailAddresses: [EmailAddress] {
         if isKeyAvailable(CNContactEmailAddressesKey) {
-            return emailAddresses.map { EmailAddress(value: $0.value as String)  }
+            return emailAddresses.map { EmailAddress(value: setToNilIfEmpty($0.value as String)) }
         }
         
         return []

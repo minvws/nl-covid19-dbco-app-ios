@@ -5,6 +5,7 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
+import CocoaLumberjack
 import Foundation
 
 public protocol Logging {
@@ -24,18 +25,71 @@ public extension Logging {
     }
 
     func logDebug(_ message: String, function: StaticString = #function, file: StaticString = #file, line: UInt = #line) {
-        NSLog("🐞 \(message)")
+        DDLogDebug("🐞 \(message)", file: file, function: function, line: line, tag: loggingCategory)
     }
 
     func logInfo(_ message: String, function: StaticString = #function, file: StaticString = #file, line: UInt = #line) {
-        NSLog("📋 \(message)")
+        DDLogInfo("📋 \(message)", file: file, function: function, line: line, tag: loggingCategory)
     }
 
     func logWarning(_ message: String, function: StaticString = #function, file: StaticString = #file, line: UInt = #line) {
-        NSLog("❗️ \(message)")
+        DDLogWarn("❗️ \(message)", file: file, function: function, line: line, tag: loggingCategory)
     }
 
     func logError(_ message: String, function: StaticString = #function, file: StaticString = #file, line: UInt = #line) {
-        NSLog("🔥 \(message)")
+        DDLogError("🔥 \(message)", file: file, function: function, line: line, tag: loggingCategory)
+    }
+}
+
+public final class LogHandler: Logging {
+
+    public static var isSetup = false
+
+    /// Can be called multiple times, will only setup once
+    public static func setup() {
+        guard !isSetup else {
+            DDLogDebug("🐞 Logging has already been setup before", file: #file, function: #function, line: #line, tag: "default")
+
+            return
+        }
+
+        isSetup = true
+
+        let level = Bundle.main.infoDictionary?["LOG_LEVEL"] as? String ?? "debug"
+
+        switch level {
+        case "debug":
+            dynamicLogLevel = .debug
+        case "info":
+            dynamicLogLevel = .info
+        case "warn":
+            dynamicLogLevel = .warning
+        case "error":
+            dynamicLogLevel = .error
+        case "none":
+            dynamicLogLevel = .off
+        default:
+            dynamicLogLevel = .off
+        }
+
+        DDLog.add(DDOSLogger.sharedInstance) // Uses os_log
+
+        let fileLogger: DDFileLogger = DDFileLogger() // File Logger
+        fileLogger.rollingFrequency = 60 * 60 * 24 // 24 hours
+        fileLogger.logFileManager.maximumNumberOfLogFiles = 7
+        DDLog.add(fileLogger)
+
+        DDLogDebug("🐞 Logging has been setup", file: #file, function: #function, line: #line, tag: "default")
+    }
+
+    public static func logFiles() -> [URL] {
+        guard let fileLogger = DDLog.allLoggers.first(where: { $0 is DDFileLogger }) as? DDFileLogger else {
+            #if DEBUG
+                assertionFailure("File Logger Not Found")
+            #endif
+            print("File Logger not Found")
+            return []
+        }
+        return fileLogger.logFileManager.sortedLogFilePaths.compactMap { URL(fileURLWithPath: $0) }
     }
 }

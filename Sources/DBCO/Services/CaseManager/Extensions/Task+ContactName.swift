@@ -11,13 +11,15 @@ extension Task {
     /// Searches for a .contactDetails answer in the results and returns the firstName and lastName combined.
     /// Falls back to the value of `label` if no answer could be found
     var contactName: String? {
-        result?.answers
+        questionnaireResult?.answers
             .compactMap {
                 switch $0.value {
                 case .contactDetails(let firstName, let lastName, _, _):
-                    return [firstName, lastName]
+                    let fullName = [firstName, lastName]
                         .compactMap { $0 }
                         .joined(separator: " ")
+                    
+                    return fullName.isEmpty ? nil : fullName
                 default:
                     return nil
                 }
@@ -28,7 +30,7 @@ extension Task {
     /// Searches for a .contactDetails answer in the results and returns the firstName.
     /// Falls back to the value of `label` if answer could be found
     var contactFirstName: String? {
-        result?.answers
+        questionnaireResult?.answers
             .compactMap {
                 switch $0.value {
                 case .contactDetails(let firstName, _, _, _):
@@ -42,7 +44,7 @@ extension Task {
     
     /// Searches for a .contactDetails answer in the results and returns the phoneNumber.
     var contactPhoneNumber: String? {
-        result?.answers
+        questionnaireResult?.answers
             .compactMap {
                 switch $0.value {
                 case .contactDetails(_, _, _, let phoneNumber):
@@ -56,7 +58,7 @@ extension Task {
     
     /// Searches for a .contactDetails answer in the results and returns the email.
     var contactEmail: String? {
-        result?.answers
+        questionnaireResult?.answers
             .compactMap {
                 switch $0.value {
                 case .contactDetails(_, _, let email, _):

@@ -5,7 +5,6 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-
 import UIKit
 
 class Fonts {
@@ -137,6 +136,14 @@ final class Colors {
     
     var separator: UIColor {
         return color(for: "Separator")
+    }
+    
+    var disabledBorder: UIColor {
+        return color(for: "DisabledBorder")
+    }
+    
+    var disabledIcon: UIColor {
+        return color(for: "DisabledIcon")
     }
 
     // MARK: - Private

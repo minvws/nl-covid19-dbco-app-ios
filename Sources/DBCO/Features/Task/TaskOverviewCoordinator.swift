@@ -8,18 +8,27 @@
 import UIKit
 import Contacts
 
+protocol TaskOverviewCoordinatorDelegate: class {
+    func taskOverviewCoordinatorDidRequestReset(_ coordinator: TaskOverviewCoordinator)
+}
+
 /// Coordinator displaying the tasks for the index with [TaskOverviewViewController](x-source-tag://TaskOverviewViewController).
 /// Uses [SelectContactCoordinator](x-source-tag://SelectContactCoordinator) and [EditContactCoordinator](x-source-tag://EditContactCoordinator) for updating tasks.
 /// Uses [UploadCoordinator](x-source-tag://UploadCoordinator) to upload the tasks.
 ///
 /// - Tag: TaskOverviewCoordinator
-final class TaskOverviewCoordinator: Coordinator {
+final class TaskOverviewCoordinator: Coordinator, Logging {
+    var loggingCategory: String = "TaskOverviewCoordinator"
+    
+    private weak var delegate: TaskOverviewCoordinatorDelegate?
+    
     private let window: UIWindow
     private let overviewController: TaskOverviewViewController
     private let navigationController: NavigationController
     
-    init(window: UIWindow) {
+    init(window: UIWindow, delegate: TaskOverviewCoordinatorDelegate) {
         self.window = window
+        self.delegate = delegate
         
         let viewModel = TaskOverviewViewModel()
         
@@ -33,29 +42,78 @@ final class TaskOverviewCoordinator: Coordinator {
     }
     
     override func start() {
-        let snapshotView = window.snapshotView(afterScreenUpdates: true)!
+        if window.rootViewController == nil {
+            window.rootViewController = navigationController
+            window.makeKeyAndVisible()
+        } else {
+            let snapshotView = window.snapshotView(afterScreenUpdates: true)!
+            
+            window.rootViewController = navigationController
+            navigationController.view.addSubview(snapshotView)
+            
+            UIView.transition(with: window, duration: 0.5, options: [.transitionFlipFromRight]) {
+                snapshotView.removeFromSuperview()
+            }
+        }
         
-        window.rootViewController = navigationController
-        navigationController.view.addSubview(snapshotView)
+        loadCaseData(userInitiated: false)
+    }
+    
+    override func removeChildCoordinator(_ coordinator: Coordinator) {
+        super.removeChildCoordinator(coordinator)
         
-        UIView.transition(with: window, duration: 0.5, options: [.transitionFlipFromRight]) {
-            snapshotView.removeFromSuperview()
+        // Overview became visible so: 
+        Services.caseManager.loadCaseData(userInitiated: false) { _, _ in }
+    }
+    
+    private func loadCaseData(userInitiated: Bool, completionHandler: (() -> Void)? = nil) {
+        Services.caseManager.loadCaseData(userInitiated: userInitiated) { success, error in
+            if success {
+                completionHandler?()
+            } else {
+                let alert = UIAlertController(title: .taskLoadingErrorTitle, message: .taskLoadingErrorMessage, preferredStyle: .alert)
+                
+                alert.addAction(UIAlertAction(title: .tryAgain, style: .default) { _ in
+                    self.loadCaseData(userInitiated: userInitiated, completionHandler: completionHandler)
+                })
+                
+                if Services.caseManager.hasCaseData {
+                    alert.addAction(UIAlertAction(title: .cancel, style: .cancel) { _ in
+                        completionHandler?()
+                    })
+                }
+                
+                self.navigationController.present(alert, animated: true)
+            }
         }
     }
     
     private func upload() {
+        guard Services.caseManager.hasCaseData else {
+            return
+        }
+        
         startChildCoordinator(UploadCoordinator(presenter: overviewController, delegate: self))
     }
     
     private func selectContact(for task: Task) {
+        guard Services.caseManager.hasCaseData else { return }
+        
         startChildCoordinator(SelectContactCoordinator(presenter: overviewController, contactTask: task, delegate: self))
     }
     
     private func addContact() {
+        guard Services.caseManager.hasCaseData else {
+            logWarning("Cannot add contact before case data is fetched")
+            return
+        }
+        
         startChildCoordinator(SelectContactCoordinator(presenter: overviewController, contactTask: nil, delegate: self))
     }
     
     private func editContact(for task: Task) {
+        guard Services.caseManager.hasCaseData else { return }
+        
         startChildCoordinator(EditContactCoordinator(presenter: overviewController, contactTask: task, delegate: self))
     }
 
@@ -67,7 +125,11 @@ extension TaskOverviewCoordinator: SelectContactCoordinatorDelegate {
     func selectContactCoordinator(_ coordinator: SelectContactCoordinator, didFinishWith task: Task) {
         removeChildCoordinator(coordinator)
         
-        Services.caseManager.save(task)
+        do {
+            try Services.caseManager.save(task)
+        } catch let error {
+            logError("Could not save task: \(error)")
+        }
     }
     
     func selectContactCoordinatorDidCancel(_ coordinator: SelectContactCoordinator) {
@@ -81,7 +143,11 @@ extension TaskOverviewCoordinator: EditContactCoordinatorDelegate {
     func editContactCoordinator(_ coordinator: EditContactCoordinator, didFinishContactTask task: Task) {
         removeChildCoordinator(coordinator)
         
-        Services.caseManager.save(task)
+        do {
+            try Services.caseManager.save(task)
+        } catch let error {
+            logError("Could not save task: \(error)")
+        }
     }
     
     func editContactCoordinatorDidCancel(_ coordinator: EditContactCoordinator) {
@@ -108,7 +174,7 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
     func taskOverviewViewController(_ controller: TaskOverviewViewController, didSelect task: Task) {
         switch task.taskType {
         case .contact:
-            if task.result != nil {
+            if task.questionnaireResult != nil {
                 // edit flow
                 editContact(for: task)
             } else {
@@ -120,6 +186,67 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
     
     func taskOverviewViewControllerDidRequestUpload(_ controller: TaskOverviewViewController) {
         upload()
+    }
+    
+    func taskOverviewViewControllerDidRequestRefresh(_ controller: TaskOverviewViewController) {
+        logDebug("Pulled to refresh")
+        loadCaseData(userInitiated: true) {
+            // Delay for a bit to make it feel more like something is happening
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                controller.isLoading = false
+            }
+        }
+    }
+    
+    func taskOverviewViewControllerDidRequestDebugMenu(_ controller: TaskOverviewViewController) {
+        func confirmReset() {
+            let alert = UIAlertController(title: "Are you sure you want to reset?", message: nil, preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "Yes, reset!", style: .destructive) { _ in
+                self.delegate?.taskOverviewCoordinatorDidRequestReset(self)
+            })
+            
+            alert.addAction(UIAlertAction(title: .cancel, style: .cancel, handler: nil))
+            
+            controller.present(alert, animated: true)
+        }
+        
+        var actions = [UIAlertAction]()
+        
+        if let shareLogs = Bundle.main.infoDictionary?["SHARE_LOGS_ENABLED"] as? String, shareLogs == "YES" {
+            actions.append(.init(title: "Share logs", style: .default) { _ in
+                let activityViewController = UIActivityViewController(activityItems: LogHandler.logFiles(),
+                                                                      applicationActivities: nil)
+                controller.present(activityViewController, animated: true, completion: nil)
+            })
+        }
+        
+        if let resetEnabled = Bundle.main.infoDictionary?["RESET_ENABLED"] as? String, resetEnabled == "YES" {
+            actions.append(.init(title: "Reset pairing and data", style: .destructive) { _ in
+                confirmReset()
+            })
+        }
+        
+        guard !actions.isEmpty else { return }
+        
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        actions.forEach(alert.addAction)
+        alert.addAction(UIAlertAction(title: .cancel, style: .cancel, handler: nil))
+        
+        controller.present(alert, animated: true)
+    }
+    
+    func taskOverviewViewControllerDidRequestReset(_ controller: TaskOverviewViewController) {
+        let alert = UIAlertController(title: .deleteDataPromptTitle, message: .deleteDataPromptMessage, preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: .deleteDataPromptOptionDelete, style: .destructive) { _ in
+            self.delegate?.taskOverviewCoordinatorDidRequestReset(self)
+        })
+        
+        alert.addAction(UIAlertAction(title: .deleteDataPromptOptionCancel, style: .cancel, handler: nil))
+        
+        controller.present(alert, animated: true)
     }
     
 }

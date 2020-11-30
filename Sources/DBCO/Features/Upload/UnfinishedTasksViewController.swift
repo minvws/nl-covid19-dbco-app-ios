@@ -32,6 +32,7 @@ class UnfinishedTasksViewModel {
         
         // Store unfisnished task identifiers now, so any completed tasks won't have to dissappear from the overview.
         relevantTaskIdentifiers = Services.caseManager.tasks
+            .filter { !$0.deletedByIndex }
             .filter { !$0.isOrCanBeInformed }
             .map { $0.uuid }
         
@@ -83,8 +84,9 @@ extension UnfinishedTasksViewModel: CaseManagerListener {
     }
     
     func caseManagerDidUpdateSyncState(_ caseManager: CaseManaging) {}
+    
+    func caseManagerWindowExpired(_ caseManager: CaseManaging) {}
 }
-
 
 /// - Tag: UnfinishedTasksViewControllers
 class UnfinishedTasksViewController: PromptableViewController {
@@ -128,8 +130,8 @@ class UnfinishedTasksViewController: PromptableViewController {
         
         let sectionHeaderBuilder = { (title: String, subtitle: String) -> UIView in
             VStack(spacing: 4,
-                   Label(bodyBold: title),
-                   Label(subhead: subtitle, textColor: Theme.colors.captionGray))
+                   Label(bodyBold: title).multiline(),
+                   Label(subhead: subtitle, textColor: Theme.colors.captionGray).multiline())
                 .wrappedInReadableWidth(insets: .top(20) + .bottom(16))
         }
         

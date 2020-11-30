@@ -9,6 +9,7 @@ import UIKit
 
 protocol LabeledInputView: UIView {
     associatedtype LabelType: UILabel
+    
     var label: LabelType { get }
     var labelText: String? { get set }
     var isLabelHidden: Bool { get set }
@@ -16,12 +17,12 @@ protocol LabeledInputView: UIView {
 
 extension LabeledInputView {
     var isLabelHidden: Bool {
-        get { label.isHidden }
+        get { return label.isHidden }
         set { label.isHidden = newValue }
     }
     
     var labelText: String? {
-        get { label.text }
+        get { return label.text }
         set {
             label.text = newValue
             label.isHidden = newValue == nil
@@ -43,7 +44,7 @@ extension LabeledInputView {
         
         return VStack(spacing: 16,
                       Label(bodyBold: labelText).multiline().hideIfEmpty(),
-                      VStack(TextView(htmlText: description),
-                             self))
+                      TextView(htmlText: description),
+                      self)
     }
 }

@@ -5,7 +5,15 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import Foundation
+import UIKit
+
+enum CaseManagingError: Error {
+    case noCaseData
+    case questionnaireNotFound
+    case couldNotLoadTasks(NetworkError)
+    case couldNotLoadQuestionnaires(NetworkError)
+    case windowExpired
+}
 
 /// Loads tasks and questionnaires.
 /// Facilitates storing and uploading results to the backend.
@@ -17,30 +25,44 @@ import Foundation
 ///
 /// - Tag: CaseManaging
 protocol CaseManaging {
+    
     init()
     
-    var tasks: [Task] { get }
+    var hasCaseData: Bool { get }
     
     /// Indicates that alls the tasks are uploaded to the backend in their current state
     var isSynced: Bool { get }
     
-    var hasUnfinishedTasks: Bool { get }
+    /// Indicates that tasks can no longer be uploaded to the backedn
+    var isWindowExpired: Bool { get }
     
-    /// Returns the [Questionnaire](x-source-tag://Questionnaire) associated with a task
-    func questionnaire(for task: Task) -> Questionnaire
+    var dateOfSymptomOnset: Date { get }
+    var tasks: [Task] { get }
     
-    func loadTasksAndQuestions(pairingCode: String, completion: @escaping (_ success: Bool, _ error: NetworkError?) -> Void)
+    /// Returns the [Questionnaire](x-source-tag://Questionnaire) associated with a task type.
+    /// Throws an `notPaired` error when called befored paired.
+    /// Throws an `questionnaireNotFound` error when there's no suitable questionnaire  for the supplied task
+    func questionnaire(for taskType: Task.TaskType) throws -> Questionnaire
+    
+    func loadCaseData(userInitiated: Bool, completion: @escaping (_ success: Bool, _ error: CaseManagingError?) -> Void)
+    
+    /// Clears all stored data. Using any method or property except for `hasCaseData` on CaseManager before pairing and loading the data again is an invalid operation.
+    /// Throws an `notPaired` error when called befored paired.
+    func removeCaseData() throws
     
     /// Adds a listener
     /// - parameter listener: The object conforming to [CaseManagerListener](x-source-tag://CaseManagerListener) that will receive updates. Will be stored with a weak reference
     func addListener(_ listener: CaseManagerListener)
     
     /// Saves updates to a task if a task with the same uuid is already managed, or stores a new task.
-    func save(_ task: Task)
+    /// Throws an `notPaired` error when called befored paired.
+    func save(_ task: Task) throws
     
-    /// Uploads all the tasks to the backend
+    /// Uploads all the tasks to the backend.
+    /// Throws an `notPaired` error when called befored paired.
+    ///
     /// - parameter completionHandler: The closure to be called after the upload was finished.
-    func sync(completionHandler: ((_ success: Bool) -> Void)?)
+    func sync(completionHandler: ((_ success: Bool) -> Void)?) throws
 }
 
 /// - Tag: CaseManagerListener
@@ -50,11 +72,19 @@ protocol CaseManagerListener: class {
     
     /// Called after tasks were uploaded to the backend
     func caseManagerDidUpdateSyncState(_ caseManager: CaseManaging)
+    
+    /// Called when the window for uploading data has expired
+    func caseManagerWindowExpired(_ caseManager: CaseManaging)
 }
 
-// Temporary implementation
 /// - Tag: CaseManager
 final class CaseManager: CaseManaging, Logging {
+    
+    private struct Constants {
+        static let keychainService = "CaseManager"
+        static let normalFetchInterval = TimeInterval(60)
+        static let userInitiatedFetchInterval = TimeInterval(10)
+    }
     
     private struct ListenerWrapper {
         weak var listener: CaseManagerListener?
@@ -62,49 +92,126 @@ final class CaseManager: CaseManaging, Logging {
     
     private var listeners = [ListenerWrapper]()
     
-    private(set) var isSynced: Bool = true {
+    @Keychain(name: "appData", service: Constants.keychainService, clearOnReinstall: true)
+    private var appData: AppData = .empty // swiftlint:disable:this let_var_whitespace
+    
+    @UserDefaults(key: "isSynced")
+    private(set) var isSynced: Bool = true { // swiftlint:disable:this let_var_whitespace
         didSet {
             listeners.forEach { $0.listener?.caseManagerDidUpdateSyncState(self) }
         }
     }
     
-    private var questionnaires = [Questionnaire]()
-    private(set) var tasks = [Task]()
-    
-    var hasUnfinishedTasks: Bool {
-        tasks.contains { $0.status != .completed }
+    private(set) var tasks: [Task] {
+        get { appData.tasks }
+        set { appData.tasks = newValue }
     }
     
-    func loadTasksAndQuestions(pairingCode: String, completion: @escaping (Bool, NetworkError?) -> Void) {
-        // This is all temporary code until until pairing with the API is available.
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + .random(in: 0.1...0.5)) {
-            if let validCodes = Bundle.main.infoDictionary?["ValidCodes"] as? [String] {
-                guard validCodes.contains(pairingCode.sha256) else {
-                    completion(false, .invalidRequest)
-                    return
+    private var questionnaires: [Questionnaire] {
+        get { appData.questionnaires }
+        set { appData.questionnaires = newValue }
+    }
+    
+    private(set) var dateOfSymptomOnset: Date {
+        get { appData.dateOfSymptomOnset }
+        set { appData.dateOfSymptomOnset = newValue }
+    }
+    
+    private(set) var windowExpiresAt: Date {
+        get { appData.windowExpiresAt }
+        set {
+            appData.windowExpiresAt = newValue
+            setWindowExpiryTimer()
+        }
+    }
+    
+    var isWindowExpired: Bool {
+        return appData.windowExpiresAt.timeIntervalSinceNow < 0
+    }
+    
+    private var windowExpiryTimer: Timer?
+    
+    var hasCaseData: Bool {
+        $appData.exists && !questionnaires.isEmpty
+    }
+    
+    private var fetchDate = Date.distantPast
+    
+    private func shouldLoadTasks(userInitiated: Bool) -> Bool {
+        if appData.tasks.isEmpty {
+            return true
+        } else if userInitiated {
+            return fetchDate.timeIntervalSinceNow + Constants.userInitiatedFetchInterval < 0
+        } else {
+            return fetchDate.timeIntervalSinceNow + Constants.normalFetchInterval < 0
+        }
+    }
+    
+    private var shouldLoadQuestionnaires: Bool {
+        return appData.questionnaires.isEmpty
+    }
+    
+    func loadCaseData(userInitiated: Bool, completion: @escaping (Bool, CaseManagingError?) -> Void) {
+        func loadTasksIfNeeded() {
+            guard shouldLoadTasks(userInitiated: userInitiated) else {
+                logDebug("No task loading needed. Skipping.")
+                return loadQuestionnairesIfNeeded()
+            }
+            
+            do {
+                let previousFetchDate = fetchDate
+                fetchDate = Date() // Set the fetchdate here to prevent multiple request
+                
+                let identifier = try Services.pairingManager.caseToken()
+                Services.networkManager.getCase(identifier: identifier) {
+                    switch $0 {
+                    case .success(let result):
+                        self.setTasks(result.tasks)
+                        self.dateOfSymptomOnset = result.dateOfSymptomOnset
+                        self.windowExpiresAt = result.windowExpiresAt
+                        
+                        self.fetchDate = Date() // Set the fetchdate here again to the actual date
+            
+                        loadQuestionnairesIfNeeded()
+                    case .failure(let error):
+                        self.fetchDate = previousFetchDate // Reset the fetchdate since no data was fetched
+                        
+                        completion(false, .couldNotLoadTasks(error))
+                    }
                 }
-            }
-        
-            let group = DispatchGroup()
-            
-            group.enter()
-            Services.networkManager.getCase(identifier: "1234") { result in
-                self.tasks = (try? result.get())?.tasks ?? []
-                self.listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
-                group.leave()
-            }
-            
-            group.enter()
-            Services.networkManager.getQuestionnaires { result in
-                self.setQuestionnaires((try? result.get()) ?? [])
-                group.leave()
-            }
-            
-            group.notify(queue: .main) {
-                completion(true, nil)
+            } catch {
+                return completion(false, .noCaseData)
             }
         }
+        
+        func loadQuestionnairesIfNeeded() {
+            guard shouldLoadQuestionnaires else {
+                logDebug("No questionnaire loading needed. Skipping.")
+                return finish()
+            }
+            
+            Services.networkManager.getQuestionnaires {
+                switch $0 {
+                case .success(let questionnaires):
+                    self.setQuestionnaires(questionnaires)
+                    
+                    finish()
+                case .failure(let error):
+                    completion(false, .couldNotLoadQuestionnaires(error))
+                }
+            }
+        }
+        
+        func finish() {
+            completion(true, nil)
+            self.listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
+        }
+        
+        loadTasksIfNeeded()
+    }
+    
+    func removeCaseData() throws {
+        $appData.clearData()
     }
     
     /// Set the questionnaires from the api call result
@@ -122,13 +229,39 @@ final class CaseManager: CaseManaging, Logging {
             case .contact:
                 var questions = questionnaire.questions
                 
+                // Modify the classification and communication questionsto be disabled when the task source is .portal
+                func shouldBeDisabledForPortalTasks(_ offset: Int, _ question: Question) -> Bool {
+                    return
+                        (question.questionType == .classificationDetails) ||
+                        (question.answerOptions?.contains { $0.trigger == .setCommunicationToIndex } == true)
+                }
+                
+                let classificationIndices = questionnaire.questions
+                    .enumerated()
+                    .filter(shouldBeDisabledForPortalTasks)
+                    .map { $0.offset }
+                
+                for index in classificationIndices {
+                    let question = questions[index]
+                    questions[index] = Question(uuid: question.uuid,
+                                                group: question.group,
+                                                questionType: question.questionType,
+                                                label: question.label,
+                                                description: question.description,
+                                                relevantForCategories: question.relevantForCategories,
+                                                answerOptions: question.answerOptions,
+                                                disabledForSources: [.portal])
+                }
+                
+                // Insert a .lastExposureDate question
                 let lastExposureQuestion = Question(uuid: UUID(),
                                                     group: .contactDetails,
                                                     questionType: .lastExposureDate,
                                                     label: .contactInformationLastExposure,
                                                     description: nil,
                                                     relevantForCategories: [.category1, .category2a, .category2b, .category3],
-                                                    answerOptions: nil)
+                                                    answerOptions: nil,
+                                                    disabledForSources: [])
                 
                 // Find the index of the question modifying the communication type. (Via triggers)
                 let communicationQuestionIndex = questionnaire.questions
@@ -149,17 +282,62 @@ final class CaseManager: CaseManaging, Logging {
         self.questionnaires = questionnaires.map(injectingLastExposureDateIfNeeded)
     }
     
+    /// Set the tasks from the api call result
+    ///
+    /// Updates existing tasks if the user has not yet started them and adds any new tasks
+    private func setTasks(_ fetchedTasks: [Task]) {
+        guard !tasks.isEmpty else {
+            tasks = fetchedTasks
+            return
+        }
+        
+        fetchedTasks.forEach { task in
+            if let existingTaskIndex = tasks.firstIndex(where: { $0.uuid == task.uuid }) {
+                if tasks[existingTaskIndex].status == .notStarted {
+                    tasks[existingTaskIndex] = task
+                }
+            } else {
+                tasks.append(task)
+            }
+        }
+    }
+    
+    private func setWindowExpiryTimer() {
+        guard $appData.exists else { return }
+        
+        windowExpiryTimer?.invalidate()
+        
+        guard !isWindowExpired else {
+            listeners.forEach { $0.listener?.caseManagerWindowExpired(self) }
+            return
+        }
+        
+        windowExpiryTimer = Timer(fire: windowExpiresAt, interval: 0, repeats: false) { [weak self] timer in
+            timer.invalidate()
+            
+            guard let self = self else { return }
+            
+            self.listeners.forEach { $0.listener?.caseManagerWindowExpired(self) }
+        }
+        
+        RunLoop.main.add(windowExpiryTimer!, forMode: .common)
+    }
+    
     /// - Tag: CaseManager.questionnaire
-    func questionnaire(for task: Task) -> Questionnaire {
-        guard let questionnaire = questionnaires.first(where: { $0.taskType == task.taskType }) else {
+    func questionnaire(for taskType: Task.TaskType) throws -> Questionnaire {
+        guard hasCaseData else { throw CaseManagingError.noCaseData }
+        
+        guard let questionnaire = questionnaires.first(where: { $0.taskType == taskType }) else {
             logError("Could not find applicable questionnaire")
-            fatalError()
+            throw CaseManagingError.questionnaireNotFound
         }
         
         return questionnaire
     }
     
-    func save(_ task: Task) {
+    func save(_ task: Task) throws {
+        guard hasCaseData else { throw CaseManagingError.noCaseData }
+        
         func storeNewTask() -> Int {
             tasks.append(task)
             return tasks.count - 1
@@ -167,16 +345,10 @@ final class CaseManager: CaseManaging, Logging {
         
         let index = tasks.lastIndex { $0.uuid == task.uuid } ?? storeNewTask()
         
-        let questionnaire = self.questionnaire(for: task)
+        let questionnaire = try self.questionnaire(for: task.taskType)
         
-        // Update task type content
-        switch tasks[index].taskType {
-        case .contact:
-            tasks[index].contact = task.contact
-        }
-        
-        let currentAnswers = tasks[index].result?.answers ?? []
-        let newAnswers = task.result?.answers ?? []
+        let currentAnswers = tasks[index].questionnaireResult?.answers ?? []
+        let newAnswers = task.questionnaireResult?.answers ?? []
         
         // Ensure we have (empty) answers for all necessary questions
         // Updating existing any answers
@@ -202,22 +374,61 @@ final class CaseManager: CaseManaging, Logging {
             .filter { $0.relevantForCategories.contains(tasks[index].contact.category) }
             .map(answerForQuestion)
         
-        tasks[index].result = QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: answers)
+        var updatedTask = tasks[index]
         
-        isSynced = false
+        // Update task results
+        updatedTask.questionnaireResult = QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: answers)
+        
+        // Update task type content
+        switch updatedTask.taskType {
+        case .contact:
+            updatedTask.contact = task.contact
+        }
+        
+        // Update deletion
+        if task.deletedByIndex {
+            updatedTask.deletedByIndex = true
+        }
+        
+        // If the data was synced and the updatedTask is the same as the current task, data is still synced
+        isSynced = isSynced && tasks[index] == updatedTask
+        
+        tasks[index] = updatedTask
         
         listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
     }
     
     func addListener(_ listener: CaseManagerListener) {
         listeners.append(ListenerWrapper(listener: listener))
+        
+        if isWindowExpired {
+            // call listener immediately for expired window
+            listener.caseManagerWindowExpired(self)
+        } else {
+            setWindowExpiryTimer()
+        }
     }
     
-    func sync(completionHandler: ((Bool) -> Void)?) {
-        // Fake doing some work
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            self.isSynced = true
-            completionHandler?(true)
+    func sync(completionHandler: ((Bool) -> Void)?) throws {
+        guard hasCaseData else { throw CaseManagingError.noCaseData }
+        guard !isWindowExpired else { throw CaseManagingError.windowExpired }
+        
+        do {
+            let value = Case(dateOfSymptomOnset: dateOfSymptomOnset, windowExpiresAt: windowExpiresAt, tasks: tasks)
+            let identifier = try Services.pairingManager.caseToken()
+            Services.networkManager.putCase(identifier: identifier, value: value) {
+                switch $0 {
+                case .success:
+                    self.isSynced = true
+                    completionHandler?(true)
+                case .failure(let error):
+                    self.logError("Could not sync case: \(error)")
+                    completionHandler?(false)
+                }
+            }
+        } catch {
+            completionHandler?(false)
+            return
         }
     }
     

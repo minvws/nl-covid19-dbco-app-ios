@@ -3,36 +3,66 @@
 "appVersionTitle" = "Versie %@ (%@)";
 
 /* MARK: - General */
+"yes" = "Ja";
+"no" = "Nee";
 "save" = "Opslaan";
 "cancel" = "Annuleren";
+"close" = "Sluiten";
 "next" = "Volgende";
 "start" = "Beginnen";
 "edit" = "Wijzig";
 "selectDate" = "Selecteer datum";
 "done" = "Klaar";
 "ok" = "Oké";
+"tryAgain" = "Opnieuw proberen";
+"delete" = "Verwijderen";
+"error.title" = "Er ging iets mis";
+
+/* MARK: - Update App */
+"updateApp.error.message" = "De App Store kan niet geopend worden.";
+"updateApp.title" = "De app heeft een update nodig";
+
+"updateApp.content" = "Update de app om te zorgen dat deze goed blijft werken.";
+"updateApp.button" = "Updaten";
 
 /* MARK: - Onboarding */
-"onboarding.step1.title" = "Help de GGD bij het contactonderzoek en breng je omgeving op de hoogte";
-"onboarding.step1.message" = "Je kunt via deze app gegevens van je contacten met de GGD delen. Zo zorg je dat het contactonderzoek sneller gaat.";
+"onboarding.step1.title" = "Help de GGD bij het contactonderzoek en breng je contacten op de hoogte";
+"onboarding.step1.message" = "Je kunt via deze app gegevens van je contacten met de GGD delen. Dit doe je als je corona hebt. Zo help je de GGD met het sneller en beter uitvoeren van bron- en contactonderzoek.";
 "onboarding.step2.title" = "Vul de code in die je hebt gekregen van de GGD-medewerker";
 "onboarding.step3.title" = "Voeg de gegevens van je contacten toe";
-"onboarding.step3.message" = "De GGD heeft contactgegevens nodig van mensen die jij hebt ontmoet. Via deze app kun je die het snelst delen.\n\nDe gegevens worden alleen gedeeld wanneer je helemaal klaar bent.";
+"onboarding.step3.message" = "De GGD heeft contactgegevens nodig van mensen die jij hebt ontmoet, omdat je hen misschien hebt besmet. Via deze app kun je gemakkelijk gegevens delen. Je bepaalt zelf welke gegevens je deelt en wanneer je dat doet.";
+"onboarding.consent.title" = "Zo gaat de GGD om met je gegevens";
+"onboarding.consent.message" = "Om de GGD Contact-app te gebruiken moet je akkoord gaan met de <a href=\"https://ggdcontact.nl/nl/privacy\">privacyverklaring</a>. Belangrijk om te weten:";
+"onboarding.consent.item1" = "Gegevens worden versleuteld en via een veilige verbinding gedeeld";
+"onboarding.consent.item2" = "Gegevens worden pas met de GGD gedeeld als jij laat weten dat je klaar bent";
+"onboarding.consent.item3" = "Alleen gegevens die je zelf invoert worden gedeeld";
+"onboarding.consent.item4" = "Je kunt na het delen zelf de gegevens verwijderen";
+"onboarding.consent.buttonTitle" = "Ik heb de privacyverklaring gelezen en ga hiermee akkoord";
 "onboardingLoadingErrorTitle" = "Kon de gegevens niet ophalen";
 "onboardingLoadingErrorMessage" = "Controleer de code en probeer het opnieuw.";
 
 /* MARK: - Task Overview */
 "taskOverviewTitle" = "Mijn contacten";
-"taskOverviewDoneButtonTitle" = "Verstuur gegevens naar GGD";
+"taskOverviewDoneButtonTitle" = "Deel gegevens met GGD";
+"taskOverviewDeleteDataButtonTitle" = "Gegevens verwijderen";
 "taskOverviewAddContactButtonTitle" = "+ Contact toevoegen";
 
 "taskOverviewUninformedContactsHeader.title" = "Vul contactgegevens aan";
-"taskOverviewUninformedContactsHeader.subtitle" = "En informeer je contacten";
+"taskOverviewUninformedContactsHeader.subtitle" = "Contacten die moeten weten dat je besmet bent";
 "taskOverviewInformedContactsHeader.title" = "Behandelde contacten";
 "taskOverviewInformedContactsHeader.subtitle" = "Contacten die zijn of worden geinformeerd";
 
-"task.contact.caption.completed" = "Gegevens toegevoegd";
-"task.contact.caption.incomplete" = "Vul gegevens aan";
+"taskContactUnknownName" = "Geen naam bekend";
+
+"taskLoadingErrorTitle" = "Kon de gegevens niet ophalen";
+"taskLoadingErrorMessage" = "Controleer de internetverbinding en probeer het opnieuw.";
+
+"deleteDataPromptTitle" = "Wil je de gegevens verwijderen?";
+"deleteDataPromptMessage" = "Zo worden alle gegevens verwijderd van de contacten die in deze app staan.";
+"deleteDataPromptOptionCancel" = "Ga terug";
+"deleteDataPromptOptionDelete" = "Verwijder";
+
+"windowExpiredMessage" = "De periode voor het delen van gegevens met de GGD is verlopen.";
 
 /* MARK: - Contact Selection */
 "selectContactTitle" = "Selecteer contact";
@@ -40,7 +70,7 @@
 "selectContactAddManually" = "+ Handmatig toevoegen";
 "selectContactSuggestions" = "Suggesties";
 "selectContactOtherContacts" = "Alle contacten";
-"selectContactFromContactsFallback" = "Uit contacten";
+"selectContactFromContactsFallback" = "Uit contacten kopiëren";
 "selectContactAddManuallyFallback" = "Handmatig toevoegen";
 
 // MARK: - Editing Contacts
@@ -48,42 +78,49 @@
 "contactTypeSection.message" = "Beantwoord vragen over ontmoeting";
 "contactDetailsSection.title" = "Contactgegevens";
 "contactDetailsSection.message" = "Vul zo veel mogelijk gegevens aan";
-"informContactSection.title" = "Informeren";
-"informContactSection.message.index" = "De GGD informeert dit contact niet";
-"informContactSection.message.staff" = "De GGD neemt contact op";
+"informContactSection.title" = "Informatie voor dit contact";
+"informContactSection.message" = "De leefregels voor deze persoon";
 
-"informContactTitle.index.knownName" = "De GGD neemt <u>geen</u> contact op met %@. Deel jij deze leefregels met %@?";
-"informContactTitle.index.unknownName" = "De GGD neemt <u>geen</u> contact op met dit contact. Deel jij deze leefregels?";
-"informContactTitle.staff.knownName" = "De GGD neemt contact op met %@. Dit zijn de leefregels voor %@.";
-"informContactTitle.staff.unknownName" = "De GGD neemt contact op met dit contact. Dit zijn de leefregels.";
+"informContactTitle.index" = "De GGD neemt <u>geen</u> contact op met %@. Deel jij deze leefregels?";
+"informContactTitle.staff" = "De GGD neemt contact op met %@. Dit zijn de leefregels voor deze persoon.";
 
-"informContactGuidelines.close" = "<ul><li>Blijf thuis, ontvang geen bezoek - alle huisgenoten blijven thuis%@%@</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li><li>Alle leefregels staan op <a href=\"https://www.rivm.nl\">www.rivm.nl/een-redelijk-lange-link</a></li></ul>";
-"informContactGuidelines.close.untilDate" = " - <b>tot %@</b>";
-"informContactGuidelines.close.dateFormat" = "d MMMM";
-"informContactGuidelines.close.dayRemaining" = " (nog 1 dag)";
-"informContactGuidelines.close.daysRemaining" = " (nog %@ dagen)";
-"informContactGuidelines.other" = "<ul><li>Houd 1,5 meter afstand en vermijd bezoek aan drukke plekken</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li><li>Alle leefregels staan op <a href=\"https://www.rivm.nl\">www.rivm.nl/een-redelijk-lange-link</a></li></ul>";
+"informContactGuidelines.category1" = "<ul><li>Blijf thuis tot <b>10 dagen</b> na het laatste contact met de besmette persoon en ontvang geen bezoek</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li></ul>";
+"informContactGuidelines.category2" = "<ul><li>Blijf thuis, ontvang geen bezoek - alle huisgenoten blijven thuis%@%@</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li></ul>";
+"informContactGuidelines.category2.untilDate" = " - <b>tot %@</b>";
+"informContactGuidelines.category2.dateFormat" = "d MMMM";
+"informContactGuidelines.category2.dayRemaining" = " (nog 1 dag)";
+"informContactGuidelines.category2.daysRemaining" = " (nog %@ dagen)";
+"informContactGuidelines.category3" = "<ul><li>Houd 1,5 meter afstand en vermijd bezoek aan drukke plekken</li><li>Let op gezondheidsklachten die bij corona passen</li><li>Zorg voor goede hygiëne</li></ul>";
+
+"informContactLink.category1" = "Alle leefregels staan op <a href=\"https://lci.rivm.nl/covid-19-huisgenoten\">lci.rivm.nl/covid-19-huisgenoten</a>";
+"informContactLink.category2a" = "Alle leefregels staan op <a href=\"https://lci.rivm.nl/covid-19-nauwe-contacten\">lci.rivm.nl/covid-19-nauwe-contacten</a>";
+"informContactLink.category2b" = "Alle leefregels staan op <a href=\"https://lci.rivm.nl/covid-19-nauwe-contacten\">lci.rivm.nl/covid-19-nauwe-contacten</a>";
+"informContactLink.category3" = "Alle leefregels staan op <a href=\"https://lci.rivm.nl/covid-19-overige-contacten\">lci.rivm.nl/covid-19-overige-contacten</a>";
 
 "informContactCopyGuidelines" = "Kopieer leefregels";
+"informContactCopyGuidelinesAction" = "Gekopieerd!";
 "informContactCall.knownName" = "Bel %@";
 "informContactCall.unknownName" = "Bel contact";
 
-"category1RiskQuestion" = "Woon je in hetzelfde huis of ben je langer dan 12 uur op dezelfde plek geweest?";
+"category1RiskQuestion" = "Woon je in hetzelfde huis?";
 "category1RiskQuestion.answer.positive" = "Ja";
 "category1RiskQuestion.answer.negative" = "Nee";
 
-"category2aRiskQuestion" = "Was je langer dan 15 minuten op 1,5 meter afstand?";
+"category2aRiskQuestion" = "Was je langer dan 15 minuten op minder dan 1,5 meter afstand van elkaar?";
 "category2aRiskQuestion.answer.positive" = "Ja, denk het wel";
 "category2aRiskQuestion.answer.negative" = "Nee, denk het niet";
 
-"category2bRiskQuestion" = "Heb je een of meerdere van deze dingen tijdens jullie ontmoeting gedaan?";
-"category2bRiskQuestion.description" = "<ul><li>Binnen anderhalve meter van de ander gehoest of geniesd</li><li>Geknuffeld of gezoend</li><li>Ander lichamelijk contact</li></ul>";
+"category2bRiskQuestion" = "Heb je één of meerdere van deze dingen tijdens jullie ontmoeting gedaan?";
+"category2bRiskQuestion.description" = "<ul><li>Binnen anderhalve meter van de ander gehoest of geniesd</li><li>Geknuffeld of gezoend</li><li>Seksueel contact</li></ul>";
 "category2bRiskQuestion.answer.positive" = "Ja, denk het wel";
 "category2bRiskQuestion.answer.negative" = "Nee, denk het niet";
 
 "category3RiskQuestion" = "Was je langer dan 15 minuten in dezelfde ruimte?";
 "category3RiskQuestion.answer.positive" = "Ja, denk het wel";
 "category3RiskQuestion.answer.negative" = "Nee, denk het niet";
+
+"otherCategoryTitle" = "Dit contact heeft geen extra risico op besmetting gelopen";
+"otherCategoryMessage" = "Je hoeft deze persoon dus niet te laten weten dat je besmet bent.";
 
 "contactFallbackTitle" = "Contact toevoegen";
 "contactInformationFirstName" = "Voornaam";
@@ -92,28 +129,35 @@
 "contactInformationEmailAddress" = "E-mailadres";
 "contactInformationBSN" = "Burgerservice nummer";
 "contactInformationLastExposure" = "Wanneer was de laatste ontmoeting?";
+"contactInformationLastExposure.earlier" = "Eerder";
+
+"contactDeletePromptTitle" = "Weet je zeker dat je dit contact wilt verwijderen?";
+
+"contactQuestionDisabledMessage" = "Ingevuld door een GGD-medewerker";
 
 /* MARK: - Informing contacts */
-"contactInformPromptTitle" = "Weet %@ wat er speelt?";
+"contactPromptNameFallback" = "dit contact";
+
+"contactInformPromptTitle" = "Heb jij %@ geinformeerd en de leefregels gedeeld?";
+"contactInformPromptMessage" = "Dit is niet verplicht, maar het is belangrijk dat deze persoon weet dat je besmet bent.";
 "contactInformOptionDone" = "Ja";
 "contactInformActionInformLater" = "Nee, doe ik later";
 "contactInformActionInformNow" = "Nee, nu informeren";
 
-"contactMissingDetailsPromptTitle" = "Heb je geen telefoonnummer of e-mailadres van %@";
-"contactMissingDetailsPromptMessage" = "De GGD kan alleen contact opnemen als ze een e-mail adres of telefoonnummer hebben.";
-"contactMissingDetailsActionIgnore" = "Nee, heb ik niet";
-"contactMissingDetailsActionFillIn" = "Invullen";
+"contactMissingDetailsPromptTitle" = "Heb je een telefoonnummer of e-mailadres van %@?";
+"contactMissingDetailsPromptMessage" = "De GGD kan alleen contact opnemen als ze een e-mailadres of telefoonnummer heeft.";
+"contactMissingDetailsActionIgnore" = "Nee";
+"contactMissingDetailsActionFillIn" = "Ja, invullen";
 
 /* MARK: - Uploading */
 "unfinishedTasksOverviewTitle" = "Bijna klaar";
-"unfinishedTasksOverviewMessage" = "Kun je de gegevens van deze contacten controleren?";
+"unfinishedTasksOverviewMessage" = "Kun je deze contacten nog even controleren?";
 
-"unfinishedTaskOverviewIndexContactsHeader.title" = "Nog niet geinformeerde contacten";
-"unfinishedTaskOverviewIndexContactsHeader.subtitle" = "Informeer en vul contactgegevens aan";
-"unfinishedTaskOverviewStaffContactsHeader.title" = "De GGD informeert deze contacten";
-"unfinishedTaskOverviewStaffContactsHeader.subtitle" = "Geef een e-mail en telefoonnummer door";
+"unfinishedTaskOverviewIndexContactsHeader.title" = "Contacten die nog niet zijn geïnformeerd";
+"unfinishedTaskOverviewIndexContactsHeader.subtitle" = "Vul contactgegevens aan";
+"unfinishedTaskOverviewStaffContactsHeader.title" = "Deel e-mailadres of telefoonnummer";
+"unfinishedTaskOverviewStaffContactsHeader.subtitle" = "De GGD zal deze contacten informeren";
 
 "uploadInProgressMessage" = "Versturen...";
 "uploadFinishedTitle" = "Bedankt voor het delen van de gegevens met de GGD";
 "uploadFinishedMessage" = "Je kunt nog contactgegevens aanpassen, contacten toevoegen of een andere aanpassing doorgeven.";
-

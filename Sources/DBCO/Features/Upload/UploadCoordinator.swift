@@ -16,7 +16,9 @@ protocol UploadCoordinatorDelegate: class {
 /// Uses [UnfinishedTasksViewController](x-source-tag://UnfinishedTasksViewController) to display tasks.
 ///
 /// - Tag: UploadCoordinator
-final class UploadCoordinator: Coordinator {
+final class UploadCoordinator: Coordinator, Logging {
+    
+    var loggingCategory: String = "UploadCoordinator"
     
     private weak var delegate: UploadCoordinatorDelegate?
     private weak var presenter: UIViewController?
@@ -37,7 +39,7 @@ final class UploadCoordinator: Coordinator {
             self.delegate?.uploadCoordinatorDidFinish(self)
         }
         
-        if Services.caseManager.hasUnfinishedTasks {
+        if Services.caseManager.tasks.contains(where: { !$0.isOrCanBeInformed }) {
             showUnfinishedTasks()
         } else {
             sync(animated: false)
@@ -57,23 +59,31 @@ final class UploadCoordinator: Coordinator {
     private func sync(animated: Bool) {
         navigationController.setViewControllers([LoadingViewController()], animated: animated)
         
-        Services.caseManager.sync { _ in
-            let viewModel = OnboardingStepViewModel(image: UIImage(named: "StartVisual")!,
-                                                    title: .uploadFinishedTitle,
-                                                    message: .uploadFinishedMessage,
-                                                    buttonTitle: .done)
-            let stepController = OnboardingStepViewController(viewModel: viewModel)
-            stepController.delegate = self
-            
-            self.navigationController.setViewControllers([stepController], animated: true)
+        do {
+            try Services.caseManager.sync { _ in
+                let viewModel = OnboardingStepViewModel(image: UIImage(named: "UploadSuccess")!,
+                                                        title: .uploadFinishedTitle,
+                                                        message: .uploadFinishedMessage,
+                                                        buttonTitle: .done)
+                let stepController = OnboardingStepViewController(viewModel: viewModel)
+                stepController.delegate = self
+                
+                self.navigationController.setViewControllers([stepController], animated: true)
+            }
+        } catch let error {
+            logError("Could not sync: \(error)")
         }
     }
     
     private func selectContact(for task: Task) {
+        guard Services.caseManager.hasCaseData else { return }
+        
         startChildCoordinator(SelectContactCoordinator(presenter: navigationController, contactTask: task, delegate: self))
     }
     
     private func editContact(for task: Task) {
+        guard Services.caseManager.hasCaseData else { return }
+        
         startChildCoordinator(EditContactCoordinator(presenter: navigationController, contactTask: task, delegate: self))
     }
     
@@ -84,7 +94,11 @@ extension UploadCoordinator: SelectContactCoordinatorDelegate {
     func selectContactCoordinator(_ coordinator: SelectContactCoordinator, didFinishWith task: Task) {
         removeChildCoordinator(coordinator)
         
-        Services.caseManager.save(task)
+        do {
+            try Services.caseManager.save(task)
+        } catch let error {
+            logError("Could not save task: \(error)")
+        }
     }
     
     func selectContactCoordinatorDidCancel(_ coordinator: SelectContactCoordinator) {
@@ -98,7 +112,7 @@ extension UploadCoordinator: UnfinishedTasksViewControllerDelegate {
     func unfinishedTasksViewController(_ controller: UnfinishedTasksViewController, didSelect task: Task) {
         switch task.taskType {
         case .contact:
-            if task.result != nil {
+            if task.questionnaireResult != nil {
                 // edit flow
                 editContact(for: task)
             } else {
@@ -123,7 +137,11 @@ extension UploadCoordinator: EditContactCoordinatorDelegate {
     func editContactCoordinator(_ coordinator: EditContactCoordinator, didFinishContactTask task: Task) {
         removeChildCoordinator(coordinator)
         
-        Services.caseManager.save(task)
+        do {
+            try Services.caseManager.save(task)
+        } catch let error {
+            logError("Could not save task: \(error)")
+        }
     }
     
     func editContactCoordinatorDidCancel(_ coordinator: EditContactCoordinator) {
@@ -139,5 +157,3 @@ extension UploadCoordinator: OnboardingStepViewControllerDelegate {
     }
     
 }
-
-

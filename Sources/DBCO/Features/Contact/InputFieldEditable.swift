@@ -32,7 +32,7 @@ extension Editable {
 
 /// - Tag: InputFieldEditable
 protocol InputFieldEditable: Editable {
-    var showValidationState: Bool { get }
+    var validator: Validator.Type? { get }
     var inputType: InputType { get }
     var keyboardType: UIKeyboardType { get }
     var autocapitalizationType: UITextAutocapitalizationType { get }
@@ -40,7 +40,7 @@ protocol InputFieldEditable: Editable {
 }
 
 extension InputFieldEditable {
-    var showValidationState: Bool { return false }
+    var validator: Validator.Type? { return nil }
     var inputType: InputType { return .text }
     var keyboardType: UIKeyboardType { return .default }
     var autocapitalizationType: UITextAutocapitalizationType { return .sentences }
@@ -62,13 +62,13 @@ extension LastName: InputFieldEditable {
 
 extension PhoneNumber: InputFieldEditable {
     var label: String? { .contactInformationPhoneNumber }
-    var showValidationState: Bool { true }
+    var validator: Validator.Type? { PhoneNumberValidator.self }
     var inputType: InputType { .number }
 }
 
 extension EmailAddress: InputFieldEditable {
     var label: String? { .contactInformationEmailAddress }
-    var showValidationState: Bool { true }
+    var validator: Validator.Type? { EmailAddressValidator.self }
     var keyboardType: UIKeyboardType { .emailAddress }
     var autocapitalizationType: UITextAutocapitalizationType { .none }
     var textContentType: UITextContentType? { .emailAddress }
@@ -96,4 +96,3 @@ extension Text: InputFieldEditable {
 }
 
 extension Options: InputFieldEditable {}
-
