@@ -29,6 +29,12 @@ class TextField: UITextField {
         setup()
     }
     
+    override var isEnabled: Bool {
+        didSet {
+            backgroundView.backgroundColor = isEnabled ? Theme.colors.tertiary : Theme.colors.disabledBorder
+        }
+    }
+    
     private func setup() {
         backgroundView.backgroundColor = Theme.colors.tertiary
         backgroundView.layer.cornerRadius = 8

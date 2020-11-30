@@ -13,7 +13,7 @@ enum AnswerTrigger: String, Codable {
     case setCommunicationToStaff = "communication_staff"
 }
 
-struct AnswerOption: Codable {
+struct AnswerOption: Codable, Equatable {
     let label: String
     let value: String
     let trigger: AnswerTrigger?

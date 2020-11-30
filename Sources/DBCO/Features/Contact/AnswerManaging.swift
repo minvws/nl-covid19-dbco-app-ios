@@ -8,6 +8,12 @@
 import UIKit
 import Contacts
 
+extension AnswerOption {
+    static let lastExposureDateEarlierOption = AnswerOption(label: .contactInformationLastExposureEarlier,
+                                                            value: "earlier",
+                                                            trigger: nil)
+}
+
 /// - Tag: AnswerManaging
 protocol AnswerManaging: class {
     var question: Question { get }
@@ -278,7 +284,9 @@ class LastExposureDateAnswerManager: AnswerManaging {
     
     var updateHandler: ((AnswerManaging) -> Void)?
     
-    private(set) var options: Options { didSet { updateHandler?(self) } }
+    private(set) var options: Options {
+        didSet { update() }
+    }
     
     init(question: Question, answer: Answer, lastExposureDate: String?) {
         self.baseAnswer = answer
@@ -296,10 +304,17 @@ class LastExposureDateAnswerManager: AnswerManaging {
                                 value: Self.valueDateFormatter.string(from: $0),
                                 trigger: nil) }
         
-        self.answerOptions = [AnswerOption(label: .contactInformationLastExposureEarlier, value: "earlier", trigger: nil)] + dateOptions
+        var answerOptions = [.lastExposureDateEarlierOption] + dateOptions
         
         if let lastExposureDate = lastExposureDate {
             if let option = answerOptions.first(where: { $0.value == lastExposureDate }) {
+                baseAnswer.value = .lastExposureDate(option)
+            } else if let date = Self.valueDateFormatter.date(from: lastExposureDate) {
+                // If we got a different valid date, create an option for it
+                let option = AnswerOption(label: Self.displayDateFormatter.string(from: date),
+                                          value: lastExposureDate,
+                                          trigger: nil)
+                answerOptions.append(option)
                 baseAnswer.value = .lastExposureDate(option)
             }
         }
@@ -308,6 +323,7 @@ class LastExposureDateAnswerManager: AnswerManaging {
             fatalError()
         }
         
+        self.answerOptions = answerOptions
         self.options = Options(label: question.label,
                                 value: option?.value,
                                 options: answerOptions.map { ($0.value, $0.label) })
@@ -317,10 +333,52 @@ class LastExposureDateAnswerManager: AnswerManaging {
     let question: Question
     private let answerOptions: [AnswerOption]
     
-    private(set) lazy var view: UIView = {
-        return InputField(for: self, path: \.options)
-            .decorateWithDescriptionIfNeeded(description: question.description)
+    private let disabledIndicatorView: UIView = {
+        let iconView = UIImageView(image: UIImage(named: "Warning"))
+        iconView.contentMode = .center
+        iconView.setContentHuggingPriority(.required, for: .horizontal)
+        iconView.tintColor = Theme.colors.primary
+        
+        let stack = HStack(spacing: 6,
+                           iconView,
+                           Label(subhead: .contactQuestionDisabledMessage,
+                                 textColor: Theme.colors.primary).multiline())
+        
+        stack.isHidden = true
+        
+        return stack
     }()
+    
+    private let earlierIndicatorView: UIView = {
+        let containerView = UIView()
+        containerView.backgroundColor = Theme.colors.tertiary
+        containerView.layer.cornerRadius = 8
+        containerView.isHidden = true
+        
+        VStack(spacing: 16,
+               Label(bodyBold: .earlierExposureDateTitle).multiline(),
+               Label(body: .earlierExposureDateMessage, textColor: Theme.colors.captionGray).multiline())
+            .embed(in: containerView, insets: .leftRight(16) + .topBottom(24))
+        
+        return containerView
+    }()
+    
+    private lazy var inputField = InputField(for: self, path: \.options)
+    
+    private(set) lazy var view: UIView = {
+        VStack(spacing: 8,
+               inputField.decorateWithDescriptionIfNeeded(description: question.description),
+               disabledIndicatorView,
+               earlierIndicatorView)
+    }()
+    
+    private func update() {
+        updateHandler?(self)
+        
+        if case .lastExposureDate(let option) = answer.value {
+            earlierIndicatorView.isHidden = option != .lastExposureDateEarlierOption
+        }
+    }
     
     var answer: Answer {
         let selectedOption = answerOptions.first { $0.value == options.value }
@@ -329,7 +387,12 @@ class LastExposureDateAnswerManager: AnswerManaging {
         return answer
     }
     
-    var isEnabled: Bool = true
+    var isEnabled: Bool = true {
+        didSet {
+            inputField.isEnabled = isEnabled
+            disabledIndicatorView.isHidden = isEnabled
+        }
+    }
     
     var hasValidAnswer: Bool {
         guard case .lastExposureDate(let value) = answer.value else {
