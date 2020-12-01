@@ -14,6 +14,13 @@ private extension Question {
     }
 }
 
+private extension Task.Contact {
+    var shouldBeDeleted: Bool {
+        category == .other ||
+        dateOfLastExposure == AnswerOption.lastExposureDateEarlierOption.value
+    }
+}
+
 /// The ViewModel required for [ContactQuestionnaireViewController](x-source-tag://ContactQuestionnaireViewController).
 /// Can be used to update a task or to create a new task.
 ///
@@ -238,10 +245,14 @@ class ContactQuestionnaireViewModel {
         detailsSectionView?.isCompleted = detailsCompleted
         informSectionView?.isCompleted = updatedTask.isOrCanBeInformed
         
+        let detailsSectionWasDisabled = detailsSectionView?.isEnabled == false
         detailsSectionView?.isEnabled = classificationManagers.allSatisfy(\.hasValidAnswer)
         
         let informSectionWasDisabled = informSectionView?.isEnabled == false
-        informSectionView?.isEnabled = hasValidCommunication && classificationManagers.allSatisfy(\.hasValidAnswer)
+        informSectionView?.isEnabled =
+            hasValidCommunication &&
+            classificationManagers.allSatisfy(\.hasValidAnswer) &&
+            !updatedContact.shouldBeDeleted
         
         if expandFirstUnfinishedSection {
             let sections = [classificationSectionView, detailsSectionView, informSectionView].compactMap { $0 }
@@ -254,11 +265,10 @@ class ContactQuestionnaireViewModel {
             } else if sections.allSatisfy(\.isCollapsed) {
                 informSectionView?.expand(animated: false)
             }
-        } else {
-            // Expand inform section if it became enabled
-            if informSectionWasDisabled && (informSectionView?.isEnabled == true) {
-                informSectionView?.expand(animated: true)
-            }
+        } else if detailsSectionWasDisabled && (detailsSectionView?.isEnabled == true) { // Expand details section if it became enabled
+            detailsSectionView?.expand(animated: true)
+        } else if informSectionWasDisabled && (informSectionView?.isEnabled == true) { // Expand inform section if it became enabled
+            informSectionView?.expand(animated: true)
         }
         
         updateInformSectionContent()
@@ -332,11 +342,15 @@ class ContactQuestionnaireViewModel {
         case .category3:
             informContent = .informContactGuidelinesCategory3
         case .other:
+            break
+        }
+        
+        if updatedContact.shouldBeDeleted {
             promptButtonType = .secondary
             promptButtonTitle = didCreateNewTask ? .cancel : .delete
         }
         
-        informLink = .informContactLink(category: updatedContact.category)
+        informLink = .informContactLink(category: updatedTask.contact.category)
     }
     
     private func view(manager: AnswerManaging) -> UIView {
@@ -494,7 +508,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         var task = viewModel.updatedTask
         let firstName = task.contactFirstName ?? .contactPromptNameFallback
         
-        guard task.contact.category != .other else { // if task is not valid and should be deleted
+        guard !task.contact.shouldBeDeleted else { // if task is not valid and should be deleted
             if viewModel.didCreateNewTask {
                 delegate?.contactQuestionnaireViewControllerDidCancel(self)
             } else {

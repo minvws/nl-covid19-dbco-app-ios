@@ -6,6 +6,7 @@
  */
 
 import UIKit
+import SafariServices
 
 protocol OnboardingCoordinatorDelegate: class {
     func onboardingCoordinatorDidFinish(_ coordinator: OnboardingCoordinator)
@@ -29,14 +30,9 @@ final class OnboardingCoordinator: Coordinator {
                                                 buttonTitle: .next)
         let stepController = OnboardingStepViewController(viewModel: viewModel)
         navigationController = NavigationController(rootViewController: stepController)
-        navigationController.navigationBar.prefersLargeTitles = true
-        
-        if #available(iOS 13.0, *) {
-            // nothing
-        } else {
-            navigationController.navigationBar.shadowImage = UIImage()
-            navigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        }
+
+        navigationController.navigationBar.shadowImage = UIImage()
+        navigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
         
         super.init()
         
@@ -65,11 +61,28 @@ extension OnboardingCoordinator: OnboardingStepViewControllerDelegate {
         if didPair {
             delegate?.onboardingCoordinatorDidFinish(self)
         } else {
-            let viewModel = PairViewModel()
-            let pairController = PairViewController(viewModel: viewModel)
-            pairController.delegate = self
-            navigationController.pushViewController(pairController, animated: true)
+            let viewModel = PrivacyConsentViewModel(buttonTitle: .next)
+            let consentController = PrivacyConsentViewController(viewModel: viewModel)
+            consentController.delegate = self
+            navigationController.pushViewController(consentController, animated: true)
         }
+    }
+    
+}
+
+extension OnboardingCoordinator: PrivacyConsentViewControllerDelegate {
+    
+    func privacyConsentViewControllerWantsToContinue(_ controller: PrivacyConsentViewController) {
+        let viewModel = PairViewModel()
+        let pairController = PairViewController(viewModel: viewModel)
+        pairController.delegate = self
+        navigationController.pushViewController(pairController, animated: true)
+    }
+    
+    func privacyConsentViewController(_ controller: PrivacyConsentViewController, wantsToOpen url: URL) {
+        let safariController = SFSafariViewController(url: url)
+        safariController.preferredControlTintColor = Theme.colors.primary
+        navigationController.present(safariController, animated: true)
     }
     
 }
