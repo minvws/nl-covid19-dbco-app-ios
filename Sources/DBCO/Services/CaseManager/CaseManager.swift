@@ -229,11 +229,9 @@ final class CaseManager: CaseManaging, Logging {
             case .contact:
                 var questions = questionnaire.questions
                 
-                // Modify the classification and communication questions to be disabled when the task source is .portal
+                // Modify the classification questions to be disabled when the task source is .portal
                 func shouldBeDisabledForPortalTasks(_ offset: Int, _ question: Question) -> Bool {
-                    return
-                        (question.questionType == .classificationDetails) ||
-                        (question.answerOptions?.contains { $0.trigger == .setCommunicationToIndex } == true)
+                    return question.questionType == .classificationDetails
                 }
                 
                 let classificationIndices = questionnaire.questions
