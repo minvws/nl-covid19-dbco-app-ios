@@ -154,7 +154,7 @@ class TaskOverviewViewController: PromptableViewController {
         let doneButton = Button(title: .taskOverviewDoneButtonTitle)
             .touchUpInside(self, action: #selector(upload))
         
-        let resetButton = Button(title: .taskOverviewDeleteDataButtonTitle, style: .secondary)
+        let resetButton = Button(title: .taskOverviewDeleteDataButtonTitle)
             .touchUpInside(self, action: #selector(reset))
         
         promptView = VStack(doneButton, resetButton)
