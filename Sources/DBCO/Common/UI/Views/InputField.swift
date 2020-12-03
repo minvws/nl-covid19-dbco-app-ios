@@ -98,6 +98,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             
             inputView = datePicker
             inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
+            tintColor = .clear
         case .picker(let options):
             pickerOptions = [("", "")] + options
 
@@ -115,6 +116,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
 
             inputView = picker
             inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
+            tintColor = .clear
             optionPicker = picker
             
             dropdownIconView.isHidden = false

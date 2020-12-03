@@ -449,6 +449,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         
         // Inform
         let informContactSection = SectionView(title: .informContactSectionTitle, caption: .informContactSectionMessage, index: 3)
+        informContactSection.showBottomSeparator = false
         informContactSection.collapse(animated: false)
         
         let informTitleLabel = Label(bodyBold: "").multiline()

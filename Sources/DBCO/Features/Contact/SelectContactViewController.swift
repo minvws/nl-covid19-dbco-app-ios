@@ -180,8 +180,14 @@ class SelectContactViewController: PromptableViewController {
     }
     
     private func setupTableView() {
-        promptView = Button(title: .selectContactAddManually, style: .secondary)
+        let manualButton = Button(title: .selectContactAddManually, style: .secondary)
             .touchUpInside(self, action: #selector(requestManualInput))
+    
+        manualButton.setImage(UIImage(named: "Plus"), for: .normal)
+        manualButton.titleEdgeInsets = .left(5)
+        manualButton.imageEdgeInsets = .right(5)
+        
+        promptView = manualButton
 
         viewModel.setupContactsTableView(
             tableView,

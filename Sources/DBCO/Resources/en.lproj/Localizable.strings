@@ -45,7 +45,7 @@
 "taskOverviewTitle" = "Mijn contacten";
 "taskOverviewDoneButtonTitle" = "Deel gegevens met GGD";
 "taskOverviewDeleteDataButtonTitle" = "Gegevens verwijderen";
-"taskOverviewAddContactButtonTitle" = "+ Contact toevoegen";
+"taskOverviewAddContactButtonTitle" = "Contact toevoegen";
 
 "taskOverviewUninformedContactsHeader.title" = "Vul contactgegevens aan";
 "taskOverviewUninformedContactsHeader.subtitle" = "Contacten die moeten weten dat je besmet bent";
@@ -67,7 +67,7 @@
 /* MARK: - Contact Selection */
 "selectContactTitle" = "Selecteer contact";
 "selectContactSearch" = "Zoeken";
-"selectContactAddManually" = "+ Handmatig toevoegen";
+"selectContactAddManually" = "Handmatig toevoegen";
 "selectContactSuggestions" = "Suggesties";
 "selectContactOtherContacts" = "Alle contacten";
 "selectContactFromContactsFallback" = "Uit contacten kopiëren";

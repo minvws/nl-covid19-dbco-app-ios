@@ -29,6 +29,7 @@ class PrivacyConsentViewModel {
 /// - Tag: PrivacyConsentViewController
 class PrivacyConsentViewController: PromptableViewController {
     private let viewModel: PrivacyConsentViewModel
+    private let scrollView = UIScrollView(frame: .zero)
     
     weak var delegate: PrivacyConsentViewControllerDelegate?
     
@@ -48,7 +49,6 @@ class PrivacyConsentViewController: PromptableViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
         
-        let scrollView = UIScrollView(frame: .zero)
         scrollView.embed(in: contentView)
         scrollView.delaysContentTouches = false
         
@@ -67,7 +67,7 @@ class PrivacyConsentViewController: PromptableViewController {
                 .alignment(.top)
         }
         
-        let margin: UIEdgeInsets = .top(32) + .bottom(20)
+        let margin: UIEdgeInsets = .top(32) + .bottom(18)
         
         let stack =
             VStack(spacing: 24,
@@ -85,7 +85,7 @@ class PrivacyConsentViewController: PromptableViewController {
                 .distribution(.equalSpacing)
                 .embed(in: scrollView.readableWidth, insets: margin)
         
-        stack.heightAnchor.constraint(greaterThanOrEqualTo: contentView.layoutMarginsGuide.heightAnchor,
+        stack.heightAnchor.constraint(greaterThanOrEqualTo: contentView.safeAreaLayoutGuide.heightAnchor,
                                       multiplier: 1,
                                       constant: -(margin.top + margin.bottom)).isActive = true
         
@@ -101,6 +101,13 @@ class PrivacyConsentViewController: PromptableViewController {
         super.viewWillAppear(animated)
         
         navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        let scrollingHeight = scrollView.contentSize.height + scrollView.safeAreaInsets.top + scrollView.safeAreaInsets.bottom
+        showPromptViewSeparator = scrollingHeight > scrollView.frame.height
     }
     
     @objc private func handleContinue() {

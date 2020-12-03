@@ -43,6 +43,10 @@ class SectionView: UIView {
         didSet { updateEnabled() }
     }
     
+    var showBottomSeparator: Bool = true {
+        didSet { bottomSeparator.isHidden = !showBottomSeparator }
+    }
+    
     init(title: String, caption: String, index: Int) {
         super.init(frame: .zero)
         
@@ -91,7 +95,7 @@ class SectionView: UIView {
         contentView
             .snap(to: .bottom, of: contentContainerView, insets: .bottom(24))
 
-        SeparatorView()
+        bottomSeparator
             .snap(to: .bottom, of: contentContainerView.readableIdentation)
         
         // A low priority top constraint that will break when collapsing, so content will seem to move upwards while animating, instead of getting squished
@@ -195,4 +199,5 @@ class SectionView: UIView {
     private let collapseIndicator = UIImageView()
     private let titleLabel = Label(bodyBold: "")
     private let captionLabel = Label(subhead: "", textColor: Theme.colors.captionGray)
+    private let bottomSeparator = SeparatorView()
 }
