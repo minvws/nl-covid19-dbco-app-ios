@@ -42,7 +42,7 @@
 /* MARK: - Task Overview */
 "taskOverviewTitle" = "Mijn contacten";
 "taskOverviewDoneButtonTitle" = "Deel gegevens met GGD";
-"taskOverviewDeleteDataButtonTitle" = "Gegevens verwijderen";
+"taskOverviewDeleteDataButtonTitle" = "Verwijder gegevens";
 "taskOverviewAddContactButtonTitle" = "+ Contact toevoegen";
 
 "taskOverviewUninformedContactsHeader.title" = "Vul contactgegevens aan";
