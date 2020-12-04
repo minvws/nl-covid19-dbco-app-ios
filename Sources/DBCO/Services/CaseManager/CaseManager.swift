@@ -138,6 +138,8 @@ final class CaseManager: CaseManaging, Logging {
     private var fetchDate = Date.distantPast
     
     private func shouldLoadTasks(userInitiated: Bool) -> Bool {
+        guard !isWindowExpired else { return false }
+        
         if appData.tasks.isEmpty {
             return true
         } else if userInitiated {
