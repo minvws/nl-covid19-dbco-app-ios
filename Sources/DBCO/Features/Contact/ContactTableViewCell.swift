@@ -20,11 +20,17 @@ final class ContactTableViewCell: UITableViewCell, Configurable, Reusable {
     }
     
     func configure(_ item: CNContact) {
-        titleLabel.text = item.fullName
+        let fullName = item.fullName
+        let attributedName = NSMutableAttributedString(string: fullName, attributes: [.font: Theme.fonts.body])
+        if let firstName = item.contactFirstName.value {
+            let range = (fullName as NSString).range(of: firstName)
+            attributedName.addAttribute(.font, value: Theme.fonts.bodyBold, range: range)
+        }
+        titleLabel.attributedText = attributedName
     }
 
     private func build() {
-        SeparatorView()
+        SeparatorView(style: .gray)
             .snap(to: .bottom, of: contentView.readableIdentation)
         
         titleLabel.embed(in: contentView.readableWidth, insets: .topBottom(12))
@@ -32,5 +38,5 @@ final class ContactTableViewCell: UITableViewCell, Configurable, Reusable {
 
     // MARK: - Private
 
-    private let titleLabel = UILabel()
+    private let titleLabel = Label(body: "")
 }

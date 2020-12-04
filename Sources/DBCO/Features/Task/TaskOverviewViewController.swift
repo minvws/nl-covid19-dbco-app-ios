@@ -177,6 +177,10 @@ class TaskOverviewViewController: PromptableViewController {
             let addContactButton = Button(title: .taskOverviewAddContactButtonTitle, style: .secondary)
                 .touchUpInside(self, action: #selector(requestContact))
             
+            addContactButton.setImage(UIImage(named: "Plus"), for: .normal)
+            addContactButton.titleEdgeInsets = .left(5)
+            addContactButton.imageEdgeInsets = .right(5)
+            
             let iconView = UIImageView(image: UIImage(named: "Warning"))
             iconView.contentMode = .center
             iconView.setContentHuggingPriority(.required, for: .horizontal)

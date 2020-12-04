@@ -40,6 +40,8 @@ class PromptableViewController: ViewController {
             }
         }
         
+        let separator = SeparatorView()
+        
         init() {
             super.init(frame: CGRect(origin: .zero, size: CGSize(width: 320, height: 480)))
             
@@ -47,7 +49,7 @@ class PromptableViewController: ViewController {
             
             promptContainerView.backgroundColor = .white
             
-            SeparatorView()
+            separator
                 .snap(to: .top, of: promptContainerView)
             
             let stackView = UIStackView(vertical: [contentView, promptContainerView])
@@ -64,13 +66,12 @@ class PromptableViewController: ViewController {
     }
     
     var promptView: UIView? {
-        get {
-            (view as? PromptView)?.promptView
-        }
-        
-        set {
-            (view as? PromptView)?.promptView = newValue
-        }
+        get { (view as? PromptView)?.promptView }
+        set { (view as? PromptView)?.promptView = newValue }
+    }
+    
+    var showPromptViewSeparator: Bool = true {
+        didSet { (view as? PromptView)?.separator.isHidden = !showPromptViewSeparator }
     }
     
     override func loadView() {

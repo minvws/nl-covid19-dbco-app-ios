@@ -54,8 +54,8 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
         containerView
             .embed(in: contentView.readableWidth, insets: .topBottom(16))
         
-        SeparatorView()
-            .snap(to: .bottom, of: contentView.readableIdentation)
+        SeparatorView(style: .gray)
+            .snap(to: .bottom, of: contentView.readableIdentation, insets: .left(40))
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
