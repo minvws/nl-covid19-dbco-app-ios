@@ -172,7 +172,6 @@
 		CD7FACA0251B3FCD00AB8142 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		CD8F957825616F23004729A4 /* Certificates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Certificates.swift; sourceTree = "<group>"; };
 		CD995B5F256FDA63007A8B2C /* PrivacyConsentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyConsentViewController.swift; sourceTree = "<group>"; };
-		CD9C7F402549B2B600A78EEF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CD9C7F442549B2B900A78EEF /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CD9C7F51254AC25300A78EEF /* Task+Informed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Informed.swift"; sourceTree = "<group>"; };
 		CDA07ECB256C0FD900DEF3FF /* Validator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validator.swift; sourceTree = "<group>"; };
@@ -221,9 +220,7 @@
 		CDE30E6B251CE15800862A40 /* ContactValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactValues.swift; sourceTree = "<group>"; };
 		CDE30E71251E278200862A40 /* EditContactCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditContactCoordinator.swift; sourceTree = "<group>"; };
 		CDE30E762521D90200862A40 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
-		CDE30E792521D92600862A40 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CDE30E7C2521D92B00862A40 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
-		CDE30E7E2521D97000862A40 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		CDE30E8625232FE200862A40 /* InputFieldEditable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputFieldEditable.swift; sourceTree = "<group>"; };
 		CDF817262552BEF100C60771 /* Bindable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bindable.swift; sourceTree = "<group>"; };
 		CDFCF906250FA6E80062269A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -676,10 +673,9 @@
 			};
 			buildConfigurationList = CDC4A8DF250B87E5001BABC6 /* Build configuration list for PBXProject "DBCO" */;
 			compatibilityVersion = "Xcode 9.3";
-			developmentRegion = en;
+			developmentRegion = nl;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
 				nl,
 			);
@@ -935,7 +931,6 @@
 		CD9C7F412549B2B600A78EEF /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				CD9C7F402549B2B600A78EEF /* en */,
 				CD9C7F442549B2B900A78EEF /* nl */,
 			);
 			name = InfoPlist.strings;
@@ -946,7 +941,6 @@
 			children = (
 				CDC4A8F3250B87E6001BABC6 /* Base */,
 				CDE30E762521D90200862A40 /* nl */,
-				CDE30E7E2521D97000862A40 /* en */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -954,7 +948,6 @@
 		CDE30E7A2521D92600862A40 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				CDE30E792521D92600862A40 /* en */,
 				CDE30E7C2521D92B00862A40 /* nl */,
 			);
 			name = Localizable.strings;
