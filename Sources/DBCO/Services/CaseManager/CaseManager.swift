@@ -39,6 +39,9 @@ protocol CaseManaging {
     var dateOfSymptomOnset: Date { get }
     var tasks: [Task] { get }
     
+    /// Returns the tasks as fetched by the portal without modifications by the index
+    var portalTasks: [Task] { get }
+    
     /// Returns the [Questionnaire](x-source-tag://Questionnaire) associated with a task type.
     /// Throws an `notPaired` error when called befored paired.
     /// Throws an `questionnaireNotFound` error when there's no suitable questionnaire  for the supplied task
@@ -105,6 +108,11 @@ final class CaseManager: CaseManaging, Logging {
     private(set) var tasks: [Task] {
         get { appData.tasks }
         set { appData.tasks = newValue }
+    }
+    
+    private(set) var portalTasks: [Task] {
+        get { appData.portalTasks }
+        set { appData.portalTasks = newValue }
     }
     
     private var questionnaires: [Questionnaire] {
@@ -286,6 +294,8 @@ final class CaseManager: CaseManaging, Logging {
     ///
     /// Updates existing tasks if the user has not yet started them and adds any new tasks
     private func setTasks(_ fetchedTasks: [Task]) {
+        portalTasks = fetchedTasks.filter { $0.source == .portal }
+        
         guard !tasks.isEmpty else {
             tasks = fetchedTasks
             return

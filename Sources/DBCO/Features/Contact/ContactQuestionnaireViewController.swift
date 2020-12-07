@@ -159,7 +159,8 @@ class ContactQuestionnaireViewModel {
     
     private func setCommunicationToIndex() {
         // Tasks that had their "communication" set to .staff in the portal cannot be set to .index in the app
-        let isFixedToStaff = task.source == .portal && task.contact.communication == .staff
+        let portalTask = Services.caseManager.portalTasks.first { $0.uuid == task.uuid } ?? task
+        let isFixedToStaff = portalTask.source == .portal && portalTask.contact.communication == .staff
        
         guard !isFixedToStaff else { return updateInformSectionContent() }
         
