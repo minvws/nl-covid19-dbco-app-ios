@@ -52,6 +52,12 @@ class PrivacyConsentViewController: PromptableViewController {
         scrollView.embed(in: contentView)
         scrollView.delaysContentTouches = false
         
+        let headerBackgroundView = UIView(frame: .zero)
+        headerBackgroundView.backgroundColor = .white
+        
+        headerBackgroundView.snap(to: .top, of: contentView)
+        headerBackgroundView.bottomAnchor .constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor).isActive = true
+        
         let widthProviderView = UIView()
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
         widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
@@ -103,11 +109,20 @@ class PrivacyConsentViewController: PromptableViewController {
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        navigationController?.hidesBarsOnSwipe = false
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         let scrollingHeight = scrollView.contentSize.height + scrollView.safeAreaInsets.top + scrollView.safeAreaInsets.bottom
-        showPromptViewSeparator = scrollingHeight > scrollView.frame.height
+        let canScroll = scrollingHeight > scrollView.frame.height
+        showPromptViewSeparator = canScroll
+        
+        navigationController?.hidesBarsOnSwipe = canScroll
     }
     
     @objc private func handleContinue() {
