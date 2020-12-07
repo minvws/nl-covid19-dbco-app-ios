@@ -93,10 +93,10 @@ struct Task: Equatable {
         }
     }
     
-    init(type: TaskType) {
+    init(type: TaskType, source: Source = .app) {
         self.uuid = UUID()
         self.taskType = type
-        self.source = .app
+        self.source = source
         self.label = nil
         self.taskContext = nil
         self.deletedByIndex = false

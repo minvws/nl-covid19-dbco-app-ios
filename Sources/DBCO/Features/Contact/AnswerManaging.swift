@@ -542,4 +542,14 @@ class MultipleChoiceAnswerManager: AnswerManaging {
         
         return value != nil
     }
+    
+    func applyOption(at index: Int) {
+        if options != nil {
+            guard question.answerOptions?.indices.contains(index) == true else { return }
+            options.value = question.answerOptions?[index].value
+        } else {
+            selectedButtonIndex = index
+            updateHandler?(self)
+        }
+    }
 }

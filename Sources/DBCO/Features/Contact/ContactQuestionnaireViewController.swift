@@ -54,7 +54,7 @@ class ContactQuestionnaireViewModel {
     private(set) var title: String
     let showCancelButton: Bool
     
-    private var answerManagers: [AnswerManaging]
+    private(set) var answerManagers: [AnswerManaging]
     
     // swiftlint:disable opening_brace
     weak var classificationSectionView: SectionView?    { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
