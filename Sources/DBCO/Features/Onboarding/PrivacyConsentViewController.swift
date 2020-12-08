@@ -56,7 +56,7 @@ class PrivacyConsentViewController: PromptableViewController {
         headerBackgroundView.backgroundColor = .white
         
         headerBackgroundView.snap(to: .top, of: contentView)
-        headerBackgroundView.bottomAnchor .constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor).isActive = true
+        headerBackgroundView.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor).isActive = true
         
         let widthProviderView = UIView()
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
@@ -188,7 +188,7 @@ private class ConsentButton: UIButton {
         
         titleLabel?.font = Theme.fonts.body
         titleLabel?.lineBreakMode = .byWordWrapping
-        titleLabel?.numberOfLines = 2
+        titleLabel?.numberOfLines = 0
         
         tintColor = .white
         backgroundColor = Theme.colors.tertiary
