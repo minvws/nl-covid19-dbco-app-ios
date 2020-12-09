@@ -63,6 +63,7 @@ class ContactQuestionnaireViewModel {
     // swiftlint:enable opening_brace
     
     @Bindable private(set) var informTitle: String
+    @Bindable private(set) var informIntro: String
     @Bindable private(set) var informContent: String
     @Bindable private(set) var informLink: String
     @Bindable private(set) var informButtonTitle: String
@@ -83,6 +84,7 @@ class ContactQuestionnaireViewModel {
         self.showCancelButton = showCancelButton
         
         self.informTitle = ""
+        self.informIntro = ""
         self.informContent = ""
         self.informLink = ""
         self.copyButtonHidden = true
@@ -309,46 +311,27 @@ class ContactQuestionnaireViewModel {
         
         promptButtonTitle = .save
         
-        switch updatedContact.category {
-        case .category1:
-            informContent = .informContactGuidelinesCategory1
-        case .category2a, .category2b:
-            if let dateValue = updatedContact.dateOfLastExposure,
-               let date = LastExposureDateAnswerManager.valueDateFormatter.date(from: dateValue) {
-                let untilDate = date.addingTimeInterval(10 * 24 * 3600) // 10 days
-                
-                let dateFormatter = DateFormatter()
-                dateFormatter.calendar = .current
-                dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-                dateFormatter.dateFormat = .informContactGuidelinesCloseDateFormat
-                
-                let untilDateString = String.informContactGuidelinesCloseUntilDate(date: dateFormatter.string(from: untilDate))
-                
-                let calendar = Calendar.current
-                let components = calendar.dateComponents([.day], from: Date(), to: untilDate)
-                
-                var daysRemainingString = ""
-                
-                if let daysRemaining = components.day {
-                    switch daysRemaining {
-                    case 1:
-                        daysRemainingString = .informContactGuidelinesCloseDayRemaining
-                    case 2...:
-                        daysRemainingString = .informContactGuidelinesCloseDaysRemaining(daysRemaining: String(daysRemaining))
-                    default:
-                        daysRemainingString = ""
-                    }
-                }
-                
-                informContent = .informContactGuidelinesCategory2(untilDate: untilDateString,
-                                                              daysRemaining: daysRemainingString)
-            } else {
-                informContent = .informContactGuidelinesCategory2(untilDate: "", daysRemaining: "")
-            }
-        case .category3:
-            informContent = .informContactGuidelinesCategory3
-        case .other:
-            break
+        if let dateValue = updatedContact.dateOfLastExposure,
+           let exposureDate = LastExposureDateAnswerManager.valueDateFormatter.date(from: dateValue),
+           let exposureDatePlus5 = Calendar.current.date(byAdding: .day, value: 5, to: exposureDate),
+           let exposureDatePlus10 = Calendar.current.date(byAdding: .day, value: 10, to: exposureDate),
+           let exposureDatePlus14 = Calendar.current.date(byAdding: .day, value: 14, to: exposureDate) {
+            
+            let formatter = DateFormatter()
+            formatter.dateFormat = .informContactGuidelinesDateFormat
+            formatter.calendar = Calendar.current
+            formatter.locale = Locale.current
+            formatter.timeZone = TimeZone(secondsFromGMT: 0)
+            
+            informContent = .informContactGuidelines(category: updatedContact.category,
+                                                     exposureDatePlus5: formatter.string(from: exposureDatePlus5),
+                                                     exposureDatePlus10: formatter.string(from: exposureDatePlus10),
+                                                     exposureDatePlus14: formatter.string(from: exposureDatePlus14))
+            informIntro = .informContactGuidelinesIntro(category: updatedContact.category,
+                                                        exposureDate: formatter.string(from: exposureDate))
+        } else {
+            informContent = .informContactGuidelinesGeneric(category: updatedContact.category)
+            informIntro = .informContactGuidelinesIntroGeneric(category: updatedContact.category)
         }
         
         if updatedContact.shouldBeDeleted {
@@ -381,6 +364,10 @@ class ContactQuestionnaireViewModel {
     
     var copyableGuidelines: String {
         // Parse the html then return the plaintext string
+        let intro = NSAttributedString
+            .makeFromHtml(text: informIntro, font: Theme.fonts.body, textColor: .black)
+            .string
+        
         let content = NSAttributedString
             .makeFromHtml(text: informContent, font: Theme.fonts.body, textColor: .black)
             .string
@@ -389,7 +376,9 @@ class ContactQuestionnaireViewModel {
             .makeFromHtml(text: informLink, font: Theme.fonts.body, textColor: .black)
             .string
         
-        return [content, link].joined(separator: "\n")
+        return [intro, content, link]
+            .filter { !$0.isEmpty }
+            .joined(separator: "\n")
     }
 }
 

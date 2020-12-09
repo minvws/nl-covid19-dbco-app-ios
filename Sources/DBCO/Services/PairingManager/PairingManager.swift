@@ -38,7 +38,7 @@ class PairingManager: PairingManaging, Logging {
     let loggingCategory = "PairingManager"
     
     private struct Constants {
-        static let encodedHAPublicKey = "I8uOsrNAccb4/4xJUHOKKWZ4ZDW5JygzEMZMB5xwHAM="
+        static let encodedHAPublicKey = "HBpEa5msZtzdA03ikhZHAT7mAI9SLp0fz0mEn0d8hWs="
         static let keychainService = "PairingManager"
     }
     

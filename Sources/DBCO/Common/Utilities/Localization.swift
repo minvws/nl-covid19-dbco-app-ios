@@ -140,19 +140,59 @@ extension String {
         return Localization.string(for: "informContactTitle.staff", [firstName])
     }
     
-    static var informContactGuidelinesCategory1: String { return Localization.string(for: "informContactGuidelines.category1") }
+    static var informContactGuidelinesDateFormat: String { return Localization.string(for: "informContactGuidelines.dateFormat") }
     
-    static func informContactGuidelinesCategory2(untilDate: String, daysRemaining: String) -> String { return Localization.string(for: "informContactGuidelines.category2", [untilDate, daysRemaining]) }
+    static func informContactGuidelines(category: Task.Contact.Category, exposureDatePlus5: String, exposureDatePlus10: String, exposureDatePlus14: String) -> String {
+        switch category {
+        case .category1:
+            return Localization.string(for: "informContactGuidelines.category1", [exposureDatePlus10])
+        case .category2a, .category2b:
+            return Localization.string(for: "informContactGuidelines.category2", [exposureDatePlus5, exposureDatePlus10])
+        case .category3:
+            return Localization.string(for: "informContactGuidelines.category3", [exposureDatePlus14])
+        default:
+            return ""
+        }
+    }
     
-    static func informContactGuidelinesCloseUntilDate(date: String) -> String { return Localization.string(for: "informContactGuidelines.category2.untilDate", [date]) }
+    static func informContactGuidelinesIntro(category: Task.Contact.Category, exposureDate: String) -> String {
+        switch category {
+        case .category1:
+            return Localization.string(for: "informContactGuidelines.category1.intro")
+        case .category2a, .category2b:
+            return Localization.string(for: "informContactGuidelines.category2.intro", [exposureDate])
+        case .category3:
+            return Localization.string(for: "informContactGuidelines.category3.intro", [exposureDate])
+        default:
+            return ""
+        }
+    }
     
-    static var informContactGuidelinesCloseDateFormat: String { return Localization.string(for: "informContactGuidelines.category2.dateFormat") }
+    static func informContactGuidelinesGeneric(category: Task.Contact.Category) -> String {
+        switch category {
+        case .category1:
+            return Localization.string(for: "informContactGuidelines.generic.category1")
+        case .category2a, .category2b:
+            return Localization.string(for: "informContactGuidelines.generic.category2")
+        case .category3:
+            return Localization.string(for: "informContactGuidelines.generic.category3")
+        default:
+            return ""
+        }
+    }
     
-    static var informContactGuidelinesCloseDayRemaining: String { return Localization.string(for: "informContactGuidelines.category2.dayRemaining") }
-    
-    static func informContactGuidelinesCloseDaysRemaining(daysRemaining: String) -> String { return Localization.string(for: "informContactGuidelines.category2.daysRemaining", [daysRemaining]) }
-    
-    static var informContactGuidelinesCategory3: String { return Localization.string(for: "informContactGuidelines.category3") }
+    static func informContactGuidelinesIntroGeneric(category: Task.Contact.Category) -> String {
+        switch category {
+        case .category1:
+            return Localization.string(for: "informContactGuidelines.generic.category1.intro")
+        case .category2a, .category2b:
+            return Localization.string(for: "informContactGuidelines.generic.category2.intro")
+        case .category3:
+            return Localization.string(for: "informContactGuidelines.generic.category3.intro")
+        default:
+            return ""
+        }
+    }
     
     static func informContactLink(category: Task.Contact.Category) -> String {
         switch category {
