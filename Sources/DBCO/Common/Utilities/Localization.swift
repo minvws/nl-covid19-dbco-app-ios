@@ -186,9 +186,9 @@ extension String {
         case .category1:
             return Localization.string(for: "informContactGuidelines.generic.category1.intro")
         case .category2a, .category2b:
-            return Localization.string(for: "informContactLink.generic.category2.intro")
+            return Localization.string(for: "informContactGuidelines.generic.category2.intro")
         case .category3:
-            return Localization.string(for: "informContactLink.generic.category3.intro")
+            return Localization.string(for: "informContactGuidelines.generic.category3.intro")
         default:
             return ""
         }
