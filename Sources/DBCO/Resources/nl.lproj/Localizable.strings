@@ -84,7 +84,7 @@
 "informContactTitle.index" = "De GGD neemt <u>geen</u> contact op met %@. Deel jij deze leefregels?";
 "informContactTitle.staff" = "De GGD neemt contact op met %@. Dit zijn de leefregels voor deze persoon.";
 
-"informContactGuidelines.dateFormat" = "EEEE dd MMMM";
+"informContactGuidelines.dateFormat" = "EEEE d MMMM";
 "informContactGuidelines.category1" = "<ul><li>Blijf thuis, vermijd contact met je besmette huisgenoot en ontvang geen bezoek</li><li>Doe een coronatest <b>5 dagen</b> na het laatste contact met je besmette huisgenoot. Blijkt uit de test dat je geen corona hebt? Dan mag je weer naar buiten</li><li>Doe je geen coronatest? Dan blijf je thuis tot <b>10 dagen</b> na het laatste contact. Dat is op z’n vroegst op %@</li><li>Lukt het niet om contact met je besmette huisgenoot te vermijden? Dan kun je je laten testen 5 dagen <b>nadat je huisgenoot 24 uur geen klachten meer heeft</b> die bij corona passen.</li></ul>";
 "informContactGuidelines.category1.intro" = "Je bent een huisgenoot van iemand die corona heeft. Je bent hierdoor misschien besmet geraakt of kan dat nog worden.\n\nAls je inderdaad besmet bent, kun je het virus aan anderen doorgeven. Ook als je je nu niet ziek voelt. Daarom vraagt de GGD je om je aan deze leefregels te houden:";
 
