@@ -9,6 +9,7 @@ import Foundation
 
 class NetworkManager: NetworkManaging, Logging {
     private(set) var loggingCategory: String = "Network"
+    private(set) var configuration: NetworkConfiguration
     
     required init(configuration: NetworkConfiguration) {
         self.configuration = configuration
@@ -29,12 +30,14 @@ class NetworkManager: NetworkManaging, Logging {
         struct PairBody: Encodable {
             let pairingCode: String
             let sealedClientPublicKey: Data
+            let generalHealthAuthorityPublicKeyVersion: String
         }
         
         let urlRequest = constructRequest(url: configuration.pairingsUrl,
                                           method: .POST,
                                           body: PairBody(pairingCode: code,
-                                                         sealedClientPublicKey: sealedClientPublicKey))
+                                                         sealedClientPublicKey: sealedClientPublicKey,
+                                                         generalHealthAuthorityPublicKeyVersion: configuration.haPublicKey.keyVersion))
         
         decodedJSONData(request: urlRequest, completion: completion)
     }
@@ -256,7 +259,6 @@ class NetworkManager: NetworkManaging, Logging {
     
     // MARK: - Private
 
-    private let configuration: NetworkConfiguration
     private let session: URLSession
     // swiftlint:disable:next weak_delegate
     private let sessionDelegate: URLSessionDelegate? // swiftlint ignore: this // hold on to delegate to prevent deallocation

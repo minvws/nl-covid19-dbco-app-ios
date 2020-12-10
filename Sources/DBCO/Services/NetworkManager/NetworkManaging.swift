@@ -49,6 +49,8 @@ enum HTTPContentType: String {
 
 /// - Tag: NetworkManaging
 protocol NetworkManaging {
+    var configuration: NetworkConfiguration { get }
+    
     init(configuration: NetworkConfiguration)
     
     func getAppConfiguration(completion: @escaping (Result<AppConfiguration, NetworkError>) -> Void)
