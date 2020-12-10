@@ -52,7 +52,7 @@ protocol NetworkManaging {
     init(configuration: NetworkConfiguration)
     
     func getAppConfiguration(completion: @escaping (Result<AppConfiguration, NetworkError>) -> Void)
-    func pair(code: String, sealedClientPublicKey: Data, completion: @escaping (Result<PairResponse, NetworkError>) -> Void)
+    func pair(code: String, sealedClientPublicKey: Data, generalHAPublicKeyVersion: String, completion: @escaping (Result<PairResponse, NetworkError>) -> Void)
     func getCase(identifier: String, completion: @escaping (Result<Case, NetworkError>) -> Void)
     func putCase(identifier: String, value: Case, completion: @escaping (Result<Void, NetworkError>) -> Void)
     func getQuestionnaires(completion: @escaping (Result<[Questionnaire], NetworkError>) -> Void)

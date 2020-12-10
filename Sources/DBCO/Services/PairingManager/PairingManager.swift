@@ -38,6 +38,7 @@ class PairingManager: PairingManaging, Logging {
     let loggingCategory = "PairingManager"
     
     private struct Constants {
+        static let generalHAPublicKeyVersion = "20201210"
         static let encodedHAPublicKey = "HBpEa5msZtzdA03ikhZHAT7mAI9SLp0fz0mEn0d8hWs="
         static let keychainService = "PairingManager"
     }
@@ -99,7 +100,9 @@ class PairingManager: PairingManaging, Logging {
             return completion(false, PairingManagingError.encryptionError)
         }
         
-        Services.networkManager.pair(code: pairingCode, sealedClientPublicKey: Data(sealedClientPublicKey)) {
+        Services.networkManager.pair(code: pairingCode,
+                                     sealedClientPublicKey: Data(sealedClientPublicKey),
+                                     generalHAPublicKeyVersion: Constants.generalHAPublicKeyVersion) {
             switch $0 {
             case .success(let pairingResponse):
                 let sealedCaseHAPublicKey = Bytes(pairingResponse.sealedHealthAuthorityPublicKey)

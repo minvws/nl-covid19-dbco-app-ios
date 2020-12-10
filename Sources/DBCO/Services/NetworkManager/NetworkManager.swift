@@ -25,17 +25,18 @@ class NetworkManager: NetworkManaging, Logging {
         decodedJSONData(request: urlRequest, completion: completion)
     }
     
-    func pair(code: String, sealedClientPublicKey: Data, completion: @escaping (Result<PairResponse, NetworkError>) -> Void) {
+    func pair(code: String, sealedClientPublicKey: Data, generalHAPublicKeyVersion: String, completion: @escaping (Result<PairResponse, NetworkError>) -> Void) {
         struct PairBody: Encodable {
             let pairingCode: String
             let sealedClientPublicKey: Data
-            let generalHealthAuthorityPublicKeyVersion: String = "20201210"
+            let generalHealthAuthorityPublicKeyVersion: String
         }
         
         let urlRequest = constructRequest(url: configuration.pairingsUrl,
                                           method: .POST,
                                           body: PairBody(pairingCode: code,
-                                                         sealedClientPublicKey: sealedClientPublicKey))
+                                                         sealedClientPublicKey: sealedClientPublicKey,
+                                                         generalHealthAuthorityPublicKeyVersion: generalHAPublicKeyVersion))
         
         decodedJSONData(request: urlRequest, completion: completion)
     }
