@@ -29,6 +29,7 @@ class NetworkManager: NetworkManaging, Logging {
         struct PairBody: Encodable {
             let pairingCode: String
             let sealedClientPublicKey: Data
+            let generalHealthAuthorityPublicKeyVersion: String = "20201210"
         }
         
         let urlRequest = constructRequest(url: configuration.pairingsUrl,

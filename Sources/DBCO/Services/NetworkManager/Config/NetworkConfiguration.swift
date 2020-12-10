@@ -42,7 +42,7 @@ struct NetworkConfiguration {
         name: "Test",
         api: .init(
             scheme: "https",
-            host: "public.testing.dbco.egeniq.com",
+            host: "api-test.bco-portaal.nl",
             port: nil,
             path: ["v1"],
             sslSignature: nil,
@@ -54,10 +54,10 @@ struct NetworkConfiguration {
         name: "ACC",
         api: .init(
             scheme: "https",
-            host: "public.testing.dbco.egeniq.com",
+            host: "api-acc.bco-portaal.nl",
             port: nil,
             path: ["v1"],
-            sslSignature: Certificate.SSL.apiSignature,
+            sslSignature: nil,
             tokenParams: [:]
         )
     )
@@ -66,7 +66,7 @@ struct NetworkConfiguration {
         name: "Production",
         api: .init(
             scheme: "https",
-            host: "public.testing.dbco.egeniq.com",
+            host: "api.bco-portaal.nl",
             port: nil,
             path: ["v1"],
             sslSignature: Certificate.SSL.apiSignature,
