@@ -38,8 +38,6 @@ class PairingManager: PairingManaging, Logging {
     let loggingCategory = "PairingManager"
     
     private struct Constants {
-        static let generalHAPublicKeyVersion = "20201210"
-        static let encodedHAPublicKey = "HBpEa5msZtzdA03ikhZHAT7mAI9SLp0fz0mEn0d8hWs="
         static let keychainService = "PairingManager"
     }
     
@@ -84,7 +82,9 @@ class PairingManager: PairingManaging, Logging {
     func pair(pairingCode: String, completion: @escaping (_ success: Bool, _ error: PairingManagingError?) -> Void) {
         guard !$pairing.exists else { return completion(false, .alreadyPaired) }
         
-        guard let haPublicKeyData = Data(base64Encoded: Constants.encodedHAPublicKey) else {
+        let haPublicKeyInformation = Services.networkManager.configuration.haPublicKey
+        
+        guard let haPublicKeyData = Data(base64Encoded: haPublicKeyInformation.encodedPublicKey) else {
             fatalError("Invalid stored health authority public key")
         }
         
@@ -100,9 +100,7 @@ class PairingManager: PairingManaging, Logging {
             return completion(false, PairingManagingError.encryptionError)
         }
         
-        Services.networkManager.pair(code: pairingCode,
-                                     sealedClientPublicKey: Data(sealedClientPublicKey),
-                                     generalHAPublicKeyVersion: Constants.generalHAPublicKeyVersion) {
+        Services.networkManager.pair(code: pairingCode, sealedClientPublicKey: Data(sealedClientPublicKey)) {
             switch $0 {
             case .success(let pairingResponse):
                 let sealedCaseHAPublicKey = Bytes(pairingResponse.sealedHealthAuthorityPublicKey)
