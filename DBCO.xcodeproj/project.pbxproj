@@ -121,10 +121,14 @@
 		0230E8A0955F3CA5EC36778F /* Pods-DBCOTests.pentest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.pentest.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.pentest.xcconfig"; sourceTree = "<group>"; };
 		049B33A27415B972962D11C7 /* Pods-DBCO.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.debug.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.debug.xcconfig"; sourceTree = "<group>"; };
 		0960A2CA9D203990D48CA127 /* Pods-DBCO.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.release.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.release.xcconfig"; sourceTree = "<group>"; };
+		1309B3B4DC170EA5E953827F /* Pods-DBCOTests.ad hoc a.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc a.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc a.xcconfig"; sourceTree = "<group>"; };
 		13C8941476779FBFFBD8A4C7 /* Pods_DBCO.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DBCO.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		15DD27ADC58F767AEF653836 /* Pods-DBCOTests.ad hoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc.xcconfig"; sourceTree = "<group>"; };
+		338AE82F669A00159A255C14 /* Pods-DBCOTests.ad hoc p.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc p.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc p.xcconfig"; sourceTree = "<group>"; };
 		3C5D22DA740F30F804D7F95E /* Pods_DBCOTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DBCOTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F26983E3C652AB213ED4047 /* Pods-DBCO.ad hoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc.xcconfig"; sourceTree = "<group>"; };
+		8C5B6FFF57DC03F9D4B6BA45 /* Pods-DBCO.ad hoc p.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc p.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc p.xcconfig"; sourceTree = "<group>"; };
+		926126B7CC8EF910FA24AE60 /* Pods-DBCOTests.ad hoc t.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc t.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc t.xcconfig"; sourceTree = "<group>"; };
 		95E9699EAF5C5557EB9A0265 /* Pods-DBCO.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.app store.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.app store.xcconfig"; sourceTree = "<group>"; };
 		9C3C39BFCF985C619EF17EFA /* Pods-DBCOTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.debug.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C604B6AA2DE456A21DA9EE15 /* Pods-DBCOTests.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.app store.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.app store.xcconfig"; sourceTree = "<group>"; };
@@ -230,7 +234,9 @@
 		CDFCF9142510EB4D0062269A /* NSAttributedString+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Extension.swift"; sourceTree = "<group>"; };
 		CDFCF9162510ECC70062269A /* UIView+Embed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Embed.swift"; sourceTree = "<group>"; };
 		CDFCF9182510FC760062269A /* SelfSizingTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingTableView.swift; sourceTree = "<group>"; };
+		E83F120572B4CBA49A883E2D /* Pods-DBCO.ad hoc a.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc a.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc a.xcconfig"; sourceTree = "<group>"; };
 		F20D8B2429FE08BE228E7DCD /* Pods-DBCOTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.release.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.release.xcconfig"; sourceTree = "<group>"; };
+		F25DD8B1E7114556272B64D6 /* Pods-DBCO.ad hoc t.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc t.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc t.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -608,6 +614,12 @@
 				15DD27ADC58F767AEF653836 /* Pods-DBCOTests.ad hoc.xcconfig */,
 				CBA78D02FA0FE384D189E4D2 /* Pods-DBCO.pentest.xcconfig */,
 				0230E8A0955F3CA5EC36778F /* Pods-DBCOTests.pentest.xcconfig */,
+				F25DD8B1E7114556272B64D6 /* Pods-DBCO.ad hoc t.xcconfig */,
+				E83F120572B4CBA49A883E2D /* Pods-DBCO.ad hoc a.xcconfig */,
+				8C5B6FFF57DC03F9D4B6BA45 /* Pods-DBCO.ad hoc p.xcconfig */,
+				926126B7CC8EF910FA24AE60 /* Pods-DBCOTests.ad hoc t.xcconfig */,
+				1309B3B4DC170EA5E953827F /* Pods-DBCOTests.ad hoc a.xcconfig */,
+				338AE82F669A00159A255C14 /* Pods-DBCOTests.ad hoc p.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -1045,12 +1057,12 @@
 		};
 		CD756C3F252B4316005FEDA0 /* Ad Hoc T */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4F26983E3C652AB213ED4047 /* Pods-DBCO.ad hoc.xcconfig */;
+			baseConfigurationReference = F25DD8B1E7114556272B64D6 /* Pods-DBCO.ad hoc t.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 81;
+				CURRENT_PROJECT_VERSION = 82;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1067,7 +1079,7 @@
 		};
 		CD756C40252B4316005FEDA0 /* Ad Hoc T */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 15DD27ADC58F767AEF653836 /* Pods-DBCOTests.ad hoc.xcconfig */;
+			baseConfigurationReference = 926126B7CC8EF910FA24AE60 /* Pods-DBCOTests.ad hoc t.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -1155,7 +1167,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 81;
+				CURRENT_PROJECT_VERSION = 82;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1265,7 +1277,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 81;
+				CURRENT_PROJECT_VERSION = 82;
 				DEVELOPMENT_TEAM = 5598UZ23ZV;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1346,12 +1358,12 @@
 		};
 		CDE70A8725836DCF00782BFB /* Ad Hoc A */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4F26983E3C652AB213ED4047 /* Pods-DBCO.ad hoc.xcconfig */;
+			baseConfigurationReference = E83F120572B4CBA49A883E2D /* Pods-DBCO.ad hoc a.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 81;
+				CURRENT_PROJECT_VERSION = 82;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1368,7 +1380,7 @@
 		};
 		CDE70A8825836DCF00782BFB /* Ad Hoc A */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 15DD27ADC58F767AEF653836 /* Pods-DBCOTests.ad hoc.xcconfig */;
+			baseConfigurationReference = 1309B3B4DC170EA5E953827F /* Pods-DBCOTests.ad hoc a.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -1451,12 +1463,12 @@
 		};
 		CDE70A8A25836DD600782BFB /* Ad Hoc P */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4F26983E3C652AB213ED4047 /* Pods-DBCO.ad hoc.xcconfig */;
+			baseConfigurationReference = 8C5B6FFF57DC03F9D4B6BA45 /* Pods-DBCO.ad hoc p.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 81;
+				CURRENT_PROJECT_VERSION = 82;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1473,7 +1485,7 @@
 		};
 		CDE70A8B25836DD600782BFB /* Ad Hoc P */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 15DD27ADC58F767AEF653836 /* Pods-DBCOTests.ad hoc.xcconfig */;
+			baseConfigurationReference = 338AE82F669A00159A255C14 /* Pods-DBCOTests.ad hoc p.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
