@@ -112,6 +112,11 @@ extension String {
     
     static var windowExpiredMessage: String { return Localization.string(for: "windowExpiredMessage") }
     
+    static var contactTaskStatusStaffWillInform: String { return Localization.string(for: "contactTaskStatusStaffWillInform") }
+    static var contactTaskStatusIndexDidInform: String { return Localization.string(for: "contactTaskStatusIndexDidInform") }
+    static var contactTaskStatusIndexWillInform: String { return Localization.string(for: "contactTaskStatusIndexWillInform") }
+    static var contactTaskStatusMissingDetails: String { return Localization.string(for: "contactTaskStatusMissingDetails") }
+    
     // MARK: - Contact Selection
     static var selectContactTitle: String { return Localization.string(for: "selectContactTitle") }
     static var selectContactSearch: String { return Localization.string(for: "selectContactSearch") }

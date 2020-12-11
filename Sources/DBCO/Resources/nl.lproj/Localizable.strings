@@ -47,10 +47,10 @@
 "taskOverviewDeleteDataButtonTitle" = "Verwijder gegevens";
 "taskOverviewAddContactButtonTitle" = "Contact toevoegen";
 
-"taskOverviewUninformedContactsHeader.title" = "Vul contactgegevens aan";
-"taskOverviewUninformedContactsHeader.subtitle" = "Contacten die moeten weten dat je besmet bent";
-"taskOverviewInformedContactsHeader.title" = "Behandelde contacten";
-"taskOverviewInformedContactsHeader.subtitle" = "Contacten die zijn of worden geinformeerd";
+"taskOverviewUninformedContactsHeader.title" = "Ga hiermee aan de slag";
+"taskOverviewUninformedContactsHeader.subtitle" = "Deze contacten moeten weten dat je besmet bent";
+"taskOverviewInformedContactsHeader.title" = "Deze contacten zijn klaar";
+"taskOverviewInformedContactsHeader.subtitle" = "Jij hebt ze geïnformeerd of de GGD doet dit";
 
 "taskContactUnknownName" = "Geen naam bekend";
 
@@ -63,6 +63,11 @@
 "deleteDataPromptOptionDelete" = "Verwijder";
 
 "windowExpiredMessage" = "De periode voor het delen van gegevens met de GGD is verlopen.";
+
+"contactTaskStatusStaffWillInform" = "GGD gaat informeren";
+"contactTaskStatusIndexDidInform" = "Jij hebt geïnformeerd";
+"contactTaskStatusIndexWillInform" = "Jij informeert dit contact";
+"contactTaskStatusMissingDetails" = "Vul gegevens aan";
 
 /* MARK: - Contact Selection */
 "selectContactTitle" = "Selecteer contact";

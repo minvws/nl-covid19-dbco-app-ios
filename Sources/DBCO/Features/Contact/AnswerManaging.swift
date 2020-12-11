@@ -231,7 +231,7 @@ class ContactDetailsAnswerManager: AnswerManaging {
     var isEnabled: Bool = true
     
     var hasValidAnswer: Bool {
-        return answer.progress > 0
+        return answer.progressElements.contains(true)
     }
 }
 

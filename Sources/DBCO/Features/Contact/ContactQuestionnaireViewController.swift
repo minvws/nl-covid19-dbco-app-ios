@@ -202,7 +202,7 @@ class ContactQuestionnaireViewModel {
         }
         
         answerManagers.forEach {
-            $0.view.isHidden = !$0.question.isRelevant(in: taskCategory)
+            $0.view.isHidden = !$0.question.isRelevant(in: taskCategory) || !$0.isEnabled
         }
         
         updateInformSectionContent()
@@ -232,7 +232,7 @@ class ContactQuestionnaireViewModel {
         let hasValidCommunication = updatedContact.communication != .none || !hasCommunicationTypeQuestion // true is there is a valid answer or, there is no question for a valid answer
         
         func isCompleted(_ answer: Answer) -> Bool {
-            return abs(answer.progress - 1) < 0.01
+            return answer.progressElements.allSatisfy { $0 }
         }
         
         let classificationCompleted = classificationManagers
@@ -249,14 +249,19 @@ class ContactQuestionnaireViewModel {
             .map(\.answer)
             .allSatisfy(isCompleted)
         
+        let classificationIsHidden = classificationManagers.allSatisfy { !$0.isEnabled }
         classificationSectionView?.isCompleted = classificationCompleted
+        classificationSectionView?.isHidden = classificationIsHidden
+        classificationSectionView?.index = 1
         detailsSectionView?.isCompleted = detailsCompleted
         informSectionView?.isCompleted = updatedTask.isOrCanBeInformed
         
         let detailsSectionWasDisabled = detailsSectionView?.isEnabled == false
         detailsSectionView?.isEnabled = classificationManagers.allSatisfy(\.hasValidAnswer)
+        detailsSectionView?.index = classificationIsHidden ? 1 : 2
         
         let informSectionWasDisabled = informSectionView?.isEnabled == false
+        informSectionView?.index = classificationIsHidden ? 2 : 3
         informSectionView?.isEnabled =
             hasValidCommunication &&
             classificationManagers.allSatisfy(\.hasValidAnswer) &&
@@ -270,6 +275,9 @@ class ContactQuestionnaireViewModel {
                 classificationSectionView?.expand(animated: false)
             } else if !allDetailsFilledIn {
                 detailsSectionView?.expand(animated: false)
+                if informSectionView?.isEnabled == true { // Since the inform section is not disabled, it will not auto expand when the communication question is answered
+                    informSectionView?.expand(animated: false)
+                }
             } else if sections.allSatisfy(\.isCollapsed) {
                 informSectionView?.expand(animated: false)
             }
@@ -345,7 +353,7 @@ class ContactQuestionnaireViewModel {
     private func view(manager: AnswerManaging) -> UIView {
         let view = manager.view
         let isRelevant = manager.question.isRelevant(in: task.contact.category)
-        view.isHidden = !isRelevant
+        view.isHidden = !isRelevant || !manager.isEnabled
         
         return view
     }
@@ -470,7 +478,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         viewModel.$informButtonType.binding = { informButton.style = $0 }
         viewModel.$promptButtonType.binding = { promptButton.style = $0 }
         viewModel.$promptButtonTitle.binding = { promptButton.title = $0 }
-        
+
         VStack(spacing: 24,
                VStack(spacing: 16,
                       informTitleLabel,

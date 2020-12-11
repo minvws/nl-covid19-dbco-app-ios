@@ -303,7 +303,7 @@ final class CaseManager: CaseManaging, Logging {
         
         fetchedTasks.forEach { task in
             if let existingTaskIndex = tasks.firstIndex(where: { $0.uuid == task.uuid }) {
-                if tasks[existingTaskIndex].status == .notStarted {
+                if tasks[existingTaskIndex].questionnaireResult == nil {
                     tasks[existingTaskIndex] = task
                 }
             } else {
