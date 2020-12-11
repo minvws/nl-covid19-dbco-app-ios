@@ -270,6 +270,9 @@ class ContactQuestionnaireViewModel {
                 classificationSectionView?.expand(animated: false)
             } else if !allDetailsFilledIn {
                 detailsSectionView?.expand(animated: false)
+                if informSectionView?.isEnabled == true { // Since the inform section is not disabled, it will not auto expand when the communication question is answered
+                    informSectionView?.expand(animated: false)
+                }
             } else if sections.allSatisfy(\.isCollapsed) {
                 informSectionView?.expand(animated: false)
             }
