@@ -47,7 +47,13 @@ class SectionView: UIView {
         didSet { bottomSeparator.isHidden = !showBottomSeparator }
     }
     
+    var index: Int {
+        didSet { icon.image = UIImage(named: "EditContact/Section\(index)") }
+    }
+    
     init(title: String, caption: String, index: Int) {
+        self.index = index
+        
         super.init(frame: .zero)
         
         clipsToBounds = true
