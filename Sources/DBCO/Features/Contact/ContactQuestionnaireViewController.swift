@@ -232,7 +232,7 @@ class ContactQuestionnaireViewModel {
         let hasValidCommunication = updatedContact.communication != .none || !hasCommunicationTypeQuestion // true is there is a valid answer or, there is no question for a valid answer
         
         func isCompleted(_ answer: Answer) -> Bool {
-            return abs(answer.progress - 1) < 0.01
+            return answer.progressElements.allSatisfy { $0 }
         }
         
         let classificationCompleted = classificationManagers

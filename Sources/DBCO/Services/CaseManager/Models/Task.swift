@@ -17,7 +17,7 @@ import Foundation
 /// - Tag: Task
 struct Task: Equatable {
     enum Status: Equatable {
-        case notStarted
+        case missingEssentialInput
         case inProgress(Double)
         case completed
     }
@@ -83,13 +83,18 @@ struct Task: Equatable {
         
         switch taskType {
         case .contact:
-            if let questionnaireProgress = questionnaireResult?.progress {
-                // task progress = questionnaire progress * 0.9 + isOrCanBeInformed * 0.1
-                let progress = (questionnaireProgress * 0.9) + (isOrCanBeInformed ? 0.1 : 0.0)
-                return abs(progress - 1) < 0.01 ? .completed : .inProgress(progress)
-            } else {
-                return .notStarted
+            guard contact.communication != .none else {
+                return .missingEssentialInput
             }
+            
+            guard let result = questionnaireResult, result.hasAllEssentialAnswers, isOrCanBeInformed else {
+                return .missingEssentialInput
+            }
+            
+            let completedElements = result.progressElements.filter { $0 }
+            
+            let progress = Double(completedElements.count) / Double(result.progressElements.count)
+            return abs(progress - 1) < 0.01 ? .completed : .inProgress(progress)
         }
     }
     
