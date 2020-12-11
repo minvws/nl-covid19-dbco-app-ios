@@ -478,8 +478,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         viewModel.$informButtonType.binding = { informButton.style = $0 }
         viewModel.$promptButtonType.binding = { promptButton.style = $0 }
         viewModel.$promptButtonTitle.binding = { promptButton.title = $0 }
-        
-        
+
         VStack(spacing: 24,
                VStack(spacing: 16,
                       informTitleLabel,

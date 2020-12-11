@@ -26,15 +26,33 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
     }
     
     private func configureForContactDetails(task: Task) {
-        titleLabel.text = task.contactName ?? .taskContactUnknownName
-        titleLabel.font = Theme.fonts.bodyBold
+        let contextString = task.taskContext.map { " (\($0))" } ?? ""
         
-        subtitleLabel.text = task.taskContext
+        titleLabel.text = (task.contactName ?? .taskContactUnknownName) + contextString
+        titleLabel.font = Theme.fonts.bodyBold
         
         subtitleLabel.font = Theme.fonts.callout
         subtitleLabel.textColor = Theme.colors.captionGray
         
         statusView.status = task.status
+        
+        if let result = task.questionnaireResult,
+           task.contact.communication != .none,
+           result.hasAllEssentialAnswers {
+    
+            switch task.contact.communication {
+            case .staff:
+                subtitleLabel.text = .contactTaskStatusStaffWillInform
+            case .index where task.contact.didInform:
+                subtitleLabel.text = .contactTaskStatusIndexDidInform
+            case .index:
+                subtitleLabel.text = .contactTaskStatusIndexWillInform
+            default:
+                break
+            }
+        } else {
+            subtitleLabel.text = .contactTaskStatusMissingDetails
+        }
     }
 
     private func build() {
