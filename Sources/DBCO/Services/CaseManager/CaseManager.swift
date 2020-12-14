@@ -393,6 +393,14 @@ final class CaseManager: CaseManaging, Logging {
         switch updatedTask.taskType {
         case .contact:
             updatedTask.contact = task.contact
+            
+            // Fallback to .index for communication if currently .none
+            if let contact = updatedTask.contact, contact.communication == .none {
+                updatedTask.contact = Task.Contact(category: contact.category,
+                                                   communication: .index,
+                                                   didInform: contact.didInform,
+                                                   dateOfLastExposure: contact.dateOfLastExposure)
+            }
         }
         
         // Update deletion
