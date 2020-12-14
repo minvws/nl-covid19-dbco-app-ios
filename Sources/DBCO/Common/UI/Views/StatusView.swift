@@ -84,7 +84,6 @@ class StatusView: UIView {
         Theme.colors.disabledBorder.setStroke()
         Theme.colors.ok.setFill()
         context.drawPath(using: .stroke)
-        context.closePath()
         
         let center = CGPoint(x: bounds.width / 2, y: bounds.height / 2)
         let startAngle: CGFloat = -.pi / 2
@@ -97,7 +96,6 @@ class StatusView: UIView {
             startAngle: startAngle,
             endAngle: endAngle,
             clockwise: false)
-        context.closePath()
         
         context.fillPath()
     
