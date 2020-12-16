@@ -88,6 +88,8 @@ extension String {
     
     static var onboardingLoadingErrorTitle: String { return Localization.string(for: "onboardingLoadingErrorTitle") }
     static var onboardingLoadingErrorMessage: String { return Localization.string(for: "onboardingLoadingErrorMessage") }
+    static var onboardingLoadingErrorCancelAction: String { return Localization.string(for: "onboardingLoadingErrorCancelAction") }
+    static var onboardingLoadingErrorRetryAction: String { return Localization.string(for: "onboardingLoadingErrorRetryAction") }
     
     /* MARK: - Task Overview */
     static var taskOverviewTitle: String { return Localization.string(for: "taskOverviewTitle") }

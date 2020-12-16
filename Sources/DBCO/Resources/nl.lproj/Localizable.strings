@@ -38,8 +38,10 @@
 "onboarding.consent.item4" = "Je kunt na het delen zelf de gegevens verwijderen";
 "onboarding.consent.buttonTitle" = "Ik heb de privacyverklaring gelezen en begrijp hoe GGD Contact mijn gegevens gebruikt";
 
-"onboardingLoadingErrorTitle" = "Kon de gegevens niet ophalen";
-"onboardingLoadingErrorMessage" = "Controleer de code en probeer het opnieuw.";
+"onboardingLoadingErrorTitle" = "Koppelen mislukt";
+"onboardingLoadingErrorMessage" = "Probeer het opnieuw of controleer of je de code goed hebt ingevuld.";
+"onboardingLoadingErrorCancelAction" = "Ga terug";
+"onboardingLoadingErrorRetryAction" = "Probeer opnieuw";
 
 /* MARK: - Task Overview */
 "taskOverviewTitle" = "Mijn contacten";

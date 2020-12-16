@@ -90,21 +90,10 @@ extension OnboardingCoordinator: PrivacyConsentViewControllerDelegate {
 extension OnboardingCoordinator: PairViewControllerDelegate {
     
     func pairViewController(_ controller: PairViewController, wantsToPairWith code: String) {
-        controller.startLoadingAnimation()
-        navigationController.navigationBar.isUserInteractionEnabled = false
-    
-        func errorAlert() {
-            controller.stopLoadingAnimation()
-            self.navigationController.navigationBar.isUserInteractionEnabled = true
+        func pair() {
+            controller.startLoadingAnimation()
+            navigationController.navigationBar.isUserInteractionEnabled = false
             
-            let alert = UIAlertController(title: .onboardingLoadingErrorTitle, message: .onboardingLoadingErrorMessage, preferredStyle: .alert)
-            
-            alert.addAction(UIAlertAction(title: .ok, style: .default, handler: nil))
-            
-            controller.present(alert, animated: true)
-        }
-        
-        func pair(pairdingCode: String) {
             Services.pairingManager.pair(pairingCode: code) { success, error in
                 if success {
                     finish()
@@ -112,6 +101,20 @@ extension OnboardingCoordinator: PairViewControllerDelegate {
                     errorAlert()
                 }
             }
+        }
+        
+        func errorAlert() {
+            controller.stopLoadingAnimation()
+            self.navigationController.navigationBar.isUserInteractionEnabled = true
+            
+            let alert = UIAlertController(title: .onboardingLoadingErrorTitle, message: .onboardingLoadingErrorMessage, preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: .onboardingLoadingErrorCancelAction, style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: .onboardingLoadingErrorRetryAction, style: .default) { _ in
+                pair()
+            })
+            
+            controller.present(alert, animated: true)
         }
         
         func finish() {
@@ -132,7 +135,7 @@ extension OnboardingCoordinator: PairViewControllerDelegate {
             Services.caseManager.loadCaseData(userInitiated: false, completion: { _, _ in })
         }
         
-        pair(pairdingCode: code)
+        pair()
     }
     
 }
