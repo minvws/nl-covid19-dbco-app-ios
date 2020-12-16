@@ -39,9 +39,9 @@ final class UploadCoordinator: Coordinator, Logging {
             self.delegate?.uploadCoordinatorDidFinish(self)
         }
         
-        let validTasks = Services.caseManager.tasks.filter { !$0.deletedByIndex }
+        let unfinishedTasks = Services.caseManager.tasks.filter(\.isUnfinished)
         
-        if validTasks.contains(where: { !$0.isOrCanBeInformed }) {
+        if !unfinishedTasks.isEmpty {
             showUnfinishedTasks()
         } else {
             sync(animated: false)

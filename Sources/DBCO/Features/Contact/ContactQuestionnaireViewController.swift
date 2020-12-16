@@ -287,6 +287,12 @@ class ContactQuestionnaireViewModel {
             }
         } else if detailsSectionWasDisabled && (detailsSectionView?.isEnabled == true) { // Expand details section if it became enabled
             detailsSectionView?.expand(animated: true)
+            
+            // If there is already a valid communication or there's no communication question, expand the inform section too
+            if hasValidCommunication {
+                informSectionView?.expand(animated: true)
+            }
+            
         } else if informSectionWasDisabled && (informSectionView?.isEnabled == true) { // Expand inform section if it became enabled
             informSectionView?.expand(animated: true)
         }
