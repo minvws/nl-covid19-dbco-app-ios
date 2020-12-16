@@ -90,21 +90,10 @@ extension OnboardingCoordinator: PrivacyConsentViewControllerDelegate {
 extension OnboardingCoordinator: PairViewControllerDelegate {
     
     func pairViewController(_ controller: PairViewController, wantsToPairWith code: String) {
-        controller.startLoadingAnimation()
-        navigationController.navigationBar.isUserInteractionEnabled = false
-    
-        func errorAlert() {
-            controller.stopLoadingAnimation()
-            self.navigationController.navigationBar.isUserInteractionEnabled = true
+        func pair() {
+            controller.startLoadingAnimation()
+            navigationController.navigationBar.isUserInteractionEnabled = false
             
-            let alert = UIAlertController(title: .onboardingLoadingErrorTitle, message: .onboardingLoadingErrorMessage, preferredStyle: .alert)
-            
-            alert.addAction(UIAlertAction(title: .ok, style: .default, handler: nil))
-            
-            controller.present(alert, animated: true)
-        }
-        
-        func pair(pairdingCode: String) {
             Services.pairingManager.pair(pairingCode: code) { success, error in
                 if success {
                     finish()
@@ -114,11 +103,25 @@ extension OnboardingCoordinator: PairViewControllerDelegate {
             }
         }
         
+        func errorAlert() {
+            controller.stopLoadingAnimation()
+            navigationController.navigationBar.isUserInteractionEnabled = true
+            
+            let alert = UIAlertController(title: .onboardingLoadingErrorTitle, message: .onboardingLoadingErrorMessage, preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: .onboardingLoadingErrorCancelAction, style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: .onboardingLoadingErrorRetryAction, style: .default) { _ in
+                pair()
+            })
+            
+            controller.present(alert, animated: true)
+        }
+        
         func finish() {
             controller.stopLoadingAnimation()
-            self.navigationController.navigationBar.isUserInteractionEnabled = true
+            navigationController.navigationBar.isUserInteractionEnabled = true
             
-            self.didPair = true
+            didPair = true
             
             let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding2")!,
                                                     title: .onboardingStep3Title,
@@ -126,13 +129,13 @@ extension OnboardingCoordinator: PairViewControllerDelegate {
                                                     buttonTitle: .start)
             let stepController = OnboardingStepViewController(viewModel: viewModel)
             stepController.delegate = self
-            self.navigationController.setViewControllers([stepController], animated: true)
+            navigationController.setViewControllers([stepController], animated: true)
             
             // Load case data. If it fails, the task overview will try again.
             Services.caseManager.loadCaseData(userInitiated: false, completion: { _, _ in })
         }
         
-        pair(pairdingCode: code)
+        pair()
     }
     
 }
