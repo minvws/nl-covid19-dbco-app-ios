@@ -128,6 +128,7 @@ platform :ios do
       app: "1:1027445500001:ios:8a329354737579567ce220",
       groups: "testers"
     )
+  end
 
   private_lane :inform_slack do |options|
     unless ENV['SLACK_URL'].nil?
