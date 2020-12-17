@@ -40,21 +40,11 @@ platform :ios do
 
     increment_build_number(build_number: build_number, xcodeproj: "DBCO.xcodeproj")
 
-    build_ios_app(
-      scheme: "DBCO",
-      configuration: "Ad Hoc Test",
-      export_options: {
-        method: "ad-hoc",
-        provisioningProfiles: {
-          "nl.rijksoverheid.dbco" => "GGD DBCO Ad Hoc"
-        }
-      }
-    )
+    deploy_test
 
-    firebase_app_distribution(
-      app: "1:14711935107:ios:58f70d62749507a0074bb6",
-      groups: "testers"
-    )
+    deploy_acc
+
+    deploy_prod
 
     inform_slack(
       default_payloads: [:git_author],
@@ -85,6 +75,59 @@ platform :ios do
   private_lane :determine_build_number do |options|
       ENV['GITHUB_RUN_NUMBER']
   end
+
+  private_lane :deploy_test do
+    build_ios_app(
+      scheme: "DBCO",
+      configuration: "Ad Hoc Test",
+      export_options: {
+        method: "ad-hoc",
+        provisioningProfiles: {
+          "nl.rijksoverheid.dbco" => "GGD DBCO Ad Hoc"
+        }
+      }
+    )
+
+    firebase_app_distribution(
+      app: "1:14711935107:ios:58f70d62749507a0074bb6",
+      groups: "testers"
+    )
+  end
+
+  private_lane :deploy_acc do
+    build_ios_app(
+      scheme: "DBCO",
+      configuration: "Ad Hoc Acc",
+      export_options: {
+        method: "ad-hoc",
+        provisioningProfiles: {
+          "nl.rijksoverheid.dbco" => "GGD DBCO Ad Hoc"
+        }
+      }
+    )
+
+    firebase_app_distribution(
+      app: "1:514196416954:ios:2a98a875f55d06368f9583",
+      groups: "testers"
+    )
+  end
+
+  private_lane :deploy_prod do
+    build_ios_app(
+      scheme: "DBCO",
+      configuration: "Ad Hoc Prod",
+      export_options: {
+        method: "ad-hoc",
+        provisioningProfiles: {
+          "nl.rijksoverheid.dbco" => "GGD DBCO Ad Hoc"
+        }
+      }
+    )
+
+    firebase_app_distribution(
+      app: "1:1027445500001:ios:8a329354737579567ce220",
+      groups: "testers"
+    )
 
   private_lane :inform_slack do |options|
     unless ENV['SLACK_URL'].nil?
