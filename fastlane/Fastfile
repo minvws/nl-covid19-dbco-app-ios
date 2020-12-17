@@ -35,14 +35,14 @@ platform :ios do
   lane :deploy do
     prepare
 
-    version = get_version_number(xcodeproj: "DBCO.xcodeproj", target: "DBCO", configuration: "Ad Hoc P")
+    version = get_version_number(xcodeproj: "DBCO.xcodeproj", target: "DBCO", configuration: "Ad Hoc Prod")
     build_number = determine_build_number()
 
     increment_build_number(build_number: build_number, xcodeproj: "DBCO.xcodeproj")
 
     build_ios_app(
       scheme: "DBCO",
-      configuration: "Ad Hoc T",
+      configuration: "Ad Hoc Test",
       export_options: {
         method: "ad-hoc",
         provisioningProfiles: {
