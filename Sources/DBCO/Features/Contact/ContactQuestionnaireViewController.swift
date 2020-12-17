@@ -337,7 +337,7 @@ class ContactQuestionnaireViewModel {
            let exposureDate = LastExposureDateAnswerManager.valueDateFormatter.date(from: dateValue),
            let exposureDatePlus5 = Calendar.current.date(byAdding: .day, value: 5, to: exposureDate),
            let exposureDatePlus10 = Calendar.current.date(byAdding: .day, value: 10, to: exposureDate),
-           let exposureDatePlus11 = Calendar.current.date(byAdding: .day, value: 1, to: exposureDate),
+           let exposureDatePlus11 = Calendar.current.date(byAdding: .day, value: 11, to: exposureDate),
            let exposureDatePlus14 = Calendar.current.date(byAdding: .day, value: 14, to: exposureDate) {
             
             let formatter = DateFormatter()
