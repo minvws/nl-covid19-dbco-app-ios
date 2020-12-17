@@ -9,8 +9,8 @@ import Foundation
 
 extension Answer {
 
-    /// A value in 0...1 indicating the progress of completing the answer
-    var progress: Double {
+    /// An array of booleans indicating the progress of completing (elements of) the answer
+    var progressElements: [Bool] {
         switch value {
         case .classificationDetails(let category1Risk, let category2aRisk, let category2bRisk, let category3Risk):
             let classificationResult = ClassificationHelper.classificationResult(for: category1Risk,
@@ -20,36 +20,26 @@ extension Answer {
             
             switch classificationResult {
             case .success:
-                return 1
+                return [true]
             case .needsAssessmentFor:
-                return 0
+                return [false]
             }
         case .contactDetails(let firstName, let lastName, let email, let phoneNumber):
-            let values = [firstName,
-                          lastName,
-                          email ?? phoneNumber]
-            let validValueCount = values
-                .compactMap { $0 }
-                .count
-            
-            return Double(validValueCount) / Double(values.count)
+            return [firstName != nil,
+                    lastName != nil,
+                    (email ?? phoneNumber) != nil]
         case .contactDetailsFull(let firstName, let lastName, let email, let phoneNumber):
-            let values = [firstName,
-                          lastName,
-                          email ?? phoneNumber]
-            let validValueCount = values
-                .compactMap { $0 }
-                .count
-            
-            return Double(validValueCount) / Double(values.count)
+            return [firstName != nil,
+                    lastName != nil,
+                    (email ?? phoneNumber) != nil]
         case .date(let value):
-            return value != nil ? 1 : 0
+            return [value != nil]
         case .open(let value):
-            return value?.isEmpty == false ? 1 : 0
+            return [value?.isEmpty == false]
         case .multipleChoice(let value):
-            return value != nil ? 1 : 0
+            return [value != nil]
         case .lastExposureDate(let value):
-            return value != nil ? 1 : 0
+            return [value != nil]
         }
     }
     
@@ -71,11 +61,16 @@ extension Answer {
 
 extension QuestionnaireResult {
     
-    /// A value in 0...1 indicating the progress of completing the quesionnaire.
+    /// An array of booleans indicating the progress of completing the questionnaire
     /// Used for calculating the [task's status](x-source-tag://Task.status)
-    var progress: Double {
-        let essentialAnswers = answers.filter(\.isEssential)
-        return essentialAnswers.reduce(0) { $0 + ($1.progress / Double(essentialAnswers.count)) }
+    var progressElements: [Bool] {
+        return answers.flatMap(\.progressElements)
+    }
+    
+    var hasAllEssentialAnswers: Bool {
+        return answers.filter(\.isEssential).allSatisfy {
+            $0.progressElements.allSatisfy { $0 }
+        }
     }
     
 }

@@ -303,7 +303,7 @@ final class CaseManager: CaseManaging, Logging {
         
         fetchedTasks.forEach { task in
             if let existingTaskIndex = tasks.firstIndex(where: { $0.uuid == task.uuid }) {
-                if tasks[existingTaskIndex].status == .notStarted {
+                if tasks[existingTaskIndex].questionnaireResult == nil {
                     tasks[existingTaskIndex] = task
                 }
             } else {
@@ -393,6 +393,14 @@ final class CaseManager: CaseManaging, Logging {
         switch updatedTask.taskType {
         case .contact:
             updatedTask.contact = task.contact
+            
+            // Fallback to .index for communication if currently .none
+            if let contact = updatedTask.contact, contact.communication == .none {
+                updatedTask.contact = Task.Contact(category: contact.category,
+                                                   communication: .index,
+                                                   didInform: contact.didInform,
+                                                   dateOfLastExposure: contact.dateOfLastExposure)
+            }
         }
         
         // Update deletion

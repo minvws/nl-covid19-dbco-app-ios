@@ -66,6 +66,8 @@ class ContactQuestionnaireViewModel {
     @Bindable private(set) var informIntro: String
     @Bindable private(set) var informContent: String
     @Bindable private(set) var informLink: String
+    @Bindable private(set) var informFooter: String
+    @Bindable private(set) var informFooterHidden: Bool
     @Bindable private(set) var informButtonTitle: String
     @Bindable private(set) var informButtonHidden: Bool
     @Bindable private(set) var copyButtonHidden: Bool
@@ -87,6 +89,8 @@ class ContactQuestionnaireViewModel {
         self.informIntro = ""
         self.informContent = ""
         self.informLink = ""
+        self.informFooter = ""
+        self.informFooterHidden = true
         self.copyButtonHidden = true
         self.informButtonTitle = ""
         self.informButtonHidden = true
@@ -202,7 +206,7 @@ class ContactQuestionnaireViewModel {
         }
         
         answerManagers.forEach {
-            $0.view.isHidden = !$0.question.isRelevant(in: taskCategory)
+            $0.view.isHidden = !$0.question.isRelevant(in: taskCategory) || !$0.isEnabled
         }
         
         updateInformSectionContent()
@@ -232,7 +236,7 @@ class ContactQuestionnaireViewModel {
         let hasValidCommunication = updatedContact.communication != .none || !hasCommunicationTypeQuestion // true is there is a valid answer or, there is no question for a valid answer
         
         func isCompleted(_ answer: Answer) -> Bool {
-            return abs(answer.progress - 1) < 0.01
+            return answer.progressElements.allSatisfy { $0 }
         }
         
         let classificationCompleted = classificationManagers
@@ -249,14 +253,19 @@ class ContactQuestionnaireViewModel {
             .map(\.answer)
             .allSatisfy(isCompleted)
         
+        let classificationIsHidden = classificationManagers.allSatisfy { !$0.isEnabled }
         classificationSectionView?.isCompleted = classificationCompleted
+        classificationSectionView?.isHidden = classificationIsHidden
+        classificationSectionView?.index = 1
         detailsSectionView?.isCompleted = detailsCompleted
         informSectionView?.isCompleted = updatedTask.isOrCanBeInformed
         
         let detailsSectionWasDisabled = detailsSectionView?.isEnabled == false
         detailsSectionView?.isEnabled = classificationManagers.allSatisfy(\.hasValidAnswer)
+        detailsSectionView?.index = classificationIsHidden ? 1 : 2
         
         let informSectionWasDisabled = informSectionView?.isEnabled == false
+        informSectionView?.index = classificationIsHidden ? 2 : 3
         informSectionView?.isEnabled =
             hasValidCommunication &&
             classificationManagers.allSatisfy(\.hasValidAnswer) &&
@@ -270,11 +279,20 @@ class ContactQuestionnaireViewModel {
                 classificationSectionView?.expand(animated: false)
             } else if !allDetailsFilledIn {
                 detailsSectionView?.expand(animated: false)
+                if informSectionView?.isEnabled == true { // Since the inform section is not disabled, it will not auto expand when the communication question is answered
+                    informSectionView?.expand(animated: false)
+                }
             } else if sections.allSatisfy(\.isCollapsed) {
                 informSectionView?.expand(animated: false)
             }
         } else if detailsSectionWasDisabled && (detailsSectionView?.isEnabled == true) { // Expand details section if it became enabled
             detailsSectionView?.expand(animated: true)
+            
+            // If there is already a valid communication or there's no communication question, expand the inform section too
+            if hasValidCommunication {
+                informSectionView?.expand(animated: true)
+            }
+            
         } else if informSectionWasDisabled && (informSectionView?.isEnabled == true) { // Expand inform section if it became enabled
             informSectionView?.expand(animated: true)
         }
@@ -299,15 +317,19 @@ class ContactQuestionnaireViewModel {
         switch updatedContact.communication {
         case .index, .none:
             informTitle = .informContactTitleIndex(firstName: firstName)
+            informFooter = .informContactFooterIndex(firstName: firstName)
             informButtonType = .primary
             promptButtonType = .secondary
             setInformButtonTitle()
         case .staff:
             informTitle = .informContactTitleStaff(firstName: firstName)
+            informFooter = .informContactFooterStaff(firstName: firstName)
             informButtonType = .secondary
             promptButtonType = .primary
             setInformButtonTitle()
         }
+        
+        informFooterHidden = didCreateNewTask
         
         promptButtonTitle = .save
         
@@ -315,6 +337,7 @@ class ContactQuestionnaireViewModel {
            let exposureDate = LastExposureDateAnswerManager.valueDateFormatter.date(from: dateValue),
            let exposureDatePlus5 = Calendar.current.date(byAdding: .day, value: 5, to: exposureDate),
            let exposureDatePlus10 = Calendar.current.date(byAdding: .day, value: 10, to: exposureDate),
+           let exposureDatePlus11 = Calendar.current.date(byAdding: .day, value: 1, to: exposureDate),
            let exposureDatePlus14 = Calendar.current.date(byAdding: .day, value: 14, to: exposureDate) {
             
             let formatter = DateFormatter()
@@ -326,6 +349,7 @@ class ContactQuestionnaireViewModel {
             informContent = .informContactGuidelines(category: updatedContact.category,
                                                      exposureDatePlus5: formatter.string(from: exposureDatePlus5),
                                                      exposureDatePlus10: formatter.string(from: exposureDatePlus10),
+                                                     exposureDatePlus11: formatter.string(from: exposureDatePlus11),
                                                      exposureDatePlus14: formatter.string(from: exposureDatePlus14))
             informIntro = .informContactGuidelinesIntro(category: updatedContact.category,
                                                         exposureDate: formatter.string(from: exposureDate))
@@ -345,7 +369,7 @@ class ContactQuestionnaireViewModel {
     private func view(manager: AnswerManaging) -> UIView {
         let view = manager.view
         let isRelevant = manager.question.isRelevant(in: task.contact.category)
-        view.isHidden = !isRelevant
+        view.isHidden = !isRelevant || !manager.isEnabled
         
         return view
     }
@@ -378,7 +402,7 @@ class ContactQuestionnaireViewModel {
         
         return [intro, content, link]
             .filter { !$0.isEmpty }
-            .joined(separator: "\n")
+            .joined(separator: "\n\n")
     }
 }
 
@@ -454,6 +478,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         let informLinkView = TextView().linkTouched { [unowned self] in
             delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0)
         }
+        let informFooterLabel = Label(bodyBold: "").multiline()
         
         let informButton = Button(title: "", style: .primary)
             .touchUpInside(self, action: #selector(informContact))
@@ -464,18 +489,21 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         viewModel.$informTitle.binding = { informTitleLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
         viewModel.$informContent.binding = { informTextView.html($0, textColor: Theme.colors.captionGray) }
         viewModel.$informLink.binding = { informLinkView.html($0, textColor: Theme.colors.captionGray) }
+        viewModel.$informFooter.binding = { informFooterLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
+        viewModel.$informFooterHidden.binding = { informFooterLabel.isHidden = $0 }
         viewModel.$copyButtonHidden.binding = { copyButton.isHidden = $0 }
         viewModel.$informButtonTitle.binding = { informButton.title = $0 }
         viewModel.$informButtonHidden.binding = { informButton.isHidden = $0 }
         viewModel.$informButtonType.binding = { informButton.style = $0 }
         viewModel.$promptButtonType.binding = { promptButton.style = $0 }
         viewModel.$promptButtonTitle.binding = { promptButton.title = $0 }
-        
+
         VStack(spacing: 24,
                VStack(spacing: 16,
                       informTitleLabel,
                       informTextView,
-                      informLinkView),
+                      informLinkView,
+                      informFooterLabel),
                VStack(spacing: 16,
                       copyButton,
                       informButton))

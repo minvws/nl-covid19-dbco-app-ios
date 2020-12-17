@@ -21,14 +21,14 @@ class StatusView: UIView {
 
     private let imageView = UIImageView()
 
-    init(status: Task.Status = .notStarted) {
+    init(status: Task.Status = .missingEssentialInput) {
         self.status = status
         super.init(frame: CGRect(origin: .zero, size: CGSize(width: 24, height: 24)))
         setup()
     }
     
     required init?(coder: NSCoder) {
-        self.status = .notStarted
+        self.status = .missingEssentialInput
         super.init(coder: coder)
         setup()
     }
@@ -43,14 +43,15 @@ class StatusView: UIView {
     
     private func applyStatus() {
         switch status {
-        case .notStarted:
+        case .missingEssentialInput:
             imageView.isHighlighted = false
             imageView.isHidden = false
         case .completed:
             imageView.isHighlighted = true
             imageView.isHidden = false
         case .inProgress:
-            imageView.isHidden = true
+            imageView.isHighlighted = true
+            imageView.isHidden = false
         }
         
         setNeedsDisplay()
@@ -65,15 +66,23 @@ class StatusView: UIView {
         
         context.clear(rect)
         
-        guard case .inProgress(let progress) = status else { return }
+        let progress: Double
+        switch status {
+        case .inProgress(let value):
+            progress = value
+        case .completed:
+            progress = 1
+        case .missingEssentialInput:
+            return
+        }
         
         let clampedProgress = min(max(CGFloat(progress), 0), 1)
     
         context.addEllipse(in: bounds.inset(by: .all(1)))
         context.setLineWidth(2)
         
-        Theme.colors.primary.setStroke()
-        Theme.colors.primary.setFill()
+        Theme.colors.disabledBorder.setStroke()
+        Theme.colors.ok.setFill()
         context.drawPath(using: .stroke)
         
         let center = CGPoint(x: bounds.width / 2, y: bounds.height / 2)
@@ -83,11 +92,16 @@ class StatusView: UIView {
         context.move(to: center)
         context.addArc(
             center: center,
-            radius: bounds.width / 2 - 4,
+            radius: bounds.width / 2,
             startAngle: startAngle,
             endAngle: endAngle,
             clockwise: false)
         
+        context.fillPath()
+    
+        context.addEllipse(in: bounds.inset(by: .all(2)))
+        UIColor.clear.setFill()
+        context.setBlendMode(.clear)
         context.fillPath()
     }
     

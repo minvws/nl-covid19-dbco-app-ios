@@ -112,6 +112,11 @@ extension String {
     
     static var windowExpiredMessage: String { return Localization.string(for: "windowExpiredMessage") }
     
+    static var contactTaskStatusStaffWillInform: String { return Localization.string(for: "contactTaskStatusStaffWillInform") }
+    static var contactTaskStatusIndexDidInform: String { return Localization.string(for: "contactTaskStatusIndexDidInform") }
+    static var contactTaskStatusIndexWillInform: String { return Localization.string(for: "contactTaskStatusIndexWillInform") }
+    static var contactTaskStatusMissingDetails: String { return Localization.string(for: "contactTaskStatusMissingDetails") }
+    
     // MARK: - Contact Selection
     static var selectContactTitle: String { return Localization.string(for: "selectContactTitle") }
     static var selectContactSearch: String { return Localization.string(for: "selectContactSearch") }
@@ -140,12 +145,22 @@ extension String {
         return Localization.string(for: "informContactTitle.staff", [firstName])
     }
     
+    static func informContactFooterIndex(firstName: String?) -> String {
+        let firstName = firstName ?? .contactPromptNameFallback
+        return Localization.string(for: "informContactFooter.index", [firstName])
+    }
+    
+    static func informContactFooterStaff(firstName: String?) -> String {
+        let firstName = firstName ?? .contactPromptNameFallback
+        return Localization.string(for: "informContactFooter.staff", [firstName])
+    }
+    
     static var informContactGuidelinesDateFormat: String { return Localization.string(for: "informContactGuidelines.dateFormat") }
     
-    static func informContactGuidelines(category: Task.Contact.Category, exposureDatePlus5: String, exposureDatePlus10: String, exposureDatePlus14: String) -> String {
+    static func informContactGuidelines(category: Task.Contact.Category, exposureDatePlus5: String, exposureDatePlus10: String, exposureDatePlus11: String, exposureDatePlus14: String) -> String {
         switch category {
         case .category1:
-            return Localization.string(for: "informContactGuidelines.category1", [exposureDatePlus10])
+            return Localization.string(for: "informContactGuidelines.category1", [exposureDatePlus11])
         case .category2a, .category2b:
             return Localization.string(for: "informContactGuidelines.category2", [exposureDatePlus5, exposureDatePlus10])
         case .category3:
