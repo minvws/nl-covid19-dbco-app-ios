@@ -88,8 +88,8 @@ struct NetworkConfiguration {
             tokenParams: [:]
         ),
         haPublicKey: .init(
-            encodedPublicKey: "lNyVtsLHDWl2pDguF03sfSZ7T6ahDdGtGHkz6oWu+mI=",
-            keyVersion: "20201210")
+            encodedPublicKey: "+Ey3G55XEefYbU5eCOzZl9oG1SVshUzh3DMYSS12Rkg=",
+            keyVersion: "20201217")
     )
     
     var appConfigurationUrl: URL? {
