@@ -208,15 +208,15 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Sodium/Sodium.framework"
 fi
-if [[ "$CONFIGURATION" == "Ad Hoc T" ]]; then
+if [[ "$CONFIGURATION" == "Ad Hoc Test" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Sodium/Sodium.framework"
 fi
-if [[ "$CONFIGURATION" == "Ad Hoc A" ]]; then
+if [[ "$CONFIGURATION" == "Ad Hoc Acc" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Sodium/Sodium.framework"
 fi
-if [[ "$CONFIGURATION" == "Ad Hoc P" ]]; then
+if [[ "$CONFIGURATION" == "Ad Hoc Prod" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Sodium/Sodium.framework"
 fi
