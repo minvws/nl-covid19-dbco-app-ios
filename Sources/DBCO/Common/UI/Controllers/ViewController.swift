@@ -15,7 +15,6 @@ protocol DismissActionable {
     var onDismissed: ((Item) -> Void)? { get set }
 }
 
-
 /// Adopters of this protocol expose an onPopped callback property that is called whenever the object is popped from a navigation stack
 /// - Tag: PopActionable
 protocol PopActionable {

@@ -5,7 +5,6 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-
 import UIKit
 
 class AppUpdateViewModel {
@@ -14,7 +13,7 @@ class AppUpdateViewModel {
     let updateURL: URL?
     
     init(versionInformation: AppVersionInformation) {
-        image = UIImage(named: "StartVisual")!
+        image = UIImage(named: "Onboarding2")!
         message = versionInformation.minimumVersionMessage ?? .updateAppContent
         updateURL = versionInformation.appStoreURL
     }
@@ -93,7 +92,6 @@ class AppUpdateViewController: ViewController {
         
         delegate?.appUpdateViewController(self, wantsToOpen: url)
     }
-    
     
     private func showCannotOpenAppStoreAlert() {
         let alertController = UIAlertController(title: .errorTitle,

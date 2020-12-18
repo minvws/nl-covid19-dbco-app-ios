@@ -5,7 +5,6 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-
 import Foundation
 
 @propertyWrapper struct ISO8601DateFormat: Codable, Equatable {
@@ -39,5 +38,9 @@ import Foundation
     func encode(to encoder: Encoder) throws {
         let valueString = dateFormatter.string(from: value)
         try valueString.encode(to: encoder)
+    }
+    
+    static func == (lhs: ISO8601DateFormat, rhs: ISO8601DateFormat) -> Bool {
+        return lhs.value == rhs.value
     }
 }

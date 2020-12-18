@@ -8,6 +8,11 @@
 import Foundation
 
 struct NetworkConfiguration {
+    struct HAPublicKeyInformation {
+        let encodedPublicKey: String
+        let keyVersion: String
+    }
+    
     struct EndpointConfiguration {
         let scheme: String
         let host: String
@@ -19,6 +24,7 @@ struct NetworkConfiguration {
 
     let name: String
     let api: EndpointConfiguration
+    let haPublicKey: HAPublicKeyInformation
     
     func sslSignature(forHost host: String) -> Certificate.Signature? {
         if api.host == host { return api.sslSignature }
@@ -35,43 +41,55 @@ struct NetworkConfiguration {
             path: ["v1"],
             sslSignature: nil,
             tokenParams: [:]
-        )
+        ),
+        haPublicKey: .init(
+            encodedPublicKey: "uuPJSp5VXqQElwGsywf9ESEm26Ie1BOlnxlr8V+7/Fg=",
+            keyVersion: "20201210")
     )
 
     static let test = NetworkConfiguration(
         name: "Test",
         api: .init(
             scheme: "https",
-            host: "public.testing.dbco.egeniq.com",
+            host: "api-test.bco-portaal.nl",
             port: nil,
             path: ["v1"],
             sslSignature: nil,
             tokenParams: [:]
-        )
+        ),
+        haPublicKey: .init(
+            encodedPublicKey: "bwRH2gO0Bgd6DZ2Ia9y/SxryydiKsxBDd01+AjDgykc=",
+            keyVersion: "20201210")
     )
 
     static let acceptance = NetworkConfiguration(
         name: "ACC",
         api: .init(
             scheme: "https",
-            host: "public.testing.dbco.egeniq.com",
+            host: "api-acc.bco-portaal.nl",
             port: nil,
             path: ["v1"],
             sslSignature: Certificate.SSL.apiSignature,
             tokenParams: [:]
-        )
+        ),
+        haPublicKey: .init(
+            encodedPublicKey: "bwRH2gO0Bgd6DZ2Ia9y/SxryydiKsxBDd01+AjDgykc=",
+            keyVersion: "20201210")
     )
 
     static let production = NetworkConfiguration(
         name: "Production",
         api: .init(
             scheme: "https",
-            host: "public.testing.dbco.egeniq.com",
+            host: "api.bco-portaal.nl",
             port: nil,
             path: ["v1"],
             sslSignature: Certificate.SSL.apiSignature,
             tokenParams: [:]
-        )
+        ),
+        haPublicKey: .init(
+            encodedPublicKey: "+Ey3G55XEefYbU5eCOzZl9oG1SVshUzh3DMYSS12Rkg=",
+            keyVersion: "20201217")
     )
     
     var appConfigurationUrl: URL? {
@@ -119,4 +137,3 @@ struct NetworkConfiguration {
         return characterSet
     }()
 }
-

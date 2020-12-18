@@ -15,9 +15,9 @@ import Foundation
 /// [CaseManager](x-source-tag://CaseManager)
 ///
 /// - Tag: Task
-struct Task {
+struct Task: Equatable {
     enum Status: Equatable {
-        case notStarted
+        case missingEssentialInput
         case inProgress(Double)
         case completed
     }
@@ -32,7 +32,7 @@ struct Task {
     }
     
     /// - Tag: Task.Contact
-    struct Contact {
+    struct Contact: Equatable {
         
         /// # See also
         /// [ClassificationHelper](x-source-tag://ClassificationHelper)
@@ -73,32 +73,42 @@ struct Task {
     
     var contact: Contact!
     
-    var result: QuestionnaireResult?
+    var deletedByIndex: Bool
+    
+    var questionnaireResult: QuestionnaireResult?
     
     /// - Tag: Task.status
     var status: Status {
-        switch taskType {
-        case .contact:
-            if let questionnaireProgress = result?.progress {
-                // task progress = questionnaire progress * 0.9 + isOrCanBeInformed * 0.1
-                let progress = (questionnaireProgress * 0.9) + (isOrCanBeInformed ? 0.1 : 0.0)
-                return abs(progress - 1) < 0.01 ? .completed : .inProgress(progress)
-            } else {
-                return .notStarted
-            }
-        }
-    }
-    
-    init(type: TaskType) {
-        self.uuid = UUID()
-        self.taskType = type
-        self.source = .app
-        self.label = nil
-        self.taskContext = nil
+        guard !deletedByIndex else { return .completed }
         
         switch taskType {
         case .contact:
-            contact = Contact(category: .category3, communication: .none, didInform: false, dateOfLastExposure: nil)
+            guard contact.communication != .none else {
+                return .missingEssentialInput
+            }
+            
+            guard let result = questionnaireResult, result.hasAllEssentialAnswers, isOrCanBeInformed else {
+                return .missingEssentialInput
+            }
+            
+            let completedElements = result.progressElements.filter { $0 }
+            
+            let progress = Double(completedElements.count) / Double(result.progressElements.count)
+            return abs(progress - 1) < 0.01 ? .completed : .inProgress(progress)
+        }
+    }
+    
+    init(type: TaskType, source: Source = .app) {
+        self.uuid = UUID()
+        self.taskType = type
+        self.source = source
+        self.label = nil
+        self.taskContext = nil
+        self.deletedByIndex = false
+        
+        switch taskType {
+        case .contact:
+            contact = Contact(category: .other, communication: .none, didInform: false, dateOfLastExposure: nil)
         }
     }
     
@@ -141,7 +151,7 @@ extension Task: Codable {
         source = try container.decode(Source.self, forKey: .source)
         label = try container.decode(String?.self, forKey: .label)
         taskContext = try container.decode(String?.self, forKey: .taskContext)
-        result = try? container.decode(QuestionnaireResult?.self, forKey: .result)
+        questionnaireResult = try? container.decode(QuestionnaireResult?.self, forKey: .questionnaireResult)
         
         taskType = try container.decode(TaskType.self, forKey: .taskType)
         
@@ -149,6 +159,8 @@ extension Task: Codable {
         case .contact:
             contact = try Contact(from: decoder)
         }
+        
+        deletedByIndex = (try? container.decode(Bool?.self, forKey: .deletedByIndex)) ?? false
     }
     
     func encode(to encoder: Encoder) throws {
@@ -158,13 +170,18 @@ extension Task: Codable {
         try container.encode(source, forKey: .source)
         try container.encode(label, forKey: .label)
         try container.encode(taskContext, forKey: .taskContext)
-        try container.encode(result, forKey: .result)
         try container.encode(taskType, forKey: .taskType)
+        try container.encode(deletedByIndex, forKey: .deletedByIndex)
         
         switch taskType {
         case .contact:
             try contact?.encode(to: encoder)
         }
+        
+        // Don't encode result data for deleted tasks when sending to the api
+        guard !(encoder.target == .api && deletedByIndex) else { return }
+        
+        try container.encode(questionnaireResult, forKey: .questionnaireResult)
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -177,7 +194,8 @@ extension Task: Codable {
         case communication
         case dateOfLastExposure
         case didInform
-        case result
+        case questionnaireResult
+        case deletedByIndex
     }
 }
 
@@ -186,13 +204,13 @@ extension Task {
         
         var task = Task(type: .contact)
         
-        guard let questionnaire = try? Services.caseManager.questionnaire(for: task) else { return task }
+        guard let questionnaire = try? Services.caseManager.questionnaire(for: task.taskType) else { return task }
         
         guard let classificationUuid = questionnaire.questions.first(where: { $0.questionType == .classificationDetails })?.uuid else {
             return task
         }
         
-        task.result = QuestionnaireResult(questionnaireUuid: questionnaire.uuid,
+        task.questionnaireResult = QuestionnaireResult(questionnaireUuid: questionnaire.uuid,
                                           answers: [
                                             Answer(uuid: UUID(),
                                                    questionUuid: classificationUuid,

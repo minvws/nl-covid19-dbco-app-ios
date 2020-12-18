@@ -6,6 +6,7 @@
  */
 
 import UIKit
+import SafariServices
 
 protocol OnboardingCoordinatorDelegate: class {
     func onboardingCoordinatorDidFinish(_ coordinator: OnboardingCoordinator)
@@ -23,20 +24,15 @@ final class OnboardingCoordinator: Coordinator {
     init(window: UIWindow) {
         self.window = window
         
-        let viewModel = OnboardingStepViewModel(image: UIImage(named: "StartVisual")!,
+        let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding1")!,
                                                 title: .onboardingStep1Title,
                                                 message: .onboardingStep1Message,
                                                 buttonTitle: .next)
         let stepController = OnboardingStepViewController(viewModel: viewModel)
         navigationController = NavigationController(rootViewController: stepController)
-        navigationController.navigationBar.prefersLargeTitles = true
-        
-        if #available(iOS 13.0, *) {
-            // nothing
-        } else {
-            navigationController.navigationBar.shadowImage = UIImage()
-            navigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        }
+
+        navigationController.navigationBar.shadowImage = UIImage()
+        navigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
         
         super.init()
         
@@ -65,11 +61,28 @@ extension OnboardingCoordinator: OnboardingStepViewControllerDelegate {
         if didPair {
             delegate?.onboardingCoordinatorDidFinish(self)
         } else {
-            let viewModel = PairViewModel()
-            let pairController = PairViewController(viewModel: viewModel)
-            pairController.delegate = self
-            navigationController.pushViewController(pairController, animated: true)
+            let viewModel = PrivacyConsentViewModel(buttonTitle: .next)
+            let consentController = PrivacyConsentViewController(viewModel: viewModel)
+            consentController.delegate = self
+            navigationController.pushViewController(consentController, animated: true)
         }
+    }
+    
+}
+
+extension OnboardingCoordinator: PrivacyConsentViewControllerDelegate {
+    
+    func privacyConsentViewControllerWantsToContinue(_ controller: PrivacyConsentViewController) {
+        let viewModel = PairViewModel()
+        let pairController = PairViewController(viewModel: viewModel)
+        pairController.delegate = self
+        navigationController.pushViewController(pairController, animated: true)
+    }
+    
+    func privacyConsentViewController(_ controller: PrivacyConsentViewController, wantsToOpen url: URL) {
+        let safariController = SFSafariViewController(url: url)
+        safariController.preferredControlTintColor = Theme.colors.primary
+        navigationController.present(safariController, animated: true)
     }
     
 }
@@ -107,7 +120,7 @@ extension OnboardingCoordinator: PairViewControllerDelegate {
             
             self.didPair = true
             
-            let viewModel = OnboardingStepViewModel(image: UIImage(named: "StartVisual")!,
+            let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding2")!,
                                                     title: .onboardingStep3Title,
                                                     message: .onboardingStep3Message,
                                                     buttonTitle: .start)
@@ -116,7 +129,7 @@ extension OnboardingCoordinator: PairViewControllerDelegate {
             self.navigationController.setViewControllers([stepController], animated: true)
             
             // Load case data. If it fails, the task overview will try again.
-            Services.caseManager.loadCaseData(completion: { _, _ in })
+            Services.caseManager.loadCaseData(userInitiated: false, completion: { _, _ in })
         }
         
         pair(pairdingCode: code)

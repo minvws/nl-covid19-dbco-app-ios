@@ -8,11 +8,19 @@
 import UIKit
 import Contacts
 
+extension AnswerOption {
+    static let lastExposureDateEarlierOption = AnswerOption(label: .contactInformationLastExposureEarlier,
+                                                            value: "earlier",
+                                                            trigger: nil)
+}
+
 /// - Tag: AnswerManaging
 protocol AnswerManaging: class {
     var question: Question { get }
     var answer: Answer { get }
     var view: UIView { get }
+    
+    var isEnabled: Bool { get set }
     
     var hasValidAnswer: Bool { get }
     
@@ -25,10 +33,12 @@ protocol AnswerManaging: class {
 class ClassificationDetailsAnswerManager: AnswerManaging {
     private var baseAnswer: Answer
     
+    // swiftlint:disable opening_brace
     private var category1Risk: Bool?    { didSet { determineGroupVisibility() } }
     private var category2aRisk: Bool?   { didSet { determineGroupVisibility() } }
     private var category2bRisk: Bool?   { didSet { determineGroupVisibility() } }
     private var category3Risk: Bool?    { didSet { determineGroupVisibility() } }
+    // swiftlint:enable opening_brace
     
     private(set) var classification: ClassificationHelper.Result
     
@@ -87,7 +97,7 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         switch classification {
         case .success(let category):
             answer.value = .classificationDetails(contactCategory: category)
-        case .needsAssessmentFor(_):
+        case .needsAssessmentFor:
             answer.value = .classificationDetails(category1Risk: category1Risk,
                                                   category2aRisk: category2aRisk,
                                                   category2bRisk: category2bRisk,
@@ -95,6 +105,15 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         }
         
         return answer
+    }
+    
+    var isEnabled: Bool = true {
+        didSet {
+            category1RiskGroup.isEnabled = isEnabled
+            category2aRiskGroup.isEnabled = isEnabled
+            category2bRiskGroupUndecorated.isEnabled = isEnabled
+            category3RiskGroup.isEnabled = isEnabled
+        }
     }
     
     var hasValidAnswer: Bool {
@@ -118,12 +137,15 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
                     ToggleButton(title: .category2aRiskQuestionAnswerNegative, selected: category2aRisk == false))
         .didSelect { [unowned self] in self.category2aRisk = $0 == 0 }
     
-    private lazy var category2bRiskGroup =
+    private lazy var category2bRiskGroupUndecorated =
         ToggleGroup(label: .category2bRiskQuestion,
                     ToggleButton(title: .category2bRiskQuestionAnswerPositive, selected: category2bRisk == true),
                     ToggleButton(title: .category2bRiskQuestionAnswerNegative, selected: category2bRisk == false))
         .didSelect { [unowned self] in self.category2bRisk = $0 == 0 }
-        .decorateWithDescriptionIfNeeded(description: .category2bRiskQuestionDescription)
+    
+    private lazy var category2bRiskGroup =
+        category2bRiskGroupUndecorated
+            .decorateWithDescriptionIfNeeded(description: .category2bRiskQuestionDescription)
     
     private lazy var category3RiskGroup =
         ToggleGroup(label: .category3RiskQuestion,
@@ -156,10 +178,12 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
 /// AnswerManager for the .contactDetails question.
 /// Uses [InputField](x-source-tag://InputField) to question the firstName, lastName, email and phoneNumber of the index
 class ContactDetailsAnswerManager: AnswerManaging {
+    // swiftlint:disable opening_brace
     private(set) var firstName = FirstName()        { didSet { updateHandler?(self) } }
     private(set) var lastName = LastName()          { didSet { updateHandler?(self) } }
     private(set) var email = EmailAddress()         { didSet { updateHandler?(self) } }
     private(set) var phoneNumber = PhoneNumber()    { didSet { updateHandler?(self) } }
+    // swiftlint:enable opening_brace
     
     private var baseAnswer: Answer
     
@@ -204,8 +228,10 @@ class ContactDetailsAnswerManager: AnswerManaging {
         return answer
     }
     
+    var isEnabled: Bool = true
+    
     var hasValidAnswer: Bool {
-        return answer.progress > 0
+        return answer.progressElements.contains(true)
     }
 }
 
@@ -240,6 +266,8 @@ class DateAnswerManager: AnswerManaging {
         return answer
     }
     
+    var isEnabled: Bool = true
+    
     var hasValidAnswer: Bool {
         return date.value != nil
     }
@@ -256,7 +284,9 @@ class LastExposureDateAnswerManager: AnswerManaging {
     
     var updateHandler: ((AnswerManaging) -> Void)?
     
-    private(set) var options: Options { didSet { updateHandler?(self) } }
+    private(set) var options: Options {
+        didSet { update() }
+    }
     
     init(question: Question, answer: Answer, lastExposureDate: String?) {
         self.baseAnswer = answer
@@ -274,11 +304,17 @@ class LastExposureDateAnswerManager: AnswerManaging {
                                 value: Self.valueDateFormatter.string(from: $0),
                                 trigger: nil) }
         
-        
-        self.answerOptions = [AnswerOption(label: .contactInformationLastExposureEarlier, value: "earlier", trigger: nil)] + dateOptions
+        var answerOptions = [.lastExposureDateEarlierOption] + dateOptions
         
         if let lastExposureDate = lastExposureDate {
             if let option = answerOptions.first(where: { $0.value == lastExposureDate }) {
+                baseAnswer.value = .lastExposureDate(option)
+            } else if let date = Self.valueDateFormatter.date(from: lastExposureDate) {
+                // If we got a different valid date, create an option for it
+                let option = AnswerOption(label: Self.displayDateFormatter.string(from: date),
+                                          value: lastExposureDate,
+                                          trigger: nil)
+                answerOptions.append(option)
                 baseAnswer.value = .lastExposureDate(option)
             }
         }
@@ -287,6 +323,7 @@ class LastExposureDateAnswerManager: AnswerManaging {
             fatalError()
         }
         
+        self.answerOptions = answerOptions
         self.options = Options(label: question.label,
                                 value: option?.value,
                                 options: answerOptions.map { ($0.value, $0.label) })
@@ -296,16 +333,65 @@ class LastExposureDateAnswerManager: AnswerManaging {
     let question: Question
     private let answerOptions: [AnswerOption]
     
-    private(set) lazy var view: UIView = {
-        return InputField(for: self, path: \.options)
-            .decorateWithDescriptionIfNeeded(description: question.description)
+    private let disabledIndicatorView: UIView = {
+        let iconView = UIImageView(image: UIImage(named: "Warning"))
+        iconView.contentMode = .center
+        iconView.setContentHuggingPriority(.required, for: .horizontal)
+        iconView.tintColor = Theme.colors.primary
+        
+        let stack = HStack(spacing: 6,
+                           iconView,
+                           Label(subhead: .contactQuestionDisabledMessage,
+                                 textColor: Theme.colors.primary).multiline())
+        
+        stack.isHidden = true
+        
+        return stack
     }()
+    
+    private let earlierIndicatorView: UIView = {
+        let containerView = UIView()
+        containerView.backgroundColor = Theme.colors.tertiary
+        containerView.layer.cornerRadius = 8
+        containerView.isHidden = true
+        
+        VStack(spacing: 16,
+               Label(bodyBold: .earlierExposureDateTitle).multiline(),
+               Label(body: .earlierExposureDateMessage, textColor: Theme.colors.captionGray).multiline())
+            .embed(in: containerView, insets: .leftRight(16) + .topBottom(24))
+        
+        return containerView
+    }()
+    
+    private lazy var inputField = InputField(for: self, path: \.options)
+    
+    private(set) lazy var view: UIView = {
+        VStack(spacing: 8,
+               inputField.decorateWithDescriptionIfNeeded(description: question.description),
+               disabledIndicatorView,
+               earlierIndicatorView)
+    }()
+    
+    private func update() {
+        updateHandler?(self)
+        
+        if case .lastExposureDate(let option) = answer.value {
+            earlierIndicatorView.isHidden = option != .lastExposureDateEarlierOption
+        }
+    }
     
     var answer: Answer {
         let selectedOption = answerOptions.first { $0.value == options.value }
         var answer = baseAnswer
         answer.value = .lastExposureDate(selectedOption)
         return answer
+    }
+    
+    var isEnabled: Bool = true {
+        didSet {
+            inputField.isEnabled = isEnabled
+            disabledIndicatorView.isHidden = isEnabled
+        }
     }
     
     var hasValidAnswer: Bool {
@@ -369,6 +455,8 @@ class OpenAnswerManager: AnswerManaging {
         return answer
     }
     
+    var isEnabled: Bool = true
+    
     var hasValidAnswer: Bool {
         return text.value != nil
     }
@@ -390,23 +478,6 @@ class MultipleChoiceAnswerManager: AnswerManaging {
         self.baseAnswer = answer
         self.question = question
         
-        // Prefill communication triggers
-        do {
-            let option = question.answerOptions?.first(where: { $0.trigger == .setCommunicationToIndex })
-            
-            if let indexCommunicationOption = option, contact.communication == .index {
-                baseAnswer.value = .multipleChoice(indexCommunicationOption)
-            }
-        }
-        
-        do {
-            let option = question.answerOptions?.first(where: { $0.trigger == .setCommunicationToStaff })
-            
-            if let staffCommunicationOption = option, contact.communication == .staff {
-                baseAnswer.value = .multipleChoice(staffCommunicationOption)
-            }
-        }
-        
         guard case .multipleChoice(let option) = baseAnswer.value else {
             fatalError()
         }
@@ -420,7 +491,7 @@ class MultipleChoiceAnswerManager: AnswerManaging {
         } else {
             self.selectedButtonIndex = question.answerOptions?.firstIndex { $0.value == option?.value }
             
-            self.buttons = ToggleGroup(label: question.label, answerOptions.map { ToggleButton(title: $0.label, selected: $0.value == option?.value) } )
+            self.buttons = ToggleGroup(label: question.label, answerOptions.map { ToggleButton(title: $0.label, selected: $0.value == option?.value) })
                 .didSelect { [unowned self] in
                     selectedButtonIndex = $0
                     updateHandler?(self)
@@ -458,11 +529,27 @@ class MultipleChoiceAnswerManager: AnswerManaging {
         }
     }
     
+    var isEnabled: Bool = true {
+        didSet {
+            buttons?.isEnabled = isEnabled
+        }
+    }
+    
     var hasValidAnswer: Bool {
         guard case .multipleChoice(let value) = answer.value else {
             return false
         }
         
         return value != nil
+    }
+    
+    func applyOption(at index: Int) {
+        if options != nil {
+            guard question.answerOptions?.indices.contains(index) == true else { return }
+            options.value = question.answerOptions?[index].value
+        } else {
+            selectedButtonIndex = index
+            updateHandler?(self)
+        }
     }
 }

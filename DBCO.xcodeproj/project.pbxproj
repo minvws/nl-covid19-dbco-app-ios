@@ -9,7 +9,9 @@
 /* Begin PBXBuildFile section */
 		6A6A1EA99F603F8A68B3CFE6 /* Pods_DBCO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13C8941476779FBFFBD8A4C7 /* Pods_DBCO.framework */; };
 		91E5A9010414FC25C0F3B864 /* Pods_DBCOTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C5D22DA740F30F804D7F95E /* Pods_DBCOTests.framework */; };
+		CD010B98257A409B00CEA4F5 /* ContactQuestionnaireCommunicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD010B97257A409B00CEA4F5 /* ContactQuestionnaireCommunicationTests.swift */; };
 		CD1824EE2524B3E4006EB272 /* InputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1824ED2524B3E4006EB272 /* InputField.swift */; };
+		CD21D4A8258A07330079D085 /* Task+Unfinished.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD21D4A7258A07330079D085 /* Task+Unfinished.swift */; };
 		CD2963442514BF4E008443AF /* SelectContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2963432514BF4E008443AF /* SelectContactViewController.swift */; };
 		CD2963472514E129008443AF /* ContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2963462514E129008443AF /* ContactTableViewCell.swift */; };
 		CD29634C2518CE8E008443AF /* TableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD29634B2518CE8E008443AF /* TableViewManager.swift */; };
@@ -41,7 +43,6 @@
 		CD7282BF250F740000D68911 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282BE250F740000D68911 /* AppCoordinator.swift */; };
 		CD7282C3250F9AFE00D68911 /* TaskOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C2250F9AFE00D68911 /* TaskOverviewViewController.swift */; };
 		CD7282C6250F9D2400D68911 /* TaskOverviewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C5250F9D2400D68911 /* TaskOverviewCoordinator.swift */; };
-		CD756C35252B3D36005FEDA0 /* DBCOTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C34252B3D36005FEDA0 /* DBCOTests.swift */; };
 		CD756C4A252C6A30005FEDA0 /* OnboardingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C49252C6A30005FEDA0 /* OnboardingCoordinator.swift */; };
 		CD756C50252C6AC9005FEDA0 /* OnboardingStepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C4F252C6AC9005FEDA0 /* OnboardingStepViewController.swift */; };
 		CD756C5E252C9A7F005FEDA0 /* PairViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C5D252C9A7E005FEDA0 /* PairViewController.swift */; };
@@ -51,8 +52,10 @@
 		CD756C78252DDF30005FEDA0 /* SectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C77252DDF30005FEDA0 /* SectionView.swift */; };
 		CD7FACA1251B3FCD00AB8142 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7FACA0251B3FCD00AB8142 /* TextView.swift */; };
 		CD8F957925616F23004729A4 /* Certificates.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8F957825616F23004729A4 /* Certificates.swift */; };
+		CD995B60256FDA63007A8B2C /* PrivacyConsentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD995B5F256FDA63007A8B2C /* PrivacyConsentViewController.swift */; };
 		CD9C7F3F2549B2B600A78EEF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CD9C7F412549B2B600A78EEF /* InfoPlist.strings */; };
 		CD9C7F52254AC25300A78EEF /* Task+Informed.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9C7F51254AC25300A78EEF /* Task+Informed.swift */; };
+		CDA07ECC256C0FD900DEF3FF /* Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA07ECB256C0FD900DEF3FF /* Validator.swift */; };
 		CDA0F6812539AA42009FD2A9 /* Answer+Prefilling.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA0F6802539AA42009FD2A9 /* Answer+Prefilling.swift */; };
 		CDA0F6852539AA66009FD2A9 /* Task+ContactName.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA0F6842539AA66009FD2A9 /* Task+ContactName.swift */; };
 		CDA0F6892539AAB8009FD2A9 /* Answer+Progress.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA0F6882539AAB8009FD2A9 /* Answer+Progress.swift */; };
@@ -71,6 +74,7 @@
 		CDC4A8EA250B87E5001BABC6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC4A8E9250B87E5001BABC6 /* SceneDelegate.swift */; };
 		CDC4A8F1250B87E6001BABC6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CDC4A8F0250B87E6001BABC6 /* Assets.xcassets */; };
 		CDC4A8F4250B87E6001BABC6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CDC4A8F2250B87E6001BABC6 /* LaunchScreen.storyboard */; };
+		CDC6726A2566824300222DCC /* Codable+UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC672692566824300222DCC /* Codable+UserInfo.swift */; };
 		CDC7C86225376AB200FE7E05 /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C86125376AB200FE7E05 /* Services.swift */; };
 		CDC7C8692538412600FE7E05 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C8682538412600FE7E05 /* NetworkManager.swift */; };
 		CDC7C86F2538429B00FE7E05 /* NetworkConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C86E2538429B00FE7E05 /* NetworkConfiguration.swift */; };
@@ -88,9 +92,7 @@
 		CDD68BAA254D60BC00E96E9C /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD68BA9254D60BC00E96E9C /* UserDefaults.swift */; };
 		CDDC05642543120D0079C2F4 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDDC05632543120D0079C2F4 /* Coordinator.swift */; };
 		CDDC056C2546CD460079C2F4 /* Case.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDDC056B2546CD460079C2F4 /* Case.swift */; };
-		CDE25F61254B315100E9AE49 /* LocalMockNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE25F60254B315100E9AE49 /* LocalMockNetworkManager.swift */; };
 		CDE25F65254B316F00E9AE49 /* NetworkManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE25F64254B316F00E9AE49 /* NetworkManaging.swift */; };
-		CDE25F6C254B39B600E9AE49 /* Mocks in Resources */ = {isa = PBXBuildFile; fileRef = CDE25F6B254B39B600E9AE49 /* Mocks */; };
 		CDE25F8F254C21B900E9AE49 /* String+SHA256.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE25F8E254C21B900E9AE49 /* String+SHA256.swift */; };
 		CDE30E64251BC02100862A40 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E63251BC02100862A40 /* TextField.swift */; };
 		CDE30E69251C89FF00862A40 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E68251C89FF00862A40 /* NavigationController.swift */; };
@@ -120,15 +122,23 @@
 		0230E8A0955F3CA5EC36778F /* Pods-DBCOTests.pentest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.pentest.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.pentest.xcconfig"; sourceTree = "<group>"; };
 		049B33A27415B972962D11C7 /* Pods-DBCO.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.debug.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.debug.xcconfig"; sourceTree = "<group>"; };
 		0960A2CA9D203990D48CA127 /* Pods-DBCO.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.release.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.release.xcconfig"; sourceTree = "<group>"; };
+		1309B3B4DC170EA5E953827F /* Pods-DBCOTests.ad hoc a.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc a.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc a.xcconfig"; sourceTree = "<group>"; };
 		13C8941476779FBFFBD8A4C7 /* Pods_DBCO.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DBCO.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		15DD27ADC58F767AEF653836 /* Pods-DBCOTests.ad hoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc.xcconfig"; sourceTree = "<group>"; };
+		27736E44777314C870221718 /* Pods-DBCO.ad hoc acc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc acc.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc acc.xcconfig"; sourceTree = "<group>"; };
+		338AE82F669A00159A255C14 /* Pods-DBCOTests.ad hoc p.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc p.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc p.xcconfig"; sourceTree = "<group>"; };
 		3C5D22DA740F30F804D7F95E /* Pods_DBCOTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DBCOTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F26983E3C652AB213ED4047 /* Pods-DBCO.ad hoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc.xcconfig"; sourceTree = "<group>"; };
+		8C5B6FFF57DC03F9D4B6BA45 /* Pods-DBCO.ad hoc p.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc p.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc p.xcconfig"; sourceTree = "<group>"; };
+		926126B7CC8EF910FA24AE60 /* Pods-DBCOTests.ad hoc t.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc t.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc t.xcconfig"; sourceTree = "<group>"; };
 		95E9699EAF5C5557EB9A0265 /* Pods-DBCO.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.app store.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.app store.xcconfig"; sourceTree = "<group>"; };
 		9C3C39BFCF985C619EF17EFA /* Pods-DBCOTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.debug.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.debug.xcconfig"; sourceTree = "<group>"; };
+		9CC161F1119555874A856AE2 /* Pods-DBCOTests.ad hoc acc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc acc.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc acc.xcconfig"; sourceTree = "<group>"; };
 		C604B6AA2DE456A21DA9EE15 /* Pods-DBCOTests.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.app store.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.app store.xcconfig"; sourceTree = "<group>"; };
 		CBA78D02FA0FE384D189E4D2 /* Pods-DBCO.pentest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.pentest.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.pentest.xcconfig"; sourceTree = "<group>"; };
+		CD010B97257A409B00CEA4F5 /* ContactQuestionnaireCommunicationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactQuestionnaireCommunicationTests.swift; sourceTree = "<group>"; };
 		CD1824ED2524B3E4006EB272 /* InputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputField.swift; sourceTree = "<group>"; };
+		CD21D4A7258A07330079D085 /* Task+Unfinished.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Unfinished.swift"; sourceTree = "<group>"; };
 		CD2963432514BF4E008443AF /* SelectContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectContactViewController.swift; sourceTree = "<group>"; };
 		CD2963462514E129008443AF /* ContactTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactTableViewCell.swift; sourceTree = "<group>"; };
 		CD29634B2518CE8E008443AF /* TableViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewManager.swift; sourceTree = "<group>"; };
@@ -161,7 +171,6 @@
 		CD7282C2250F9AFE00D68911 /* TaskOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskOverviewViewController.swift; sourceTree = "<group>"; };
 		CD7282C5250F9D2400D68911 /* TaskOverviewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskOverviewCoordinator.swift; sourceTree = "<group>"; };
 		CD756C32252B3D36005FEDA0 /* DBCOTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DBCOTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		CD756C34252B3D36005FEDA0 /* DBCOTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBCOTests.swift; sourceTree = "<group>"; };
 		CD756C36252B3D37005FEDA0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CD756C49252C6A30005FEDA0 /* OnboardingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinator.swift; sourceTree = "<group>"; };
 		CD756C4F252C6AC9005FEDA0 /* OnboardingStepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStepViewController.swift; sourceTree = "<group>"; };
@@ -172,9 +181,10 @@
 		CD756C77252DDF30005FEDA0 /* SectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionView.swift; sourceTree = "<group>"; };
 		CD7FACA0251B3FCD00AB8142 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		CD8F957825616F23004729A4 /* Certificates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Certificates.swift; sourceTree = "<group>"; };
-		CD9C7F402549B2B600A78EEF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		CD995B5F256FDA63007A8B2C /* PrivacyConsentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyConsentViewController.swift; sourceTree = "<group>"; };
 		CD9C7F442549B2B900A78EEF /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CD9C7F51254AC25300A78EEF /* Task+Informed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Informed.swift"; sourceTree = "<group>"; };
+		CDA07ECB256C0FD900DEF3FF /* Validator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validator.swift; sourceTree = "<group>"; };
 		CDA0F6802539AA42009FD2A9 /* Answer+Prefilling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Answer+Prefilling.swift"; sourceTree = "<group>"; };
 		CDA0F6842539AA66009FD2A9 /* Task+ContactName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+ContactName.swift"; sourceTree = "<group>"; };
 		CDA0F6882539AAB8009FD2A9 /* Answer+Progress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Answer+Progress.swift"; sourceTree = "<group>"; };
@@ -189,12 +199,13 @@
 		CDADF7DD2534773800424492 /* UIToolbar+Done.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIToolbar+Done.swift"; sourceTree = "<group>"; };
 		CDADF7ED2535B6A500424492 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		CDADF7F22535E34400424492 /* UploadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadCoordinator.swift; sourceTree = "<group>"; };
-		CDC4A8E4250B87E5001BABC6 /* Oplossing 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Oplossing 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CDC4A8E4250B87E5001BABC6 /* GGD Contact.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GGD Contact.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDC4A8E7250B87E5001BABC6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CDC4A8E9250B87E5001BABC6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		CDC4A8F0250B87E6001BABC6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CDC4A8F3250B87E6001BABC6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CDC4A8F5250B87E6001BABC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CDC672692566824300222DCC /* Codable+UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+UserInfo.swift"; sourceTree = "<group>"; };
 		CDC7C86125376AB200FE7E05 /* Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
 		CDC7C8682538412600FE7E05 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		CDC7C86E2538429B00FE7E05 /* NetworkConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConfiguration.swift; sourceTree = "<group>"; };
@@ -212,18 +223,14 @@
 		CDD68BA9254D60BC00E96E9C /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		CDDC05632543120D0079C2F4 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		CDDC056B2546CD460079C2F4 /* Case.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case.swift; sourceTree = "<group>"; };
-		CDE25F60254B315100E9AE49 /* LocalMockNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMockNetworkManager.swift; sourceTree = "<group>"; };
 		CDE25F64254B316F00E9AE49 /* NetworkManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManaging.swift; sourceTree = "<group>"; };
-		CDE25F6B254B39B600E9AE49 /* Mocks */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Mocks; sourceTree = "<group>"; };
 		CDE25F8E254C21B900E9AE49 /* String+SHA256.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+SHA256.swift"; sourceTree = "<group>"; };
 		CDE30E63251BC02100862A40 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		CDE30E68251C89FF00862A40 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		CDE30E6B251CE15800862A40 /* ContactValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactValues.swift; sourceTree = "<group>"; };
 		CDE30E71251E278200862A40 /* EditContactCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditContactCoordinator.swift; sourceTree = "<group>"; };
 		CDE30E762521D90200862A40 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
-		CDE30E792521D92600862A40 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CDE30E7C2521D92B00862A40 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
-		CDE30E7E2521D97000862A40 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		CDE30E8625232FE200862A40 /* InputFieldEditable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputFieldEditable.swift; sourceTree = "<group>"; };
 		CDF817262552BEF100C60771 /* Bindable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bindable.swift; sourceTree = "<group>"; };
 		CDFCF906250FA6E80062269A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -231,7 +238,13 @@
 		CDFCF9142510EB4D0062269A /* NSAttributedString+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Extension.swift"; sourceTree = "<group>"; };
 		CDFCF9162510ECC70062269A /* UIView+Embed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Embed.swift"; sourceTree = "<group>"; };
 		CDFCF9182510FC760062269A /* SelfSizingTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingTableView.swift; sourceTree = "<group>"; };
+		D2AD6924D68CE50CD7E415A6 /* Pods-DBCO.ad hoc prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc prod.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc prod.xcconfig"; sourceTree = "<group>"; };
+		D34E71FC855BE93CC1FC3C40 /* Pods-DBCO.ad hoc test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc test.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc test.xcconfig"; sourceTree = "<group>"; };
+		DE63011D372615A2F530B706 /* Pods-DBCOTests.ad hoc test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc test.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc test.xcconfig"; sourceTree = "<group>"; };
+		E83F120572B4CBA49A883E2D /* Pods-DBCO.ad hoc a.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc a.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc a.xcconfig"; sourceTree = "<group>"; };
 		F20D8B2429FE08BE228E7DCD /* Pods-DBCOTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.release.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.release.xcconfig"; sourceTree = "<group>"; };
+		F25DD8B1E7114556272B64D6 /* Pods-DBCO.ad hoc t.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc t.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc t.xcconfig"; sourceTree = "<group>"; };
+		F7A36007E7696A5D934BA199 /* Pods-DBCOTests.ad hoc prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc prod.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc prod.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -263,6 +276,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		CD21D4A6258A071F0079D085 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				CD21D4A7258A07330079D085 /* Task+Unfinished.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		CD29635D25191975008443AF /* UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -287,6 +308,7 @@
 				CDF817262552BEF100C60771 /* Bindable.swift */,
 				CD2F7CB0255949F300F2F73A /* ContactSuggestionHelper.swift */,
 				CD2F7CAA255943E400F2F73A /* ISO8601DateFormat.swift */,
+				CDA07ECB256C0FD900DEF3FF /* Validator.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -404,8 +426,8 @@
 		CD756C33252B3D36005FEDA0 /* DBCOTests */ = {
 			isa = PBXGroup;
 			children = (
-				CD756C34252B3D36005FEDA0 /* DBCOTests.swift */,
 				CD2F7CB425594BDA00F2F73A /* ContactSuggestionTests.swift */,
+				CD010B97257A409B00CEA4F5 /* ContactQuestionnaireCommunicationTests.swift */,
 				CD756C36252B3D37005FEDA0 /* Info.plist */,
 			);
 			path = DBCOTests;
@@ -417,6 +439,7 @@
 				CD756C49252C6A30005FEDA0 /* OnboardingCoordinator.swift */,
 				CD756C4F252C6AC9005FEDA0 /* OnboardingStepViewController.swift */,
 				CD756C5D252C9A7E005FEDA0 /* PairViewController.swift */,
+				CD995B5F256FDA63007A8B2C /* PrivacyConsentViewController.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -462,6 +485,7 @@
 		CDADF7F12535E32B00424492 /* Upload */ = {
 			isa = PBXGroup;
 			children = (
+				CD21D4A6258A071F0079D085 /* Extensions */,
 				CDADF7F22535E34400424492 /* UploadCoordinator.swift */,
 				CD65CD802535F77400BB761A /* LoadingViewController.swift */,
 				CD65CD8425360F5C00BB761A /* UnfinishedTasksViewController.swift */,
@@ -483,7 +507,7 @@
 		CDC4A8E5250B87E5001BABC6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CDC4A8E4250B87E5001BABC6 /* Oplossing 2.app */,
+				CDC4A8E4250B87E5001BABC6 /* GGD Contact.app */,
 				CD756C32252B3D36005FEDA0 /* DBCOTests.xctest */,
 			);
 			name = Products;
@@ -504,7 +528,6 @@
 		CDC4A8FB250B8945001BABC6 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				CDE25F6B254B39B600E9AE49 /* Mocks */,
 				CDC4A8F0250B87E6001BABC6 /* Assets.xcassets */,
 				CD29636325191C7C008443AF /* Colors.xcassets */,
 				CDC4A8F5250B87E6001BABC6 /* Info.plist */,
@@ -533,7 +556,6 @@
 				CDC7C897253873CE00FE7E05 /* Envelope.swift */,
 				CDE25F64254B316F00E9AE49 /* NetworkManaging.swift */,
 				CDC7C8682538412600FE7E05 /* NetworkManager.swift */,
-				CDE25F60254B315100E9AE49 /* LocalMockNetworkManager.swift */,
 				CDC7C8762538469B00FE7E05 /* NetworkManagerURLSessionDelegate.swift */,
 				CDC7C87A2538481C00FE7E05 /* Config */,
 				CDC7C8812538497C00FE7E05 /* Extensions */,
@@ -557,6 +579,7 @@
 			children = (
 				CDC7C8822538497C00FE7E05 /* Encodable+AnyEncodable.swift */,
 				CDC7C8832538497C00FE7E05 /* JSONDecoder+Decoding.swift */,
+				CDC672692566824300222DCC /* Codable+UserInfo.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -608,6 +631,18 @@
 				15DD27ADC58F767AEF653836 /* Pods-DBCOTests.ad hoc.xcconfig */,
 				CBA78D02FA0FE384D189E4D2 /* Pods-DBCO.pentest.xcconfig */,
 				0230E8A0955F3CA5EC36778F /* Pods-DBCOTests.pentest.xcconfig */,
+				F25DD8B1E7114556272B64D6 /* Pods-DBCO.ad hoc t.xcconfig */,
+				E83F120572B4CBA49A883E2D /* Pods-DBCO.ad hoc a.xcconfig */,
+				8C5B6FFF57DC03F9D4B6BA45 /* Pods-DBCO.ad hoc p.xcconfig */,
+				926126B7CC8EF910FA24AE60 /* Pods-DBCOTests.ad hoc t.xcconfig */,
+				1309B3B4DC170EA5E953827F /* Pods-DBCOTests.ad hoc a.xcconfig */,
+				338AE82F669A00159A255C14 /* Pods-DBCOTests.ad hoc p.xcconfig */,
+				D34E71FC855BE93CC1FC3C40 /* Pods-DBCO.ad hoc test.xcconfig */,
+				27736E44777314C870221718 /* Pods-DBCO.ad hoc acc.xcconfig */,
+				D2AD6924D68CE50CD7E415A6 /* Pods-DBCO.ad hoc prod.xcconfig */,
+				DE63011D372615A2F530B706 /* Pods-DBCOTests.ad hoc test.xcconfig */,
+				9CC161F1119555874A856AE2 /* Pods-DBCOTests.ad hoc acc.xcconfig */,
+				F7A36007E7696A5D934BA199 /* Pods-DBCOTests.ad hoc prod.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -639,6 +674,7 @@
 			buildConfigurationList = CDC4A8F8250B87E6001BABC6 /* Build configuration list for PBXNativeTarget "DBCO" */;
 			buildPhases = (
 				34080FC9F24951AD3F5AD83E /* [CP] Check Pods Manifest.lock */,
+				CDC672882566A86600222DCC /* ShellScript */,
 				CDC4A8E0250B87E5001BABC6 /* Sources */,
 				CDC4A8E1250B87E5001BABC6 /* Frameworks */,
 				CDC4A8E2250B87E5001BABC6 /* Resources */,
@@ -651,7 +687,7 @@
 			);
 			name = DBCO;
 			productName = DBCO;
-			productReference = CDC4A8E4250B87E5001BABC6 /* Oplossing 2.app */;
+			productReference = CDC4A8E4250B87E5001BABC6 /* GGD Contact.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -675,10 +711,9 @@
 			};
 			buildConfigurationList = CDC4A8DF250B87E5001BABC6 /* Build configuration list for PBXProject "DBCO" */;
 			compatibilityVersion = "Xcode 9.3";
-			developmentRegion = en;
+			developmentRegion = nl;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
 				nl,
 			);
@@ -705,7 +740,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CDE25F6C254B39B600E9AE49 /* Mocks in Resources */,
 				CDC4A8F4250B87E6001BABC6 /* LaunchScreen.storyboard in Resources */,
 				CD29636425191C80008443AF /* Colors.xcassets in Resources */,
 				CDE30E782521D92600862A40 /* Localizable.strings in Resources */,
@@ -797,6 +831,23 @@
 			shellPath = /bin/sh;
 			shellScript = "INFOPLIST=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nGITHASH=$(git rev-parse --verify --short HEAD)\n/usr/libexec/PlistBuddy -c \"Set :GitHash $GITHASH\" \"${INFOPLIST}\"\n";
 		};
+		CDC672882566A86600222DCC /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -804,8 +855,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD010B98257A409B00CEA4F5 /* ContactQuestionnaireCommunicationTests.swift in Sources */,
 				CD2F7CB525594BDA00F2F73A /* ContactSuggestionTests.swift in Sources */,
-				CD756C35252B3D36005FEDA0 /* DBCOTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -829,6 +880,7 @@
 				CD5DA76425516301003660CC /* ConfigManager.swift in Sources */,
 				CD756C78252DDF30005FEDA0 /* SectionView.swift in Sources */,
 				CD1824EE2524B3E4006EB272 /* InputField.swift in Sources */,
+				CDA07ECC256C0FD900DEF3FF /* Validator.swift in Sources */,
 				CDA5C11125123DC9009440D1 /* AppVersion.swift in Sources */,
 				CD6860CA253B31190061C318 /* ClassificationHelper.swift in Sources */,
 				CDA52601252F1752004E923A /* ToggleGroup.swift in Sources */,
@@ -847,7 +899,6 @@
 				CD4036A1255D42F70037BCF1 /* PairingManager.swift in Sources */,
 				CD5DA75E255162EE003660CC /* ConfigManaging.swift in Sources */,
 				CDADF7F32535E34400424492 /* UploadCoordinator.swift in Sources */,
-				CDE25F61254B315100E9AE49 /* LocalMockNetworkManager.swift in Sources */,
 				CD65CD812535F77400BB761A /* LoadingViewController.swift in Sources */,
 				CD2AC0762530601900E8AF78 /* InputTextView.swift in Sources */,
 				CDD68BAA254D60BC00E96E9C /* UserDefaults.swift in Sources */,
@@ -859,6 +910,7 @@
 				CDC4A8E8250B87E5001BABC6 /* AppDelegate.swift in Sources */,
 				CDE25F65254B316F00E9AE49 /* NetworkManaging.swift in Sources */,
 				CD756C70252DC629005FEDA0 /* SeparatorView.swift in Sources */,
+				CDC6726A2566824300222DCC /* Codable+UserInfo.swift in Sources */,
 				CD5DA76F2551859C003660CC /* AppUpdateViewController.swift in Sources */,
 				CD9C7F52254AC25300A78EEF /* Task+Informed.swift in Sources */,
 				CD2963522518F291008443AF /* ContactQuestionnaireViewController.swift in Sources */,
@@ -876,8 +928,10 @@
 				CDC7C8772538469B00FE7E05 /* NetworkManagerURLSessionDelegate.swift in Sources */,
 				CDC7C89425385AD600FE7E05 /* Task.swift in Sources */,
 				CDC7C88C2538507100FE7E05 /* Logging.swift in Sources */,
+				CD995B60256FDA63007A8B2C /* PrivacyConsentViewController.swift in Sources */,
 				CD47A4042549766C005B8801 /* SectionedScrollView.swift in Sources */,
 				CDA0F6892539AAB8009FD2A9 /* Answer+Progress.swift in Sources */,
+				CD21D4A8258A07330079D085 /* Task+Unfinished.swift in Sources */,
 				CD29635B25191972008443AF /* Haptic.swift in Sources */,
 				CDFCF907250FA6E80062269A /* ViewController.swift in Sources */,
 				CD2F7CAB255943E400F2F73A /* ISO8601DateFormat.swift in Sources */,
@@ -917,7 +971,6 @@
 		CD9C7F412549B2B600A78EEF /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				CD9C7F402549B2B600A78EEF /* en */,
 				CD9C7F442549B2B900A78EEF /* nl */,
 			);
 			name = InfoPlist.strings;
@@ -928,7 +981,6 @@
 			children = (
 				CDC4A8F3250B87E6001BABC6 /* Base */,
 				CDE30E762521D90200862A40 /* nl */,
-				CDE30E7E2521D97000862A40 /* en */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -936,7 +988,6 @@
 		CDE30E7A2521D92600862A40 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				CDE30E792521D92600862A40 /* en */,
 				CDE30E7C2521D92B00862A40 /* nl */,
 			);
 			name = Localizable.strings;
@@ -945,7 +996,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		CD64D2A2256188D000C1D715 /* Pentest */ = {
+		CD21D4C6258B77360079D085 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -995,41 +1046,44 @@
 				LOG_LEVEL = error;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				NETWORK_CONFIGURATION = Development;
+				NETWORK_CONFIGURATION = Production;
+				RESET_ENABLED = NO;
 				SDKROOT = iphoneos;
-				SHARE_LOGS_ENABLED = YES;
+				SHARE_LOGS_ENABLED = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
-			name = Pentest;
+			name = Release;
 		};
-		CD64D2A3256188D000C1D715 /* Pentest */ = {
+		CD21D4C7258B77360079D085 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CBA78D02FA0FE384D189E4D2 /* Pods-DBCO.pentest.xcconfig */;
+			baseConfigurationReference = 0960A2CA9D203990D48CA127 /* Pods-DBCO.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 88;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
-				PRODUCT_NAME = "Oplossing 2";
-				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO Ad Hoc";
+				MARKETING_VERSION = 1.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco.debug;
+				PRODUCT_NAME = "GGD Contact";
+				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO App Store";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = Pentest;
+			name = Release;
 		};
-		CD64D2A4256188D000C1D715 /* Pentest */ = {
+		CD21D4C8258B77360079D085 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0230E8A0955F3CA5EC36778F /* Pods-DBCOTests.pentest.xcconfig */;
+			baseConfigurationReference = F20D8B2429FE08BE228E7DCD /* Pods-DBCOTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -1044,9 +1098,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Oplossing 2.app/Oplossing 2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GGD Contact.app/GGD Contact";
 			};
-			name = Pentest;
+			name = Release;
 		};
 		CD756C39252B3D37005FEDA0 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1065,32 +1119,11 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Oplossing 2.app/Oplossing 2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GGD Contact.app/GGD Contact";
 			};
 			name = Debug;
 		};
-		CD756C3A252B3D37005FEDA0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = F20D8B2429FE08BE228E7DCD /* Pods-DBCOTests.release.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = DBCOTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.DBCOTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Oplossing 2.app/Oplossing 2";
-			};
-			name = Release;
-		};
-		CD756C3E252B4316005FEDA0 /* Ad Hoc */ = {
+		CD756C3E252B4316005FEDA0 /* Ad Hoc Test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1140,7 +1173,8 @@
 				LOG_LEVEL = debug;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				NETWORK_CONFIGURATION = ACC;
+				NETWORK_CONFIGURATION = Test;
+				RESET_ENABLED = YES;
 				SDKROOT = iphoneos;
 				SHARE_LOGS_ENABLED = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
@@ -1149,33 +1183,34 @@
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
-			name = "Ad Hoc";
+			name = "Ad Hoc Test";
 		};
-		CD756C3F252B4316005FEDA0 /* Ad Hoc */ = {
+		CD756C3F252B4316005FEDA0 /* Ad Hoc Test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4F26983E3C652AB213ED4047 /* Pods-DBCO.ad hoc.xcconfig */;
+			baseConfigurationReference = D34E71FC855BE93CC1FC3C40 /* Pods-DBCO.ad hoc test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 88;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
-				PRODUCT_NAME = "Oplossing 2";
+				PRODUCT_NAME = "GGD Contact (Test)";
 				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO Ad Hoc";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = "Ad Hoc";
+			name = "Ad Hoc Test";
 		};
-		CD756C40252B4316005FEDA0 /* Ad Hoc */ = {
+		CD756C40252B4316005FEDA0 /* Ad Hoc Test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 15DD27ADC58F767AEF653836 /* Pods-DBCOTests.ad hoc.xcconfig */;
+			baseConfigurationReference = DE63011D372615A2F530B706 /* Pods-DBCOTests.ad hoc test.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -1190,9 +1225,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Oplossing 2.app/Oplossing 2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GGD Contact.app/GGD Contact";
 			};
-			name = "Ad Hoc";
+			name = "Ad Hoc Test";
 		};
 		CD756C43252B44E6005FEDA0 /* App Store */ = {
 			isa = XCBuildConfiguration;
@@ -1245,6 +1280,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				NETWORK_CONFIGURATION = Production;
+				RESET_ENABLED = NO;
 				SDKROOT = iphoneos;
 				SHARE_LOGS_ENABLED = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
@@ -1262,15 +1298,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 88;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
-				PRODUCT_NAME = "Oplossing 2";
+				PRODUCT_NAME = "GGD Contact";
 				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO App Store";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1294,7 +1331,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Oplossing 2.app/Oplossing 2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GGD Contact.app/GGD Contact";
 			};
 			name = "App Store";
 		};
@@ -1356,6 +1393,7 @@
 				MTL_FAST_MATH = YES;
 				NETWORK_CONFIGURATION = Development;
 				ONLY_ACTIVE_ARCH = YES;
+				RESET_ENABLED = YES;
 				SDKROOT = iphoneos;
 				SHARE_LOGS_ENABLED = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -1364,7 +1402,32 @@
 			};
 			name = Debug;
 		};
-		CDC4A8F7250B87E6001BABC6 /* Release */ = {
+		CDC4A8F9250B87E6001BABC6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 049B33A27415B972962D11C7 /* Pods-DBCO.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 88;
+				DEVELOPMENT_TEAM = 5598UZ23ZV;
+				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.1;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco.debug;
+				PRODUCT_NAME = "GGD Contact";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		CDE70A8625836DCF00782BFB /* Ad Hoc Acc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1414,61 +1477,167 @@
 				LOG_LEVEL = debug;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				NETWORK_CONFIGURATION = Development;
+				NETWORK_CONFIGURATION = ACC;
+				RESET_ENABLED = YES;
 				SDKROOT = iphoneos;
 				SHARE_LOGS_ENABLED = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
-			name = Release;
+			name = "Ad Hoc Acc";
 		};
-		CDC4A8F9250B87E6001BABC6 /* Debug */ = {
+		CDE70A8725836DCF00782BFB /* Ad Hoc Acc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 049B33A27415B972962D11C7 /* Pods-DBCO.debug.xcconfig */;
+			baseConfigurationReference = 27736E44777314C870221718 /* Pods-DBCO.ad hoc acc.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 44;
-				DEVELOPMENT_TEAM = 5598UZ23ZV;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 88;
+				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco.debug;
-				PRODUCT_NAME = "Oplossing 2";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				MARKETING_VERSION = 1.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
+				PRODUCT_NAME = "GGD Contact (Acc)";
+				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO Ad Hoc";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = Debug;
+			name = "Ad Hoc Acc";
 		};
-		CDC4A8FA250B87E6001BABC6 /* Release */ = {
+		CDE70A8825836DCF00782BFB /* Ad Hoc Acc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0960A2CA9D203990D48CA127 /* Pods-DBCO.release.xcconfig */;
+			baseConfigurationReference = 9CC161F1119555874A856AE2 /* Pods-DBCOTests.ad hoc acc.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = DBCOTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.DBCOTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GGD Contact.app/GGD Contact";
+			};
+			name = "Ad Hoc Acc";
+		};
+		CDE70A8925836DD600782BFB /* Ad Hoc Prod */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LOG_LEVEL = debug;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				NETWORK_CONFIGURATION = Production;
+				RESET_ENABLED = YES;
+				SDKROOT = iphoneos;
+				SHARE_LOGS_ENABLED = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = "Ad Hoc Prod";
+		};
+		CDE70A8A25836DD600782BFB /* Ad Hoc Prod */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D2AD6924D68CE50CD7E415A6 /* Pods-DBCO.ad hoc prod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 44;
-				DEVELOPMENT_TEAM = 5598UZ23ZV;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 88;
+				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco.debug;
-				PRODUCT_NAME = "Oplossing 2";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				MARKETING_VERSION = 1.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
+				PRODUCT_NAME = "GGD Contact (Prod)";
+				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO Ad Hoc";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = Release;
+			name = "Ad Hoc Prod";
+		};
+		CDE70A8B25836DD600782BFB /* Ad Hoc Prod */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F7A36007E7696A5D934BA199 /* Pods-DBCOTests.ad hoc prod.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = DBCOTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.DBCOTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GGD Contact.app/GGD Contact";
+			};
+			name = "Ad Hoc Prod";
 		};
 /* End XCBuildConfiguration section */
 
@@ -1477,37 +1646,40 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CD756C39252B3D37005FEDA0 /* Debug */,
-				CD756C3A252B3D37005FEDA0 /* Release */,
 				CD756C45252B44E6005FEDA0 /* App Store */,
-				CD64D2A4256188D000C1D715 /* Pentest */,
-				CD756C40252B4316005FEDA0 /* Ad Hoc */,
+				CD21D4C8258B77360079D085 /* Release */,
+				CD756C40252B4316005FEDA0 /* Ad Hoc Test */,
+				CDE70A8825836DCF00782BFB /* Ad Hoc Acc */,
+				CDE70A8B25836DD600782BFB /* Ad Hoc Prod */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		CDC4A8DF250B87E5001BABC6 /* Build configuration list for PBXProject "DBCO" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CDC4A8F6250B87E6001BABC6 /* Debug */,
-				CDC4A8F7250B87E6001BABC6 /* Release */,
 				CD756C43252B44E6005FEDA0 /* App Store */,
-				CD64D2A2256188D000C1D715 /* Pentest */,
-				CD756C3E252B4316005FEDA0 /* Ad Hoc */,
+				CD21D4C6258B77360079D085 /* Release */,
+				CD756C3E252B4316005FEDA0 /* Ad Hoc Test */,
+				CDE70A8625836DCF00782BFB /* Ad Hoc Acc */,
+				CDE70A8925836DD600782BFB /* Ad Hoc Prod */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		CDC4A8F8250B87E6001BABC6 /* Build configuration list for PBXNativeTarget "DBCO" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CDC4A8F9250B87E6001BABC6 /* Debug */,
-				CDC4A8FA250B87E6001BABC6 /* Release */,
 				CD756C44252B44E6005FEDA0 /* App Store */,
-				CD64D2A3256188D000C1D715 /* Pentest */,
-				CD756C3F252B4316005FEDA0 /* Ad Hoc */,
+				CD21D4C7258B77360079D085 /* Release */,
+				CD756C3F252B4316005FEDA0 /* Ad Hoc Test */,
+				CDE70A8725836DCF00782BFB /* Ad Hoc Acc */,
+				CDE70A8A25836DD600782BFB /* Ad Hoc Prod */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

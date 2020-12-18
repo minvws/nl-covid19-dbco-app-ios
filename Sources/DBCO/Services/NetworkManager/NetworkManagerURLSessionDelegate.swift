@@ -16,7 +16,7 @@ final class NetworkManagerURLSessionDelegate: NSObject, URLSessionDelegate, Logg
         self.configuration = configuration
     }
     
-    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> ()) {
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
 
         guard let localSignature = configuration.sslSignature(forHost: challenge.protectionSpace.host),
             challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,

@@ -39,7 +39,9 @@ final class UploadCoordinator: Coordinator, Logging {
             self.delegate?.uploadCoordinatorDidFinish(self)
         }
         
-        if Services.caseManager.tasks.contains(where: { !$0.isOrCanBeInformed } ) {
+        let unfinishedTasks = Services.caseManager.tasks.filter(\.isUnfinished)
+        
+        if !unfinishedTasks.isEmpty {
             showUnfinishedTasks()
         } else {
             sync(animated: false)
@@ -61,7 +63,7 @@ final class UploadCoordinator: Coordinator, Logging {
         
         do {
             try Services.caseManager.sync { _ in
-                let viewModel = OnboardingStepViewModel(image: UIImage(named: "StartVisual")!,
+                let viewModel = OnboardingStepViewModel(image: UIImage(named: "UploadSuccess")!,
                                                         title: .uploadFinishedTitle,
                                                         message: .uploadFinishedMessage,
                                                         buttonTitle: .done)
@@ -112,7 +114,7 @@ extension UploadCoordinator: UnfinishedTasksViewControllerDelegate {
     func unfinishedTasksViewController(_ controller: UnfinishedTasksViewController, didSelect task: Task) {
         switch task.taskType {
         case .contact:
-            if task.result != nil {
+            if task.questionnaireResult != nil {
                 // edit flow
                 editContact(for: task)
             } else {
@@ -157,5 +159,3 @@ extension UploadCoordinator: OnboardingStepViewControllerDelegate {
     }
     
 }
-
-

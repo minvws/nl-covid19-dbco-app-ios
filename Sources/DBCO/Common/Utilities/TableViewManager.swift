@@ -59,6 +59,7 @@ class TableViewManager<Cell: UITableViewCell & Reusable & Configurable>: NSObjec
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // swiftlint:disable:next force_cast
         let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseIdentifier) as! Cell
         itemForCellAtIndexPath.map { cell.configure($0(indexPath)) }
         return cell

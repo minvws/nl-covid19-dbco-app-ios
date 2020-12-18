@@ -68,7 +68,7 @@ class PairViewController: UIViewController {
                           nextButton,
                           keyboardSpacerView))
             .distribution(.equalSpacing)
-            .wrappedInReadableWidth()
+            .wrappedInReadableWidth(insets: .top(66))
         
         containerView.embed(in: view.safeAreaLayoutGuide)
         

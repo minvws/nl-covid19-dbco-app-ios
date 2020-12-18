@@ -21,8 +21,8 @@ public extension NSAttributedString {
         let tabInterval: CGFloat = 20
         var tabStops = [NSTextTab]()
         tabStops.append(NSTextTab(textAlignment: .natural, location: 1))
-        for i in 1...12 {
-            tabStops.append(NSTextTab(textAlignment: .natural, location: CGFloat(i)*tabInterval))
+        for index in 1...12 {
+            tabStops.append(NSTextTab(textAlignment: .natural, location: CGFloat(index) * tabInterval))
         }
         
         listParagraphStyle.alignment = textAlignment
@@ -33,7 +33,7 @@ public extension NSAttributedString {
         
         var attributes: [Key: Any] = [
             .foregroundColor: textColor,
-            .paragraphStyle: paragraphStyle,
+            .paragraphStyle: paragraphStyle
         ]
         if let underlineColor = underlineColor {
             attributes[.underlineColor] = underlineColor
@@ -82,7 +82,7 @@ public extension NSAttributedString {
             ]
             let listBulletCharacter = "\u{25CF}"
             let currentText = attributedTitle.string
-            var searchRange = NSRange(location: 0, length:currentText.count)
+            var searchRange = NSRange(location: 0, length: currentText.count)
             var foundRange = NSRange()
             while searchRange.location < currentText.count {
                 searchRange.length = currentText.count - searchRange.location
@@ -109,11 +109,11 @@ public extension NSAttributedString {
                     }
                     attributedTitle.removeAttribute(.paragraphStyle, range: startRange)
                     attributedTitle.addAttribute(.paragraphStyle, value: listParagraphStyle, range: startRange)
-                    previousParagraphIsListStart  = true
+                    previousParagraphIsListStart = true
                 } else if previousParagraphIsListStart {
                     attributedTitle.removeAttribute(.paragraphStyle, range: range)
                     attributedTitle.addAttribute(.paragraphStyle, value: listParagraphStyle, range: range)
-                    previousParagraphIsListStart  = false
+                    previousParagraphIsListStart = false
                 }
             }
             

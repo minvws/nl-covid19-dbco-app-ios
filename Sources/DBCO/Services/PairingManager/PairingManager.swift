@@ -38,7 +38,6 @@ class PairingManager: PairingManaging, Logging {
     let loggingCategory = "PairingManager"
     
     private struct Constants {
-        static let encodedHAPublicKey = "I8uOsrNAccb4/4xJUHOKKWZ4ZDW5JygzEMZMB5xwHAM="
         static let keychainService = "PairingManager"
     }
     
@@ -60,6 +59,7 @@ class PairingManager: PairingManaging, Logging {
     
     @Keychain(name: "pairing", service: Constants.keychainService, clearOnReinstall: true)
     private var pairing: Pairing = .empty
+    // swiftlint:disable:previous let_var_whitespace
     
     required init() {}
     
@@ -82,7 +82,9 @@ class PairingManager: PairingManaging, Logging {
     func pair(pairingCode: String, completion: @escaping (_ success: Bool, _ error: PairingManagingError?) -> Void) {
         guard !$pairing.exists else { return completion(false, .alreadyPaired) }
         
-        guard let haPublicKeyData = Data(base64Encoded: Constants.encodedHAPublicKey) else {
+        let haPublicKeyInformation = Services.networkManager.configuration.haPublicKey
+        
+        guard let haPublicKeyData = Data(base64Encoded: haPublicKeyInformation.encodedPublicKey) else {
             fatalError("Invalid stored health authority public key")
         }
         
@@ -192,12 +194,14 @@ class PairingManager: PairingManaging, Logging {
     private lazy var jsonEncoder: JSONEncoder = {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .formatted(dateFormatter)
+        encoder.target = .api
         return encoder
     }()
     
     private lazy var jsonDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        decoder.source = .api
         return decoder
     }()
 }

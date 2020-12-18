@@ -24,19 +24,15 @@ final class AppCoordinator: Coordinator {
     }
     
     override func start() {
-        #if USERTEST_MOCKS
-        Services.use(LocalMockNetworkManager.self)
-        #endif
-        
         LogHandler.setup()
         
         window.tintColor = Theme.colors.primary
         
         // Check if the app is the minimum version. If not, show the app update screen
-        checkForRequiredUpdates()
+        updateConfiguration()
         
         if Services.pairingManager.isPaired {
-            startChildCoordinator(TaskOverviewCoordinator(window: window))
+            startChildCoordinator(TaskOverviewCoordinator(window: window, delegate: self))
         } else {
             let onboardingCoordinator = OnboardingCoordinator(window: window)
             onboardingCoordinator.delegate = self
@@ -44,22 +40,27 @@ final class AppCoordinator: Coordinator {
         }
     }
     
-    private var isCheckingForRequiredUpdates = false
-    func checkForRequiredUpdates() {
-        guard !isCheckingForRequiredUpdates else { return}
+    private var isUpdatingConfiguration = false
+    
+    func updateConfiguration() {
+        guard !isUpdatingConfiguration else { return }
         
-        isCheckingForRequiredUpdates = true
+        isUpdatingConfiguration = true
         
-        Services.configManager.checkUpdateRequired { [unowned self] in
-            switch $0 {
+        Services.configManager.update { [unowned self] updateState, _ in
+            switch updateState {
             case .updateRequired(let versionInformation):
                 showRequiredUpdate(with: versionInformation)
             case .noActionNeeded:
                 break
             }
             
-            isCheckingForRequiredUpdates = false
+            isUpdatingConfiguration = false
         }
+    }
+    
+    func refreshCaseDataIfNeeded() {
+        Services.caseManager.loadCaseData(userInitiated: false) { _, _ in }
     }
     
     private func showRequiredUpdate(with versionInformation: AppVersionInformation) {
@@ -85,7 +86,7 @@ extension AppCoordinator: OnboardingCoordinatorDelegate {
     func onboardingCoordinatorDidFinish(_ coordinator: OnboardingCoordinator) {
         removeChildCoordinator(coordinator)
         
-        startChildCoordinator(TaskOverviewCoordinator(window: window))
+        startChildCoordinator(TaskOverviewCoordinator(window: window, delegate: self))
     }
     
 }
@@ -94,6 +95,20 @@ extension AppCoordinator: AppUpdateViewControllerDelegate {
     
     func appUpdateViewController(_ controller: AppUpdateViewController, wantsToOpen url: URL) {
         UIApplication.shared.open(url)
+    }
+    
+}
+
+extension AppCoordinator: TaskOverviewCoordinatorDelegate {
+    
+    func taskOverviewCoordinatorDidRequestReset(_ coordinator: TaskOverviewCoordinator) {
+    
+        Services.pairingManager.unpair()
+        try? Services.caseManager.removeCaseData()
+        
+        removeChildCoordinator(coordinator)
+        
+        start()
     }
     
 }

@@ -49,11 +49,13 @@ enum HTTPContentType: String {
 
 /// - Tag: NetworkManaging
 protocol NetworkManaging {
+    var configuration: NetworkConfiguration { get }
+    
     init(configuration: NetworkConfiguration)
     
-    func getAppConfiguration(completion: @escaping (Result<AppConfiguration, NetworkError>) -> ())
-    func pair(code: String, sealedClientPublicKey: Data, completion: @escaping (Result<PairResponse, NetworkError>) -> ())
-    func getCase(identifier: String, completion: @escaping (Result<Case, NetworkError>) -> ())
-    func putCase(identifier: String, value: Case, completion: @escaping (Result<Void, NetworkError>) -> ())
-    func getQuestionnaires(completion: @escaping (Result<[Questionnaire], NetworkError>) -> ())
+    func getAppConfiguration(completion: @escaping (Result<AppConfiguration, NetworkError>) -> Void)
+    func pair(code: String, sealedClientPublicKey: Data, completion: @escaping (Result<PairResponse, NetworkError>) -> Void)
+    func getCase(identifier: String, completion: @escaping (Result<Case, NetworkError>) -> Void)
+    func putCase(identifier: String, value: Case, completion: @escaping (Result<Void, NetworkError>) -> Void)
+    func getQuestionnaires(completion: @escaping (Result<[Questionnaire], NetworkError>) -> Void)
 }

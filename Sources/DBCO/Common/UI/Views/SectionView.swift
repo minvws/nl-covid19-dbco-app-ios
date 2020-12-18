@@ -43,7 +43,17 @@ class SectionView: UIView {
         didSet { updateEnabled() }
     }
     
+    var showBottomSeparator: Bool = true {
+        didSet { bottomSeparator.isHidden = !showBottomSeparator }
+    }
+    
+    var index: Int {
+        didSet { icon.image = UIImage(named: "EditContact/Section\(index)") }
+    }
+    
     init(title: String, caption: String, index: Int) {
+        self.index = index
+        
         super.init(frame: .zero)
         
         clipsToBounds = true
@@ -65,7 +75,7 @@ class SectionView: UIView {
         icon.setContentHuggingPriority(.required, for: .horizontal)
         icon.tintColor = Theme.colors.primary
         
-        collapseIndicator.image =  UIImage(named: "EditContact/SectionCollapse")
+        collapseIndicator.image = UIImage(named: "EditContact/SectionCollapse")
         collapseIndicator.setContentHuggingPriority(.required, for: .horizontal)
         
         titleLabel.text = title
@@ -91,7 +101,7 @@ class SectionView: UIView {
         contentView
             .snap(to: .bottom, of: contentContainerView, insets: .bottom(24))
 
-        SeparatorView()
+        bottomSeparator
             .snap(to: .bottom, of: contentContainerView.readableIdentation)
         
         // A low priority top constraint that will break when collapsing, so content will seem to move upwards while animating, instead of getting squished
@@ -195,4 +205,5 @@ class SectionView: UIView {
     private let collapseIndicator = UIImageView()
     private let titleLabel = Label(bodyBold: "")
     private let captionLabel = Label(subhead: "", textColor: Theme.colors.captionGray)
+    private let bottomSeparator = SeparatorView()
 }

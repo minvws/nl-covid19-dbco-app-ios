@@ -20,8 +20,8 @@ extension String {
 
         let hash = NSMutableString()
         
-        for i in 0 ..< digestLen {
-            hash.appendFormat("%02x", result[i])
+        for index in 0 ..< digestLen {
+            hash.appendFormat("%02x", result[index])
         }
 
         result.deallocate()

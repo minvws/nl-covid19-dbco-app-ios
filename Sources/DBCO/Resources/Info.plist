@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<string>nl</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>GitHash</key>
@@ -27,7 +27,11 @@
 	<key>NETWORK_CONFIGURATION</key>
 	<string>$(NETWORK_CONFIGURATION)</string>
 	<key>NSContactsUsageDescription</key>
-	<string>Contacten delen gaat sneller als we toestemming hebben, je beslist zelf welke contactgegevens je deelt met de GGD.</string>
+	<string>Zo kun je makkelijk contactgegevens aanvullen. Je bepaalt daarna zelf welke gegevens je met de GGD deelt. Wil je de app geen toegang geven? Dan kun je contactgegevens ook handmatig toevoegen.</string>
+	<key>RESET_ENABLED</key>
+	<string>$(RESET_ENABLED)</string>
+	<key>SHARE_LOGS_ENABLED</key>
+	<string>$(SHARE_LOGS_ENABLED)</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -71,7 +75,5 @@
 		<string>a6f3cb251db58a4cceaaec27090241216e69bdf8b28900dbcacb0cdf1f8c9813</string>
 		<string>022819c49acf699b5030995565cdb86bb183e23ed155300980e86baada1b908a</string>
 	</array>
-	<key>SHARE_LOGS_ENABLED</key>
-	<string>$(SHARE_LOGS_ENABLED)</string>
 </dict>
 </plist>

@@ -15,15 +15,15 @@ public final class Localization {
     public static func string(for key: String, comment: String = "", _ arguments: [CVarArg] = []) -> String {
         let value = NSLocalizedString(key, bundle: Bundle(for: Localization.self), comment: comment)
         guard value == key else {
-            return (arguments.count > 0) ? String(format: value, arguments: arguments) : value
+            return !arguments.isEmpty ? String(format: value, arguments: arguments) : value
         }
         guard
             let path = Bundle(for: Localization.self).path(forResource: "Base", ofType: "lproj"),
             let bundle = Bundle(path: path) else {
-            return (arguments.count > 0) ? String(format: value, arguments: arguments) : value
+            return !arguments.isEmpty ? String(format: value, arguments: arguments) : value
         }
         let localizedString = NSLocalizedString(key, bundle: bundle, comment: "")
-        return (arguments.count > 0) ? String(format: localizedString, arguments: arguments) : localizedString
+        return !arguments.isEmpty ? String(format: localizedString, arguments: arguments) : localizedString
     }
 
     public static func attributedString(for key: String, comment: String = "", _ arguments: [CVarArg] = []) -> NSMutableAttributedString {
@@ -35,7 +35,7 @@ public final class Localization {
         let paragraph = "\n\n"
         let strings = value.components(separatedBy: paragraph)
 
-        return strings.enumerated().map { (index, element) -> NSMutableAttributedString in
+        return strings.enumerated().map { index, element -> NSMutableAttributedString in
             let value = index < strings.count - 1 ? element + "\n" : element
             return NSMutableAttributedString(string: value)
         }
@@ -49,6 +49,8 @@ extension String {
     static func appVersionTitle(_ version: String, _ build: String) -> String { return Localization.string(for: "appVersionTitle", [version, build]) }
     
     /* MARK: - General */
+    static var yes: String { return Localization.string(for: "yes") }
+    static var no: String { return Localization.string(for: "no") }
     static var save: String { return Localization.string(for: "save") }
     static var cancel: String { return Localization.string(for: "cancel") }
     static var close: String { return Localization.string(for: "close") }
@@ -59,6 +61,7 @@ extension String {
     static var done: String { return Localization.string(for: "done") }
     static var ok: String { return Localization.string(for: "ok") }
     static var tryAgain: String { return Localization.string(for: "tryAgain") }
+    static var delete: String { return Localization.string(for: "delete") }
     static var errorTitle: String { return Localization.string(for: "error.title") }
     
     // MARK: - Update App
@@ -75,12 +78,21 @@ extension String {
     static var onboardingStep3Title: String { return Localization.string(for: "onboarding.step3.title") }
     static var onboardingStep3Message: String { return Localization.string(for: "onboarding.step3.message") }
     
+    static var onboardingConsentTitle: String { return Localization.string(for: "onboarding.consent.title") }
+    static var onboardingConsentMessage: String { return Localization.string(for: "onboarding.consent.message") }
+    static var onboardingConsentItem1: String { return Localization.string(for: "onboarding.consent.item1") }
+    static var onboardingConsentItem2: String { return Localization.string(for: "onboarding.consent.item2") }
+    static var onboardingConsentItem3: String { return Localization.string(for: "onboarding.consent.item3") }
+    static var onboardingConsentItem4: String { return Localization.string(for: "onboarding.consent.item4") }
+    static var onboardingConsentButtonTitle: String { return Localization.string(for: "onboarding.consent.buttonTitle") }
+    
     static var onboardingLoadingErrorTitle: String { return Localization.string(for: "onboardingLoadingErrorTitle") }
     static var onboardingLoadingErrorMessage: String { return Localization.string(for: "onboardingLoadingErrorMessage") }
     
     /* MARK: - Task Overview */
     static var taskOverviewTitle: String { return Localization.string(for: "taskOverviewTitle") }
     static var taskOverviewDoneButtonTitle: String { return Localization.string(for: "taskOverviewDoneButtonTitle") }
+    static var taskOverviewDeleteDataButtonTitle: String { return Localization.string(for: "taskOverviewDeleteDataButtonTitle") }
     static var taskOverviewAddContactButtonTitle: String { return Localization.string(for: "taskOverviewAddContactButtonTitle") }
     
     static var taskOverviewUninformedContactsHeaderTitle: String { return Localization.string(for: "taskOverviewUninformedContactsHeader.title") }
@@ -88,11 +100,22 @@ extension String {
     static var taskOverviewInformedContactsHeaderTitle: String { return Localization.string(for: "taskOverviewInformedContactsHeader.title") }
     static var taskOverviewInformedContactsHeaderSubtitle: String { return Localization.string(for: "taskOverviewInformedContactsHeader.subtitle") }
     
-    static var taskContactCaptionCompleted: String { return Localization.string(for: "task.contact.caption.completed") }
-    static var taskContactCaptionIncomplete: String { return Localization.string(for: "task.contact.caption.incomplete") }
+    static var taskContactUnknownName: String { return Localization.string(for: "taskContactUnknownName") }
     
     static var taskLoadingErrorTitle: String { return Localization.string(for: "taskLoadingErrorTitle") }
     static var taskLoadingErrorMessage: String { return Localization.string(for: "taskLoadingErrorMessage") }
+    
+    static var deleteDataPromptTitle: String { return Localization.string(for: "deleteDataPromptTitle") }
+    static var deleteDataPromptMessage: String { return Localization.string(for: "deleteDataPromptMessage") }
+    static var deleteDataPromptOptionCancel: String { return Localization.string(for: "deleteDataPromptOptionCancel") }
+    static var deleteDataPromptOptionDelete: String { return Localization.string(for: "deleteDataPromptOptionDelete") }
+    
+    static var windowExpiredMessage: String { return Localization.string(for: "windowExpiredMessage") }
+    
+    static var contactTaskStatusStaffWillInform: String { return Localization.string(for: "contactTaskStatusStaffWillInform") }
+    static var contactTaskStatusIndexDidInform: String { return Localization.string(for: "contactTaskStatusIndexDidInform") }
+    static var contactTaskStatusIndexWillInform: String { return Localization.string(for: "contactTaskStatusIndexWillInform") }
+    static var contactTaskStatusMissingDetails: String { return Localization.string(for: "contactTaskStatusMissingDetails") }
     
     // MARK: - Contact Selection
     static var selectContactTitle: String { return Localization.string(for: "selectContactTitle") }
@@ -122,13 +145,69 @@ extension String {
         return Localization.string(for: "informContactTitle.staff", [firstName])
     }
     
-    static var informContactGuidelinesCategory1: String { return Localization.string(for: "informContactGuidelines.category1") }
-    static func informContactGuidelinesCategory2(untilDate: String, daysRemaining: String) -> String { return Localization.string(for: "informContactGuidelines.category2", [untilDate, daysRemaining]) }
-    static func informContactGuidelinesCloseUntilDate(date: String) -> String { return Localization.string(for: "informContactGuidelines.category2.untilDate", [date]) }
-    static var informContactGuidelinesCloseDateFormat: String { return Localization.string(for: "informContactGuidelines.category2.dateFormat") }
-    static var informContactGuidelinesCloseDayRemaining: String { return Localization.string(for: "informContactGuidelines.category2.dayRemaining") }
-    static func informContactGuidelinesCloseDaysRemaining(daysRemaining: String) -> String { return Localization.string(for: "informContactGuidelines.category2.daysRemaining", [daysRemaining]) }
-    static var informContactGuidelinesCategory3: String { return Localization.string(for: "informContactGuidelines.category3") }
+    static func informContactFooterIndex(firstName: String?) -> String {
+        let firstName = firstName ?? .contactPromptNameFallback
+        return Localization.string(for: "informContactFooter.index", [firstName])
+    }
+    
+    static func informContactFooterStaff(firstName: String?) -> String {
+        let firstName = firstName ?? .contactPromptNameFallback
+        return Localization.string(for: "informContactFooter.staff", [firstName])
+    }
+    
+    static var informContactGuidelinesDateFormat: String { return Localization.string(for: "informContactGuidelines.dateFormat") }
+    
+    static func informContactGuidelines(category: Task.Contact.Category, exposureDatePlus5: String, exposureDatePlus10: String, exposureDatePlus11: String, exposureDatePlus14: String) -> String {
+        switch category {
+        case .category1:
+            return Localization.string(for: "informContactGuidelines.category1", [exposureDatePlus11])
+        case .category2a, .category2b:
+            return Localization.string(for: "informContactGuidelines.category2", [exposureDatePlus5, exposureDatePlus10])
+        case .category3:
+            return Localization.string(for: "informContactGuidelines.category3", [exposureDatePlus14])
+        default:
+            return ""
+        }
+    }
+    
+    static func informContactGuidelinesIntro(category: Task.Contact.Category, exposureDate: String) -> String {
+        switch category {
+        case .category1:
+            return Localization.string(for: "informContactGuidelines.category1.intro")
+        case .category2a, .category2b:
+            return Localization.string(for: "informContactGuidelines.category2.intro", [exposureDate])
+        case .category3:
+            return Localization.string(for: "informContactGuidelines.category3.intro", [exposureDate])
+        default:
+            return ""
+        }
+    }
+    
+    static func informContactGuidelinesGeneric(category: Task.Contact.Category) -> String {
+        switch category {
+        case .category1:
+            return Localization.string(for: "informContactGuidelines.generic.category1")
+        case .category2a, .category2b:
+            return Localization.string(for: "informContactGuidelines.generic.category2")
+        case .category3:
+            return Localization.string(for: "informContactGuidelines.generic.category3")
+        default:
+            return ""
+        }
+    }
+    
+    static func informContactGuidelinesIntroGeneric(category: Task.Contact.Category) -> String {
+        switch category {
+        case .category1:
+            return Localization.string(for: "informContactGuidelines.generic.category1.intro")
+        case .category2a, .category2b:
+            return Localization.string(for: "informContactGuidelines.generic.category2.intro")
+        case .category3:
+            return Localization.string(for: "informContactGuidelines.generic.category3.intro")
+        default:
+            return ""
+        }
+    }
     
     static func informContactLink(category: Task.Contact.Category) -> String {
         switch category {
@@ -186,16 +265,25 @@ extension String {
     static var contactInformationLastExposure: String { return Localization.string(for: "contactInformationLastExposure") }
     static var contactInformationLastExposureEarlier: String { return Localization.string(for: "contactInformationLastExposure.earlier") }
     
+    static var earlierExposureDateTitle: String { return Localization.string(for: "earlierExposureDateTitle") }
+    static var earlierExposureDateMessage: String { return Localization.string(for: "earlierExposureDateMessage") }
+    
+    static var contactDeletePromptTitle: String { return Localization.string(for: "contactDeletePromptTitle") }
+    
+    static var contactQuestionDisabledMessage: String { return Localization.string(for: "contactQuestionDisabledMessage") }
+    
     /* MARK: - Informing contacts */
     static var contactPromptNameFallback: String { return Localization.string(for: "contactPromptNameFallback") }
     
     static func contactInformPromptTitle(firstName: String) -> String { return Localization.string(for: "contactInformPromptTitle", [firstName]) }
+    
     static var contactInformPromptMessage: String { return Localization.string(for: "contactInformPromptMessage") }
     static var contactInformOptionDone: String { return Localization.string(for: "contactInformOptionDone") }
     static var contactInformActionInformLater: String { return Localization.string(for: "contactInformActionInformLater") }
     static var contactInformActionInformNow: String { return Localization.string(for: "contactInformActionInformNow") }
     
     static func contactMissingDetailsPromptTitle(firstName: String) -> String { return Localization.string(for: "contactMissingDetailsPromptTitle", [firstName]) }
+    
     static var contactMissingDetailsPromptMessage: String { return Localization.string(for: "contactMissingDetailsPromptMessage") }
     static var contactMissingDetailsActionIgnore: String { return Localization.string(for: "contactMissingDetailsActionIgnore") }
     static var contactMissingDetailsActionFillIn: String { return Localization.string(for: "contactMissingDetailsActionFillIn") }

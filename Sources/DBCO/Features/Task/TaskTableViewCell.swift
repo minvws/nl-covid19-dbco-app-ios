@@ -26,15 +26,41 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
     }
     
     private func configureForContactDetails(task: Task) {
-        titleLabel.text = task.contactName
-        titleLabel.font = Theme.fonts.bodyBold
+        switch (task.contactName, task.taskContext) {
+        case (.some(let name), .some(let context)):
+            titleLabel.text = name + " (\(context))"
+        case (.some(let name), .none):
+            titleLabel.text = name
+        case (.none, .some(let context)):
+            titleLabel.text = context
+        case (.none, .none):
+            titleLabel.text = .taskContactUnknownName
+        }
         
-        subtitleLabel.text = task.taskContext
+        titleLabel.font = Theme.fonts.bodyBold
         
         subtitleLabel.font = Theme.fonts.callout
         subtitleLabel.textColor = Theme.colors.captionGray
         
         statusView.status = task.status
+        
+        if let result = task.questionnaireResult,
+           task.contact.communication != .none,
+           result.hasAllEssentialAnswers {
+    
+            switch task.contact.communication {
+            case .staff:
+                subtitleLabel.text = .contactTaskStatusStaffWillInform
+            case .index where task.contact.didInform:
+                subtitleLabel.text = .contactTaskStatusIndexDidInform
+            case .index:
+                subtitleLabel.text = .contactTaskStatusIndexWillInform
+            default:
+                break
+            }
+        } else {
+            subtitleLabel.text = .contactTaskStatusMissingDetails
+        }
     }
 
     private func build() {
@@ -54,8 +80,8 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
         containerView
             .embed(in: contentView.readableWidth, insets: .topBottom(16))
         
-        SeparatorView()
-            .snap(to: .bottom, of: contentView.readableIdentation)
+        SeparatorView(style: .gray)
+            .snap(to: .bottom, of: contentView.readableIdentation, insets: .left(40))
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

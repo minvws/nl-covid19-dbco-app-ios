@@ -42,7 +42,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillEnterForeground(_ scene: UIScene) {
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
-        appCoordinator?.checkForRequiredUpdates()
+        
+        guard scene.activationState == .background else { return }
+        
+        appCoordinator?.updateConfiguration()
+        appCoordinator?.refreshCaseDataIfNeeded()
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
@@ -51,6 +55,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
-
 }
-

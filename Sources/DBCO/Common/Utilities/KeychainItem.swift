@@ -79,7 +79,11 @@ class KeychainItem<T: Codable> {
         guard status != errSecItemNotFound else { throw KeychainError.notFound }
         guard status == noErr else { throw KeychainError.unhandledError(status: status) }
         
-        let decoder = JSONDecoder()
+        let decoder: JSONDecoder = {
+            let decoder = JSONDecoder()
+            decoder.source = .internalStorage
+            return decoder
+        }()
         
         // Parse the value from the query result.
         guard let existingItem = queryResult as? [String: AnyObject], let passwordData = existingItem[kSecValueData as String] as? Data else {
@@ -88,8 +92,8 @@ class KeychainItem<T: Codable> {
         
         if let password = try? decoder.decode(Wrapped.self, from: passwordData) {
             return password.value
-        } else if T.self is String.Type, let password = String(data: passwordData, encoding: .utf8) {
-            return password as! T
+        } else if T.self is String.Type, let password = String(data: passwordData, encoding: .utf8), let value = password as? T {
+            return value
         } else {
             throw KeychainError.unexpectedData
         }
@@ -109,8 +113,14 @@ class KeychainItem<T: Codable> {
             return
         }
         
+        let encoder: JSONEncoder = {
+            let encoder = JSONEncoder()
+            encoder.target = .internalStorage
+            return encoder
+        }()
+        
         // Encode the value into an Data object.
-        guard let encoded = try? JSONEncoder().encode(Wrapped(value: value)) else {
+        guard let encoded = try? encoder.encode(Wrapped(value: value)) else {
             throw KeychainError.unexpectedData
         }
         

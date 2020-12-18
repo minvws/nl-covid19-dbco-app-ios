@@ -15,5 +15,6 @@ import Foundation
 /// - Tag: Case
 struct Case: Codable {
     let dateOfSymptomOnset: Date
+    @ISO8601DateFormat var windowExpiresAt: Date
     let tasks: [Task]
 }
