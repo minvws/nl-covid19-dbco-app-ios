@@ -58,7 +58,7 @@ struct NetworkConfiguration {
             tokenParams: [:]
         ),
         haPublicKey: .init(
-            encodedPublicKey: "HBpEa5msZtzdA03ikhZHAT7mAI9SLp0fz0mEn0d8hWs=",
+            encodedPublicKey: "bwRH2gO0Bgd6DZ2Ia9y/SxryydiKsxBDd01+AjDgykc=",
             keyVersion: "20201210")
     )
 
@@ -69,11 +69,11 @@ struct NetworkConfiguration {
             host: "api-acc.bco-portaal.nl",
             port: nil,
             path: ["v1"],
-            sslSignature: nil,
+            sslSignature: Certificate.SSL.apiSignature,
             tokenParams: [:]
         ),
         haPublicKey: .init(
-            encodedPublicKey: "HBpEa5msZtzdA03ikhZHAT7mAI9SLp0fz0mEn0d8hWs=",
+            encodedPublicKey: "bwRH2gO0Bgd6DZ2Ia9y/SxryydiKsxBDd01+AjDgykc=",
             keyVersion: "20201210")
     )
 
@@ -88,8 +88,8 @@ struct NetworkConfiguration {
             tokenParams: [:]
         ),
         haPublicKey: .init(
-            encodedPublicKey: "lNyVtsLHDWl2pDguF03sfSZ7T6ahDdGtGHkz6oWu+mI=",
-            keyVersion: "20201210")
+            encodedPublicKey: "+Ey3G55XEefYbU5eCOzZl9oG1SVshUzh3DMYSS12Rkg=",
+            keyVersion: "20201217")
     )
     
     var appConfigurationUrl: URL? {

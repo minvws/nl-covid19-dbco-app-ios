@@ -38,6 +38,6 @@ struct Certificate {
 
 extension Certificate {
     struct SSL {
-        static let apiSignature: Certificate.Signature = "55PJsC/YqhPiHDEiisywgRlkO3SciYlksXRtRsPUy9I="
+        static let apiSignature: Certificate.Signature = "TSSRQUz+lWdG7Ezvps9vcuKKEylDL52KkHrEy12twVo="
     }
 }
