@@ -82,7 +82,7 @@ extension BirthDate: InputFieldEditable {
 extension GeneralDate: InputFieldEditable {
     var placeholder: String? { .selectDate }
     var labelFont: UIFont? { Theme.fonts.bodyBold }
-    var inputType: InputType { .date(formatter: GeneralDate.dateFormatter) }
+    var inputType: InputType { .date(formatter: GeneralDate.displayDateFormatter) }
 }
 
 extension BSN: InputFieldEditable {
