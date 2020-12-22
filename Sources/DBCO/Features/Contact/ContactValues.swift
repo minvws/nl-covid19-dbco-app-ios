@@ -75,7 +75,7 @@ struct GeneralDate: ContactValue {
                 return nil
             }
             
-            return GeneralDate.displayDateFormatter.date(from: value)
+            return GeneralDate.valueDateFormatter.date(from: value)
         }
         
         set {
@@ -84,7 +84,7 @@ struct GeneralDate: ContactValue {
                 return
             }
             
-            self.value = GeneralDate.dataDateFormatter.string(from: date)
+            self.value = GeneralDate.valueDateFormatter.string(from: date)
         }
     }
         
@@ -99,7 +99,7 @@ struct GeneralDate: ContactValue {
         return formatter
     }()
     
-    static let dataDateFormatter: DateFormatter = {
+    static let valueDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
         formatter.timeStyle = .none
