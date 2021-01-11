@@ -212,7 +212,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let text = text {
-            textWidthLabel.text = (text as NSString).replacingCharacters(in: range, with: string) as String
+            let replacementString = string.replacingOccurrences(of: "\n", with: "") // ignoring newlines like the textfield itself does
+            textWidthLabel.text = (text as NSString).replacingCharacters(in: range, with: replacementString) as String
         }
         
         guard let object = object else { return true }
