@@ -58,8 +58,8 @@ struct NetworkConfiguration {
             tokenParams: [:]
         ),
         haPublicKey: .init(
-            encodedPublicKey: "bwRH2gO0Bgd6DZ2Ia9y/SxryydiKsxBDd01+AjDgykc=",
-            keyVersion: "20201210")
+            encodedPublicKey: "qC8yrdZA5PUDuIfP2nED8Zr9gD9nmxlKKtu/rVl0QVw=",
+            keyVersion: "20210107")
     )
 
     static let acceptance = NetworkConfiguration(
@@ -73,8 +73,8 @@ struct NetworkConfiguration {
             tokenParams: [:]
         ),
         haPublicKey: .init(
-            encodedPublicKey: "bwRH2gO0Bgd6DZ2Ia9y/SxryydiKsxBDd01+AjDgykc=",
-            keyVersion: "20201210")
+            encodedPublicKey: "X850Q6EDZT7N5IQEXVHphSerjDjHxuwEtDH0KnNrHRg=",
+            keyVersion: "20201230")
     )
 
     static let production = NetworkConfiguration(
