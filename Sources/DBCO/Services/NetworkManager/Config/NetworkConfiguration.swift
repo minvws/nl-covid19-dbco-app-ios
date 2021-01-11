@@ -59,7 +59,7 @@ struct NetworkConfiguration {
         ),
         haPublicKey: .init(
             encodedPublicKey: "qC8yrdZA5PUDuIfP2nED8Zr9gD9nmxlKKtu/rVl0QVw=",
-            keyVersion: "20200107")
+            keyVersion: "20210107")
     )
 
     static let acceptance = NetworkConfiguration(
