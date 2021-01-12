@@ -58,7 +58,7 @@ struct NetworkConfiguration {
             tokenParams: [:]
         ),
         haPublicKey: .init(
-            encodedPublicKey: "qC8yrdZA5PUDuIfP2nED8Zr9gD9nmxlKKtu/rVl0QVw=",
+            encodedPublicKey: "bWLH9tCUERcZbnCo5J0ibf5pa5mN6Il4gPqeTIQcG18=",
             keyVersion: "20210107")
     )
 
