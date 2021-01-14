@@ -80,9 +80,9 @@ extension DetermineContagiousPeriodCoordinator: OnboardingStepViewControllerDele
         
         switch identifier {
         case .confirmNoSymptoms:
-            delegate?.determineContagiousPeriodCoordinator(self, didFinishWith: testDate)
+            userConfirmedNoSymptoms()
         case .confirmSymptomOnset:
-            delegate?.determineContagiousPeriodCoordinator(self, didFinishWith: symptoms, dateOfSymptomOnset: symptomOnsetDate)
+            userConfirmedDateOfSymptomOnset()
         }
     }
     
@@ -94,15 +94,35 @@ extension DetermineContagiousPeriodCoordinator: OnboardingStepViewControllerDele
         
         switch identifier {
         case .confirmNoSymptoms:
-            // User changed their mind, go back to symptom selection
-            if let symptomController = navigationController.viewControllers.first(where: { $0 is SelectSymptomsViewController }) {
-                navigationController.popToViewController(symptomController, animated: true)
-            }
+            userDidHaveSymptoms()
         case .confirmSymptomOnset:
-            // Adjust the date to one day earlier
-            let adjustedDate = Calendar.current.date(byAdding: .day, value: -1, to: symptomOnsetDate)!
-            delegate?.determineContagiousPeriodCoordinator(self, didFinishWith: symptoms, dateOfSymptomOnset: adjustedDate)
+            userSelectedDayEarlier()
         }
+    }
+    
+}
+
+extension DetermineContagiousPeriodCoordinator {
+    
+    private func userConfirmedNoSymptoms() {
+        delegate?.determineContagiousPeriodCoordinator(self, didFinishWith: testDate)
+    }
+    
+    private func userDidHaveSymptoms() {
+        // User changed their mind, go back to symptom selection
+        if let symptomController = navigationController.viewControllers.first(where: { $0 is SelectSymptomsViewController }) {
+            navigationController.popToViewController(symptomController, animated: true)
+        }
+    }
+    
+    private func userConfirmedDateOfSymptomOnset() {
+        delegate?.determineContagiousPeriodCoordinator(self, didFinishWith: symptoms, dateOfSymptomOnset: symptomOnsetDate)
+    }
+    
+    private func userSelectedDayEarlier() {
+        // Adjust the date to one day earlier
+        let adjustedDate = Calendar.current.date(byAdding: .day, value: -1, to: symptomOnsetDate)!
+        delegate?.determineContagiousPeriodCoordinator(self, didFinishWith: symptoms, dateOfSymptomOnset: adjustedDate)
     }
     
 }
