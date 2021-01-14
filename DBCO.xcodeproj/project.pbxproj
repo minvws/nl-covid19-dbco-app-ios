@@ -10,6 +10,12 @@
 		6A6A1EA99F603F8A68B3CFE6 /* Pods_DBCO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13C8941476779FBFFBD8A4C7 /* Pods_DBCO.framework */; };
 		91E5A9010414FC25C0F3B864 /* Pods_DBCOTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C5D22DA740F30F804D7F95E /* Pods_DBCOTests.framework */; };
 		CD010B98257A409B00CEA4F5 /* ContactQuestionnaireCommunicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD010B97257A409B00CEA4F5 /* ContactQuestionnaireCommunicationTests.swift */; };
+		CD10F07C25AEFEC6000295B9 /* OnboardingPairingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F07725AEFD41000295B9 /* OnboardingPairingCoordinator.swift */; };
+		CD10F08125AF0886000295B9 /* InitializeContactsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F08025AF0886000295B9 /* InitializeContactsCoordinator.swift */; };
+		CD10F08625AF2E52000295B9 /* DetermineContagiousPeriodCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F08525AF2E52000295B9 /* DetermineContagiousPeriodCoordinator.swift */; };
+		CD10F08C25AF30A7000295B9 /* SelectSymptomsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F08B25AF30A7000295B9 /* SelectSymptomsViewController.swift */; };
+		CD10F09025AF42F8000295B9 /* SymptomToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F08F25AF42F8000295B9 /* SymptomToggleButton.swift */; };
+		CD10F09425AF48B4000295B9 /* OnboardingDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F09325AF48B4000295B9 /* OnboardingDateViewController.swift */; };
 		CD1824EE2524B3E4006EB272 /* InputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1824ED2524B3E4006EB272 /* InputField.swift */; };
 		CD21D4A8258A07330079D085 /* Task+Unfinished.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD21D4A7258A07330079D085 /* Task+Unfinished.swift */; };
 		CD2963442514BF4E008443AF /* SelectContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2963432514BF4E008443AF /* SelectContactViewController.swift */; };
@@ -137,6 +143,12 @@
 		C604B6AA2DE456A21DA9EE15 /* Pods-DBCOTests.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.app store.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.app store.xcconfig"; sourceTree = "<group>"; };
 		CBA78D02FA0FE384D189E4D2 /* Pods-DBCO.pentest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.pentest.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.pentest.xcconfig"; sourceTree = "<group>"; };
 		CD010B97257A409B00CEA4F5 /* ContactQuestionnaireCommunicationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactQuestionnaireCommunicationTests.swift; sourceTree = "<group>"; };
+		CD10F07725AEFD41000295B9 /* OnboardingPairingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPairingCoordinator.swift; sourceTree = "<group>"; };
+		CD10F08025AF0886000295B9 /* InitializeContactsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializeContactsCoordinator.swift; sourceTree = "<group>"; };
+		CD10F08525AF2E52000295B9 /* DetermineContagiousPeriodCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetermineContagiousPeriodCoordinator.swift; sourceTree = "<group>"; };
+		CD10F08B25AF30A7000295B9 /* SelectSymptomsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSymptomsViewController.swift; sourceTree = "<group>"; };
+		CD10F08F25AF42F8000295B9 /* SymptomToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomToggleButton.swift; sourceTree = "<group>"; };
+		CD10F09325AF48B4000295B9 /* OnboardingDateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDateViewController.swift; sourceTree = "<group>"; };
 		CD1824ED2524B3E4006EB272 /* InputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputField.swift; sourceTree = "<group>"; };
 		CD21D4A7258A07330079D085 /* Task+Unfinished.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Unfinished.swift"; sourceTree = "<group>"; };
 		CD2963432514BF4E008443AF /* SelectContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectContactViewController.swift; sourceTree = "<group>"; };
@@ -274,6 +286,33 @@
 				3C5D22DA740F30F804D7F95E /* Pods_DBCOTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CD10F07625AEFD21000295B9 /* Pairing */ = {
+			isa = PBXGroup;
+			children = (
+				CD10F07725AEFD41000295B9 /* OnboardingPairingCoordinator.swift */,
+			);
+			path = Pairing;
+			sourceTree = "<group>";
+		};
+		CD10F07F25AF07B8000295B9 /* InitializeContacts */ = {
+			isa = PBXGroup;
+			children = (
+				CD10F08025AF0886000295B9 /* InitializeContactsCoordinator.swift */,
+			);
+			path = InitializeContacts;
+			sourceTree = "<group>";
+		};
+		CD10F08425AF2DB1000295B9 /* DetermineContagiousPeriod */ = {
+			isa = PBXGroup;
+			children = (
+				CD10F08525AF2E52000295B9 /* DetermineContagiousPeriodCoordinator.swift */,
+				CD10F08B25AF30A7000295B9 /* SelectSymptomsViewController.swift */,
+				CD10F08F25AF42F8000295B9 /* SymptomToggleButton.swift */,
+				CD10F09325AF48B4000295B9 /* OnboardingDateViewController.swift */,
+			);
+			path = DetermineContagiousPeriod;
 			sourceTree = "<group>";
 		};
 		CD21D4A6258A071F0079D085 /* Extensions */ = {
@@ -436,6 +475,9 @@
 		CD756C48252C6860005FEDA0 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
+				CD10F08425AF2DB1000295B9 /* DetermineContagiousPeriod */,
+				CD10F07F25AF07B8000295B9 /* InitializeContacts */,
+				CD10F07625AEFD21000295B9 /* Pairing */,
 				CD756C49252C6A30005FEDA0 /* OnboardingCoordinator.swift */,
 				CD756C4F252C6AC9005FEDA0 /* OnboardingStepViewController.swift */,
 				CD756C5D252C9A7E005FEDA0 /* PairViewController.swift */,
@@ -872,6 +914,7 @@
 				CDA0F6912539F0D9009FD2A9 /* AnswerManaging.swift in Sources */,
 				CD756C50252C6AC9005FEDA0 /* OnboardingStepViewController.swift in Sources */,
 				CD2963442514BF4E008443AF /* SelectContactViewController.swift in Sources */,
+				CD10F08625AF2E52000295B9 /* DetermineContagiousPeriodCoordinator.swift in Sources */,
 				CDDC05642543120D0079C2F4 /* Coordinator.swift in Sources */,
 				CD29634C2518CE8E008443AF /* TableViewManager.swift in Sources */,
 				CDC7C87E2538487B00FE7E05 /* HTTPMethod.swift in Sources */,
@@ -879,6 +922,8 @@
 				CDE30E69251C89FF00862A40 /* NavigationController.swift in Sources */,
 				CD5DA76425516301003660CC /* ConfigManager.swift in Sources */,
 				CD756C78252DDF30005FEDA0 /* SectionView.swift in Sources */,
+				CD10F08125AF0886000295B9 /* InitializeContactsCoordinator.swift in Sources */,
+				CD10F09425AF48B4000295B9 /* OnboardingDateViewController.swift in Sources */,
 				CD1824EE2524B3E4006EB272 /* InputField.swift in Sources */,
 				CDA07ECC256C0FD900DEF3FF /* Validator.swift in Sources */,
 				CDA5C11125123DC9009440D1 /* AppVersion.swift in Sources */,
@@ -907,6 +952,7 @@
 				CDA525FC252F0FAA004E923A /* ToggleButton.swift in Sources */,
 				CD2AC08A25308B6500E8AF78 /* StatusView.swift in Sources */,
 				CDFCF9152510EBC40062269A /* NSAttributedString+Extension.swift in Sources */,
+				CD10F09025AF42F8000295B9 /* SymptomToggleButton.swift in Sources */,
 				CDC4A8E8250B87E5001BABC6 /* AppDelegate.swift in Sources */,
 				CDE25F65254B316F00E9AE49 /* NetworkManaging.swift in Sources */,
 				CD756C70252DC629005FEDA0 /* SeparatorView.swift in Sources */,
@@ -930,6 +976,7 @@
 				CDC7C88C2538507100FE7E05 /* Logging.swift in Sources */,
 				CD995B60256FDA63007A8B2C /* PrivacyConsentViewController.swift in Sources */,
 				CD47A4042549766C005B8801 /* SectionedScrollView.swift in Sources */,
+				CD10F08C25AF30A7000295B9 /* SelectSymptomsViewController.swift in Sources */,
 				CDA0F6892539AAB8009FD2A9 /* Answer+Progress.swift in Sources */,
 				CD21D4A8258A07330079D085 /* Task+Unfinished.swift in Sources */,
 				CD29635B25191972008443AF /* Haptic.swift in Sources */,
@@ -945,6 +992,7 @@
 				CD29634F2518ED51008443AF /* UIEdgeInsets+Convenience.swift in Sources */,
 				CD7282C3250F9AFE00D68911 /* TaskOverviewViewController.swift in Sources */,
 				CD8F957925616F23004729A4 /* Certificates.swift in Sources */,
+				CD10F07C25AEFEC6000295B9 /* OnboardingPairingCoordinator.swift in Sources */,
 				CDC7C8842538498400FE7E05 /* Encodable+AnyEncodable.swift in Sources */,
 				CDFCF9172510ECC70062269A /* UIView+Embed.swift in Sources */,
 				CD756C5E252C9A7F005FEDA0 /* PairViewController.swift in Sources */,
