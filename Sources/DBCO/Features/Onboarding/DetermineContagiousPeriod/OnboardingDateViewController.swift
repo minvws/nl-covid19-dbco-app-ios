@@ -55,12 +55,10 @@ class OnboardingDateViewController: ViewController {
         datePicker.datePickerMode = .date
         datePicker.maximumDate = Date()
         
-        VStack(spacing: 24,
-               VStack(spacing: 16,
+        VStack(VStack(spacing: 16,
                       Label(title2: viewModel.title).multiline(),
                       Label(body: viewModel.subtitle, textColor: Theme.colors.captionGray).multiline()),
                datePicker,
-               UIView(), // empty view to better align the datePicker
                VStack(spacing: 16,
                       secondaryButton,
                       primaryButton))

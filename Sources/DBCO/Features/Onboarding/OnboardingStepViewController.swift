@@ -81,10 +81,15 @@ class OnboardingStepViewController: ViewController {
                           Label(title2: viewModel.title).multiline(),
                           Label(body: viewModel.message, textColor: Theme.colors.captionGray).multiline()),
                    buttonStack)
+            .distribution(.equalSpacing)
         
         textContainerView.snap(to: .bottom,
                                of: view.readableContentGuide,
                                insets: .bottom(8))
+        
+        let heightConstraint = textContainerView.heightAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.4)
+        heightConstraint.priority = .defaultHigh
+        heightConstraint.isActive = true
         
         imageView = UIImageView(image: viewModel.image)
         imageView.contentMode = .scaleAspectFit
@@ -95,6 +100,7 @@ class OnboardingStepViewController: ViewController {
         view.addSubview(imageView)
         
         imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        imageView.widthAnchor.constraint(lessThanOrEqualTo: textContainerView.widthAnchor, multiplier: 1).isActive = true
         
         let imageCenterYConstraint = imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         imageCenterYConstraint.priority = .defaultLow
@@ -106,7 +112,7 @@ class OnboardingStepViewController: ViewController {
         imageTextSpacingConstraint.priority = .defaultLow
         imageTextSpacingConstraint.isActive = true
         
-        imageView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 16).isActive = true
+        imageView.topAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
     }
     
     @objc private func handlePrimary() {

@@ -132,7 +132,7 @@ extension DetermineContagiousPeriodCoordinator: SelectTestDateViewControllerDele
     func selectTestDateViewController(_ controller: SelectTestDateViewController, didSelect date: Date) {
         testDate = date
         
-        let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding1")!,
+        let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding3")!,
                                                 title: "Weet je zeker dat je geen klachten hebt die passen bij corona?",
                                                 message: "Ook lichtere klachten zoals een snotneus of vermoeidheid tellen mee.",
                                                 primaryButtonTitle: "Geen klachten",
@@ -161,7 +161,7 @@ extension DetermineContagiousPeriodCoordinator: SelectSymptomOnsetDateViewContro
         
         let dateString = dateFormatter.string(from: verifyDate)
         
-        let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding1")!,
+        let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding3")!,
                                                 title: "Weet je zeker dat je geen klachten had op \(dateString)?",
                                                 message: "Ook lichtere klachten zoals een snotneus of vermoeidheid tellen mee.",
                                                 primaryButtonTitle: "Geen klachten",

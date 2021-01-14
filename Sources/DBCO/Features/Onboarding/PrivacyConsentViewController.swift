@@ -109,6 +109,12 @@ class PrivacyConsentViewController: PromptableViewController {
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
