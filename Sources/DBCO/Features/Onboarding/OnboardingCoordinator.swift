@@ -24,10 +24,10 @@ final class OnboardingCoordinator: Coordinator {
         self.window = window
         
         let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding1")!,
-                                                title: "Help de GGD bij het contactonderzoek",
-                                                message: "Je kunt via deze app bepalen wie van je contacten een grote kans op besmetting heeft gelopen. Ook kun je contactgegevens met de GGD delen voor het contactonderzoek.",
-                                                primaryButtonTitle: "Ik heb al een code",
-                                                secondaryButtonTitle: "Ik heb nog geen code")
+                                                title: .onboardingStep1Title,
+                                                message: .onboardingStep1Message,
+                                                primaryButtonTitle: .onboardingStep1HasCodeButton,
+                                                secondaryButtonTitle: .onboardingStep1NoCodeButton)
         let stepController = OnboardingStepViewController(viewModel: viewModel)
         navigationController = NavigationController(rootViewController: stepController)
 

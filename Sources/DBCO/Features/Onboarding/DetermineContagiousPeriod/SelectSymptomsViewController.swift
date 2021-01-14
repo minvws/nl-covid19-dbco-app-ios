@@ -12,6 +12,8 @@ protocol SelectSymptomsViewControllerDelegate: class {
 }
 
 class SelectSymptomsViewModel {
+    
+    // These are temporary and will be replaced by an API call
     let selectableSymptoms = [
         "Niezen", "Loopneus", "Keelpijn", "Hoesten", "Hoofdpijn", "Spierpijn", "Algehele malaise", "Reuk- of smaakverlies", "Pijn achter de ogen", "Benauwdheid", "Vermoeidheid", "Koorts", "Verminderde eetlust"
     ]
@@ -107,8 +109,8 @@ class SelectSymptomsViewController: ViewController {
         
         VStack(spacing: 24,
                VStack(spacing: 16,
-                      Label(title2: "Welke klachten heb je die bij COVID-19 passen?").multiline(),
-                      Label(body: "Ook lichte klachten tellen mee. Je kunt meerdere klachten kiezen.", textColor: Theme.colors.captionGray).multiline()),
+                      Label(title2: .contagiousPeriodSelectSymptomsTitle).multiline(),
+                      Label(body: .contagiousPeriodSelectSymptomsMessage, textColor: Theme.colors.captionGray).multiline()),
                buttonContainerView,
                continueWithSymptomsButton,
                continueWithoutSymptomsButton)
@@ -133,7 +135,7 @@ extension SelectSymptomsViewController: UIScrollViewDelegate {
             if scrollView.contentOffset.y + scrollView.safeAreaInsets.top > 0 {
                 self.separatorView.alpha = 1
                 self.navigationBackgroundView.isHidden = false
-                self.navigationItem.title = "Klachten"
+                self.navigationItem.title = .contagiousPeriodSelectSymptomsShortTitle
             } else {
                 self.separatorView.alpha = 0
                 self.navigationBackgroundView.isHidden = true

@@ -34,8 +34,8 @@ final class DetermineContagiousPeriodCoordinator: Coordinator, Logging {
     }
     
     override func start() {
-        let viewModel = SelectSymptomsViewModel(continueWithSymptomsButtonTitle: "Volgende",
-                                                continueWithoutSymptomsButtonTitle: "Ik heb geen klachten")
+        let viewModel = SelectSymptomsViewModel(continueWithSymptomsButtonTitle: .next,
+                                                continueWithoutSymptomsButtonTitle: .contagiousPeriodNoSymptomsButton)
         let symptomController = SelectSymptomsViewController(viewModel: viewModel)
         symptomController.delegate = self
         symptomController.onPopped = { [weak self] _ in
@@ -133,10 +133,10 @@ extension DetermineContagiousPeriodCoordinator: SelectTestDateViewControllerDele
         testDate = date
         
         let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding3")!,
-                                                title: "Weet je zeker dat je geen klachten hebt die passen bij corona?",
-                                                message: "Ook lichtere klachten zoals een snotneus of vermoeidheid tellen mee.",
-                                                primaryButtonTitle: "Geen klachten",
-                                                secondaryButtonTitle: "Ik had toch klachten",
+                                                title: .contagiousPeriodNoSymptomsVerifyTitle,
+                                                message: .contagiousPeriodNoSymptomsVerifyMessage,
+                                                primaryButtonTitle: .contagiousPeriodNoSymptomsVerifyConfirmButton,
+                                                secondaryButtonTitle: .contagiousPeriodNoSymptomsVerifyCancelButton,
                                                 showSecondaryButtonOnTop: true)
         let stepController = OnboardingStepViewController(viewModel: viewModel)
         stepController.view.tag = StepIdentifiers.confirmNoSymptoms.rawValue
@@ -157,15 +157,15 @@ extension DetermineContagiousPeriodCoordinator: SelectSymptomOnsetDateViewContro
         let dateFormatter = DateFormatter()
         dateFormatter.calendar = .current
         dateFormatter.timeZone = .current
-        dateFormatter.dateFormat = "EEEE d MMMM"
+        dateFormatter.dateFormat = .contagiousPeriodOnsetDateVerifyDateFormat
         
         let dateString = dateFormatter.string(from: verifyDate)
         
         let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding3")!,
-                                                title: "Weet je zeker dat je geen klachten had op \(dateString)?",
-                                                message: "Ook lichtere klachten zoals een snotneus of vermoeidheid tellen mee.",
-                                                primaryButtonTitle: "Geen klachten",
-                                                secondaryButtonTitle: "Ik had toch klachten",
+                                                title: .contagiousPeriodOnsetDateVerifyTitle(date: dateString),
+                                                message: .contagiousPeriodOnsetDateVerifyMessage,
+                                                primaryButtonTitle: .contagiousPeriodOnsetDateVerifyConfirmButton,
+                                                secondaryButtonTitle: .contagiousPeriodOnsetDateVerifyCancelButton,
                                                 showSecondaryButtonOnTop: true)
         let stepController = OnboardingStepViewController(viewModel: viewModel)
         stepController.view.tag = StepIdentifiers.confirmSymptomOnset.rawValue

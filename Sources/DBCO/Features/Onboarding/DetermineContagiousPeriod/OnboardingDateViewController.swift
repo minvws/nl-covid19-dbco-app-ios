@@ -81,9 +81,9 @@ class SelectTestDateViewController: OnboardingDateViewController {
     weak var delegate: SelectTestDateViewControllerDelegate?
     
     init() {
-        super.init(viewModel: OnboardingDateViewModel(title: "Wanneer heb je je laten testen op corona?",
-                                                      subtitle: "Kies de datum waarop de test bij je is afgenomen.",
-                                                      primaryButtonTitle: "Volgende",
+        super.init(viewModel: OnboardingDateViewModel(title: .contagiousPeriodSelectTestDateTitle,
+                                                      subtitle: .contagiousPeriodSelectTestDateMessage,
+                                                      primaryButtonTitle: .next,
                                                       secondaryButtonTitle: nil))
     }
     
@@ -105,10 +105,10 @@ class SelectSymptomOnsetDateViewController: OnboardingDateViewController {
     weak var delegate: SelectSymptomOnsetDateViewControllerDelegate?
     
     init() {
-        super.init(viewModel: OnboardingDateViewModel(title: "Sinds wanneer heb je deze klachten?",
-                                                      subtitle: "Twijfel je over je eerste ziektedag? Kies dan een dag eerder.",
-                                                      primaryButtonTitle: "Volgende",
-                                                      secondaryButtonTitle: "Ik weet het niet"))
+        super.init(viewModel: OnboardingDateViewModel(title: .contagiousPeriodSelectOnsetDateTitle,
+                                                      subtitle: .contagiousPeriodSelectOnsetDateMessage,
+                                                      primaryButtonTitle: .next,
+                                                      secondaryButtonTitle: .contagiousPeriodSelectOnsetDateHelpButtonTitle))
     }
     
     required init?(coder: NSCoder) {

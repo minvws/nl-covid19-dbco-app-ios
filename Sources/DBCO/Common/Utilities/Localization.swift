@@ -74,6 +74,8 @@ extension String {
     /* MARK: - Onboarding */
     static var onboardingStep1Title: String { return Localization.string(for: "onboarding.step1.title") }
     static var onboardingStep1Message: String { return Localization.string(for: "onboarding.step1.message") }
+    static var onboardingStep1HasCodeButton: String { return Localization.string(for: "onboarding.step1.hasCodeButton") }
+    static var onboardingStep1NoCodeButton: String { return Localization.string(for: "onboarding.step1.noCodeButton") }
     static var onboardingStep2Title: String { return Localization.string(for: "onboarding.step2.title") }
     static var onboardingStep3Title: String { return Localization.string(for: "onboarding.step3.title") }
     static var onboardingStep3Message: String { return Localization.string(for: "onboarding.step3.message") }
@@ -90,6 +92,35 @@ extension String {
     static var onboardingLoadingErrorMessage: String { return Localization.string(for: "onboardingLoadingErrorMessage") }
     static var onboardingLoadingErrorCancelAction: String { return Localization.string(for: "onboardingLoadingErrorCancelAction") }
     static var onboardingLoadingErrorRetryAction: String { return Localization.string(for: "onboardingLoadingErrorRetryAction") }
+    
+    static var contagiousPeriodSelectSymptomsShortTitle: String { return Localization.string(for: "contagiousPeriodSelectSymptoms.shortTitle") }
+    static var contagiousPeriodSelectSymptomsTitle: String { return Localization.string(for: "contagiousPeriodSelectSymptoms.title") }
+    static var contagiousPeriodSelectSymptomsMessage: String { return Localization.string(for: "contagiousPeriodSelectSymptoms.message") }
+    
+    static var contagiousPeriodNoSymptomsButton: String { return Localization.string(for: "contagiousPeriodNoSymptomsButton") }
+    
+    static var contagiousPeriodSelectTestDateTitle: String { return Localization.string(for: "contagiousPeriodSelectTestDate.title") }
+    static var contagiousPeriodSelectTestDateMessage: String { return Localization.string(for: "contagiousPeriodSelectTestDate.message") }
+    
+    static var contagiousPeriodSelectOnsetDateTitle: String { return Localization.string(for: "contagiousPeriodSelectOnsetDate.title") }
+    static var contagiousPeriodSelectOnsetDateMessage: String { return Localization.string(for: "contagiousPeriodSelectOnsetDate.message") }
+    static var contagiousPeriodSelectOnsetDateHelpButtonTitle: String { return Localization.string(for: "contagiousPeriodSelectOnsetDate.helpButtonTitle") }
+    
+    static var contagiousPeriodNoSymptomsVerifyTitle: String { return Localization.string(for: "contagiousPeriodNoSymptomsVerify.title") }
+    static var contagiousPeriodNoSymptomsVerifyMessage: String { return Localization.string(for: "contagiousPeriodNoSymptomsVerify.message") }
+    static var contagiousPeriodNoSymptomsVerifyConfirmButton: String { return Localization.string(for: "contagiousPeriodNoSymptomsVerify.confirmButton") }
+    static var contagiousPeriodNoSymptomsVerifyCancelButton: String { return Localization.string(for: "contagiousPeriodNoSymptomsVerify.cancelButton") }
+    
+    static var contagiousPeriodOnsetDateVerifyDateFormat: String { return Localization.string(for: "contagiousPeriodOnsetDateVerify.dateFormat") }
+    
+    static func contagiousPeriodOnsetDateVerifyTitle(date: String) -> String { return Localization.string(for: "contagiousPeriodOnsetDateVerify.title", [date]) }
+    
+    static var contagiousPeriodOnsetDateVerifyMessage: String { return Localization.string(for: "contagiousPeriodOnsetDateVerify.message") }
+    static var contagiousPeriodOnsetDateVerifyConfirmButton: String { return Localization.string(for: "contagiousPeriodOnsetDateVerify.confirmButton") }
+    static var contagiousPeriodOnsetDateVerifyCancelButton: String { return Localization.string(for: "contagiousPeriodOnsetDateVerify.cancelButton") }
+    
+    static var onboardingDetermineContactsIntroTitle: String { return Localization.string(for: "onboardingDetermineContactsIntro.title") }
+    static var onboardingDetermineContactsIntroMessage: String { return Localization.string(for: "onboardingDetermineContactsIntro.message") }
     
     /* MARK: - Task Overview */
     static var taskOverviewTitle: String { return Localization.string(for: "taskOverviewTitle") }

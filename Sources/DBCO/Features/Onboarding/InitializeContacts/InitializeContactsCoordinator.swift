@@ -32,8 +32,8 @@ final class InitializeContactsCoordinator: Coordinator, Logging {
     
     override func start() {
         let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding2")!,
-                                                title: "Ontdek welke leefregels gelden voor je contacten",
-                                                message: "Goed om te weten: niet iedereen hoeft direct in quarantaine om de verspreiding van het coronavirus te stoppen.",
+                                                title: .onboardingDetermineContactsIntroTitle,
+                                                message: .onboardingDetermineContactsIntroMessage,
                                                 primaryButtonTitle: .next)
         let stepController = OnboardingStepViewController(viewModel: viewModel)
         stepController.view.tag = StepIdentifiers.start.rawValue
