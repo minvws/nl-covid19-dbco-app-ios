@@ -5,4 +5,4 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-NSContactsUsageDescription = "Zo kun je makkelijk contactgegevens aanvullen. Je bepaalt daarna zelf welke gegevens je met de GGD deelt. Wil je de app geen toegang geven? Dan kun je contactgegevens ook handmatig toevoegen.";
+NSContactsUsageDescription = "Zo kun je makkelijk contactgegevens aanvullen. Wil je de app geen toegang geven? Dan kun je contactgegevens ook handmatig toevoegen.";

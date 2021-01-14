@@ -16,6 +16,7 @@
 		CD10F08C25AF30A7000295B9 /* SelectSymptomsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F08B25AF30A7000295B9 /* SelectSymptomsViewController.swift */; };
 		CD10F09025AF42F8000295B9 /* SymptomToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F08F25AF42F8000295B9 /* SymptomToggleButton.swift */; };
 		CD10F09425AF48B4000295B9 /* OnboardingDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F09325AF48B4000295B9 /* OnboardingDateViewController.swift */; };
+		CD10F09825B08B03000295B9 /* SelectRoommatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F09725B08B02000295B9 /* SelectRoommatesViewController.swift */; };
 		CD1824EE2524B3E4006EB272 /* InputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1824ED2524B3E4006EB272 /* InputField.swift */; };
 		CD21D4A8258A07330079D085 /* Task+Unfinished.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD21D4A7258A07330079D085 /* Task+Unfinished.swift */; };
 		CD2963442514BF4E008443AF /* SelectContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2963432514BF4E008443AF /* SelectContactViewController.swift */; };
@@ -149,6 +150,7 @@
 		CD10F08B25AF30A7000295B9 /* SelectSymptomsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSymptomsViewController.swift; sourceTree = "<group>"; };
 		CD10F08F25AF42F8000295B9 /* SymptomToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomToggleButton.swift; sourceTree = "<group>"; };
 		CD10F09325AF48B4000295B9 /* OnboardingDateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDateViewController.swift; sourceTree = "<group>"; };
+		CD10F09725B08B02000295B9 /* SelectRoommatesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRoommatesViewController.swift; sourceTree = "<group>"; };
 		CD1824ED2524B3E4006EB272 /* InputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputField.swift; sourceTree = "<group>"; };
 		CD21D4A7258A07330079D085 /* Task+Unfinished.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Unfinished.swift"; sourceTree = "<group>"; };
 		CD2963432514BF4E008443AF /* SelectContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectContactViewController.swift; sourceTree = "<group>"; };
@@ -299,6 +301,7 @@
 		CD10F07F25AF07B8000295B9 /* InitializeContacts */ = {
 			isa = PBXGroup;
 			children = (
+				CD10F09725B08B02000295B9 /* SelectRoommatesViewController.swift */,
 				CD10F08025AF0886000295B9 /* InitializeContactsCoordinator.swift */,
 			);
 			path = InitializeContacts;
@@ -957,6 +960,7 @@
 				CDE25F65254B316F00E9AE49 /* NetworkManaging.swift in Sources */,
 				CD756C70252DC629005FEDA0 /* SeparatorView.swift in Sources */,
 				CDC6726A2566824300222DCC /* Codable+UserInfo.swift in Sources */,
+				CD10F09825B08B03000295B9 /* SelectRoommatesViewController.swift in Sources */,
 				CD5DA76F2551859C003660CC /* AppUpdateViewController.swift in Sources */,
 				CD9C7F52254AC25300A78EEF /* Task+Informed.swift in Sources */,
 				CD2963522518F291008443AF /* ContactQuestionnaireViewController.swift in Sources */,
