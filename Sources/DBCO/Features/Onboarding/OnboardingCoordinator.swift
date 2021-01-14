@@ -11,6 +11,7 @@ protocol OnboardingCoordinatorDelegate: class {
     func onboardingCoordinatorDidFinish(_ coordinator: OnboardingCoordinator)
 }
 
+// TODO: Update onboarding coordinator documentation
 /// Coordinator managing the onboarding of the user, pairing with the backend and guiding the user through the process of creating a list of at-risk contacts.
 /// Uses [PairViewController](x-source-tag://PairViewController) and [OnboardingStepViewController](x-source-tag://OnboardingStepViewController)
 final class OnboardingCoordinator: Coordinator {
