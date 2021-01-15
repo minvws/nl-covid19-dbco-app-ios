@@ -14,7 +14,7 @@ protocol PairViewControllerDelegate: class {
 class PairViewModel {}
 
 /// - Tag: PairViewController
-class PairViewController: UIViewController {
+class PairViewController: ViewController {
     private let viewModel: PairViewModel
     
     private let codeField = PairingCodeField()

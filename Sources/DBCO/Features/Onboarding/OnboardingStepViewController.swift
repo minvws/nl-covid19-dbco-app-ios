@@ -8,31 +8,36 @@
 import UIKit
 
 protocol OnboardingStepViewControllerDelegate: class {
-    func onboardingStepViewControllerWantsToContinue(_ controller: OnboardingStepViewController)
+    func onboardingStepViewControllerDidSelectPrimaryButton(_ controller: OnboardingStepViewController)
+    func onboardingStepViewControllerDidSelectSecondaryButton(_ controller: OnboardingStepViewController)
 }
 
 class OnboardingStepViewModel {
     let image: UIImage
     let title: String
     let message: String
-    let buttonTitle: String
+    let primaryButtonTitle: String
+    let secondaryButtonTitle: String?
+    let showSecondaryButtonOnTop: Bool
     
-    init(image: UIImage, title: String, message: String, buttonTitle: String) {
+    init(image: UIImage, title: String, message: String, primaryButtonTitle: String, secondaryButtonTitle: String? = nil, showSecondaryButtonOnTop: Bool = false) {
         self.image = image
         self.title = title
         self.message = message
-        self.buttonTitle = buttonTitle
+        self.primaryButtonTitle = primaryButtonTitle
+        self.secondaryButtonTitle = secondaryButtonTitle
+        self.showSecondaryButtonOnTop = showSecondaryButtonOnTop
     }
 }
 
 /// - Tag: OnboardingStepViewController
-class OnboardingStepViewController: UIViewController {
+class OnboardingStepViewController: ViewController {
     private let viewModel: OnboardingStepViewModel
     private var imageView: UIImageView!
     
     weak var delegate: OnboardingStepViewControllerDelegate?
     
-    init(viewModel: OnboardingStepViewModel) {
+    init(viewModel: OnboardingStepViewModel, showSecondaryButtonOnTop: Bool = false) {
         self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)
@@ -47,18 +52,44 @@ class OnboardingStepViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
+        navigationItem.largeTitleDisplayMode = .never
+        
+        let buttonStack: UIView
+        let primaryButton = Button(title: viewModel.primaryButtonTitle, style: .primary)
+            .touchUpInside(self, action: #selector(handlePrimary))
+        
+        if let secondaryButtonTitle = viewModel.secondaryButtonTitle {
+            let secondaryButton = Button(title: secondaryButtonTitle, style: .secondary)
+                .touchUpInside(self, action: #selector(handleSecondary))
+            
+            if viewModel.showSecondaryButtonOnTop {
+                buttonStack = VStack(spacing: 16,
+                                     secondaryButton,
+                                     primaryButton)
+            } else {
+                buttonStack = VStack(spacing: 16,
+                                     primaryButton,
+                                     secondaryButton)
+            }
+        } else {
+            buttonStack = primaryButton
+        }
         
         let textContainerView =
             VStack(spacing: 32,
                    VStack(spacing: 16,
                           Label(title2: viewModel.title).multiline(),
                           Label(body: viewModel.message, textColor: Theme.colors.captionGray).multiline()),
-                   Button(title: viewModel.buttonTitle, style: .primary)
-                       .touchUpInside(self, action: #selector(handleContinue)))
+                   buttonStack)
+            .distribution(.equalSpacing)
         
         textContainerView.snap(to: .bottom,
                                of: view.readableContentGuide,
                                insets: .bottom(8))
+        
+        let heightConstraint = textContainerView.heightAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.4)
+        heightConstraint.priority = .defaultHigh
+        heightConstraint.isActive = true
         
         imageView = UIImageView(image: viewModel.image)
         imageView.contentMode = .scaleAspectFit
@@ -69,6 +100,7 @@ class OnboardingStepViewController: UIViewController {
         view.addSubview(imageView)
         
         imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        imageView.widthAnchor.constraint(lessThanOrEqualTo: textContainerView.widthAnchor, multiplier: 1).isActive = true
         
         let imageCenterYConstraint = imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         imageCenterYConstraint.priority = .defaultLow
@@ -80,17 +112,15 @@ class OnboardingStepViewController: UIViewController {
         imageTextSpacingConstraint.priority = .defaultLow
         imageTextSpacingConstraint.isActive = true
         
-        imageView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 16).isActive = true
+        imageView.topAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        navigationController?.setNavigationBarHidden(true, animated: animated)
+    @objc private func handlePrimary() {
+        delegate?.onboardingStepViewControllerDidSelectPrimaryButton(self)
     }
     
-    @objc private func handleContinue() {
-        delegate?.onboardingStepViewControllerWantsToContinue(self)
+    @objc private func handleSecondary() {
+        delegate?.onboardingStepViewControllerDidSelectSecondaryButton(self)
     }
 
 }

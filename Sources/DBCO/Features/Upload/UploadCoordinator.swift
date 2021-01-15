@@ -66,7 +66,7 @@ final class UploadCoordinator: Coordinator, Logging {
                 let viewModel = OnboardingStepViewModel(image: UIImage(named: "UploadSuccess")!,
                                                         title: .uploadFinishedTitle,
                                                         message: .uploadFinishedMessage,
-                                                        buttonTitle: .done)
+                                                        primaryButtonTitle: .done)
                 let stepController = OnboardingStepViewController(viewModel: viewModel)
                 stepController.delegate = self
                 
@@ -154,8 +154,10 @@ extension UploadCoordinator: EditContactCoordinatorDelegate {
 
 extension UploadCoordinator: OnboardingStepViewControllerDelegate {
     
-    func onboardingStepViewControllerWantsToContinue(_ controller: OnboardingStepViewController) {
+    func onboardingStepViewControllerDidSelectPrimaryButton(_ controller: OnboardingStepViewController) {
         navigationController.dismiss(animated: true)
     }
+    
+    func onboardingStepViewControllerDidSelectSecondaryButton(_ controller: OnboardingStepViewController) {}
     
 }
