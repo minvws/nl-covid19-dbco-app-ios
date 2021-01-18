@@ -201,7 +201,23 @@ extension InitializeContactsCoordinator: SelectRoommatesViewControllerDelegate {
 extension InitializeContactsCoordinator: ContactsExplanationViewControllerDelegate {
     
     func contactsExplanationViewControllerWantsToContinue(_ controller: ContactsExplanationViewController) {
+        let viewModel = ContactsTimelineViewModel(dateOfSymptomOnset: Date()) // TODO:
+        let timelineController = ContactsTimelineViewController(viewModel: viewModel)
+        timelineController.delegate = self
         
+        navigationController.pushViewController(timelineController, animated: true)
+    }
+    
+}
+
+extension InitializeContactsCoordinator: ContactsTimelineViewControllerDelegate {
+    
+    func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [String], dateOfSymptomOnset: Date) {
+        delegate?.initializeContactsCoordinatorDidFinish(self)
+    }
+    
+    func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [String], testDate: Date) {
+        delegate?.initializeContactsCoordinatorDidFinish(self)
     }
     
 }
