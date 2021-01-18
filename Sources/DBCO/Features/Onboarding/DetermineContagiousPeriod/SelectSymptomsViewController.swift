@@ -70,6 +70,10 @@ class SelectSymptomsViewController: ViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        if #available(iOS 14.0, *) {
+            navigationItem.backButtonDisplayMode = .generic
+        }
+        
         view.backgroundColor = .white
         
         scrollView.embed(in: view)
@@ -141,10 +145,6 @@ extension SelectSymptomsViewController: UIScrollViewDelegate {
                 self.navigationBackgroundView.isHidden = true
                 self.navigationItem.title = nil
             }
-        }
-        
-        if #available(iOS 14.0, *) {
-            navigationItem.backButtonDisplayMode = .generic
         }
     }
     

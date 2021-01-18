@@ -191,6 +191,16 @@ extension InitializeContactsCoordinator: DetermineContagiousPeriodCoordinatorDel
 extension InitializeContactsCoordinator: SelectRoommatesViewControllerDelegate {
     
     func selectRoommatesViewController(_ controller: SelectRoommatesViewController, didSelect roommates: [String]) {
+        let explanationController = ContactsExplanationViewController(viewModel: .init())
+        explanationController.delegate = self
+        navigationController.pushViewController(explanationController, animated: true)
+    }
+    
+}
+
+extension InitializeContactsCoordinator: ContactsExplanationViewControllerDelegate {
+    
+    func contactsExplanationViewControllerWantsToContinue(_ controller: ContactsExplanationViewController) {
         
     }
     

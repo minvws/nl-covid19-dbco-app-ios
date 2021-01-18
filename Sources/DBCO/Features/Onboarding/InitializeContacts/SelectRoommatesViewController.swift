@@ -38,9 +38,14 @@ class SelectRoommatesViewController: ViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        if #available(iOS 14.0, *) {
+            navigationItem.backButtonDisplayMode = .generic
+        }
+        
         view.backgroundColor = .white
         
         scrollView.embed(in: view)
+        scrollView.keyboardDismissMode = .onDrag
         scrollView.delegate = self
         
         navigationBackgroundView.backgroundColor = .white
@@ -57,13 +62,44 @@ class SelectRoommatesViewController: ViewController {
                    VStack(spacing: 16,
                           Label(title2: "Wie zijn je huisgenoten?").multiline(),
                           Label(body: "Dit zijn de mensen met wie je in één huis woont.", textColor: Theme.colors.captionGray).multiline()),
-                   Button(title: .next, style: .primary))
-                .distribution(.equalSpacing)
+                   ContactListInputView(placeholder: "Voeg huisgenoot toe"),
+                   Button(title: .next, style: .primary).touchUpInside(self, action: #selector(handleContinue)))
+                .distribution(.fill)
                 .embed(in: scrollView.readableWidth, insets: margin)
         
         stack.heightAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.heightAnchor,
                                       multiplier: 1,
                                       constant: -(margin.top + margin.bottom)).isActive = true
+        
+        registerForKeyboardNotifications()
+    }
+    
+    @objc private func handleContinue() {
+        delegate?.selectRoommatesViewController(self, didSelect: [])
+    }
+    
+    // MARK: - Keyboard handling
+    
+    private func registerForKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIWindow.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIWindow.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc private func keyboardWillShow(notification: NSNotification) {
+        guard let userInfo = notification.userInfo else { return }
+        let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? .zero
+        
+        let convertedFrame = view.window?.convert(endFrame, to: view)
+        
+        let inset = view.frame.maxY - (convertedFrame?.minY ?? 0)
+        
+        scrollView.contentInset.bottom = inset
+        scrollView.verticalScrollIndicatorInsets.bottom = inset
+    }
+
+    @objc private func keyboardWillHide(notification: NSNotification) {
+        scrollView.contentInset = .zero
+        scrollView.verticalScrollIndicatorInsets.bottom = .zero
     }
 
 }
@@ -81,10 +117,6 @@ extension SelectRoommatesViewController: UIScrollViewDelegate {
                 self.navigationBackgroundView.isHidden = true
                 self.navigationItem.title = nil
             }
-        }
-        
-        if #available(iOS 14.0, *) {
-            navigationItem.backButtonDisplayMode = .generic
         }
     }
     
