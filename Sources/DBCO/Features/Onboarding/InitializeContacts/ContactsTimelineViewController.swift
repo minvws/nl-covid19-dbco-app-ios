@@ -50,7 +50,7 @@ class ContactsTimelineViewModel {
         }
     }
     
-    private let configuration: Configuration
+    private var configuration: Configuration
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.calendar = .current
@@ -60,12 +60,29 @@ class ContactsTimelineViewModel {
         return formatter
     }()
     
+    private let shortDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.calendar = .current
+        formatter.timeZone = .current
+        formatter.dateFormat = "d MMMM"
+        
+        return formatter
+    }()
+    
+    private var remainingExtraDays = 2
+    
     init(dateOfSymptomOnset: Date) {
         configuration = .dateOfSymptomOnset(dateOfSymptomOnset.normalized)
     }
     
     init(testDate: Date) {
         configuration = .testDate(testDate.normalized)
+    }
+    
+    var title: String {
+        let endDate = Calendar.current.date(byAdding: .day, value: -2, to: configuration.date)!
+        
+        return "Wie heb je ontmoet tussen \(dateFormatter.string(from: endDate)) en vandaag?"
     }
     
     var sections: [Section] {
@@ -124,12 +141,41 @@ class ContactsTimelineViewModel {
             return section
         }
     }
+    
+    var hideExtraDaySection: Bool {
+        switch configuration {
+        case .dateOfSymptomOnset:
+            return remainingExtraDays == 0
+        case .testDate:
+            return true
+        }
+    }
+    
+    var addExtraDayTitle: String? {
+        guard case .dateOfSymptomOnset(let date) = configuration else { return nil }
+        
+        return "Weet je zeker dat je voor \(shortDateFormatter.string(from: date)) nog geen klachten had?"
+    }
+    
+    func addExtraDay() {
+        guard case .dateOfSymptomOnset(let date) = configuration else { return }
+        guard remainingExtraDays > 0 else { return }
+        
+        let adjustedDate = Calendar.current.date(byAdding: .day, value: -1, to: date)!
+        
+        configuration = .dateOfSymptomOnset(adjustedDate)
+        
+        remainingExtraDays -= 1
+    }
 }
 
 class ContactsTimelineViewController: ViewController {
     private let viewModel: ContactsTimelineViewModel
     private let navigationBackgroundView = UIView()
     private let separatorView = SeparatorView()
+    private let titleLabel = Label(title2: nil)
+    private var addExtraDaySectionView: UIStackView!
+    private let addExtraDayTitleLabel = Label(bodyBold: nil)
     
     private let scrollView = UIScrollView(frame: .zero)
     private var sectionStackView: UIStackView!
@@ -170,14 +216,27 @@ class ContactsTimelineViewController: ViewController {
         let margin: UIEdgeInsets = .top(32) + .bottom(16)
         
         sectionStackView = VStack(spacing: 40)
+        
+        let addExtraDayButton = Button(title: "Extra dag toevoegen", style: .secondary)
+            .touchUpInside(self, action: #selector(addExtraDay))
+        
+        addExtraDayButton.setImage(UIImage(named: "Plus"), for: .normal)
+        addExtraDayButton.titleEdgeInsets = .left(5)
+        addExtraDayButton.imageEdgeInsets = .right(5)
+        
+        addExtraDaySectionView = VStack(spacing: 24,
+                                        addExtraDayTitleLabel.multiline(),
+                                        addExtraDayButton)
 
         let stack =
             VStack(spacing: 40,
                    VStack(spacing: 16,
-                          Label(title2: "Wie heb je ontmoet tussen maandag 1 oktober en vandaag?").multiline(),
+                          titleLabel.multiline(),
                           Label(body: "Weet je niet hoe iemand heet? Zet het contact er dan toch in. Bijvoorbeeld als trainer, kapper of buurvrouw. Je hoeft hier geen huisgenoten toe te voegen.", textColor: Theme.colors.captionGray).multiline()),
                    sectionStackView,
-                   Button(title: .next, style: .primary).touchUpInside(self, action: #selector(handleContinue)))
+                   VStack(spacing: 16,
+                          addExtraDaySectionView,
+                          Button(title: .next, style: .primary).touchUpInside(self, action: #selector(handleContinue))))
                 .distribution(.fill)
                 .embed(in: scrollView.readableWidth, insets: margin)
         
@@ -191,18 +250,32 @@ class ContactsTimelineViewController: ViewController {
     }
     
     private func configureSections() {
+        titleLabel.text = viewModel.title
+        
         viewModel.sections.forEach { section in
-            let sectionView = VStack(spacing: 8,
-                                     VStack(spacing: 4,
-                                            Label(bodyBold: section.title).multiline(),
-                                            Label(body: section.subtitle, textColor: Theme.colors.captionGray).multiline().hideIfEmpty()),
-                                     ContactListInputView(placeholder: "Contact toevoegen"))
-            self.sectionStackView.addArrangedSubview(sectionView)
+            let existingSectionViews = self.sectionStackView.arrangedSubviews.compactMap { $0 as? DaySectionView }
+            
+            if let sectionView = existingSectionViews.first(where: { $0.isConfigured(for: section) }) {
+                sectionView.section = section
+            } else {
+                let sectionView = DaySectionView()
+                sectionView.section = section
+                self.sectionStackView.addArrangedSubview(sectionView)
+            }
         }
+        
+        addExtraDaySectionView.isHidden = viewModel.hideExtraDaySection
+        addExtraDayTitleLabel.text = viewModel.addExtraDayTitle
     }
     
     @objc private func handleContinue() {
         delegate?.contactsTimelineViewController(self, didFinishWith: [], testDate: Date())
+    }
+    
+    @objc private func addExtraDay() {
+        viewModel.addExtraDay()
+        
+        configureSections()
     }
     
     // MARK: - Keyboard handling
@@ -229,6 +302,46 @@ class ContactsTimelineViewController: ViewController {
         scrollView.verticalScrollIndicatorInsets.bottom = .zero
     }
 
+}
+
+private class DaySectionView: UIView {
+    
+    private let titleLabel = Label(bodyBold: nil)
+    private let subtitleLabel = Label(body: nil, textColor: Theme.colors.captionGray)
+    
+    var section: ContactsTimelineViewModel.Section? {
+        didSet { configureForSection() }
+    }
+    
+    init() {
+        super.init(frame: .zero)
+        setup()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
+    
+    private func setup() {
+        VStack(spacing: 8,
+               VStack(spacing: 4,
+                      titleLabel.multiline(),
+                      subtitleLabel.multiline().hideIfEmpty()),
+               ContactListInputView(placeholder: "Contact toevoegen"))
+            .embed(in: self)
+    }
+        
+    private func configureForSection() {
+        titleLabel.text = section?.title
+        subtitleLabel.text = section?.subtitle
+        tag = section?.tag ?? 0
+    }
+    
+    func isConfigured(for section: ContactsTimelineViewModel.Section) -> Bool {
+        return tag == section.tag
+    }
+    
 }
 
 extension ContactsTimelineViewController: UIScrollViewDelegate {
