@@ -30,10 +30,21 @@ extension String {
 
 class ContactsTimelineViewModel {
     
-    struct Section {
-        let tag: Int
-        let title: String
-        var subtitle: String?
+    enum Section {
+        case day(tag: Int, title: String, subtitle: String?)
+        case reviewTips(tag: Int)
+        case activityTips(tag: Int)
+        
+        var tag: Int {
+            switch self {
+            case .day(let tag, _, _):
+                return tag
+            case .reviewTips(let tag):
+                return tag
+            case .activityTips(let tag):
+                return tag
+            }
+        }
     }
     
     enum Configuration {
@@ -132,14 +143,29 @@ class ContactsTimelineViewModel {
             }
         }
         
-        return (0 ..< numberOfDays).map { index in
+        var sections = (0 ..< numberOfDays).map { index -> Section in
             let date = Calendar.current.date(byAdding: .day, value: -index, to: today)!
-            let section = Section(tag: Int(date.timeIntervalSinceReferenceDate),
-                                  title: title(for: index, date: date),
-                                  subtitle: subtitle(for: index))
+            
+            let section = Section.day(tag: Int(date.timeIntervalSinceReferenceDate),
+                                      title: title(for: index, date: date),
+                                      subtitle: subtitle(for: index))
             
             return section
         }
+        
+        let reviewSection = Section.reviewTips(tag: 100)
+        let activitySection = Section.activityTips(tag: 200)
+        
+        sections.insert(reviewSection, at: 0)
+        
+        switch numberOfDays {
+        case ...4:
+            sections.append(activitySection)
+        default:
+            sections.insert(activitySection, at: 5)
+        }
+        
+        return sections
     }
     
     var hideExtraDaySection: Bool {
@@ -252,16 +278,29 @@ class ContactsTimelineViewController: ViewController {
     private func configureSections() {
         titleLabel.text = viewModel.title
         
-        viewModel.sections.forEach { section in
-            let existingSectionViews = self.sectionStackView.arrangedSubviews.compactMap { $0 as? DaySectionView }
-            
+        let existingSectionViews = sectionStackView.arrangedSubviews.compactMap { $0 as? TimelineSectionView }
+        
+        func view(for section: ContactsTimelineViewModel.Section) -> TimelineSectionView {
             if let sectionView = existingSectionViews.first(where: { $0.isConfigured(for: section) }) {
-                sectionView.section = section
+                return sectionView
             } else {
-                let sectionView = DaySectionView()
-                sectionView.section = section
-                self.sectionStackView.addArrangedSubview(sectionView)
+                switch section {
+                case .day:
+                    return DaySectionView()
+                case .reviewTips:
+                    return ReviewTipsSectionView()
+                case .activityTips:
+                    return ActivityTipsSectionView()
+                }
             }
+        }
+        
+        sectionStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
+        viewModel.sections.forEach { section in
+            let sectionView = view(for: section)
+            sectionView.section = section
+            self.sectionStackView.addArrangedSubview(sectionView)
         }
         
         addExtraDaySectionView.isHidden = viewModel.hideExtraDaySection
@@ -304,10 +343,25 @@ class ContactsTimelineViewController: ViewController {
 
 }
 
-private class DaySectionView: UIView {
+extension ContactsTimelineViewController: UIScrollViewDelegate {
     
-    private let titleLabel = Label(bodyBold: nil)
-    private let subtitleLabel = Label(body: nil, textColor: Theme.colors.captionGray)
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        UIView.animate(withDuration: 0.2) {
+            if scrollView.contentOffset.y + scrollView.safeAreaInsets.top > 0 {
+                self.separatorView.alpha = 1
+                self.navigationBackgroundView.isHidden = false
+                self.navigationItem.title = "Contacten"
+            } else {
+                self.separatorView.alpha = 0
+                self.navigationBackgroundView.isHidden = true
+                self.navigationItem.title = nil
+            }
+        }
+    }
+    
+}
+
+private class TimelineSectionView: UIView {
     
     var section: ContactsTimelineViewModel.Section? {
         didSet { configureForSection() }
@@ -323,7 +377,45 @@ private class DaySectionView: UIView {
         setup()
     }
     
-    private func setup() {
+    func setup() { }
+    
+    func configureForSection() {
+        self.tag = section?.tag ?? 0
+    }
+    
+    func isConfigured(for section: ContactsTimelineViewModel.Section) -> Bool {
+        return tag == section.tag
+    }
+    
+    func createTipHeaderLabel() -> UIView {
+        let headerContainerView = UIView()
+        headerContainerView.layer.cornerRadius = 4
+        headerContainerView.backgroundColor = Theme.colors.tipHeaderBackground
+        
+        Label(caption1: "Geheugentip".uppercased(), textColor: .white)
+            .embed(in: headerContainerView, insets: .all(4))
+        
+        return VStack(headerContainerView).alignment(.leading)
+    }
+    
+    func createTipItem(icon: String, text: String) -> UIView {
+        let icon = UIImageView(image: UIImage(named: "MemoryTips/\(icon)"))
+        icon.contentMode = .center
+        icon.widthAnchor.constraint(equalToConstant: 22).isActive = true
+        
+        return HStack(spacing: 12,
+                      icon,
+                      Label(body: text, textColor: Theme.colors.tipItemColor).multiline())
+    }
+}
+
+private class DaySectionView: TimelineSectionView {
+    private let titleLabel = Label(bodyBold: nil)
+    private let subtitleLabel = Label(body: nil, textColor: Theme.colors.captionGray)
+    
+    override func setup() {
+        super.setup()
+        
         VStack(spacing: 8,
                VStack(spacing: 4,
                       titleLabel.multiline(),
@@ -332,32 +424,59 @@ private class DaySectionView: UIView {
             .embed(in: self)
     }
         
-    private func configureForSection() {
-        titleLabel.text = section?.title
-        subtitleLabel.text = section?.subtitle
-        tag = section?.tag ?? 0
-    }
-    
-    func isConfigured(for section: ContactsTimelineViewModel.Section) -> Bool {
-        return tag == section.tag
+    override func configureForSection() {
+        super.configureForSection()
+        
+        guard case .day(_, let title, let subtitle) = section else { return }
+        
+        titleLabel.text = title
+        subtitleLabel.text = subtitle
     }
     
 }
 
-extension ContactsTimelineViewController: UIScrollViewDelegate {
+private class ReviewTipsSectionView: TimelineSectionView {
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        UIView.animate(withDuration: 0.2) {
-            if scrollView.contentOffset.y + scrollView.safeAreaInsets.top > 0 {
-                self.separatorView.alpha = 1
-                self.navigationBackgroundView.isHidden = false
-                self.navigationItem.title = "Contacten"
-            } else {
-                self.separatorView.alpha = 0
-                self.navigationBackgroundView.isHidden = true
-                self.navigationItem.title = nil
-            }
-        }
+    override func setup() {
+        super.setup()
+        
+        layer.cornerRadius = 8
+        backgroundColor = Theme.colors.tipBackgroundPrimary
+        
+        VStack(spacing: 16,
+               VStack(spacing: 6,
+                      createTipHeaderLabel(),
+                      Label(bodyBold: "Mensen vergeten vaak activiteiten. Bekijk daarom ook je:").multiline()),
+               HStack(spacing: 24,
+                      VStack(spacing: 16,
+                             createTipItem(icon: "Photos", text: "Foto's"),
+                             createTipItem(icon: "Calendar", text: "Agenda's")),
+                      VStack(spacing: 16,
+                             createTipItem(icon: "SocialMedia", text: "Social Media"),
+                             createTipItem(icon: "Transactions", text: "Pintransacties")))
+                .distribution(.fillProportionally))
+            .embed(in: self, insets: .all(16))
+    }
+    
+}
+
+private class ActivityTipsSectionView: TimelineSectionView {
+    
+    override func setup() {
+        super.setup()
+        
+        layer.cornerRadius = 8
+        backgroundColor = Theme.colors.tipBackgroundSecondary
+        
+        VStack(spacing: 16,
+               VStack(spacing: 6,
+                      createTipHeaderLabel(),
+                      Label(bodyBold: "Deze activiteiten worden vaak vergeten").multiline()),
+               VStack(spacing: 16,
+                      createTipItem(icon: "Car", text: "Samen in de auto zitten"),
+                      createTipItem(icon: "Meetings", text: "Ontmoetingen buiten of bij jou thuis"),
+                      createTipItem(icon: "Conversations", text: "Een onverwachts gesprek op werk")))
+            .embed(in: self, insets: .all(16))
     }
     
 }
