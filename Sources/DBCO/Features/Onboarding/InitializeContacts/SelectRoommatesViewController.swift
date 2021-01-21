@@ -6,12 +6,33 @@
  */
 
 import UIKit
+import Contacts
 
 protocol SelectRoommatesViewControllerDelegate: class {
     func selectRoommatesViewController(_ controller: SelectRoommatesViewController, didSelect roommates: [String])
 }
 
 class SelectRoommatesViewModel {
+    
+    private(set) lazy var contacts: [CNContact] = {
+        guard case .authorized = CNContactStore.authorizationStatus(for: .contacts) else { return [] }
+        
+        let keys = [
+            CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
+            CNContactTypeKey as CNKeyDescriptor
+        ]
+        
+        let request = CNContactFetchRequest(keysToFetch: keys)
+        request.sortOrder = .givenName
+        
+        var contacts = [CNContact]()
+        try? CNContactStore().enumerateContacts(with: request) { contact, stop in
+            if contact.contactType == .person {
+                contacts.append(contact)
+            }
+        }
+        return contacts
+    }()
     
 }
 
@@ -57,12 +78,15 @@ class SelectRoommatesViewController: ViewController {
         
         let margin: UIEdgeInsets = .top(32) + .bottom(16)
 
+        let contactList = ContactListInputView(placeholder: "Voeg huisgenoot toe")
+        contactList.delegate = self
+        
         let stack =
             VStack(spacing: 24,
                    VStack(spacing: 16,
                           Label(title2: "Wie zijn je huisgenoten?").multiline(),
                           Label(body: "Dit zijn de mensen met wie je in één huis woont.", textColor: Theme.colors.captionGray).multiline()),
-                   ContactListInputView(placeholder: "Voeg huisgenoot toe"),
+                   contactList,
                    Button(title: .next, style: .primary).touchUpInside(self, action: #selector(handleContinue)))
                 .distribution(.fill)
                 .embed(in: scrollView.readableWidth, insets: margin)
@@ -118,6 +142,43 @@ extension SelectRoommatesViewController: UIScrollViewDelegate {
                 self.navigationItem.title = nil
             }
         }
+    }
+    
+}
+
+extension SelectRoommatesViewController: ContactListInputViewDelegate {
+    
+    func contactListInputView(_ view: ContactListInputView, didBeginEditingIn textField: UITextField) {
+        func scrollVisible() {
+            let convertedBounds = scrollView.convert(textField.bounds, from: textField)
+            let extraMargin = UIEdgeInsets(top: 32, left: 0, bottom: 100, right: 0)
+            let visibleHeight =
+                scrollView.bounds.height -
+                scrollView.safeAreaInsets.top -
+                scrollView.safeAreaInsets.bottom -
+                scrollView.contentInset.bottom
+        
+            let minOffset = convertedBounds.minY - (scrollView.safeAreaInsets.top + extraMargin.top)
+            let maxOffset = minOffset - visibleHeight + convertedBounds.height + extraMargin.bottom
+            let currentOffset = scrollView.contentOffset.y
+            
+            if currentOffset > minOffset {
+                scrollView.setContentOffset(CGPoint(x: 0, y: minOffset), animated: true)
+            } else if currentOffset < maxOffset {
+                scrollView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
+            }
+        }
+        
+        // Next runcycle so keyboard size is properly incorporated
+        DispatchQueue.main.async(execute: scrollVisible)
+    }
+    
+    func viewForPresentingSuggestionsFromContactListInputView(_ view: ContactListInputView) -> UIView {
+        return self.view
+    }
+    
+    func contactsAvailableForSuggestionInContactListInputView(_ view: ContactListInputView) -> [CNContact] {
+        return viewModel.contacts
     }
     
 }

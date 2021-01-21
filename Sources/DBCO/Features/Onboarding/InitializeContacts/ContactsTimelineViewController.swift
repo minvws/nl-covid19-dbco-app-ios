@@ -6,6 +6,7 @@
  */
 
 import UIKit
+import Contacts
 
 protocol ContactsTimelineViewControllerDelegate: class {
     func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [String], dateOfSymptomOnset: Date)
@@ -193,6 +194,26 @@ class ContactsTimelineViewModel {
         
         remainingExtraDays -= 1
     }
+    
+    private(set) lazy var contacts: [CNContact] = {
+        guard case .authorized = CNContactStore.authorizationStatus(for: .contacts) else { return [] }
+        
+        let keys = [
+            CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
+            CNContactTypeKey as CNKeyDescriptor
+        ]
+        
+        let request = CNContactFetchRequest(keysToFetch: keys)
+        request.sortOrder = .givenName
+        
+        var contacts = [CNContact]()
+        try? CNContactStore().enumerateContacts(with: request) { contact, stop in
+            if contact.contactType == .person {
+                contacts.append(contact)
+            }
+        }
+        return contacts
+    }()
 }
 
 class ContactsTimelineViewController: ViewController {
@@ -286,7 +307,9 @@ class ContactsTimelineViewController: ViewController {
             } else {
                 switch section {
                 case .day:
-                    return DaySectionView()
+                    let sectionView = DaySectionView()
+                    sectionView.contactListDelegate = self
+                    return sectionView
                 case .reviewTips:
                     return ReviewTipsSectionView()
                 case .activityTips:
@@ -361,6 +384,43 @@ extension ContactsTimelineViewController: UIScrollViewDelegate {
     
 }
 
+extension ContactsTimelineViewController: ContactListInputViewDelegate {
+    
+    func contactListInputView(_ view: ContactListInputView, didBeginEditingIn textField: UITextField) {
+        func scrollVisible() {
+            let convertedBounds = scrollView.convert(textField.bounds, from: textField)
+            let extraMargin = UIEdgeInsets(top: 32, left: 0, bottom: 100, right: 0)
+            let visibleHeight =
+                scrollView.bounds.height -
+                scrollView.safeAreaInsets.top -
+                scrollView.safeAreaInsets.bottom -
+                scrollView.contentInset.bottom
+        
+            let minOffset = convertedBounds.minY - (scrollView.safeAreaInsets.top + extraMargin.top)
+            let maxOffset = minOffset - visibleHeight + convertedBounds.height + extraMargin.bottom
+            let currentOffset = scrollView.contentOffset.y
+            
+            if currentOffset > minOffset {
+                scrollView.setContentOffset(CGPoint(x: 0, y: minOffset), animated: true)
+            } else if currentOffset < maxOffset {
+                scrollView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
+            }
+        }
+        
+        // Next runcycle so keyboard size is properly incorporated
+        DispatchQueue.main.async(execute: scrollVisible)
+    }
+    
+    func viewForPresentingSuggestionsFromContactListInputView(_ view: ContactListInputView) -> UIView {
+        return self.view
+    }
+    
+    func contactsAvailableForSuggestionInContactListInputView(_ view: ContactListInputView) -> [CNContact] {
+        return viewModel.contacts
+    }
+    
+}
+
 private class TimelineSectionView: UIView {
     
     var section: ContactsTimelineViewModel.Section? {
@@ -412,6 +472,11 @@ private class TimelineSectionView: UIView {
 private class DaySectionView: TimelineSectionView {
     private let titleLabel = Label(bodyBold: nil)
     private let subtitleLabel = Label(body: nil, textColor: Theme.colors.captionGray)
+    private let contactList = ContactListInputView(placeholder: "Contact toevoegen")
+    
+    weak var contactListDelegate: ContactListInputViewDelegate? {
+        didSet { contactList.delegate = contactListDelegate }
+    }
     
     override func setup() {
         super.setup()
@@ -420,7 +485,7 @@ private class DaySectionView: TimelineSectionView {
                VStack(spacing: 4,
                       titleLabel.multiline(),
                       subtitleLabel.multiline().hideIfEmpty()),
-               ContactListInputView(placeholder: "Contact toevoegen"))
+               contactList)
             .embed(in: self)
     }
         
