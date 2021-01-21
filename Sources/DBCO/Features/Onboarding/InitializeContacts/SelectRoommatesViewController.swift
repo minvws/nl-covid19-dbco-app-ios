@@ -9,7 +9,7 @@ import UIKit
 import Contacts
 
 protocol SelectRoommatesViewControllerDelegate: class {
-    func selectRoommatesViewController(_ controller: SelectRoommatesViewController, didSelect roommates: [String])
+    func selectRoommatesViewController(_ controller: SelectRoommatesViewController, didSelect roommates: [Onboarding.Roommate])
 }
 
 class SelectRoommatesViewModel {
@@ -40,6 +40,7 @@ class SelectRoommatesViewController: ViewController {
     private let viewModel: SelectRoommatesViewModel
     private let navigationBackgroundView = UIView()
     private let separatorView = SeparatorView()
+    private var contactListView: ContactListInputView!
     
     private let scrollView = UIScrollView(frame: .zero)
     
@@ -77,16 +78,19 @@ class SelectRoommatesViewController: ViewController {
         separatorView.snap(to: .top, of: view.safeAreaLayoutGuide)
         
         let margin: UIEdgeInsets = .top(32) + .bottom(16)
+        
+        let contacts = Services.onboardingManager.roommates?.map { ContactListInputView.Contact(name: $0.name, cnContactIdentifier: $0.contactIdentifier) } ?? []
 
-        let contactList = ContactListInputView(placeholder: "Voeg huisgenoot toe")
-        contactList.delegate = self
+        contactListView = ContactListInputView(placeholder: "Voeg huisgenoot toe",
+                                               contacts: contacts,
+                                               delegate: self)
         
         let stack =
             VStack(spacing: 24,
                    VStack(spacing: 16,
                           Label(title2: "Wie zijn je huisgenoten?").multiline(),
                           Label(body: "Dit zijn de mensen met wie je in één huis woont.", textColor: Theme.colors.captionGray).multiline()),
-                   contactList,
+                   contactListView,
                    Button(title: .next, style: .primary).touchUpInside(self, action: #selector(handleContinue)))
                 .distribution(.fill)
                 .embed(in: scrollView.readableWidth, insets: margin)
@@ -99,7 +103,9 @@ class SelectRoommatesViewController: ViewController {
     }
     
     @objc private func handleContinue() {
-        delegate?.selectRoommatesViewController(self, didSelect: [])
+        delegate?.selectRoommatesViewController(self, didSelect: contactListView.contacts.map {
+            Onboarding.Roommate(name: $0.name, contactIdentifier: $0.cnContactIdentifier)
+        })
     }
     
     // MARK: - Keyboard handling

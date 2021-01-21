@@ -9,11 +9,12 @@ import UIKit
 import Contacts
 
 protocol ContactsTimelineViewControllerDelegate: class {
-    func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [String], dateOfSymptomOnset: Date)
-    func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [String], testDate: Date)
+    func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [Onboarding.Contact], dateOfSymptomOnset: Date)
+    func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [Onboarding.Contact], testDate: Date)
+    func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didCancelWith contacts: [Onboarding.Contact])
 }
 
-extension Date {
+private extension Date {
     var normalized: Date {
         Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: self)!
     }
@@ -32,20 +33,9 @@ extension String {
 class ContactsTimelineViewModel {
     
     enum Section {
-        case day(tag: Int, title: String, subtitle: String?)
-        case reviewTips(tag: Int)
-        case activityTips(tag: Int)
-        
-        var tag: Int {
-            switch self {
-            case .day(let tag, _, _):
-                return tag
-            case .reviewTips(let tag):
-                return tag
-            case .activityTips(let tag):
-                return tag
-            }
-        }
+        case day(date: Date, title: String, subtitle: String?)
+        case reviewTips
+        case activityTips
     }
     
     enum Configuration {
@@ -62,7 +52,7 @@ class ContactsTimelineViewModel {
         }
     }
     
-    private var configuration: Configuration
+    private(set) var configuration: Configuration
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.calendar = .current
@@ -147,23 +137,20 @@ class ContactsTimelineViewModel {
         var sections = (0 ..< numberOfDays).map { index -> Section in
             let date = Calendar.current.date(byAdding: .day, value: -index, to: today)!
             
-            let section = Section.day(tag: Int(date.timeIntervalSinceReferenceDate),
+            let section = Section.day(date: date,
                                       title: title(for: index, date: date),
                                       subtitle: subtitle(for: index))
             
             return section
         }
         
-        let reviewSection = Section.reviewTips(tag: 100)
-        let activitySection = Section.activityTips(tag: 200)
-        
-        sections.insert(reviewSection, at: 0)
+        sections.insert(.reviewTips, at: 0)
         
         switch numberOfDays {
         case ...4:
-            sections.append(activitySection)
+            sections.append(.activityTips)
         default:
-            sections.insert(activitySection, at: 5)
+            sections.insert(.activityTips, at: 5)
         }
         
         return sections
@@ -296,19 +283,32 @@ class ContactsTimelineViewController: ViewController {
         registerForKeyboardNotifications()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        if isMovingFromParent {
+            delegate?.contactsTimelineViewController(self, didCancelWith: listAllContacts())
+        }
+    }
+    
     private func configureSections() {
         titleLabel.text = viewModel.title
         
         let existingSectionViews = sectionStackView.arrangedSubviews.compactMap { $0 as? TimelineSectionView }
+        
+        let storedContacts = Services.onboardingManager.contacts ?? []
         
         func view(for section: ContactsTimelineViewModel.Section) -> TimelineSectionView {
             if let sectionView = existingSectionViews.first(where: { $0.isConfigured(for: section) }) {
                 return sectionView
             } else {
                 switch section {
-                case .day:
+                case .day(let date, _, _):
                     let sectionView = DaySectionView()
                     sectionView.contactListDelegate = self
+                    sectionView.contactList.contacts = storedContacts
+                        .filter { $0.date == date }
+                        .map { ContactListInputView.Contact(name: $0.name, cnContactIdentifier: $0.contactIdentifier) }
                     return sectionView
                 case .reviewTips:
                     return ReviewTipsSectionView()
@@ -330,8 +330,22 @@ class ContactsTimelineViewController: ViewController {
         addExtraDayTitleLabel.text = viewModel.addExtraDayTitle
     }
     
+    private func listAllContacts() -> [Onboarding.Contact] {
+        return sectionStackView.arrangedSubviews
+            .compactMap { $0 as? DaySectionView }
+            .flatMap { sectionView -> [Onboarding.Contact] in
+                guard case .day(let date, _, _) = sectionView.section else { return [] }
+                return sectionView.contactList.contacts.map { Onboarding.Contact(date: date, name: $0.name, contactIdentifier: $0.cnContactIdentifier) }
+            }
+    }
+    
     @objc private func handleContinue() {
-        delegate?.contactsTimelineViewController(self, didFinishWith: [], testDate: Date())
+        switch viewModel.configuration {
+        case .dateOfSymptomOnset(let date):
+            delegate?.contactsTimelineViewController(self, didFinishWith: listAllContacts(), dateOfSymptomOnset: date)
+        case .testDate(let date):
+            delegate?.contactsTimelineViewController(self, didFinishWith: listAllContacts(), testDate: date)
+        }
     }
     
     @objc private func addExtraDay() {
@@ -439,12 +453,10 @@ private class TimelineSectionView: UIView {
     
     func setup() { }
     
-    func configureForSection() {
-        self.tag = section?.tag ?? 0
-    }
+    func configureForSection() {}
     
     func isConfigured(for section: ContactsTimelineViewModel.Section) -> Bool {
-        return tag == section.tag
+        return false
     }
     
     func createTipHeaderLabel() -> UIView {
@@ -472,7 +484,7 @@ private class TimelineSectionView: UIView {
 private class DaySectionView: TimelineSectionView {
     private let titleLabel = Label(bodyBold: nil)
     private let subtitleLabel = Label(body: nil, textColor: Theme.colors.captionGray)
-    private let contactList = ContactListInputView(placeholder: "Contact toevoegen")
+    private(set) var contactList = ContactListInputView(placeholder: "Contact toevoegen")
     
     weak var contactListDelegate: ContactListInputViewDelegate? {
         didSet { contactList.delegate = contactListDelegate }
@@ -496,6 +508,14 @@ private class DaySectionView: TimelineSectionView {
         
         titleLabel.text = title
         subtitleLabel.text = subtitle
+    }
+    
+    override func isConfigured(for section: ContactsTimelineViewModel.Section) -> Bool {
+        if case .day(let date, _, _) = self.section, case .day(let otherDate, _, _) = section {
+            return date == otherDate
+        }
+        
+        return false
     }
     
 }

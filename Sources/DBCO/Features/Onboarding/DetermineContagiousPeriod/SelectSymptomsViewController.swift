@@ -23,12 +23,19 @@ class SelectSymptomsViewModel {
     let continueWithSymptomsButtonTitle: String
     let continueWithoutSymptomsButtonTitle: String
     
-    @Bindable private(set) var continueWithSymptomsButtonHidden: Bool = true
-    @Bindable private(set) var continueWithoutSymptomsButtonHidden: Bool = false
+    @Bindable private(set) var continueWithSymptomsButtonHidden: Bool
+    @Bindable private(set) var continueWithoutSymptomsButtonHidden: Bool
     
     init(continueWithSymptomsButtonTitle: String, continueWithoutSymptomsButtonTitle: String) {
         self.continueWithSymptomsButtonTitle = continueWithSymptomsButtonTitle
         self.continueWithoutSymptomsButtonTitle = continueWithoutSymptomsButtonTitle
+        
+        if case .finishedWithSymptoms(let symptoms, _) = Services.onboardingManager.contagiousPeriod {
+            selectedSymptoms = symptoms
+        }
+        
+        continueWithSymptomsButtonHidden = selectedSymptoms.isEmpty
+        continueWithoutSymptomsButtonHidden = !selectedSymptoms.isEmpty
     }
     
     func toggleSymptom(at index: Int) {
@@ -89,7 +96,7 @@ class SelectSymptomsViewController: ViewController {
         let margin: UIEdgeInsets = .top(32) + .bottom(16)
         
         func button(for index: Int, symptom: String) -> UIView {
-            let button = SymptomToggleButton(title: symptom, selected: false)
+            let button = SymptomToggleButton(title: symptom, selected: viewModel.selectedSymptoms.contains(symptom))
             button.tag = index
             button.addTarget(self, action: #selector(toggleSymptom), for: .valueChanged)
             return button

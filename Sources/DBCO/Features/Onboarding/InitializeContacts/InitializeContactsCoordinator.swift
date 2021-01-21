@@ -170,15 +170,16 @@ extension InitializeContactsCoordinator: PrivacyConsentViewControllerDelegate {
 extension InitializeContactsCoordinator: DetermineContagiousPeriodCoordinatorDelegate {
     
     func determineContagiousPeriodCoordinator(_ coordinator: DetermineContagiousPeriodCoordinator, didFinishWith testDate: Date) {
+        Services.onboardingManager.registerTestDate(testDate)
+        
         // Not removing the coordinator here, so the user can go back and adjust if needed
-        
         continueToContacts()
-        
     }
     
     func determineContagiousPeriodCoordinator(_ coordinator: DetermineContagiousPeriodCoordinator, didFinishWith symptoms: [String], dateOfSymptomOnset: Date) {
-        // Not removing the coordinator here, so the user can go back and adjust if needed
+        Services.onboardingManager.registerSymptoms(symptoms, dateOfOnset: dateOfSymptomOnset)
         
+        // Not removing the coordinator here, so the user can go back and adjust if needed
         continueToContacts()
     }
     
@@ -190,7 +191,9 @@ extension InitializeContactsCoordinator: DetermineContagiousPeriodCoordinatorDel
 
 extension InitializeContactsCoordinator: SelectRoommatesViewControllerDelegate {
     
-    func selectRoommatesViewController(_ controller: SelectRoommatesViewController, didSelect roommates: [String]) {
+    func selectRoommatesViewController(_ controller: SelectRoommatesViewController, didSelect roommates: [Onboarding.Roommate]) {
+        Services.onboardingManager.registerRoommates(roommates)
+        
         let explanationController = ContactsExplanationViewController(viewModel: .init())
         explanationController.delegate = self
         navigationController.pushViewController(explanationController, animated: true)
@@ -201,7 +204,17 @@ extension InitializeContactsCoordinator: SelectRoommatesViewControllerDelegate {
 extension InitializeContactsCoordinator: ContactsExplanationViewControllerDelegate {
     
     func contactsExplanationViewControllerWantsToContinue(_ controller: ContactsExplanationViewController) {
-        let viewModel = ContactsTimelineViewModel(dateOfSymptomOnset: Date()) // TODO:
+        let viewModel: ContactsTimelineViewModel
+        
+        switch Services.onboardingManager.contagiousPeriod {
+        case .finishedWithSymptoms(_, let date):
+            viewModel = ContactsTimelineViewModel(dateOfSymptomOnset: date)
+        case .finishedWithTestDate(let date):
+            viewModel = ContactsTimelineViewModel(testDate: date)
+        default:
+            fatalError("Date should exist at this point")
+        }
+        
         let timelineController = ContactsTimelineViewController(viewModel: viewModel)
         timelineController.delegate = self
         
@@ -212,12 +225,29 @@ extension InitializeContactsCoordinator: ContactsExplanationViewControllerDelega
 
 extension InitializeContactsCoordinator: ContactsTimelineViewControllerDelegate {
     
-    func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [String], dateOfSymptomOnset: Date) {
+    func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [Onboarding.Contact], dateOfSymptomOnset: Date) {
+        let onboardingManager = Services.onboardingManager
+        
+        onboardingManager.registerContacts(contacts)
+        
+        if case .finishedWithSymptoms(let symptoms, _) = onboardingManager.contagiousPeriod {
+            onboardingManager.registerSymptoms(symptoms, dateOfOnset: dateOfSymptomOnset)
+        }
+        
         delegate?.initializeContactsCoordinatorDidFinish(self)
     }
     
-    func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [String], testDate: Date) {
+    func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [Onboarding.Contact], testDate: Date) {
+        let onboardingManager = Services.onboardingManager
+        
+        onboardingManager.registerContacts(contacts)
+        onboardingManager.registerTestDate(testDate)
+        
         delegate?.initializeContactsCoordinatorDidFinish(self)
+    }
+    
+    func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didCancelWith contacts: [Onboarding.Contact]) {
+        Services.onboardingManager.registerContacts(contacts)
     }
     
 }

@@ -42,6 +42,13 @@ final class OnboardingCoordinator: Coordinator {
     }
     
     override func start() {
+        let needsPairingOption = Services.onboardingManager.needsPairingOption
+        if needsPairingOption == false {
+            let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, canCancel: false)
+            initializeContactsCoordinator.delegate = self
+            startChildCoordinator(initializeContactsCoordinator)
+        }
+        
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
     }

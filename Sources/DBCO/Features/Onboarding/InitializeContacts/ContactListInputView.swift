@@ -15,6 +15,11 @@ protocol ContactListInputViewDelegate: class {
 }
 
 class ContactListInputView: UIView {
+    struct Contact {
+        var name: String
+        var cnContactIdentifier: String?
+    }
+    
     weak var delegate: ContactListInputViewDelegate?
     
     private let textFieldStack = VStack()
@@ -22,7 +27,12 @@ class ContactListInputView: UIView {
     
     private var activeField: ContactTextField?
     
-    private var contacts: [CNContact] = []
+    var contacts: [Contact] {
+        get { listContacts() }
+        set { createFields(for: newValue) }
+    }
+    
+    private var availableContacts: [CNContact] = []
     private var activeSuggestions: [CNContact] = [] {
         didSet { updateSuggestionView() }
     }
@@ -31,25 +41,24 @@ class ContactListInputView: UIView {
     private var suggestionContainerView: UIView!
     private var suggestedNamesStackView: UIStackView!
     
-    init(placeholder: String) {
+    init(placeholder: String, contacts: [Contact] = [], delegate: ContactListInputViewDelegate? = nil) {
         self.placeholder = placeholder
+        self.delegate = delegate
         super.init(frame: .zero)
-        setup()
+        setup(with: contacts)
     }
     
     required init?(coder: NSCoder) {
-        self.placeholder = nil
-        super.init(coder: coder)
-        setup()
+        fatalError("init(coder:) has not been implemented")
     }
     
-    private func setup() {
+    private func setup(with contacts: [Contact]) {
         textFieldStack
             .snap(to: .top, of: self)
         
-        addContactField()
-        
         textFieldStack.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor).isActive = true
+        
+        createFields(for: contacts)
         
         suggestionContainerView = UIView()
         let backgroundView = UIImageView(image: UIImage(named: "ContactSuggestionBackground"))
@@ -60,8 +69,23 @@ class ContactListInputView: UIView {
         suggestedNamesStackView = VStack().embed(in: suggestionContainerView)
     }
     
-    private func addContactField() {
-        let textField = ContactTextField(placeholder: placeholder)
+    private func createFields(for contacts: [Contact]) {
+        textFieldStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
+        contacts.forEach(addContactField)
+        addContactField()
+    }
+    
+    private func listContacts() -> [Contact] {
+        return textFieldStack.arrangedSubviews
+            .compactMap { $0 as? ContactTextField }
+            .filter { $0.text?.isEmpty == false }
+            .map { Contact(name: $0.text!, cnContactIdentifier: $0.acceptedSuggestedContactIdentifier) }
+    }
+    
+    private func addContactField(for contact: Contact? = nil) {
+        let textField = ContactTextField(placeholder: placeholder, text: contact?.name)
+        textField.acceptedSuggestedContactIdentifier = contact?.cnContactIdentifier
         textField.addTarget(self, action: #selector(editingDidBegin), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(editingDidEndOnExit), for: .editingDidEndOnExit)
         textField.addTarget(self, action: #selector(editingDidEnd), for: .editingDidEnd)
@@ -72,16 +96,18 @@ class ContactListInputView: UIView {
     
     @objc private func editingDidBegin(_ sender: ContactTextField) {
         activeField = sender
-        contacts = delegate?.contactsAvailableForSuggestionInContactListInputView(self) ?? []
+        availableContacts = delegate?.contactsAvailableForSuggestionInContactListInputView(self) ?? []
         suggestionPresenter = delegate?.viewForPresentingSuggestionsFromContactListInputView(self)
         delegate?.contactListInputView(self, didBeginEditingIn: sender)
     }
     
     @objc private func editingChanged(_ sender: ContactTextField) {
-        activeSuggestions = ContactSuggestionHelper.suggestions(for: sender.text ?? "", in: contacts)
+        activeSuggestions = ContactSuggestionHelper.suggestions(for: sender.text ?? "", in: availableContacts)
         
         guard let index = textFieldStack.arrangedSubviews.firstIndex(of: sender) else { return }
         let isLastField = textFieldStack.arrangedSubviews.count - 1 == index
+        
+        sender.acceptedSuggestedContactIdentifier = nil
         
         if sender.text?.isEmpty == false, isLastField {
             addContactField()
@@ -93,7 +119,7 @@ class ContactListInputView: UIView {
     }
     
     @objc private func editingDidEnd(_ sender: ContactTextField) {
-        contacts = []
+        availableContacts = []
         activeSuggestions = []
         activeField = nil
         
@@ -136,7 +162,8 @@ class ContactListInputView: UIView {
     
     @objc private func acceptSuggestion(_ sender: SuggestionButton) {
         activeField?.text = sender.contact.fullName
-        suggestionContainerView.removeFromSuperview()
+        activeField?.acceptedSuggestedContactIdentifier = sender.contact.identifier
+        activeField?.endEditing(false)
     }
     
     private class SuggestionButton: UIButton {
@@ -167,6 +194,7 @@ class ContactListInputView: UIView {
 }
 
 private class ContactTextField: UITextField {
+    var acceptedSuggestedContactIdentifier: String?
     
     init(placeholder: String?, text: String? = nil) {
         super.init(frame: .zero)
