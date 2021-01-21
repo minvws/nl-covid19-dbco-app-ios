@@ -9,6 +9,7 @@ import UIKit
 
 enum CaseManagingError: Error {
     case noCaseData
+    case alreadyHaseCase
     case questionnaireNotFound
     case couldNotLoadTasks(NetworkError)
     case couldNotLoadQuestionnaires(NetworkError)
@@ -29,6 +30,7 @@ protocol CaseManaging {
     init()
     
     var hasCaseData: Bool { get }
+    var isLocalCase: Bool { get }
     
     /// Indicates that alls the tasks are uploaded to the backend in their current state
     var isSynced: Bool { get }
@@ -49,6 +51,8 @@ protocol CaseManaging {
     
     func loadCaseData(userInitiated: Bool, completion: @escaping (_ success: Bool, _ error: CaseManagingError?) -> Void)
     
+    func startLocalCase(dateOfSymptomOnset: Date) throws
+    
     /// Clears all stored data. Using any method or property except for `hasCaseData` on CaseManager before pairing and loading the data again is an invalid operation.
     /// Throws an `notPaired` error when called befored paired.
     func removeCaseData() throws
@@ -60,6 +64,9 @@ protocol CaseManaging {
     /// Saves updates to a task if a task with the same uuid is already managed, or stores a new task.
     /// Throws an `notPaired` error when called befored paired.
     func save(_ task: Task) throws
+    
+    func addRoommateTask(name: String, contactIdentifier: String?)
+    func addContactTask(name: String, contactIdentifier: String?, dateOfLastExposure: Date)
     
     /// Uploads all the tasks to the backend.
     /// Throws an `notPaired` error when called befored paired.
@@ -133,6 +140,11 @@ final class CaseManager: CaseManaging, Logging {
         }
     }
     
+    private(set) var isLocalCase: Bool {
+        get { appData.isLocalCase }
+        set { appData.isLocalCase = newValue }
+    }
+    
     var isWindowExpired: Bool {
         return appData.windowExpiresAt.timeIntervalSinceNow < 0
     }
@@ -146,6 +158,7 @@ final class CaseManager: CaseManaging, Logging {
     private var fetchDate = Date.distantPast
     
     private func shouldLoadTasks(userInitiated: Bool) -> Bool {
+        guard !isLocalCase else { return false }
         guard !isWindowExpired else { return false }
         
         if appData.tasks.isEmpty {
@@ -218,6 +231,15 @@ final class CaseManager: CaseManaging, Logging {
         }
         
         loadTasksIfNeeded()
+    }
+    
+    func startLocalCase(dateOfSymptomOnset: Date) throws {
+        guard !hasCaseData else { throw CaseManagingError.alreadyHaseCase }
+        
+        self.dateOfSymptomOnset = dateOfSymptomOnset
+        windowExpiresAt = .distantFuture
+        isLocalCase = true
+        isSynced = false
     }
     
     func removeCaseData() throws {
@@ -381,7 +403,7 @@ final class CaseManager: CaseManaging, Logging {
         }
         
         let answers = questionnaire.questions
-            .filter { $0.relevantForCategories.contains(tasks[index].contact.category) }
+            .filter { $0.relevantForCategories.contains(task.contact.category) }
             .map(answerForQuestion)
         
         var updatedTask = tasks[index]
@@ -412,6 +434,41 @@ final class CaseManager: CaseManaging, Logging {
         isSynced = isSynced && tasks[index] == updatedTask
         
         tasks[index] = updatedTask
+        
+        listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
+    }
+    
+    func addRoommateTask(name: String, contactIdentifier: String?) {
+        var task = Task(type: .contact, label: name, source: .app)
+        task.contact = Task.Contact(category: .category1,
+                                    communication: .none,
+                                    didInform: false,
+                                    dateOfLastExposure: nil,
+                                    contactIdentifier: contactIdentifier)
+        
+        tasks.append(task)
+        
+        listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
+    }
+    
+    private static let valueDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar.current
+        formatter.locale = Locale.current
+        formatter.timeZone = TimeZone.current
+        formatter.dateFormat = "yyyy-MM-dd"
+        
+        return formatter
+    }()
+    
+    func addContactTask(name: String, contactIdentifier: String?, dateOfLastExposure: Date) {
+        var task = Task(type: .contact, label: name, source: .app)
+        task.contact = Task.Contact(category: .other,
+                                    communication: .none,
+                                    didInform: false,
+                                    dateOfLastExposure: Self.valueDateFormatter.string(from: dateOfLastExposure),
+                                    contactIdentifier: contactIdentifier)
+        tasks.append(task)
         
         listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
     }

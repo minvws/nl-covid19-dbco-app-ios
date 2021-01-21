@@ -19,6 +19,7 @@ struct AppData {
     var tasks: [Task]
     var portalTasks: [Task]
     var questionnaires: [Questionnaire]
+    var isLocalCase: Bool
 }
 
 extension AppData {
@@ -28,7 +29,8 @@ extension AppData {
                 windowExpiresAt: .distantFuture,
                 tasks: [],
                 portalTasks: [],
-                questionnaires: [])
+                questionnaires: [],
+                isLocalCase: false)
     }
 }
 
@@ -44,5 +46,6 @@ extension AppData: Codable {
         tasks = try container.decode([Task].self, forKey: .tasks)
         portalTasks = (try? container.decode([Task].self, forKey: .portalTasks)) ?? []
         questionnaires = try container.decode([Questionnaire].self, forKey: .questionnaires)
+        isLocalCase = (try? container.decode(Bool.self, forKey: .isLocalCase)) ?? false
     }
 }

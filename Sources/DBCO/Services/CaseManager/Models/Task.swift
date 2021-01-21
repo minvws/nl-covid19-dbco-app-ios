@@ -56,12 +56,14 @@ struct Task: Equatable {
         let communication: Communication
         let didInform: Bool
         let dateOfLastExposure: String?
+        let contactIdentifier: String?
         
-        init(category: Category, communication: Communication, didInform: Bool, dateOfLastExposure: String?) {
+        init(category: Category, communication: Communication, didInform: Bool, dateOfLastExposure: String?, contactIdentifier: String? = nil) {
             self.category = category
             self.communication = communication
             self.didInform = didInform
             self.dateOfLastExposure = dateOfLastExposure
+            self.contactIdentifier = contactIdentifier
         }
     }
     
@@ -98,17 +100,17 @@ struct Task: Equatable {
         }
     }
     
-    init(type: TaskType, source: Source = .app) {
+    init(type: TaskType, label: String? = nil, source: Source = .app) {
         self.uuid = UUID()
         self.taskType = type
         self.source = source
-        self.label = nil
+        self.label = label
         self.taskContext = nil
         self.deletedByIndex = false
         
         switch taskType {
         case .contact:
-            contact = Contact(category: .other, communication: .none, didInform: false, dateOfLastExposure: nil)
+            contact = Contact(category: .other, communication: .none, didInform: false, dateOfLastExposure: nil, contactIdentifier: nil)
         }
     }
     
@@ -123,6 +125,7 @@ extension Task.Contact: Codable {
         communication = try container.decode(Communication.self, forKey: .communication)
         dateOfLastExposure = try container.decode(String?.self, forKey: .dateOfLastExposure)
         didInform = (try? container.decode(Bool?.self, forKey: .didInform)) ?? false
+        contactIdentifier = try? container.decode(String?.self, forKey: .contactIdentifier)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -132,6 +135,10 @@ extension Task.Contact: Codable {
         try container.encode(communication, forKey: .communication)
         try container.encode(dateOfLastExposure, forKey: .dateOfLastExposure)
         try container.encode(didInform, forKey: .didInform)
+        
+        if encoder.target == .internalStorage {
+            try container.encode(contactIdentifier, forKey: .contactIdentifier)
+        }
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -139,6 +146,7 @@ extension Task.Contact: Codable {
         case communication
         case dateOfLastExposure
         case didInform
+        case contactIdentifier
     }
     
 }
@@ -220,4 +228,5 @@ extension Task {
         
         return task
     }
+
 }

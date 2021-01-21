@@ -76,4 +76,6 @@ protocol OnboardingManaging {
     
     func finishOnboarding()
     
+    func reset()
+    
 }

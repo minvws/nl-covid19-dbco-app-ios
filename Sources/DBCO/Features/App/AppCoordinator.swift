@@ -105,6 +105,7 @@ extension AppCoordinator: TaskOverviewCoordinatorDelegate {
     
         Services.pairingManager.unpair()
         try? Services.caseManager.removeCaseData()
+        Services.onboardingManager.reset()
         
         removeChildCoordinator(coordinator)
         

@@ -91,9 +91,24 @@ class OnboardingManager: OnboardingManaging, Logging {
     }
     
     func finishOnboarding() {
+        if !Services.caseManager.hasCaseData {
+            if let dateOfSymptomOnset = Self.onboardingData.dateOfSymptomOnset {
+                try! Services.caseManager.startLocalCase(dateOfSymptomOnset: dateOfSymptomOnset)
+            } else if let testDate = Self.onboardingData.testDate {
+                try! Services.caseManager.startLocalCase(dateOfSymptomOnset: testDate)
+            }
+        }
+        
+        Self.onboardingData.roommates?.forEach { Services.caseManager.addRoommateTask(name: $0.name, contactIdentifier: $0.contactIdentifier) }
+        Self.onboardingData.contacts?.forEach { Services.caseManager.addContactTask(name: $0.name, contactIdentifier: $0.contactIdentifier, dateOfLastExposure: $0.date) }
+        
+        Self.$onboardingData.clearData()
+        
         Self.onboardingData.needsOnboarding = false
-        Self.onboardingData.contacts = nil
-        Self.onboardingData.roommates = nil
+    }
+    
+    func reset() {
+        Self.$onboardingData.clearData()
     }
     
 }

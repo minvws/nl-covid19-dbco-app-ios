@@ -86,6 +86,7 @@ extension OnboardingCoordinator: OnboardingPairingCoordinatorDelegate {
         
         if hasTasks {
             // go to task overview
+            Services.onboardingManager.finishOnboarding()
             delegate?.onboardingCoordinatorDidFinish(self)
         } else {
             let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, canCancel: false)
@@ -106,6 +107,7 @@ extension OnboardingCoordinator: InitializeContactsCoordinatorDelegate {
         removeChildCoordinator(coordinator)
         
         // go to task overview
+        Services.onboardingManager.finishOnboarding()
         delegate?.onboardingCoordinatorDidFinish(self)
     }
     
