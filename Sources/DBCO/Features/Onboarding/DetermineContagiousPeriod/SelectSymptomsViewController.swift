@@ -15,7 +15,7 @@ class SelectSymptomsViewModel {
     
     // These are temporary and will be replaced by an API call
     let selectableSymptoms = [
-        "Niezen", "Loopneus", "Keelpijn", "Hoesten", "Hoofdpijn", "Spierpijn", "Algehele malaise", "Reuk- of smaakverlies", "Pijn achter de ogen", "Benauwdheid", "Vermoeidheid", "Koorts", "Verminderde eetlust"
+        "Neusverkoudheid", "Schorre stem", "Keelpijn", "(Licht) hoesten", "Kortademigheid/benauwdheid", "Pijn bij de ademhaling", "Koorts (= boven 38 graden Celsius)", "Koude rillingen", "Verlies van of verminderde reuk", "Verlies van of verminderde smaak", "Algehele malaise", "Vermoeidheid", "Hoofdpijn", "Spierpijn", "Pijn achter de ogen", "Algehele pijnklachten", "Duizeligheid", "Prikkelbaarheid/verwardheid", "Verlies van eetlust", "Misselijkheid", "Overgeven", "Diarree", "Buikpijn", "Rode prikkende ogen (oogontsteking)", "Huidafwijkingen"
     ]
     
     private(set) var selectedSymptoms = [String]()
@@ -23,12 +23,19 @@ class SelectSymptomsViewModel {
     let continueWithSymptomsButtonTitle: String
     let continueWithoutSymptomsButtonTitle: String
     
-    @Bindable private(set) var continueWithSymptomsButtonHidden: Bool = true
-    @Bindable private(set) var continueWithoutSymptomsButtonHidden: Bool = false
+    @Bindable private(set) var continueWithSymptomsButtonHidden: Bool
+    @Bindable private(set) var continueWithoutSymptomsButtonHidden: Bool
     
     init(continueWithSymptomsButtonTitle: String, continueWithoutSymptomsButtonTitle: String) {
         self.continueWithSymptomsButtonTitle = continueWithSymptomsButtonTitle
         self.continueWithoutSymptomsButtonTitle = continueWithoutSymptomsButtonTitle
+        
+        if case .finishedWithSymptoms(let symptoms, _) = Services.onboardingManager.contagiousPeriod {
+            selectedSymptoms = symptoms
+        }
+        
+        continueWithSymptomsButtonHidden = selectedSymptoms.isEmpty
+        continueWithoutSymptomsButtonHidden = !selectedSymptoms.isEmpty
     }
     
     func toggleSymptom(at index: Int) {
@@ -70,6 +77,10 @@ class SelectSymptomsViewController: ViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        if #available(iOS 14.0, *) {
+            navigationItem.backButtonDisplayMode = .generic
+        }
+        
         view.backgroundColor = .white
         
         scrollView.embed(in: view)
@@ -85,7 +96,7 @@ class SelectSymptomsViewController: ViewController {
         let margin: UIEdgeInsets = .top(32) + .bottom(16)
         
         func button(for index: Int, symptom: String) -> UIView {
-            let button = SymptomToggleButton(title: symptom, selected: false)
+            let button = SymptomToggleButton(title: symptom, selected: viewModel.selectedSymptoms.contains(symptom))
             button.tag = index
             button.addTarget(self, action: #selector(toggleSymptom), for: .valueChanged)
             return button
@@ -131,20 +142,22 @@ class SelectSymptomsViewController: ViewController {
 extension SelectSymptomsViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        UIView.animate(withDuration: 0.2) {
-            if scrollView.contentOffset.y + scrollView.safeAreaInsets.top > 0 {
-                self.separatorView.alpha = 1
-                self.navigationBackgroundView.isHidden = false
-                self.navigationItem.title = .contagiousPeriodSelectSymptomsShortTitle
-            } else {
-                self.separatorView.alpha = 0
-                self.navigationBackgroundView.isHidden = true
-                self.navigationItem.title = nil
-            }
-        }
+        // TODO: This pattern is used multiple times
+        let shouldShow = scrollView.contentOffset.y + scrollView.safeAreaInsets.top > 0
+        let isShown = navigationBackgroundView.isHidden == false
         
-        if #available(iOS 14.0, *) {
-            navigationItem.backButtonDisplayMode = .generic
+        if shouldShow != isShown {
+            UIView.animate(withDuration: 0.2) {
+                if shouldShow {
+                    self.separatorView.alpha = 1
+                    self.navigationBackgroundView.isHidden = false
+                    self.navigationItem.title = .contagiousPeriodSelectSymptomsShortTitle
+                } else {
+                    self.separatorView.alpha = 0
+                    self.navigationBackgroundView.isHidden = true
+                    self.navigationItem.title = nil
+                }
+            }
         }
     }
     

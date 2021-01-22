@@ -16,8 +16,11 @@
 		CD10F08C25AF30A7000295B9 /* SelectSymptomsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F08B25AF30A7000295B9 /* SelectSymptomsViewController.swift */; };
 		CD10F09025AF42F8000295B9 /* SymptomToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F08F25AF42F8000295B9 /* SymptomToggleButton.swift */; };
 		CD10F09425AF48B4000295B9 /* OnboardingDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F09325AF48B4000295B9 /* OnboardingDateViewController.swift */; };
+		CD10F09825B08B03000295B9 /* SelectRoommatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F09725B08B02000295B9 /* SelectRoommatesViewController.swift */; };
 		CD1824EE2524B3E4006EB272 /* InputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1824ED2524B3E4006EB272 /* InputField.swift */; };
 		CD21D4A8258A07330079D085 /* Task+Unfinished.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD21D4A7258A07330079D085 /* Task+Unfinished.swift */; };
+		CD24CBE825B9B34D00A2F634 /* OnboardingManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD24CBE725B9B34D00A2F634 /* OnboardingManaging.swift */; };
+		CD24CBEE25B9B3E500A2F634 /* OnboardingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD24CBED25B9B3E500A2F634 /* OnboardingManager.swift */; };
 		CD2963442514BF4E008443AF /* SelectContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2963432514BF4E008443AF /* SelectContactViewController.swift */; };
 		CD2963472514E129008443AF /* ContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2963462514E129008443AF /* ContactTableViewCell.swift */; };
 		CD29634C2518CE8E008443AF /* TableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD29634B2518CE8E008443AF /* TableViewManager.swift */; };
@@ -58,6 +61,9 @@
 		CD756C78252DDF30005FEDA0 /* SectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C77252DDF30005FEDA0 /* SectionView.swift */; };
 		CD7FACA1251B3FCD00AB8142 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7FACA0251B3FCD00AB8142 /* TextView.swift */; };
 		CD8F957925616F23004729A4 /* Certificates.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8F957825616F23004729A4 /* Certificates.swift */; };
+		CD926AEC25B59AEA0076113C /* ContactListInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD926AEB25B59AEA0076113C /* ContactListInputView.swift */; };
+		CD926AF025B5B92E0076113C /* ContactsExplanationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD926AEF25B5B92E0076113C /* ContactsExplanationViewController.swift */; };
+		CD926AF425B5C3E40076113C /* ContactsTimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD926AF325B5C3E40076113C /* ContactsTimelineViewController.swift */; };
 		CD995B60256FDA63007A8B2C /* PrivacyConsentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD995B5F256FDA63007A8B2C /* PrivacyConsentViewController.swift */; };
 		CD9C7F3F2549B2B600A78EEF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CD9C7F412549B2B600A78EEF /* InfoPlist.strings */; };
 		CD9C7F52254AC25300A78EEF /* Task+Informed.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9C7F51254AC25300A78EEF /* Task+Informed.swift */; };
@@ -149,8 +155,11 @@
 		CD10F08B25AF30A7000295B9 /* SelectSymptomsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSymptomsViewController.swift; sourceTree = "<group>"; };
 		CD10F08F25AF42F8000295B9 /* SymptomToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomToggleButton.swift; sourceTree = "<group>"; };
 		CD10F09325AF48B4000295B9 /* OnboardingDateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDateViewController.swift; sourceTree = "<group>"; };
+		CD10F09725B08B02000295B9 /* SelectRoommatesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRoommatesViewController.swift; sourceTree = "<group>"; };
 		CD1824ED2524B3E4006EB272 /* InputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputField.swift; sourceTree = "<group>"; };
 		CD21D4A7258A07330079D085 /* Task+Unfinished.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Unfinished.swift"; sourceTree = "<group>"; };
+		CD24CBE725B9B34D00A2F634 /* OnboardingManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingManaging.swift; sourceTree = "<group>"; };
+		CD24CBED25B9B3E500A2F634 /* OnboardingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingManager.swift; sourceTree = "<group>"; };
 		CD2963432514BF4E008443AF /* SelectContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectContactViewController.swift; sourceTree = "<group>"; };
 		CD2963462514E129008443AF /* ContactTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactTableViewCell.swift; sourceTree = "<group>"; };
 		CD29634B2518CE8E008443AF /* TableViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewManager.swift; sourceTree = "<group>"; };
@@ -193,6 +202,9 @@
 		CD756C77252DDF30005FEDA0 /* SectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionView.swift; sourceTree = "<group>"; };
 		CD7FACA0251B3FCD00AB8142 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		CD8F957825616F23004729A4 /* Certificates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Certificates.swift; sourceTree = "<group>"; };
+		CD926AEB25B59AEA0076113C /* ContactListInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListInputView.swift; sourceTree = "<group>"; };
+		CD926AEF25B5B92E0076113C /* ContactsExplanationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsExplanationViewController.swift; sourceTree = "<group>"; };
+		CD926AF325B5C3E40076113C /* ContactsTimelineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsTimelineViewController.swift; sourceTree = "<group>"; };
 		CD995B5F256FDA63007A8B2C /* PrivacyConsentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyConsentViewController.swift; sourceTree = "<group>"; };
 		CD9C7F442549B2B900A78EEF /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CD9C7F51254AC25300A78EEF /* Task+Informed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Informed.swift"; sourceTree = "<group>"; };
@@ -299,7 +311,11 @@
 		CD10F07F25AF07B8000295B9 /* InitializeContacts */ = {
 			isa = PBXGroup;
 			children = (
+				CD10F09725B08B02000295B9 /* SelectRoommatesViewController.swift */,
 				CD10F08025AF0886000295B9 /* InitializeContactsCoordinator.swift */,
+				CD926AEB25B59AEA0076113C /* ContactListInputView.swift */,
+				CD926AEF25B5B92E0076113C /* ContactsExplanationViewController.swift */,
+				CD926AF325B5C3E40076113C /* ContactsTimelineViewController.swift */,
 			);
 			path = InitializeContacts;
 			sourceTree = "<group>";
@@ -321,6 +337,15 @@
 				CD21D4A7258A07330079D085 /* Task+Unfinished.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		CD24CBE625B9B34300A2F634 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				CD24CBE725B9B34D00A2F634 /* OnboardingManaging.swift */,
+				CD24CBED25B9B3E500A2F634 /* OnboardingManager.swift */,
+			);
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 		CD29635D25191975008443AF /* UI */ = {
@@ -583,11 +608,12 @@
 		CDC7C86025376A2D00FE7E05 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				CDC7C86125376AB200FE7E05 /* Services.swift */,
+				CDA0F67625398C8B009FD2A9 /* CaseManager */,
 				CD5DA75C255162D8003660CC /* ConfigManager */,
 				CDC7C8672538411300FE7E05 /* NetworkManager */,
-				CDA0F67625398C8B009FD2A9 /* CaseManager */,
+				CD24CBE625B9B34300A2F634 /* Onboarding */,
 				CD40369F255D42DD0037BCF1 /* PairingManager */,
+				CDC7C86125376AB200FE7E05 /* Services.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -947,6 +973,7 @@
 				CD65CD812535F77400BB761A /* LoadingViewController.swift in Sources */,
 				CD2AC0762530601900E8AF78 /* InputTextView.swift in Sources */,
 				CDD68BAA254D60BC00E96E9C /* UserDefaults.swift in Sources */,
+				CD24CBE825B9B34D00A2F634 /* OnboardingManaging.swift in Sources */,
 				CD421872251B4819004544B3 /* TaskTableViewCell.swift in Sources */,
 				CDC7C86F2538429B00FE7E05 /* NetworkConfiguration.swift in Sources */,
 				CDA525FC252F0FAA004E923A /* ToggleButton.swift in Sources */,
@@ -957,6 +984,7 @@
 				CDE25F65254B316F00E9AE49 /* NetworkManaging.swift in Sources */,
 				CD756C70252DC629005FEDA0 /* SeparatorView.swift in Sources */,
 				CDC6726A2566824300222DCC /* Codable+UserInfo.swift in Sources */,
+				CD10F09825B08B03000295B9 /* SelectRoommatesViewController.swift in Sources */,
 				CD5DA76F2551859C003660CC /* AppUpdateViewController.swift in Sources */,
 				CD9C7F52254AC25300A78EEF /* Task+Informed.swift in Sources */,
 				CD2963522518F291008443AF /* ContactQuestionnaireViewController.swift in Sources */,
@@ -971,6 +999,7 @@
 				CDC7C873253842A200FE7E05 /* Endpoint.swift in Sources */,
 				CD756C4A252C6A30005FEDA0 /* OnboardingCoordinator.swift in Sources */,
 				CD65CD8525360F5C00BB761A /* UnfinishedTasksViewController.swift in Sources */,
+				CD926AEC25B59AEA0076113C /* ContactListInputView.swift in Sources */,
 				CDC7C8772538469B00FE7E05 /* NetworkManagerURLSessionDelegate.swift in Sources */,
 				CDC7C89425385AD600FE7E05 /* Task.swift in Sources */,
 				CDC7C88C2538507100FE7E05 /* Logging.swift in Sources */,
@@ -989,12 +1018,15 @@
 				CD3DA9432555565800F738EE /* PairResponse.swift in Sources */,
 				CD3DA94925556ACF00F738EE /* AppData.swift in Sources */,
 				CDE30E6C251CE15800862A40 /* ContactValues.swift in Sources */,
+				CD926AF025B5B92E0076113C /* ContactsExplanationViewController.swift in Sources */,
 				CD29634F2518ED51008443AF /* UIEdgeInsets+Convenience.swift in Sources */,
 				CD7282C3250F9AFE00D68911 /* TaskOverviewViewController.swift in Sources */,
 				CD8F957925616F23004729A4 /* Certificates.swift in Sources */,
+				CD24CBEE25B9B3E500A2F634 /* OnboardingManager.swift in Sources */,
 				CD10F07C25AEFEC6000295B9 /* OnboardingPairingCoordinator.swift in Sources */,
 				CDC7C8842538498400FE7E05 /* Encodable+AnyEncodable.swift in Sources */,
 				CDFCF9172510ECC70062269A /* UIView+Embed.swift in Sources */,
+				CD926AF425B5C3E40076113C /* ContactsTimelineViewController.swift in Sources */,
 				CD756C5E252C9A7F005FEDA0 /* PairViewController.swift in Sources */,
 				CD2963472514E129008443AF /* ContactTableViewCell.swift in Sources */,
 				CDC7C898253873CE00FE7E05 /* Envelope.swift in Sources */,

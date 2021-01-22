@@ -12,12 +12,14 @@ class OnboardingDateViewModel {
     let subtitle: String
     let primaryButtonTitle: String
     let secondaryButtonTitle: String?
+    let date: Date?
     
-    init(title: String, subtitle: String, primaryButtonTitle: String, secondaryButtonTitle: String?) {
+    init(title: String, subtitle: String, primaryButtonTitle: String, secondaryButtonTitle: String?, date: Date?) {
         self.title = title
         self.subtitle = subtitle
         self.primaryButtonTitle = primaryButtonTitle
         self.secondaryButtonTitle = secondaryButtonTitle
+        self.date = date
     }
 }
 
@@ -54,6 +56,7 @@ class OnboardingDateViewController: ViewController {
         
         datePicker.datePickerMode = .date
         datePicker.maximumDate = Date()
+        viewModel.date.map { datePicker.setDate($0, animated: false) }
         
         VStack(VStack(spacing: 16,
                       Label(title2: viewModel.title).multiline(),
@@ -84,7 +87,8 @@ class SelectTestDateViewController: OnboardingDateViewController {
         super.init(viewModel: OnboardingDateViewModel(title: .contagiousPeriodSelectTestDateTitle,
                                                       subtitle: .contagiousPeriodSelectTestDateMessage,
                                                       primaryButtonTitle: .next,
-                                                      secondaryButtonTitle: nil))
+                                                      secondaryButtonTitle: nil,
+                                                      date: Services.onboardingManager.contagiousPeriod.testDate))
     }
     
     required init?(coder: NSCoder) {
@@ -108,7 +112,8 @@ class SelectSymptomOnsetDateViewController: OnboardingDateViewController {
         super.init(viewModel: OnboardingDateViewModel(title: .contagiousPeriodSelectOnsetDateTitle,
                                                       subtitle: .contagiousPeriodSelectOnsetDateMessage,
                                                       primaryButtonTitle: .next,
-                                                      secondaryButtonTitle: .contagiousPeriodSelectOnsetDateHelpButtonTitle))
+                                                      secondaryButtonTitle: nil,
+                                                      date: Services.onboardingManager.contagiousPeriod.symptomOnsetDate))
     }
     
     required init?(coder: NSCoder) {

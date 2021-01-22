@@ -48,7 +48,7 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         self.baseAnswer = answer
         self.question = question
         
-        if let contactCategory = contactCategory {
+        if let contactCategory = contactCategory, contactCategory != .other {
             baseAnswer.value = .classificationDetails(contactCategory: contactCategory)
         }
         

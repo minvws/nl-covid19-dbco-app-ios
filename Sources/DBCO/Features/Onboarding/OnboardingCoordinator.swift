@@ -42,6 +42,13 @@ final class OnboardingCoordinator: Coordinator {
     }
     
     override func start() {
+        let needsPairingOption = Services.onboardingManager.needsPairingOption
+        if needsPairingOption == false {
+            let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, canCancel: false)
+            initializeContactsCoordinator.delegate = self
+            startChildCoordinator(initializeContactsCoordinator)
+        }
+        
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
     }
@@ -79,6 +86,7 @@ extension OnboardingCoordinator: OnboardingPairingCoordinatorDelegate {
         
         if hasTasks {
             // go to task overview
+            Services.onboardingManager.finishOnboarding(createTasks: false)
             delegate?.onboardingCoordinatorDidFinish(self)
         } else {
             let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, canCancel: false)
@@ -99,6 +107,7 @@ extension OnboardingCoordinator: InitializeContactsCoordinatorDelegate {
         removeChildCoordinator(coordinator)
         
         // go to task overview
+        Services.onboardingManager.finishOnboarding(createTasks: true)
         delegate?.onboardingCoordinatorDidFinish(self)
     }
     

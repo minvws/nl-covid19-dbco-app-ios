@@ -49,11 +49,22 @@ final class SelectContactCoordinator: Coordinator, Logging {
         
         switch currentStatus {
         case .authorized:
-            let viewModel = SelectContactViewModel(suggestedName: task?.label)
-            let selectController = SelectContactViewController(viewModel: viewModel)
-            selectController.delegate = self
-            
-            presentNavigationController(with: selectController)
+            if let contactIdentifier = task?.contact.contactIdentifier {
+                let editViewModel = ContactQuestionnaireViewModel(task: task,
+                                                                  questionnaire: questionnaire,
+                                                                  contact: findContact(with: contactIdentifier),
+                                                                  showCancelButton: true)
+                let editController = ContactQuestionnaireViewController(viewModel: editViewModel)
+                editController.delegate = self
+                
+                presentNavigationController(with: editController)
+            } else {
+                let viewModel = SelectContactViewModel(suggestedName: task?.label)
+                let selectController = SelectContactViewController(viewModel: viewModel)
+                selectController.delegate = self
+                
+                presentNavigationController(with: selectController)
+            }
             
         case .notDetermined:
             CNContactStore().requestAccess(for: .contacts) { authorized, error in
@@ -133,6 +144,20 @@ final class SelectContactCoordinator: Coordinator, Logging {
         editController.delegate = self
         
         presentNavigationController(with: editController)
+    }
+    
+    private func findContact(with identifier: String) -> CNContact? {
+        guard case .authorized = CNContactStore.authorizationStatus(for: .contacts) else { return nil }
+        
+        let keys = [
+            CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
+            CNContactBirthdayKey as CNKeyDescriptor,
+            CNContactPhoneNumbersKey as CNKeyDescriptor,
+            CNContactEmailAddressesKey as CNKeyDescriptor,
+            CNContactPostalAddressesKey as CNKeyDescriptor
+        ]
+        
+        return try? CNContactStore().unifiedContact(withIdentifier: identifier, keysToFetch: keys)
     }
 }
 

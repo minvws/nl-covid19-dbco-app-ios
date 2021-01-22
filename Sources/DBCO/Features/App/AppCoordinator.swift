@@ -31,12 +31,12 @@ final class AppCoordinator: Coordinator {
         // Check if the app is the minimum version. If not, show the app update screen
         updateConfiguration()
         
-        if Services.pairingManager.isPaired {
-            startChildCoordinator(TaskOverviewCoordinator(window: window, delegate: self))
-        } else {
+        if Services.onboardingManager.needsOnboarding {
             let onboardingCoordinator = OnboardingCoordinator(window: window)
             onboardingCoordinator.delegate = self
             startChildCoordinator(onboardingCoordinator)
+        } else {
+            startChildCoordinator(TaskOverviewCoordinator(window: window, delegate: self))
         }
     }
     
@@ -105,6 +105,7 @@ extension AppCoordinator: TaskOverviewCoordinatorDelegate {
     
         Services.pairingManager.unpair()
         try? Services.caseManager.removeCaseData()
+        Services.onboardingManager.reset()
         
         removeChildCoordinator(coordinator)
         
