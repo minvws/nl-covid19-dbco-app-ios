@@ -182,6 +182,28 @@ class ContactsTimelineViewModel {
         remainingExtraDays -= 1
     }
     
+    func emptyDaysMessage(for sections: [Section]) -> String {
+        let dates = sections
+            .compactMap { section -> String? in
+                if case .day(let date, _, _) = section {
+                    return dateFormatter.string(from: date)
+                } else {
+                    return nil
+                }
+            }
+            .reversed()
+        
+        let combinedDates: String
+        
+        if dates.count > 2 {
+            combinedDates = dates.dropLast().joined(separator: ", ") + " en " + dates.last!
+        } else {
+            combinedDates = dates.joined(separator: " en ")
+        }
+        
+        return "Klopt het dat je op \(combinedDates) niemand hebt ontmoet?"
+    }
+    
     private(set) lazy var contacts: [CNContact] = {
         guard case .authorized = CNContactStore.authorizationStatus(for: .contacts) else { return [] }
         
@@ -340,11 +362,34 @@ class ContactsTimelineViewController: ViewController {
     }
     
     @objc private func handleContinue() {
-        switch viewModel.configuration {
-        case .dateOfSymptomOnset(let date):
-            delegate?.contactsTimelineViewController(self, didFinishWith: listAllContacts(), dateOfSymptomOnset: date)
-        case .testDate(let date):
-            delegate?.contactsTimelineViewController(self, didFinishWith: listAllContacts(), testDate: date)
+        let emptySections = sectionStackView
+            .arrangedSubviews
+            .compactMap { $0 as? DaySectionView }
+            .filter { $0.contactList.contacts.isEmpty }
+            .compactMap { $0.section }
+        
+        func finish() {
+            switch viewModel.configuration {
+            case .dateOfSymptomOnset(let date):
+                delegate?.contactsTimelineViewController(self, didFinishWith: listAllContacts(), dateOfSymptomOnset: date)
+            case .testDate(let date):
+                delegate?.contactsTimelineViewController(self, didFinishWith: listAllContacts(), testDate: date)
+            }
+        }
+        
+        if emptySections.isEmpty {
+            finish()
+        } else {
+            let alert = UIAlertController(title: "Je hebt niet aan iedere dag contacten toegevoegd",
+                                          message: viewModel.emptyDaysMessage(for: emptySections),
+                                          preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "Terug", style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: "Ga verder", style: .default) { _ in
+                finish()
+            })
+            
+            present(alert, animated: true)
         }
     }
     
