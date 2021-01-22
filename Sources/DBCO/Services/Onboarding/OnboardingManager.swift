@@ -101,7 +101,22 @@ class OnboardingManager: OnboardingManaging, Logging {
         
         if createTasks {
             Self.onboardingData.roommates?.forEach { Services.caseManager.addRoommateTask(name: $0.name, contactIdentifier: $0.contactIdentifier) }
-            Self.onboardingData.contacts?.forEach { Services.caseManager.addContactTask(name: $0.name, contactIdentifier: $0.contactIdentifier, dateOfLastExposure: $0.date) }
+            
+            if let contacts = Self.onboardingData.contacts {
+                // Remove the most distant duplicates
+                var filteredContacts = [Onboarding.Contact]()
+                
+                contacts.forEach { contact in
+                    if let duplicateIndex = filteredContacts.firstIndex(where: { $0.name == contact.name }) {
+                        filteredContacts[duplicateIndex].date = max(contact.date, filteredContacts[duplicateIndex].date)
+                        filteredContacts[duplicateIndex].contactIdentifier = filteredContacts[duplicateIndex].contactIdentifier ?? contact.contactIdentifier
+                    } else {
+                        filteredContacts.append(contact)
+                    }
+                }
+                
+                filteredContacts.forEach { Services.caseManager.addContactTask(name: $0.name, contactIdentifier: $0.contactIdentifier, dateOfLastExposure: $0.date) }
+            }
         }
         
         Self.$onboardingData.clearData()
