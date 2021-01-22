@@ -90,7 +90,7 @@ class OnboardingManager: OnboardingManaging, Logging {
         Self.onboardingData.contacts = contacts
     }
     
-    func finishOnboarding() {
+    func finishOnboarding(createTasks: Bool) {
         if !Services.caseManager.hasCaseData {
             if let dateOfSymptomOnset = Self.onboardingData.dateOfSymptomOnset {
                 try! Services.caseManager.startLocalCase(dateOfSymptomOnset: dateOfSymptomOnset)
@@ -99,8 +99,10 @@ class OnboardingManager: OnboardingManaging, Logging {
             }
         }
         
-        Self.onboardingData.roommates?.forEach { Services.caseManager.addRoommateTask(name: $0.name, contactIdentifier: $0.contactIdentifier) }
-        Self.onboardingData.contacts?.forEach { Services.caseManager.addContactTask(name: $0.name, contactIdentifier: $0.contactIdentifier, dateOfLastExposure: $0.date) }
+        if createTasks {
+            Self.onboardingData.roommates?.forEach { Services.caseManager.addRoommateTask(name: $0.name, contactIdentifier: $0.contactIdentifier) }
+            Self.onboardingData.contacts?.forEach { Services.caseManager.addContactTask(name: $0.name, contactIdentifier: $0.contactIdentifier, dateOfLastExposure: $0.date) }
+        }
         
         Self.$onboardingData.clearData()
         

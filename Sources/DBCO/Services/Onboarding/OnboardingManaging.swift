@@ -74,7 +74,7 @@ protocol OnboardingManaging {
     func registerRoommates(_ roommates: [Onboarding.Roommate])
     func registerContacts(_ contacts: [Onboarding.Contact])
     
-    func finishOnboarding()
+    func finishOnboarding(createTasks: Bool)
     
     func reset()
     
