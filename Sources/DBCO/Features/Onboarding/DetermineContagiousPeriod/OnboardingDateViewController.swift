@@ -112,7 +112,7 @@ class SelectSymptomOnsetDateViewController: OnboardingDateViewController {
         super.init(viewModel: OnboardingDateViewModel(title: .contagiousPeriodSelectOnsetDateTitle,
                                                       subtitle: .contagiousPeriodSelectOnsetDateMessage,
                                                       primaryButtonTitle: .next,
-                                                      secondaryButtonTitle: .contagiousPeriodSelectOnsetDateHelpButtonTitle,
+                                                      secondaryButtonTitle: nil,
                                                       date: Services.onboardingManager.contagiousPeriod.symptomOnsetDate))
     }
     
