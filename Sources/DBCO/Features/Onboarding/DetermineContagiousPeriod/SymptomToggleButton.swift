@@ -52,6 +52,8 @@ class SymptomToggleButton: UIButton {
         contentEdgeInsets = .topBottom(13.5) + .left(52) + .right(20)
         
         titleLabel?.font = Theme.fonts.body
+        titleLabel?.lineBreakMode = .byWordWrapping
+        titleLabel?.numberOfLines = 0
         
         tintColor = .white
         backgroundColor = Theme.colors.tertiary
@@ -59,6 +61,19 @@ class SymptomToggleButton: UIButton {
         contentHorizontalAlignment = .left
         
         applyState()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        titleLabel?.preferredMaxLayoutWidth = bounds.width - contentEdgeInsets.left - contentEdgeInsets.right
+    }
+    
+    override var intrinsicContentSize: CGSize {
+        var base = titleLabel?.intrinsicContentSize ?? .zero
+        base.height += contentEdgeInsets.top + contentEdgeInsets.bottom
+        base.width += contentEdgeInsets.left + contentEdgeInsets.right
+        return base
     }
     
     private func applyState() {

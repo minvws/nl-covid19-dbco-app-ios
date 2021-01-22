@@ -15,7 +15,7 @@ class SelectSymptomsViewModel {
     
     // These are temporary and will be replaced by an API call
     let selectableSymptoms = [
-        "Niezen", "Loopneus", "Keelpijn", "Hoesten", "Hoofdpijn", "Spierpijn", "Algehele malaise", "Reuk- of smaakverlies", "Pijn achter de ogen", "Benauwdheid", "Vermoeidheid", "Koorts", "Verminderde eetlust"
+        "Neusverkoudheid", "Schorre stem", "Keelpijn", "(Licht) hoesten", "Kortademigheid/benauwdheid", "Pijn bij de ademhaling", "Koorts (= boven 38 graden Celsius)", "Koude rillingen", "Verlies van of verminderde reuk", "Verlies van of verminderde smaak", "Algehele malaise", "Vermoeidheid", "Hoofdpijn", "Spierpijn", "Pijn achter de ogen", "Algehele pijnklachten", "Duizeligheid", "Prikkelbaarheid/verwardheid", "Verlies van eetlust", "Misselijkheid", "Overgeven", "Diarree", "Buikpijn", "Rode prikkende ogen (oogontsteking)", "Huidafwijkingen"
     ]
     
     private(set) var selectedSymptoms = [String]()
@@ -142,15 +142,21 @@ class SelectSymptomsViewController: ViewController {
 extension SelectSymptomsViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        UIView.animate(withDuration: 0.2) {
-            if scrollView.contentOffset.y + scrollView.safeAreaInsets.top > 0 {
-                self.separatorView.alpha = 1
-                self.navigationBackgroundView.isHidden = false
-                self.navigationItem.title = .contagiousPeriodSelectSymptomsShortTitle
-            } else {
-                self.separatorView.alpha = 0
-                self.navigationBackgroundView.isHidden = true
-                self.navigationItem.title = nil
+        // TODO: This pattern is used multiple times
+        let shouldShow = scrollView.contentOffset.y + scrollView.safeAreaInsets.top > 0
+        let isShown = navigationBackgroundView.isHidden == false
+        
+        if shouldShow != isShown {
+            UIView.animate(withDuration: 0.2) {
+                if shouldShow {
+                    self.separatorView.alpha = 1
+                    self.navigationBackgroundView.isHidden = false
+                    self.navigationItem.title = .contagiousPeriodSelectSymptomsShortTitle
+                } else {
+                    self.separatorView.alpha = 0
+                    self.navigationBackgroundView.isHidden = true
+                    self.navigationItem.title = nil
+                }
             }
         }
     }

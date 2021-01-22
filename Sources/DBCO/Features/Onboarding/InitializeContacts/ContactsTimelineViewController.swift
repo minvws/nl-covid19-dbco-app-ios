@@ -428,15 +428,21 @@ class ContactsTimelineViewController: ViewController {
 extension ContactsTimelineViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        UIView.animate(withDuration: 0.2) {
-            if scrollView.contentOffset.y + scrollView.safeAreaInsets.top > 0 {
-                self.separatorView.alpha = 1
-                self.navigationBackgroundView.isHidden = false
-                self.navigationItem.title = "Contacten"
-            } else {
-                self.separatorView.alpha = 0
-                self.navigationBackgroundView.isHidden = true
-                self.navigationItem.title = nil
+        // TODO: This pattern is used multiple times
+        let shouldShow = scrollView.contentOffset.y + scrollView.safeAreaInsets.top > 0
+        let isShown = navigationBackgroundView.isHidden == false
+        
+        if shouldShow != isShown {
+            UIView.animate(withDuration: 0.2) {
+                if scrollView.contentOffset.y + scrollView.safeAreaInsets.top > 0 {
+                    self.separatorView.alpha = 1
+                    self.navigationBackgroundView.isHidden = false
+                    self.navigationItem.title = "Contacten"
+                } else {
+                    self.separatorView.alpha = 0
+                    self.navigationBackgroundView.isHidden = true
+                    self.navigationItem.title = nil
+                }
             }
         }
     }
