@@ -127,4 +127,8 @@ class SelectSymptomOnsetDateViewController: OnboardingDateViewController {
     fileprivate override func handleSecondaryButton() {
         delegate?.selectSymptomOnsetDateViewControllerWantsHelp(self)
     }
+    
+    func selectDate(_ date: Date) {
+        datePicker.setDate(date, animated: true)
+    }
 }
