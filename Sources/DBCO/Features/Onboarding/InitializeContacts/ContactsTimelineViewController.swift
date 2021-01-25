@@ -81,16 +81,22 @@ class ContactsTimelineViewModel {
         configuration = .testDate(testDate.normalized)
     }
     
+    private var endDate: Date {
+        switch configuration {
+        case .dateOfSymptomOnset(let date):
+            return Calendar.current.date(byAdding: .day, value: -2, to: date)!
+        case .testDate(let date):
+            return date
+        }
+    }
+    
     var title: String {
-        let endDate = Calendar.current.date(byAdding: .day, value: -2, to: configuration.date)!
-        
         return "Wie heb je ontmoet tussen \(dateFormatter.string(from: endDate)) en vandaag?"
     }
     
     var sections: [Section] {
         let today = Date().normalized
-        
-        let endDate = Calendar.current.date(byAdding: .day, value: -2, to: configuration.date)!
+    
         let numberOfDays = Calendar.current.dateComponents([.day], from: endDate, to: today).day! + 1
         
         func title(for index: Int, date: Date) -> String {
@@ -119,8 +125,6 @@ class ContactsTimelineViewModel {
                 ]
             case .testDate:
                 reversedSubtitles = [
-                    nil,
-                    nil,
                     "Op deze dag liet je jezelf testen"
                 ]
             }

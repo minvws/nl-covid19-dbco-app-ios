@@ -122,7 +122,17 @@ extension DetermineContagiousPeriodCoordinator {
     private func userSelectedDayEarlier() {
         // Adjust the date to one day earlier
         let adjustedDate = Calendar.current.date(byAdding: .day, value: -1, to: symptomOnsetDate)!
-        delegate?.determineContagiousPeriodCoordinator(self, didFinishWith: symptoms, dateOfSymptomOnset: adjustedDate)
+        
+        let symtomOnsetViewController = navigationController
+            .viewControllers
+            .compactMap { $0 as? SelectSymptomOnsetDateViewController }
+            .last
+        
+        (navigationController.topViewController as? ViewController)?.onPopped = { _ in
+            symtomOnsetViewController?.selectDate(adjustedDate)
+        }
+        
+        navigationController.popViewController(animated: true)
     }
     
 }

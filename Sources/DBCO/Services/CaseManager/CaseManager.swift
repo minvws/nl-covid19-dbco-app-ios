@@ -236,7 +236,11 @@ final class CaseManager: CaseManaging, Logging {
     func startLocalCase(dateOfSymptomOnset: Date) throws {
         guard !hasCaseData else { throw CaseManagingError.alreadyHaseCase }
         
-        self.dateOfSymptomOnset = dateOfSymptomOnset
+        // During onboarding date calculations are in the user's current timezone.
+        // We need to reinterpret them as being in GMT+00
+        let offset = TimeInterval(TimeZone.current.secondsFromGMT())
+        self.dateOfSymptomOnset = dateOfSymptomOnset.addingTimeInterval(offset)
+        
         windowExpiresAt = .distantFuture
         isLocalCase = true
         isSynced = false

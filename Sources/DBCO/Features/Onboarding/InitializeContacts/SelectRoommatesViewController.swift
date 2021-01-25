@@ -9,7 +9,8 @@ import UIKit
 import Contacts
 
 protocol SelectRoommatesViewControllerDelegate: class {
-    func selectRoommatesViewController(_ controller: SelectRoommatesViewController, didSelect roommates: [Onboarding.Roommate])
+    func selectRoommatesViewController(_ controller: SelectRoommatesViewController, didFinishWith roommates: [Onboarding.Roommate])
+    func selectRoommatesViewController(_ controller: SelectRoommatesViewController, didCancelWith roommates: [Onboarding.Roommate])
 }
 
 class SelectRoommatesViewModel {
@@ -102,8 +103,18 @@ class SelectRoommatesViewController: ViewController {
         registerForKeyboardNotifications()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        if isMovingFromParent {
+            delegate?.selectRoommatesViewController(self, didCancelWith: contactListView.contacts.map {
+                Onboarding.Roommate(name: $0.name, contactIdentifier: $0.cnContactIdentifier)
+            })
+        }
+    }
+    
     @objc private func handleContinue() {
-        delegate?.selectRoommatesViewController(self, didSelect: contactListView.contacts.map {
+        delegate?.selectRoommatesViewController(self, didFinishWith: contactListView.contacts.map {
             Onboarding.Roommate(name: $0.name, contactIdentifier: $0.cnContactIdentifier)
         })
     }
