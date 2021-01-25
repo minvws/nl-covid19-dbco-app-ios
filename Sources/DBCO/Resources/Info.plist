@@ -20,6 +20,8 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>GitHash</key>
 	<string></string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LOG_LEVEL</key>
 	<string>$(LOG_LEVEL)</string>
 	<key>LSRequiresIPhoneOS</key>
