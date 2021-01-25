@@ -26,12 +26,19 @@ class SelectSymptomsViewModel {
     @Bindable private(set) var continueWithSymptomsButtonHidden: Bool
     @Bindable private(set) var continueWithoutSymptomsButtonHidden: Bool
     
+    let initiallyVisibleSymptomsCount: Int
+    
     init(continueWithSymptomsButtonTitle: String, continueWithoutSymptomsButtonTitle: String) {
         self.continueWithSymptomsButtonTitle = continueWithSymptomsButtonTitle
         self.continueWithoutSymptomsButtonTitle = continueWithoutSymptomsButtonTitle
         
+        let minVisibleSymptoms = 14
         if case .finishedWithSymptoms(let symptoms, _) = Services.onboardingManager.contagiousPeriod {
             selectedSymptoms = symptoms
+            let lastSelectedIndex = selectableSymptoms.lastIndex { symptoms.contains($0) }
+            initiallyVisibleSymptomsCount = max((lastSelectedIndex ?? 0) + 1, minVisibleSymptoms)
+        } else {
+            initiallyVisibleSymptomsCount = minVisibleSymptoms
         }
         
         continueWithSymptomsButtonHidden = selectedSymptoms.isEmpty
@@ -58,6 +65,7 @@ class SelectSymptomsViewController: ViewController {
     private let viewModel: SelectSymptomsViewModel
     private let navigationBackgroundView = UIView()
     private let separatorView = SeparatorView()
+    private var symptomButtonStackView: UIStackView!
     
     private let scrollView = UIScrollView(frame: .zero)
     
@@ -99,6 +107,7 @@ class SelectSymptomsViewController: ViewController {
             let button = SymptomToggleButton(title: symptom, selected: viewModel.selectedSymptoms.contains(symptom))
             button.tag = index
             button.addTarget(self, action: #selector(toggleSymptom), for: .valueChanged)
+            button.isHidden = index >= viewModel.initiallyVisibleSymptomsCount
             return button
         }
         
@@ -106,8 +115,9 @@ class SelectSymptomsViewController: ViewController {
         buttonContainerView.layer.cornerRadius = 8
         buttonContainerView.clipsToBounds = true
         
-        VStack(spacing: 0.5,
-               viewModel.selectableSymptoms.enumerated().map(button))
+        symptomButtonStackView =
+            VStack(spacing: 0.5,
+                   viewModel.selectableSymptoms.enumerated().map(button))
             .embed(in: buttonContainerView)
         
         let continueWithSymptomsButton = Button(title: viewModel.continueWithSymptomsButtonTitle, style: .primary)
@@ -118,15 +128,27 @@ class SelectSymptomsViewController: ViewController {
         viewModel.$continueWithSymptomsButtonHidden.binding = { continueWithSymptomsButton.isHidden = $0 }
         viewModel.$continueWithoutSymptomsButtonHidden.binding = { continueWithoutSymptomsButton.isHidden = $0 }
         
+        let showAllSymptomsButton = Button(title: "Toon meer klachten", style: .info)
+            .touchUpInside(self, action: #selector(showAllSymptoms))
+        
+        showAllSymptomsButton.isHidden = symptomButtonStackView.arrangedSubviews.allSatisfy { $0.isHidden == false }
+        
         VStack(spacing: 24,
                VStack(spacing: 16,
                       Label(title2: .contagiousPeriodSelectSymptomsTitle).multiline(),
                       Label(body: .contagiousPeriodSelectSymptomsMessage, textColor: Theme.colors.captionGray).multiline()),
                buttonContainerView,
+               showAllSymptomsButton,
                continueWithSymptomsButton,
                continueWithoutSymptomsButton)
             .distribution(.equalSpacing)
             .embed(in: scrollView.readableWidth, insets: margin)
+    }
+    
+    @objc private func showAllSymptoms(_ sender: UIButton) {
+        symptomButtonStackView.arrangedSubviews.forEach { $0.isHidden = false }
+        
+        sender.isHidden = true
     }
     
     @objc private func toggleSymptom(_ sender: SymptomToggleButton) {

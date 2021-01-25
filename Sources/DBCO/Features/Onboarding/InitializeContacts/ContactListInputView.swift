@@ -115,7 +115,7 @@ class ContactListInputView: UIView {
     }
     
     @objc private func editingDidEndOnExit(_ sender: ContactTextField) {
-        
+        // This will dismiss the keyboard
     }
     
     @objc private func editingDidEnd(_ sender: ContactTextField) {
