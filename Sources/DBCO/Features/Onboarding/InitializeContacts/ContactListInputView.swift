@@ -221,10 +221,12 @@ private class ContactTextField: UITextField {
             .foregroundColor: Theme.colors.disabledBorder
         ])
         
-        clearButton.setImage(UIImage(named: "DeleteContact"), for: .normal)
+        let deleteIcon = UIImage(named: "DeleteContact")!
+        clearButton.setImage(deleteIcon, for: .normal)
         clearButton.tintColor = Theme.colors.primary
         clearButton.backgroundColor = .white
         clearButton.addTarget(self, action: #selector(clear), for: .touchUpInside)
+        clearButton.bounds = CGRect(origin: .zero, size: deleteIcon.size)
         
         rightView = clearButton
         rightViewMode = .whileEditing
