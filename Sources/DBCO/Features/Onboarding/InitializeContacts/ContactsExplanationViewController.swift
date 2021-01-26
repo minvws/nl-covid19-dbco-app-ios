@@ -16,11 +16,13 @@ class ContactsExplanationViewModel {
 }
 
 /// - Tag: ContactsExplanationViewControlle
-class ContactsExplanationViewController: PromptableViewController {
+class ContactsExplanationViewController: PromptableViewController, ScrollViewNavivationbarAdjusting {
     private let viewModel: ContactsExplanationViewModel
     private let scrollView = UIScrollView(frame: .zero)
     
     weak var delegate: ContactsExplanationViewControllerDelegate?
+    
+    let shortTitle: String = "Contacten"
     
     init(viewModel: ContactsExplanationViewModel) {
         self.viewModel = viewModel
@@ -36,16 +38,15 @@ class ContactsExplanationViewController: PromptableViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        if #available(iOS 14.0, *) {
+            navigationItem.backButtonDisplayMode = .generic
+        }
+        
         view.backgroundColor = .white
         
         scrollView.embed(in: contentView)
+        scrollView.delegate = self
         scrollView.delaysContentTouches = false
-        
-        let headerBackgroundView = UIView(frame: .zero)
-        headerBackgroundView.backgroundColor = .white
-        
-        headerBackgroundView.snap(to: .top, of: contentView)
-        headerBackgroundView.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor).isActive = true
         
         let widthProviderView = UIView()
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
@@ -87,36 +88,24 @@ class ContactsExplanationViewController: PromptableViewController {
             .touchUpInside(self, action: #selector(handleContinue))
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        navigationController?.setNavigationBarHidden(false, animated: animated)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        navigationController?.setNavigationBarHidden(false, animated: animated)
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        navigationController?.hidesBarsOnSwipe = false
-    }
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         let scrollingHeight = scrollView.contentSize.height + scrollView.safeAreaInsets.top + scrollView.safeAreaInsets.bottom
         let canScroll = scrollingHeight > scrollView.frame.height
         showPromptViewSeparator = canScroll
-        
-        navigationController?.hidesBarsOnSwipe = canScroll
     }
     
     @objc private func handleContinue() {
         delegate?.contactsExplanationViewControllerWantsToContinue(self)
+    }
+    
+}
+
+extension ContactsExplanationViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        adjustNavigationBar(for: scrollView)
     }
     
 }

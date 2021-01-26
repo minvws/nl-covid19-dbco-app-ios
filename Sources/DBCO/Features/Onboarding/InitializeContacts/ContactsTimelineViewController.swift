@@ -229,7 +229,7 @@ class ContactsTimelineViewModel {
     }()
 }
 
-class ContactsTimelineViewController: ViewController {
+class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdjusting {
     private let viewModel: ContactsTimelineViewModel
     private let navigationBackgroundView = UIView()
     private let separatorView = SeparatorView()
@@ -241,6 +241,8 @@ class ContactsTimelineViewController: ViewController {
     private var sectionStackView: UIStackView!
     
     weak var delegate: ContactsTimelineViewControllerDelegate?
+    
+    let shortTitle: String = "Contacten"
     
     init(viewModel: ContactsTimelineViewModel) {
         self.viewModel = viewModel
@@ -265,13 +267,6 @@ class ContactsTimelineViewController: ViewController {
         scrollView.embed(in: view)
         scrollView.keyboardDismissMode = .onDrag
         scrollView.delegate = self
-        
-        navigationBackgroundView.backgroundColor = .white
-        navigationBackgroundView.snap(to: .top, of: view)
-        
-        navigationBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        
-        separatorView.snap(to: .top, of: view.safeAreaLayoutGuide)
         
         let margin: UIEdgeInsets = .top(32) + .bottom(16)
         
@@ -432,23 +427,7 @@ class ContactsTimelineViewController: ViewController {
 extension ContactsTimelineViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // TODO: This pattern is used multiple times
-        let shouldShow = scrollView.contentOffset.y + scrollView.safeAreaInsets.top > 0
-        let isShown = navigationBackgroundView.isHidden == false
-        
-        if shouldShow != isShown {
-            UIView.animate(withDuration: 0.2) {
-                if scrollView.contentOffset.y + scrollView.safeAreaInsets.top > 0 {
-                    self.separatorView.alpha = 1
-                    self.navigationBackgroundView.isHidden = false
-                    self.navigationItem.title = "Contacten"
-                } else {
-                    self.separatorView.alpha = 0
-                    self.navigationBackgroundView.isHidden = true
-                    self.navigationItem.title = nil
-                }
-            }
-        }
+        adjustNavigationBar(for: scrollView)
     }
     
 }
