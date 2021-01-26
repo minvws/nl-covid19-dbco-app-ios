@@ -573,7 +573,8 @@ private class ReviewTipsSectionView: TimelineSectionView {
                       VStack(spacing: 16,
                              createTipItem(icon: "SocialMedia", text: "Social Media"),
                              createTipItem(icon: "Transactions", text: "Pintransacties")))
-                .distribution(.fillProportionally))
+                .distribution(.fillProportionally)
+                .verticalIf(screenWidthLessThan: 330, spacing: 0))
             .embed(in: self, insets: .all(16))
     }
     
