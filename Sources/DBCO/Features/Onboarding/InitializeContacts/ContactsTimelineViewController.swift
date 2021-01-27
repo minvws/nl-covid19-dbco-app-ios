@@ -71,8 +71,6 @@ class ContactsTimelineViewModel {
         return formatter
     }()
     
-    private var remainingExtraDays = 2
-    
     init(dateOfSymptomOnset: Date) {
         configuration = .dateOfSymptomOnset(dateOfSymptomOnset.normalized)
     }
@@ -163,7 +161,7 @@ class ContactsTimelineViewModel {
     var hideExtraDaySection: Bool {
         switch configuration {
         case .dateOfSymptomOnset:
-            return remainingExtraDays == 0
+            return false
         case .testDate:
             return true
         }
@@ -177,13 +175,10 @@ class ContactsTimelineViewModel {
     
     func addExtraDay() {
         guard case .dateOfSymptomOnset(let date) = configuration else { return }
-        guard remainingExtraDays > 0 else { return }
         
         let adjustedDate = Calendar.current.date(byAdding: .day, value: -1, to: date)!
         
         configuration = .dateOfSymptomOnset(adjustedDate)
-        
-        remainingExtraDays -= 1
     }
     
     func emptyDaysMessage(for sections: [Section]) -> String {
