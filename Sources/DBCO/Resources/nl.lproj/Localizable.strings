@@ -32,6 +32,8 @@
 "onboarding.step3.title" = "Voeg de gegevens van je contacten toe";
 "onboarding.step3.message" = "De GGD heeft contactgegevens nodig van mensen die jij hebt ontmoet, omdat je hen misschien hebt besmet. Via deze app kun je gemakkelijk gegevens delen. Je bepaalt zelf welke gegevens je deelt en wanneer je dat doet.";
 
+/* MARK: - Privacy */
+"onboarding.consent.shortTitle" = "Privacy";
 "onboarding.consent.title" = "Zo gaat GGD Contact om met je gegevens";
 "onboarding.consent.message" = "In de  <a href=\"https://ggdcontact.nl/nl/privacy-in-app\">privacyverklaring</a> staat hoe GGD Contact jouw gegevens gebruikt. Dit zijn de belangrijkste punten:";
 "onboarding.consent.item1" = "Gegevens worden versleuteld en via een veilige verbinding gedeeld";
@@ -40,15 +42,18 @@
 "onboarding.consent.item4" = "Je kunt na het delen zelf de gegevens verwijderen";
 "onboarding.consent.buttonTitle" = "Ik heb de privacyverklaring gelezen en begrijp hoe GGD Contact mijn gegevens gebruikt";
 
+/* MARK: - Onboarding Error */
 "onboardingLoadingErrorTitle" = "Koppelen mislukt";
 "onboardingLoadingErrorMessage" = "Probeer het opnieuw of controleer of je de code goed hebt ingevuld.";
 "onboardingLoadingErrorCancelAction" = "Ga terug";
 "onboardingLoadingErrorRetryAction" = "Probeer opnieuw";
 
+/* MARK: - Contagious Period */
 "contagiousPeriodSelectSymptoms.shortTitle" = "Klachten";
 "contagiousPeriodSelectSymptoms.title" = "Welke klachten heb je die bij COVID-19 passen?";
 "contagiousPeriodSelectSymptoms.message" = "Ook lichte klachten tellen mee. Je kunt meerdere klachten kiezen.";
 
+"contagiousPeriodAllSymptomsButton" = "Toon meer klachten";
 "contagiousPeriodNoSymptomsButton" = "Ik heb geen klachten";
 
 "contagiousPeriodSelectTestDate.title" = "Wanneer heb je je laten testen op corona?";
@@ -69,8 +74,68 @@
 "contagiousPeriodOnsetDateVerify.confirmButton" = "Geen klachten";
 "contagiousPeriodOnsetDateVerify.cancelButton" = "Ik had toch klachten";
 
+/* MARK: - Determine contacts */
 "onboardingDetermineContactsIntro.title" = "Ontdek welke leefregels gelden voor je contacten";
 "onboardingDetermineContactsIntro.message" = "Goed om te weten: niet iedereen hoeft direct in quarantaine om de verspreiding van het coronavirus te stoppen.";
+
+"determineContactsAutorization.title" = "Wil je je contactenlijst gebruiken om contactgegevens in te vullen?";
+"determineContactsAutorization.message" = "Gebruik je contactenlijst om makkelijk contacten te vinden en contactgegevens in te vullen. Je bepaalt daarna zelf welke gegevens je met de GGD deelt.";
+"determineContactsAutorization.allowButton" = "Toegang geven";
+"determineContactsAutorization.addManuallyButton" = "Handmatig toevoegen";
+
+"determineRoommates.shortTitle" = "Huisgenoten";
+"determineRoommates.title" = "Wie zijn je huisgenoten?";
+"determineRoommates.message" = "Dit zijn de mensen met wie je in één huis woont.";
+"determineRoommatesAddContact" = "Voeg huisgenoot toe";
+
+"determineContactsExplanation.shortTitle" = "Contacten";
+"determineContactsExplanation.title" = "We gaan een overzicht maken van mensen die je hebt ontmoet";
+"determineContactsExplanation.message" = "Niet iedereen die je hebt ontmoet heeft risico op besmetting gelopen. We zijn op zoek naar mensen met wie je:";
+"determineContactsExplanation.item.1" = "Langer dan 15 minuten in dezelfde ruimte bent geweest";
+"determineContactsExplanation.item.2" = "Intens contact hebt gehad door zoenen of seksueel contact";
+"determineContactsExplanation.item.3" = "Twijfel je? Voeg de persoon dan toch toe";
+"determineContactsExplanation.item.4" = "Je hoeft je huisgenoten niet nog een keer toe te voegen";
+
+/* MARK: - Onboarding Contacts Timeline */
+"contactsTimeline.dateFormat" = "EEEE d MMMM";
+"contactsTimeline.shortDateFormat" = "d MMMM";
+
+"contactsTimeline.shortTitle" = "Contacten";
+"contactsTimeline.title" = "Wie heb je ontmoet tussen %@ en vandaag?";
+"contactsTimeline.message" = "Weet je niet hoe iemand heet? Zet het contact er dan toch in. Bijvoorbeeld als trainer, kapper of buurvrouw. Je hoeft hier geen huisgenoten toe te voegen.";
+
+"contactsTimelineAddContact" = "Contact toevoegen";
+
+"contactsTimelineSectionTitle.todayFormat" = "Vandaag (%@)";
+"contactsTimelineSectionTitle.yesterdayFormat" = "Gisteren (%@)";
+"contactsTimelineSectionTitle.2daysAgoFormat" = "Eergisteren (%@)";
+
+"contactsTimelineSectionSubtitle.symptomOnset" = "De eerste dag dat je klachten had";
+"contactsTimelineSectionSubtitle.beforeOnset" = "Deze dag was je ook al besmettelijk";
+"contactsTimelineSectionSubtitle.testDate" = "Op deze dag liet je jezelf testen";
+
+"contactsTimelineAddExtraDay.title" = "Weet je zeker dat je voor %@ nog geen klachten had?";
+"contactsTimelineAddExtraDay.button" = "Extra dag toevoegen";
+
+"contactsTimelineEmptyDays.title" = "Je hebt niet aan iedere dag contacten toegevoegd";
+"contactsTimelineEmptyDays.message" = "Klopt het dat je op %@ niemand hebt ontmoet?";
+"contactsTimelineEmptyDays.separator" = ", ";
+"contactsTimelineEmptyDays.finalSeparator" = " en ";
+"contactsTimelineEmptyDays.backButton" = "Terug";
+"contactsTimelineEmptyDays.continueButton" = "Ga verder";
+
+"contactsTimelineTip" = "Geheugentip";
+
+"contactsTimelineReviewTip.title" = "Mensen vergeten vaak activiteiten. Bekijk daarom ook je:";
+"contactsTimelineReviewTip.photos" = "Foto's";
+"contactsTimelineReviewTip.calendar" = "Agenda's";
+"contactsTimelineReviewTip.socialMedia" = "Social Media";
+"contactsTimelineReviewTip.transactions" = "Pintransacties";
+
+"contactsTimelineActivityTip.title" = "Deze activiteiten worden vaak vergeten";
+"contactsTimelineActivityTip.car" = "Samen in de auto zitten";
+"contactsTimelineActivityTip.meetings" = "Ontmoetingen buiten of bij jou thuis";
+"contactsTimelineActivityTip.conversations" = "Een onverwachts gesprek op werk";
 
 /* MARK: - Task Overview */
 "taskOverviewTitle" = "Mijn contacten";

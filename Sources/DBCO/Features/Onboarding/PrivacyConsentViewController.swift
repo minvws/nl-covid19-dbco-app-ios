@@ -33,7 +33,7 @@ class PrivacyConsentViewController: PromptableViewController, ScrollViewNavivati
     
     weak var delegate: PrivacyConsentViewControllerDelegate?
     
-    let shortTitle: String = "Privacy"
+    let shortTitle: String = .onboardingConsentShortTitle
     
     init(viewModel: PrivacyConsentViewModel) {
         self.viewModel = viewModel

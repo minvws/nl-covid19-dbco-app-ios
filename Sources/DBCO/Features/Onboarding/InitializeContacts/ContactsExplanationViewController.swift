@@ -22,7 +22,7 @@ class ContactsExplanationViewController: PromptableViewController, ScrollViewNav
     
     weak var delegate: ContactsExplanationViewControllerDelegate?
     
-    let shortTitle: String = "Contacten"
+    let shortTitle: String = .determineContactsExplanationShortTitle
     
     init(viewModel: ContactsExplanationViewModel) {
         self.viewModel = viewModel
@@ -69,13 +69,13 @@ class ContactsExplanationViewController: PromptableViewController, ScrollViewNav
             VStack(spacing: 24,
                    VStack(spacing: 24,
                        VStack(spacing: 16,
-                              Label(title2: "We gaan een overzicht maken van mensen die je hebt ontmoet").multiline(),
-                              Label(body: "Niet iedereen die je hebt ontmoet heeft risico op besmetting gelopen. We zijn op zoek naar mensen met wie je:", textColor: Theme.colors.captionGray).multiline()),
+                              Label(title2: .determineContactsExplanationTitle).multiline(),
+                              Label(body: .determineContactsExplanationMessage, textColor: Theme.colors.captionGray).multiline()),
                        VStack(spacing: 16,
-                              listItem("Langer dan 15 minuten in dezelfde ruimte bent geweest", icon: "Checkmark"),
-                              listItem("Intens contact hebt gehad door zoenen of seksueel contact", icon: "Checkmark"),
-                              listItem("Twijfel je? Voeg de persoon dan toch toe", icon: "Questionmark"),
-                              listItem("Je hoeft je huisgenoten niet nog een keer toe te voegen", icon: "Stop"))),
+                              listItem(.determineContactsExplanationItem1, icon: "Checkmark"),
+                              listItem(.determineContactsExplanationItem2, icon: "Checkmark"),
+                              listItem(.determineContactsExplanationItem3, icon: "Questionmark"),
+                              listItem(.determineContactsExplanationItem4, icon: "Stop"))),
                    UIView()) // Empty view for spacing
                 .distribution(.equalSpacing)
                 .embed(in: scrollView.readableWidth, insets: margin)

@@ -57,7 +57,7 @@ class ContactsTimelineViewModel {
         let formatter = DateFormatter()
         formatter.calendar = .current
         formatter.timeZone = .current
-        formatter.dateFormat = "EEEE d MMMM"
+        formatter.dateFormat = .contactsTimelineDateFormat
         
         return formatter
     }()
@@ -66,7 +66,7 @@ class ContactsTimelineViewModel {
         let formatter = DateFormatter()
         formatter.calendar = .current
         formatter.timeZone = .current
-        formatter.dateFormat = "d MMMM"
+        formatter.dateFormat = .contactsTimelineShortDateFormat
         
         return formatter
     }()
@@ -91,7 +91,7 @@ class ContactsTimelineViewModel {
     }
     
     var title: String {
-        return "Wie heb je ontmoet tussen \(dateFormatter.string(from: endDate)) en vandaag?"
+        return .contactsTimelineTitle(endDate: dateFormatter.string(from: endDate))
     }
     
     var sections: [Section] {
@@ -100,10 +100,10 @@ class ContactsTimelineViewModel {
         let numberOfDays = Calendar.current.dateComponents([.day], from: endDate, to: today).day! + 1
         
         func title(for index: Int, date: Date) -> String {
-            let titleFormats = [
-                "Vandaag (%@)",
-                "Gisteren (%@)",
-                "Eergisteren (%@)"
+            let titleFormats: [String] = [
+                .contactsTimelineSectionTitleTodayFormat,
+                .contactsTimelineSectionTitleYesterdayFormat,
+                .contactsTimelineSectionTitle2DaysAgoFormat
             ]
             
             if titleFormats.indices.contains(index) {
@@ -119,13 +119,13 @@ class ContactsTimelineViewModel {
             switch configuration {
             case .dateOfSymptomOnset:
                 reversedSubtitles = [
-                    "Deze dag was je ook al besmettelijk",
-                    "Deze dag was je ook al besmettelijk",
-                    "De eerste dag dat je klachten had"
+                    .contactsTimelineSectionSubtitleBeforeOnset,
+                    .contactsTimelineSectionSubtitleBeforeOnset,
+                    .contactsTimelineSectionSubtitleSymptomOnset
                 ]
             case .testDate:
                 reversedSubtitles = [
-                    "Op deze dag liet je jezelf testen"
+                    .contactsTimelineSectionSubtitleTestDate
                 ]
             }
             
@@ -172,7 +172,7 @@ class ContactsTimelineViewModel {
     var addExtraDayTitle: String? {
         guard case .dateOfSymptomOnset(let date) = configuration else { return nil }
         
-        return "Weet je zeker dat je voor \(shortDateFormatter.string(from: date)) nog geen klachten had?"
+        return .contactsTimelineAddExtraDayTitle(endDate: shortDateFormatter.string(from: date))
     }
     
     func addExtraDay() {
@@ -200,12 +200,12 @@ class ContactsTimelineViewModel {
         let combinedDates: String
         
         if dates.count > 2 {
-            combinedDates = dates.dropLast().joined(separator: ", ") + " en " + dates.last!
+            combinedDates = dates.dropLast().joined(separator: .contactsTimelineEmptyDaysSeparator) + .contactsTimelineEmptyDaysFinalSeparator + dates.last!
         } else {
-            combinedDates = dates.joined(separator: " en ")
+            combinedDates = dates.joined(separator: .contactsTimelineEmptyDaysFinalSeparator)
         }
         
-        return "Klopt het dat je op \(combinedDates) niemand hebt ontmoet?"
+        return .contactsTimelineEmptyDaysMessage(days: combinedDates)
     }
     
     private(set) lazy var contacts: [CNContact] = {
@@ -242,7 +242,7 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
     
     weak var delegate: ContactsTimelineViewControllerDelegate?
     
-    let shortTitle: String = "Contacten"
+    let shortTitle: String = .contactsTimelineShortTitle
     
     init(viewModel: ContactsTimelineViewModel) {
         self.viewModel = viewModel
@@ -272,7 +272,7 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
         
         sectionStackView = VStack(spacing: 40)
         
-        let addExtraDayButton = Button(title: "Extra dag toevoegen", style: .secondary)
+        let addExtraDayButton = Button(title: .contactsTimelineAddExtraDayButton, style: .secondary)
             .touchUpInside(self, action: #selector(addExtraDay))
         
         addExtraDayButton.setImage(UIImage(named: "Plus"), for: .normal)
@@ -287,7 +287,7 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
             VStack(spacing: 40,
                    VStack(spacing: 16,
                           titleLabel.multiline(),
-                          Label(body: "Weet je niet hoe iemand heet? Zet het contact er dan toch in. Bijvoorbeeld als trainer, kapper of buurvrouw. Je hoeft hier geen huisgenoten toe te voegen.", textColor: Theme.colors.captionGray).multiline()),
+                          Label(body: .contactsTimelineMessage, textColor: Theme.colors.captionGray).multiline()),
                    sectionStackView,
                    VStack(spacing: 16,
                           addExtraDaySectionView,
@@ -379,12 +379,12 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
         if emptySections.isEmpty {
             finish()
         } else {
-            let alert = UIAlertController(title: "Je hebt niet aan iedere dag contacten toegevoegd",
+            let alert = UIAlertController(title: .contactsTimelineEmptyDaysTitle,
                                           message: viewModel.emptyDaysMessage(for: emptySections),
                                           preferredStyle: .alert)
             
-            alert.addAction(UIAlertAction(title: "Terug", style: .default, handler: nil))
-            alert.addAction(UIAlertAction(title: "Ga verder", style: .default) { _ in
+            alert.addAction(UIAlertAction(title: .contactsTimelineEmptyDaysBackButton, style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: .contactsTimelineEmptyDaysContinueButton, style: .default) { _ in
                 finish()
             })
             
@@ -518,7 +518,7 @@ private class TimelineSectionView: UIView {
 private class DaySectionView: TimelineSectionView {
     private let titleLabel = Label(bodyBold: nil)
     private let subtitleLabel = Label(body: nil, textColor: Theme.colors.captionGray)
-    private(set) var contactList = ContactListInputView(placeholder: "Contact toevoegen")
+    private(set) var contactList = ContactListInputView(placeholder: .contactsTimelineAddContact)
     
     weak var contactListDelegate: ContactListInputViewDelegate? {
         didSet { contactList.delegate = contactListDelegate }
@@ -565,14 +565,14 @@ private class ReviewTipsSectionView: TimelineSectionView {
         VStack(spacing: 16,
                VStack(spacing: 6,
                       createTipHeaderLabel(),
-                      Label(bodyBold: "Mensen vergeten vaak activiteiten. Bekijk daarom ook je:").multiline()),
+                      Label(bodyBold: .contactsTimelineReviewTipTitle).multiline()),
                HStack(spacing: 24,
                       VStack(spacing: 16,
-                             createTipItem(icon: "Photos", text: "Foto's"),
-                             createTipItem(icon: "Calendar", text: "Agenda's")),
+                             createTipItem(icon: "Photos", text: .contactsTimelineReviewTipPhotos),
+                             createTipItem(icon: "Calendar", text: .contactsTimelineReviewTipCalendar)),
                       VStack(spacing: 16,
-                             createTipItem(icon: "SocialMedia", text: "Social Media"),
-                             createTipItem(icon: "Transactions", text: "Pintransacties")))
+                             createTipItem(icon: "SocialMedia", text: .contactsTimelineReviewTipSocialMedia),
+                             createTipItem(icon: "Transactions", text: .contactsTimelineReviewTipTransactions)))
                 .distribution(.fillProportionally)
                 .verticalIf(screenWidthLessThan: 330, spacing: 0))
             .embed(in: self, insets: .all(16))
@@ -591,11 +591,11 @@ private class ActivityTipsSectionView: TimelineSectionView {
         VStack(spacing: 16,
                VStack(spacing: 6,
                       createTipHeaderLabel(),
-                      Label(bodyBold: "Deze activiteiten worden vaak vergeten").multiline()),
+                      Label(bodyBold: .contactsTimelineActivityTipTitle).multiline()),
                VStack(spacing: 16,
-                      createTipItem(icon: "Car", text: "Samen in de auto zitten"),
-                      createTipItem(icon: "Meetings", text: "Ontmoetingen buiten of bij jou thuis"),
-                      createTipItem(icon: "Conversations", text: "Een onverwachts gesprek op werk")))
+                      createTipItem(icon: "Car", text: .contactsTimelineActivityTipCar),
+                      createTipItem(icon: "Meetings", text: .contactsTimelineActivityTipMeetings),
+                      createTipItem(icon: "Conversations", text: .contactsTimelineActivityTipConversations)))
             .embed(in: self, insets: .all(16))
     }
     

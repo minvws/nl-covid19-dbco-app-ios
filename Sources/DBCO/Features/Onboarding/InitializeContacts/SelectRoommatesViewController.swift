@@ -47,7 +47,7 @@ class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdju
     
     weak var delegate: SelectRoommatesViewControllerDelegate?
     
-    let shortTitle: String = "Huisgenoten"
+    let shortTitle: String = .determineRoommatesShortTitle
     
     init(viewModel: SelectRoommatesViewModel) {
         self.viewModel = viewModel
@@ -77,15 +77,15 @@ class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdju
         
         let contacts = Services.onboardingManager.roommates?.map { ContactListInputView.Contact(name: $0.name, cnContactIdentifier: $0.contactIdentifier) } ?? []
 
-        contactListView = ContactListInputView(placeholder: "Voeg huisgenoot toe",
+        contactListView = ContactListInputView(placeholder: .determineRoommatesAddContact,
                                                contacts: contacts,
                                                delegate: self)
         
         let stack =
             VStack(spacing: 24,
                    VStack(spacing: 16,
-                          Label(title2: "Wie zijn je huisgenoten?").multiline(),
-                          Label(body: "Dit zijn de mensen met wie je in één huis woont.", textColor: Theme.colors.captionGray).multiline()),
+                          Label(title2: .determineRoommatesTitle).multiline(),
+                          Label(body: .determineRoommatesMessage, textColor: Theme.colors.captionGray).multiline()),
                    contactListView,
                    Button(title: .next, style: .primary).touchUpInside(self, action: #selector(handleContinue)))
                 .distribution(.fill)

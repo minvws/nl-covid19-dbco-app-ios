@@ -121,7 +121,7 @@ class SelectSymptomsViewController: ViewController, ScrollViewNavivationbarAdjus
         viewModel.$continueWithSymptomsButtonHidden.binding = { continueWithSymptomsButton.isHidden = $0 }
         viewModel.$continueWithoutSymptomsButtonHidden.binding = { continueWithoutSymptomsButton.isHidden = $0 }
         
-        let showAllSymptomsButton = Button(title: "Toon meer klachten", style: .info)
+        let showAllSymptomsButton = Button(title: .contagiousPeriodAllSymptomsButton, style: .info)
             .touchUpInside(self, action: #selector(showAllSymptoms))
         
         showAllSymptomsButton.isHidden = symptomButtonStackView.arrangedSubviews.allSatisfy { $0.isHidden == false }
