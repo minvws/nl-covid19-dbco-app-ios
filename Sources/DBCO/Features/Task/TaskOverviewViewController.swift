@@ -10,6 +10,7 @@ import UIKit
 protocol TaskOverviewViewControllerDelegate: class {
     func taskOverviewViewControllerDidRequestAddContact(_ controller: TaskOverviewViewController)
     func taskOverviewViewController(_ controller: TaskOverviewViewController, didSelect task: Task)
+    func taskOverviewViewControllerDidRequestTips(_ controller: TaskOverviewViewController)
     func taskOverviewViewControllerDidRequestUpload(_ controller: TaskOverviewViewController)
     func taskOverviewViewControllerDidRequestRefresh(_ controller: TaskOverviewViewController)
     func taskOverviewViewControllerDidRequestDebugMenu(_ controller: TaskOverviewViewController)
@@ -205,6 +206,7 @@ class TaskOverviewViewController: PromptableViewController {
             tipButton.contentHorizontalAlignment = .left
             tipButton.contentEdgeInsets = .zero
             tipButton.titleLabel?.font = Theme.fonts.subheadBold
+            tipButton.touchUpInside(self, action: #selector(requestTips))
             
             VStack(VStack(spacing: 4,
                           Label(bodyBold: "Geen contacten vergeten?").multiline(),
@@ -289,6 +291,10 @@ class TaskOverviewViewController: PromptableViewController {
     
     @objc private func requestContact() {
         delegate?.taskOverviewViewControllerDidRequestAddContact(self)
+    }
+    
+    @objc private func requestTips() {
+        delegate?.taskOverviewViewControllerDidRequestTips(self)
     }
     
     @objc private func upload() {
