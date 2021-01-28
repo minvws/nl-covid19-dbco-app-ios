@@ -80,7 +80,7 @@ class ContactListInputView: UIView {
         return textFieldStack.arrangedSubviews
             .compactMap { $0 as? ContactTextField }
             .filter { $0.text?.isEmpty == false }
-            .map { Contact(name: $0.text!, cnContactIdentifier: $0.acceptedSuggestedContactIdentifier) }
+            .map { Contact(name: $0.text!.trimmingCharacters(in: .whitespacesAndNewlines), cnContactIdentifier: $0.acceptedSuggestedContactIdentifier) }
     }
     
     private func addContactField(for contact: Contact? = nil) {
@@ -221,10 +221,12 @@ private class ContactTextField: UITextField {
             .foregroundColor: Theme.colors.disabledBorder
         ])
         
-        clearButton.setImage(UIImage(named: "DeleteContact"), for: .normal)
+        let deleteIcon = UIImage(named: "DeleteContact")!
+        clearButton.setImage(deleteIcon, for: .normal)
         clearButton.tintColor = Theme.colors.primary
         clearButton.backgroundColor = .white
         clearButton.addTarget(self, action: #selector(clear), for: .touchUpInside)
+        clearButton.bounds = CGRect(origin: .zero, size: deleteIcon.size)
         
         rightView = clearButton
         rightViewMode = .whileEditing

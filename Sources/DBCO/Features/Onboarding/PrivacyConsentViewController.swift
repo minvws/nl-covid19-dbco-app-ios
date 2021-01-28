@@ -27,11 +27,13 @@ class PrivacyConsentViewModel {
 }
 
 /// - Tag: PrivacyConsentViewController
-class PrivacyConsentViewController: PromptableViewController {
+class PrivacyConsentViewController: PromptableViewController, ScrollViewNavivationbarAdjusting {
     private let viewModel: PrivacyConsentViewModel
     private let scrollView = UIScrollView(frame: .zero)
     
     weak var delegate: PrivacyConsentViewControllerDelegate?
+    
+    let shortTitle: String = .onboardingConsentShortTitle
     
     init(viewModel: PrivacyConsentViewModel) {
         self.viewModel = viewModel
@@ -47,16 +49,15 @@ class PrivacyConsentViewController: PromptableViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        if #available(iOS 14.0, *) {
+            navigationItem.backButtonDisplayMode = .generic
+        }
+        
         view.backgroundColor = .white
         
         scrollView.embed(in: contentView)
+        scrollView.delegate = self
         scrollView.delaysContentTouches = false
-        
-        let headerBackgroundView = UIView(frame: .zero)
-        headerBackgroundView.backgroundColor = .white
-        
-        headerBackgroundView.snap(to: .top, of: contentView)
-        headerBackgroundView.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor).isActive = true
         
         let widthProviderView = UIView()
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
@@ -103,32 +104,12 @@ class PrivacyConsentViewController: PromptableViewController {
         promptView = continueButton
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        navigationController?.setNavigationBarHidden(false, animated: animated)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        navigationController?.setNavigationBarHidden(false, animated: animated)
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        navigationController?.hidesBarsOnSwipe = false
-    }
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         let scrollingHeight = scrollView.contentSize.height + scrollView.safeAreaInsets.top + scrollView.safeAreaInsets.bottom
         let canScroll = scrollingHeight > scrollView.frame.height
         showPromptViewSeparator = canScroll
-        
-        navigationController?.hidesBarsOnSwipe = canScroll
     }
     
     @objc private func handleContinue() {
@@ -141,6 +122,14 @@ class PrivacyConsentViewController: PromptableViewController {
     
     @objc private func consentValueChanged(_ sender: ConsentButton) {
         viewModel.registerConsent(value: sender.isSelected)
+    }
+    
+}
+
+extension PrivacyConsentViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        adjustNavigationBar(for: scrollView)
     }
     
 }

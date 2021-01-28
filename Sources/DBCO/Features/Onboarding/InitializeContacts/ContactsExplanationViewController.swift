@@ -16,11 +16,13 @@ class ContactsExplanationViewModel {
 }
 
 /// - Tag: ContactsExplanationViewControlle
-class ContactsExplanationViewController: PromptableViewController {
+class ContactsExplanationViewController: PromptableViewController, ScrollViewNavivationbarAdjusting {
     private let viewModel: ContactsExplanationViewModel
     private let scrollView = UIScrollView(frame: .zero)
     
     weak var delegate: ContactsExplanationViewControllerDelegate?
+    
+    let shortTitle: String = .determineContactsExplanationShortTitle
     
     init(viewModel: ContactsExplanationViewModel) {
         self.viewModel = viewModel
@@ -36,16 +38,15 @@ class ContactsExplanationViewController: PromptableViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        if #available(iOS 14.0, *) {
+            navigationItem.backButtonDisplayMode = .generic
+        }
+        
         view.backgroundColor = .white
         
         scrollView.embed(in: contentView)
+        scrollView.delegate = self
         scrollView.delaysContentTouches = false
-        
-        let headerBackgroundView = UIView(frame: .zero)
-        headerBackgroundView.backgroundColor = .white
-        
-        headerBackgroundView.snap(to: .top, of: contentView)
-        headerBackgroundView.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor).isActive = true
         
         let widthProviderView = UIView()
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
@@ -68,13 +69,13 @@ class ContactsExplanationViewController: PromptableViewController {
             VStack(spacing: 24,
                    VStack(spacing: 24,
                        VStack(spacing: 16,
-                              Label(title2: "We gaan een overzicht maken van mensen die je hebt ontmoet").multiline(),
-                              Label(body: "Niet iedereen die je hebt ontmoet heeft risico op besmetting gelopen. We zijn op zoek naar mensen met wie je:", textColor: Theme.colors.captionGray).multiline()),
+                              Label(title2: .determineContactsExplanationTitle).multiline(),
+                              Label(body: .determineContactsExplanationMessage, textColor: Theme.colors.captionGray).multiline()),
                        VStack(spacing: 16,
-                              listItem("Langer dan 15 minuten in dezelfde ruimte bent geweest", icon: "Checkmark"),
-                              listItem("Intens contact hebt gehad door zoenen of seksueel contact", icon: "Checkmark"),
-                              listItem("Twijfel je? Voeg de persoon dan toch toe", icon: "Questionmark"),
-                              listItem("Je hoeft je huisgenoten niet nog een keer toe te voegen", icon: "Stop"))),
+                              listItem(.determineContactsExplanationItem1, icon: "Checkmark"),
+                              listItem(.determineContactsExplanationItem2, icon: "Checkmark"),
+                              listItem(.determineContactsExplanationItem3, icon: "Questionmark"),
+                              listItem(.determineContactsExplanationItem4, icon: "Stop"))),
                    UIView()) // Empty view for spacing
                 .distribution(.equalSpacing)
                 .embed(in: scrollView.readableWidth, insets: margin)
@@ -87,36 +88,24 @@ class ContactsExplanationViewController: PromptableViewController {
             .touchUpInside(self, action: #selector(handleContinue))
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        navigationController?.setNavigationBarHidden(false, animated: animated)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        navigationController?.setNavigationBarHidden(false, animated: animated)
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        navigationController?.hidesBarsOnSwipe = false
-    }
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         let scrollingHeight = scrollView.contentSize.height + scrollView.safeAreaInsets.top + scrollView.safeAreaInsets.bottom
         let canScroll = scrollingHeight > scrollView.frame.height
         showPromptViewSeparator = canScroll
-        
-        navigationController?.hidesBarsOnSwipe = canScroll
     }
     
     @objc private func handleContinue() {
         delegate?.contactsExplanationViewControllerWantsToContinue(self)
+    }
+    
+}
+
+extension ContactsExplanationViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        adjustNavigationBar(for: scrollView)
     }
     
 }

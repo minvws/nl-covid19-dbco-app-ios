@@ -80,6 +80,8 @@ extension String {
     static var onboardingStep3Title: String { return Localization.string(for: "onboarding.step3.title") }
     static var onboardingStep3Message: String { return Localization.string(for: "onboarding.step3.message") }
     
+    /* MARK: - Privacy */
+    static var onboardingConsentShortTitle: String { return Localization.string(for: "onboarding.consent.shortTitle") }
     static var onboardingConsentTitle: String { return Localization.string(for: "onboarding.consent.title") }
     static var onboardingConsentMessage: String { return Localization.string(for: "onboarding.consent.message") }
     static var onboardingConsentItem1: String { return Localization.string(for: "onboarding.consent.item1") }
@@ -88,15 +90,18 @@ extension String {
     static var onboardingConsentItem4: String { return Localization.string(for: "onboarding.consent.item4") }
     static var onboardingConsentButtonTitle: String { return Localization.string(for: "onboarding.consent.buttonTitle") }
     
+    /* MARK: - Onboarding Error */
     static var onboardingLoadingErrorTitle: String { return Localization.string(for: "onboardingLoadingErrorTitle") }
     static var onboardingLoadingErrorMessage: String { return Localization.string(for: "onboardingLoadingErrorMessage") }
     static var onboardingLoadingErrorCancelAction: String { return Localization.string(for: "onboardingLoadingErrorCancelAction") }
     static var onboardingLoadingErrorRetryAction: String { return Localization.string(for: "onboardingLoadingErrorRetryAction") }
     
+    /* MARK: - Contagious Period */
     static var contagiousPeriodSelectSymptomsShortTitle: String { return Localization.string(for: "contagiousPeriodSelectSymptoms.shortTitle") }
     static var contagiousPeriodSelectSymptomsTitle: String { return Localization.string(for: "contagiousPeriodSelectSymptoms.title") }
     static var contagiousPeriodSelectSymptomsMessage: String { return Localization.string(for: "contagiousPeriodSelectSymptoms.message") }
     
+    static var contagiousPeriodAllSymptomsButton: String { return Localization.string(for: "contagiousPeriodAllSymptomsButton") }
     static var contagiousPeriodNoSymptomsButton: String { return Localization.string(for: "contagiousPeriodNoSymptomsButton") }
     
     static var contagiousPeriodSelectTestDateTitle: String { return Localization.string(for: "contagiousPeriodSelectTestDate.title") }
@@ -119,8 +124,72 @@ extension String {
     static var contagiousPeriodOnsetDateVerifyConfirmButton: String { return Localization.string(for: "contagiousPeriodOnsetDateVerify.confirmButton") }
     static var contagiousPeriodOnsetDateVerifyCancelButton: String { return Localization.string(for: "contagiousPeriodOnsetDateVerify.cancelButton") }
     
+    /* MARK: - Determine contacts */
     static var onboardingDetermineContactsIntroTitle: String { return Localization.string(for: "onboardingDetermineContactsIntro.title") }
     static var onboardingDetermineContactsIntroMessage: String { return Localization.string(for: "onboardingDetermineContactsIntro.message") }
+    
+    static var determineContactsAutorizationTitle: String { return Localization.string(for: "determineContactsAutorization.title") }
+    static var determineContactsAutorizationMessage: String { return Localization.string(for: "determineContactsAutorization.message") }
+    static var determineContactsAutorizationAllowButton: String { return Localization.string(for: "determineContactsAutorization.allowButton") }
+    static var determineContactsAutorizationAddManuallyButton: String { return Localization.string(for: "determineContactsAutorization.addManuallyButton") }
+    
+    static var determineRoommatesShortTitle: String { return Localization.string(for: "determineRoommates.shortTitle") }
+    static var determineRoommatesTitle: String { return Localization.string(for: "determineRoommates.title") }
+    static var determineRoommatesMessage: String { return Localization.string(for: "determineRoommates.message") }
+    static var determineRoommatesAddContact: String { return Localization.string(for: "determineRoommatesAddContact") }
+    
+    static var determineContactsExplanationShortTitle: String { return Localization.string(for: "determineContactsExplanation.shortTitle") }
+    static var determineContactsExplanationTitle: String { return Localization.string(for: "determineContactsExplanation.title") }
+    static var determineContactsExplanationMessage: String { return Localization.string(for: "determineContactsExplanation.message") }
+    static var determineContactsExplanationItem1: String { return Localization.string(for: "determineContactsExplanation.item.1") }
+    static var determineContactsExplanationItem2: String { return Localization.string(for: "determineContactsExplanation.item.2") }
+    static var determineContactsExplanationItem3: String { return Localization.string(for: "determineContactsExplanation.item.3") }
+    static var determineContactsExplanationItem4: String { return Localization.string(for: "determineContactsExplanation.item.4") }
+    
+    /* MARK: - Onboarding Contacts Timeline */
+    static var contactsTimelineDateFormat: String { return Localization.string(for: "contactsTimeline.dateFormat") }
+    static var contactsTimelineShortDateFormat: String { return Localization.string(for: "contactsTimeline.shortDateFormat") }
+    static var contactsTimelineShortTitle: String { return Localization.string(for: "contactsTimeline.shortTitle") }
+    
+    static func contactsTimelineTitle(endDate: String) -> String { return Localization.string(for: "contactsTimeline.title", [endDate]) }
+    
+    static var contactsTimelineMessage: String { return Localization.string(for: "contactsTimeline.message") }
+    
+    static var contactsTimelineAddContact: String { return Localization.string(for: "contactsTimelineAddContact") }
+    
+    static var contactsTimelineSectionTitleTodayFormat: String { return Localization.string(for: "contactsTimelineSectionTitle.todayFormat") }
+    static var contactsTimelineSectionTitleYesterdayFormat: String { return Localization.string(for: "contactsTimelineSectionTitle.yesterdayFormat") }
+    static var contactsTimelineSectionTitle2DaysAgoFormat: String { return Localization.string(for: "contactsTimelineSectionTitle.2daysAgoFormat") }
+    
+    static var contactsTimelineSectionSubtitleSymptomOnset: String { return Localization.string(for: "contactsTimelineSectionSubtitle.symptomOnset") }
+    static var contactsTimelineSectionSubtitleBeforeOnset: String { return Localization.string(for: "contactsTimelineSectionSubtitle.beforeOnset") }
+    static var contactsTimelineSectionSubtitleTestDate: String { return Localization.string(for: "contactsTimelineSectionSubtitle.testDate") }
+    
+    static func contactsTimelineAddExtraDayTitle(endDate: String) -> String { return Localization.string(for: "contactsTimelineAddExtraDay.title", [endDate]) }
+    
+    static var contactsTimelineAddExtraDayButton: String { return Localization.string(for: "contactsTimelineAddExtraDay.button") }
+    
+    static var contactsTimelineEmptyDaysTitle: String { return Localization.string(for: "contactsTimelineEmptyDays.title") }
+    
+    static func contactsTimelineEmptyDaysMessage(days: String) -> String { return Localization.string(for: "contactsTimelineEmptyDays.message", [days]) }
+    
+    static var contactsTimelineEmptyDaysSeparator: String { return Localization.string(for: "contactsTimelineEmptyDays.separator") }
+    static var contactsTimelineEmptyDaysFinalSeparator: String { return Localization.string(for: "contactsTimelineEmptyDays.finalSeparator") }
+    static var contactsTimelineEmptyDaysBackButton: String { return Localization.string(for: "contactsTimelineEmptyDays.backButton") }
+    static var contactsTimelineEmptyDaysContinueButton: String { return Localization.string(for: "contactsTimelineEmptyDays.continueButton") }
+    
+    static var contactsTimelineTip: String { return Localization.string(for: "contactsTimelineTip") }
+    
+    static var contactsTimelineReviewTipTitle: String { return Localization.string(for: "contactsTimelineReviewTip.title") }
+    static var contactsTimelineReviewTipPhotos: String { return Localization.string(for: "contactsTimelineReviewTip.photos") }
+    static var contactsTimelineReviewTipCalendar: String { return Localization.string(for: "contactsTimelineReviewTip.calendar") }
+    static var contactsTimelineReviewTipSocialMedia: String { return Localization.string(for: "contactsTimelineReviewTip.socialMedia") }
+    static var contactsTimelineReviewTipTransactions: String { return Localization.string(for: "contactsTimelineReviewTip.transactions") }
+    
+    static var contactsTimelineActivityTipTitle: String { return Localization.string(for: "contactsTimelineActivityTip.title") }
+    static var contactsTimelineActivityTipCar: String { return Localization.string(for: "contactsTimelineActivityTip.car") }
+    static var contactsTimelineActivityTipMeetings: String { return Localization.string(for: "contactsTimelineActivityTip.meetings") }
+    static var contactsTimelineActivityTipConversations: String { return Localization.string(for: "contactsTimelineActivityTip.conversations") }
     
     /* MARK: - Task Overview */
     static var taskOverviewTitle: String { return Localization.string(for: "taskOverviewTitle") }

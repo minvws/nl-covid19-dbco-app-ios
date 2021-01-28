@@ -67,10 +67,10 @@ final class InitializeContactsCoordinator: Coordinator, Logging {
     
     private func requestContactsAuthorization() {
         let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding4")!,
-                                                title: "Wil je je contactenlijst gebruiken om contactgegevens in te vullen?",
-                                                message: "Gebruik je contactenlijst om makkelijk contacten te vinden en contactgegevens in te vullen. Je bepaalt daarna zelf welke gegevens je met de GGD deelt.",
-                                                primaryButtonTitle: "Toegang geven",
-                                                secondaryButtonTitle: "Handmatig toevoegen",
+                                                title: .determineContactsAutorizationTitle,
+                                                message: .determineContactsAutorizationMessage,
+                                                primaryButtonTitle: .determineContactsAutorizationAllowButton,
+                                                secondaryButtonTitle: .determineContactsAutorizationAddManuallyButton,
                                                 showSecondaryButtonOnTop: true)
         let stepController = OnboardingStepViewController(viewModel: viewModel)
         stepController.view.tag = StepIdentifiers.requestContactsAuthorization.rawValue

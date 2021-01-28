@@ -37,7 +37,7 @@ class SelectRoommatesViewModel {
     
 }
 
-class SelectRoommatesViewController: ViewController {
+class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdjusting {
     private let viewModel: SelectRoommatesViewModel
     private let navigationBackgroundView = UIView()
     private let separatorView = SeparatorView()
@@ -46,6 +46,8 @@ class SelectRoommatesViewController: ViewController {
     private let scrollView = UIScrollView(frame: .zero)
     
     weak var delegate: SelectRoommatesViewControllerDelegate?
+    
+    let shortTitle: String = .determineRoommatesShortTitle
     
     init(viewModel: SelectRoommatesViewModel) {
         self.viewModel = viewModel
@@ -71,26 +73,19 @@ class SelectRoommatesViewController: ViewController {
         scrollView.keyboardDismissMode = .onDrag
         scrollView.delegate = self
         
-        navigationBackgroundView.backgroundColor = .white
-        navigationBackgroundView.snap(to: .top, of: view)
-        
-        navigationBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        
-        separatorView.snap(to: .top, of: view.safeAreaLayoutGuide)
-        
         let margin: UIEdgeInsets = .top(32) + .bottom(16)
         
         let contacts = Services.onboardingManager.roommates?.map { ContactListInputView.Contact(name: $0.name, cnContactIdentifier: $0.contactIdentifier) } ?? []
 
-        contactListView = ContactListInputView(placeholder: "Voeg huisgenoot toe",
+        contactListView = ContactListInputView(placeholder: .determineRoommatesAddContact,
                                                contacts: contacts,
                                                delegate: self)
         
         let stack =
             VStack(spacing: 24,
                    VStack(spacing: 16,
-                          Label(title2: "Wie zijn je huisgenoten?").multiline(),
-                          Label(body: "Dit zijn de mensen met wie je in één huis woont.", textColor: Theme.colors.captionGray).multiline()),
+                          Label(title2: .determineRoommatesTitle).multiline(),
+                          Label(body: .determineRoommatesMessage, textColor: Theme.colors.captionGray).multiline()),
                    contactListView,
                    Button(title: .next, style: .primary).touchUpInside(self, action: #selector(handleContinue)))
                 .distribution(.fill)
@@ -148,23 +143,7 @@ class SelectRoommatesViewController: ViewController {
 extension SelectRoommatesViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // TODO: This pattern is used multiple times
-        let shouldShow = scrollView.contentOffset.y + scrollView.safeAreaInsets.top > 0
-        let isShown = navigationBackgroundView.isHidden == false
-        
-        if shouldShow != isShown {
-            UIView.animate(withDuration: 0.2) {
-                if scrollView.contentOffset.y + scrollView.safeAreaInsets.top > 0 {
-                    self.separatorView.alpha = 1
-                    self.navigationBackgroundView.isHidden = false
-                    self.navigationItem.title = "Huisgenoten"
-                } else {
-                    self.separatorView.alpha = 0
-                    self.navigationBackgroundView.isHidden = true
-                    self.navigationItem.title = nil
-                }
-            }
-        }
+        adjustNavigationBar(for: scrollView)
     }
     
 }
