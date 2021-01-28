@@ -196,6 +196,8 @@ final class CaseManager: CaseManaging, Logging {
                         self.fetchDate = Date() // Set the fetchdate here again to the actual date
             
                         loadQuestionnairesIfNeeded()
+                        
+                        self.listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
                     case .failure(let error):
                         self.fetchDate = previousFetchDate // Reset the fetchdate since no data was fetched
                         
@@ -227,7 +229,6 @@ final class CaseManager: CaseManaging, Logging {
         
         func finish() {
             completion(true, nil)
-            self.listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
         }
         
         loadTasksIfNeeded()

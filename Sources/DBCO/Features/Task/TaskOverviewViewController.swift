@@ -24,14 +24,16 @@ class TaskOverviewViewModel {
     private let tableViewManager: TableViewManager<TaskTableViewCell>
     private var tableHeaderBuilder: (() -> UIView?)?
     private var sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?
+    private var addContactFooterBuilder: (() -> UIView?)?
     
-    private var sections: [(header: UIView?, tasks: [Task])]
+    private var sections: [(header: UIView?, tasks: [Task], footer: UIView?)]
     
     private var hidePrompt: PromptFunction?
     private var showPrompt: PromptFunction?
     
     @Bindable private(set) var isDoneButtonHidden: Bool = false
     @Bindable private(set) var isResetButtonHidden: Bool = true
+    @Bindable private(set) var isHeaderAddContactButtonHidden: Bool = false
     @Bindable private(set) var isAddContactButtonHidden: Bool = false
     @Bindable private(set) var isWindowExpiredMessageHidden: Bool = true
     
@@ -44,15 +46,21 @@ class TaskOverviewViewModel {
         tableViewManager.numberOfRowsInSection = { [unowned self] in return self.sections[$0].tasks.count }
         tableViewManager.itemForCellAtIndexPath = { [unowned self] in return self.sections[$0.section].tasks[$0.row] }
         tableViewManager.viewForHeaderInSection = { [unowned self] in return self.sections[$0].header }
+        tableViewManager.viewForFooterInSection = { [unowned self] in return self.sections[$0].footer }
         
         Services.caseManager.addListener(self)
     }
     
-    func setupTableView(_ tableView: UITableView, tableHeaderBuilder: (() -> UIView?)?, sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?, selectedTaskHandler: @escaping (Task, IndexPath) -> Void) {
+    func setupTableView(_ tableView: UITableView,
+                        tableHeaderBuilder: (() -> UIView?)?,
+                        sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?,
+                        addContactFooterBuilder: (() -> UIView?)?,
+                        selectedTaskHandler: @escaping (Task, IndexPath) -> Void) {
         tableViewManager.manage(tableView)
         tableViewManager.didSelectItem = selectedTaskHandler
         self.tableHeaderBuilder = tableHeaderBuilder
         self.sectionHeaderBuilder = sectionHeaderBuilder
+        self.addContactFooterBuilder = addContactFooterBuilder
         
         tableView.allowsSelection = !Services.caseManager.isWindowExpired
         
@@ -77,7 +85,7 @@ class TaskOverviewViewModel {
     
     private func buildSections() {
         sections = []
-        sections.append((tableHeaderBuilder?(), []))
+        sections.append((tableHeaderBuilder?(), [], nil))
         
         let tasks = Services.caseManager.tasks.filter { !$0.deletedByIndex }
         
@@ -89,13 +97,18 @@ class TaskOverviewViewModel {
         
         if !uninformedContacts.isEmpty {
             sections.append((header: sectionHeaderBuilder?(uninformedSectionHeader),
-                             tasks: uninformedContacts))
+                             tasks: uninformedContacts,
+                             footer: addContactFooterBuilder?()))
         }
         
         if !informedContacts.isEmpty {
             sections.append((header: sectionHeaderBuilder?(informedSectionHeader),
-                             tasks: informedContacts))
+                             tasks: informedContacts,
+                             footer: nil))
         }
+        
+        isHeaderAddContactButtonHidden = !uninformedContacts.isEmpty
+        isAddContactButtonHidden = uninformedContacts.isEmpty
     }
 }
 
@@ -117,6 +130,7 @@ extension TaskOverviewViewModel: CaseManagerListener {
         isDoneButtonHidden = true
         isResetButtonHidden = false
         isAddContactButtonHidden = true
+        isHeaderAddContactButtonHidden = true
         isWindowExpiredMessageHidden = false
         
         tableViewManager.tableView?.allowsSelection = false
@@ -174,7 +188,32 @@ class TaskOverviewViewController: PromptableViewController {
         tableView.refreshControl = refreshControl
         
         let tableHeaderBuilder = { [unowned self] () -> UIView in
-            let addContactButton = Button(title: .taskOverviewAddContactButtonTitle, style: .secondary)
+            let tipContainerView = UIView()
+            tipContainerView.backgroundColor = Theme.colors.graySeparator
+            tipContainerView.layer.cornerRadius = 8
+            
+            let thinkingImage = UIImage(named: "Thinking")!
+            let thinkingImageView = UIImageView(image: thinkingImage)
+            thinkingImageView.snap(to: .bottomRight,
+                                   of: tipContainerView,
+                                   width: thinkingImage.size.width + 8) // add 1 cornerradius worth of margin on the left
+            thinkingImageView.contentMode = .bottomRight
+            thinkingImageView.layer.cornerRadius = 8
+            thinkingImageView.clipsToBounds = true
+            
+            let tipButton = Button(title: "Lees de tips", style: .info)
+            tipButton.contentHorizontalAlignment = .left
+            tipButton.contentEdgeInsets = .zero
+            tipButton.titleLabel?.font = Theme.fonts.subheadBold
+            
+            VStack(VStack(spacing: 4,
+                          Label(bodyBold: "Geen contacten vergeten?").multiline(),
+                          Label(subhead: "Maak een overzicht van wie je hebt ontmoet <b>vanaf 1 oktober</b>",
+                                textColor: Theme.colors.captionGray).multiline().asHTML()),
+                   tipButton)
+                .embed(in: tipContainerView, insets: .right(92) + .left(16) + .top(16) + .bottom(11))
+            
+            let addContactButton = Button(title: .taskOverviewAddContactButtonTitle, style: .info)
                 .touchUpInside(self, action: #selector(requestContact))
             
             addContactButton.setImage(UIImage(named: "Plus"), for: .normal)
@@ -193,10 +232,13 @@ class TaskOverviewViewController: PromptableViewController {
                              textColor: Theme.colors.primary).multiline())
                 .alignment(.top)
             
-            self.viewModel.$isAddContactButtonHidden.binding = { addContactButton.isHidden = $0 }
+            self.viewModel.$isHeaderAddContactButtonHidden.binding = { addContactButton.isHidden = $0 }
             self.viewModel.$isWindowExpiredMessageHidden.binding = { windowExpiredMessage.isHidden = $0 }
             
-            return VStack(addContactButton, windowExpiredMessage)
+            return VStack(spacing: 12,
+                          tipContainerView,
+                          addContactButton,
+                          windowExpiredMessage)
                 .wrappedInReadableWidth(insets: .top(16))
         }
         
@@ -207,7 +249,24 @@ class TaskOverviewViewController: PromptableViewController {
                 .wrappedInReadableWidth(insets: .top(20) + .bottom(16))
         }
         
-        viewModel.setupTableView(tableView, tableHeaderBuilder: tableHeaderBuilder, sectionHeaderBuilder: sectionHeaderBuilder) { [weak self] task, indexPath in
+        let addContactFooterBuilder = { [unowned self] () -> UIView in
+            let addContactButton = Button(title: .taskOverviewAddContactButtonTitle, style: .info)
+                .touchUpInside(self, action: #selector(requestContact))
+            
+            addContactButton.setImage(UIImage(named: "Plus"), for: .normal)
+            addContactButton.titleEdgeInsets = .left(5)
+            addContactButton.imageEdgeInsets = .right(5)
+            
+            self.viewModel.$isAddContactButtonHidden.binding = { addContactButton.isHidden = $0 }
+            
+            return addContactButton
+                .wrappedInReadableWidth(insets: .top(2) + .bottom(16))
+        }
+        
+        viewModel.setupTableView(tableView,
+                                 tableHeaderBuilder: tableHeaderBuilder,
+                                 sectionHeaderBuilder: sectionHeaderBuilder,
+                                 addContactFooterBuilder: addContactFooterBuilder) { [weak self] task, indexPath in
             guard let self = self else { return }
             
             self.delegate?.taskOverviewViewController(self, didSelect: task)
