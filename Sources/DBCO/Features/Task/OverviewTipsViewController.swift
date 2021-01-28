@@ -13,6 +13,23 @@ protocol OverviewTipsViewControllerDelegate: class {
 
 class OverviewTipsViewModel {
     
+    var titleText: String {
+        let date = Services.caseManager.dateOfSymptomOnset
+        
+        guard !Calendar.current.isDateInToday(date) else {
+            return "Maak een compleet overzicht van mensen die je vandaag hebt ontmoet"
+        }
+        
+        let titleFormat = "Maak een compleet overzicht van mensen die je hebt ontmoet tussen %@ en vandaag"
+        
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar.current
+        formatter.locale = Locale.current
+        formatter.dateFormat = "d MMMM"
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+    
+        return String(format: titleFormat, formatter.string(from: date))
+    }
 }
 
 class OverviewTipsViewController: ViewController {
@@ -34,7 +51,7 @@ class OverviewTipsViewController: ViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: .close, style: .done, target: self, action: #selector(close))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: .close, style: .plain, target: self, action: #selector(close))
         title = "Tips"
         
         view.backgroundColor = .white
@@ -77,7 +94,7 @@ class OverviewTipsViewController: ViewController {
         VStack(spacing: 40,
                imageContainerView,
                VStack(spacing: 16,
-                      Label(title2: "Maak een compleet overzicht van mensen die je hebt ontmoet tussen 1 oktober en vandaag").multiline(),
+                      Label(title2: viewModel.titleText).multiline(),
                       Label(body: "Het is belangrijk dat we weten wie kans hebben gelopen besmet te zijn geraakt. Zo kunnen deze mensen op tijd worden geïnformeerd. Dit helpt om verdere verspreiding van het coronavirus te stoppen.", textColor: Theme.colors.tipItemColor).multiline()),
                VStack(spacing: 16,
                       createSectionHeader(icon: "EditContact/Section1", title: "Bedenk wat je hebt gedaan"),

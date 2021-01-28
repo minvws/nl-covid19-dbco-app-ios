@@ -68,6 +68,18 @@ class TaskOverviewViewModel {
         buildSections()
     }
     
+    var tipMessageText: String {
+        let messageFormat = "Maak een overzicht van wie je hebt ontmoet <b>vanaf %@</b>"
+        
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar.current
+        formatter.locale = Locale.current
+        formatter.dateFormat = "d MMMM"
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        
+        return String(format: messageFormat, formatter.string(from: Services.caseManager.dateOfSymptomOnset))
+    }
+    
     func setHidePrompt(_ hidePrompt: @escaping PromptFunction) {
         self.hidePrompt = hidePrompt
         
@@ -210,7 +222,7 @@ class TaskOverviewViewController: PromptableViewController {
             
             VStack(VStack(spacing: 4,
                           Label(bodyBold: "Geen contacten vergeten?").multiline(),
-                          Label(subhead: "Maak een overzicht van wie je hebt ontmoet <b>vanaf 1 oktober</b>",
+                          Label(subhead: viewModel.tipMessageText,
                                 textColor: Theme.colors.captionGray).multiline().asHTML()),
                    tipButton)
                 .embed(in: tipContainerView, insets: .right(92) + .left(16) + .top(16) + .bottom(11))
@@ -241,7 +253,7 @@ class TaskOverviewViewController: PromptableViewController {
                           tipContainerView,
                           addContactButton,
                           windowExpiredMessage)
-                .wrappedInReadableWidth(insets: .top(16))
+                .wrappedInReadableWidth(insets: .top(32))
         }
         
         let sectionHeaderBuilder = { (title: String, subtitle: String) -> UIView in
