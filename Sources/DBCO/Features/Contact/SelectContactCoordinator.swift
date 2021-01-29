@@ -20,7 +20,7 @@ protocol SelectContactCoordinatorDelegate: class {
 /// - Tag: SelectContactCoordinator
 final class SelectContactCoordinator: Coordinator, Logging {
     
-    let loggingCategory = "SelectContactCoordinato"
+    let loggingCategory = "SelectContactCoordinator"
     
     private weak var delegate: SelectContactCoordinatorDelegate?
     private weak var presenter: UIViewController?
@@ -109,17 +109,17 @@ final class SelectContactCoordinator: Coordinator, Logging {
         
         if let name = task?.contactName {
             viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding4")!,
-                                                title: "‘\(name)’ opzoeken in je contactenlijst?",
-                                                message: "Zo kun je snel de gegevens van dit contact invullen. Je bepaalt altijd zelf welke gegevens je met de GGD deelt en wanneer je dat doet.",
-                                                primaryButtonTitle: "Ja, opzoekhulp gebruiken",
-                                                secondaryButtonTitle: "Nee, zelf invullen",
+                                                title: .selectContactAuthorizationTitle(name: name),
+                                                message: .selectContactAuthorizationMessage,
+                                                primaryButtonTitle: .selectContactAuthorizationAllowButton,
+                                                secondaryButtonTitle: .selectContactAuthorizationManualButton,
                                                 showSecondaryButtonOnTop: true)
         } else {
             viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding4")!,
-                                                title: .determineContactsAutorizationTitle,
-                                                message: .determineContactsAutorizationMessage,
-                                                primaryButtonTitle: .determineContactsAutorizationAllowButton,
-                                                secondaryButtonTitle: .determineContactsAutorizationAddManuallyButton,
+                                                title: .determineContactsAuthorizationTitle,
+                                                message: .determineContactsAuthorizationMessage,
+                                                primaryButtonTitle: .determineContactsAuthorizationAllowButton,
+                                                secondaryButtonTitle: .determineContactsAuthorizationAddManuallyButton,
                                                 showSecondaryButtonOnTop: true)
         }
         

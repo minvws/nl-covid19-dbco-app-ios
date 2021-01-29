@@ -67,10 +67,10 @@ final class InitializeContactsCoordinator: Coordinator, Logging {
     
     private func requestContactsAuthorization() {
         let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding4")!,
-                                                title: .determineContactsAutorizationTitle,
-                                                message: .determineContactsAutorizationMessage,
-                                                primaryButtonTitle: .determineContactsAutorizationAllowButton,
-                                                secondaryButtonTitle: .determineContactsAutorizationAddManuallyButton,
+                                                title: .determineContactsAuthorizationTitle,
+                                                message: .determineContactsAuthorizationMessage,
+                                                primaryButtonTitle: .determineContactsAuthorizationAllowButton,
+                                                secondaryButtonTitle: .determineContactsAuthorizationAddManuallyButton,
                                                 showSecondaryButtonOnTop: true)
         let stepController = OnboardingStepViewController(viewModel: viewModel)
         stepController.view.tag = StepIdentifiers.requestContactsAuthorization.rawValue

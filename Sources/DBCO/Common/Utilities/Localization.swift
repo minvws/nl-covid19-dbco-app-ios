@@ -128,10 +128,10 @@ extension String {
     static var onboardingDetermineContactsIntroTitle: String { return Localization.string(for: "onboardingDetermineContactsIntro.title") }
     static var onboardingDetermineContactsIntroMessage: String { return Localization.string(for: "onboardingDetermineContactsIntro.message") }
     
-    static var determineContactsAutorizationTitle: String { return Localization.string(for: "determineContactsAutorization.title") }
-    static var determineContactsAutorizationMessage: String { return Localization.string(for: "determineContactsAutorization.message") }
-    static var determineContactsAutorizationAllowButton: String { return Localization.string(for: "determineContactsAutorization.allowButton") }
-    static var determineContactsAutorizationAddManuallyButton: String { return Localization.string(for: "determineContactsAutorization.addManuallyButton") }
+    static var determineContactsAuthorizationTitle: String { return Localization.string(for: "determineContactsAuthorization.title") }
+    static var determineContactsAuthorizationMessage: String { return Localization.string(for: "determineContactsAuthorization.message") }
+    static var determineContactsAuthorizationAllowButton: String { return Localization.string(for: "determineContactsAuthorization.allowButton") }
+    static var determineContactsAuthorizationAddManuallyButton: String { return Localization.string(for: "determineContactsAuthorization.addManuallyButton") }
     
     static var determineRoommatesShortTitle: String { return Localization.string(for: "determineRoommates.shortTitle") }
     static var determineRoommatesTitle: String { return Localization.string(for: "determineRoommates.title") }
@@ -192,6 +192,13 @@ extension String {
     static var contactsTimelineActivityTipConversations: String { return Localization.string(for: "contactsTimelineActivityTip.conversations") }
     
     /* MARK: - Task Overview */
+    static var taskOverviewTipsTitle: String { return Localization.string(for: "taskOverviewTipsTitle") }
+    static var taskOverviewTipsDateFormat: String { return Localization.string(for: "taskOverviewTipsDateFormat") }
+    
+    static func taskOverviewTipsMessage(date: String) -> String { return Localization.string(for: "taskOverviewTipsMessage", [date]) }
+    
+    static var taskOverviewTipsButton: String { return Localization.string(for: "taskOverviewTipsButton") }
+    
     static var taskOverviewTitle: String { return Localization.string(for: "taskOverviewTitle") }
     static var taskOverviewDoneButtonTitle: String { return Localization.string(for: "taskOverviewDoneButtonTitle") }
     static var taskOverviewDeleteDataButtonTitle: String { return Localization.string(for: "taskOverviewDeleteDataButtonTitle") }
@@ -219,6 +226,32 @@ extension String {
     static var contactTaskStatusIndexWillInform: String { return Localization.string(for: "contactTaskStatusIndexWillInform") }
     static var contactTaskStatusMissingDetails: String { return Localization.string(for: "contactTaskStatusMissingDetails") }
     
+    /* MARK: - Overview Tips */
+    static var overviewTipsShortTitle: String { return Localization.string(for: "overviewTipsShortTitle") }
+    static var overviewTipsTitleTodayOnly: String { return Localization.string(for: "overviewTipsTitleTodayOnly") }
+    
+    static func overviewTipsTitle(date: String) -> String { return Localization.string(for: "overviewTipsTitle", [date]) }
+    
+    static var overviewTipsTitleDateFormat: String { return Localization.string(for: "overviewTipsTitleDateFormat") }
+    static var overviewTipsMessage: String { return Localization.string(for: "overviewTipsMessage") }
+    
+    static var overviewTipsSection1Title: String { return Localization.string(for: "overviewTipsSection1.title") }
+    static var overviewTipsSection1Intro: String { return Localization.string(for: "overviewTipsSection1.intro") }
+    static var overviewTipsSection1Photos: String { return Localization.string(for: "overviewTipsSection1.photos") }
+    static var overviewTipsSection1SocialMedia: String { return Localization.string(for: "overviewTipsSection1.socialMedia") }
+    static var overviewTipsSection1Calendar: String { return Localization.string(for: "overviewTipsSection1.calendar") }
+    static var overviewTipsSection1Transactions: String { return Localization.string(for: "overviewTipsSection1.transactions") }
+    static var overviewTipsSection1ActivitiesIntro: String { return Localization.string(for: "overviewTipsSection1.activitiesIntro") }
+    static var overviewTipsSection1Car: String { return Localization.string(for: "overviewTipsSection1.car") }
+    static var overviewTipsSection1Meetings: String { return Localization.string(for: "overviewTipsSection1.meetings") }
+    static var overviewTipsSection1Conversations: String { return Localization.string(for: "overviewTipsSection1.conversations") }
+    
+    static var overviewTipsSection2Title: String { return Localization.string(for: "overviewTipsSection2.title") }
+    static var overviewTipsSection2Intro: String { return Localization.string(for: "overviewTipsSection2.intro") }
+    static var overviewTipsSection2Item1: String { return Localization.string(for: "overviewTipsSection2.item1") }
+    static var overviewTipsSection2Item2: String { return Localization.string(for: "overviewTipsSection2.item2") }
+    static var overviewTipsSection2Item3: String { return Localization.string(for: "overviewTipsSection2.item3") }
+    
     // MARK: - Contact Selection
     static var selectContactTitle: String { return Localization.string(for: "selectContactTitle") }
     static var selectContactSearch: String { return Localization.string(for: "selectContactSearch") }
@@ -227,6 +260,12 @@ extension String {
     static var selectContactOtherContacts: String { return Localization.string(for: "selectContactOtherContacts") }
     static var selectContactFromContactsFallback: String { return Localization.string(for: "selectContactFromContactsFallback") }
     static var selectContactAddManuallyFallback: String { return Localization.string(for: "selectContactAddManuallyFallback") }
+    
+    static func selectContactAuthorizationTitle(name: String) -> String { return Localization.string(for: "selectContactAuthorizationTitle", [name]) }
+    
+    static var selectContactAuthorizationMessage: String { return Localization.string(for: "selectContactAuthorizationMessage") }
+    static var selectContactAuthorizationAllowButton: String { return Localization.string(for: "selectContactAuthorizationAllowButton") }
+    static var selectContactAuthorizationManualButton: String { return Localization.string(for: "selectContactAuthorizationManualButton") }
     
     // MARK: - Editing Contacts
     static var contactTypeSectionTitle: String { return Localization.string(for: "contactTypeSection.title") }

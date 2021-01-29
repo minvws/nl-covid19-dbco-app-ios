@@ -69,15 +69,13 @@ class TaskOverviewViewModel {
     }
     
     var tipMessageText: String {
-        let messageFormat = "Maak een overzicht van wie je hebt ontmoet <b>vanaf %@</b>"
-        
         let formatter = DateFormatter()
         formatter.calendar = Calendar.current
         formatter.locale = Locale.current
-        formatter.dateFormat = "d MMMM"
+        formatter.dateFormat = .taskOverviewTipsDateFormat
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         
-        return String(format: messageFormat, formatter.string(from: Services.caseManager.dateOfSymptomOnset))
+        return .taskOverviewTipsMessage(date: formatter.string(from: Services.caseManager.dateOfSymptomOnset))
     }
     
     func setHidePrompt(_ hidePrompt: @escaping PromptFunction) {
@@ -227,14 +225,14 @@ class TaskOverviewViewController: PromptableViewController {
             thinkingImageView.layer.cornerRadius = 8
             thinkingImageView.clipsToBounds = true
             
-            let tipButton = Button(title: "Lees de tips", style: .info)
+            let tipButton = Button(title: .taskOverviewTipsButton, style: .info)
             tipButton.contentHorizontalAlignment = .left
             tipButton.contentEdgeInsets = .zero
             tipButton.titleLabel?.font = Theme.fonts.subheadBold
             tipButton.touchUpInside(self, action: #selector(requestTips))
             
             VStack(VStack(spacing: 4,
-                          Label(bodyBold: "Geen contacten vergeten?").multiline(),
+                          Label(bodyBold: .taskOverviewTipsTitle).multiline(),
                           Label(subhead: viewModel.tipMessageText,
                                 textColor: Theme.colors.captionGray).multiline().asHTML()),
                    tipButton)

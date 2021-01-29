@@ -17,18 +17,16 @@ class OverviewTipsViewModel {
         let date = Services.caseManager.dateOfSymptomOnset
         
         guard !Calendar.current.isDateInToday(date) else {
-            return "Maak een compleet overzicht van mensen die je vandaag hebt ontmoet"
+            return .overviewTipsTitleTodayOnly
         }
-        
-        let titleFormat = "Maak een compleet overzicht van mensen die je hebt ontmoet tussen %@ en vandaag"
         
         let formatter = DateFormatter()
         formatter.calendar = Calendar.current
         formatter.locale = Locale.current
-        formatter.dateFormat = "d MMMM"
+        formatter.dateFormat = .overviewTipsTitleDateFormat
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
     
-        return String(format: titleFormat, formatter.string(from: date))
+        return .overviewTipsTitle(date: formatter.string(from: date))
     }
 }
 
@@ -52,7 +50,7 @@ class OverviewTipsViewController: ViewController {
 
         // Do any additional setup after loading the view.
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: .close, style: .plain, target: self, action: #selector(close))
-        title = "Tips"
+        title = .overviewTipsShortTitle
         
         view.backgroundColor = .white
         
@@ -91,28 +89,28 @@ class OverviewTipsViewController: ViewController {
                imageContainerView,
                VStack(spacing: 16,
                       Label(title2: viewModel.titleText).multiline(),
-                      Label(body: "Het is belangrijk dat we weten wie kans hebben gelopen besmet te zijn geraakt. Zo kunnen deze mensen op tijd worden geïnformeerd. Dit helpt om verdere verspreiding van het coronavirus te stoppen.", textColor: Theme.colors.tipItemColor).multiline()),
+                      Label(body: .overviewTipsMessage, textColor: Theme.colors.tipItemColor).multiline()),
                VStack(spacing: 16,
-                      createSectionHeader(icon: "EditContact/Section1", title: "Bedenk wat je hebt gedaan"),
-                      Label(body: "Deze dingen kunnen je geheugen opfrissen:", textColor: Theme.colors.tipItemColor).multiline(),
+                      createSectionHeader(icon: "EditContact/Section1", title: .overviewTipsSection1Title),
+                      Label(body: .overviewTipsSection1Intro, textColor: Theme.colors.tipItemColor).multiline(),
                       VStack(spacing: 12,
-                             createTipItem(icon: "MemoryTips/Photos", text: "Foto’s van of met jou"),
-                             createTipItem(icon: "MemoryTips/Calendar", text: "Berichten op social media"),
-                             createTipItem(icon: "MemoryTips/SocialMedia", text: "Je agenda"),
-                             createTipItem(icon: "MemoryTips/Transactions", text: "Pintransacties")),
-                      Label(bodyBold: "Deze activiteiten worden vaak vergeten:").multiline(),
+                             createTipItem(icon: "MemoryTips/Photos", text: .overviewTipsSection1Photos),
+                             createTipItem(icon: "MemoryTips/Calendar", text: .overviewTipsSection1Calendar),
+                             createTipItem(icon: "MemoryTips/SocialMedia", text: .overviewTipsSection1SocialMedia),
+                             createTipItem(icon: "MemoryTips/Transactions", text: .overviewTipsSection1Transactions)),
+                      Label(bodyBold: .overviewTipsSection1ActivitiesIntro).multiline(),
                       VStack(spacing: 12,
-                             createTipItem(icon: "MemoryTips/Car", text: "Samen in de auto zitten"),
-                             createTipItem(icon: "MemoryTips/Meetings", text: "Ontmoetingen buiten of bij jou thuis"),
-                             createTipItem(icon: "MemoryTips/Conversations", text: "Een onverwacht gesprek op werk"))),
+                             createTipItem(icon: "MemoryTips/Car", text: .overviewTipsSection1Car),
+                             createTipItem(icon: "MemoryTips/Meetings", text: .overviewTipsSection1Meetings),
+                             createTipItem(icon: "MemoryTips/Conversations", text: .overviewTipsSection1Conversations))),
                VStack(spacing: 16,
-                      createSectionHeader(icon: "EditContact/Section2", title: "Zet de contacten in de app"),
+                      createSectionHeader(icon: "EditContact/Section2", title: .overviewTipsSection2Title),
                       VStack(spacing: 12,
-                             Label(body: "Niet iedereen die je hebt ontmoet heeft risico op besmetting gelopen. We zijn op zoek naar mensen met wie je:", textColor: Theme.colors.tipItemColor).multiline(),
+                             Label(body: .overviewTipsSection2Intro, textColor: Theme.colors.tipItemColor).multiline(),
                              VStack(spacing: 16,
-                                    createTipItem(icon: "ListItem/Checkmark", text: "Langer dan 15 minuten in dezelfde ruimte bent geweest"),
-                                    createTipItem(icon: "ListItem/Checkmark", text: "Intens contact hebt gehad door zoenen of seksueel contact"),
-                                    createTipItem(icon: "ListItem/Questionmark", text: "Twijfel je? Voeg de persoon dan toch toe")))))
+                                    createTipItem(icon: "ListItem/Checkmark", text: .overviewTipsSection2Item1),
+                                    createTipItem(icon: "ListItem/Checkmark", text: .overviewTipsSection2Item2),
+                                    createTipItem(icon: "ListItem/Questionmark", text: .overviewTipsSection2Item3)))))
             .embed(in: scrollView.readableWidth, insets: .top(16) + .bottom(16))
     }
     
