@@ -73,12 +73,8 @@ class OverviewTipsViewController: ViewController {
         }
         
         func createSectionHeader(icon: String, title: String) -> UIView {
-            let imageView = UIImageView(image: UIImage(named: icon))
-            imageView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-            imageView.contentMode = .center
-            
             return HStack(spacing: 8,
-                          imageView,
+                          ImageView(imageName: icon).asIcon(),
                           Label(title2: title))
         }
         

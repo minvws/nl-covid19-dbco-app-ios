@@ -120,8 +120,10 @@ class TaskOverviewViewModel {
                              footer: nil))
         }
         
-        isHeaderAddContactButtonHidden = !uninformedContacts.isEmpty
-        isAddContactButtonHidden = uninformedContacts.isEmpty
+        let windowExpired = Services.caseManager.isWindowExpired
+        
+        isHeaderAddContactButtonHidden = !uninformedContacts.isEmpty || windowExpired
+        isAddContactButtonHidden = uninformedContacts.isEmpty || windowExpired
     }
 }
 
@@ -178,16 +180,27 @@ class TaskOverviewViewController: PromptableViewController {
         
         setupTableView()
         
+        let windowExpiredMessage =
+            HStack(spacing: 8,
+                   ImageView(imageName: "Warning").asIcon().withInsets(.top(2)),
+                   Label(subhead: .windowExpiredMessage,
+                         textColor: Theme.colors.primary).multiline())
+            .alignment(.top)
+        
         let doneButton = Button(title: .taskOverviewDoneButtonTitle)
             .touchUpInside(self, action: #selector(upload))
         
         let resetButton = Button(title: .taskOverviewDeleteDataButtonTitle)
             .touchUpInside(self, action: #selector(reset))
         
-        promptView = VStack(doneButton, resetButton)
+        promptView = VStack(spacing: 16,
+                            windowExpiredMessage,
+                            doneButton,
+                            resetButton)
         
         viewModel.$isDoneButtonHidden.binding = { doneButton.isHidden = $0 }
         viewModel.$isResetButtonHidden.binding = { resetButton.isHidden = $0 }
+        viewModel.$isWindowExpiredMessageHidden.binding = { windowExpiredMessage.isHidden = $0 }
         
         viewModel.setHidePrompt { [unowned self] in self.hidePrompt(animated: $0) }
         viewModel.setShowPrompt { [unowned self] in self.showPrompt(animated: $0) }
@@ -234,25 +247,11 @@ class TaskOverviewViewController: PromptableViewController {
             addContactButton.titleEdgeInsets = .left(5)
             addContactButton.imageEdgeInsets = .right(5)
             
-            let iconView = UIImageView(image: UIImage(named: "Warning"))
-            iconView.contentMode = .center
-            iconView.setContentHuggingPriority(.required, for: .horizontal)
-            iconView.tintColor = Theme.colors.primary
-            
-            let windowExpiredMessage =
-                HStack(spacing: 8,
-                       iconView.withInsets(.top(2)),
-                       Label(subhead: .windowExpiredMessage,
-                             textColor: Theme.colors.primary).multiline())
-                .alignment(.top)
-            
             self.viewModel.$isHeaderAddContactButtonHidden.binding = { addContactButton.isHidden = $0 }
-            self.viewModel.$isWindowExpiredMessageHidden.binding = { windowExpiredMessage.isHidden = $0 }
             
             return VStack(spacing: 12,
                           tipContainerView,
-                          addContactButton,
-                          windowExpiredMessage)
+                          addContactButton)
                 .wrappedInReadableWidth(insets: .top(32))
         }
         

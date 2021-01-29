@@ -66,14 +66,10 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
     private func build() {
         statusView.setContentHuggingPriority(.required, for: .horizontal)
         
-        let disclosureIndicator = UIImageView(image: UIImage(named: "Chevron"))
-        disclosureIndicator.contentMode = .right
-        disclosureIndicator.setContentHuggingPriority(.required, for: .horizontal)
-        
         HStack(spacing: 16,
                statusView,
                VStack(spacing: 4, titleLabel, subtitleLabel),
-               disclosureIndicator)
+               ImageView(imageName: "Chevron").asIcon())
             .alignment(.center)
             .embed(in: containerView)
         

@@ -334,13 +334,8 @@ class LastExposureDateAnswerManager: AnswerManaging {
     private let answerOptions: [AnswerOption]
     
     private let disabledIndicatorView: UIView = {
-        let iconView = UIImageView(image: UIImage(named: "Warning"))
-        iconView.contentMode = .center
-        iconView.setContentHuggingPriority(.required, for: .horizontal)
-        iconView.tintColor = Theme.colors.primary
-        
         let stack = HStack(spacing: 6,
-                           iconView,
+                           ImageView(imageName: "Warning").asIcon(),
                            Label(subhead: .contactQuestionDisabledMessage,
                                  textColor: Theme.colors.primary).multiline())
         
