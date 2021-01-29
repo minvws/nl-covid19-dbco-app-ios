@@ -29,6 +29,9 @@ final class SelectContactCoordinator: Coordinator, Logging {
     private var updatedTask: Task?
     private var questionnaire: Questionnaire!
     
+    @UserDefaults(key: "SelectContactCoordinator.didSelectManualEntry")
+    private(set) var didSelectManualEntry: Bool = false // swiftlint:disable:this let_var_whitespace
+    
     init(presenter: UIViewController, contactTask: Task?, delegate: SelectContactCoordinatorDelegate) {
         self.delegate = delegate
         self.presenter = presenter
@@ -66,19 +69,10 @@ final class SelectContactCoordinator: Coordinator, Logging {
                 presentNavigationController(with: selectController)
             }
             
-        case .notDetermined:
-            CNContactStore().requestAccess(for: .contacts) { authorized, error in
-                DispatchQueue.main.async {
-                    if authorized {
-                        self.continueAfterAuthorization()
-                    } else {
-                        self.continueWithoutAuthorization()
-                    }
-                }
-            }
+        case .notDetermined where didSelectManualEntry == false:
+            requestContactsAuthorization()
             
-        case .denied, .restricted: fallthrough
-        @unknown default:
+        default:
             continueWithoutAuthorization()
         }
     }
@@ -108,6 +102,36 @@ final class SelectContactCoordinator: Coordinator, Logging {
         selectController.delegate = self
         
         presentNavigationController(with: selectController)
+    }
+    
+    private func requestContactsAuthorization() {
+        let viewModel: OnboardingStepViewModel
+        
+        if let name = task?.contactName {
+            viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding4")!,
+                                                title: "‘\(name)’ opzoeken in je contactenlijst?",
+                                                message: "Zo kun je snel de gegevens van dit contact invullen. Je bepaalt altijd zelf welke gegevens je met de GGD deelt en wanneer je dat doet.",
+                                                primaryButtonTitle: "Ja, opzoekhulp gebruiken",
+                                                secondaryButtonTitle: "Nee, zelf invullen",
+                                                showSecondaryButtonOnTop: true)
+        } else {
+            viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding4")!,
+                                                title: .determineContactsAutorizationTitle,
+                                                message: .determineContactsAutorizationMessage,
+                                                primaryButtonTitle: .determineContactsAutorizationAllowButton,
+                                                secondaryButtonTitle: .determineContactsAutorizationAddManuallyButton,
+                                                showSecondaryButtonOnTop: true)
+        }
+        
+        let stepController = OnboardingStepViewController(viewModel: viewModel)
+        stepController.delegate = self
+        stepController.onDismissed = { [weak self] _ in
+            guard let self = self else { return }
+            
+            self.callDelegate()
+        }
+        
+        presenter?.present(stepController, animated: true)
     }
     
     private func continueWithoutAuthorization() {
@@ -158,6 +182,32 @@ final class SelectContactCoordinator: Coordinator, Logging {
         ]
         
         return try? CNContactStore().unifiedContact(withIdentifier: identifier, keysToFetch: keys)
+    }
+}
+
+extension SelectContactCoordinator: OnboardingStepViewControllerDelegate {
+    
+    func onboardingStepViewControllerDidSelectPrimaryButton(_ controller: OnboardingStepViewController) {
+        CNContactStore().requestAccess(for: .contacts) { authorized, error in
+            DispatchQueue.main.async {
+                controller.onDismissed = nil
+                controller.dismiss(animated: true) {
+                    if authorized {
+                        self.continueAfterAuthorization()
+                    } else {
+                        self.continueWithoutAuthorization()
+                    }
+                }
+            }
+        }
+    }
+    
+    func onboardingStepViewControllerDidSelectSecondaryButton(_ controller: OnboardingStepViewController) {
+        controller.onDismissed = nil
+        didSelectManualEntry = true
+        controller.dismiss(animated: true) {
+            self.continueWithoutAuthorization()
+        }
     }
 }
 
