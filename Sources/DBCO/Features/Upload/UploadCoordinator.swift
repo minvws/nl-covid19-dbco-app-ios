@@ -39,23 +39,39 @@ final class UploadCoordinator: Coordinator, Logging {
             self.delegate?.uploadCoordinatorDidFinish(self)
         }
         
-        let unfinishedTasks = Services.caseManager.tasks.filter(\.isUnfinished)
-        
-        if !unfinishedTasks.isEmpty {
-            showUnfinishedTasks()
+        if Services.pairingManager.isPaired {
+            continueToUnfinishedTasksIfNeeded(animated: false)
         } else {
-            sync(animated: false)
+            pair()
         }
         
         presenter?.present(navigationController, animated: true)
     }
     
-    private func showUnfinishedTasks() {
+    private func continueToUnfinishedTasksIfNeeded(animated: Bool) {
+        let unfinishedTasks = Services.caseManager.tasks.filter(\.isUnfinished)
+        
+        if !unfinishedTasks.isEmpty {
+            showUnfinishedTasks(animated: animated)
+        } else {
+            sync(animated: animated)
+        }
+    }
+    
+    private func pair() {
+        let viewModel = ReversePairViewModel()
+        let pairingController = ReversePairViewController(viewModel: viewModel)
+        pairingController.delegate = self
+        
+        navigationController.setViewControllers([pairingController], animated: false)
+    }
+    
+    private func showUnfinishedTasks(animated: Bool) {
         let viewModel = UnfinishedTasksViewModel()
         let tasksController = UnfinishedTasksViewController(viewModel: viewModel)
         tasksController.delegate = self
         
-        navigationController.setViewControllers([tasksController], animated: false)
+        navigationController.setViewControllers([tasksController], animated: animated)
     }
     
     private func sync(animated: Bool) {
@@ -159,5 +175,17 @@ extension UploadCoordinator: OnboardingStepViewControllerDelegate {
     }
     
     func onboardingStepViewControllerDidSelectSecondaryButton(_ controller: OnboardingStepViewController) {}
+    
+}
+
+extension UploadCoordinator: ReversePairViewControllerDelegate {
+    
+    func reversePairViewControllerWantsToContinue(_ controller: ReversePairViewController) {
+        continueToUnfinishedTasksIfNeeded(animated: true)
+    }
+    
+    func reversePairViewControllerWantsToClose(_ controller: ReversePairViewController) {
+        navigationController.dismiss(animated: true)
+    }
     
 }

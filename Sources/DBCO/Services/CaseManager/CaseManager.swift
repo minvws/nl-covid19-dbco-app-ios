@@ -30,7 +30,7 @@ protocol CaseManaging {
     init()
     
     var hasCaseData: Bool { get }
-    var isLocalCase: Bool { get }
+    var isLocalCase: Bool { get } // TODO: Determine if this can be replaced by a check on PairingManager.isPaired
     
     /// Indicates that alls the tasks are uploaded to the backend in their current state
     var isSynced: Bool { get }
