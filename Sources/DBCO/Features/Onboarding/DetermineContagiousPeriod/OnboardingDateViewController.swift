@@ -7,6 +7,17 @@
 
 import UIKit
 
+protocol DatePicking: UIView {
+    var maximumDate: Date? { get set }
+    var minimumDate: Date? { get set }
+    
+    var date: Date { get set }
+    
+    func setDate(_ date: Date, animated: Bool)
+}
+
+extension UIDatePicker: DatePicking {}
+
 class OnboardingDateViewModel {
     let title: String
     let subtitle: String
@@ -25,7 +36,17 @@ class OnboardingDateViewModel {
 
 class OnboardingDateViewController: ViewController {
     private let viewModel: OnboardingDateViewModel
-    fileprivate let datePicker = UIDatePicker(frame: CGRect(x: 0, y: 0, width: 280, height: 100))
+    fileprivate let datePicker: DatePicking = {
+        if #available(iOS 14, *) {
+            let datePicker = UIDatePicker(frame: CGRect(x: 0, y: 0, width: 280, height: 100))
+            datePicker.preferredDatePickerStyle = .inline
+            datePicker.datePickerMode = .date
+
+            return datePicker
+        } else {
+            return OnsetDatePicker()
+        }
+    }()
     
     init(viewModel: OnboardingDateViewModel) {
         self.viewModel = viewModel
@@ -50,13 +71,9 @@ class OnboardingDateViewController: ViewController {
         
         secondaryButton.isHidden = viewModel.secondaryButtonTitle == nil
         
-        if #available(iOS 13.4, *) {
-            datePicker.preferredDatePickerStyle = .wheels
-        }
-        
-        datePicker.datePickerMode = .date
         datePicker.maximumDate = Date()
-        viewModel.date.map { datePicker.setDate($0, animated: false) }
+        datePicker.minimumDate = Calendar.current.date(byAdding: .month, value: -3, to: Date())
+        datePicker.setDate(viewModel.date ?? Date(), animated: false)
         
         VStack(VStack(spacing: 16,
                       Label(title2: viewModel.title).multiline(),

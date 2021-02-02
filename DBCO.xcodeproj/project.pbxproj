@@ -115,6 +115,7 @@
 		CDE30E72251E278200862A40 /* EditContactCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E71251E278200862A40 /* EditContactCoordinator.swift */; };
 		CDE30E782521D92600862A40 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CDE30E7A2521D92600862A40 /* Localizable.strings */; };
 		CDE30E8725232FE200862A40 /* InputFieldEditable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E8625232FE200862A40 /* InputFieldEditable.swift */; };
+		CDF0AE8325C95BAA0054AF87 /* OnsetDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF0AE8225C95BAA0054AF87 /* OnsetDatePicker.swift */; };
 		CDF817272552BEF100C60771 /* Bindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF817262552BEF100C60771 /* Bindable.swift */; };
 		CDFCF907250FA6E80062269A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF906250FA6E80062269A /* ViewController.swift */; };
 		CDFCF90C2510C47E0062269A /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF90B2510C47E0062269A /* Localization.swift */; };
@@ -262,6 +263,7 @@
 		CDE30E762521D90200862A40 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		CDE30E7C2521D92B00862A40 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CDE30E8625232FE200862A40 /* InputFieldEditable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputFieldEditable.swift; sourceTree = "<group>"; };
+		CDF0AE8225C95BAA0054AF87 /* OnsetDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnsetDatePicker.swift; sourceTree = "<group>"; };
 		CDF817262552BEF100C60771 /* Bindable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bindable.swift; sourceTree = "<group>"; };
 		CDFCF906250FA6E80062269A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		CDFCF90B2510C47E0062269A /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
@@ -430,6 +432,7 @@
 				CDADF7ED2535B6A500424492 /* Label.swift */,
 				CD47A4032549766C005B8801 /* SectionedScrollView.swift */,
 				CD3EFC5A25C40F6100EB2087 /* ImageView.swift */,
+				CDF0AE8225C95BAA0054AF87 /* OnsetDatePicker.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1046,6 +1049,7 @@
 				CDADF7DE2534773800424492 /* UIToolbar+Done.swift in Sources */,
 				CD7FACA1251B3FCD00AB8142 /* TextView.swift in Sources */,
 				CDC7C89E25387E2000FE7E05 /* Questionnaire.swift in Sources */,
+				CDF0AE8325C95BAA0054AF87 /* OnsetDatePicker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
