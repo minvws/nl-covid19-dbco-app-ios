@@ -78,10 +78,10 @@
 "onboardingDetermineContactsIntro.title" = "Ontdek welke leefregels gelden voor je contacten";
 "onboardingDetermineContactsIntro.message" = "Goed om te weten: niet iedereen hoeft direct in quarantaine om de verspreiding van het coronavirus te stoppen.";
 
-"determineContactsAutorization.title" = "Wil je je contactenlijst gebruiken om contactgegevens in te vullen?";
-"determineContactsAutorization.message" = "Gebruik je contactenlijst om makkelijk contacten te vinden en contactgegevens in te vullen. Je bepaalt daarna zelf welke gegevens je met de GGD deelt.";
-"determineContactsAutorization.allowButton" = "Toegang geven";
-"determineContactsAutorization.addManuallyButton" = "Handmatig toevoegen";
+"determineContactsAuthorization.title" = "Wil je je contactenlijst gebruiken om contactgegevens in te vullen?";
+"determineContactsAuthorization.message" = "Gebruik je contactenlijst om makkelijk contacten te vinden en contactgegevens in te vullen. Je bepaalt daarna zelf welke gegevens je met de GGD deelt.";
+"determineContactsAuthorization.allowButton" = "Toegang geven";
+"determineContactsAuthorization.addManuallyButton" = "Handmatig toevoegen";
 
 "determineRoommates.shortTitle" = "Huisgenoten";
 "determineRoommates.title" = "Wie zijn je huisgenoten?";
@@ -138,6 +138,11 @@
 "contactsTimelineActivityTip.conversations" = "Een onverwachts gesprek op werk";
 
 /* MARK: - Task Overview */
+"taskOverviewTipsTitle" = "Geen contacten vergeten?";
+"taskOverviewTipsDateFormat" = "d MMMM";
+"taskOverviewTipsMessage" = "Maak een overzicht van wie je hebt ontmoet <b>vanaf %@</b>";
+"taskOverviewTipsButton" = "Lees de tips";
+
 "taskOverviewTitle" = "Mijn contacten";
 "taskOverviewDoneButtonTitle" = "Deel gegevens met GGD";
 "taskOverviewDeleteDataButtonTitle" = "Verwijder gegevens";
@@ -165,6 +170,30 @@
 "contactTaskStatusIndexWillInform" = "Jij informeert dit contact";
 "contactTaskStatusMissingDetails" = "Vul gegevens aan";
 
+/* MARK: - Overview Tips */
+"overviewTipsShortTitle" = "Tips";
+"overviewTipsTitleTodayOnly" = "Maak een compleet overzicht van mensen die je vandaag hebt ontmoet";
+"overviewTipsTitle" = "Maak een compleet overzicht van mensen die je hebt ontmoet tussen %@ en vandaag";
+"overviewTipsTitleDateFormat" = "d MMMM";
+"overviewTipsMessage" = "Het is belangrijk dat we weten wie kans hebben gelopen besmet te zijn geraakt. Zo kunnen deze mensen op tijd worden geïnformeerd. Dit helpt om verdere verspreiding van het coronavirus te stoppen.";
+
+"overviewTipsSection1.title" = "Bedenk wat je hebt gedaan";
+"overviewTipsSection1.intro" = "Deze dingen kunnen je geheugen opfrissen:";
+"overviewTipsSection1.photos" = "Foto’s van of met jou";
+"overviewTipsSection1.socialMedia" = "Berichten op social media";
+"overviewTipsSection1.calendar" = "Je agenda";
+"overviewTipsSection1.transactions" = "Pintransacties";
+"overviewTipsSection1.activitiesIntro" = "Deze activiteiten worden vaak vergeten:";
+"overviewTipsSection1.car" = "Samen in de auto zitten";
+"overviewTipsSection1.meetings" = "Ontmoetingen buiten of bij jou thuis";
+"overviewTipsSection1.conversations" = "Een onverwacht gesprek op werk";
+
+"overviewTipsSection2.title" = "Zet de contacten in de app";
+"overviewTipsSection2.intro" = "Niet iedereen die je hebt ontmoet heeft risico op besmetting gelopen. We zijn op zoek naar mensen met wie je:";
+"overviewTipsSection2.item1" = "Langer dan 15 minuten in dezelfde ruimte bent geweest";
+"overviewTipsSection2.item2" = "Intens contact hebt gehad door zoenen of seksueel contact";
+"overviewTipsSection2.item3" = "Twijfel je? Voeg de persoon dan toch toe";
+
 /* MARK: - Contact Selection */
 "selectContactTitle" = "Selecteer contact";
 "selectContactSearch" = "Zoeken";
@@ -173,6 +202,11 @@
 "selectContactOtherContacts" = "Alle contacten";
 "selectContactFromContactsFallback" = "Uit contacten kopiëren";
 "selectContactAddManuallyFallback" = "Handmatig toevoegen";
+
+"selectContactAuthorizationTitle" = "‘%@’ opzoeken in je contactenlijst?";
+"selectContactAuthorizationMessage" = "Zo kun je snel de gegevens van dit contact invullen. Je bepaalt altijd zelf welke gegevens je met de GGD deelt en wanneer je dat doet.";
+"selectContactAuthorizationAllowButton" = "Ja, opzoekhulp gebruiken";
+"selectContactAuthorizationManualButton" = "Nee, zelf invullen";
 
 // MARK: - Editing Contacts
 "contactTypeSection.title" = "Soort contact";

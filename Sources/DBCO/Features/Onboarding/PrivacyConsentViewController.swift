@@ -64,12 +64,8 @@ class PrivacyConsentViewController: PromptableViewController, ScrollViewNavivati
         widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         
         func listItem(_ text: String) -> UIView {
-            let iconView = UIImageView(image: UIImage(named: "PrivacyItem"))
-            iconView.contentMode = .center
-            iconView.setContentHuggingPriority(.required, for: .horizontal)
-            
             return HStack(spacing: 16,
-                          iconView,
+                          ImageView(imageName: "PrivacyItem").asIcon(),
                           Label(body: text, textColor: Theme.colors.captionGray).multiline())
                 .alignment(.top)
         }

@@ -105,6 +105,11 @@ extension UIView {
         case right
         case bottom
         
+        case topLeft
+        case topRight
+        case bottomLeft
+        case bottomRight
+        
         var constrainedSides: [Side] {
             switch self {
             case .left:
@@ -115,6 +120,14 @@ extension UIView {
                 return [.top, .right, .bottom]
             case .bottom:
                 return [.left, .right, .bottom]
+            case .topLeft:
+                return [.right, .top]
+            case .topRight:
+                return [.right, .top]
+            case .bottomLeft:
+                return [.right, .bottom]
+            case .bottomRight:
+                return [.right, .bottom]
             }
         }
     }

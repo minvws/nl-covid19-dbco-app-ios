@@ -53,12 +53,8 @@ class ContactsExplanationViewController: PromptableViewController, ScrollViewNav
         widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         
         func listItem(_ text: String, icon: String) -> UIView {
-            let iconView = UIImageView(image: UIImage(named: "ListItem/\(icon)"))
-            iconView.contentMode = .center
-            iconView.setContentHuggingPriority(.required, for: .horizontal)
-            
             return HStack(spacing: 16,
-                          iconView,
+                          ImageView(imageName: "ListItem/\(icon)").asIcon(),
                           Label(body: text, textColor: Theme.colors.captionGray).multiline())
                 .alignment(.top)
         }

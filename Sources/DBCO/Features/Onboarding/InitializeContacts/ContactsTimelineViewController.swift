@@ -569,7 +569,7 @@ private class ReviewTipsSectionView: TimelineSectionView {
                              createTipItem(icon: "SocialMedia", text: .contactsTimelineReviewTipSocialMedia),
                              createTipItem(icon: "Transactions", text: .contactsTimelineReviewTipTransactions)))
                 .distribution(.fillProportionally)
-                .verticalIf(screenWidthLessThan: 330, spacing: 0))
+                .verticalIf(screenWidthLessThan: 330, spacing: 16))
             .embed(in: self, insets: .all(16))
     }
     

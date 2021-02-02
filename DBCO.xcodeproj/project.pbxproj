@@ -39,6 +39,8 @@
 		CD2F7CB525594BDA00F2F73A /* ContactSuggestionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2F7CB425594BDA00F2F73A /* ContactSuggestionTests.swift */; };
 		CD3DA9432555565800F738EE /* PairResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3DA93A255554A700F738EE /* PairResponse.swift */; };
 		CD3DA94925556ACF00F738EE /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3DA94825556ACF00F738EE /* AppData.swift */; };
+		CD3EFC5325C2F56800EB2087 /* OverviewTipsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3EFC5225C2F56800EB2087 /* OverviewTipsViewController.swift */; };
+		CD3EFC5B25C40F6100EB2087 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3EFC5A25C40F6100EB2087 /* ImageView.swift */; };
 		CD4036A1255D42F70037BCF1 /* PairingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4036A0255D42F70037BCF1 /* PairingManager.swift */; };
 		CD4036A7255D4F2D0037BCF1 /* Sealed.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4036A6255D4F2D0037BCF1 /* Sealed.swift */; };
 		CD421872251B4819004544B3 /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD421871251B4819004544B3 /* TaskTableViewCell.swift */; };
@@ -179,6 +181,8 @@
 		CD2F7CB425594BDA00F2F73A /* ContactSuggestionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactSuggestionTests.swift; sourceTree = "<group>"; };
 		CD3DA93A255554A700F738EE /* PairResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairResponse.swift; sourceTree = "<group>"; };
 		CD3DA94825556ACF00F738EE /* AppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
+		CD3EFC5225C2F56800EB2087 /* OverviewTipsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewTipsViewController.swift; sourceTree = "<group>"; };
+		CD3EFC5A25C40F6100EB2087 /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		CD4036A0255D42F70037BCF1 /* PairingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingManager.swift; sourceTree = "<group>"; };
 		CD4036A6255D4F2D0037BCF1 /* Sealed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sealed.swift; sourceTree = "<group>"; };
 		CD421871251B4819004544B3 /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
@@ -425,6 +429,7 @@
 				CDA52600252F1752004E923A /* ToggleGroup.swift */,
 				CDADF7ED2535B6A500424492 /* Label.swift */,
 				CD47A4032549766C005B8801 /* SectionedScrollView.swift */,
+				CD3EFC5A25C40F6100EB2087 /* ImageView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -486,6 +491,7 @@
 				CD7282C5250F9D2400D68911 /* TaskOverviewCoordinator.swift */,
 				CD7282C2250F9AFE00D68911 /* TaskOverviewViewController.swift */,
 				CD421871251B4819004544B3 /* TaskTableViewCell.swift */,
+				CD3EFC5225C2F56800EB2087 /* OverviewTipsViewController.swift */,
 			);
 			path = Task;
 			sourceTree = "<group>";
@@ -1010,6 +1016,7 @@
 				CD24CBF825C0305100A2F634 /* ScrollViewNavivationbarAdjusting.swift in Sources */,
 				CD47A4042549766C005B8801 /* SectionedScrollView.swift in Sources */,
 				CD10F08C25AF30A7000295B9 /* SelectSymptomsViewController.swift in Sources */,
+				CD3EFC5B25C40F6100EB2087 /* ImageView.swift in Sources */,
 				CDA0F6892539AAB8009FD2A9 /* Answer+Progress.swift in Sources */,
 				CD21D4A8258A07330079D085 /* Task+Unfinished.swift in Sources */,
 				CD29635B25191972008443AF /* Haptic.swift in Sources */,
@@ -1025,6 +1032,7 @@
 				CD926AF025B5B92E0076113C /* ContactsExplanationViewController.swift in Sources */,
 				CD29634F2518ED51008443AF /* UIEdgeInsets+Convenience.swift in Sources */,
 				CD7282C3250F9AFE00D68911 /* TaskOverviewViewController.swift in Sources */,
+				CD3EFC5325C2F56800EB2087 /* OverviewTipsViewController.swift in Sources */,
 				CD8F957925616F23004729A4 /* Certificates.swift in Sources */,
 				CD24CBEE25B9B3E500A2F634 /* OnboardingManager.swift in Sources */,
 				CD10F07C25AEFEC6000295B9 /* OnboardingPairingCoordinator.swift in Sources */,
