@@ -107,6 +107,10 @@ struct NetworkConfiguration {
     var questionnairesUrl: URL? {
         return self.combine(path: Endpoint.questionnaires)
     }
+    
+    func pairingRequestsUrl(token: String?) -> URL? {
+        return self.combine(path: Endpoint.pairingRequests(token: token))
+    }
 
     private func combine(path: Path, params: [String: String] = [:]) -> URL? {
         let endpointConfig = api

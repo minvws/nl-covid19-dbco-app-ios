@@ -10,8 +10,8 @@ import Foundation
 struct Path {
     let components: [String]
 
-    init(components: String...) {
-        self.components = Array(components)
+    init(components: String?...) {
+        self.components = Array(components).compactMap { $0 }
     }
 }
 
@@ -26,4 +26,6 @@ struct Endpoint {
     static func `case`(identifier: String) -> Path { Path(components: "cases", identifier) }
     
     static let questionnaires = Path(components: "questionnaires")
+    
+    static func pairingRequests(token: String?) -> Path { Path(components: "pairingrequests", token)}
 }
