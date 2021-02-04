@@ -32,11 +32,14 @@ class TaskOverviewViewModel {
     private var hidePrompt: PromptFunction?
     private var showPrompt: PromptFunction?
     
+    private var pairingTimeoutTimer: Timer?
+    
     @Bindable private(set) var isDoneButtonHidden: Bool = false
     @Bindable private(set) var isResetButtonHidden: Bool = true
     @Bindable private(set) var isHeaderAddContactButtonHidden: Bool = false
     @Bindable private(set) var isAddContactButtonHidden: Bool = false
     @Bindable private(set) var isWindowExpiredMessageHidden: Bool = true
+    @Bindable private(set) var isPairingViewHidden: Bool = true
     
     init() {
         tableViewManager = .init()
@@ -50,6 +53,7 @@ class TaskOverviewViewModel {
         tableViewManager.viewForFooterInSection = { [unowned self] in return self.sections[$0].footer }
         
         Services.caseManager.addListener(self)
+        Services.pairingManager.addListener(self)
     }
     
     func setupTableView(_ tableView: UITableView,
@@ -152,6 +156,41 @@ extension TaskOverviewViewModel: CaseManagerListener {
     }
 }
 
+extension TaskOverviewViewModel: PairingManagerListener {
+    
+    func pairingManagerDidStartPollingForPairing(_ pairingManager: PairingManaging) {
+        pairingTimeoutTimer?.invalidate()
+        pairingTimeoutTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [unowned self] _ in
+            self.isPairingViewHidden = false
+            self.isDoneButtonHidden = true
+        }
+    }
+    
+    func pairingManager(_ pairingManager: PairingManaging, didFailWith error: PairingManagingError) {
+        pairingTimeoutTimer?.invalidate()
+        
+        isPairingViewHidden = true
+        isDoneButtonHidden = false
+    }
+    
+    func pairingManagerDidCancelPollingForPairing(_ pairingManager: PairingManaging) {
+        pairingTimeoutTimer?.invalidate()
+        
+        isPairingViewHidden = true
+        isDoneButtonHidden = false
+    }
+    
+    func pairingManager(_ pairingManager: PairingManaging, didReceiveReversePairingCode code: String) {}
+    
+    func pairingManagerDidFinishPairing(_ pairingManager: PairingManaging) {
+        pairingTimeoutTimer?.invalidate()
+        
+        isPairingViewHidden = true
+        isDoneButtonHidden = false
+    }
+    
+}
+
 /// - Tag: TaskOverviewViewController
 class TaskOverviewViewController: PromptableViewController {
     private let viewModel: TaskOverviewViewModel
@@ -191,7 +230,18 @@ class TaskOverviewViewController: PromptableViewController {
         let resetButton = Button(title: .taskOverviewDeleteDataButtonTitle)
             .touchUpInside(self, action: #selector(reset))
         
+        let pairingActivityView = UIActivityIndicatorView(style: .gray)
+        pairingActivityView.startAnimating()
+        pairingActivityView.setContentHuggingPriority(.required, for: .horizontal)
+        let pairingView = VStack(spacing: 16,
+                                 HStack(spacing: 6,
+                                        pairingActivityView,
+                                        Label(subhead: "Wachten op koppeling met de GGD", textColor: Theme.colors.primary).multiline()),
+                                 Button(title: "Probeer opnieuw", style: .secondary)
+                                    .touchUpInside(self, action: #selector(upload)))
+        
         promptView = VStack(spacing: 16,
+                            pairingView,
                             windowExpiredMessage,
                             doneButton,
                             resetButton)
@@ -199,6 +249,8 @@ class TaskOverviewViewController: PromptableViewController {
         viewModel.$isDoneButtonHidden.binding = { doneButton.isHidden = $0 }
         viewModel.$isResetButtonHidden.binding = { resetButton.isHidden = $0 }
         viewModel.$isWindowExpiredMessageHidden.binding = { windowExpiredMessage.isHidden = $0 }
+        
+        viewModel.$isPairingViewHidden.binding = { pairingView.isHidden = $0 }
         
         viewModel.setHidePrompt { [unowned self] in self.hidePrompt(animated: $0) }
         viewModel.setShowPrompt { [unowned self] in self.showPrompt(animated: $0) }

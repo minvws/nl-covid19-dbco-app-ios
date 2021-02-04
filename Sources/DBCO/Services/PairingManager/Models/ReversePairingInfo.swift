@@ -14,7 +14,7 @@ struct ReversePairingInfo: Codable {
     var refreshDelay: Int
     
     var statusInfo: ReversePairingStatusInfo {
-        return ReversePairingStatusInfo(status: .pending, expiresAt: expiresAt, refreshDelay: refreshDelay)
+        return ReversePairingStatusInfo(self)
     }
 }
 
@@ -28,5 +28,22 @@ struct ReversePairingStatusInfo: Codable {
     @ISO8601DateFormat var expiresAt: Date
     var refreshDelay: Int
     
-    var pairingCode: String? = nil
+    var pairingCode: String?
+    
+    init(_ pairingInfo: ReversePairingInfo) {
+        status = .pending
+        expiresAt = pairingInfo.expiresAt
+        refreshDelay = pairingInfo.refreshDelay
+        pairingCode = nil
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        status = try container.decode(Status.self, forKey: .status)
+        _expiresAt = try container.decode(ISO8601DateFormat.self, forKey: .expiresAt)
+        refreshDelay = try container.decode(Int.self, forKey: .refreshDelay)
+        
+        pairingCode = try container.decodeIfPresent(String.self, forKey: .pairingCode)
+    }
 }

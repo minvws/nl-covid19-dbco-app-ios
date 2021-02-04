@@ -13,6 +13,7 @@ enum PairingManagingError: Error {
     case notPaired
     case encryptionError
     case couldNotPair(NetworkError)
+    case pairingCodeExpired
     case pairingCancelled
 }
 
@@ -150,7 +151,6 @@ class PairingManager: PairingManaging, Logging {
                 self.$pairing.clearCache()
                 
                 completion(true, nil)
-                self.listeners.forEach { $0.listener?.pairingManagerDidFinishPairing(self) }
             case .failure(let error):
                 completion(false, .couldNotPair(error))
             }
@@ -172,13 +172,13 @@ class PairingManager: PairingManaging, Logging {
                 return fail(with: .pairingCancelled)
             }
             
-            guard case .pending = info.status else { return finish() }
+            guard case .pending = info.status else { return finish(with: info.pairingCode) }
             
             let delay = Double(info.refreshDelay)
             
             guard info.expiresAt.timeIntervalSinceNow > delay else {
                 logDebug("Polling token has expired")
-                return fail(with: .pairingCancelled)
+                return fail(with: .pairingCodeExpired)
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
@@ -191,7 +191,7 @@ class PairingManager: PairingManaging, Logging {
                             self.logDebug("Received too many errors while polling")
                             fail(with: .couldNotPair(error))
                         } else {
-                            poll(with: info, token: token, errorCount: 0)
+                            poll(with: info, token: token, errorCount: errorCount + 1)
                         }
                     }
                 }
@@ -226,9 +226,22 @@ class PairingManager: PairingManaging, Logging {
             }
         }
         
-        func finish() {
-            isBusyReversePairing = false
+        func finish(with pairingCode: String?) {
+            guard let pairingCode = pairingCode else {
+                logError("Invalid pairing code")
+                fail(with: .couldNotPair(.invalidResponse))
+                return
+            }
             
+            pair(pairingCode: pairingCode) { success, error in
+                self.isBusyReversePairing = false
+                
+                if success {
+                    self.listeners.forEach { $0.listener?.pairingManagerDidFinishPairing(self) }
+                } else {
+                    self.listeners.forEach { $0.listener?.pairingManager(self, didFailWith: error ?? .notPaired) }
+                }
+            }
         }
 
         guard !isBusyReversePairing else {
@@ -240,12 +253,15 @@ class PairingManager: PairingManaging, Logging {
         }
         
         shouldStopPollingForPairing = false
+        listeners.forEach { $0.listener?.pairingManagerDidStartPollingForPairing(self) }
         createRequest()
     }
     
     func stopPollingForPairing() {
         isBusyReversePairing = false
         shouldStopPollingForPairing = true
+        
+        listeners.forEach { $0.listener?.pairingManagerDidCancelPollingForPairing(self) }
     }
     
     func addListener(_ listener: PairingManagerListener) {

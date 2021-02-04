@@ -63,6 +63,10 @@ class ReversePairViewController: PromptableViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        if #available(iOS 13.0, *) {
+            isModalInPresentation = true
+        }
+        
         if #available(iOS 14.0, *) {
             navigationItem.backButtonDisplayMode = .generic
         }

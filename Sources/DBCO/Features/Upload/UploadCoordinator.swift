@@ -200,8 +200,8 @@ extension UploadCoordinator: ReversePairViewControllerDelegate {
                                                 preferredStyle: .alert)
         
         alertController.addAction(UIAlertAction(title: "nee", style: .default) { _ in
-            Services.pairingManager.stopPollingForPairing()
             close()
+            Services.pairingManager.stopPollingForPairing()
         })
         
         alertController.addAction(UIAlertAction(title: "Ja", style: .default) { _ in
@@ -215,17 +215,32 @@ extension UploadCoordinator: ReversePairViewControllerDelegate {
 
 extension UploadCoordinator: PairingManagerListener {
     
-    func pairingManagerDidStartPollingForPairing(_ pairingManager: PairingManaging) {
-        
-    }
+    func pairingManagerDidStartPollingForPairing(_ pairingManager: PairingManaging) {}
     
     func pairingManager(_ pairingManager: PairingManaging, didFailWith error: PairingManagingError) {
-        // TODO: 
+        guard case .pairingCodeExpired = error else {
+            // Create a new code and continue
+            pairingManager.startPollingForPairing()
+            
+            return
+        }
+        
+        let alertController = UIAlertController(title: .errorTitle,
+                                                message: "Controleer de internetverbinding en probeer het opnieuw.",
+                                                preferredStyle: .alert)
+        
+        alertController.addAction(UIAlertAction(title: .cancel, style: .cancel) { _ in
+            self.navigationController.dismiss(animated: true)
+        })
+        
+        alertController.addAction(UIAlertAction(title: .tryAgain, style: .default) { _ in
+            pairingManager.startPollingForPairing()
+        })
+        
+        navigationController.present(alertController, animated: true, completion: nil)
     }
     
-    func pairingManagerDidCancelPollingForPairing(_ pairingManager: PairingManaging) {
-        pairingManager.startPollingForPairing()
-    }
+    func pairingManagerDidCancelPollingForPairing(_ pairingManager: PairingManaging) {}
     
     func pairingManager(_ pairingManager: PairingManaging, didReceiveReversePairingCode code: String) {
         let pairViewController = navigationController.viewControllers.compactMap { $0 as? ReversePairViewController }.first
