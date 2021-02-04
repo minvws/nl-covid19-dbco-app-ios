@@ -236,8 +236,8 @@ class TaskOverviewViewController: PromptableViewController {
         let pairingView = VStack(spacing: 16,
                                  HStack(spacing: 6,
                                         pairingActivityView,
-                                        Label(subhead: "Wachten op koppeling met de GGD", textColor: Theme.colors.primary).multiline()),
-                                 Button(title: "Probeer opnieuw", style: .secondary)
+                                        Label(subhead: .taskOverviewWaitingForPairing, textColor: Theme.colors.primary).multiline()),
+                                 Button(title: .taskOverviewPairingTryAgain, style: .secondary)
                                     .touchUpInside(self, action: #selector(upload)))
         
         promptView = VStack(spacing: 16,

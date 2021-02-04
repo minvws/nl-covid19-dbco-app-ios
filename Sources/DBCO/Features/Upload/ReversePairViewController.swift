@@ -72,7 +72,7 @@ class ReversePairViewController: PromptableViewController {
         }
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: .close, style: .plain, target: self, action: #selector(close))
-        title = "Koppelen"
+        title = .reversePairingTitle
         
         view.backgroundColor = .white
         
@@ -112,12 +112,12 @@ class ReversePairViewController: PromptableViewController {
         
         let waitingView = HStack(spacing: 8,
                                  activityIndicator,
-                                 Label(body: "Wachten op GGD-medewerker", textColor: Theme.colors.captionGray).multiline())
+                                 Label(body: .reversePairingWaiting, textColor: Theme.colors.captionGray).multiline())
             .withInsets(.left(24))
         
         let successView = VStack(HStack(spacing: 8,
                                         ImageView(imageName: "ListItem/Checkmark").asIcon(),
-                                        Label(body: "Gekoppeld met GGD", textColor: Theme.colors.captionGray)))
+                                        Label(body: .reversePairingFinished, textColor: Theme.colors.captionGray)))
             .alignment(.center)
         
         viewModel.$isWaitingViewHidden.binding = { waitingView.isHidden = $0 }
@@ -128,20 +128,20 @@ class ReversePairViewController: PromptableViewController {
         
         VStack(spacing: 24,
                VStack(spacing: 16,
-                      Label(title2: "Koppel de app met de GGD om je gegevens te delen").multiline(),
-                      Label(body: "Heb je de app nog niet gekoppeld? Dan belt de GGD je om dit samen te doen. Daarna kun je via de app contactgegevens en locaties delen.", textColor: Theme.colors.captionGray).multiline()),
+                      Label(title2: .reversePairingStep1Title).multiline(),
+                      Label(body: .reversePairingStep1Message, textColor: Theme.colors.captionGray).multiline()),
                VStack(spacing: 16,
                       HStack(spacing: 16,
                              step1IconView,
-                             Label(title3: "Geef deze code door aan de GGD-medewerker:").multiline())
+                             Label(title3: .reversePairingStep1Code).multiline())
                         .alignment(.top),
                       codeContainerView.withInsets(.left(40))),
                VStack(spacing: 16,
                       HStack(spacing: 16,
                              step2IconView,
                              VStack(spacing: 4,
-                                    Label(title3: "Wacht tot de GGD-medewerker de code heeft ingevoerd").multiline(),
-                                    Label(body: "Wil je ondertussen nog gegevens aanvullen? Dan kun je dit scherm sluiten.", textColor: Theme.colors.captionGray).multiline()))
+                                    Label(title3: .reversePairingStep2Title).multiline(),
+                                    Label(body: .reversePairingStep2Message, textColor: Theme.colors.captionGray).multiline()))
                         .alignment(.top),
                       statusContainerView.withInsets(.left(40))))
             .embed(in: scrollView.readableWidth, insets: .top(32) + .bottom(16))

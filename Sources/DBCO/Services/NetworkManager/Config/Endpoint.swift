@@ -27,5 +27,5 @@ struct Endpoint {
     
     static let questionnaires = Path(components: "questionnaires")
     
-    static func pairingRequests(token: String?) -> Path { Path(components: "pairingrequests", token)}
+    static func pairingRequests(token: String?) -> Path { Path(components: "pairingrequests", token) }
 }
