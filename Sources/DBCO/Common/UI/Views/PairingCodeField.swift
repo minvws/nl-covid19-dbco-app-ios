@@ -117,6 +117,13 @@ extension PairingCodeField: UITextFieldDelegate {
         }
         
         self.text = codeWithSeparators
+        
+        if #available(iOS 13.0, *) {
+            accessibilityAttributedValue = NSAttributedString(
+                string: codeWithSeparators,
+                attributes: [.accessibilitySpeechSpellOut: true]
+            )
+        }
 
         updatePlaceholder(textLength: codeWithSeparators.count)
         
