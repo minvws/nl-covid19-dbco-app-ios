@@ -115,7 +115,7 @@
 "contactsTimelineSectionSubtitle.testDate" = "Op deze dag liet je jezelf testen";
 
 "contactsTimelineAddExtraDay.title" = "Weet je zeker dat je voor %@ nog geen klachten had?";
-"contactsTimelineAddExtraDay.button" = "Extra dag toevoegen";
+"contactsTimelineAddExtraDay.button" = "Ik had al eerder klachten";
 
 "contactsTimelineEmptyDays.title" = "Je hebt niet aan iedere dag contacten toegevoegd";
 "contactsTimelineEmptyDays.message" = "Klopt het dat je op %@ niemand hebt ontmoet?";
