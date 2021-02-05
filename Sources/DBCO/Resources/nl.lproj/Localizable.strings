@@ -115,7 +115,7 @@
 "contactsTimelineSectionSubtitle.testDate" = "Op deze dag liet je jezelf testen";
 
 "contactsTimelineAddExtraDay.title" = "Weet je zeker dat je voor %@ nog geen klachten had?";
-"contactsTimelineAddExtraDay.button" = "Extra dag toevoegen";
+"contactsTimelineAddExtraDay.button" = "Ik had al eerder klachten";
 
 "contactsTimelineEmptyDays.title" = "Je hebt niet aan iedere dag contacten toegevoegd";
 "contactsTimelineEmptyDays.message" = "Klopt het dat je op %@ niemand hebt ontmoet?";
@@ -169,6 +169,9 @@
 "contactTaskStatusIndexDidInform" = "Jij hebt geïnformeerd";
 "contactTaskStatusIndexWillInform" = "Jij informeert dit contact";
 "contactTaskStatusMissingDetails" = "Vul gegevens aan";
+
+"taskOverviewWaitingForPairing" = "Wachten op koppeling met de GGD";
+"taskOverviewPairingTryAgain" = "Probeer opnieuw";
 
 /* MARK: - Overview Tips */
 "overviewTipsShortTitle" = "Tips";
@@ -299,6 +302,23 @@
 "contactMissingDetailsPromptMessage" = "De GGD kan alleen contact opnemen als ze een e-mailadres of telefoonnummer heeft.";
 "contactMissingDetailsActionIgnore" = "Nee";
 "contactMissingDetailsActionFillIn" = "Ja, invullen";
+
+/* MARK: - Reverse Pairing */
+"reversePairingTitle" = "Koppelen";
+"reversePairingWaiting" = "Wachten op GGD-medewerker";
+"reversePairingFinished" = "Gekoppeld met GGD";
+
+"reversePairingStep1.title" = "Koppel de app met de GGD om je gegevens te delen";
+"reversePairingStep1.message" = "Heb je de app nog niet gekoppeld? Dan belt de GGD je om dit samen te doen. Daarna kun je via de app contactgegevens en locaties delen.";
+"reversePairingStep1.code" = "Geef deze code door aan de GGD-medewerker:";
+
+"reversePairingStep2.title" = "Wacht tot de GGD-medewerker de code heeft ingevoerd";
+"reversePairingStep2.message" = "Wil je ondertussen nog gegevens aanvullen? Dan kun je dit scherm sluiten.";
+
+"reversePairingError.title" = "Er ging iets mis";
+"reversePairingError.message" = "Controleer de internetverbinding en probeer het opnieuw.";
+
+"reversePairingCloseAlert" = "Heb je de code gedeeld met de GGD-medewerker?";
 
 /* MARK: - Uploading */
 "unfinishedTasksOverviewTitle" = "Bijna klaar";

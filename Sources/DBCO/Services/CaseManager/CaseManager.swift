@@ -30,7 +30,6 @@ protocol CaseManaging {
     init()
     
     var hasCaseData: Bool { get }
-    var isLocalCase: Bool { get }
     
     /// Indicates that alls the tasks are uploaded to the backend in their current state
     var isSynced: Bool { get }
@@ -140,9 +139,8 @@ final class CaseManager: CaseManaging, Logging {
         }
     }
     
-    private(set) var isLocalCase: Bool {
-        get { appData.isLocalCase }
-        set { appData.isLocalCase = newValue }
+    private var isLocalCase: Bool {
+        return !Services.pairingManager.isPaired
     }
     
     var isWindowExpired: Bool {
@@ -243,7 +241,6 @@ final class CaseManager: CaseManaging, Logging {
         self.dateOfSymptomOnset = dateOfSymptomOnset.addingTimeInterval(offset)
         
         windowExpiresAt = .distantFuture
-        isLocalCase = true
         isSynced = false
     }
     

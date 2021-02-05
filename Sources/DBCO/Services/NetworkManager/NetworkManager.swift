@@ -89,6 +89,20 @@ class NetworkManager: NetworkManaging, Logging {
         decodedJSONData(request: urlRequest, completion: open)
     }
     
+    func postPairingRequest(completion: @escaping (Result<ReversePairingInfo, NetworkError>) -> Void) {
+        let urlRequest = constructRequest(url: configuration.pairingRequestsUrl(token: nil),
+                                          method: .POST)
+
+        decodedJSONData(request: urlRequest, completion: completion)
+    }
+    
+    func getPairingRequestStatus(token: String, completion: @escaping (Result<ReversePairingStatusInfo, NetworkError>) -> Void) {
+        let urlRequest = constructRequest(url: configuration.pairingRequestsUrl(token: token),
+                                          method: .GET)
+
+        decodedJSONData(request: urlRequest, completion: completion)
+    }
+    
     // MARK: - Construct Request
 
     private func constructRequest(url: URL?,

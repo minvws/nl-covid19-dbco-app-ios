@@ -226,6 +226,9 @@ extension String {
     static var contactTaskStatusIndexWillInform: String { return Localization.string(for: "contactTaskStatusIndexWillInform") }
     static var contactTaskStatusMissingDetails: String { return Localization.string(for: "contactTaskStatusMissingDetails") }
     
+    static var taskOverviewWaitingForPairing: String { return Localization.string(for: "taskOverviewWaitingForPairing") }
+    static var taskOverviewPairingTryAgain: String { return Localization.string(for: "taskOverviewPairingTryAgain") }
+    
     /* MARK: - Overview Tips */
     static var overviewTipsShortTitle: String { return Localization.string(for: "overviewTipsShortTitle") }
     static var overviewTipsTitleTodayOnly: String { return Localization.string(for: "overviewTipsTitleTodayOnly") }
@@ -428,6 +431,23 @@ extension String {
     static var contactMissingDetailsPromptMessage: String { return Localization.string(for: "contactMissingDetailsPromptMessage") }
     static var contactMissingDetailsActionIgnore: String { return Localization.string(for: "contactMissingDetailsActionIgnore") }
     static var contactMissingDetailsActionFillIn: String { return Localization.string(for: "contactMissingDetailsActionFillIn") }
+    
+    /* MARK: - Reverse Pairing */
+    static var reversePairingTitle: String { return Localization.string(for: "reversePairingTitle") }
+    static var reversePairingWaiting: String { return Localization.string(for: "reversePairingWaiting") }
+    static var reversePairingFinished: String { return Localization.string(for: "reversePairingFinished") }
+    
+    static var reversePairingStep1Title: String { return Localization.string(for: "reversePairingStep1.title") }
+    static var reversePairingStep1Message: String { return Localization.string(for: "reversePairingStep1.message") }
+    static var reversePairingStep1Code: String { return Localization.string(for: "reversePairingStep1.code") }
+    
+    static var reversePairingStep2Title: String { return Localization.string(for: "reversePairingStep2.title") }
+    static var reversePairingStep2Message: String { return Localization.string(for: "reversePairingStep2.message") }
+    
+    static var reversePairingErrorTitle: String { return Localization.string(for: "reversePairingError.title") }
+    static var reversePairingErrorMessage: String { return Localization.string(for: "reversePairingError.message") }
+    
+    static var reversePairingCloseAlert: String { return Localization.string(for: "reversePairingCloseAlert") }
     
     /* MARK: - Uploading */
     static var unfinishedTasksOverviewTitle: String { return Localization.string(for: "unfinishedTasksOverviewTitle") }

@@ -115,6 +115,8 @@
 		CDE30E72251E278200862A40 /* EditContactCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E71251E278200862A40 /* EditContactCoordinator.swift */; };
 		CDE30E782521D92600862A40 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CDE30E7A2521D92600862A40 /* Localizable.strings */; };
 		CDE30E8725232FE200862A40 /* InputFieldEditable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE30E8625232FE200862A40 /* InputFieldEditable.swift */; };
+		CDEB5E5025CBF9CD00DD5BEC /* ReversePairingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDEB5E4F25CBF9CD00DD5BEC /* ReversePairingInfo.swift */; };
+		CDF0AE7D25C82D310054AF87 /* ReversePairViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF0AE7C25C82D310054AF87 /* ReversePairViewController.swift */; };
 		CDF0AE8325C95BAA0054AF87 /* OnsetDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF0AE8225C95BAA0054AF87 /* OnsetDatePicker.swift */; };
 		CDF817272552BEF100C60771 /* Bindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF817262552BEF100C60771 /* Bindable.swift */; };
 		CDFCF907250FA6E80062269A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF906250FA6E80062269A /* ViewController.swift */; };
@@ -263,6 +265,8 @@
 		CDE30E762521D90200862A40 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		CDE30E7C2521D92B00862A40 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CDE30E8625232FE200862A40 /* InputFieldEditable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputFieldEditable.swift; sourceTree = "<group>"; };
+		CDEB5E4F25CBF9CD00DD5BEC /* ReversePairingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReversePairingInfo.swift; sourceTree = "<group>"; };
+		CDF0AE7C25C82D310054AF87 /* ReversePairViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReversePairViewController.swift; sourceTree = "<group>"; };
 		CDF0AE8225C95BAA0054AF87 /* OnsetDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnsetDatePicker.swift; sourceTree = "<group>"; };
 		CDF817262552BEF100C60771 /* Bindable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bindable.swift; sourceTree = "<group>"; };
 		CDFCF906250FA6E80062269A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -410,6 +414,7 @@
 			isa = PBXGroup;
 			children = (
 				CD3DA93A255554A700F738EE /* PairResponse.swift */,
+				CDEB5E4F25CBF9CD00DD5BEC /* ReversePairingInfo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -568,6 +573,7 @@
 				CDADF7F22535E34400424492 /* UploadCoordinator.swift */,
 				CD65CD802535F77400BB761A /* LoadingViewController.swift */,
 				CD65CD8425360F5C00BB761A /* UnfinishedTasksViewController.swift */,
+				CDF0AE7C25C82D310054AF87 /* ReversePairViewController.swift */,
 			);
 			path = Upload;
 			sourceTree = "<group>";
@@ -1007,6 +1013,7 @@
 				CD49BAEB2525CE7C0079D018 /* PromptableViewController.swift in Sources */,
 				CDFCF90C2510C47E0062269A /* Localization.swift in Sources */,
 				CDC4A8EA250B87E5001BABC6 /* SceneDelegate.swift in Sources */,
+				CDF0AE7D25C82D310054AF87 /* ReversePairViewController.swift in Sources */,
 				CD756C74252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift in Sources */,
 				CDC7C873253842A200FE7E05 /* Endpoint.swift in Sources */,
 				CD756C4A252C6A30005FEDA0 /* OnboardingCoordinator.swift in Sources */,
@@ -1025,6 +1032,7 @@
 				CD29635B25191972008443AF /* Haptic.swift in Sources */,
 				CDFCF907250FA6E80062269A /* ViewController.swift in Sources */,
 				CD2F7CAB255943E400F2F73A /* ISO8601DateFormat.swift in Sources */,
+				CDEB5E5025CBF9CD00DD5BEC /* ReversePairingInfo.swift in Sources */,
 				CDDC056C2546CD460079C2F4 /* Case.swift in Sources */,
 				CDA0F6962539F1A3009FD2A9 /* LabeledInputView.swift in Sources */,
 				CD29636125191AA8008443AF /* Theme.swift in Sources */,

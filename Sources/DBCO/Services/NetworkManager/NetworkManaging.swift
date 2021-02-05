@@ -58,4 +58,7 @@ protocol NetworkManaging {
     func getCase(identifier: String, completion: @escaping (Result<Case, NetworkError>) -> Void)
     func putCase(identifier: String, value: Case, completion: @escaping (Result<Void, NetworkError>) -> Void)
     func getQuestionnaires(completion: @escaping (Result<[Questionnaire], NetworkError>) -> Void)
+    
+    func postPairingRequest(completion: @escaping (Result<ReversePairingInfo, NetworkError>) -> Void)
+    func getPairingRequestStatus(token: String, completion: @escaping (Result<ReversePairingStatusInfo, NetworkError>) -> Void)
 }
