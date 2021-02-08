@@ -87,8 +87,8 @@ extension OnboardingPairingCoordinator: PairViewControllerDelegate {
             Services.caseManager.loadCaseData(userInitiated: true) { success, error in
                 if success {
                     finish()
-                } else if case .couldNotLoadQuestionnaires = error, Services.caseManager.hasCaseData {
-                    // If the questionnaire could not be loaded, but the case data is fine, finish()
+                } else if case .couldNotLoadQuestionnaires = error {
+                    // If only the questionnaires could not be loaded:
                     finish()
                 } else {
                     caseErrorAlert()
@@ -100,7 +100,7 @@ extension OnboardingPairingCoordinator: PairViewControllerDelegate {
             controller.stopLoadingAnimation()
             navigationController.navigationBar.isUserInteractionEnabled = false
             
-            let alert = UIAlertController(title: .onboardingLoadingErrorTitle, message: .onboardingLoadingErrorMessage, preferredStyle: .alert)
+            let alert = UIAlertController(title: .taskLoadingErrorTitle, message: .taskLoadingErrorMessage, preferredStyle: .alert)
             
             alert.addAction(UIAlertAction(title: .onboardingLoadingErrorRetryAction, style: .default) { _ in
                 loadCaseData()
