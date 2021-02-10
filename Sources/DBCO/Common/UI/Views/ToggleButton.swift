@@ -58,11 +58,12 @@ class ToggleButton: UIButton {
     
     fileprivate func setup() {
         clipsToBounds = true
-        contentEdgeInsets = .topBottom(25.5) + .leftRight(16)
+        contentEdgeInsets = .topBottom(25.5) + .left(16) + .right(32)
         
         layer.cornerRadius = 8
         
         titleLabel?.font = Theme.fonts.body
+        titleLabel?.numberOfLines = 2
         
         tintColor = .white
         backgroundColor = Theme.colors.tertiary
