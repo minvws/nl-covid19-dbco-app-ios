@@ -304,7 +304,11 @@ class LastExposureDateAnswerManager: AnswerManaging {
                                 value: Self.valueDateFormatter.string(from: $0),
                                 trigger: nil) }
         
-        var answerOptions = [.lastExposureDateEarlierOption] + dateOptions
+        let everyDayOption = AnswerOption(label: .contactInformationLastExposureEveryDay,
+                                          value: Self.valueDateFormatter.string(from: endDate),
+                                          trigger: nil)
+        
+        var answerOptions = [.lastExposureDateEarlierOption] + dateOptions + [everyDayOption]
         
         if let lastExposureDate = lastExposureDate {
             if let option = answerOptions.first(where: { $0.value == lastExposureDate }) {
