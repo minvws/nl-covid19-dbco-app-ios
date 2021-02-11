@@ -291,7 +291,7 @@ final class CaseManager: CaseManaging, Logging {
                                                     questionType: .lastExposureDate,
                                                     label: .contactInformationLastExposure,
                                                     description: nil,
-                                                    relevantForCategories: [.category1, .category2a, .category2b, .category3],
+                                                    relevantForCategories: [.category1, .category2a, .category2b, .category3a, .category3b],
                                                     answerOptions: nil,
                                                     disabledForSources: [.portal])
                 

@@ -103,7 +103,8 @@ extension Question: Codable {
             let category: Task.Contact.Category
         }
         
-        let categories = try container.decode([CategoryWrapper].self, forKey: .relevantForCategories)
+        // TODO: Once the API supports categories 3a and 3b, the fallback here should be removed
+        let categories = (try? container.decode([CategoryWrapper].self, forKey: .relevantForCategories)) ?? Task.Contact.Category.allCases.map(CategoryWrapper.init)
         relevantForCategories = categories.map { $0.category }
         
         answerOptions = try? container.decode([AnswerOption]?.self, forKey: .answerOptions)
@@ -156,10 +157,16 @@ struct Answer: Codable, Equatable {
     @ISO8601DateFormat var lastModified: Date
     
     enum Value: CustomStringConvertible, Equatable {
-        case classificationDetails(category1Risk: Bool?,
-                                   category2aRisk: Bool?,
-                                   category2bRisk: Bool?,
-                                   category3Risk: Bool?)
+        enum Distance: String, Codable, Equatable {
+            case yesMoreThan15min
+            case yesLessThan15min
+            case no
+        }
+        
+        case classificationDetails(sameHouseholdRisk: Bool?,
+                                   distanceRisk: Distance?,
+                                   physicalContactRisk: Bool?,
+                                   sameRoomRisk: Bool?)
         case contactDetails(firstName: String?,
                             lastName: String?,
                             email: String?,
@@ -177,8 +184,8 @@ struct Answer: Codable, Equatable {
         
         var description: String {
             switch self {
-            case .classificationDetails(let category1Risk, let category2aRisk, let category2bRisk, let category3Risk):
-                return "classificationDetails(\(String(describing: category1Risk)), \(String(describing: category2aRisk)), \(String(describing: category2bRisk)), \(String(describing: category3Risk)))"
+            case .classificationDetails(let sameHouseholdRisk, let distanceRisk, let physicalContactRisk, let sameRoomRisk):
+                return "classificationDetails(\(String(describing: sameHouseholdRisk)), \(String(describing: distanceRisk)), \(String(describing: physicalContactRisk)), \(String(describing: sameRoomRisk)))"
             case .contactDetails(let firstName, let lastName, let email, let phoneNumber):
                 return "contactDetails(\(String(describing: firstName)), \(String(describing: lastName)), \(String(describing: email)), \(String(describing: phoneNumber)))"
             case .contactDetailsFull(let firstName, let lastName, let email, let phoneNumber):
@@ -210,10 +217,10 @@ extension Answer.Value: Codable {
         case email
         case phoneNumber
         case value
-        case category1Risk
-        case category2ARisk
-        case category2BRisk
-        case category3Risk
+        case sameHouseholdRisk
+        case distanceRisk
+        case physicalContactRisk
+        case sameRoomRisk
     }
     
     init(from decoder: Decoder) throws {
@@ -222,10 +229,10 @@ extension Answer.Value: Codable {
         
         switch type {
         case .classificationDetails:
-            self = .classificationDetails(category1Risk: try container.decode(Bool?.self, forKey: .category1Risk),
-                                          category2aRisk: try container.decode(Bool?.self, forKey: .category2ARisk),
-                                          category2bRisk: try container.decode(Bool?.self, forKey: .category2BRisk),
-                                          category3Risk: try container.decode(Bool?.self, forKey: .category3Risk))
+            self = .classificationDetails(sameHouseholdRisk: try container.decode(Bool?.self, forKey: .sameHouseholdRisk),
+                                          distanceRisk: try container.decode(Distance?.self, forKey: .distanceRisk),
+                                          physicalContactRisk: try container.decode(Bool?.self, forKey: .physicalContactRisk),
+                                          sameRoomRisk: try container.decode(Bool?.self, forKey: .sameRoomRisk))
         case .contactDetails:
             self = .contactDetails(firstName: try container.decode(String?.self, forKey: .firstName),
                                    lastName: try container.decode(String?.self, forKey: .lastName),
@@ -259,12 +266,12 @@ extension Answer.Value: Codable {
     private func encodeForLocalStorage(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         switch self {
-        case .classificationDetails(let category1Risk, let category2aRisk, let category2bRisk, let category3Risk):
+        case .classificationDetails(let sameHouseholdRisk, let distanceRisk, let physicalContactRisk, let sameRoomRisk):
             try container.encode(Question.QuestionType.classificationDetails, forKey: .type)
-            try container.encode(category1Risk, forKey: .category1Risk)
-            try container.encode(category2aRisk, forKey: .category2ARisk)
-            try container.encode(category2bRisk, forKey: .category2BRisk)
-            try container.encode(category3Risk, forKey: .category3Risk)
+            try container.encode(sameHouseholdRisk, forKey: .sameHouseholdRisk)
+            try container.encode(distanceRisk, forKey: .distanceRisk)
+            try container.encode(physicalContactRisk, forKey: .physicalContactRisk)
+            try container.encode(sameRoomRisk, forKey: .sameRoomRisk)
         case .contactDetails(let firstName, let lastName, let email, let phoneNumber):
             try container.encode(Question.QuestionType.contactDetails, forKey: .type)
             try container.encode(firstName, forKey: .firstName)
@@ -295,11 +302,11 @@ extension Answer.Value: Codable {
     private func encodeForAPI(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         switch self {
-        case .classificationDetails(let category1Risk, let category2aRisk, let category2bRisk, let category3Risk):
-            try container.encode(category1Risk ?? false, forKey: .category1Risk)
-            try container.encode(category2aRisk ?? false, forKey: .category2ARisk)
-            try container.encode(category2bRisk ?? false, forKey: .category2BRisk)
-            try container.encode(category3Risk ?? false, forKey: .category3Risk)
+        case .classificationDetails(let sameHouseholdRisk, let distanceRisk, let physicalContactRisk, let sameRoomRisk):
+            try container.encode(sameHouseholdRisk ?? false, forKey: .sameHouseholdRisk)
+            try container.encode(distanceRisk ?? .no, forKey: .distanceRisk)
+            try container.encode(physicalContactRisk ?? false, forKey: .physicalContactRisk)
+            try container.encode(sameRoomRisk ?? false, forKey: .sameRoomRisk)
         case .contactDetails(let firstName, let lastName, let email, let phoneNumber):
             try container.encode(firstName, forKey: .firstName)
             try container.encode(lastName, forKey: .lastName)

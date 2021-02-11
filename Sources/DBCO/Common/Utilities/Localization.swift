@@ -307,7 +307,7 @@ extension String {
             return Localization.string(for: "informContactGuidelines.category1", [exposureDatePlus11])
         case .category2a, .category2b:
             return Localization.string(for: "informContactGuidelines.category2", [exposureDatePlus5, exposureDatePlus10])
-        case .category3:
+        case .category3a, .category3b:
             return Localization.string(for: "informContactGuidelines.category3", [exposureDatePlus14])
         default:
             return ""
@@ -320,7 +320,7 @@ extension String {
             return Localization.string(for: "informContactGuidelines.category1.intro")
         case .category2a, .category2b:
             return Localization.string(for: "informContactGuidelines.category2.intro", [exposureDate])
-        case .category3:
+        case .category3a, .category3b:
             return Localization.string(for: "informContactGuidelines.category3.intro", [exposureDate])
         default:
             return ""
@@ -333,7 +333,7 @@ extension String {
             return Localization.string(for: "informContactGuidelines.generic.category1")
         case .category2a, .category2b:
             return Localization.string(for: "informContactGuidelines.generic.category2")
-        case .category3:
+        case .category3a, .category3b:
             return Localization.string(for: "informContactGuidelines.generic.category3")
         default:
             return ""
@@ -346,7 +346,7 @@ extension String {
             return Localization.string(for: "informContactGuidelines.generic.category1.intro")
         case .category2a, .category2b:
             return Localization.string(for: "informContactGuidelines.generic.category2.intro")
-        case .category3:
+        case .category3a, .category3b:
             return Localization.string(for: "informContactGuidelines.generic.category3.intro")
         default:
             return ""
@@ -361,7 +361,7 @@ extension String {
             return Localization.string(for: "informContactLink.category2a")
         case .category2b:
             return Localization.string(for: "informContactLink.category2b")
-        case .category3:
+        case .category3a, .category3b:
             return Localization.string(for: "informContactLink.category3")
         default:
             return ""
@@ -379,22 +379,23 @@ extension String {
         }
     }
     
-    static var category1RiskQuestion: String { return Localization.string(for: "category1RiskQuestion") }
-    static var category1RiskQuestionAnswerPositive: String { return Localization.string(for: "category1RiskQuestion.answer.positive") }
-    static var category1RiskQuestionAnswerNegative: String { return Localization.string(for: "category1RiskQuestion.answer.negative") }
+    static var sameHouseholdRiskQuestion: String { return Localization.string(for: "sameHouseholdRiskQuestion") }
+    static var sameHouseholdRiskQuestionAnswerPositive: String { return Localization.string(for: "sameHouseholdRiskQuestion.answer.positive") }
+    static var sameHouseholdRiskQuestionAnswerNegative: String { return Localization.string(for: "sameHouseholdRiskQuestion.answer.negative") }
     
-    static var category2aRiskQuestion: String { return Localization.string(for: "category2aRiskQuestion") }
-    static var category2aRiskQuestionAnswerPositive: String { return Localization.string(for: "category2aRiskQuestion.answer.positive") }
-    static var category2aRiskQuestionAnswerNegative: String { return Localization.string(for: "category2aRiskQuestion.answer.negative") }
+    static var distanceRiskQuestion: String { return Localization.string(for: "distanceRiskQuestion") }
+    static var distanceRiskQuestionAnswerMoreThan15Min: String { return Localization.string(for: "distanceRiskQuestion.answer.moreThan15Min") }
+    static var distanceRiskQuestionAnswerLessThan15Min: String { return Localization.string(for: "distanceRiskQuestion.answer.lessThan15Min") }
+    static var distanceRiskQuestionAnswerNegative: String { return Localization.string(for: "distanceRiskQuestion.answer.negative") }
     
-    static var category2bRiskQuestion: String { return Localization.string(for: "category2bRiskQuestion") }
-    static var category2bRiskQuestionDescription: String { return Localization.string(for: "category2bRiskQuestion.description") }
-    static var category2bRiskQuestionAnswerPositive: String { return Localization.string(for: "category2bRiskQuestion.answer.positive") }
-    static var category2bRiskQuestionAnswerNegative: String { return Localization.string(for: "category2bRiskQuestion.answer.negative") }
+    static var physicalContactRiskQuestion: String { return Localization.string(for: "physicalContactRiskQuestion") }
+    static var physicalContactRiskQuestionDescription: String { return Localization.string(for: "physicalContactRiskQuestion.description") }
+    static var physicalContactRiskQuestionAnswerPositive: String { return Localization.string(for: "physicalContactRiskQuestion.answer.positive") }
+    static var physicalContactRiskQuestionAnswerNegative: String { return Localization.string(for: "physicalContactRiskQuestion.answer.negative") }
     
-    static var category3RiskQuestion: String { return Localization.string(for: "category3RiskQuestion") }
-    static var category3RiskQuestionAnswerPositive: String { return Localization.string(for: "category3RiskQuestion.answer.positive") }
-    static var category3RiskQuestionAnswerNegative: String { return Localization.string(for: "category3RiskQuestion.answer.negative") }
+    static var sameRoomRiskQuestion: String { return Localization.string(for: "sameRoomRiskQuestion") }
+    static var sameRoomRiskQuestionAnswerPositive: String { return Localization.string(for: "sameRoomRiskQuestion.answer.positive") }
+    static var sameRoomRiskQuestionAnswerNegative: String { return Localization.string(for: "sameRoomRiskQuestion.answer.negative") }
     
     static var otherCategoryTitle: String { return Localization.string(for: "otherCategoryTitle") }
     static var otherCategoryMessage: String { return Localization.string(for: "otherCategoryMessage") }

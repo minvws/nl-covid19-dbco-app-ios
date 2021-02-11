@@ -16,7 +16,7 @@ class ContactQuestionnaireCommunicationTests: XCTestCase {
                                          questionType: .multipleChoice,
                                          label: "",
                                          description: nil,
-                                         relevantForCategories: [.category1, .category2a, .category2b, .category3],
+                                         relevantForCategories: [.category1, .category2a, .category2b, .category3a, .category3b],
                                          answerOptions: [
                                             AnswerOption(label: "Ja", value: "Ja", trigger: .setCommunicationToStaff),
                                             AnswerOption(label: "Nee", value: "Nee", trigger: .setCommunicationToIndex)],
