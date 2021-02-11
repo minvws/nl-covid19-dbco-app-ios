@@ -13,7 +13,7 @@ extension Question {
         let value: Answer.Value = {
             switch questionType {
             case .classificationDetails:
-                return .classificationDetails(category1Risk: nil, category2aRisk: nil, category2bRisk: nil, category3Risk: nil)
+                return .classificationDetails(sameHouseholdRisk: nil, distanceRisk: nil, physicalContactRisk: nil, sameRoomRisk: nil)
             case .contactDetails:
                 return .contactDetails(firstName: nil, lastName: nil, email: nil, phoneNumber: nil)
             case .contactDetailsFull:

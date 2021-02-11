@@ -38,11 +38,12 @@ struct Task: Equatable {
         /// [ClassificationHelper](x-source-tag://ClassificationHelper)
         ///
         /// - Tag: Task.Contact.Category
-        enum Category: String, Codable {
+        enum Category: String, Codable, CaseIterable {
             case category1 = "1"
             case category2a = "2a"
             case category2b = "2b"
-            case category3 = "3"
+            case category3a = "3a"
+            case category3b = "3b"
             case other = "other"
         }
         
@@ -223,7 +224,7 @@ extension Task {
                                             Answer(uuid: UUID(),
                                                    questionUuid: classificationUuid,
                                                    lastModified: Date(),
-                                                   value: .classificationDetails(category1Risk: nil, category2aRisk: nil, category2bRisk: nil, category3Risk: nil))
+                                                   value: .classificationDetails(sameHouseholdRisk: nil, distanceRisk: nil, physicalContactRisk: nil, sameRoomRisk: nil))
                                           ])
         
         return task
