@@ -89,7 +89,17 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
         case .date(let dateFormatter):
             let datePicker = UIDatePicker()
-            text.map(dateFormatter.date)?.map { datePicker.date = $0 }
+            
+            if let text = text, let date = dateFormatter.date(from: text) {
+                datePicker.date = date
+            } else {
+                datePicker.date = DateComponents(calendar: Calendar.current,
+                                                 timeZone: TimeZone.current,
+                                                 year: 1980,
+                                                 month: 1,
+                                                 day: 1).date ?? Date()
+            }
+            
             datePicker.datePickerMode = .date
             datePicker.tintColor = .black
             datePicker.maximumDate = Date()
