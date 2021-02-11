@@ -123,4 +123,9 @@ class OnboardingStepViewController: ViewController {
         delegate?.onboardingStepViewControllerDidSelectSecondaryButton(self)
     }
 
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        imageView.isHidden = UIDevice.current.orientation.isLandscape // Hide image on landscape
+    }
 }

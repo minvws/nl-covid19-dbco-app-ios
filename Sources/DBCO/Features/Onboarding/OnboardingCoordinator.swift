@@ -37,7 +37,6 @@ final class OnboardingCoordinator: Coordinator {
         
         super.init()
         
-        navigationController.delegate = self
         stepController.delegate = self
     }
     
@@ -52,15 +51,6 @@ final class OnboardingCoordinator: Coordinator {
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
     }
-
-}
-
-extension OnboardingCoordinator: UINavigationControllerDelegate {
-    
-    func navigationControllerSupportedInterfaceOrientations(_ navigationController: UINavigationController) -> UIInterfaceOrientationMask {
-        return .portrait
-    }
-    
 }
 
 extension OnboardingCoordinator: OnboardingStepViewControllerDelegate {

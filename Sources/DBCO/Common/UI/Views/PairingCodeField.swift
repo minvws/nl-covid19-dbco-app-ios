@@ -127,6 +127,7 @@ extension PairingCodeField: UITextFieldDelegate {
         
         if trimmedCode.count == 12 {
             pairingCode = String(trimmedCode)
+            resignFirstResponder() // Hide keyboard to show submit button
         } else {
             pairingCode = nil
         }

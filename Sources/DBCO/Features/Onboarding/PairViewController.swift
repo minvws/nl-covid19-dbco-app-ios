@@ -17,6 +17,7 @@ class PairViewModel {}
 class PairViewController: ViewController {
     private let viewModel: PairViewModel
     
+    private let scrollView = UIScrollView()
     private let codeField = PairingCodeField()
     private let loadingOverlay = UIView()
     private let loadingIndicator = UIActivityIndicatorView(style: .white)
@@ -70,7 +71,12 @@ class PairViewController: ViewController {
             .distribution(.equalSpacing)
             .wrappedInReadableWidth(insets: .top(66))
         
-        containerView.embed(in: view.safeAreaLayoutGuide)
+        containerView.embed(in: scrollView.readableWidth)
+        
+        containerView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.safeAreaLayoutGuide.heightAnchor, multiplier: 1, constant: 0).isActive = true
+        
+        scrollView.embed(in: view)
+        scrollView.delegate = self
         
         loadingOverlay.backgroundColor = UIColor(white: 0, alpha: 0.4)
         loadingOverlay.embed(in: view)
@@ -140,5 +146,13 @@ class PairViewController: ViewController {
     @objc private func keyboardWillHide(notification: NSNotification) {
         keyboardSpacerHeightConstraint.constant = 0
     }
+}
 
+// MARK: - UIScrollViewDelegate
+
+extension PairViewController: UIScrollViewDelegate {
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        codeField.resignFirstResponder() // Hide keyboard on scroll
+    }
 }
