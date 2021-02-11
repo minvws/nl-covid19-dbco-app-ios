@@ -282,6 +282,7 @@
 "contactInformationBSN" = "Burgerservice nummer";
 "contactInformationLastExposure" = "Wanneer was de laatste ontmoeting?";
 "contactInformationLastExposure.earlier" = "Eerder";
+"contactInformationLastExposure.everyDay" = "Bijna iedere dag";
 
 "earlierExposureDateTitle" = "Je hoeft geen gegevens te delen van deze persoon";
 "earlierExposureDateMessage" = "Jullie waren namelijk bij elkaar in de buurt toen je nog niet besmettelijk was";

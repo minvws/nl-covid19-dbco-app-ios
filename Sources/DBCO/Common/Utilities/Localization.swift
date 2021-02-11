@@ -409,6 +409,7 @@ extension String {
     static var contactInformationBSN: String { return Localization.string(for: "contactInformationBSN") }
     static var contactInformationLastExposure: String { return Localization.string(for: "contactInformationLastExposure") }
     static var contactInformationLastExposureEarlier: String { return Localization.string(for: "contactInformationLastExposure.earlier") }
+    static var contactInformationLastExposureEveryDay: String { return Localization.string(for: "contactInformationLastExposure.everyDay") }
     
     static var earlierExposureDateTitle: String { return Localization.string(for: "earlierExposureDateTitle") }
     static var earlierExposureDateMessage: String { return Localization.string(for: "earlierExposureDateMessage") }
