@@ -44,6 +44,7 @@ class PairingCodeField: UITextField {
         ]
         
         accessibilityLabel = .onboardingStep2Title
+        accessibilityHint = .onboardingStep2CodeHint
         
         placeholderLabel.embed(in: self)
         sendSubviewToBack(placeholderLabel)
