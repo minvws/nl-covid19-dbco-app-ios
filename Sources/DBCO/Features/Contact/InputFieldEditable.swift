@@ -37,6 +37,7 @@ protocol InputFieldEditable: Editable {
     var keyboardType: UIKeyboardType { get }
     var autocapitalizationType: UITextAutocapitalizationType { get }
     var textContentType: UITextContentType? { get }
+    var valueOptions: [String]? { get }
 }
 
 extension InputFieldEditable {
@@ -45,6 +46,7 @@ extension InputFieldEditable {
     var keyboardType: UIKeyboardType { return .default }
     var autocapitalizationType: UITextAutocapitalizationType { return .sentences }
     var textContentType: UITextContentType? { return nil }
+    var valueOptions: [String]? { return nil }
 }
 
 // MARK: - ContactValue Extensions

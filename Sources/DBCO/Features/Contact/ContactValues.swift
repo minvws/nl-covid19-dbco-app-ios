@@ -22,10 +22,14 @@ struct LastName: ContactValue {
 
 struct PhoneNumber: ContactValue {
     var value: String?
+    var valueOptions: [String]?
+    var placeholder: String?
 }
 
 struct EmailAddress: ContactValue {
     var value: String?
+    var valueOptions: [String]?
+    var placeholder: String? 
 }
 
 struct BirthDate: ContactValue {
