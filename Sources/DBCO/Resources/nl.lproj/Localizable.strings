@@ -15,6 +15,7 @@
 "tryAgain" = "Opnieuw proberen";
 "delete" = "Verwijderen";
 "error.title" = "Er ging iets mis";
+"other" = "Anders";
 
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
@@ -140,8 +141,8 @@
 
 /* MARK: - Task Overview */
 "taskOverviewTipsTitle" = "Geen contacten vergeten?";
-"taskOverviewTipsDateFormat" = "d MMMM";
-"taskOverviewTipsMessage" = "Maak een overzicht van wie je hebt ontmoet <b>vanaf %@</b>";
+"taskOverviewTipsDateFormat" = "'vanaf' d MMMM";
+"taskOverviewTipsMessage" = "Maak een overzicht van wie je hebt ontmoet %@";
 "taskOverviewTipsButton" = "Lees de tips";
 
 "taskOverviewTitle" = "Mijn contacten";
@@ -279,7 +280,9 @@
 "contactInformationFirstName" = "Voornaam";
 "contactInformationLastName" = "Achternaam";
 "contactInformationPhoneNumber" = "Telefoonnummer";
+"contactInformationPhoneNumberPlaceholder" = "Selecteer telefoonnummer";
 "contactInformationEmailAddress" = "E-mailadres";
+"contactInformationEmailAddressPlaceholder" = "Selecteer e-mailadres";
 "contactInformationBSN" = "Burgerservice nummer";
 "contactInformationLastExposure" = "Wanneer was de laatste ontmoeting?";
 "contactInformationLastExposure.earlier" = "Eerder";

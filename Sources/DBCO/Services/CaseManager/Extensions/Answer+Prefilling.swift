@@ -30,9 +30,12 @@ extension Answer.Value {
     /// Create a prefilled .contactDetails case.
     /// - parameter contact: The CNContact to be used
     static func contactDetails(contact: CNContact) -> Self {
+        let email = contact.contactEmailAddresses.count == 1 ? contact.contactEmailAddresses.first?.value : nil
+        let phoneNumber = contact.contactPhoneNumbers.count == 1 ? contact.contactPhoneNumbers.first?.value : nil
+        
         return .contactDetails(firstName: contact.contactFirstName.value,
                                lastName: contact.contactLastName.value,
-                               email: contact.contactEmailAddresses.first?.value,
-                               phoneNumber: contact.contactPhoneNumbers.first?.value)
+                               email: email,
+                               phoneNumber: phoneNumber)
     }
 }
