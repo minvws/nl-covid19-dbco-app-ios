@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol InputFieldDelegate: class {
+    func promptOptionsForInputField(_ options: [String], selectOption: @escaping (String?) -> Void)
+}
+
 /// A styled UITextField subclass that binds to an object's field conforming to [InputFieldEditable](x-source-tag://InputFieldEditable) and automatically updates its value.
 /// InputField adjusts its input method based on the properties of the supplied [InputFieldEditable](x-source-tag://InputFieldEditable) field.
 ///
@@ -15,6 +19,8 @@ import UIKit
 class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     private weak var object: Object?
     private let path: WritableKeyPath<Object, Field>
+    
+    weak var inputFieldDelegate: InputFieldDelegate?
     
     init(for object: Object, path: WritableKeyPath<Object, Field>) {
         self.object = object
@@ -83,7 +89,17 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
         case .date(let dateFormatter):
             let datePicker = UIDatePicker()
-            text.map(dateFormatter.date)?.map { datePicker.date = $0 }
+            
+            if let text = text, let date = dateFormatter.date(from: text) {
+                datePicker.date = date
+            } else {
+                datePicker.date = DateComponents(calendar: Calendar.current,
+                                                 timeZone: TimeZone.current,
+                                                 year: 1980,
+                                                 month: 1,
+                                                 day: 1).date ?? Date()
+            }
+            
             datePicker.datePickerMode = .date
             datePicker.tintColor = .black
             datePicker.maximumDate = Date()
@@ -150,6 +166,12 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         }
     }
     
+    @discardableResult
+    func delegate(_ delegate: InputFieldDelegate?) -> Self {
+        inputFieldDelegate = delegate
+        return self
+    }
+    
     // MARK: - Private
     
     @objc private func handleEditingDidEnd() {
@@ -209,6 +231,38 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     private lazy var iconContainerView = UIStackView()
     
     // MARK: - Delegate implementations
+    
+    private var overrideOptionPrompt: Bool = false
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        guard let editable = object?[keyPath: path] else { return true }
+        
+        switch editable.inputType {
+        case .date, .picker:
+            return true
+        default:
+            break
+        }
+        
+        guard let delegate = inputFieldDelegate else { return true }
+        
+        if let options = editable.valueOptions, options.count > 1, text?.isEmpty == true, !overrideOptionPrompt {
+            delegate.promptOptionsForInputField(options) {
+                if $0 == nil {
+                    self.overrideOptionPrompt = true
+                    self.becomeFirstResponder()
+                    self.overrideOptionPrompt = false
+                } else {
+                    self.text = $0
+                    self.handleEditingDidEnd()
+                }
+            }
+            
+            return false
+        } else {
+            return true
+        }
+    }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let text = text {
