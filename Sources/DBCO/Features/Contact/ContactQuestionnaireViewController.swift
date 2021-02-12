@@ -404,6 +404,10 @@ class ContactQuestionnaireViewModel {
             .filter { !$0.isEmpty }
             .joined(separator: "\n\n")
     }
+    
+    func setInputFieldDelegate(_ delegate: InputFieldDelegate) {
+        answerManagers.forEach { $0.inputFieldDelegate = delegate }
+    }
 }
 
 protocol ContactQuestionnaireViewControllerDelegate: class {
@@ -451,6 +455,8 @@ final class ContactQuestionnaireViewController: PromptableViewController {
             .touchUpInside(self, action: #selector(save))
         
         promptView = promptButton
+        
+        viewModel.setInputFieldDelegate(self)
         
         // Type
         let classificationSectionView = SectionView(title: .contactTypeSectionTitle, caption: .contactTypeSectionMessage, index: 1)
@@ -659,4 +665,26 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         scrollView.verticalScrollIndicatorInsets.bottom = .zero
     }
 
+}
+
+extension ContactQuestionnaireViewController: InputFieldDelegate {
+    
+    func promptOptionsForInputField(_ options: [String], selectOption: @escaping (String?) -> Void) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        options.forEach { option in
+            alert.addAction(UIAlertAction(title: option, style: .default) { _ in
+                selectOption(option)
+            })
+        }
+        
+        alert.addAction(UIAlertAction(title: .other, style: .default) { _ in
+            selectOption(nil)
+        })
+        
+        alert.addAction(UIAlertAction(title: .cancel, style: .cancel, handler: nil))
+        
+        present(alert, animated: true)
+    }
+    
 }

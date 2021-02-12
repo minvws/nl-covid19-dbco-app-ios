@@ -25,6 +25,8 @@ protocol AnswerManaging: class {
     var hasValidAnswer: Bool { get }
     
     var updateHandler: ((AnswerManaging) -> Void)? { get set }
+    
+    var inputFieldDelegate: InputFieldDelegate? { get set }
 }
 
 /// AnswerManager for the .classificationDetails question.
@@ -183,11 +185,13 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
                physicalContactRiskGroup,
                sameRoomRiskGroup,
                otherCategoryView)
+    
+    weak var inputFieldDelegate: InputFieldDelegate?
 }
 
 /// AnswerManager for the .contactDetails question.
 /// Uses [InputField](x-source-tag://InputField) to question the firstName, lastName, email and phoneNumber of the index
-class ContactDetailsAnswerManager: AnswerManaging {
+class ContactDetailsAnswerManager: AnswerManaging, InputFieldDelegate {
     // swiftlint:disable opening_brace
     private(set) var firstName = FirstName()        { didSet { updateHandler?(self) } }
     private(set) var lastName = LastName()          { didSet { updateHandler?(self) } }
@@ -205,6 +209,14 @@ class ContactDetailsAnswerManager: AnswerManaging {
         
         if let contact = contact {
             baseAnswer.value = .contactDetails(contact: contact)
+            
+            let phoneNumberOptions = contact.contactPhoneNumbers.compactMap(\.value)
+            self.phoneNumber.valueOptions = phoneNumberOptions
+            self.phoneNumber.placeholder = phoneNumberOptions.isEmpty ? nil : .contactInformationPhoneNumberPlaceholder
+            
+            let emailOptions = contact.contactEmailAddresses.compactMap(\.value)
+            self.email.valueOptions = emailOptions
+            self.email.placeholder = emailOptions.isEmpty ? nil : .contactInformationEmailAddressPlaceholder
         }
         
         switch baseAnswer.value {
@@ -224,10 +236,10 @@ class ContactDetailsAnswerManager: AnswerManaging {
     private(set) lazy var view: UIView =
         VStack(spacing: 16,
                HStack(spacing: 15,
-                      InputField(for: self, path: \.firstName),
-                      InputField(for: self, path: \.lastName)).distribution(.fillEqually),
-               InputField(for: self, path: \.phoneNumber),
-               InputField(for: self, path: \.email))
+                      InputField(for: self, path: \.firstName).delegate(self),
+                      InputField(for: self, path: \.lastName).delegate(self)).distribution(.fillEqually),
+               InputField(for: self, path: \.phoneNumber).delegate(self),
+               InputField(for: self, path: \.email).delegate(self))
     
     var answer: Answer {
         var answer = baseAnswer
@@ -243,6 +255,12 @@ class ContactDetailsAnswerManager: AnswerManaging {
     var hasValidAnswer: Bool {
         return answer.progressElements.contains(true)
     }
+    
+    weak var inputFieldDelegate: InputFieldDelegate?
+    
+    func promptOptionsForInputField(_ options: [String], selectOption: @escaping (String?) -> Void) {
+        inputFieldDelegate?.promptOptionsForInputField(options, selectOption: selectOption)
+    }
 }
 
 /// AnswerManager for the .date question.
@@ -253,6 +271,7 @@ class DateAnswerManager: AnswerManaging {
     private var baseAnswer: Answer
     
     var updateHandler: ((AnswerManaging) -> Void)?
+    weak var inputFieldDelegate: InputFieldDelegate?
     
     init(question: Question, answer: Answer) {
         self.baseAnswer = answer
@@ -293,6 +312,7 @@ class LastExposureDateAnswerManager: AnswerManaging {
     private var baseAnswer: Answer
     
     var updateHandler: ((AnswerManaging) -> Void)?
+    weak var inputFieldDelegate: InputFieldDelegate?
     
     private(set) var options: Options {
         didSet { update() }
@@ -314,7 +334,11 @@ class LastExposureDateAnswerManager: AnswerManaging {
                                 value: Self.valueDateFormatter.string(from: $0),
                                 trigger: nil) }
         
-        var answerOptions = [.lastExposureDateEarlierOption] + dateOptions
+        let everyDayOption = AnswerOption(label: .contactInformationLastExposureEveryDay,
+                                          value: Self.valueDateFormatter.string(from: endDate),
+                                          trigger: nil)
+        
+        var answerOptions = [.lastExposureDateEarlierOption] + dateOptions + [everyDayOption]
         
         if let lastExposureDate = lastExposureDate {
             if let option = answerOptions.first(where: { $0.value == lastExposureDate }) {
@@ -437,6 +461,7 @@ class OpenAnswerManager: AnswerManaging {
     private var baseAnswer: Answer
     
     var updateHandler: ((AnswerManaging) -> Void)?
+    weak var inputFieldDelegate: InputFieldDelegate?
     
     init(question: Question, answer: Answer) {
         self.baseAnswer = answer
@@ -474,6 +499,7 @@ class MultipleChoiceAnswerManager: AnswerManaging {
     private var baseAnswer: Answer
     
     var updateHandler: ((AnswerManaging) -> Void)?
+    weak var inputFieldDelegate: InputFieldDelegate?
     
     private var options: Options! { didSet { updateHandler?(self) } }
     private var buttons: ToggleGroup!

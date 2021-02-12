@@ -10,12 +10,23 @@ import UIKit
 /// Styled UILabel subclass providing convenience initialization for each text style support in the [Theme](x-source-tag://Theme)
 class Label: UILabel {
     
-    init(_ text: String?, font: UIFont = Theme.fonts.body, textColor: UIColor = .darkText) {
+    init(_ text: String?, font: UIFont = Theme.fonts.body, textColor: UIColor = .darkText, isHeader: Bool = false) {
         super.init(frame: .zero)
         
         self.text = text
         self.font = font
         self.textColor = textColor
+        
+        if isHeader {
+            accessibilityTraits = .header
+        } else {
+            accessibilityTraits.remove(.header)
+        }
+    }
+    
+    init(_ text: NSAttributedString) {
+        super.init(frame: .zero)
+        self.attributedText = text
     }
     
     required init?(coder: NSCoder) {
@@ -23,15 +34,15 @@ class Label: UILabel {
     }
     
     convenience init(largeTitle: String?, textColor: UIColor = .darkText) {
-        self.init(largeTitle, font: Theme.fonts.largeTitle, textColor: textColor)
+        self.init(largeTitle, font: Theme.fonts.largeTitle, textColor: textColor, isHeader: true)
     }
     
     convenience init(title1: String?, textColor: UIColor = .darkText) {
-        self.init(title1, font: Theme.fonts.title1, textColor: textColor)
+        self.init(title1, font: Theme.fonts.title1, textColor: textColor, isHeader: true)
     }
     
     convenience init(title2: String?, textColor: UIColor = .darkText) {
-        self.init(title2, font: Theme.fonts.title2, textColor: textColor)
+        self.init(title2, font: Theme.fonts.title2, textColor: textColor, isHeader: true)
     }
     
     convenience init(title3: String?, textColor: UIColor = .darkText) {
@@ -79,12 +90,6 @@ class Label: UILabel {
     @discardableResult
     func hideIfEmpty() -> Self {
         isHidden = text?.isEmpty == true
-        return self
-    }
-    
-    @discardableResult
-    func asHTML() -> Self {
-        attributedText = .makeFromHtml(text: text, font: font, textColor: textColor, boldTextColor: .black)
         return self
     }
 }

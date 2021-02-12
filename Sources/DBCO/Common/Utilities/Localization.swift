@@ -63,6 +63,7 @@ extension String {
     static var tryAgain: String { return Localization.string(for: "tryAgain") }
     static var delete: String { return Localization.string(for: "delete") }
     static var errorTitle: String { return Localization.string(for: "error.title") }
+    static var other: String { return Localization.string(for: "other") }
     
     // MARK: - Update App
     static var updateAppErrorMessage: String { return Localization.string(for: "updateApp.error.message") }
@@ -77,6 +78,7 @@ extension String {
     static var onboardingStep1HasCodeButton: String { return Localization.string(for: "onboarding.step1.hasCodeButton") }
     static var onboardingStep1NoCodeButton: String { return Localization.string(for: "onboarding.step1.noCodeButton") }
     static var onboardingStep2Title: String { return Localization.string(for: "onboarding.step2.title") }
+    static var onboardingStep2CodeHint: String { return Localization.string(for: "onboarding.step2.codeHint") }
     static var onboardingStep3Title: String { return Localization.string(for: "onboarding.step3.title") }
     static var onboardingStep3Message: String { return Localization.string(for: "onboarding.step3.message") }
     
@@ -404,11 +406,14 @@ extension String {
     static var contactInformationFirstName: String { return Localization.string(for: "contactInformationFirstName") }
     static var contactInformationLastName: String { return Localization.string(for: "contactInformationLastName") }
     static var contactInformationPhoneNumber: String { return Localization.string(for: "contactInformationPhoneNumber") }
+    static var contactInformationPhoneNumberPlaceholder: String { return Localization.string(for: "contactInformationPhoneNumberPlaceholder") }
     static var contactInformationEmailAddress: String { return Localization.string(for: "contactInformationEmailAddress") }
+    static var contactInformationEmailAddressPlaceholder: String { return Localization.string(for: "contactInformationEmailAddressPlaceholder") }
     static var contactInformationBirthDate: String { return Localization.string(for: "contactInformationBirthDate") }
     static var contactInformationBSN: String { return Localization.string(for: "contactInformationBSN") }
     static var contactInformationLastExposure: String { return Localization.string(for: "contactInformationLastExposure") }
     static var contactInformationLastExposureEarlier: String { return Localization.string(for: "contactInformationLastExposure.earlier") }
+    static var contactInformationLastExposureEveryDay: String { return Localization.string(for: "contactInformationLastExposure.everyDay") }
     
     static var earlierExposureDateTitle: String { return Localization.string(for: "earlierExposureDateTitle") }
     static var earlierExposureDateMessage: String { return Localization.string(for: "earlierExposureDateMessage") }
