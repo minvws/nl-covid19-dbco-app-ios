@@ -143,7 +143,7 @@ class ContactListInputView: UIView {
         suggestedNamesStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
         activeSuggestions
-            .prefix(2)
+            .prefix(5)
             .forEach { contact in
             suggestedNamesStackView.addArrangedSubview(SuggestionButton(contact: contact)
                                                         .touchUpInside(self, action: #selector(acceptSuggestion)))
