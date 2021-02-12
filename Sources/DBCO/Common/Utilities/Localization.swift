@@ -64,7 +64,11 @@ extension String {
     static var delete: String { return Localization.string(for: "delete") }
     static var errorTitle: String { return Localization.string(for: "error.title") }
     static var other: String { return Localization.string(for: "other") }
-    
+    static var collapsed: String { return Localization.string(for: "collapsed") }
+    static var expanded: String { return Localization.string(for: "expanded") }
+    static var completed: String { return Localization.string(for: "completed") }
+    static var disabled: String { return Localization.string(for: "disabled") }
+        
     // MARK: - Update App
     static var updateAppErrorMessage: String { return Localization.string(for: "updateApp.error.message") }
     static var updateAppTitle: String { return Localization.string(for: "updateApp.title") }
@@ -272,8 +276,18 @@ extension String {
     static var selectContactAuthorizationManualButton: String { return Localization.string(for: "selectContactAuthorizationManualButton") }
     
     // MARK: - Editing Contacts
+    static func contactSectionLabel(index: Int, title: String, caption: String, isCollapsed: Bool, isCompleted: Bool, isEnabled: Bool) -> String {
+        let status = !isEnabled ? disabled : isCompleted ? completed : isCollapsed ? collapsed : expanded
+        return Localization.string(for: "contactSection.label", [status, index, title, caption])
+    }
+    
+    static func contactSectionCompleted(index: Int) -> String {
+        return Localization.string(for: "contactSection.completed", [index])
+    }
+    
     static var contactTypeSectionTitle: String { return Localization.string(for: "contactTypeSection.title") }
     static var contactTypeSectionMessage: String { return Localization.string(for: "contactTypeSection.message") }
+        
     static var contactDetailsSectionTitle: String { return Localization.string(for: "contactDetailsSection.title") }
     static var contactDetailsSectionMessage: String { return Localization.string(for: "contactDetailsSection.message") }
     

@@ -16,6 +16,10 @@
 "delete" = "Verwijderen";
 "error.title" = "Er ging iets mis";
 "other" = "Anders";
+"collapsed" = "Ingeklapt";
+"expanded" = "Uitgeklapt";
+"completed" = "Afgerond";
+"disabled" = "Uitgeschakeld";
 
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
@@ -213,10 +217,15 @@
 "selectContactAuthorizationManualButton" = "Nee, zelf invullen";
 
 // MARK: - Editing Contacts
+"contactSection.label" = "%@. Stap %d. %@. %@.";
+"contactSection.completed" = "Je hebt stap %d afgerond.";
+
 "contactTypeSection.title" = "Soort contact";
 "contactTypeSection.message" = "Beantwoord vragen over ontmoeting";
+
 "contactDetailsSection.title" = "Contactgegevens";
 "contactDetailsSection.message" = "Vul zo veel mogelijk gegevens aan";
+
 "informContactSection.title" = "Informatie voor dit contact";
 "informContactSection.message" = "De leefregels voor deze persoon";
 
