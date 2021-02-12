@@ -18,6 +18,11 @@ class Label: UILabel {
         self.textColor = textColor
     }
     
+    init(_ text: NSAttributedString) {
+        super.init(frame: .zero)
+        self.attributedText = text
+    }
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
@@ -79,12 +84,6 @@ class Label: UILabel {
     @discardableResult
     func hideIfEmpty() -> Self {
         isHidden = text?.isEmpty == true
-        return self
-    }
-    
-    @discardableResult
-    func asHTML() -> Self {
-        attributedText = .makeFromHtml(text: text, font: font, textColor: textColor, boldTextColor: .black)
         return self
     }
 }

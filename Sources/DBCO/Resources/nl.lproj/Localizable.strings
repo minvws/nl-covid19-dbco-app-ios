@@ -140,8 +140,8 @@
 
 /* MARK: - Task Overview */
 "taskOverviewTipsTitle" = "Geen contacten vergeten?";
-"taskOverviewTipsDateFormat" = "d MMMM";
-"taskOverviewTipsMessage" = "Maak een overzicht van wie je hebt ontmoet <b>vanaf %@</b>";
+"taskOverviewTipsDateFormat" = "'vanaf' d MMMM";
+"taskOverviewTipsMessage" = "Maak een overzicht van wie je hebt ontmoet %@";
 "taskOverviewTipsButton" = "Lees de tips";
 
 "taskOverviewTitle" = "Mijn contacten";

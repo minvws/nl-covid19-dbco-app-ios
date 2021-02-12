@@ -72,14 +72,29 @@ class TaskOverviewViewModel {
         buildSections()
     }
     
-    var tipMessageText: String {
+    var tipMessageText: NSAttributedString {
         let formatter = DateFormatter()
         formatter.calendar = Calendar.current
         formatter.locale = Locale.current
         formatter.dateFormat = .taskOverviewTipsDateFormat
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         
-        return .taskOverviewTipsMessage(date: formatter.string(from: Services.caseManager.dateOfSymptomOnset))
+        let dateString = formatter.string(from: Services.caseManager.dateOfSymptomOnset)
+        
+        let fullString: String = .taskOverviewTipsMessage(date: formatter.string(from: Services.caseManager.dateOfSymptomOnset))
+        let dateRange = (fullString as NSString).range(of: dateString)
+        
+        let attributed = NSMutableAttributedString(string: fullString as String, attributes: [
+            .font: Theme.fonts.subhead,
+            .foregroundColor: Theme.colors.captionGray
+        ])
+        
+        attributed.removeAttribute(.font, range: dateRange)
+        attributed.removeAttribute(.foregroundColor, range: dateRange)
+        attributed.addAttribute(.font, value: Theme.fonts.subheadBold, range: dateRange)
+        attributed.addAttribute(.foregroundColor, value: UIColor.black, range: dateRange)
+        
+        return attributed
     }
     
     func setHidePrompt(_ hidePrompt: @escaping PromptFunction) {
@@ -285,8 +300,7 @@ class TaskOverviewViewController: PromptableViewController {
             
             VStack(VStack(spacing: 4,
                           Label(bodyBold: .taskOverviewTipsTitle).multiline(),
-                          Label(subhead: viewModel.tipMessageText,
-                                textColor: Theme.colors.captionGray).multiline().asHTML()),
+                          Label(viewModel.tipMessageText).multiline()),
                    tipButton)
                 .embed(in: tipContainerView, insets: .right(92) + .left(16) + .top(16) + .bottom(11))
             
