@@ -78,6 +78,7 @@ extension String {
     static var onboardingStep1HasCodeButton: String { return Localization.string(for: "onboarding.step1.hasCodeButton") }
     static var onboardingStep1NoCodeButton: String { return Localization.string(for: "onboarding.step1.noCodeButton") }
     static var onboardingStep2Title: String { return Localization.string(for: "onboarding.step2.title") }
+    static var onboardingStep2CodeHint: String { return Localization.string(for: "onboarding.step2.codeHint") }
     static var onboardingStep3Title: String { return Localization.string(for: "onboarding.step3.title") }
     static var onboardingStep3Message: String { return Localization.string(for: "onboarding.step3.message") }
     
