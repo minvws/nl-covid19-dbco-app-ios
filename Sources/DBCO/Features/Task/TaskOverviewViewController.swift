@@ -26,6 +26,7 @@ class TaskOverviewViewModel {
     private var tableHeaderBuilder: (() -> UIView?)?
     private var sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?
     private var addContactFooterBuilder: (() -> UIView?)?
+    private var tableFooterBuilder: (() -> UIView?)?
     
     private var sections: [(header: UIView?, tasks: [Task], footer: UIView?)]
     
@@ -60,12 +61,14 @@ class TaskOverviewViewModel {
                         tableHeaderBuilder: (() -> UIView?)?,
                         sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?,
                         addContactFooterBuilder: (() -> UIView?)?,
+                        tableFooterBuilder: (() -> UIView?)?,
                         selectedTaskHandler: @escaping (Task, IndexPath) -> Void) {
         tableViewManager.manage(tableView)
         tableViewManager.didSelectItem = selectedTaskHandler
         self.tableHeaderBuilder = tableHeaderBuilder
         self.sectionHeaderBuilder = sectionHeaderBuilder
         self.addContactFooterBuilder = addContactFooterBuilder
+        self.tableFooterBuilder = tableFooterBuilder
         
         tableView.allowsSelection = !Services.caseManager.isWindowExpired
         
@@ -134,6 +137,8 @@ class TaskOverviewViewModel {
                              tasks: informedContacts,
                              footer: nil))
         }
+        
+        sections.append((tableFooterBuilder?(), [], nil))
         
         let windowExpired = Services.caseManager.isWindowExpired
         
@@ -338,28 +343,32 @@ class TaskOverviewViewController: PromptableViewController {
                 .wrappedInReadableWidth(insets: .top(2) + .bottom(16))
         }
         
+        let tableFooterBuilder = { [unowned self] () -> UIView in
+            
+            let versionLabel = Label(caption1: .mainAppVersionTitle, textColor: Theme.colors.captionGray)
+            versionLabel.textAlignment = .center
+            versionLabel.sizeToFit()
+            versionLabel.frame = CGRect(x: 0, y: 0, width: versionLabel.frame.width, height: 60.0)
+            versionLabel.isUserInteractionEnabled = true
+            
+            let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openDebugMenu))
+            gestureRecognizer.numberOfTapsRequired = 4
+            
+            versionLabel.addGestureRecognizer(gestureRecognizer)
+            
+            return versionLabel.wrappedInReadableWidth(insets: .top(8) + .bottom(8))
+        }
+        
         viewModel.setupTableView(tableView,
                                  tableHeaderBuilder: tableHeaderBuilder,
                                  sectionHeaderBuilder: sectionHeaderBuilder,
-                                 addContactFooterBuilder: addContactFooterBuilder) { [weak self] task, indexPath in
+                                 addContactFooterBuilder: addContactFooterBuilder,
+                                 tableFooterBuilder: tableFooterBuilder) { [weak self] task, indexPath in
             guard let self = self else { return }
             
             self.delegate?.taskOverviewViewController(self, didSelect: task)
             self.tableView.deselectRow(at: indexPath, animated: true)
         }
-        
-        let versionLabel = Label(caption1: .mainAppVersionTitle, textColor: Theme.colors.captionGray)
-        versionLabel.textAlignment = .center
-        versionLabel.sizeToFit()
-        versionLabel.frame = CGRect(x: 0, y: 0, width: versionLabel.frame.width, height: 60.0)
-        versionLabel.isUserInteractionEnabled = true
-        
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openDebugMenu))
-        gestureRecognizer.numberOfTapsRequired = 4
-        
-        versionLabel.addGestureRecognizer(gestureRecognizer)
-        
-        tableView.tableFooterView = versionLabel
     }
     
     @objc private func requestContact() {
