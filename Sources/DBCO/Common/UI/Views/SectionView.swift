@@ -14,7 +14,11 @@ class SectionView: UIView {
     /// Add your subviews to this view.
     let contentView = UIView()
     
-    private(set) var isCollapsed: Bool = false
+    private(set) var isCollapsed: Bool = false {
+        didSet {
+            updateHeaderAccessibilityLabel()
+        }
+    }
     
     /// Toggles the state of the status indicator view.
     /// if isCompleted is true a checkmark icon will be shown. If false, the index of the section will be shown.
@@ -22,16 +26,24 @@ class SectionView: UIView {
     var isCompleted: Bool = false {
         didSet {
             icon.isHighlighted = isCompleted
+            updateHeaderAccessibilityLabel()
+            
+            if isCompleted {
+                UIAccessibility.post(
+                    notification: .announcement,
+                    argument: String.contactSectionCompleted(index: index)
+                )
+            }
         }
     }
     
-    var title: String? {
-        get { titleLabel.text }
+    var title: String {
+        get { titleLabel.text ?? "" }
         set { titleLabel.text = newValue }
     }
     
-    var caption: String? {
-        get { captionLabel.text }
+    var caption: String {
+        get { captionLabel.text ?? "" }
         set { captionLabel.text = newValue }
     }
     
@@ -40,7 +52,10 @@ class SectionView: UIView {
     }
     
     var isEnabled: Bool = true {
-        didSet { updateEnabled() }
+        didSet {
+            updateEnabled()
+            updateHeaderAccessibilityLabel()
+        }
     }
     
     var showBottomSeparator: Bool = true {
@@ -48,7 +63,9 @@ class SectionView: UIView {
     }
     
     var index: Int {
-        didSet { icon.image = UIImage(named: "EditContact/Section\(index)") }
+        didSet {
+            icon.image = UIImage(named: "EditContact/Section\(index)")
+        }
     }
     
     init(title: String, caption: String, index: Int) {
@@ -62,6 +79,14 @@ class SectionView: UIView {
             .embed(in: self)
         
         // Header
+        headerContainerView.isAccessibilityElement = true
+        headerContainerView.shouldGroupAccessibilityChildren = true
+        headerContainerView.accessibilityTraits = [.header, .button]
+        headerContainerView.addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: #selector(handleToggleButton))
+        )
+        updateHeaderAccessibilityLabel()
+        
         let headerBackgroundView = UIView()
         headerBackgroundView.backgroundColor = .white
         // Make the background view extend above the header.
@@ -89,13 +114,6 @@ class SectionView: UIView {
         SeparatorView()
             .snap(to: .bottom, of: headerContainerView.readableIdentation)
         
-        let button = UIButton(type: .system)
-        button.addTarget(self, action: #selector(handleToggleButton), for: .touchUpInside)
-        button.embed(in: headerContainerView)
-        button.accessibilityTraits = [.header, .button]
-        button.accessibilityLabel = title
-        button.accessibilityHint = caption
-        
         // Content
         contentContainerView.clipsToBounds = true
         contentView
@@ -112,7 +130,7 @@ class SectionView: UIView {
         // Set default state to expanded
         expand(animated: false)
     }
-    
+
     @objc private func handleToggleButton() {
         toggle(animated: true)
     }
@@ -197,6 +215,17 @@ class SectionView: UIView {
             
             titleLabel.textColor = Theme.colors.captionGray
         }
+    }
+    
+    private func updateHeaderAccessibilityLabel() {
+        headerContainerView.accessibilityLabel = .contactSectionLabel(
+            index: index,
+            title: title,
+            caption: caption,
+            isCollapsed: isCollapsed,
+            isCompleted: isCompleted,
+            isEnabled: isEnabled
+        )
     }
     
     private let contentContainerView = UIView()
