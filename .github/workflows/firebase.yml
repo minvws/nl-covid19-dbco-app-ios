@@ -1,9 +1,6 @@
-name: firebase
+name: firebase deploy
 
-on:
-  push:
-    branches:
-      - main
+on: workflow_dispatch
 
 jobs:
   firebase:

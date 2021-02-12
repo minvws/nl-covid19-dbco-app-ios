@@ -64,6 +64,9 @@ class Button: UIButton {
         self.style = style
 
         updateButtonType()
+        
+        // Bold font can cause the button to be marked as heading, this should never be the case.
+        accessibilityTraits.remove(.header)
     }
 
     required init?(coder aDecoder: NSCoder) {
