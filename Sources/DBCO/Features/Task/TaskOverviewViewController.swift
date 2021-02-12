@@ -81,7 +81,7 @@ class TaskOverviewViewModel {
         
         let dateString = formatter.string(from: Services.caseManager.dateOfSymptomOnset)
         
-        let fullString: String = .taskOverviewTipsMessage(date: formatter.string(from: Services.caseManager.dateOfSymptomOnset))
+        let fullString: String = .taskOverviewTipsMessage(date: dateString)
         let dateRange = (fullString as NSString).range(of: dateString)
         
         let attributed = NSMutableAttributedString(string: fullString as String, attributes: [
@@ -89,8 +89,6 @@ class TaskOverviewViewModel {
             .foregroundColor: Theme.colors.captionGray
         ])
         
-        attributed.removeAttribute(.font, range: dateRange)
-        attributed.removeAttribute(.foregroundColor, range: dateRange)
         attributed.addAttribute(.font, value: Theme.fonts.subheadBold, range: dateRange)
         attributed.addAttribute(.foregroundColor, value: UIColor.black, range: dateRange)
         
