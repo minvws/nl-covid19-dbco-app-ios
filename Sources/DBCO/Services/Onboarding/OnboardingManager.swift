@@ -12,7 +12,7 @@ private struct OnboardingData: Codable {
     var dateOfSymptomOnset: Date?
     var testDate: Date?
     var symptoms: [String]?
-    var roommates: [Onboarding.Roommate]?
+    var roommates: [Onboarding.Contact]?
     var contacts: [Onboarding.Contact]?
 }
 
@@ -48,7 +48,7 @@ class OnboardingManager: OnboardingManaging, Logging {
     
     private(set) var contagiousPeriod: Onboarding.ContagiousPeriodState
     
-    var roommates: [Onboarding.Roommate]? {
+    var roommates: [Onboarding.Contact]? {
         return Self.onboardingData.roommates
     }
     
@@ -82,7 +82,7 @@ class OnboardingManager: OnboardingManaging, Logging {
         contagiousPeriod = .finishedWithTestDate(date)
     }
     
-    func registerRoommates(_ roommates: [Onboarding.Roommate]) {
+    func registerRoommates(_ roommates: [Onboarding.Contact]) {
         Self.onboardingData.roommates = roommates
     }
     
@@ -91,35 +91,6 @@ class OnboardingManager: OnboardingManaging, Logging {
     }
     
     func finishOnboarding(createTasks: Bool) {
-        func filter(_ roommates: [Onboarding.Roommate]) -> [Onboarding.Roommate] {
-            var filteredRoommates = [Onboarding.Roommate]()
-            roommates.forEach { roommate in
-                if let duplicateIndex = filteredRoommates.firstIndex(where: { $0.name == roommate.name }) {
-                    filteredRoommates[duplicateIndex].contactIdentifier = filteredRoommates[duplicateIndex].contactIdentifier ?? roommate.contactIdentifier
-                } else {
-                    filteredRoommates.append(roommate)
-                }
-            }
-            
-            return filteredRoommates
-        }
-        
-        func filter(_ contacts: [Onboarding.Contact], withRoommates roommates: [Onboarding.Roommate]) -> [Onboarding.Contact] {
-            var filteredContacts = [Onboarding.Contact]()
-            contacts
-                .filter { contact in !roommates.contains { $0.name == contact.name } }
-                .forEach { contact in
-                    if let duplicateIndex = filteredContacts.firstIndex(where: { $0.name == contact.name }) {
-                        filteredContacts[duplicateIndex].date = max(contact.date, filteredContacts[duplicateIndex].date)
-                        filteredContacts[duplicateIndex].contactIdentifier = filteredContacts[duplicateIndex].contactIdentifier ?? contact.contactIdentifier
-                    } else {
-                        filteredContacts.append(contact)
-                    }
-                }
-            
-            return filteredContacts
-        }
-        
         if !Services.caseManager.hasCaseData {
             if let dateOfSymptomOnset = Self.onboardingData.dateOfSymptomOnset {
                 try! Services.caseManager.startLocalCase(dateOfSymptomOnset: dateOfSymptomOnset) // swiftlint:disable:this force_try
@@ -129,16 +100,45 @@ class OnboardingManager: OnboardingManaging, Logging {
         }
         
         if createTasks {
-            let roommates = filter(Self.onboardingData.roommates ?? [])
-            let contacts = filter(Self.onboardingData.contacts ?? [], withRoommates: roommates)
-            
-            roommates.forEach { Services.caseManager.addRoommateTask(name: $0.name, contactIdentifier: $0.contactIdentifier) }
-            contacts.forEach { Services.caseManager.addContactTask(name: $0.name, contactIdentifier: $0.contactIdentifier, dateOfLastExposure: $0.date) }
+            mergeContacts(roommates: Self.onboardingData.roommates,
+                          contacts: Self.onboardingData.contacts).forEach {
+                            
+                Services.caseManager.addContactTask(name: $0.name,
+                                                    category: $0.isRoommate ? .category1 : .other,
+                                                    contactIdentifier: $0.contactIdentifier,
+                                                    dateOfLastExposure: $0.date)
+            }
         }
         
         Self.$onboardingData.clearData()
         
         Self.onboardingData.needsOnboarding = false
+    }
+    
+    private func mergeContacts(roommates: [Onboarding.Contact]?, contacts: [Onboarding.Contact]?) -> [Onboarding.Contact] {
+        var filteredContacts = [Onboarding.Contact]()
+        let allContacts = (roommates ?? []) + (contacts ?? [])
+        
+        allContacts
+            .forEach { contact in
+                if let duplicateIndex = filteredContacts.firstIndex(where: { $0.name == contact.name }) {
+                    switch (contact.date, filteredContacts[duplicateIndex].date) {
+                    case (.some(let date), .some(let otherDate)):
+                        filteredContacts[duplicateIndex].date = max(date, otherDate)
+                    case (.some(let date), .none), (.none, .some(let date)):
+                        filteredContacts[duplicateIndex].date = date
+                    case (.none, .none):
+                        filteredContacts[duplicateIndex].date = nil
+                    }
+                    
+                    filteredContacts[duplicateIndex].contactIdentifier = filteredContacts[duplicateIndex].contactIdentifier ?? contact.contactIdentifier
+                    filteredContacts[duplicateIndex].isRoommate = filteredContacts[duplicateIndex].isRoommate || contact.isRoommate
+                } else {
+                    filteredContacts.append(contact)
+                }
+            }
+        
+        return filteredContacts
     }
     
     func reset() {

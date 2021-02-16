@@ -64,8 +64,7 @@ protocol CaseManaging {
     /// Throws an `notPaired` error when called befored paired.
     func save(_ task: Task) throws
     
-    func addRoommateTask(name: String, contactIdentifier: String?)
-    func addContactTask(name: String, contactIdentifier: String?, dateOfLastExposure: Date)
+    func addContactTask(name: String, category: Task.Contact.Category, contactIdentifier: String?, dateOfLastExposure: Date?)
     
     /// Uploads all the tasks to the backend.
     /// Throws an `notPaired` error when called befored paired.
@@ -440,19 +439,6 @@ final class CaseManager: CaseManaging, Logging {
         listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
     }
     
-    func addRoommateTask(name: String, contactIdentifier: String?) {
-        var task = Task(type: .contact, label: name, source: .app)
-        task.contact = Task.Contact(category: .category1,
-                                    communication: .none,
-                                    didInform: false,
-                                    dateOfLastExposure: nil,
-                                    contactIdentifier: contactIdentifier)
-        
-        tasks.append(task)
-        
-        listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
-    }
-    
     private static let valueDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.calendar = Calendar.current
@@ -463,12 +449,12 @@ final class CaseManager: CaseManaging, Logging {
         return formatter
     }()
     
-    func addContactTask(name: String, contactIdentifier: String?, dateOfLastExposure: Date) {
+    func addContactTask(name: String, category: Task.Contact.Category, contactIdentifier: String?, dateOfLastExposure: Date?) {
         var task = Task(type: .contact, label: name, source: .app)
-        task.contact = Task.Contact(category: .other,
+        task.contact = Task.Contact(category: category,
                                     communication: .none,
                                     didInform: false,
-                                    dateOfLastExposure: Self.valueDateFormatter.string(from: dateOfLastExposure),
+                                    dateOfLastExposure: dateOfLastExposure.map(Self.valueDateFormatter.string),
                                     contactIdentifier: contactIdentifier)
         tasks.append(task)
         

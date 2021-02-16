@@ -33,25 +33,17 @@ struct Onboarding {
         }
     }
     
-    struct Roommate: Codable {
-        var name: String
-        var contactIdentifier: String?
-        
-        init(name: String, contactIdentifier: String?) {
-            self.name = name
-            self.contactIdentifier = contactIdentifier
-        }
-    }
-    
     struct Contact: Codable {
-        var date: Date
+        var date: Date?
         var name: String
         var contactIdentifier: String?
+        var isRoommate: Bool
         
-        init(date: Date, name: String, contactIdentifier: String?) {
+        init(date: Date?, name: String, contactIdentifier: String?, isRoommate: Bool) {
             self.date = date
             self.name = name
             self.contactIdentifier = contactIdentifier
+            self.isRoommate = isRoommate
         }
     }
 }
@@ -65,13 +57,13 @@ protocol OnboardingManaging {
     var needsPairingOption: Bool { get }
     
     var contagiousPeriod: Onboarding.ContagiousPeriodState { get }
-    var roommates: [Onboarding.Roommate]? { get }
+    var roommates: [Onboarding.Contact]? { get }
     var contacts: [Onboarding.Contact]? { get }
     
     func registerSymptoms(_ symptoms: [String], dateOfOnset: Date)
     func registerTestDate(_ date: Date)
     
-    func registerRoommates(_ roommates: [Onboarding.Roommate])
+    func registerRoommates(_ roommates: [Onboarding.Contact])
     func registerContacts(_ contacts: [Onboarding.Contact])
     
     func finishOnboarding(createTasks: Bool)
