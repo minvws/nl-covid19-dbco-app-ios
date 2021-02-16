@@ -78,6 +78,8 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
         
         SeparatorView(style: .gray)
             .snap(to: .bottom, of: contentView.readableIdentation, insets: .left(40))
+        
+        accessibilityTraits = .button
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
