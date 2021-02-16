@@ -77,6 +77,14 @@ extension OnboardingPairingCoordinator: PairViewControllerDelegate {
                 pair()
             })
             
+            if let shareLogs = Bundle.main.infoDictionary?["SHARE_LOGS_ENABLED"] as? String, shareLogs == "YES" {
+                alert.addAction(UIAlertAction(title: "Share logs", style: .default) { _ in
+                    let activityViewController = UIActivityViewController(activityItems: LogHandler.logFiles(),
+                                                                          applicationActivities: nil)
+                    controller.present(activityViewController, animated: true, completion: nil)
+                })
+            }
+            
             controller.present(alert, animated: true)
         }
         
@@ -101,6 +109,15 @@ extension OnboardingPairingCoordinator: PairViewControllerDelegate {
             navigationController.navigationBar.isUserInteractionEnabled = false
             
             let alert = UIAlertController(title: .taskLoadingErrorTitle, message: .taskLoadingErrorMessage, preferredStyle: .alert)
+            
+            if let shareLogs = Bundle.main.infoDictionary?["SHARE_LOGS_ENABLED"] as? String, shareLogs == "YES" {
+                alert.addAction(UIAlertAction(title: "Share logs", style: .default) { _ in
+                    let activityViewController = UIActivityViewController(activityItems: LogHandler.logFiles(),
+                                                                          applicationActivities: nil)
+                    activityViewController.completionWithItemsHandler = { _, _, _, _ in loadCaseData() }
+                    controller.present(activityViewController, animated: true, completion: nil)
+                })
+            }
             
             alert.addAction(UIAlertAction(title: .onboardingLoadingErrorRetryAction, style: .default) { _ in
                 loadCaseData()
