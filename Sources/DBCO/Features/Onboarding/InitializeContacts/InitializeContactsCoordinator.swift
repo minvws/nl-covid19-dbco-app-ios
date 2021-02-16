@@ -191,7 +191,7 @@ extension InitializeContactsCoordinator: DetermineContagiousPeriodCoordinatorDel
 
 extension InitializeContactsCoordinator: SelectRoommatesViewControllerDelegate {
     
-    func selectRoommatesViewController(_ controller: SelectRoommatesViewController, didFinishWith roommates: [Onboarding.Roommate]) {
+    func selectRoommatesViewController(_ controller: SelectRoommatesViewController, didFinishWith roommates: [Onboarding.Contact]) {
         Services.onboardingManager.registerRoommates(roommates)
         
         let explanationController = ContactsExplanationViewController(viewModel: .init())
@@ -199,7 +199,7 @@ extension InitializeContactsCoordinator: SelectRoommatesViewControllerDelegate {
         navigationController.pushViewController(explanationController, animated: true)
     }
     
-    func selectRoommatesViewController(_ controller: SelectRoommatesViewController, didCancelWith roommates: [Onboarding.Roommate]) {
+    func selectRoommatesViewController(_ controller: SelectRoommatesViewController, didCancelWith roommates: [Onboarding.Contact]) {
         Services.onboardingManager.registerRoommates(roommates)
     }
     

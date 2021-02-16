@@ -9,8 +9,8 @@ import UIKit
 import Contacts
 
 protocol SelectRoommatesViewControllerDelegate: class {
-    func selectRoommatesViewController(_ controller: SelectRoommatesViewController, didFinishWith roommates: [Onboarding.Roommate])
-    func selectRoommatesViewController(_ controller: SelectRoommatesViewController, didCancelWith roommates: [Onboarding.Roommate])
+    func selectRoommatesViewController(_ controller: SelectRoommatesViewController, didFinishWith roommates: [Onboarding.Contact])
+    func selectRoommatesViewController(_ controller: SelectRoommatesViewController, didCancelWith roommates: [Onboarding.Contact])
 }
 
 class SelectRoommatesViewModel {
@@ -103,14 +103,14 @@ class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdju
         
         if isMovingFromParent {
             delegate?.selectRoommatesViewController(self, didCancelWith: contactListView.contacts.map {
-                Onboarding.Roommate(name: $0.name, contactIdentifier: $0.cnContactIdentifier)
+                Onboarding.Contact(date: nil, name: $0.name, contactIdentifier: $0.cnContactIdentifier, isRoommate: true)
             })
         }
     }
     
     @objc private func handleContinue() {
         delegate?.selectRoommatesViewController(self, didFinishWith: contactListView.contacts.map {
-            Onboarding.Roommate(name: $0.name, contactIdentifier: $0.cnContactIdentifier)
+            Onboarding.Contact(date: nil, name: $0.name, contactIdentifier: $0.cnContactIdentifier, isRoommate: true)
         })
     }
     

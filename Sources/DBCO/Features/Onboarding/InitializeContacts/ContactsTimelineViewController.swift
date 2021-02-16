@@ -351,7 +351,7 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
             .compactMap { $0 as? DaySectionView }
             .flatMap { sectionView -> [Onboarding.Contact] in
                 guard case .day(let date, _, _) = sectionView.section else { return [] }
-                return sectionView.contactList.contacts.map { Onboarding.Contact(date: date, name: $0.name, contactIdentifier: $0.cnContactIdentifier) }
+                return sectionView.contactList.contacts.map { Onboarding.Contact(date: date, name: $0.name, contactIdentifier: $0.cnContactIdentifier, isRoommate: false) }
             }
     }
     
