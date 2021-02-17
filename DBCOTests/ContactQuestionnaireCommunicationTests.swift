@@ -27,7 +27,7 @@ class ContactQuestionnaireCommunicationTests: XCTestCase {
         var portalTask = Task(type: .contact, source: taskSource)
         portalTask.contact = Task.Contact(category: .category1,
                                           communication: initialCommunication,
-                                          didInform: false,
+                                          informedByIndexAt: nil,
                                           dateOfLastExposure: nil)
         let questionnaire = Questionnaire(uuid: UUID(), taskType: .contact, questions: [communicationQuestion])
         let viewModel = ContactQuestionnaireViewModel(task: portalTask, questionnaire: questionnaire)
