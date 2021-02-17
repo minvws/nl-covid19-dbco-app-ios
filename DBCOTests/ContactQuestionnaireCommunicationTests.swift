@@ -16,7 +16,7 @@ class ContactQuestionnaireCommunicationTests: XCTestCase {
                                          questionType: .multipleChoice,
                                          label: "",
                                          description: nil,
-                                         relevantForCategories: [.category1, .category2a, .category2b, .category3],
+                                         relevantForCategories: [.category1, .category2a, .category2b, .category3a, .category3b],
                                          answerOptions: [
                                             AnswerOption(label: "Ja", value: "Ja", trigger: .setCommunicationToStaff),
                                             AnswerOption(label: "Nee", value: "Nee", trigger: .setCommunicationToIndex)],
@@ -27,7 +27,7 @@ class ContactQuestionnaireCommunicationTests: XCTestCase {
         var portalTask = Task(type: .contact, source: taskSource)
         portalTask.contact = Task.Contact(category: .category1,
                                           communication: initialCommunication,
-                                          didInform: false,
+                                          informedByIndexAt: nil,
                                           dateOfLastExposure: nil)
         let questionnaire = Questionnaire(uuid: UUID(), taskType: .contact, questions: [communicationQuestion])
         let viewModel = ContactQuestionnaireViewModel(task: portalTask, questionnaire: questionnaire)

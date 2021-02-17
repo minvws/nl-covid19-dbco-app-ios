@@ -78,13 +78,14 @@ class TextField: UITextField {
     }
     
     override func layoutSubviews() {
-        super.layoutSubviews()
-        
         let labelSize = label.intrinsicContentSize
         let backgroundHeight = baseFieldHeight + Constants.backgroundBaseHeight
         
         label.frame = CGRect(x: 0, y: 0, width: bounds.width, height: labelSize.height)
         backgroundView.frame = CGRect(x: 0, y: bounds.height - backgroundHeight, width: bounds.width, height: backgroundHeight)
+        
+        // Call super last because the _rect(forBounts: ..) calculations depend on backgroundView.frame
+        super.layoutSubviews()
     }
     
     // MARK: - Private

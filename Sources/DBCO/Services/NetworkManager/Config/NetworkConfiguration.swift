@@ -58,8 +58,8 @@ struct NetworkConfiguration {
             tokenParams: [:]
         ),
         haPublicKey: .init(
-            encodedPublicKey: "bwRH2gO0Bgd6DZ2Ia9y/SxryydiKsxBDd01+AjDgykc=",
-            keyVersion: "20201210")
+            encodedPublicKey: "bWLH9tCUERcZbnCo5J0ibf5pa5mN6Il4gPqeTIQcG18=",
+            keyVersion: "20210107")
     )
 
     static let acceptance = NetworkConfiguration(
@@ -73,8 +73,8 @@ struct NetworkConfiguration {
             tokenParams: [:]
         ),
         haPublicKey: .init(
-            encodedPublicKey: "bwRH2gO0Bgd6DZ2Ia9y/SxryydiKsxBDd01+AjDgykc=",
-            keyVersion: "20201210")
+            encodedPublicKey: "X850Q6EDZT7N5IQEXVHphSerjDjHxuwEtDH0KnNrHRg=",
+            keyVersion: "20201230")
     )
 
     static let production = NetworkConfiguration(
@@ -107,6 +107,10 @@ struct NetworkConfiguration {
     var questionnairesUrl: URL? {
         return self.combine(path: Endpoint.questionnaires)
     }
+    
+    func pairingRequestsUrl(token: String?) -> URL? {
+        return self.combine(path: Endpoint.pairingRequests(token: token))
+    }
 
     private func combine(path: Path, params: [String: String] = [:]) -> URL? {
         let endpointConfig = api
@@ -118,8 +122,8 @@ struct NetworkConfiguration {
 
         if !params.isEmpty {
             urlComponents.percentEncodedQueryItems = params.compactMap { parameter in
-                guard let name = parameter.key.addingPercentEncoding(withAllowedCharacters: urlQueryEncodedCharacterSet),
-                    let value = parameter.value.addingPercentEncoding(withAllowedCharacters: urlQueryEncodedCharacterSet) else {
+                guard let name = parameter.key.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                    let value = parameter.value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
                     return nil
                 }
 
@@ -129,11 +133,4 @@ struct NetworkConfiguration {
 
         return urlComponents.url
     }
-
-    private var urlQueryEncodedCharacterSet: CharacterSet = {
-        // WARNING: Do not remove this code, this will break signature validation on the backend.
-        // specify characters which are allowed to be unespaced in the queryString, note the `inverted`
-        let characterSet = CharacterSet(charactersIn: "!*'();:@&=+$,/?%#[] ").inverted
-        return characterSet
-    }()
 }

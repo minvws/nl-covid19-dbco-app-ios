@@ -30,6 +30,15 @@ extension UIStackView {
         alignment = value
         return self
     }
+    
+    func verticalIf(screenWidthLessThan value: CGFloat, spacing: CGFloat? = nil) -> Self {
+        if UIScreen.main.bounds.width < value {
+            self.axis = .vertical
+            self.spacing = spacing ?? self.spacing
+        }
+        
+        return self
+    }
  
 }
 

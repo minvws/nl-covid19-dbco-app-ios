@@ -12,17 +12,17 @@ extension Answer.Value {
     /// Makes use of [ClassificationHelper](x-source-tag://ClassificationHelper)
     /// - parameter contactCategory: The [category](x-source-tag://Task.Contact.Category) to be used
     static func classificationDetails(contactCategory: Task.Contact.Category) -> Self {
-        var category1Risk: Bool?
-        var category2aRisk: Bool?
-        var category2bRisk: Bool?
-        var category3Risk: Bool?
+        var sameHouseholdRisk: Bool?
+        var distanceRisk: Answer.Value.Distance?
+        var physicalContactRisk: Bool?
+        var sameRoomRisk: Bool?
         
-        ClassificationHelper.setValues(for: contactCategory, category1Risk: &category1Risk, category2aRisk: &category2aRisk, category2bRisk: &category2bRisk, category3Risk: &category3Risk)
+        ClassificationHelper.setValues(for: contactCategory, sameHouseholdRisk: &sameHouseholdRisk, distanceRisk: &distanceRisk, physicalContactRisk: &physicalContactRisk, sameRoomRisk: &sameRoomRisk)
         
-        return .classificationDetails(category1Risk: category1Risk,
-                                      category2aRisk: category2aRisk,
-                                      category2bRisk: category2bRisk,
-                                      category3Risk: category3Risk)
+        return .classificationDetails(sameHouseholdRisk: sameHouseholdRisk,
+                                      distanceRisk: distanceRisk,
+                                      physicalContactRisk: physicalContactRisk,
+                                      sameRoomRisk: sameRoomRisk)
     }
 }
 
@@ -30,9 +30,12 @@ extension Answer.Value {
     /// Create a prefilled .contactDetails case.
     /// - parameter contact: The CNContact to be used
     static func contactDetails(contact: CNContact) -> Self {
+        let email = contact.contactEmailAddresses.count == 1 ? contact.contactEmailAddresses.first?.value : nil
+        let phoneNumber = contact.contactPhoneNumbers.count == 1 ? contact.contactPhoneNumbers.first?.value : nil
+        
         return .contactDetails(firstName: contact.contactFirstName.value,
                                lastName: contact.contactLastName.value,
-                               email: contact.contactEmailAddresses.first?.value,
-                               phoneNumber: contact.contactPhoneNumbers.first?.value)
+                               email: email,
+                               phoneNumber: phoneNumber)
     }
 }

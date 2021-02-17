@@ -38,11 +38,12 @@ struct Task: Equatable {
         /// [ClassificationHelper](x-source-tag://ClassificationHelper)
         ///
         /// - Tag: Task.Contact.Category
-        enum Category: String, Codable {
+        enum Category: String, Codable, CaseIterable {
             case category1 = "1"
             case category2a = "2a"
             case category2b = "2b"
-            case category3 = "3"
+            case category3a = "3a"
+            case category3b = "3b"
             case other = "other"
         }
         
@@ -54,14 +55,16 @@ struct Task: Equatable {
         
         let category: Category
         let communication: Communication
-        let didInform: Bool
+        let informedByIndexAt: String?
         let dateOfLastExposure: String?
+        let contactIdentifier: String?
         
-        init(category: Category, communication: Communication, didInform: Bool, dateOfLastExposure: String?) {
+        init(category: Category, communication: Communication, informedByIndexAt: String?, dateOfLastExposure: String?, contactIdentifier: String? = nil) {
             self.category = category
             self.communication = communication
-            self.didInform = didInform
+            self.informedByIndexAt = informedByIndexAt
             self.dateOfLastExposure = dateOfLastExposure
+            self.contactIdentifier = contactIdentifier
         }
     }
     
@@ -98,17 +101,17 @@ struct Task: Equatable {
         }
     }
     
-    init(type: TaskType, source: Source = .app) {
+    init(type: TaskType, label: String? = nil, source: Source = .app) {
         self.uuid = UUID()
         self.taskType = type
         self.source = source
-        self.label = nil
+        self.label = label
         self.taskContext = nil
         self.deletedByIndex = false
         
         switch taskType {
         case .contact:
-            contact = Contact(category: .other, communication: .none, didInform: false, dateOfLastExposure: nil)
+            contact = Contact(category: .other, communication: .none, informedByIndexAt: nil, dateOfLastExposure: nil, contactIdentifier: nil)
         }
     }
     
@@ -122,7 +125,8 @@ extension Task.Contact: Codable {
         category = try container.decode(Category.self, forKey: .category)
         communication = try container.decode(Communication.self, forKey: .communication)
         dateOfLastExposure = try container.decode(String?.self, forKey: .dateOfLastExposure)
-        didInform = (try? container.decode(Bool?.self, forKey: .didInform)) ?? false
+        informedByIndexAt = try container.decodeIfPresent(String.self, forKey: .informedByIndexAt)
+        contactIdentifier = try? container.decode(String?.self, forKey: .contactIdentifier)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -131,14 +135,19 @@ extension Task.Contact: Codable {
         try container.encode(category, forKey: .category)
         try container.encode(communication, forKey: .communication)
         try container.encode(dateOfLastExposure, forKey: .dateOfLastExposure)
-        try container.encode(didInform, forKey: .didInform)
+        try container.encode(informedByIndexAt, forKey: .informedByIndexAt)
+        
+        if encoder.target == .internalStorage {
+            try container.encode(contactIdentifier, forKey: .contactIdentifier)
+        }
     }
     
     private enum CodingKeys: String, CodingKey {
         case category
         case communication
         case dateOfLastExposure
-        case didInform
+        case informedByIndexAt
+        case contactIdentifier
     }
     
 }
@@ -215,9 +224,10 @@ extension Task {
                                             Answer(uuid: UUID(),
                                                    questionUuid: classificationUuid,
                                                    lastModified: Date(),
-                                                   value: .classificationDetails(category1Risk: nil, category2aRisk: nil, category2bRisk: nil, category3Risk: nil))
+                                                   value: .classificationDetails(sameHouseholdRisk: nil, distanceRisk: nil, physicalContactRisk: nil, sameRoomRisk: nil))
                                           ])
         
         return task
     }
+
 }

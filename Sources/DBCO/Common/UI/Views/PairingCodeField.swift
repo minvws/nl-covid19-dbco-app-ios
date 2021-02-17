@@ -43,6 +43,9 @@ class PairingCodeField: UITextField {
             .font: UIFont.monospacedDigitSystemFont(ofSize: 22, weight: .regular)
         ]
         
+        accessibilityLabel = .onboardingStep2Title
+        accessibilityHint = .onboardingStep2CodeHint
+        
         placeholderLabel.embed(in: self)
         sendSubviewToBack(placeholderLabel)
         updatePlaceholder()
@@ -115,6 +118,13 @@ extension PairingCodeField: UITextFieldDelegate {
         }
         
         self.text = codeWithSeparators
+        
+        if #available(iOS 13.0, *) {
+            accessibilityAttributedValue = NSAttributedString(
+                string: codeWithSeparators,
+                attributes: [.accessibilitySpeechSpellOut: true]
+            )
+        }
 
         updatePlaceholder(textLength: codeWithSeparators.count)
         

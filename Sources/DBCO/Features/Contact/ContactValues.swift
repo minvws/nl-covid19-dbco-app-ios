@@ -22,10 +22,14 @@ struct LastName: ContactValue {
 
 struct PhoneNumber: ContactValue {
     var value: String?
+    var valueOptions: [String]?
+    var placeholder: String?
 }
 
 struct EmailAddress: ContactValue {
     var value: String?
+    var valueOptions: [String]?
+    var placeholder: String? 
 }
 
 struct BirthDate: ContactValue {
@@ -63,7 +67,7 @@ struct GeneralDate: ContactValue {
     
     init(label: String?, date: Date?) {
         if let date = date {
-            self.value = GeneralDate.dateFormatter.string(from: date)
+            self.value = GeneralDate.displayDateFormatter.string(from: date)
         }
         
         self.label = label
@@ -75,7 +79,7 @@ struct GeneralDate: ContactValue {
                 return nil
             }
             
-            return GeneralDate.dateFormatter.date(from: value)
+            return GeneralDate.valueDateFormatter.date(from: value)
         }
         
         set {
@@ -84,16 +88,28 @@ struct GeneralDate: ContactValue {
                 return
             }
             
-            self.value = GeneralDate.dateFormatter.string(from: date)
+            self.value = GeneralDate.valueDateFormatter.string(from: date)
         }
     }
         
-    static let dateFormatter: DateFormatter = {
+    static let displayDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
         formatter.timeStyle = .none
         formatter.calendar = Calendar.current
         formatter.locale = Locale.current
+        formatter.timeZone = TimeZone.current
+        
+        return formatter
+    }()
+    
+    static let valueDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        formatter.timeStyle = .none
+        formatter.calendar = Calendar.current
+        formatter.locale = Locale.current
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
         
         return formatter
     }()
