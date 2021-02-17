@@ -26,4 +26,13 @@ class NavigationController: UINavigationController, DismissActionable {
             onDismissed?(self)
         }
     }
+    
+    override func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
+        // Unset any onPopped callbacks on controllers that are removed
+        self.viewControllers
+            .filter { !viewControllers.contains($0) }
+            .forEach { ($0 as? ViewController)?.onPopped = nil }
+        
+        super.setViewControllers(viewControllers, animated: true)
+    }
 }

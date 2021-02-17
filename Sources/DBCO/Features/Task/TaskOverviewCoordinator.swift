@@ -184,6 +184,14 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
         }
     }
     
+    func taskOverviewViewControllerDidRequestTips(_ controller: TaskOverviewViewController) {
+        let viewModel = OverviewTipsViewModel()
+        let tipsController = OverviewTipsViewController(viewModel: viewModel)
+        tipsController.delegate = self
+        
+        controller.present(NavigationController(rootViewController: tipsController), animated: true)
+    }
+    
     func taskOverviewViewControllerDidRequestUpload(_ controller: TaskOverviewViewController) {
         upload()
     }
@@ -249,4 +257,11 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
         controller.present(alert, animated: true)
     }
     
+}
+
+extension TaskOverviewCoordinator: OverviewTipsViewControllerDelegate {
+    
+    func overviewTipsViewControllerWantsClose(_ controller: OverviewTipsViewController) {
+        controller.dismiss(animated: true)
+    }
 }

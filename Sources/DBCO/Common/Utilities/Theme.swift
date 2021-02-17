@@ -149,6 +149,22 @@ final class Colors {
     var disabledIcon: UIColor {
         return color(for: "DisabledIcon")
     }
+    
+    var tipBackgroundPrimary: UIColor {
+        return color(for: "Tip/BackgroundPrimary")
+    }
+    
+    var tipBackgroundSecondary: UIColor {
+        return color(for: "Tip/BackgroundSecondary")
+    }
+    
+    var tipHeaderBackground: UIColor {
+        return color(for: "Tip/HeaderBackground")
+    }
+    
+    var tipItemColor: UIColor {
+        return color(for: "Tip/ItemColor")
+    }
 
     // MARK: - Private
 

@@ -14,7 +14,7 @@ protocol PairViewControllerDelegate: class {
 class PairViewModel {}
 
 /// - Tag: PairViewController
-class PairViewController: UIViewController {
+class PairViewController: ViewController {
     private let viewModel: PairViewModel
     
     private let codeField = PairingCodeField()
@@ -44,10 +44,7 @@ class PairViewController: UIViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
 
-        let titleLabel = UILabel()
-        titleLabel.font = Theme.fonts.title2
-        titleLabel.numberOfLines = 0
-        titleLabel.text = .onboardingStep2Title
+        let titleLabel = Label(title2: .onboardingStep2Title).multiline()
         
         let keyboardSpacerView = UIView()
         keyboardSpacerHeightConstraint = keyboardSpacerView.heightAnchor.constraint(equalToConstant: 0)

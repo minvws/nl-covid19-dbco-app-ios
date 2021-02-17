@@ -32,6 +32,7 @@ final class UploadCoordinator: Coordinator, Logging {
     }
     
     override func start() {
+        Services.pairingManager.addListener(self)
         
         navigationController.onDismissed = { [weak self] _ in
             guard let self = self else { return }
@@ -39,23 +40,42 @@ final class UploadCoordinator: Coordinator, Logging {
             self.delegate?.uploadCoordinatorDidFinish(self)
         }
         
-        let unfinishedTasks = Services.caseManager.tasks.filter(\.isUnfinished)
-        
-        if !unfinishedTasks.isEmpty {
-            showUnfinishedTasks()
+        if Services.pairingManager.isPaired {
+            continueToUnfinishedTasksIfNeeded(animated: false)
         } else {
-            sync(animated: false)
+            pair()
         }
         
         presenter?.present(navigationController, animated: true)
+        
     }
     
-    private func showUnfinishedTasks() {
+    private func continueToUnfinishedTasksIfNeeded(animated: Bool) {
+        let unfinishedTasks = Services.caseManager.tasks.filter(\.isUnfinished)
+        
+        if !unfinishedTasks.isEmpty {
+            showUnfinishedTasks(animated: animated)
+        } else {
+            sync(animated: animated)
+        }
+    }
+    
+    private func pair() {
+        let viewModel = ReversePairViewModel()
+        let pairingController = ReversePairViewController(viewModel: viewModel)
+        pairingController.delegate = self
+        
+        navigationController.setViewControllers([pairingController], animated: false)
+        
+        Services.pairingManager.startPollingForPairing()
+    }
+    
+    private func showUnfinishedTasks(animated: Bool) {
         let viewModel = UnfinishedTasksViewModel()
         let tasksController = UnfinishedTasksViewController(viewModel: viewModel)
         tasksController.delegate = self
         
-        navigationController.setViewControllers([tasksController], animated: false)
+        navigationController.setViewControllers([tasksController], animated: animated)
     }
     
     private func sync(animated: Bool) {
@@ -66,7 +86,7 @@ final class UploadCoordinator: Coordinator, Logging {
                 let viewModel = OnboardingStepViewModel(image: UIImage(named: "UploadSuccess")!,
                                                         title: .uploadFinishedTitle,
                                                         message: .uploadFinishedMessage,
-                                                        buttonTitle: .done)
+                                                        primaryButtonTitle: .done)
                 let stepController = OnboardingStepViewController(viewModel: viewModel)
                 stepController.delegate = self
                 
@@ -154,8 +174,84 @@ extension UploadCoordinator: EditContactCoordinatorDelegate {
 
 extension UploadCoordinator: OnboardingStepViewControllerDelegate {
     
-    func onboardingStepViewControllerWantsToContinue(_ controller: OnboardingStepViewController) {
+    func onboardingStepViewControllerDidSelectPrimaryButton(_ controller: OnboardingStepViewController) {
         navigationController.dismiss(animated: true)
+    }
+    
+    func onboardingStepViewControllerDidSelectSecondaryButton(_ controller: OnboardingStepViewController) {}
+    
+}
+
+extension UploadCoordinator: ReversePairViewControllerDelegate {
+    
+    func reversePairViewControllerWantsToContinue(_ controller: ReversePairViewController) {
+        continueToUnfinishedTasksIfNeeded(animated: true)
+    }
+    
+    func reversePairViewControllerWantsToClose(_ controller: ReversePairViewController) {
+        func close() {
+            navigationController.dismiss(animated: true)
+        }
+        
+        guard !Services.pairingManager.isPaired else { return close() }
+       
+        let alertController = UIAlertController(title: .reversePairingCloseAlert,
+                                                message: nil,
+                                                preferredStyle: .alert)
+        
+        alertController.addAction(UIAlertAction(title: .no, style: .default) { _ in
+            close()
+            Services.pairingManager.stopPollingForPairing()
+        })
+        
+        alertController.addAction(UIAlertAction(title: .yes, style: .default) { _ in
+            close()
+        })
+        
+        navigationController.present(alertController, animated: true, completion: nil)
+    }
+    
+}
+
+extension UploadCoordinator: PairingManagerListener {
+    
+    func pairingManagerDidStartPollingForPairing(_ pairingManager: PairingManaging) {}
+    
+    func pairingManager(_ pairingManager: PairingManaging, didFailWith error: PairingManagingError) {
+        
+        switch error {
+        case .pairingCodeExpired:
+            // Create a new code and continue
+            pairingManager.startPollingForPairing()
+        default:
+            let alertController = UIAlertController(title: .reversePairingErrorTitle,
+                                                    message: .reversePairingErrorMessage,
+                                                    preferredStyle: .alert)
+            
+            alertController.addAction(UIAlertAction(title: .cancel, style: .cancel) { _ in
+                self.navigationController.dismiss(animated: true)
+            })
+            
+            alertController.addAction(UIAlertAction(title: .tryAgain, style: .default) { _ in
+                pairingManager.startPollingForPairing()
+            })
+            
+            navigationController.present(alertController, animated: true, completion: nil)
+        }
+    }
+    
+    func pairingManagerDidCancelPollingForPairing(_ pairingManager: PairingManaging) {}
+    
+    func pairingManager(_ pairingManager: PairingManaging, didReceiveReversePairingCode code: String) {
+        let pairViewController = navigationController.viewControllers.compactMap { $0 as? ReversePairViewController }.first
+        
+        pairViewController?.applyPairingCode(code)
+    }
+    
+    func pairingManagerDidFinishPairing(_ pairingManager: PairingManaging) {
+        let pairViewController = navigationController.viewControllers.compactMap { $0 as? ReversePairViewController }.first
+        
+        pairViewController?.showPairingSuccessful()
     }
     
 }

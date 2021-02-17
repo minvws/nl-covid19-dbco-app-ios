@@ -27,11 +27,13 @@ class PrivacyConsentViewModel {
 }
 
 /// - Tag: PrivacyConsentViewController
-class PrivacyConsentViewController: PromptableViewController {
+class PrivacyConsentViewController: PromptableViewController, ScrollViewNavivationbarAdjusting {
     private let viewModel: PrivacyConsentViewModel
     private let scrollView = UIScrollView(frame: .zero)
     
     weak var delegate: PrivacyConsentViewControllerDelegate?
+    
+    let shortTitle: String = .onboardingConsentShortTitle
     
     init(viewModel: PrivacyConsentViewModel) {
         self.viewModel = viewModel
@@ -47,28 +49,23 @@ class PrivacyConsentViewController: PromptableViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        if #available(iOS 14.0, *) {
+            navigationItem.backButtonDisplayMode = .generic
+        }
+        
         view.backgroundColor = .white
         
         scrollView.embed(in: contentView)
+        scrollView.delegate = self
         scrollView.delaysContentTouches = false
-        
-        let headerBackgroundView = UIView(frame: .zero)
-        headerBackgroundView.backgroundColor = .white
-        
-        headerBackgroundView.snap(to: .top, of: contentView)
-        headerBackgroundView.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor).isActive = true
         
         let widthProviderView = UIView()
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
         widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         
         func listItem(_ text: String) -> UIView {
-            let iconView = UIImageView(image: UIImage(named: "PrivacyItem"))
-            iconView.contentMode = .center
-            iconView.setContentHuggingPriority(.required, for: .horizontal)
-            
             return HStack(spacing: 16,
-                          iconView,
+                          ImageView(imageName: "PrivacyItem").asIcon(),
                           Label(body: text, textColor: Theme.colors.captionGray).multiline())
                 .alignment(.top)
         }
@@ -103,26 +100,12 @@ class PrivacyConsentViewController: PromptableViewController {
         promptView = continueButton
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        navigationController?.setNavigationBarHidden(false, animated: animated)
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        navigationController?.hidesBarsOnSwipe = false
-    }
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         let scrollingHeight = scrollView.contentSize.height + scrollView.safeAreaInsets.top + scrollView.safeAreaInsets.bottom
         let canScroll = scrollingHeight > scrollView.frame.height
         showPromptViewSeparator = canScroll
-        
-        navigationController?.hidesBarsOnSwipe = canScroll
     }
     
     @objc private func handleContinue() {
@@ -139,6 +122,14 @@ class PrivacyConsentViewController: PromptableViewController {
     
 }
 
+extension PrivacyConsentViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        adjustNavigationBar(for: scrollView)
+    }
+    
+}
+
 private class ConsentButton: UIButton {
     
     override var isSelected: Bool {
@@ -147,6 +138,16 @@ private class ConsentButton: UIButton {
     
     override var isEnabled: Bool {
         didSet { applyState() }
+    }
+    
+    override var accessibilityTraits: UIAccessibilityTraits {
+        get { return UISwitch().accessibilityTraits }
+        set {}
+    }
+    
+    override var accessibilityValue: String? {
+        get { return isSelected ? "1" : "0" }
+        set {}
     }
     
     var useHapticFeedback = true

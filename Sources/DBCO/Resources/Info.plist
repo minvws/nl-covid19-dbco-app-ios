@@ -20,6 +20,8 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>GitHash</key>
 	<string></string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LOG_LEVEL</key>
 	<string>$(LOG_LEVEL)</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -27,7 +29,7 @@
 	<key>NETWORK_CONFIGURATION</key>
 	<string>$(NETWORK_CONFIGURATION)</string>
 	<key>NSContactsUsageDescription</key>
-	<string>Zo kun je makkelijk contactgegevens aanvullen. Je bepaalt daarna zelf welke gegevens je met de GGD deelt. Wil je de app geen toegang geven? Dan kun je contactgegevens ook handmatig toevoegen.</string>
+	<string>Zo kun je makkelijk contactgegevens aanvullen. Wil je de app geen toegang geven? Dan kun je contactgegevens ook handmatig toevoegen.</string>
 	<key>RESET_ENABLED</key>
 	<string>$(RESET_ENABLED)</string>
 	<key>SHARE_LOGS_ENABLED</key>

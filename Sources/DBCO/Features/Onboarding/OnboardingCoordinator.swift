@@ -6,13 +6,13 @@
  */
 
 import UIKit
-import SafariServices
 
 protocol OnboardingCoordinatorDelegate: class {
     func onboardingCoordinatorDidFinish(_ coordinator: OnboardingCoordinator)
 }
 
-/// Coordinator managing the onboarding of the user and pairing with the backend. Temporarily also fetches the tasks and questionnaires.
+// TODO: Update onboarding coordinator documentation
+/// Coordinator managing the onboarding of the user, pairing with the backend and guiding the user through the process of creating a list of at-risk contacts.
 /// Uses [PairViewController](x-source-tag://PairViewController) and [OnboardingStepViewController](x-source-tag://OnboardingStepViewController)
 final class OnboardingCoordinator: Coordinator {
     private let window: UIWindow
@@ -27,7 +27,8 @@ final class OnboardingCoordinator: Coordinator {
         let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding1")!,
                                                 title: .onboardingStep1Title,
                                                 message: .onboardingStep1Message,
-                                                buttonTitle: .next)
+                                                primaryButtonTitle: .onboardingStep1HasCodeButton,
+                                                secondaryButtonTitle: .onboardingStep1NoCodeButton)
         let stepController = OnboardingStepViewController(viewModel: viewModel)
         navigationController = NavigationController(rootViewController: stepController)
 
@@ -41,6 +42,13 @@ final class OnboardingCoordinator: Coordinator {
     }
     
     override func start() {
+        let needsPairingOption = Services.onboardingManager.needsPairingOption
+        if needsPairingOption == false {
+            let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, canCancel: false)
+            initializeContactsCoordinator.delegate = self
+            startChildCoordinator(initializeContactsCoordinator)
+        }
+        
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
     }
@@ -57,82 +65,53 @@ extension OnboardingCoordinator: UINavigationControllerDelegate {
 
 extension OnboardingCoordinator: OnboardingStepViewControllerDelegate {
     
-    func onboardingStepViewControllerWantsToContinue(_ controller: OnboardingStepViewController) {
-        if didPair {
+    func onboardingStepViewControllerDidSelectPrimaryButton(_ controller: OnboardingStepViewController) {
+        let pairingCoordinator = OnboardingPairingCoordinator(navigationController: navigationController)
+        pairingCoordinator.delegate = self
+        startChildCoordinator(pairingCoordinator)
+    }
+    
+    func onboardingStepViewControllerDidSelectSecondaryButton(_ controller: OnboardingStepViewController) {
+        let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, canCancel: true)
+        initializeContactsCoordinator.delegate = self
+        startChildCoordinator(initializeContactsCoordinator)
+    }
+    
+}
+
+extension OnboardingCoordinator: OnboardingPairingCoordinatorDelegate {
+    
+    func onboardingPairingCoordinatorDidFinish(_ coordinator: OnboardingPairingCoordinator, hasTasks: Bool) {
+        removeChildCoordinator(coordinator)
+        
+        if hasTasks {
+            // go to task overview
+            Services.onboardingManager.finishOnboarding(createTasks: false)
             delegate?.onboardingCoordinatorDidFinish(self)
         } else {
-            let viewModel = PrivacyConsentViewModel(buttonTitle: .next)
-            let consentController = PrivacyConsentViewController(viewModel: viewModel)
-            consentController.delegate = self
-            navigationController.pushViewController(consentController, animated: true)
+            let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, canCancel: false)
+            initializeContactsCoordinator.delegate = self
+            startChildCoordinator(initializeContactsCoordinator)
         }
+    }
+    
+    func onboardingPairingCoordinatorDidCancel(_ coordinator: OnboardingPairingCoordinator) {
+        removeChildCoordinator(coordinator)
     }
     
 }
 
-extension OnboardingCoordinator: PrivacyConsentViewControllerDelegate {
+extension OnboardingCoordinator: InitializeContactsCoordinatorDelegate {
     
-    func privacyConsentViewControllerWantsToContinue(_ controller: PrivacyConsentViewController) {
-        let viewModel = PairViewModel()
-        let pairController = PairViewController(viewModel: viewModel)
-        pairController.delegate = self
-        navigationController.pushViewController(pairController, animated: true)
+    func initializeContactsCoordinatorDidFinish(_ coordinator: InitializeContactsCoordinator) {
+        removeChildCoordinator(coordinator)
+        
+        // go to task overview
+        Services.onboardingManager.finishOnboarding(createTasks: true)
+        delegate?.onboardingCoordinatorDidFinish(self)
     }
     
-    func privacyConsentViewController(_ controller: PrivacyConsentViewController, wantsToOpen url: URL) {
-        let safariController = SFSafariViewController(url: url)
-        safariController.preferredControlTintColor = Theme.colors.primary
-        navigationController.present(safariController, animated: true)
+    func initializeContactsCoordinatorDidCancel(_ coordinator: InitializeContactsCoordinator) {
+        removeChildCoordinator(coordinator)
     }
-    
-}
-
-extension OnboardingCoordinator: PairViewControllerDelegate {
-    
-    func pairViewController(_ controller: PairViewController, wantsToPairWith code: String) {
-        controller.startLoadingAnimation()
-        navigationController.navigationBar.isUserInteractionEnabled = false
-    
-        func errorAlert() {
-            controller.stopLoadingAnimation()
-            self.navigationController.navigationBar.isUserInteractionEnabled = true
-            
-            let alert = UIAlertController(title: .onboardingLoadingErrorTitle, message: .onboardingLoadingErrorMessage, preferredStyle: .alert)
-            
-            alert.addAction(UIAlertAction(title: .ok, style: .default, handler: nil))
-            
-            controller.present(alert, animated: true)
-        }
-        
-        func pair(pairdingCode: String) {
-            Services.pairingManager.pair(pairingCode: code) { success, error in
-                if success {
-                    finish()
-                } else {
-                    errorAlert()
-                }
-            }
-        }
-        
-        func finish() {
-            controller.stopLoadingAnimation()
-            self.navigationController.navigationBar.isUserInteractionEnabled = true
-            
-            self.didPair = true
-            
-            let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding2")!,
-                                                    title: .onboardingStep3Title,
-                                                    message: .onboardingStep3Message,
-                                                    buttonTitle: .start)
-            let stepController = OnboardingStepViewController(viewModel: viewModel)
-            stepController.delegate = self
-            self.navigationController.setViewControllers([stepController], animated: true)
-            
-            // Load case data. If it fails, the task overview will try again.
-            Services.caseManager.loadCaseData(userInitiated: false, completion: { _, _ in })
-        }
-        
-        pair(pairdingCode: code)
-    }
-    
 }
