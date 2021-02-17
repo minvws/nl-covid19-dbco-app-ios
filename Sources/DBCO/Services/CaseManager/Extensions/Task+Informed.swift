@@ -14,7 +14,7 @@ extension Task {
         
         switch contact.communication {
         case .index:
-            return contact.didInform
+            return contact.informedByIndexAt != nil
         case .staff:
             // The GGD can only contact when there's a email or phoneNumber filled in
             return contactEmail != nil || contactPhoneNumber != nil

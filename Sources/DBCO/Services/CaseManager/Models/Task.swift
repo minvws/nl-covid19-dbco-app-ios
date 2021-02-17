@@ -55,14 +55,14 @@ struct Task: Equatable {
         
         let category: Category
         let communication: Communication
-        let didInform: Bool
+        let informedByIndexAt: String?
         let dateOfLastExposure: String?
         let contactIdentifier: String?
         
-        init(category: Category, communication: Communication, didInform: Bool, dateOfLastExposure: String?, contactIdentifier: String? = nil) {
+        init(category: Category, communication: Communication, informedByIndexAt: String?, dateOfLastExposure: String?, contactIdentifier: String? = nil) {
             self.category = category
             self.communication = communication
-            self.didInform = didInform
+            self.informedByIndexAt = informedByIndexAt
             self.dateOfLastExposure = dateOfLastExposure
             self.contactIdentifier = contactIdentifier
         }
@@ -111,7 +111,7 @@ struct Task: Equatable {
         
         switch taskType {
         case .contact:
-            contact = Contact(category: .other, communication: .none, didInform: false, dateOfLastExposure: nil, contactIdentifier: nil)
+            contact = Contact(category: .other, communication: .none, informedByIndexAt: nil, dateOfLastExposure: nil, contactIdentifier: nil)
         }
     }
     
@@ -125,7 +125,7 @@ extension Task.Contact: Codable {
         category = try container.decode(Category.self, forKey: .category)
         communication = try container.decode(Communication.self, forKey: .communication)
         dateOfLastExposure = try container.decode(String?.self, forKey: .dateOfLastExposure)
-        didInform = (try? container.decode(Bool?.self, forKey: .didInform)) ?? false
+        informedByIndexAt = try container.decodeIfPresent(String.self, forKey: .informedByIndexAt)
         contactIdentifier = try? container.decode(String?.self, forKey: .contactIdentifier)
     }
     
@@ -135,7 +135,7 @@ extension Task.Contact: Codable {
         try container.encode(category, forKey: .category)
         try container.encode(communication, forKey: .communication)
         try container.encode(dateOfLastExposure, forKey: .dateOfLastExposure)
-        try container.encode(didInform, forKey: .didInform)
+        try container.encode(informedByIndexAt, forKey: .informedByIndexAt)
         
         if encoder.target == .internalStorage {
             try container.encode(contactIdentifier, forKey: .contactIdentifier)
@@ -146,7 +146,7 @@ extension Task.Contact: Codable {
         case category
         case communication
         case dateOfLastExposure
-        case didInform
+        case informedByIndexAt
         case contactIdentifier
     }
     
