@@ -51,7 +51,7 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
             switch task.contact.communication {
             case .staff:
                 subtitleLabel.text = .contactTaskStatusStaffWillInform
-            case .index where task.contact.didInform:
+            case .index where task.contact.informedByIndexAt != nil:
                 subtitleLabel.text = .contactTaskStatusIndexDidInform
             case .index:
                 subtitleLabel.text = .contactTaskStatusIndexWillInform

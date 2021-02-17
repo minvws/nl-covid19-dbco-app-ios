@@ -421,7 +421,7 @@ final class CaseManager: CaseManaging, Logging {
             if let contact = updatedTask.contact, contact.communication == .none {
                 updatedTask.contact = Task.Contact(category: contact.category,
                                                    communication: .index,
-                                                   didInform: contact.didInform,
+                                                   informedByIndexAt: contact.informedByIndexAt,
                                                    dateOfLastExposure: contact.dateOfLastExposure)
             }
         }
@@ -453,7 +453,7 @@ final class CaseManager: CaseManaging, Logging {
         var task = Task(type: .contact, label: name, source: .app)
         task.contact = Task.Contact(category: category,
                                     communication: .none,
-                                    didInform: false,
+                                    informedByIndexAt: nil,
                                     dateOfLastExposure: dateOfLastExposure.map(Self.valueDateFormatter.string),
                                     contactIdentifier: contactIdentifier)
         tasks.append(task)

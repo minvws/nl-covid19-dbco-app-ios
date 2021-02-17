@@ -43,7 +43,7 @@ class ContactQuestionnaireViewModel {
         var updatedTask = task
         updatedTask.contact = Task.Contact(category: updatedCategory,
                                            communication: updatedContact.communication,
-                                           didInform: updatedContact.didInform,
+                                           informedByIndexAt: updatedContact.informedByIndexAt,
                                            dateOfLastExposure: updatedContact.dateOfLastExposure)
         updatedTask.questionnaireResult = baseResult
         updatedTask.questionnaireResult?.answers = answerManagers.map(\.answer)
@@ -172,7 +172,7 @@ class ContactQuestionnaireViewModel {
         
         updatedContact = Task.Contact(category: updatedContact.category,
                                       communication: .index,
-                                      didInform: updatedContact.didInform,
+                                      informedByIndexAt: updatedContact.informedByIndexAt,
                                       dateOfLastExposure: updatedContact.dateOfLastExposure)
         updateInformSectionContent()
     }
@@ -180,7 +180,7 @@ class ContactQuestionnaireViewModel {
     private func setCommunicationToStaff() {
         updatedContact = Task.Contact(category: updatedContact.category,
                                       communication: .staff,
-                                      didInform: updatedContact.didInform,
+                                      informedByIndexAt: updatedContact.informedByIndexAt,
                                       dateOfLastExposure: updatedContact.dateOfLastExposure)
         updateInformSectionContent()
     }
@@ -188,7 +188,7 @@ class ContactQuestionnaireViewModel {
     func registerDidInform() {
         updatedContact = Task.Contact(category: updatedContact.category,
                                       communication: updatedContact.communication,
-                                      didInform: true,
+                                      informedByIndexAt: ISO8601DateFormatter().string(from: Date()),
                                       dateOfLastExposure: updatedContact.dateOfLastExposure)
     }
     
@@ -201,7 +201,7 @@ class ContactQuestionnaireViewModel {
             taskCategory = updatedCategory
             updatedContact = Task.Contact(category: taskCategory,
                                           communication: updatedContact.communication,
-                                          didInform: updatedContact.didInform,
+                                          informedByIndexAt: updatedContact.informedByIndexAt,
                                           dateOfLastExposure: updatedContact.dateOfLastExposure)
         }
         
@@ -215,7 +215,7 @@ class ContactQuestionnaireViewModel {
     private func updateLastExposureDate(with value: String?) {
         updatedContact = Task.Contact(category: updatedContact.category,
                                       communication: updatedContact.communication,
-                                      didInform: updatedContact.didInform,
+                                      informedByIndexAt: updatedContact.informedByIndexAt,
                                       dateOfLastExposure: value)
         
         updateInformSectionContent()
@@ -559,11 +559,10 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         }
         
         switch task.contact.communication {
-        case .index where task.contact.didInform,
-             .staff where task.isOrCanBeInformed,
-             .none:
+        case .index where task.contact.informedByIndexAt != nil,
+             .staff where task.isOrCanBeInformed:
             delegate?.contactQuestionnaireViewController(self, didSave: viewModel.updatedTask)
-        case .index:
+        case .index, .none:
             let alert = UIAlertController(title: .contactInformPromptTitle(firstName: firstName), message: .contactInformPromptMessage, preferredStyle: .alert)
             
             alert.addAction(UIAlertAction(title: .contactInformOptionDone, style: .default) { _ in
