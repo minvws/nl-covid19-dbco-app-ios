@@ -19,6 +19,11 @@ protocol FeatureFlags {
     var enablePerspectiveCopy: Bool { get }
 }
 
+struct Symptom: Codable {
+    let label: String
+    let value: String
+}
+
 struct AppConfiguration: AppVersionInformation, Decodable {
     struct Flags: FeatureFlags, Decodable {
         let enableContactCalling: Bool
@@ -50,27 +55,30 @@ struct AppConfiguration: AppVersionInformation, Decodable {
     let minimumVersionMessage: String?
     let appStoreURL: URL?
     let featureFlags: FeatureFlags
+    let symptoms: [Symptom]
     
     enum CodingKeys: String, CodingKey {
         case minimumVersion = "iosMinimumVersion"
         case minimumVersionMessage = "iosMinimumVersionMessage"
         case appStoreURL = "iosAppStoreURL"
         case featureFlags
+        case symptoms
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         minimumVersion = try container.decode(String.self, forKey: .minimumVersion)
-        minimumVersionMessage = try? container.decode(String?.self, forKey: .minimumVersionMessage)
+        minimumVersionMessage = try container.decodeIfPresent(String.self, forKey: .minimumVersionMessage)
         
-        if let appStoreURLString = try? container.decode(String?.self, forKey: .appStoreURL) {
+        if let appStoreURLString = try container.decodeIfPresent(String.self, forKey: .appStoreURL) {
             appStoreURL = URL(string: appStoreURLString)
         } else {
             appStoreURL = nil
         }
         
-        featureFlags = (try? container.decode(Flags.self, forKey: .featureFlags)) ?? Flags(enableContactCalling: false, enablePerspectiveSharing: false, enablePerspectiveCopy: false)
+        featureFlags = (try container.decodeIfPresent(Flags.self, forKey: .featureFlags)) ?? Flags(enableContactCalling: false, enablePerspectiveSharing: false, enablePerspectiveCopy: false)
+        symptoms = try container.decode([Symptom].self, forKey: .symptoms)
     }
 }
 
@@ -85,6 +93,7 @@ protocol ConfigManaging {
     
     var appVersion: String { get }
     var featureFlags: FeatureFlags { get }
+    var symptoms: [Symptom] { get }
     
     func update(completion: @escaping (UpdateState, FeatureFlags) -> Void)
 }
