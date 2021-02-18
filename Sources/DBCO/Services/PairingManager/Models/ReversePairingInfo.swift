@@ -18,7 +18,7 @@ struct ReversePairingInfo: Codable {
     }
 }
 
-struct ReversePairingStatusInfo: Codable {
+struct ReversePairingStatusInfo: Decodable {
     enum Status: String, Codable {
         case pending
         case completed
@@ -29,6 +29,14 @@ struct ReversePairingStatusInfo: Codable {
     var refreshDelay: Int
     
     var pairingCode: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case status
+        case expiresAt
+        case refreshDelay
+        case pairingCode
+        case pairingCodeExpiresAt
+    }
     
     init(_ pairingInfo: ReversePairingInfo) {
         status = .pending
@@ -41,9 +49,14 @@ struct ReversePairingStatusInfo: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         status = try container.decode(Status.self, forKey: .status)
-        _expiresAt = try container.decode(ISO8601DateFormat.self, forKey: .expiresAt)
-        refreshDelay = try container.decode(Int.self, forKey: .refreshDelay)
         
+        if let expiresAt = try container.decodeIfPresent(ISO8601DateFormat.self, forKey: .expiresAt) {
+            _expiresAt = expiresAt
+        } else {
+            _expiresAt = try container.decode(ISO8601DateFormat.self, forKey: .pairingCodeExpiresAt)
+        }
+        
+        refreshDelay = (try container.decodeIfPresent(Int.self, forKey: .refreshDelay)) ?? 10
         pairingCode = try container.decodeIfPresent(String.self, forKey: .pairingCode)
     }
 }
