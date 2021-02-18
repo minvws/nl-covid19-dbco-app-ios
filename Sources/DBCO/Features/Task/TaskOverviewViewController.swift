@@ -248,7 +248,7 @@ class TaskOverviewViewController: PromptableViewController {
         let resetButton = Button(title: .taskOverviewDeleteDataButtonTitle)
             .touchUpInside(self, action: #selector(reset))
         
-        let pairingActivityView = UIActivityIndicatorView(style: .gray)
+        let pairingActivityView = ActivityIndicatorView(style: .gray)
         pairingActivityView.startAnimating()
         pairingActivityView.setContentHuggingPriority(.required, for: .horizontal)
         let pairingView = VStack(spacing: 16,

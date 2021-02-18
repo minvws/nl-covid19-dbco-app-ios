@@ -19,7 +19,7 @@ class PairViewController: ViewController {
     
     private let codeField = PairingCodeField()
     private let loadingOverlay = UIView()
-    private let loadingIndicator = UIActivityIndicatorView(style: .white)
+    private let loadingIndicator = ActivityIndicatorView(style: .white)
     private var keyboardSpacerHeightConstraint: NSLayoutConstraint!
     
     weak var delegate: PairViewControllerDelegate?
@@ -87,6 +87,8 @@ class PairViewController: ViewController {
         loadingOverlay.isHidden = false
         loadingOverlay.alpha = 0
         codeField.isIgnoringInput = true
+        
+        UIAccessibility.post(notification: .announcement, argument: String.loading)
         
         UIView.animate(withDuration: 0.3) {
             self.loadingOverlay.alpha = 1
