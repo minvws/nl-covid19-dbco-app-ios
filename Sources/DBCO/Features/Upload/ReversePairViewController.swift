@@ -106,7 +106,7 @@ class ReversePairViewController: PromptableViewController {
         statusContainerView.layer.cornerRadius = 8
         statusContainerView.heightAnchor.constraint(equalToConstant: 80).isActive = true
         
-        let activityIndicator = UIActivityIndicatorView(style: .gray)
+        let activityIndicator = ActivityIndicatorView(style: .gray)
         activityIndicator.startAnimating()
         activityIndicator.setContentHuggingPriority(.required, for: .horizontal)
         

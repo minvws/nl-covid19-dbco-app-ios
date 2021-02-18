@@ -15,7 +15,7 @@ class LoadingViewController: UIViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
         
-        let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
+        let activityIndicator = ActivityIndicatorView(style: .whiteLarge)
         activityIndicator.color = .black
         activityIndicator.startAnimating()
         
