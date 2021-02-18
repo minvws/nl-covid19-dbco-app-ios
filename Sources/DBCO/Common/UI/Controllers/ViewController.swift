@@ -37,7 +37,6 @@ class ViewController: UIViewController, DismissActionable, PopActionable {
 
     func startReceivingDidBecomeActiveNotifications() {
         shouldAddDidBecomeActiveObserver = true
-        
     }
     
     func stopReceivingDidBecomeActiveNotifications() {
@@ -47,7 +46,8 @@ class ViewController: UIViewController, DismissActionable, PopActionable {
     
     private var didBecomeActiveObserver: NSObjectProtocol?
     private var shouldAddDidBecomeActiveObserver = false
-    
+    private var needsFocus = true
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
@@ -67,6 +67,17 @@ class ViewController: UIViewController, DismissActionable, PopActionable {
         if shouldAddDidBecomeActiveObserver {
             didBecomeActiveObserver = NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
                 self?.applicationDidBecomeActive()
+            }
+        }
+        
+        // Move focus to the first header when the ViewControler appears for the first time.
+        if needsFocus {
+            needsFocus = false
+            
+            UIAccessibility.screenChanged(self)
+
+            if let header = view.find(traits: .header) {
+                UIAccessibility.layoutChanged(header)
             }
         }
     }
