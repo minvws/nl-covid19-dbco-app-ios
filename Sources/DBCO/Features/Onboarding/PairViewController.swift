@@ -19,7 +19,7 @@ class PairViewController: ViewController {
     
     private let codeField = PairingCodeField()
     private let loadingOverlay = UIView()
-    private let loadingIndicator = UIActivityIndicatorView(style: .white)
+    private let loadingIndicator = ActivityIndicatorView(style: .white)
     private var keyboardSpacerHeightConstraint: NSLayoutConstraint!
     
     weak var delegate: PairViewControllerDelegate?

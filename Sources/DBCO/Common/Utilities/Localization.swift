@@ -68,7 +68,8 @@ extension String {
     static var expanded: String { return Localization.string(for: "expanded") }
     static var completed: String { return Localization.string(for: "completed") }
     static var disabled: String { return Localization.string(for: "disabled") }
-        
+    static var loading: String { return Localization.string(for: "loading") }
+    
     // MARK: - Update App
     static var updateAppErrorMessage: String { return Localization.string(for: "updateApp.error.message") }
     static var updateAppTitle: String { return Localization.string(for: "updateApp.title") }
