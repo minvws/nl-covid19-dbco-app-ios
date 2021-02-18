@@ -88,6 +88,8 @@ class PairViewController: ViewController {
         loadingOverlay.alpha = 0
         codeField.isIgnoringInput = true
         
+        UIAccessibility.post(notification: .announcement, argument: String.loading)
+        
         UIView.animate(withDuration: 0.3) {
             self.loadingOverlay.alpha = 1
         }
