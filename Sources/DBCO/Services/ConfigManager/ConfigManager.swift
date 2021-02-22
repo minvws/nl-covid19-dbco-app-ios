@@ -70,7 +70,7 @@ extension ConfigManager {
         Symptom(label: "Spierpijn", value: "muscle-strain"),
         Symptom(label: "Pijn achter de ogen", value: "pain-behind-the-eyes"),
         Symptom(label: "Algehele pijnklachten", value: "pain"),
-        Symptom(label: "Duizeligheid", value: "dizziness "),
+        Symptom(label: "Duizeligheid", value: "dizziness"),
         Symptom(label: "Prikkelbaar/verwardheid", value: "irritable-confused"),
         Symptom(label: "Verlies van eetlust", value: "loss-of-appetite"),
         Symptom(label: "Misselijkheid", value: "nausea"),

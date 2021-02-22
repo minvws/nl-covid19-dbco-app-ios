@@ -49,8 +49,7 @@ final class OnboardingCoordinator: Coordinator {
             startChildCoordinator(initializeContactsCoordinator)
         }
         
-        window.rootViewController = navigationController
-        window.makeKeyAndVisible()
+        window.transition(to: navigationController, with: [.transitionCrossDissolve])
     }
 
 }
