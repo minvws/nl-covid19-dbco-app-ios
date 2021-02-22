@@ -19,9 +19,13 @@ protocol FeatureFlags {
     var enablePerspectiveCopy: Bool { get }
 }
 
-struct Symptom: Codable {
+struct Symptom: Codable, Equatable {
     let label: String
     let value: String
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.value == rhs.value
+    }
 }
 
 struct AppConfiguration: AppVersionInformation, Decodable {

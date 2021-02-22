@@ -11,7 +11,7 @@ import Contacts
 struct Onboarding {
     enum ContagiousPeriodState {
         case undetermined
-        case finishedWithSymptoms([String], onset: Date)
+        case finishedWithSymptoms([Symptom], onset: Date)
         case finishedWithTestDate(Date)
         
         var symptomOnsetDate: Date? {
@@ -60,7 +60,7 @@ protocol OnboardingManaging {
     var roommates: [Onboarding.Contact]? { get }
     var contacts: [Onboarding.Contact]? { get }
     
-    func registerSymptoms(_ symptoms: [String], dateOfOnset: Date)
+    func registerSymptoms(_ symptoms: [Symptom], dateOfOnset: Date)
     func registerTestDate(_ date: Date)
     
     func registerRoommates(_ roommates: [Onboarding.Contact])
