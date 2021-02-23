@@ -144,6 +144,7 @@ extension String {
     static var determineRoommatesTitle: String { return Localization.string(for: "determineRoommates.title") }
     static var determineRoommatesMessage: String { return Localization.string(for: "determineRoommates.message") }
     static var determineRoommatesAddContact: String { return Localization.string(for: "determineRoommatesAddContact") }
+    static var determineRoommatesNoContactsButtonTitle: String { return Localization.string(for: "determineRoommatesNoContactsButtonTitle") }
     
     static var determineContactsExplanationShortTitle: String { return Localization.string(for: "determineContactsExplanation.shortTitle") }
     static var determineContactsExplanationTitle: String { return Localization.string(for: "determineContactsExplanation.title") }

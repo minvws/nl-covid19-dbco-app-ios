@@ -94,6 +94,7 @@
 "determineRoommates.title" = "Wie zijn je huisgenoten?";
 "determineRoommates.message" = "Dit zijn de mensen met wie je in één huis woont.";
 "determineRoommatesAddContact" = "Voeg huisgenoot toe";
+"determineRoommatesNoContactsButtonTitle" = "Ik woon alleen";
 
 "determineContactsExplanation.shortTitle" = "Contacten";
 "determineContactsExplanation.title" = "We gaan een overzicht maken van mensen die je hebt ontmoet";
