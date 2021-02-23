@@ -59,6 +59,20 @@ class ContactsExplanationViewController: PromptableViewController, ScrollViewNav
                 .alignment(.top)
         }
         
+        func htmlListItem(_ text: String, icon: String) -> UIView {
+            let attributedString: NSAttributedString = .makeFromHtml(text: text,
+                                                                     font: Theme.fonts.body,
+                                                                     textColor: Theme.colors.captionGray,
+                                                                     boldTextColor: .black)
+            let label = Label("")
+            label.attributedText = attributedString
+            
+            return HStack(spacing: 16,
+                          ImageView(imageName: "ListItem/\(icon)").asIcon(),
+                          label.multiline())
+                .alignment(.top)
+        }
+        
         let margin: UIEdgeInsets = .top(32) + .bottom(18) + .right(16)
         
         let stack =
@@ -71,7 +85,7 @@ class ContactsExplanationViewController: PromptableViewController, ScrollViewNav
                               listItem(.determineContactsExplanationItem1, icon: "Checkmark"),
                               listItem(.determineContactsExplanationItem2, icon: "Checkmark"),
                               listItem(.determineContactsExplanationItem3, icon: "Questionmark"),
-                              listItem(.determineContactsExplanationItem4, icon: "Stop"))),
+                              htmlListItem(.determineContactsExplanationItem4, icon: "Stop"))),
                    UIView()) // Empty view for spacing
                 .distribution(.equalSpacing)
                 .embed(in: scrollView.readableWidth, insets: margin)
