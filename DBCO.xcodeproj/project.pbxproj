@@ -11,6 +11,9 @@
 		6A6A1EA99F603F8A68B3CFE6 /* Pods_DBCO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13C8941476779FBFFBD8A4C7 /* Pods_DBCO.framework */; };
 		91E5A9010414FC25C0F3B864 /* Pods_DBCOTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C5D22DA740F30F804D7F95E /* Pods_DBCOTests.framework */; };
 		CD010B98257A409B00CEA4F5 /* ContactQuestionnaireCommunicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD010B97257A409B00CEA4F5 /* ContactQuestionnaireCommunicationTests.swift */; };
+		CD0E967925DFCD34006E70BD /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0E967825DFCD34006E70BD /* LaunchViewController.swift */; };
+		CD0E967D25E3B329006E70BD /* LaunchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0E967C25E3B329006E70BD /* LaunchCoordinator.swift */; };
+		CD0E968125E3B8D9006E70BD /* UIWindow+Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0E968025E3B8D9006E70BD /* UIWindow+Transition.swift */; };
 		CD10F07C25AEFEC6000295B9 /* OnboardingPairingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F07725AEFD41000295B9 /* OnboardingPairingCoordinator.swift */; };
 		CD10F08125AF0886000295B9 /* InitializeContactsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F08025AF0886000295B9 /* InitializeContactsCoordinator.swift */; };
 		CD10F08625AF2E52000295B9 /* DetermineContagiousPeriodCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F08525AF2E52000295B9 /* DetermineContagiousPeriodCoordinator.swift */; };
@@ -157,6 +160,9 @@
 		C604B6AA2DE456A21DA9EE15 /* Pods-DBCOTests.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.app store.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.app store.xcconfig"; sourceTree = "<group>"; };
 		CBA78D02FA0FE384D189E4D2 /* Pods-DBCO.pentest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.pentest.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.pentest.xcconfig"; sourceTree = "<group>"; };
 		CD010B97257A409B00CEA4F5 /* ContactQuestionnaireCommunicationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactQuestionnaireCommunicationTests.swift; sourceTree = "<group>"; };
+		CD0E967825DFCD34006E70BD /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
+		CD0E967C25E3B329006E70BD /* LaunchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCoordinator.swift; sourceTree = "<group>"; };
+		CD0E968025E3B8D9006E70BD /* UIWindow+Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+Transition.swift"; sourceTree = "<group>"; };
 		CD10F07725AEFD41000295B9 /* OnboardingPairingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPairingCoordinator.swift; sourceTree = "<group>"; };
 		CD10F08025AF0886000295B9 /* InitializeContactsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializeContactsCoordinator.swift; sourceTree = "<group>"; };
 		CD10F08525AF2E52000295B9 /* DetermineContagiousPeriodCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetermineContagiousPeriodCoordinator.swift; sourceTree = "<group>"; };
@@ -312,6 +318,15 @@
 				3C5D22DA740F30F804D7F95E /* Pods_DBCOTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CD0E967725DFCD24006E70BD /* Launch */ = {
+			isa = PBXGroup;
+			children = (
+				CD0E967825DFCD34006E70BD /* LaunchViewController.swift */,
+				CD0E967C25E3B329006E70BD /* LaunchCoordinator.swift */,
+			);
+			path = Launch;
 			sourceTree = "<group>";
 		};
 		CD10F07625AEFD21000295B9 /* Pairing */ = {
@@ -476,6 +491,7 @@
 		CD7282BB250F728000D68911 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				CD0E967725DFCD24006E70BD /* Launch */,
 				CD5DA76725518567003660CC /* AppUpdate */,
 				CD7282BD250F72A900D68911 /* App */,
 				CDA5C11625135A07009440D1 /* Contact */,
@@ -703,6 +719,7 @@
 				CD756C73252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift */,
 				CDADF7DD2534773800424492 /* UIToolbar+Done.swift */,
 				CDE25F8E254C21B900E9AE49 /* String+SHA256.swift */,
+				CD0E968025E3B8D9006E70BD /* UIWindow+Transition.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -953,6 +970,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD0E968125E3B8D9006E70BD /* UIWindow+Transition.swift in Sources */,
 				CDC7C8692538412600FE7E05 /* NetworkManager.swift in Sources */,
 				CDFCF9192510FC760062269A /* SelfSizingTableView.swift in Sources */,
 				CDD68BA6254D511D00E96E9C /* KeychainItem.swift in Sources */,
@@ -994,6 +1012,7 @@
 				CDADF7F32535E34400424492 /* UploadCoordinator.swift in Sources */,
 				CD65CD812535F77400BB761A /* LoadingViewController.swift in Sources */,
 				CD2AC0762530601900E8AF78 /* InputTextView.swift in Sources */,
+				CD0E967925DFCD34006E70BD /* LaunchViewController.swift in Sources */,
 				CDD68BAA254D60BC00E96E9C /* UserDefaults.swift in Sources */,
 				CD24CBE825B9B34D00A2F634 /* OnboardingManaging.swift in Sources */,
 				CD421872251B4819004544B3 /* TaskTableViewCell.swift in Sources */,
@@ -1047,6 +1066,7 @@
 				CD926AF025B5B92E0076113C /* ContactsExplanationViewController.swift in Sources */,
 				CD29634F2518ED51008443AF /* UIEdgeInsets+Convenience.swift in Sources */,
 				CD7282C3250F9AFE00D68911 /* TaskOverviewViewController.swift in Sources */,
+				CD0E967D25E3B329006E70BD /* LaunchCoordinator.swift in Sources */,
 				CD3EFC5325C2F56800EB2087 /* OverviewTipsViewController.swift in Sources */,
 				CD8F957925616F23004729A4 /* Certificates.swift in Sources */,
 				CD24CBEE25B9B3E500A2F634 /* OnboardingManager.swift in Sources */,

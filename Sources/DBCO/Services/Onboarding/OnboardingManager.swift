@@ -11,7 +11,7 @@ private struct OnboardingData: Codable {
     var needsOnboarding: Bool
     var dateOfSymptomOnset: Date?
     var testDate: Date?
-    var symptoms: [String]?
+    var symptoms: [Symptom]?
     var roommates: [Onboarding.Contact]?
     var contacts: [Onboarding.Contact]?
 }
@@ -66,7 +66,7 @@ class OnboardingManager: OnboardingManaging, Logging {
         }
     }
     
-    func registerSymptoms(_ symptoms: [String], dateOfOnset: Date) {
+    func registerSymptoms(_ symptoms: [Symptom], dateOfOnset: Date) {
         Self.onboardingData.symptoms = symptoms
         Self.onboardingData.dateOfSymptomOnset = dateOfOnset
         Self.onboardingData.testDate = nil
@@ -94,6 +94,9 @@ class OnboardingManager: OnboardingManaging, Logging {
         if !Services.caseManager.hasCaseData {
             if let dateOfSymptomOnset = Self.onboardingData.dateOfSymptomOnset {
                 try! Services.caseManager.startLocalCase(dateOfSymptomOnset: dateOfSymptomOnset) // swiftlint:disable:this force_try
+                
+                let symptoms = Self.onboardingData.symptoms?.map(\.value) ?? []
+                Services.caseManager.setSymptoms(symptoms: symptoms)
             } else if let testDate = Self.onboardingData.testDate {
                 try! Services.caseManager.startLocalCase(dateOfSymptomOnset: testDate) // swiftlint:disable:this force_try
             }

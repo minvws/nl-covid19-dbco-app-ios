@@ -8,17 +8,14 @@
 import UIKit
 
 protocol SelectSymptomsViewControllerDelegate: class {
-    func selectSymptomsViewController(_ controller: SelectSymptomsViewController, didSelect symptoms: [String])
+    func selectSymptomsViewController(_ controller: SelectSymptomsViewController, didSelect symptoms: [Symptom])
 }
 
 class SelectSymptomsViewModel {
     
-    // These are temporary and will be replaced by an API call
-    let selectableSymptoms = [
-        "Neusverkoudheid", "Schorre stem", "Keelpijn", "(Licht) hoesten", "Kortademigheid/benauwdheid", "Pijn bij de ademhaling", "Koorts (= boven 38 graden Celsius)", "Koude rillingen", "Verlies van of verminderde reuk", "Verlies van of verminderde smaak", "Algehele malaise", "Vermoeidheid", "Hoofdpijn", "Spierpijn", "Pijn achter de ogen", "Algehele pijnklachten", "Duizeligheid", "Prikkelbaarheid/verwardheid", "Verlies van eetlust", "Misselijkheid", "Overgeven", "Diarree", "Buikpijn", "Rode prikkende ogen (oogontsteking)", "Huidafwijkingen"
-    ]
+    let selectableSymptoms = Services.configManager.symptoms
     
-    private(set) var selectedSymptoms = [String]()
+    private(set) var selectedSymptoms = [Symptom]()
     
     let continueWithSymptomsButtonTitle: String
     let continueWithoutSymptomsButtonTitle: String
@@ -96,8 +93,8 @@ class SelectSymptomsViewController: ViewController, ScrollViewNavivationbarAdjus
         
         let margin: UIEdgeInsets = .top(32) + .bottom(16)
         
-        func button(for index: Int, symptom: String) -> UIView {
-            let button = SymptomToggleButton(title: symptom, selected: viewModel.selectedSymptoms.contains(symptom))
+        func button(for index: Int, symptom: Symptom) -> UIView {
+            let button = SymptomToggleButton(title: symptom.label, selected: viewModel.selectedSymptoms.contains(symptom))
             button.tag = index
             button.addTarget(self, action: #selector(toggleSymptom), for: .valueChanged)
             button.isHidden = index >= viewModel.initiallyVisibleSymptomsCount

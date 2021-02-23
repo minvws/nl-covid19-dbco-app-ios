@@ -17,4 +17,21 @@ struct Case: Codable {
     let dateOfSymptomOnset: Date
     @ISO8601DateFormat var windowExpiresAt: Date
     let tasks: [Task]
+    let symptoms: [String]
+    
+    init(dateOfSymptomOnset: Date, windowExpiresAt: Date, tasks: [Task], symptoms: [String]) {
+        self.dateOfSymptomOnset = dateOfSymptomOnset
+        self.windowExpiresAt = windowExpiresAt
+        self.tasks = tasks
+        self.symptoms = symptoms
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        dateOfSymptomOnset = try container.decode(Date.self, forKey: .dateOfSymptomOnset)
+        _windowExpiresAt = try container.decode(ISO8601DateFormat.self, forKey: .windowExpiresAt)
+        tasks = try container.decode([Task].self, forKey: .tasks)
+        symptoms = (try container.decodeIfPresent([String].self, forKey: .symptoms)) ?? []
+    }
 }

@@ -38,6 +38,8 @@ protocol CaseManaging {
     var isWindowExpired: Bool { get }
     
     var dateOfSymptomOnset: Date { get }
+    var symptoms: [String] { get }
+    
     var tasks: [Task] { get }
     
     /// Returns the tasks as fetched by the portal without modifications by the index
@@ -65,6 +67,8 @@ protocol CaseManaging {
     func save(_ task: Task) throws
     
     func addContactTask(name: String, category: Task.Contact.Category, contactIdentifier: String?, dateOfLastExposure: Date?)
+    
+    func setSymptoms(symptoms: [String])
     
     /// Uploads all the tasks to the backend.
     /// Throws an `notPaired` error when called befored paired.
@@ -130,6 +134,11 @@ final class CaseManager: CaseManaging, Logging {
         set { appData.dateOfSymptomOnset = newValue }
     }
     
+    private(set) var symptoms: [String] {
+        get { appData.symptoms }
+        set { appData.symptoms = newValue }
+    }
+    
     private(set) var windowExpiresAt: Date {
         get { appData.windowExpiresAt }
         set {
@@ -189,6 +198,7 @@ final class CaseManager: CaseManaging, Logging {
                         self.setTasks(result.tasks)
                         self.dateOfSymptomOnset = result.dateOfSymptomOnset
                         self.windowExpiresAt = result.windowExpiresAt
+                        self.symptoms = result.symptoms
                         
                         self.fetchDate = Date() // Set the fetchdate here again to the actual date
             
@@ -461,6 +471,10 @@ final class CaseManager: CaseManaging, Logging {
         listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
     }
     
+    func setSymptoms(symptoms: [String]) {
+        self.symptoms = symptoms
+    }
+    
     func addListener(_ listener: CaseManagerListener) {
         listeners.append(ListenerWrapper(listener: listener))
         
@@ -477,7 +491,10 @@ final class CaseManager: CaseManaging, Logging {
         guard !isWindowExpired else { throw CaseManagingError.windowExpired }
         
         do {
-            let value = Case(dateOfSymptomOnset: dateOfSymptomOnset, windowExpiresAt: windowExpiresAt, tasks: tasks)
+            let value = Case(dateOfSymptomOnset: dateOfSymptomOnset,
+                             windowExpiresAt: windowExpiresAt,
+                             tasks: tasks,
+                             symptoms: symptoms)
             let identifier = try Services.pairingManager.caseToken()
             Services.networkManager.putCase(identifier: identifier, value: value) {
                 switch $0 {

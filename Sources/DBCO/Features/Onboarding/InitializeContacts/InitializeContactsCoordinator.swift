@@ -176,7 +176,7 @@ extension InitializeContactsCoordinator: DetermineContagiousPeriodCoordinatorDel
         continueToContacts()
     }
     
-    func determineContagiousPeriodCoordinator(_ coordinator: DetermineContagiousPeriodCoordinator, didFinishWith symptoms: [String], dateOfSymptomOnset: Date) {
+    func determineContagiousPeriodCoordinator(_ coordinator: DetermineContagiousPeriodCoordinator, didFinishWith symptoms: [Symptom], dateOfSymptomOnset: Date) {
         Services.onboardingManager.registerSymptoms(symptoms, dateOfOnset: dateOfSymptomOnset)
         
         // Not removing the coordinator here, so the user can go back and adjust if needed
