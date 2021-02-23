@@ -78,14 +78,14 @@ extension String {
     static var updateAppButton: String { return Localization.string(for: "updateApp.button") }
     
     /* MARK: - Onboarding */
-    static var onboardingStep1Title: String { return Localization.string(for: "onboarding.step1.title") }
-    static var onboardingStep1Message: String { return Localization.string(for: "onboarding.step1.message") }
-    static var onboardingStep1HasCodeButton: String { return Localization.string(for: "onboarding.step1.hasCodeButton") }
-    static var onboardingStep1NoCodeButton: String { return Localization.string(for: "onboarding.step1.noCodeButton") }
-    static var onboardingStep2Title: String { return Localization.string(for: "onboarding.step2.title") }
-    static var onboardingStep2CodeHint: String { return Localization.string(for: "onboarding.step2.codeHint") }
-    static var onboardingStep3Title: String { return Localization.string(for: "onboarding.step3.title") }
-    static var onboardingStep3Message: String { return Localization.string(for: "onboarding.step3.message") }
+    static var onboardingStartTitle: String { return Localization.string(for: "onboarding.start.title") }
+    static var onboardingStartMessage: String { return Localization.string(for: "onboarding.start.message") }
+    static var onboardingStartHasCodeButton: String { return Localization.string(for: "onboarding.start.hasCodeButton") }
+    static var onboardingStartNoCodeButton: String { return Localization.string(for: "onboarding.start.noCodeButton") }
+    static var onboardingPairingIntroTitle: String { return Localization.string(for: "onboarding.pairingIntro.title") }
+    static var onboardingPairingIntroMessage: String { return Localization.string(for: "onboarding.pairingIntro.message") }
+    static var onboardingPairingTitle: String { return Localization.string(for: "onboarding.pairing.title") }
+    static var onboardingPairingCodeHint: String { return Localization.string(for: "onboarding.pairing.codeHint") }
     
     /* MARK: - Privacy */
     static var onboardingConsentShortTitle: String { return Localization.string(for: "onboarding.consent.shortTitle") }

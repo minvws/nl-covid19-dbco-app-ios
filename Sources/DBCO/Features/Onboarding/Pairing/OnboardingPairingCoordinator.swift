@@ -27,14 +27,18 @@ final class OnboardingPairingCoordinator: Coordinator {
     }
     
     override func start() {
-        let pairingController = PairViewController(viewModel: PairViewModel())
-        pairingController.delegate = self
-        pairingController.onPopped = { [weak self] _ in
+        let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding2")!,
+                                                title: .onboardingPairingIntroTitle,
+                                                message: .onboardingPairingIntroMessage,
+                                                primaryButtonTitle: .next)
+        let stepController = OnboardingStepViewController(viewModel: viewModel)
+        stepController.delegate = self
+        stepController.onPopped = { [weak self] _ in
             guard let self = self else { return }
             self.delegate?.onboardingPairingCoordinatorDidCancel(self)
         }
         
-        navigationController.pushViewController(pairingController, animated: true)
+        navigationController.pushViewController(stepController, animated: true)
     }
     
     private func continueWithTasks() {
@@ -48,6 +52,18 @@ final class OnboardingPairingCoordinator: Coordinator {
         delegate?.onboardingPairingCoordinatorDidFinish(self, hasTasks: false)
     }
 
+}
+
+extension OnboardingPairingCoordinator: OnboardingStepViewControllerDelegate {
+    
+    func onboardingStepViewControllerDidSelectPrimaryButton(_ controller: OnboardingStepViewController) {
+        let pairingController = PairViewController(viewModel: PairViewModel())
+        pairingController.delegate = self
+        
+        navigationController.pushViewController(pairingController, animated: true)
+    }
+    
+    func onboardingStepViewControllerDidSelectSecondaryButton(_ controller: OnboardingStepViewController) {}
 }
 
 extension OnboardingPairingCoordinator: PairViewControllerDelegate {
