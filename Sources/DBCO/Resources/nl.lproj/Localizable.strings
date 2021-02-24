@@ -215,7 +215,7 @@
 "selectContactAddManuallyFallback" = "Handmatig toevoegen";
 
 "selectContactAuthorizationTitle" = "‘%@’ opzoeken in je contactenlijst?";
-"selectContactAuthorizationFallbackTitle" = "Dit nieuew contact opzoeken in je contactenlijst?";
+"selectContactAuthorizationFallbackTitle" = "Dit nieuwe contact opzoeken in je contactenlijst?";
 "selectContactAuthorizationMessage" = "Gebruik je contactenlijst om makkelijk contacten te vinden en contactgegevens in te vullen. Bijvoorbeeld een achternaam of een telefoonnummer.";
 "selectContactAuthorization.item1" = "Alleen gegevens die jij invult worden gedeeld";
 "selectContactAuthorization.item2" = "De GGD heeft <b>geen</b> toegang tot je hele contactenlijst";
