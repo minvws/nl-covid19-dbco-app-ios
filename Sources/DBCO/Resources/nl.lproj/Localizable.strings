@@ -215,7 +215,11 @@
 "selectContactAddManuallyFallback" = "Handmatig toevoegen";
 
 "selectContactAuthorizationTitle" = "‘%@’ opzoeken in je contactenlijst?";
-"selectContactAuthorizationMessage" = "Zo kun je snel de gegevens van dit contact invullen. Je bepaalt altijd zelf welke gegevens je met de GGD deelt en wanneer je dat doet.";
+"selectContactAuthorizationFallbackTitle" = "Dit nieuew contact opzoeken in je contactenlijst?";
+"selectContactAuthorizationMessage" = "Gebruik je contactenlijst om makkelijk contacten te vinden en contactgegevens in te vullen. Bijvoorbeeld een achternaam of een telefoonnummer.";
+"selectContactAuthorization.item1" = "Alleen gegevens die jij invult worden gedeeld";
+"selectContactAuthorization.item2" = "De GGD heeft <b>geen</b> toegang tot je hele contactenlijst";
+"selectContactAuthorization.item3" = "Gegevens worden pas met de GGD gedeeld als jij laat weten dat je klaar bent";
 "selectContactAuthorizationAllowButton" = "Ja, opzoekhulp gebruiken";
 "selectContactAuthorizationManualButton" = "Nee, zelf invullen";
 
