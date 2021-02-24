@@ -36,7 +36,6 @@ class StatusView: UIView {
     private func setup() {
         isOpaque = false
         imageView.image = UIImage(named: "Status/Warning")
-        imageView.highlightedImage = UIImage(named: "Status/Completed")
         imageView.tintColor = Theme.colors.ok
         imageView.embed(in: self)
     }
@@ -44,13 +43,16 @@ class StatusView: UIView {
     private func applyStatus() {
         switch status {
         case .missingEssentialInput:
-            imageView.isHighlighted = false
+            imageView.image = UIImage(named: "Status/Warning")
+            imageView.isHidden = false
+        case .indexShouldInform:
+            imageView.image = UIImage(named: "Status/WarningFilled")
             imageView.isHidden = false
         case .completed:
-            imageView.isHighlighted = true
+            imageView.image = UIImage(named: "Status/Completed")
             imageView.isHidden = false
         case .inProgress:
-            imageView.isHighlighted = true
+            imageView.image = UIImage(named: "Status/Completed")
             imageView.isHidden = false
         }
         
@@ -72,7 +74,7 @@ class StatusView: UIView {
             progress = value
         case .completed:
             progress = 1
-        case .missingEssentialInput:
+        case .missingEssentialInput, .indexShouldInform:
             return
         }
         

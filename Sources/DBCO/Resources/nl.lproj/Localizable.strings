@@ -176,7 +176,7 @@
 
 "contactTaskStatusStaffWillInform" = "GGD gaat informeren";
 "contactTaskStatusIndexDidInform" = "Jij hebt geïnformeerd";
-"contactTaskStatusIndexWillInform" = "Jij informeert dit contact";
+"contactTaskStatusIndexWillInform" = "Informeer dit contact";
 "contactTaskStatusMissingDetails" = "Vul gegevens aan";
 
 "taskOverviewWaitingForPairing" = "Wachten op koppeling met de GGD";

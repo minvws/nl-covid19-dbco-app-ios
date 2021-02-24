@@ -18,6 +18,7 @@ import Foundation
 struct Task: Equatable {
     enum Status: Equatable {
         case missingEssentialInput
+        case indexShouldInform
         case inProgress(Double)
         case completed
     }
@@ -90,7 +91,13 @@ struct Task: Equatable {
                 return .missingEssentialInput
             }
             
-            guard let result = questionnaireResult, result.hasAllEssentialAnswers, isOrCanBeInformed else {
+            guard let result = questionnaireResult, result.hasAllEssentialAnswers else {
+                return .missingEssentialInput
+            }
+            
+            if contact.communication == .index, contact.informedByIndexAt == nil {
+                return .indexShouldInform
+            } else if isOrCanBeInformed == false {
                 return .missingEssentialInput
             }
             
