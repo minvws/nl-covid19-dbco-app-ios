@@ -213,10 +213,8 @@ extension String {
     static var taskOverviewDeleteDataButtonTitle: String { return Localization.string(for: "taskOverviewDeleteDataButtonTitle") }
     static var taskOverviewAddContactButtonTitle: String { return Localization.string(for: "taskOverviewAddContactButtonTitle") }
     
-    static var taskOverviewUninformedContactsHeaderTitle: String { return Localization.string(for: "taskOverviewUninformedContactsHeader.title") }
-    static var taskOverviewUninformedContactsHeaderSubtitle: String { return Localization.string(for: "taskOverviewUninformedContactsHeader.subtitle") }
-    static var taskOverviewInformedContactsHeaderTitle: String { return Localization.string(for: "taskOverviewInformedContactsHeader.title") }
-    static var taskOverviewInformedContactsHeaderSubtitle: String { return Localization.string(for: "taskOverviewInformedContactsHeader.subtitle") }
+    static var taskOverviewUnsyncedContactsHeader: String { return Localization.string(for: "taskOverviewUnsyncedContactsHeader") }
+    static var taskOverviewSyncedContactsHeader: String { return Localization.string(for: "taskOverviewSyncedContactsHeader") }
     
     static var taskContactUnknownName: String { return Localization.string(for: "taskContactUnknownName") }
     

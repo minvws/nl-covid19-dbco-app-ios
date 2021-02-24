@@ -19,7 +19,7 @@ protocol TaskOverviewViewControllerDelegate: class {
 
 /// - Tag: TaskOverviewViewModel
 class TaskOverviewViewModel {
-    typealias SectionHeaderContent = (title: String, subtitle: String)
+    typealias SectionHeaderContent = (title: String, subtitle: String?)
     typealias PromptFunction = (_ animated: Bool) -> Void
     
     private let tableViewManager: TableViewManager<TaskTableViewCell>
@@ -120,21 +120,21 @@ class TaskOverviewViewModel {
         
         let tasks = Services.caseManager.tasks.filter { !$0.deletedByIndex }
         
-        let uninformedContacts = tasks.filter { !$0.isOrCanBeInformed }
-        let informedContacts = tasks.filter { $0.isOrCanBeInformed }
+        let syncedContacts = tasks.filter { !$0.isSyncedWithPortal }
+        let unsyncedContacts = tasks.filter { $0.isSyncedWithPortal }
         
-        let uninformedSectionHeader = SectionHeaderContent(.taskOverviewUninformedContactsHeaderTitle, .taskOverviewUninformedContactsHeaderSubtitle)
-        let informedSectionHeader = SectionHeaderContent(.taskOverviewInformedContactsHeaderTitle, .taskOverviewInformedContactsHeaderSubtitle)
+        let unsyncedSectionHeader = SectionHeaderContent(.taskOverviewUnsyncedContactsHeader, nil)
+        let syncedSectionHeader = SectionHeaderContent(.taskOverviewSyncedContactsHeader, nil)
         
-        if !uninformedContacts.isEmpty {
-            sections.append((header: sectionHeaderBuilder?(uninformedSectionHeader),
-                             tasks: uninformedContacts,
+        if !syncedContacts.isEmpty {
+            sections.append((header: sectionHeaderBuilder?(unsyncedSectionHeader),
+                             tasks: syncedContacts,
                              footer: addContactFooterBuilder?()))
         }
         
-        if !informedContacts.isEmpty {
-            sections.append((header: sectionHeaderBuilder?(informedSectionHeader),
-                             tasks: informedContacts,
+        if !unsyncedContacts.isEmpty {
+            sections.append((header: sectionHeaderBuilder?(syncedSectionHeader),
+                             tasks: unsyncedContacts,
                              footer: nil))
         }
         
@@ -142,8 +142,8 @@ class TaskOverviewViewModel {
         
         let windowExpired = Services.caseManager.isWindowExpired
         
-        isHeaderAddContactButtonHidden = !uninformedContacts.isEmpty || windowExpired
-        isAddContactButtonHidden = uninformedContacts.isEmpty || windowExpired
+        isHeaderAddContactButtonHidden = !syncedContacts.isEmpty || windowExpired
+        isAddContactButtonHidden = syncedContacts.isEmpty || windowExpired
     }
 }
 
@@ -322,11 +322,11 @@ class TaskOverviewViewController: PromptableViewController {
                 .wrappedInReadableWidth(insets: .top(32))
         }
         
-        let sectionHeaderBuilder = { (title: String, subtitle: String) -> UIView in
+        let sectionHeaderBuilder = { (title: String, subtitle: String?) -> UIView in
             VStack(spacing: 4,
                    Label(bodyBold: title).multiline(),
-                   Label(subhead: subtitle, textColor: Theme.colors.captionGray).multiline())
-                .wrappedInReadableWidth(insets: .top(20) + .bottom(16))
+                   Label(subhead: subtitle, textColor: Theme.colors.captionGray).multiline().hideIfEmpty())
+                .wrappedInReadableWidth(insets: .top(20) + .bottom(0))
         }
         
         let addContactFooterBuilder = { [unowned self] () -> UIView in

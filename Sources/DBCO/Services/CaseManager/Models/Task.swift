@@ -81,6 +81,8 @@ struct Task: Equatable {
     
     var questionnaireResult: QuestionnaireResult?
     
+    var isSyncedWithPortal: Bool
+    
     /// - Tag: Task.status
     var status: Status {
         guard !deletedByIndex else { return .completed }
@@ -115,6 +117,7 @@ struct Task: Equatable {
         self.label = label
         self.taskContext = nil
         self.deletedByIndex = false
+        self.isSyncedWithPortal = false
         
         switch taskType {
         case .contact:
@@ -177,6 +180,7 @@ extension Task: Codable {
         }
         
         deletedByIndex = (try? container.decode(Bool?.self, forKey: .deletedByIndex)) ?? false
+        isSyncedWithPortal = (try container.decodeIfPresent(Bool.self, forKey: .isSyncedWithPortal)) ?? false
     }
     
     func encode(to encoder: Encoder) throws {
@@ -198,6 +202,11 @@ extension Task: Codable {
         guard !(encoder.target == .api && deletedByIndex) else { return }
         
         try container.encode(questionnaireResult, forKey: .questionnaireResult)
+        
+        if encoder.target == .internalStorage {
+            try container.encode(isSyncedWithPortal, forKey: .isSyncedWithPortal)
+        }
+        
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -212,6 +221,7 @@ extension Task: Codable {
         case didInform
         case questionnaireResult
         case deletedByIndex
+        case isSyncedWithPortal
     }
 }
 

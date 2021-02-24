@@ -157,10 +157,8 @@
 "taskOverviewDeleteDataButtonTitle" = "Verwijder gegevens";
 "taskOverviewAddContactButtonTitle" = "Contact toevoegen";
 
-"taskOverviewUninformedContactsHeader.title" = "Ga hiermee aan de slag";
-"taskOverviewUninformedContactsHeader.subtitle" = "Deze contacten moeten weten dat je besmet bent";
-"taskOverviewInformedContactsHeader.title" = "Deze contacten zijn klaar";
-"taskOverviewInformedContactsHeader.subtitle" = "Jij hebt ze geïnformeerd of de GGD doet dit";
+"taskOverviewUnsyncedContactsHeader" = "Nog niet gedeeld met de GGD";
+"taskOverviewSyncedContactsHeader" = "Gedeeld met de GGD";
 
 "taskContactUnknownName" = "Geen naam bekend";
 
