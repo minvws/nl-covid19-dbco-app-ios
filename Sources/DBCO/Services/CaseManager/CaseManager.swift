@@ -292,22 +292,18 @@ final class CaseManager: CaseManaging, Logging {
                 
                 // Insert a .lastExposureDate question
                 let lastExposureQuestion = Question(uuid: UUID(),
-                                                    group: .contactDetails,
+                                                    group: .classification,
                                                     questionType: .lastExposureDate,
                                                     label: .contactInformationLastExposure,
                                                     description: nil,
-                                                    relevantForCategories: [.category1, .category2a, .category2b, .category3a, .category3b],
+                                                    relevantForCategories: [.category1, .category2a, .category2b, .category3a, .category3b, .other],
                                                     answerOptions: nil,
                                                     disabledForSources: [.portal])
                 
-                // Find the index of the question modifying the communication type. (Via triggers)
-                let communicationQuestionIndex = questionnaire.questions
-                    .firstIndex { $0.answerOptions?.contains { $0.trigger == .setCommunicationToIndex } == true }
-                
-                if let index = communicationQuestionIndex {
-                    questions.insert(lastExposureQuestion, at: index)
-                } else {
+                if questions.isEmpty { // Just to be safe
                     questions.append(lastExposureQuestion)
+                } else {
+                    questions.insert(lastExposureQuestion, at: 0)
                 }
                 
                 return Questionnaire(uuid: questionnaire.uuid,

@@ -148,6 +148,39 @@ struct Questionnaire: Codable {
     let uuid: UUID
     let taskType: Task.TaskType
     let questions: [Question]
+    
+    init(uuid: UUID, taskType: Task.TaskType, questions: [Question]) {
+        self.uuid = uuid
+        self.taskType = taskType
+        self.questions = questions
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        uuid = try container.decode(UUID.self, forKey: .uuid)
+        taskType = try container.decode(Task.TaskType.self, forKey: .taskType)
+        
+        struct FailableQuestion: Decodable, Logging {
+            let question: Question?
+            
+            init(from decoder: Decoder) throws {
+                let container = try decoder.singleValueContainer()
+                
+                do {
+                    question = try container.decode(Question.self)
+                } catch let error {
+                    question = nil
+                    
+                    logError("Failed to decode Question: \(error)")
+                }
+            }
+        }
+        
+        let questions = try container.decode([FailableQuestion].self, forKey: .questions)
+        
+        self.questions = questions.compactMap(\.question)
+    }
 }
 
 /// - Tag: Answer
