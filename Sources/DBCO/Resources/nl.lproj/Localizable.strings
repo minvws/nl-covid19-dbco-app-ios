@@ -13,6 +13,7 @@
 "done" = "Klaar";
 "ok" = "Oké";
 "tryAgain" = "Opnieuw proberen";
+"back" = "Terug";
 "delete" = "Verwijderen";
 "error.title" = "Er ging iets mis";
 "other" = "Anders";
@@ -288,8 +289,8 @@
 "sameRoomRiskQuestion.answer.positive" = "Ja, denk het wel";
 "sameRoomRiskQuestion.answer.negative" = "Nee, denk het niet";
 
-"otherCategoryTitle" = "Dit contact heeft geen extra risico op besmetting gelopen";
-"otherCategoryMessage" = "Je hoeft deze persoon dus niet te laten weten dat je besmet bent.";
+"otherCategoryTitle" = "Deze persoon heeft geen extra risico op besmetting gelopen";
+"otherCategoryMessage" = "Je hoeft dus niet te laten weten dat je besmet bent.";
 
 "contactFallbackTitle" = "Contact toevoegen";
 "contactInformationFirstName" = "Voornaam";
@@ -306,7 +307,8 @@
 "earlierExposureDateTitle" = "Je hoeft geen gegevens te delen van deze persoon";
 "earlierExposureDateMessage" = "Jullie waren namelijk bij elkaar in de buurt toen je nog niet besmettelijk was";
 
-"contactDeletePromptTitle" = "Weet je zeker dat je dit contact wilt verwijderen?";
+"contactDeletePromptTitle" = "Dit contact heeft geen extra risico op besmetting gelopen";
+"contactDeletePromptMessage" = "Je hoeft deze persoon dus niet te laten weten dat je besmet bent. Ook heeft de GGD geen gegevens van deze persoon nodig.";
 
 "contactQuestionDisabledMessage" = "Ingevuld door een GGD-medewerker";
 

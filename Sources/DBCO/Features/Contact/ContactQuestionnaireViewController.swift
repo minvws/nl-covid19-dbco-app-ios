@@ -360,7 +360,7 @@ class ContactQuestionnaireViewModel {
         
         if updatedContact.shouldBeDeleted {
             promptButtonType = .secondary
-            promptButtonTitle = didCreateNewTask ? .cancel : .delete
+            promptButtonTitle = didCreateNewTask ? .cancel : .close
         }
         
         informLink = .informContactLink(category: updatedTask.contact.category)
@@ -542,11 +542,11 @@ final class ContactQuestionnaireViewController: PromptableViewController {
             if viewModel.didCreateNewTask {
                 delegate?.contactQuestionnaireViewControllerDidCancel(self)
             } else {
-                let alert = UIAlertController(title: .contactDeletePromptTitle, message: nil, preferredStyle: .alert)
+                let alert = UIAlertController(title: .contactDeletePromptTitle, message: .contactDeletePromptMessage, preferredStyle: .alert)
                 
-                alert.addAction(UIAlertAction(title: .no, style: .default))
+                alert.addAction(UIAlertAction(title: .back, style: .default))
                 
-                alert.addAction(UIAlertAction(title: .yes, style: .default) { _ in
+                alert.addAction(UIAlertAction(title: .delete, style: .default) { _ in
                     // mark task as deleted
                     task.deletedByIndex = true
                     self.delegate?.contactQuestionnaireViewController(self, didSave: task)

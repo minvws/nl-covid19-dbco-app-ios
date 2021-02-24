@@ -61,6 +61,7 @@ extension String {
     static var done: String { return Localization.string(for: "done") }
     static var ok: String { return Localization.string(for: "ok") }
     static var tryAgain: String { return Localization.string(for: "tryAgain") }
+    static var back: String { return Localization.string(for: "back") }
     static var delete: String { return Localization.string(for: "delete") }
     static var errorTitle: String { return Localization.string(for: "error.title") }
     static var other: String { return Localization.string(for: "other") }
@@ -440,6 +441,7 @@ extension String {
     static var earlierExposureDateMessage: String { return Localization.string(for: "earlierExposureDateMessage") }
     
     static var contactDeletePromptTitle: String { return Localization.string(for: "contactDeletePromptTitle") }
+    static var contactDeletePromptMessage: String { return Localization.string(for: "contactDeletePromptMessage") }
     
     static var contactQuestionDisabledMessage: String { return Localization.string(for: "contactQuestionDisabledMessage") }
     
