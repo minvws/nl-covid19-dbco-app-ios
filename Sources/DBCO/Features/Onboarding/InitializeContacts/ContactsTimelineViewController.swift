@@ -454,6 +454,8 @@ extension ContactsTimelineViewController: ContactListInputViewDelegate {
         DispatchQueue.main.async(execute: scrollVisible)
     }
     
+    func contactListInputView(_ view: ContactListInputView, didEndEditingIn textField: UITextField) {}
+    
     func viewForPresentingSuggestionsFromContactListInputView(_ view: ContactListInputView) -> UIView {
         return self.view
     }

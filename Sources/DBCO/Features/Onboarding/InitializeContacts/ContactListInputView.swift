@@ -10,6 +10,7 @@ import Contacts
 
 protocol ContactListInputViewDelegate: class {
     func contactListInputView(_ view: ContactListInputView, didBeginEditingIn textField: UITextField)
+    func contactListInputView(_ view: ContactListInputView, didEndEditingIn textField: UITextField)
     func viewForPresentingSuggestionsFromContactListInputView(_ view: ContactListInputView) -> UIView
     func contactsAvailableForSuggestionInContactListInputView(_ view: ContactListInputView) -> [CNContact]
 }
@@ -129,6 +130,8 @@ class ContactListInputView: UIView {
         if sender.text?.isEmpty == true, !isLastField {
             sender.removeFromSuperview()
         }
+        
+        delegate?.contactListInputView(self, didEndEditingIn: sender)
     }
     
     private func updateSuggestionView() {

@@ -30,14 +30,14 @@
 "updateApp.button" = "Updaten";
 
 /* MARK: - Onboarding */
-"onboarding.step1.title" = "Help de GGD bij het contactonderzoek";
-"onboarding.step1.message" = "Je kunt via deze app bepalen wie van je contacten een grote kans op besmetting heeft gelopen. Ook kun je contactgegevens met de GGD delen voor het contactonderzoek.";
-"onboarding.step1.hasCodeButton" = "Ik heb al een code";
-"onboarding.step1.noCodeButton" = "Ik heb nog geen code";
-"onboarding.step2.title" = "Vul de code in die je hebt gekregen van de GGD-medewerker";
-"onboarding.step2.codeHint" = "De code bestaat uit 12 cijfers";
-"onboarding.step3.title" = "Voeg de gegevens van je contacten toe";
-"onboarding.step3.message" = "De GGD heeft contactgegevens nodig van mensen die jij hebt ontmoet, omdat je hen misschien hebt besmet. Via deze app kun je gemakkelijk gegevens delen. Je bepaalt zelf welke gegevens je deelt en wanneer je dat doet.";
+"onboarding.start.title" = "Help de GGD bij het contactonderzoek";
+"onboarding.start.message" = "Je kunt via deze app bepalen wie van je contacten een grote kans op besmetting heeft gelopen. Ook kun je contactgegevens met de GGD delen voor het contactonderzoek.";
+"onboarding.start.hasCodeButton" = "Ik heb al een code";
+"onboarding.start.noCodeButton" = "Ik heb nog geen code";
+"onboarding.pairing.title" = "Vul de code in die je hebt gekregen van de GGD-medewerker";
+"onboarding.pairing.codeHint" = "De code bestaat uit 12 cijfers";
+"onboarding.pairingIntro.title" = "Deel de gegevens van contacten met de GGD";
+"onboarding.pairingIntro.message" = "Zo kunnen we mensen die misschien zijn besmet zo snel mogelijk informeren. Goed om te weten: niet iedereen hoeft direct in quarantaine.";
 
 /* MARK: - Privacy */
 "onboarding.consent.shortTitle" = "Privacy";
@@ -94,14 +94,15 @@
 "determineRoommates.title" = "Wie zijn je huisgenoten?";
 "determineRoommates.message" = "Dit zijn de mensen met wie je in één huis woont.";
 "determineRoommatesAddContact" = "Voeg huisgenoot toe";
+"determineRoommatesNoContactsButtonTitle" = "Ik woon alleen";
 
 "determineContactsExplanation.shortTitle" = "Contacten";
 "determineContactsExplanation.title" = "We gaan een overzicht maken van mensen die je hebt ontmoet";
 "determineContactsExplanation.message" = "Niet iedereen die je hebt ontmoet heeft risico op besmetting gelopen. We zijn op zoek naar mensen met wie je:";
-"determineContactsExplanation.item.1" = "Langer dan 15 minuten in dezelfde ruimte bent geweest";
+"determineContactsExplanation.item.1" = "Bij wie je in de buurt en/of een tijdje in dezelfde ruimte bent geweest";
 "determineContactsExplanation.item.2" = "Intens contact hebt gehad door zoenen of seksueel contact";
 "determineContactsExplanation.item.3" = "Twijfel je? Voeg de persoon dan toch toe";
-"determineContactsExplanation.item.4" = "Je hoeft je huisgenoten niet nog een keer toe te voegen";
+"determineContactsExplanation.item.4" = "Je hoeft je huisgenoten <b>hierna</b> niet nog een keer toe te voegen";
 
 /* MARK: - Onboarding Contacts Timeline */
 "contactsTimeline.dateFormat" = "EEEE d MMMM";
@@ -214,7 +215,11 @@
 "selectContactAddManuallyFallback" = "Handmatig toevoegen";
 
 "selectContactAuthorizationTitle" = "‘%@’ opzoeken in je contactenlijst?";
-"selectContactAuthorizationMessage" = "Zo kun je snel de gegevens van dit contact invullen. Je bepaalt altijd zelf welke gegevens je met de GGD deelt en wanneer je dat doet.";
+"selectContactAuthorizationFallbackTitle" = "Dit nieuwe contact opzoeken in je contactenlijst?";
+"selectContactAuthorizationMessage" = "Gebruik je contactenlijst om makkelijk contacten te vinden en contactgegevens in te vullen. Bijvoorbeeld een achternaam of een telefoonnummer.";
+"selectContactAuthorization.item1" = "Alleen gegevens die jij invult worden gedeeld";
+"selectContactAuthorization.item2" = "De GGD heeft <b>geen</b> toegang tot je hele contactenlijst";
+"selectContactAuthorization.item3" = "Gegevens worden pas met de GGD gedeeld als jij laat weten dat je klaar bent";
 "selectContactAuthorizationAllowButton" = "Ja, opzoekhulp gebruiken";
 "selectContactAuthorizationManualButton" = "Nee, zelf invullen";
 

@@ -43,8 +43,8 @@ class PairingCodeField: UITextField {
             .font: UIFont.monospacedDigitSystemFont(ofSize: 22, weight: .regular)
         ]
         
-        accessibilityLabel = .onboardingStep2Title
-        accessibilityHint = .onboardingStep2CodeHint
+        accessibilityLabel = .onboardingPairingTitle
+        accessibilityHint = .onboardingPairingCodeHint
         
         placeholderLabel.embed(in: self)
         sendSubviewToBack(placeholderLabel)
