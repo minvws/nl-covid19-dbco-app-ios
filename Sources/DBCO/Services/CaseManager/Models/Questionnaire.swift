@@ -7,16 +7,9 @@
 
 import Foundation
 
-/// - Tag: AnswerTrigger
-enum AnswerTrigger: String, Codable {
-    case setCommunicationToIndex = "communication_index"
-    case setCommunicationToStaff = "communication_staff"
-}
-
 struct AnswerOption: Codable, Equatable {
     let label: String
     let value: String
-    let trigger: AnswerTrigger?
 }
 
 /// - Tag: Question

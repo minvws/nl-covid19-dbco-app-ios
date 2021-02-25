@@ -147,41 +147,12 @@ class ContactQuestionnaireViewModel {
                     break
                 }
                 
-                if case .multipleChoice(let option) = $0.answer.value, let trigger = option?.trigger {
-                    switch trigger {
-                    case .setCommunicationToIndex: setCommunicationToIndex()
-                    case .setCommunicationToStaff: setCommunicationToStaff()
-                    }
-                }
-                
                 updateProgress()
             }
         }
         
         self.title = updatedTask.contactName ?? .contactFallbackTitle
         
-        updateInformSectionContent()
-    }
-    
-    private func setCommunicationToIndex() {
-        // Tasks that had their "communication" set to .staff in the portal cannot be set to .index in the app
-        let portalTask = Services.caseManager.portalTasks.first { $0.uuid == task.uuid } ?? task
-        let isFixedToStaff = portalTask.source == .portal && portalTask.contact.communication == .staff
-       
-        guard !isFixedToStaff else { return updateInformSectionContent() }
-        
-        updatedContact = Task.Contact(category: updatedContact.category,
-                                      communication: .index,
-                                      informedByIndexAt: updatedContact.informedByIndexAt,
-                                      dateOfLastExposure: updatedContact.dateOfLastExposure)
-        updateInformSectionContent()
-    }
-    
-    private func setCommunicationToStaff() {
-        updatedContact = Task.Contact(category: updatedContact.category,
-                                      communication: .staff,
-                                      informedByIndexAt: updatedContact.informedByIndexAt,
-                                      dateOfLastExposure: updatedContact.dateOfLastExposure)
         updateInformSectionContent()
     }
     
@@ -232,9 +203,6 @@ class ContactQuestionnaireViewModel {
         let classificationManagers = relevantManagers.filter { $0.question.group == .classification }
         let contactDetailsManagers = relevantManagers.filter { $0.question.group == .contactDetails }
         
-        let hasCommunicationTypeQuestion = contactDetailsManagers.contains { $0.question.answerOptions?.contains { $0.trigger == .setCommunicationToIndex } == true }
-        let hasValidCommunication = updatedContact.communication != .unknown || !hasCommunicationTypeQuestion // true is there is a valid answer or, there is no question for a valid answer
-        
         func isCompleted(_ answer: Answer) -> Bool {
             return answer.progressElements.allSatisfy { $0 }
         }
@@ -244,7 +212,7 @@ class ContactQuestionnaireViewModel {
             .filter(\.isEssential)
             .allSatisfy(isCompleted)
         
-        let detailsCompleted = hasValidCommunication && contactDetailsManagers
+        let detailsCompleted = contactDetailsManagers
             .map(\.answer)
             .filter(\.isEssential)
             .allSatisfy(isCompleted)
@@ -267,7 +235,6 @@ class ContactQuestionnaireViewModel {
         let informSectionWasDisabled = informSectionView?.isEnabled == false
         informSectionView?.index = classificationIsHidden ? 2 : 3
         informSectionView?.isEnabled =
-            hasValidCommunication &&
             classificationManagers.allSatisfy(\.hasValidAnswer) &&
             !updatedContact.shouldBeDeleted
         
@@ -287,11 +254,7 @@ class ContactQuestionnaireViewModel {
             }
         } else if detailsSectionWasDisabled && (detailsSectionView?.isEnabled == true) { // Expand details section if it became enabled
             detailsSectionView?.expand(animated: true)
-            
-            // If there is already a valid communication or there's no communication question, expand the inform section too
-            if hasValidCommunication {
-                informSectionView?.expand(animated: true)
-            }
+            informSectionView?.expand(animated: true)
             
         } else if informSectionWasDisabled && (informSectionView?.isEnabled == true) { // Expand inform section if it became enabled
             informSectionView?.expand(animated: true)
