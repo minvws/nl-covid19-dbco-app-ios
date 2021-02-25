@@ -237,7 +237,7 @@ extension Task {
                                             Answer(uuid: UUID(),
                                                    questionUuid: classificationUuid,
                                                    lastModified: Date(),
-                                                   value: .classificationDetails(sameHouseholdRisk: nil, distanceRisk: nil, physicalContactRisk: nil, sameRoomRisk: nil))
+                                                   value: .classificationDetails(nil))
                                           ])
         
         return task

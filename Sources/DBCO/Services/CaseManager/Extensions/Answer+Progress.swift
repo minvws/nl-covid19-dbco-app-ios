@@ -12,16 +12,11 @@ extension Answer {
     /// An array of booleans indicating the progress of completing (elements of) the answer
     var progressElements: [Bool] {
         switch value {
-        case .classificationDetails(let sameHouseholdRisk, let distanceRisk, let physicalContactRisk, let sameRoomRisk):
-            let classificationResult = ClassificationHelper.classificationResult(for: sameHouseholdRisk,
-                                                                                 distanceRisk: distanceRisk,
-                                                                                 physicalContactRisk: physicalContactRisk,
-                                                                                 sameRoomRisk: sameRoomRisk)
-            
-            switch classificationResult {
-            case .success:
+        case .classificationDetails(let category):
+            switch category {
+            case .some:
                 return [true]
-            case .needsAssessmentFor:
+            case .none:
                 return [false]
             }
         case .contactDetails(let firstName, let lastName, let email, let phoneNumber):
