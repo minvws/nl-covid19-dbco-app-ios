@@ -261,7 +261,9 @@ class ContactQuestionnaireViewModel {
         informSectionView?.isCompleted = updatedTask.isOrCanBeInformed
         
         let detailsSectionWasDisabled = detailsSectionView?.isEnabled == false
-        detailsSectionView?.isEnabled = classificationManagers.allSatisfy(\.hasValidAnswer)
+        detailsSectionView?.isEnabled =
+            classificationManagers.allSatisfy(\.hasValidAnswer) &&
+            !updatedContact.shouldBeDeleted
         detailsSectionView?.index = classificationIsHidden ? 1 : 2
         
         let informSectionWasDisabled = informSectionView?.isEnabled == false
