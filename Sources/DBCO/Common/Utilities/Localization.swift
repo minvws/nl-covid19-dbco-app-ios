@@ -323,14 +323,18 @@ extension String {
     
     static var informContactGuidelinesDateFormat: String { return Localization.string(for: "informContactGuidelines.dateFormat") }
     
-    static func informContactGuidelines(category: Task.Contact.Category, exposureDatePlus5: String, exposureDatePlus10: String, exposureDatePlus11: String, exposureDatePlus14: String) -> String {
+    static func informContactGuidelines(category: Task.Contact.Category, exposureDatePlus5: String, exposureDatePlus10: String, exposureDatePlus11: String, exposureDatePlus14: String, within4Days: Bool) -> String {
         switch category {
         case .category1:
             return Localization.string(for: "informContactGuidelines.category1", [exposureDatePlus11])
         case .category2a, .category2b:
-            return Localization.string(for: "informContactGuidelines.category2", [exposureDatePlus5, exposureDatePlus10])
+            if within4Days {
+                return Localization.string(for: "informContactGuidelines.category2.within4Days", [exposureDatePlus5, exposureDatePlus5, exposureDatePlus10])
+            } else {
+                return Localization.string(for: "informContactGuidelines.category2.after4Days", [exposureDatePlus5, exposureDatePlus10])
+            }
         case .category3a, .category3b:
-            return Localization.string(for: "informContactGuidelines.category3", [exposureDatePlus14])
+            return Localization.string(for: "informContactGuidelines.category3", [exposureDatePlus5])
         default:
             return ""
         }

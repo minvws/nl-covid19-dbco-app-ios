@@ -317,11 +317,14 @@ class ContactQuestionnaireViewModel {
             formatter.locale = Locale.current
             formatter.timeZone = TimeZone(secondsFromGMT: 0)
             
+            let isWithin4Days = (Calendar.current.dateComponents([.day], from: exposureDate, to: Date()).day ?? 0) < 4
+            
             informContent = .informContactGuidelines(category: updatedContact.category,
                                                      exposureDatePlus5: formatter.string(from: exposureDatePlus5),
                                                      exposureDatePlus10: formatter.string(from: exposureDatePlus10),
                                                      exposureDatePlus11: formatter.string(from: exposureDatePlus11),
-                                                     exposureDatePlus14: formatter.string(from: exposureDatePlus14))
+                                                     exposureDatePlus14: formatter.string(from: exposureDatePlus14),
+                                                     within4Days: isWithin4Days)
             informIntro = .informContactGuidelinesIntro(category: updatedContact.category,
                                                         exposureDate: formatter.string(from: exposureDate))
         } else {
