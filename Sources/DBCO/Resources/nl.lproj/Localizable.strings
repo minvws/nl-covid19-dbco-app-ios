@@ -123,7 +123,7 @@
 "contactsTimelineSectionSubtitle.beforeOnset" = "Deze dag was je mogelijk al besmettelijk";
 "contactsTimelineSectionSubtitle.testDate" = "Op deze dag liet je jezelf testen";
 
-"contactsTimelineAddExtraDay.title" = "Weet je zeker dat je voor %@ nog geen klachten had?";
+"contactsTimelineAddExtraDay.title" = "Ter controle: %@ was de eerste dag dat je klachten had. Klopt dit?";
 "contactsTimelineAddExtraDay.button" = "Ik had al eerder klachten";
 
 "contactsTimelineEmptyDays.title" = "Je hebt niet aan iedere dag contacten toegevoegd";
