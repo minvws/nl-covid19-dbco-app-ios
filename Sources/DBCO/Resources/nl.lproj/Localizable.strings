@@ -13,6 +13,7 @@
 "done" = "Klaar";
 "ok" = "Oké";
 "tryAgain" = "Opnieuw proberen";
+"back" = "Terug";
 "delete" = "Verwijderen";
 "error.title" = "Er ging iets mis";
 "other" = "Anders";
@@ -64,7 +65,7 @@
 "contagiousPeriodNoSymptomsButton" = "Ik heb geen klachten";
 
 "contagiousPeriodSelectTestDate.title" = "Wanneer heb je je laten testen op corona?";
-"contagiousPeriodSelectTestDate.message" = "Kies de datum waarop de test bij je is afgenomen.";
+"contagiousPeriodSelectTestDate.message" = "Kies de datum waarop je de (laatste) coronatest hebt gedaan.";
 
 "contagiousPeriodSelectOnsetDate.title" = "Sinds wanneer heb je deze klachten?";
 "contagiousPeriodSelectOnsetDate.message" = "Twijfel je over je eerste ziektedag? Kies dan een dag eerder.";
@@ -79,7 +80,7 @@
 "contagiousPeriodOnsetDateVerify.title" =  "Weet je zeker dat je geen klachten had op %@?";
 "contagiousPeriodOnsetDateVerify.message" = "Ook lichtere klachten zoals een snotneus of vermoeidheid tellen mee.";
 "contagiousPeriodOnsetDateVerify.confirmButton" = "Geen klachten";
-"contagiousPeriodOnsetDateVerify.cancelButton" = "Ik had toch klachten";
+"contagiousPeriodOnsetDateVerify.cancelButton" = "Ik had ook die dag klachten";
 
 /* MARK: - Determine contacts */
 "onboardingDetermineContactsIntro.title" = "Ontdek welke leefregels gelden voor je contacten";
@@ -119,7 +120,7 @@
 "contactsTimelineSectionTitle.2daysAgoFormat" = "Eergisteren (%@)";
 
 "contactsTimelineSectionSubtitle.symptomOnset" = "De eerste dag dat je klachten had";
-"contactsTimelineSectionSubtitle.beforeOnset" = "Deze dag was je ook al besmettelijk";
+"contactsTimelineSectionSubtitle.beforeOnset" = "Deze dag was je mogelijk al besmettelijk";
 "contactsTimelineSectionSubtitle.testDate" = "Op deze dag liet je jezelf testen";
 
 "contactsTimelineAddExtraDay.title" = "Weet je zeker dat je voor %@ nog geen klachten had?";
@@ -156,10 +157,8 @@
 "taskOverviewDeleteDataButtonTitle" = "Verwijder gegevens";
 "taskOverviewAddContactButtonTitle" = "Contact toevoegen";
 
-"taskOverviewUninformedContactsHeader.title" = "Ga hiermee aan de slag";
-"taskOverviewUninformedContactsHeader.subtitle" = "Deze contacten moeten weten dat je besmet bent";
-"taskOverviewInformedContactsHeader.title" = "Deze contacten zijn klaar";
-"taskOverviewInformedContactsHeader.subtitle" = "Jij hebt ze geïnformeerd of de GGD doet dit";
+"taskOverviewUnsyncedContactsHeader" = "Nog niet gedeeld met de GGD";
+"taskOverviewSyncedContactsHeader" = "Gedeeld met de GGD";
 
 "taskContactUnknownName" = "Geen naam bekend";
 
@@ -175,7 +174,7 @@
 
 "contactTaskStatusStaffWillInform" = "GGD gaat informeren";
 "contactTaskStatusIndexDidInform" = "Jij hebt geïnformeerd";
-"contactTaskStatusIndexWillInform" = "Jij informeert dit contact";
+"contactTaskStatusIndexWillInform" = "Informeer dit contact";
 "contactTaskStatusMissingDetails" = "Vul gegevens aan";
 
 "taskOverviewWaitingForPairing" = "Wachten op koppeling met de GGD";
@@ -201,7 +200,7 @@
 
 "overviewTipsSection2.title" = "Zet de contacten in de app";
 "overviewTipsSection2.intro" = "Niet iedereen die je hebt ontmoet heeft risico op besmetting gelopen. We zijn op zoek naar mensen met wie je:";
-"overviewTipsSection2.item1" = "Langer dan 15 minuten in dezelfde ruimte bent geweest";
+"overviewTipsSection2.item1" = "Bij wie je in de buurt en/of een tijdje in dezelfde ruimte was";
 "overviewTipsSection2.item2" = "Intens contact hebt gehad door zoenen of seksueel contact";
 "overviewTipsSection2.item3" = "Twijfel je? Voeg de persoon dan toch toe";
 
@@ -227,8 +226,8 @@
 "contactSection.label" = "%@. Stap %d. %@. %@.";
 "contactSection.completed" = "Je hebt stap %d afgerond.";
 
-"contactTypeSection.title" = "Soort contact";
-"contactTypeSection.message" = "Beantwoord vragen over ontmoeting";
+"contactTypeSection.title" = "Over de ontmoeting";
+"contactTypeSection.message" = "Beantwoord een paar vragen";
 
 "contactDetailsSection.title" = "Contactgegevens";
 "contactDetailsSection.message" = "Vul zo veel mogelijk gegevens aan";
@@ -274,7 +273,7 @@
 "sameHouseholdRiskQuestion.answer.positive" = "Ja";
 "sameHouseholdRiskQuestion.answer.negative" = "Nee";
 
-"distanceRiskQuestion" = "Zijn jullie dicht bij elkaar geweest? (minder dan 1,5 meter)";
+"distanceRiskQuestion" = "Zijn jullie die dag dicht bij elkaar geweest? (minder dan 1,5 meter)";
 "distanceRiskQuestion.answer.moreThan15Min" = "Ja, in totaal langer dan een kwartier";
 "distanceRiskQuestion.answer.lessThan15Min" = "Ja, in totaal korter dan een kwartier";
 "distanceRiskQuestion.answer.negative" = "Nee, we hielden genoeg afstand";
@@ -288,8 +287,8 @@
 "sameRoomRiskQuestion.answer.positive" = "Ja, denk het wel";
 "sameRoomRiskQuestion.answer.negative" = "Nee, denk het niet";
 
-"otherCategoryTitle" = "Dit contact heeft geen extra risico op besmetting gelopen";
-"otherCategoryMessage" = "Je hoeft deze persoon dus niet te laten weten dat je besmet bent.";
+"otherCategoryTitle" = "Deze persoon heeft geen extra risico op besmetting gelopen";
+"otherCategoryMessage" = "Je hoeft dus niet te laten weten dat je besmet bent.";
 
 "contactFallbackTitle" = "Contact toevoegen";
 "contactInformationFirstName" = "Voornaam";
@@ -306,7 +305,8 @@
 "earlierExposureDateTitle" = "Je hoeft geen gegevens te delen van deze persoon";
 "earlierExposureDateMessage" = "Jullie waren namelijk bij elkaar in de buurt toen je nog niet besmettelijk was";
 
-"contactDeletePromptTitle" = "Weet je zeker dat je dit contact wilt verwijderen?";
+"contactDeletePromptTitle" = "Dit contact heeft geen extra risico op besmetting gelopen";
+"contactDeletePromptMessage" = "Je hoeft deze persoon dus niet te laten weten dat je besmet bent. Ook heeft de GGD geen gegevens van deze persoon nodig.";
 
 "contactQuestionDisabledMessage" = "Ingevuld door een GGD-medewerker";
 
@@ -343,7 +343,7 @@
 
 /* MARK: - Uploading */
 "unfinishedTasksOverviewTitle" = "Bijna klaar";
-"unfinishedTasksOverviewMessage" = "Kun je deze contacten nog even controleren?";
+"unfinishedTasksOverviewMessage" = "Bijna klaar. Wil je dit nog doen?";
 
 "unfinishedTaskOverviewIndexContactsHeader.title" = "Contacten die nog niet zijn geïnformeerd";
 "unfinishedTaskOverviewIndexContactsHeader.subtitle" = "Vul contactgegevens aan";

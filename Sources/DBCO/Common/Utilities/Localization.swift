@@ -61,6 +61,7 @@ extension String {
     static var done: String { return Localization.string(for: "done") }
     static var ok: String { return Localization.string(for: "ok") }
     static var tryAgain: String { return Localization.string(for: "tryAgain") }
+    static var back: String { return Localization.string(for: "back") }
     static var delete: String { return Localization.string(for: "delete") }
     static var errorTitle: String { return Localization.string(for: "error.title") }
     static var other: String { return Localization.string(for: "other") }
@@ -212,10 +213,8 @@ extension String {
     static var taskOverviewDeleteDataButtonTitle: String { return Localization.string(for: "taskOverviewDeleteDataButtonTitle") }
     static var taskOverviewAddContactButtonTitle: String { return Localization.string(for: "taskOverviewAddContactButtonTitle") }
     
-    static var taskOverviewUninformedContactsHeaderTitle: String { return Localization.string(for: "taskOverviewUninformedContactsHeader.title") }
-    static var taskOverviewUninformedContactsHeaderSubtitle: String { return Localization.string(for: "taskOverviewUninformedContactsHeader.subtitle") }
-    static var taskOverviewInformedContactsHeaderTitle: String { return Localization.string(for: "taskOverviewInformedContactsHeader.title") }
-    static var taskOverviewInformedContactsHeaderSubtitle: String { return Localization.string(for: "taskOverviewInformedContactsHeader.subtitle") }
+    static var taskOverviewUnsyncedContactsHeader: String { return Localization.string(for: "taskOverviewUnsyncedContactsHeader") }
+    static var taskOverviewSyncedContactsHeader: String { return Localization.string(for: "taskOverviewSyncedContactsHeader") }
     
     static var taskContactUnknownName: String { return Localization.string(for: "taskContactUnknownName") }
     
@@ -440,6 +439,7 @@ extension String {
     static var earlierExposureDateMessage: String { return Localization.string(for: "earlierExposureDateMessage") }
     
     static var contactDeletePromptTitle: String { return Localization.string(for: "contactDeletePromptTitle") }
+    static var contactDeletePromptMessage: String { return Localization.string(for: "contactDeletePromptMessage") }
     
     static var contactQuestionDisabledMessage: String { return Localization.string(for: "contactQuestionDisabledMessage") }
     

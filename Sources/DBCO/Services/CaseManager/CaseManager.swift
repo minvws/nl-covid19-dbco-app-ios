@@ -107,11 +107,8 @@ final class CaseManager: CaseManaging, Logging {
     @Keychain(name: "appData", service: Constants.keychainService, clearOnReinstall: true)
     private var appData: AppData = .empty // swiftlint:disable:this let_var_whitespace
     
-    @UserDefaults(key: "isSynced")
-    private(set) var isSynced: Bool = true { // swiftlint:disable:this let_var_whitespace
-        didSet {
-            listeners.forEach { $0.listener?.caseManagerDidUpdateSyncState(self) }
-        }
+    var isSynced: Bool {
+        return tasks.allSatisfy(\.isSyncedWithPortal)
     }
     
     private(set) var tasks: [Task] {
@@ -250,7 +247,6 @@ final class CaseManager: CaseManaging, Logging {
         self.dateOfSymptomOnset = dateOfSymptomOnset.addingTimeInterval(offset)
         
         windowExpiresAt = .distantFuture
-        isSynced = false
     }
     
     func removeCaseData() throws {
@@ -440,11 +436,12 @@ final class CaseManager: CaseManaging, Logging {
         if task.deletedByIndex {
             updatedTask.deletedByIndex = true
         }
-        
-        // If the data was synced and the updatedTask is the same as the current task, data is still synced
-        isSynced = isSynced && tasks[index] == updatedTask
-        
-        tasks[index] = updatedTask
+    
+        // Update task if needed and set sync state
+        if tasks[index] != updatedTask {
+            tasks[index] = updatedTask
+            tasks[index].isSyncedWithPortal = false
+        }
         
         listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
     }
@@ -486,6 +483,14 @@ final class CaseManager: CaseManaging, Logging {
         }
     }
     
+    private func markAllTasksAsSynced() {
+        for index in 0 ..< tasks.count {
+            tasks[index].isSyncedWithPortal = true
+        }
+        
+        listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
+    }
+    
     func sync(completionHandler: ((Bool) -> Void)?) throws {
         guard hasCaseData else { throw CaseManagingError.noCaseData }
         guard !isWindowExpired else { throw CaseManagingError.windowExpired }
@@ -499,7 +504,7 @@ final class CaseManager: CaseManaging, Logging {
             Services.networkManager.putCase(identifier: identifier, value: value) {
                 switch $0 {
                 case .success:
-                    self.isSynced = true
+                    self.markAllTasksAsSynced()
                     completionHandler?(true)
                 case .failure(let error):
                     self.logError("Could not sync case: \(error)")

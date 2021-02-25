@@ -18,6 +18,7 @@ import Foundation
 struct Task: Equatable {
     enum Status: Equatable {
         case missingEssentialInput
+        case indexShouldInform
         case inProgress(Double)
         case completed
     }
@@ -80,6 +81,8 @@ struct Task: Equatable {
     
     var questionnaireResult: QuestionnaireResult?
     
+    var isSyncedWithPortal: Bool
+    
     /// - Tag: Task.status
     var status: Status {
         guard !deletedByIndex else { return .completed }
@@ -90,7 +93,13 @@ struct Task: Equatable {
                 return .missingEssentialInput
             }
             
-            guard let result = questionnaireResult, result.hasAllEssentialAnswers, isOrCanBeInformed else {
+            guard let result = questionnaireResult, result.hasAllEssentialAnswers else {
+                return .missingEssentialInput
+            }
+            
+            if contact.communication == .index, contact.informedByIndexAt == nil {
+                return .indexShouldInform
+            } else if isOrCanBeInformed == false {
                 return .missingEssentialInput
             }
             
@@ -108,6 +117,7 @@ struct Task: Equatable {
         self.label = label
         self.taskContext = nil
         self.deletedByIndex = false
+        self.isSyncedWithPortal = false
         
         switch taskType {
         case .contact:
@@ -170,6 +180,7 @@ extension Task: Codable {
         }
         
         deletedByIndex = (try? container.decode(Bool?.self, forKey: .deletedByIndex)) ?? false
+        isSyncedWithPortal = (try container.decodeIfPresent(Bool.self, forKey: .isSyncedWithPortal)) ?? false
     }
     
     func encode(to encoder: Encoder) throws {
@@ -191,6 +202,11 @@ extension Task: Codable {
         guard !(encoder.target == .api && deletedByIndex) else { return }
         
         try container.encode(questionnaireResult, forKey: .questionnaireResult)
+        
+        if encoder.target == .internalStorage {
+            try container.encode(isSyncedWithPortal, forKey: .isSyncedWithPortal)
+        }
+        
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -205,6 +221,7 @@ extension Task: Codable {
         case didInform
         case questionnaireResult
         case deletedByIndex
+        case isSyncedWithPortal
     }
 }
 

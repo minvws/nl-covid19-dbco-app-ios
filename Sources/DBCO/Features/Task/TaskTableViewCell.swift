@@ -55,6 +55,7 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
                 subtitleLabel.text = .contactTaskStatusIndexDidInform
             case .index:
                 subtitleLabel.text = .contactTaskStatusIndexWillInform
+                subtitleLabel.textColor = Theme.colors.orange
             default:
                 break
             }
