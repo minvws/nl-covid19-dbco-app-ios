@@ -248,7 +248,7 @@ class ContactQuestionnaireViewModel {
                 classificationSectionView?.expand(animated: false)
             } else if !allDetailsFilledIn {
                 detailsSectionView?.expand(animated: false)
-                if informSectionView?.isEnabled == true { // Since the inform section is not disabled, it will not auto expand when the communication question is answered
+                if informSectionView?.isEnabled == true { // Since the inform section is not disabled, it wouldn't auto expand otherwise
                     informSectionView?.expand(animated: false)
                 }
             } else if sections.allSatisfy(\.isCollapsed) {
@@ -280,15 +280,21 @@ class ContactQuestionnaireViewModel {
         copyButtonHidden = !Services.configManager.featureFlags.enablePerspectiveCopy
         
         switch updatedContact.communication {
-        case .index, .unknown:
-            informTitle = .informContactTitleIndex(firstName: firstName)
+        case .index:
+            informTitle = .informContactTitle(firstName: firstName)
             informFooter = .informContactFooterIndex(firstName: firstName)
             informButtonType = .primary
             promptButtonType = .secondary
             setInformButtonTitle()
         case .staff:
-            informTitle = .informContactTitleStaff(firstName: firstName)
+            informTitle = .informContactTitle(firstName: firstName)
             informFooter = .informContactFooterStaff(firstName: firstName)
+            informButtonType = .secondary
+            promptButtonType = .primary
+            setInformButtonTitle()
+        case .unknown:
+            informTitle = .informContactTitle(firstName: firstName)
+            informFooter = .informContactFooterUnknown(firstName: firstName)
             informButtonType = .secondary
             promptButtonType = .primary
             setInformButtonTitle()

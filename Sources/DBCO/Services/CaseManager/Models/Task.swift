@@ -89,15 +89,11 @@ struct Task: Equatable {
         
         switch taskType {
         case .contact:
-            guard contact.communication != .unknown else {
-                return .missingEssentialInput
-            }
-            
             guard let result = questionnaireResult, result.hasAllEssentialAnswers else {
                 return .missingEssentialInput
             }
             
-            if contact.communication == .index, contact.informedByIndexAt == nil {
+            if [.index, .unknown].contains(contact.communication), contact.informedByIndexAt == nil {
                 return .indexShouldInform
             } else if isOrCanBeInformed == false {
                 return .missingEssentialInput

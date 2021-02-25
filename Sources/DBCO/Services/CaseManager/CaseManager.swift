@@ -329,7 +329,18 @@ final class CaseManager: CaseManaging, Logging {
         fetchedTasks.forEach { task in
             if let existingTaskIndex = tasks.firstIndex(where: { $0.uuid == task.uuid }) {
                 if tasks[existingTaskIndex].questionnaireResult == nil {
+                    // Not modified by the user yet, so we can just replace it entirely
                     tasks[existingTaskIndex] = task
+                } else {
+                    switch tasks[existingTaskIndex].taskType{
+                    case .contact:
+                        // Update only the communication type
+                        let existingContact = tasks[existingTaskIndex].contact!
+                        tasks[existingTaskIndex].contact = Task.Contact(category: existingContact.category,
+                                                                        communication: task.contact.communication,
+                                                                        informedByIndexAt: existingContact.informedByIndexAt,
+                                                                        dateOfLastExposure: existingContact.dateOfLastExposure)
+                    }
                 }
             } else {
                 tasks.append(task)

@@ -13,13 +13,11 @@ extension Task {
         guard taskType == .contact else { return false }
         
         switch contact.communication {
-        case .index:
+        case .index, .unknown:
             return contact.informedByIndexAt != nil
         case .staff:
             // The GGD can only contact when there's a email or phoneNumber filled in
             return contactEmail != nil || contactPhoneNumber != nil
-        case .unknown:
-            return false
         }
     }
     

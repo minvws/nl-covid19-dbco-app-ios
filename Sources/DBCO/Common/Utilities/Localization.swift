@@ -301,14 +301,9 @@ extension String {
     static var informContactSectionTitle: String { return Localization.string(for: "informContactSection.title") }
     static var informContactSectionMessage: String { return Localization.string(for: "informContactSection.message") }
     
-    static func informContactTitleIndex(firstName: String?) -> String {
+    static func informContactTitle(firstName: String?) -> String {
         let firstName = firstName ?? .contactPromptNameFallback
-        return Localization.string(for: "informContactTitle.index", [firstName])
-    }
-    
-    static func informContactTitleStaff(firstName: String?) -> String {
-        let firstName = firstName ?? .contactPromptNameFallback
-        return Localization.string(for: "informContactTitle.staff", [firstName])
+        return Localization.string(for: "informContactTitle", [firstName])
     }
     
     static func informContactFooterIndex(firstName: String?) -> String {
@@ -319,6 +314,11 @@ extension String {
     static func informContactFooterStaff(firstName: String?) -> String {
         let firstName = firstName ?? .contactPromptNameFallback
         return Localization.string(for: "informContactFooter.staff", [firstName])
+    }
+    
+    static func informContactFooterUnknown(firstName: String?) -> String {
+        let firstName = firstName ?? .contactPromptNameFallback
+        return Localization.string(for: "informContactFooter.unknown", [firstName])
     }
     
     static var informContactGuidelinesDateFormat: String { return Localization.string(for: "informContactGuidelines.dateFormat") }

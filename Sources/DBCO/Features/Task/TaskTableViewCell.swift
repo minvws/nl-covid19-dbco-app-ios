@@ -44,20 +44,16 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
         
         statusView.status = task.status
         
-        if let result = task.questionnaireResult,
-           task.contact.communication != .unknown,
-           result.hasAllEssentialAnswers {
-    
+        if let result = task.questionnaireResult, result.hasAllEssentialAnswers {
             switch task.contact.communication {
             case .staff:
                 subtitleLabel.text = .contactTaskStatusStaffWillInform
-            case .index where task.contact.informedByIndexAt != nil:
+            case .index where task.contact.informedByIndexAt != nil,
+                 .unknown where task.contact.informedByIndexAt != nil:
                 subtitleLabel.text = .contactTaskStatusIndexDidInform
-            case .index:
+            case .index, .unknown:
                 subtitleLabel.text = .contactTaskStatusIndexWillInform
                 subtitleLabel.textColor = Theme.colors.orange
-            default:
-                break
             }
         } else {
             subtitleLabel.text = .contactTaskStatusMissingDetails

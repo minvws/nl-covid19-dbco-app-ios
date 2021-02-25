@@ -235,10 +235,10 @@
 "informContactSection.title" = "Informatie voor dit contact";
 "informContactSection.message" = "De leefregels voor deze persoon";
 
-"informContactTitle.index" = "Dit zijn de leefregels voor %@:";
-"informContactTitle.staff" = "Dit zijn de leefregels voor %@:";
+"informContactTitle" = "Dit zijn de leefregels voor %@:";
 "informContactFooter.index" = "Je hebt met de GGD afgesproken dat jij %@ informeert";
-"informContactFooter.staff" = "De GGD neemt ook contact op met %@.";
+"informContactFooter.staff" = "Je hebt met de GGD afgesproken dat zij %@ informeren. Je kunt natuurlijk wel zelf alvast de leefregels delen.";
+"informContactFooter.unknown" = "De GGD raadt aan om %@ alvast te informeren en deze leefregels te delen.";
 
 "informContactGuidelines.dateFormat" = "EEEE d MMMM";
 "informContactGuidelines.category1" = "<ul><li>Blijf thuis, vermijd contact met je besmette huisgenoot en ontvang geen bezoek</li><li>Doe een coronatest <b>5 dagen</b> na het laatste contact met je besmette huisgenoot. Ook als je geen klachten hebt. De GGD helpt je bij het bepalen van de juiste testdatum. De afspraak voor een coronatest maak je daarna via 0800-2035</li><li>Doe je geen coronatest? Dan blijf je thuis tot en met <b>10 dagen</b> na het laatste contact. Je mag op z’n vroegst weer naar buiten op %@</li><li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt</li><li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li></ul>";
