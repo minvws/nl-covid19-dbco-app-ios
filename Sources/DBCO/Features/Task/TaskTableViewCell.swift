@@ -45,7 +45,7 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
         statusView.status = task.status
         
         if let result = task.questionnaireResult,
-           task.contact.communication != .none,
+           task.contact.communication != .unknown,
            result.hasAllEssentialAnswers {
     
             switch task.contact.communication {

@@ -18,7 +18,7 @@ extension Task {
         case .staff:
             // The GGD can only contact when there's a email or phoneNumber filled in
             return contactEmail != nil || contactPhoneNumber != nil
-        case .none:
+        case .unknown:
             return false
         }
     }

@@ -422,14 +422,6 @@ final class CaseManager: CaseManaging, Logging {
         switch updatedTask.taskType {
         case .contact:
             updatedTask.contact = task.contact
-            
-            // Fallback to .index for communication if currently .none
-            if let contact = updatedTask.contact, contact.communication == .none {
-                updatedTask.contact = Task.Contact(category: contact.category,
-                                                   communication: .index,
-                                                   informedByIndexAt: contact.informedByIndexAt,
-                                                   dateOfLastExposure: contact.dateOfLastExposure)
-            }
         }
         
         // Update deletion
@@ -459,7 +451,7 @@ final class CaseManager: CaseManaging, Logging {
     func addContactTask(name: String, category: Task.Contact.Category, contactIdentifier: String?, dateOfLastExposure: Date?) {
         var task = Task(type: .contact, label: name, source: .app)
         task.contact = Task.Contact(category: category,
-                                    communication: .none,
+                                    communication: .unknown,
                                     informedByIndexAt: nil,
                                     dateOfLastExposure: dateOfLastExposure.map(Self.valueDateFormatter.string),
                                     contactIdentifier: contactIdentifier)

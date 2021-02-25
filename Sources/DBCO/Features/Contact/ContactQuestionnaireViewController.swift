@@ -233,7 +233,7 @@ class ContactQuestionnaireViewModel {
         let contactDetailsManagers = relevantManagers.filter { $0.question.group == .contactDetails }
         
         let hasCommunicationTypeQuestion = contactDetailsManagers.contains { $0.question.answerOptions?.contains { $0.trigger == .setCommunicationToIndex } == true }
-        let hasValidCommunication = updatedContact.communication != .none || !hasCommunicationTypeQuestion // true is there is a valid answer or, there is no question for a valid answer
+        let hasValidCommunication = updatedContact.communication != .unknown || !hasCommunicationTypeQuestion // true is there is a valid answer or, there is no question for a valid answer
         
         func isCompleted(_ answer: Answer) -> Bool {
             return answer.progressElements.allSatisfy { $0 }
@@ -315,7 +315,7 @@ class ContactQuestionnaireViewModel {
         copyButtonHidden = !Services.configManager.featureFlags.enablePerspectiveCopy
         
         switch updatedContact.communication {
-        case .index, .none:
+        case .index, .unknown:
             informTitle = .informContactTitleIndex(firstName: firstName)
             informFooter = .informContactFooterIndex(firstName: firstName)
             informButtonType = .primary
@@ -562,7 +562,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         case .index where task.contact.informedByIndexAt != nil,
              .staff where task.isOrCanBeInformed:
             delegate?.contactQuestionnaireViewController(self, didSave: viewModel.updatedTask)
-        case .index, .none:
+        case .index, .unknown:
             let alert = UIAlertController(title: .contactInformPromptTitle(firstName: firstName), message: .contactInformPromptMessage, preferredStyle: .alert)
             
             alert.addAction(UIAlertAction(title: .contactInformOptionDone, style: .default) { _ in
