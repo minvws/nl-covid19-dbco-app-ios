@@ -54,14 +54,17 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
             baseAnswer.value = .classificationDetails(contactCategory: contactCategory)
         }
         
-        guard case .classificationDetails(let sameHouseholdRisk, let distanceRisk, let physicalContactRisk, let sameRoomRisk) = baseAnswer.value else {
+        guard case .classificationDetails(let category) = baseAnswer.value else {
             fatalError()
         }
         
-        self.sameHouseholdRisk = sameHouseholdRisk
-        self.distanceRisk = distanceRisk
-        self.physicalContactRisk = physicalContactRisk
-        self.sameRoomRisk = sameRoomRisk
+        if let category = category {
+            ClassificationHelper.setValues(for: category,
+                                           sameHouseholdRisk: &sameHouseholdRisk,
+                                           distanceRisk: &distanceRisk,
+                                           physicalContactRisk: &physicalContactRisk,
+                                           sameRoomRisk: &sameRoomRisk)
+        }
         
         classification = .needsAssessmentFor(.sameHousehold)
         determineGroupVisibility()
@@ -98,12 +101,9 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         
         switch classification {
         case .success(let category):
-            answer.value = .classificationDetails(contactCategory: category)
+            answer.value = .classificationDetails(category)
         case .needsAssessmentFor:
-            answer.value = .classificationDetails(sameHouseholdRisk: sameHouseholdRisk,
-                                                  distanceRisk: distanceRisk,
-                                                  physicalContactRisk: physicalContactRisk,
-                                                  sameRoomRisk: sameRoomRisk)
+            answer.value = .classificationDetails(nil)
         }
         
         return answer
