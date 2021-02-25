@@ -286,7 +286,7 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
                    sectionStackView,
                    VStack(spacing: 16,
                           addExtraDaySectionView,
-                          Button(title: .next, style: .primary).touchUpInside(self, action: #selector(handleContinue))))
+                          Button(title: .done, style: .primary).touchUpInside(self, action: #selector(handleContinue))))
                 .distribution(.fill)
                 .embed(in: scrollView.readableWidth, insets: margin)
         

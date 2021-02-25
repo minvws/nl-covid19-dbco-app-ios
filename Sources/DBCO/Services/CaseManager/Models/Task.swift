@@ -51,7 +51,7 @@ struct Task: Equatable {
         enum Communication: String, Codable {
             case staff
             case index
-            case none
+            case unknown
         }
         
         let category: Category
@@ -89,15 +89,11 @@ struct Task: Equatable {
         
         switch taskType {
         case .contact:
-            guard contact.communication != .none else {
-                return .missingEssentialInput
-            }
-            
             guard let result = questionnaireResult, result.hasAllEssentialAnswers else {
                 return .missingEssentialInput
             }
             
-            if contact.communication == .index, contact.informedByIndexAt == nil {
+            if [.index, .unknown].contains(contact.communication), contact.informedByIndexAt == nil {
                 return .indexShouldInform
             } else if isOrCanBeInformed == false {
                 return .missingEssentialInput
@@ -121,7 +117,7 @@ struct Task: Equatable {
         
         switch taskType {
         case .contact:
-            contact = Contact(category: .other, communication: .none, informedByIndexAt: nil, dateOfLastExposure: nil, contactIdentifier: nil)
+            contact = Contact(category: .other, communication: .unknown, informedByIndexAt: nil, dateOfLastExposure: nil, contactIdentifier: nil)
         }
     }
     

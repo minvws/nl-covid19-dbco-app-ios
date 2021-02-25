@@ -329,7 +329,18 @@ final class CaseManager: CaseManaging, Logging {
         fetchedTasks.forEach { task in
             if let existingTaskIndex = tasks.firstIndex(where: { $0.uuid == task.uuid }) {
                 if tasks[existingTaskIndex].questionnaireResult == nil {
+                    // Not modified by the user yet, so we can just replace it entirely
                     tasks[existingTaskIndex] = task
+                } else {
+                    switch tasks[existingTaskIndex].taskType{
+                    case .contact:
+                        // Update only the communication type
+                        let existingContact = tasks[existingTaskIndex].contact!
+                        tasks[existingTaskIndex].contact = Task.Contact(category: existingContact.category,
+                                                                        communication: task.contact.communication,
+                                                                        informedByIndexAt: existingContact.informedByIndexAt,
+                                                                        dateOfLastExposure: existingContact.dateOfLastExposure)
+                    }
                 }
             } else {
                 tasks.append(task)
@@ -418,14 +429,6 @@ final class CaseManager: CaseManaging, Logging {
         switch updatedTask.taskType {
         case .contact:
             updatedTask.contact = task.contact
-            
-            // Fallback to .index for communication if currently .none
-            if let contact = updatedTask.contact, contact.communication == .none {
-                updatedTask.contact = Task.Contact(category: contact.category,
-                                                   communication: .index,
-                                                   informedByIndexAt: contact.informedByIndexAt,
-                                                   dateOfLastExposure: contact.dateOfLastExposure)
-            }
         }
         
         // Update deletion
@@ -455,7 +458,7 @@ final class CaseManager: CaseManaging, Logging {
     func addContactTask(name: String, category: Task.Contact.Category, contactIdentifier: String?, dateOfLastExposure: Date?) {
         var task = Task(type: .contact, label: name, source: .app)
         task.contact = Task.Contact(category: category,
-                                    communication: .none,
+                                    communication: .unknown,
                                     informedByIndexAt: nil,
                                     dateOfLastExposure: dateOfLastExposure.map(Self.valueDateFormatter.string),
                                     contactIdentifier: contactIdentifier)

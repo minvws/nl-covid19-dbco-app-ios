@@ -10,8 +10,7 @@ import Contacts
 
 extension AnswerOption {
     static let lastExposureDateEarlierOption = AnswerOption(label: .contactInformationLastExposureEarlier,
-                                                            value: "earlier",
-                                                            trigger: nil)
+                                                            value: "earlier")
 }
 
 /// - Tag: AnswerManaging
@@ -331,12 +330,10 @@ class LastExposureDateAnswerManager: AnswerManaging {
         let dateOptions = (0...numberOfDays)
             .compactMap { Calendar.current.date(byAdding: .day, value: $0, to: startDate) }
             .map { AnswerOption(label: Self.displayDateFormatter.string(from: $0),
-                                value: Self.valueDateFormatter.string(from: $0),
-                                trigger: nil) }
+                                value: Self.valueDateFormatter.string(from: $0)) }
         
         let everyDayOption = AnswerOption(label: .contactInformationLastExposureEveryDay,
-                                          value: Self.valueDateFormatter.string(from: endDate),
-                                          trigger: nil)
+                                          value: Self.valueDateFormatter.string(from: endDate))
         
         var answerOptions = [.lastExposureDateEarlierOption] + dateOptions + [everyDayOption]
         
@@ -346,8 +343,7 @@ class LastExposureDateAnswerManager: AnswerManaging {
             } else if let date = Self.valueDateFormatter.date(from: lastExposureDate) {
                 // If we got a different valid date, create an option for it
                 let option = AnswerOption(label: Self.displayDateFormatter.string(from: date),
-                                          value: lastExposureDate,
-                                          trigger: nil)
+                                          value: lastExposureDate)
                 answerOptions.append(option)
                 baseAnswer.value = .lastExposureDate(option)
             }

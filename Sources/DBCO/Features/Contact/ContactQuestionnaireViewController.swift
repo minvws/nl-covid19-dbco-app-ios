@@ -147,41 +147,12 @@ class ContactQuestionnaireViewModel {
                     break
                 }
                 
-                if case .multipleChoice(let option) = $0.answer.value, let trigger = option?.trigger {
-                    switch trigger {
-                    case .setCommunicationToIndex: setCommunicationToIndex()
-                    case .setCommunicationToStaff: setCommunicationToStaff()
-                    }
-                }
-                
                 updateProgress()
             }
         }
         
         self.title = updatedTask.contactName ?? .contactFallbackTitle
         
-        updateInformSectionContent()
-    }
-    
-    private func setCommunicationToIndex() {
-        // Tasks that had their "communication" set to .staff in the portal cannot be set to .index in the app
-        let portalTask = Services.caseManager.portalTasks.first { $0.uuid == task.uuid } ?? task
-        let isFixedToStaff = portalTask.source == .portal && portalTask.contact.communication == .staff
-       
-        guard !isFixedToStaff else { return updateInformSectionContent() }
-        
-        updatedContact = Task.Contact(category: updatedContact.category,
-                                      communication: .index,
-                                      informedByIndexAt: updatedContact.informedByIndexAt,
-                                      dateOfLastExposure: updatedContact.dateOfLastExposure)
-        updateInformSectionContent()
-    }
-    
-    private func setCommunicationToStaff() {
-        updatedContact = Task.Contact(category: updatedContact.category,
-                                      communication: .staff,
-                                      informedByIndexAt: updatedContact.informedByIndexAt,
-                                      dateOfLastExposure: updatedContact.dateOfLastExposure)
         updateInformSectionContent()
     }
     
@@ -232,9 +203,6 @@ class ContactQuestionnaireViewModel {
         let classificationManagers = relevantManagers.filter { $0.question.group == .classification }
         let contactDetailsManagers = relevantManagers.filter { $0.question.group == .contactDetails }
         
-        let hasCommunicationTypeQuestion = contactDetailsManagers.contains { $0.question.answerOptions?.contains { $0.trigger == .setCommunicationToIndex } == true }
-        let hasValidCommunication = updatedContact.communication != .none || !hasCommunicationTypeQuestion // true is there is a valid answer or, there is no question for a valid answer
-        
         func isCompleted(_ answer: Answer) -> Bool {
             return answer.progressElements.allSatisfy { $0 }
         }
@@ -244,7 +212,7 @@ class ContactQuestionnaireViewModel {
             .filter(\.isEssential)
             .allSatisfy(isCompleted)
         
-        let detailsCompleted = hasValidCommunication && contactDetailsManagers
+        let detailsCompleted = contactDetailsManagers
             .map(\.answer)
             .filter(\.isEssential)
             .allSatisfy(isCompleted)
@@ -269,7 +237,6 @@ class ContactQuestionnaireViewModel {
         let informSectionWasDisabled = informSectionView?.isEnabled == false
         informSectionView?.index = classificationIsHidden ? 2 : 3
         informSectionView?.isEnabled =
-            hasValidCommunication &&
             classificationManagers.allSatisfy(\.hasValidAnswer) &&
             !updatedContact.shouldBeDeleted
         
@@ -281,7 +248,7 @@ class ContactQuestionnaireViewModel {
                 classificationSectionView?.expand(animated: false)
             } else if !allDetailsFilledIn {
                 detailsSectionView?.expand(animated: false)
-                if informSectionView?.isEnabled == true { // Since the inform section is not disabled, it will not auto expand when the communication question is answered
+                if informSectionView?.isEnabled == true { // Since the inform section is not disabled, it wouldn't auto expand otherwise
                     informSectionView?.expand(animated: false)
                 }
             } else if sections.allSatisfy(\.isCollapsed) {
@@ -289,11 +256,7 @@ class ContactQuestionnaireViewModel {
             }
         } else if detailsSectionWasDisabled && (detailsSectionView?.isEnabled == true) { // Expand details section if it became enabled
             detailsSectionView?.expand(animated: true)
-            
-            // If there is already a valid communication or there's no communication question, expand the inform section too
-            if hasValidCommunication {
-                informSectionView?.expand(animated: true)
-            }
+            informSectionView?.expand(animated: true)
             
         } else if informSectionWasDisabled && (informSectionView?.isEnabled == true) { // Expand inform section if it became enabled
             informSectionView?.expand(animated: true)
@@ -317,15 +280,21 @@ class ContactQuestionnaireViewModel {
         copyButtonHidden = !Services.configManager.featureFlags.enablePerspectiveCopy
         
         switch updatedContact.communication {
-        case .index, .none:
-            informTitle = .informContactTitleIndex(firstName: firstName)
+        case .index:
+            informTitle = .informContactTitle(firstName: firstName)
             informFooter = .informContactFooterIndex(firstName: firstName)
             informButtonType = .primary
             promptButtonType = .secondary
             setInformButtonTitle()
         case .staff:
-            informTitle = .informContactTitleStaff(firstName: firstName)
+            informTitle = .informContactTitle(firstName: firstName)
             informFooter = .informContactFooterStaff(firstName: firstName)
+            informButtonType = .secondary
+            promptButtonType = .primary
+            setInformButtonTitle()
+        case .unknown:
+            informTitle = .informContactTitle(firstName: firstName)
+            informFooter = .informContactFooterUnknown(firstName: firstName)
             informButtonType = .secondary
             promptButtonType = .primary
             setInformButtonTitle()
@@ -348,11 +317,14 @@ class ContactQuestionnaireViewModel {
             formatter.locale = Locale.current
             formatter.timeZone = TimeZone(secondsFromGMT: 0)
             
+            let isWithin4Days = (Calendar.current.dateComponents([.day], from: exposureDate, to: Date()).day ?? 0) < 4
+            
             informContent = .informContactGuidelines(category: updatedContact.category,
                                                      exposureDatePlus5: formatter.string(from: exposureDatePlus5),
                                                      exposureDatePlus10: formatter.string(from: exposureDatePlus10),
                                                      exposureDatePlus11: formatter.string(from: exposureDatePlus11),
-                                                     exposureDatePlus14: formatter.string(from: exposureDatePlus14))
+                                                     exposureDatePlus14: formatter.string(from: exposureDatePlus14),
+                                                     within4Days: isWithin4Days)
             informIntro = .informContactGuidelinesIntro(category: updatedContact.category,
                                                         exposureDate: formatter.string(from: exposureDate))
         } else {
@@ -564,7 +536,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         case .index where task.contact.informedByIndexAt != nil,
              .staff where task.isOrCanBeInformed:
             delegate?.contactQuestionnaireViewController(self, didSave: viewModel.updatedTask)
-        case .index, .none:
+        case .index, .unknown:
             let alert = UIAlertController(title: .contactInformPromptTitle(firstName: firstName), message: .contactInformPromptMessage, preferredStyle: .alert)
             
             alert.addAction(UIAlertAction(title: .contactInformOptionDone, style: .default) { _ in
