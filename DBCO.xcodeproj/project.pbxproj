@@ -467,8 +467,9 @@
 			children = (
 				CDE30E68251C89FF00862A40 /* NavigationController.swift */,
 				CD49BAEA2525CE7C0079D018 /* PromptableViewController.swift */,
-				CDFCF906250FA6E80062269A /* ViewController.swift */,
+				CD0E968625E58709006E70BD /* RequestContactsAuthorizationViewController.swift */,
 				CD24CBF725C0305100A2F634 /* ScrollViewNavivationbarAdjusting.swift */,
+				CDFCF906250FA6E80062269A /* ViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -583,7 +584,6 @@
 				CD2963432514BF4E008443AF /* SelectContactViewController.swift */,
 				CDA0F6902539F0D9009FD2A9 /* AnswerManaging.swift */,
 				CDA0F6952539F1A3009FD2A9 /* LabeledInputView.swift */,
-				CD0E968625E58709006E70BD /* RequestContactsAuthorizationViewController.swift */,
 			);
 			path = Contact;
 			sourceTree = "<group>";

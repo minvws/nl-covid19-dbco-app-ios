@@ -15,12 +15,33 @@ protocol ContactsAuthorizationViewControllerDelegate: class {
 class ContactsAuthorizationViewModel {
     
     let title: String
+    let allowButtonTitle: String
+    let manualButtonTitle: String
     
-    init(contactName: String?) {
-        if let contactName = contactName {
-            title = .selectContactAuthorizationTitle(name: contactName)
-        } else {
-            title = .selectContactAuthorizationFallbackTitle
+    enum Style {
+        case onboarding
+        case selectContact
+    }
+    
+    let topMargin: CGFloat
+    
+    init(contactName: String?, style: Style) {
+        switch style {
+        case .onboarding:
+            title = .determineContactsAuthorizationTitle
+            topMargin = 18
+            allowButtonTitle = .determineContactsAuthorizationAllowButton
+            manualButtonTitle = .determineContactsAuthorizationAddManuallyButton
+        case .selectContact:
+            if let contactName = contactName {
+                title = .selectContactAuthorizationTitle(name: contactName)
+            } else {
+                title = .selectContactAuthorizationFallbackTitle
+            }
+            
+            topMargin = 64
+            allowButtonTitle = .selectContactAuthorizationAllowButton
+            manualButtonTitle = .selectContactAuthorizationManualButton
         }
     }
 }
@@ -82,7 +103,7 @@ class ContactsAuthorizationViewController: PromptableViewController, ScrollViewN
                 .alignment(.top)
         }
         
-        let margin: UIEdgeInsets = .top(64) + .bottom(18)
+        let margin: UIEdgeInsets = .top(viewModel.topMargin) + .bottom(18)
         
         let stack =
             VStack(spacing: 24,
@@ -103,9 +124,9 @@ class ContactsAuthorizationViewController: PromptableViewController, ScrollViewN
                                       constant: -(margin.top + margin.bottom)).isActive = true
         
         promptView = VStack(spacing: 16,
-                            Button(title: .selectContactAuthorizationManualButton, style: .secondary)
+                            Button(title: viewModel.manualButtonTitle, style: .secondary)
                                 .touchUpInside(self, action: #selector(manual)),
-                            Button(title: .selectContactAuthorizationAllowButton, style: .primary)
+                            Button(title: viewModel.allowButtonTitle, style: .primary)
                                 .touchUpInside(self, action: #selector(allow)))
     }
     

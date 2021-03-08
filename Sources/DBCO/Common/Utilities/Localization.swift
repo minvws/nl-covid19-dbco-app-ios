@@ -137,7 +137,6 @@ extension String {
     static var onboardingDetermineContactsIntroMessage: String { return Localization.string(for: "onboardingDetermineContactsIntro.message") }
     
     static var determineContactsAuthorizationTitle: String { return Localization.string(for: "determineContactsAuthorization.title") }
-    static var determineContactsAuthorizationMessage: String { return Localization.string(for: "determineContactsAuthorization.message") }
     static var determineContactsAuthorizationAllowButton: String { return Localization.string(for: "determineContactsAuthorization.allowButton") }
     static var determineContactsAuthorizationAddManuallyButton: String { return Localization.string(for: "determineContactsAuthorization.addManuallyButton") }
     
