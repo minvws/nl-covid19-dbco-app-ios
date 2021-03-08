@@ -31,7 +31,7 @@
 "updateApp.button" = "Updaten";
 
 /* MARK: - Onboarding */
-"onboarding.start.title" = "Help de GGD bij het contactonderzoek";
+"onboarding.start.title" = "Waarschuw de mensen die je misschien hebt besmet";
 "onboarding.start.message" = "Je kunt via deze app bepalen wie van je contacten een grote kans op besmetting heeft gelopen. Ook kun je contactgegevens met de GGD delen voor het contactonderzoek.";
 "onboarding.start.hasCodeButton" = "Ik heb al een code";
 "onboarding.start.noCodeButton" = "Ik heb nog geen code";
@@ -83,8 +83,8 @@
 "contagiousPeriodOnsetDateVerify.cancelButton" = "Ik had ook die dag klachten";
 
 /* MARK: - Determine contacts */
-"onboardingDetermineContactsIntro.title" = "Ontdek welke leefregels gelden voor je contacten";
-"onboardingDetermineContactsIntro.message" = "Goed om te weten: niet iedereen hoeft direct in quarantaine om de verspreiding van het coronavirus te stoppen.";
+"onboardingDetermineContactsIntro.title" = "Bepaal wie van je contacten misschien zijn besmet en informeer hen";
+"onboardingDetermineContactsIntro.message" = "We gaan een overzicht maken van mensen die je hebt ontmoet. Goed om te weten: niet iedereen hoeft direct in quarantaine.";
 
 "determineContactsAuthorization.title" = "Wil je je contactenlijst gebruiken om contactgegevens in te vullen?";
 "determineContactsAuthorization.message" = "Gebruik je contactenlijst om makkelijk contacten te vinden en contactgegevens in te vullen. Je bepaalt daarna zelf welke gegevens je met de GGD deelt.";
