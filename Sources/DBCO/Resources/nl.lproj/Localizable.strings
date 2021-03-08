@@ -70,6 +70,8 @@
 "contagiousPeriodSelectOnsetDate.title" = "Sinds wanneer heb je deze klachten?";
 "contagiousPeriodSelectOnsetDate.message" = "Twijfel je over je eerste ziektedag? Kies dan een dag eerder.";
 "contagiousPeriodSelectOnsetDate.helpButtonTitle" = "Ik weet het niet";
+"contagiousPeriodOnsetDateHelp.title" = "Ziektedag bepalen";
+"contagiousPeriodOnsetDateHelp.message" = "<b>Je hebt chronische klachten</b><br/>Werden je klachten erger voordat je de coronatest deed? Zo ja, wanneer kreeg je die klachten? Kies die dag als eerste ziektedag.<br/><br/><b>Je bent al eerder getest</b><br/>Kreeg je ergere klachten tussen de laatste test en de test ervoor? Kies dan de dag waarop je die klachten kreeg als eerste ziektedag.<br/><br/>Als je het echt niet weet, dan kies je de datum waarop je de coronatest hebt gedaan.";
 
 "contagiousPeriodNoSymptomsVerify.title" = "Weet je zeker dat je geen klachten hebt die passen bij corona?";
 "contagiousPeriodNoSymptomsVerify.message" = "Ook lichtere klachten zoals een snotneus of vermoeidheid tellen mee.";

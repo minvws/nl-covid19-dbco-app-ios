@@ -51,6 +51,7 @@
 		CD421872251B4819004544B3 /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD421871251B4819004544B3 /* TaskTableViewCell.swift */; };
 		CD47A4042549766C005B8801 /* SectionedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD47A4032549766C005B8801 /* SectionedScrollView.swift */; };
 		CD49BAEB2525CE7C0079D018 /* PromptableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD49BAEA2525CE7C0079D018 /* PromptableViewController.swift */; };
+		CD4DBE7025F635E10037B144 /* OnsetHelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4DBE6F25F635E10037B144 /* OnsetHelpViewController.swift */; };
 		CD5DA75E255162EE003660CC /* ConfigManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5DA75D255162EE003660CC /* ConfigManaging.swift */; };
 		CD5DA76425516301003660CC /* ConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5DA76325516301003660CC /* ConfigManager.swift */; };
 		CD5DA76F2551859C003660CC /* AppUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5DA76E2551859C003660CC /* AppUpdateViewController.swift */; };
@@ -201,6 +202,7 @@
 		CD421871251B4819004544B3 /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
 		CD47A4032549766C005B8801 /* SectionedScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionedScrollView.swift; sourceTree = "<group>"; };
 		CD49BAEA2525CE7C0079D018 /* PromptableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptableViewController.swift; sourceTree = "<group>"; };
+		CD4DBE6F25F635E10037B144 /* OnsetHelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnsetHelpViewController.swift; sourceTree = "<group>"; };
 		CD5DA75D255162EE003660CC /* ConfigManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigManaging.swift; sourceTree = "<group>"; };
 		CD5DA76325516301003660CC /* ConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigManager.swift; sourceTree = "<group>"; };
 		CD5DA76E2551859C003660CC /* AppUpdateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdateViewController.swift; sourceTree = "<group>"; };
@@ -358,6 +360,7 @@
 				CD10F08B25AF30A7000295B9 /* SelectSymptomsViewController.swift */,
 				CD10F08F25AF42F8000295B9 /* SymptomToggleButton.swift */,
 				CD10F09325AF48B4000295B9 /* OnboardingDateViewController.swift */,
+				CD4DBE6F25F635E10037B144 /* OnsetHelpViewController.swift */,
 			);
 			path = DetermineContagiousPeriod;
 			sourceTree = "<group>";
@@ -1082,6 +1085,7 @@
 				CD2963472514E129008443AF /* ContactTableViewCell.swift in Sources */,
 				CDC7C898253873CE00FE7E05 /* Envelope.swift in Sources */,
 				CDA5C11C25139D36009440D1 /* UIStackView+Axis.swift in Sources */,
+				CD4DBE7025F635E10037B144 /* OnsetHelpViewController.swift in Sources */,
 				CDADF7DE2534773800424492 /* UIToolbar+Done.swift in Sources */,
 				CD7FACA1251B3FCD00AB8142 /* TextView.swift in Sources */,
 				CDC7C89E25387E2000FE7E05 /* Questionnaire.swift in Sources */,

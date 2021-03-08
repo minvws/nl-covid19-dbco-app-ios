@@ -119,6 +119,9 @@ extension String {
     static var contagiousPeriodSelectOnsetDateMessage: String { return Localization.string(for: "contagiousPeriodSelectOnsetDate.message") }
     static var contagiousPeriodSelectOnsetDateHelpButtonTitle: String { return Localization.string(for: "contagiousPeriodSelectOnsetDate.helpButtonTitle") }
     
+    static var contagiousPeriodOnsetDateHelpTitle: String { return Localization.string(for: "contagiousPeriodOnsetDateHelp.title") }
+    static var contagiousPeriodOnsetDateHelpMessage: String { return Localization.string(for: "contagiousPeriodOnsetDateHelp.message") }
+    
     static var contagiousPeriodNoSymptomsVerifyTitle: String { return Localization.string(for: "contagiousPeriodNoSymptomsVerify.title") }
     static var contagiousPeriodNoSymptomsVerifyMessage: String { return Localization.string(for: "contagiousPeriodNoSymptomsVerify.message") }
     static var contagiousPeriodNoSymptomsVerifyConfirmButton: String { return Localization.string(for: "contagiousPeriodNoSymptomsVerify.confirmButton") }
