@@ -202,6 +202,11 @@ extension String {
     static var contactsTimelineActivityTipMeetings: String { return Localization.string(for: "contactsTimelineActivityTip.meetings") }
     static var contactsTimelineActivityTipConversations: String { return Localization.string(for: "contactsTimelineActivityTip.conversations") }
     
+    static var contactsTimelineHelpTitle: String { return Localization.string(for: "contactsTimelineHelp.title") }
+    static var contactsTimelineHelpItem1: String { return Localization.string(for: "contactsTimelineHelp.item1") }
+    static var contactsTimelineHelpItem2: String { return Localization.string(for: "contactsTimelineHelp.item2") }
+    static var contactsTimelineHelpItem3: String { return Localization.string(for: "contactsTimelineHelp.item3") }
+    
     /* MARK: - Task Overview */
     static var taskOverviewTipsTitle: String { return Localization.string(for: "taskOverviewTipsTitle") }
     static var taskOverviewTipsDateFormat: String { return Localization.string(for: "taskOverviewTipsDateFormat") }

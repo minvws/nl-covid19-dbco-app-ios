@@ -112,7 +112,7 @@
 
 "contactsTimeline.shortTitle" = "Contacten";
 "contactsTimeline.title" = "Wie heb je ontmoet tussen %@ en vandaag?";
-"contactsTimeline.message" = "Weet je niet hoe iemand heet? Zet het contact er dan toch in. Bijvoorbeeld als trainer, kapper of buurvrouw. Je hoeft hier geen huisgenoten toe te voegen.";
+"contactsTimeline.message" = "Weet je niet hoe iemand heet? Zet het contact er dan toch in. Bijvoorbeeld als trainer, kapper of buurvrouw. Je hoeft hier geen huisgenoten toe te voegen.<br/><b><a href=\"/\">Wat deel ik precies met de GGD?</a></b>";
 
 "contactsTimelineAddContact" = "Contact toevoegen";
 
@@ -146,6 +146,11 @@
 "contactsTimelineActivityTip.car" = "Samen in de auto zitten";
 "contactsTimelineActivityTip.meetings" = "Ontmoetingen buiten of bij jou thuis";
 "contactsTimelineActivityTip.conversations" = "Een onverwachts gesprek op werk";
+
+"contactsTimelineHelp.title" = "Wat deel ik precies?";
+"contactsTimelineHelp.item1" = "Alleen gegevens die jij invult worden gedeeld";
+"contactsTimelineHelp.item2" = "De GGD heeft <b>geen</b> toegang tot je hele contactenlijst";
+"contactsTimelineHelp.item3" = "Gegevens worden pas met de GGD gedeeld als jij op ‘Deel gegevens met GGD’ klikt";
 
 /* MARK: - Task Overview */
 "taskOverviewTipsTitle" = "Geen contacten vergeten?";

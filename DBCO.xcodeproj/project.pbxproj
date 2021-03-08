@@ -52,6 +52,8 @@
 		CD47A4042549766C005B8801 /* SectionedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD47A4032549766C005B8801 /* SectionedScrollView.swift */; };
 		CD49BAEB2525CE7C0079D018 /* PromptableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD49BAEA2525CE7C0079D018 /* PromptableViewController.swift */; };
 		CD4DBE7025F635E10037B144 /* OnsetHelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4DBE6F25F635E10037B144 /* OnsetHelpViewController.swift */; };
+		CD4DBE7425F64C690037B144 /* TimelineHelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4DBE7325F64C690037B144 /* TimelineHelpViewController.swift */; };
+		CD4DBE7C25F65E060037B144 /* ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4DBE7B25F65E060037B144 /* ListItem.swift */; };
 		CD5DA75E255162EE003660CC /* ConfigManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5DA75D255162EE003660CC /* ConfigManaging.swift */; };
 		CD5DA76425516301003660CC /* ConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5DA76325516301003660CC /* ConfigManager.swift */; };
 		CD5DA76F2551859C003660CC /* AppUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5DA76E2551859C003660CC /* AppUpdateViewController.swift */; };
@@ -203,6 +205,8 @@
 		CD47A4032549766C005B8801 /* SectionedScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionedScrollView.swift; sourceTree = "<group>"; };
 		CD49BAEA2525CE7C0079D018 /* PromptableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptableViewController.swift; sourceTree = "<group>"; };
 		CD4DBE6F25F635E10037B144 /* OnsetHelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnsetHelpViewController.swift; sourceTree = "<group>"; };
+		CD4DBE7325F64C690037B144 /* TimelineHelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineHelpViewController.swift; sourceTree = "<group>"; };
+		CD4DBE7B25F65E060037B144 /* ListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItem.swift; sourceTree = "<group>"; };
 		CD5DA75D255162EE003660CC /* ConfigManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigManaging.swift; sourceTree = "<group>"; };
 		CD5DA76325516301003660CC /* ConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigManager.swift; sourceTree = "<group>"; };
 		CD5DA76E2551859C003660CC /* AppUpdateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdateViewController.swift; sourceTree = "<group>"; };
@@ -344,11 +348,12 @@
 		CD10F07F25AF07B8000295B9 /* InitializeContacts */ = {
 			isa = PBXGroup;
 			children = (
-				CD10F09725B08B02000295B9 /* SelectRoommatesViewController.swift */,
-				CD10F08025AF0886000295B9 /* InitializeContactsCoordinator.swift */,
 				CD926AEB25B59AEA0076113C /* ContactListInputView.swift */,
 				CD926AEF25B5B92E0076113C /* ContactsExplanationViewController.swift */,
 				CD926AF325B5C3E40076113C /* ContactsTimelineViewController.swift */,
+				CD10F08025AF0886000295B9 /* InitializeContactsCoordinator.swift */,
+				CD10F09725B08B02000295B9 /* SelectRoommatesViewController.swift */,
+				CD4DBE7325F64C690037B144 /* TimelineHelpViewController.swift */,
 			);
 			path = InitializeContacts;
 			sourceTree = "<group>";
@@ -461,6 +466,7 @@
 				CD47A4032549766C005B8801 /* SectionedScrollView.swift */,
 				CD3EFC5A25C40F6100EB2087 /* ImageView.swift */,
 				CDF0AE8225C95BAA0054AF87 /* OnsetDatePicker.swift */,
+				CD4DBE7B25F65E060037B144 /* ListItem.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1035,6 +1041,7 @@
 				CD10F09825B08B03000295B9 /* SelectRoommatesViewController.swift in Sources */,
 				CD5DA76F2551859C003660CC /* AppUpdateViewController.swift in Sources */,
 				CD9C7F52254AC25300A78EEF /* Task+Informed.swift in Sources */,
+				CD4DBE7425F64C690037B144 /* TimelineHelpViewController.swift in Sources */,
 				CD2963522518F291008443AF /* ContactQuestionnaireViewController.swift in Sources */,
 				CD29635825191941008443AF /* Button.swift in Sources */,
 				CDE30E8725232FE200862A40 /* InputFieldEditable.swift in Sources */,
@@ -1043,6 +1050,7 @@
 				CD49BAEB2525CE7C0079D018 /* PromptableViewController.swift in Sources */,
 				CDFCF90C2510C47E0062269A /* Localization.swift in Sources */,
 				CDC4A8EA250B87E5001BABC6 /* SceneDelegate.swift in Sources */,
+				CD4DBE7C25F65E060037B144 /* ListItem.swift in Sources */,
 				CDF0AE7D25C82D310054AF87 /* ReversePairViewController.swift in Sources */,
 				CD756C74252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift in Sources */,
 				CDC7C873253842A200FE7E05 /* Endpoint.swift in Sources */,

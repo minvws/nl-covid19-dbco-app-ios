@@ -235,4 +235,22 @@ extension InitializeContactsCoordinator: ContactsTimelineViewControllerDelegate 
         Services.onboardingManager.registerContacts(contacts)
     }
     
+    func contactsTimelineViewControllerDidRequestHelp(_ controller: ContactsTimelineViewController) {
+        let viewModel = TimelineHelpViewModel()
+        let helpController = TimelineHelpViewController(viewModel: viewModel)
+        helpController.delegate = self
+        
+        let wrapperController = NavigationController(rootViewController: helpController)
+        
+        navigationController.present(wrapperController, animated: true)
+    }
+    
+}
+
+extension InitializeContactsCoordinator: TimelineHelpViewControllerDelegate {
+    
+    func timelineHelpViewControllerDidSelectClose(_ controller: TimelineHelpViewController) {
+        controller.dismiss(animated: true)
+    }
+
 }

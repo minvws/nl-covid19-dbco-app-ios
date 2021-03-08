@@ -82,27 +82,6 @@ class ContactsAuthorizationViewController: PromptableViewController, ScrollViewN
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
         widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         
-        func listItem(_ text: String) -> UIView {
-            return HStack(spacing: 16,
-                          ImageView(imageName: "PrivacyItem").asIcon(),
-                          Label(body: text, textColor: Theme.colors.captionGray).multiline())
-                .alignment(.top)
-        }
-        
-        func htmlListItem(_ text: String) -> UIView {
-            let attributedString: NSAttributedString = .makeFromHtml(text: text,
-                                                                     font: Theme.fonts.body,
-                                                                     textColor: Theme.colors.captionGray,
-                                                                     boldTextColor: .black)
-            let label = Label("")
-            label.attributedText = attributedString
-            
-            return HStack(spacing: 16,
-                          ImageView(imageName: "PrivacyItem").asIcon(),
-                          label.multiline())
-                .alignment(.top)
-        }
-        
         let margin: UIEdgeInsets = .top(viewModel.topMargin) + .bottom(18)
         
         let stack =

@@ -12,6 +12,7 @@ protocol ContactsTimelineViewControllerDelegate: class {
     func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [Onboarding.Contact], dateOfSymptomOnset: Date)
     func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [Onboarding.Contact], testDate: Date)
     func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didCancelWith contacts: [Onboarding.Contact])
+    func contactsTimelineViewControllerDidRequestHelp(_ controller: ContactsTimelineViewController)
 }
 
 private extension Date {
@@ -282,7 +283,8 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
             VStack(spacing: 40,
                    VStack(spacing: 16,
                           titleLabel.multiline(),
-                          Label(body: .contactsTimelineMessage, textColor: Theme.colors.captionGray).multiline()),
+                          TextView(htmlText: .contactsTimelineMessage, font: Theme.fonts.body, textColor: Theme.colors.captionGray, boldTextColor: Theme.colors.primary)
+                            .linkTouched { [weak self] _ in self?.openHelp() }),
                    sectionStackView,
                    VStack(spacing: 16,
                           addExtraDaySectionView,
@@ -353,6 +355,10 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
                 guard case .day(let date, _, _) = sectionView.section else { return [] }
                 return sectionView.contactList.contacts.map { Onboarding.Contact(date: date, name: $0.name, contactIdentifier: $0.cnContactIdentifier, isRoommate: false) }
             }
+    }
+    
+    private func openHelp() {
+        delegate?.contactsTimelineViewControllerDidRequestHelp(self)
     }
     
     @objc private func handleContinue() {

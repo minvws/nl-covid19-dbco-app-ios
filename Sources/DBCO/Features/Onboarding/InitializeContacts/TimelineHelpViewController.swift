@@ -7,20 +7,20 @@
 
 import UIKit
 
-protocol OnsetHelpViewControllerDelegate: class {
-    func onsetHelpViewControllerDidSelectClose(_ controller: OnsetHelpViewController)
+protocol TimelineHelpViewControllerDelegate: class {
+    func timelineHelpViewControllerDidSelectClose(_ controller: TimelineHelpViewController)
 }
 
-class OnsetHelpViewModel {
+class TimelineHelpViewModel {
     
 }
 
-class OnsetHelpViewController: ViewController {
-    private let viewModel: OnsetHelpViewModel
+class TimelineHelpViewController: ViewController {
+    private let viewModel: TimelineHelpViewModel
     
-    weak var delegate: OnsetHelpViewControllerDelegate?
+    weak var delegate: TimelineHelpViewControllerDelegate?
 
-    init(viewModel: OnsetHelpViewModel) {
+    init(viewModel: TimelineHelpViewModel) {
         self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)
@@ -37,7 +37,7 @@ class OnsetHelpViewController: ViewController {
         view.backgroundColor = .white
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: .close, style: .plain, target: self, action: #selector(close))
         
-        title = .contagiousPeriodOnsetDateHelpTitle
+        title = .contactsTimelineHelpTitle
         
         let scrollView = UIScrollView(frame: .zero)
         scrollView.embed(in: view)
@@ -46,15 +46,15 @@ class OnsetHelpViewController: ViewController {
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
         widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
-        TextView(htmlText: .contagiousPeriodOnsetDateHelpMessage,
-                 font: Theme.fonts.body,
-                 textColor: Theme.colors.captionGray,
-                 boldTextColor: .black)
-            .embed(in: scrollView.readableWidth, insets: .leftRight(16) + .topBottom(32))
+        VStack(spacing: 16,
+               listItem(.contactsTimelineHelpItem1),
+               htmlListItem(.contactsTimelineHelpItem2),
+               listItem(.contactsTimelineHelpItem3))
+            .embed(in: scrollView.readableWidth, insets: .topBottom(32))
     }
     
     @objc private func close(_ sender: Any?) {
-        delegate?.onsetHelpViewControllerDidSelectClose(self)
+        delegate?.timelineHelpViewControllerDidSelectClose(self)
     }
 
 }
