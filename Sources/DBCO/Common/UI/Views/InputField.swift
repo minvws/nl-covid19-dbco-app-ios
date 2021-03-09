@@ -189,6 +189,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     
     @objc private func handleEditingDidBegin() {
         iconContainerView.isHidden = true
+        currentValidationTask?.cancel()
     }
     
     @objc private func handleDateValueChanged(_ datePicker: UIDatePicker) {
@@ -206,8 +207,6 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         object?[keyPath: path].value = formatter.string(from: datePicker.date)
         text = formatter.string(from: datePicker.date)
     }
-    
-    private var currentValidationTask: ValidationTask?
     
     private func updateValidationStateIfNeeded() {
         guard let validator = object?[keyPath: path].validator else { return }
@@ -236,6 +235,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     private var validationIconView = UIImageView()
     private var dropdownIconView = UIImageView()
     private lazy var iconContainerView = UIStackView()
+    
+    private var currentValidationTask: ValidationTask?
     
     // MARK: - Delegate implementations
     

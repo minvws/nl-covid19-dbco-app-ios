@@ -13,7 +13,7 @@ enum ValidationResult {
     case unknown
 }
 
-protocol ValidationTask {
+protocol ValidationTask: class {
     func cancel()
 }
 
@@ -21,21 +21,36 @@ protocol Validator {
     static func validate(_ value: String?, completionHandler: @escaping (ValidationResult) -> Void) -> ValidationTask
 }
 
-private struct InlineTask: ValidationTask {
+private class SimpleTask: ValidationTask {
     let completionHandler: (ValidationResult) -> Void
+    private(set) var isCancelled: Bool = false
     
     init(_ completionHandler: @escaping (ValidationResult) -> Void) {
         self.completionHandler = completionHandler
     }
     
     func applying(_ result: ValidationResult) -> Self {
-        completionHandler(result)
+        DispatchQueue.main.async {
+            guard !self.isCancelled else { return }
+            self.completionHandler(result)
+        }
+        
         return self
     }
     
-    func cancel() {}
+    func apply(_ result: ValidationResult) {
+        DispatchQueue.main.async {
+            guard !self.isCancelled else { return }
+            self.completionHandler(result)
+        }
+    }
+    
+    func cancel() {
+        isCancelled = true
+    }
 }
 
+// MARK: - PhoneNumberValidator
 struct PhoneNumberValidator: Validator {
     static let validCharacters: CharacterSet = {
         var validCharacters = CharacterSet.decimalDigits
@@ -44,7 +59,7 @@ struct PhoneNumberValidator: Validator {
     }()
     
     static func validate(_ value: String?, completionHandler: @escaping (ValidationResult) -> Void) -> ValidationTask {
-        let task = InlineTask(completionHandler)
+        let task = SimpleTask(completionHandler)
         
         guard let value = value else { return task.applying(.unknown) }
     
@@ -57,9 +72,10 @@ struct PhoneNumberValidator: Validator {
     }
 }
 
+// MARK: - EmailAddressValidator
 struct EmailAddressValidator: Validator {
     static func validate(_ value: String?, completionHandler: @escaping (ValidationResult) -> Void) -> ValidationTask {
-        let task = InlineTask(completionHandler)
+        let task = SimpleTask(completionHandler)
         
         guard let value = value else { return task.applying(.unknown) }
         
@@ -72,4 +88,102 @@ struct EmailAddressValidator: Validator {
             return task.applying(.invalid)
         }
     }
+}
+
+// MARK: - NameValidator
+struct NameValidator: Validator {
+    
+    static func validate(_ value: String?, completionHandler: @escaping (ValidationResult) -> Void) -> ValidationTask {
+        let task = SimpleTask(completionHandler)
+        
+        guard let value = value else { return task.applying(.unknown) }
+        guard !value.isEmpty else { return task.applying(.unknown) }
+        
+        DispatchQueue.global(qos: .utility).async {
+            let failingConditions = [
+                containsOnlyConsonants,
+                containsOnlyVowels,
+                containsUppercasedCharacterAfterFirst,
+                containsInvalidCharacters,
+                endsWithInvalidSuffix,
+                containsInvalidName
+            ]
+            
+            let hasFailingCondition = failingConditions.contains { $0(value) }
+            
+            if hasFailingCondition {
+                task.apply(.invalid)
+            } else {
+                task.apply(.unknown)
+            }
+        }
+        
+        return task
+    }
+    
+    static let vowels = CharacterSet(charactersIn: "aeiouyAEIOUY")
+    static let consonants = CharacterSet.letters.subtracting(vowels)
+    static let validCharacters = CharacterSet.letters.union(CharacterSet(charactersIn: " -'’"))
+    static let invalidCharacters = validCharacters.inverted
+    
+    static let invalidNames: [String] = {
+        guard let path = Bundle.main.path(forResource: "Invalid names", ofType: "txt", inDirectory: "Validation") else { return [] }
+        
+        do {
+            return try String(contentsOfFile: path)
+                .lowercased()
+                .components(separatedBy: "\n")
+                .filter { !$0.isEmpty }
+        } catch {
+            return []
+        }
+    }()
+    
+    static let invalidSuffixes: [String] = {
+        guard let path = Bundle.main.path(forResource: "Invalid suffixes", ofType: "txt", inDirectory: "Validation") else { return [] }
+        
+        do {
+            return try String(contentsOfFile: path)
+                .lowercased()
+                .components(separatedBy: "\n")
+                .filter { !$0.isEmpty }
+        } catch {
+            return []
+        }
+    }()
+    
+    // MARK: - Failing conditions
+    static func containsOnlyConsonants(_ value: String) -> Bool {
+        let strippedValue = value.lowercased().components(separatedBy: consonants).joined()
+        
+        return strippedValue.isEmpty
+    }
+    
+    static func containsOnlyVowels(_ value: String) -> Bool {
+        let strippedValue = value.lowercased().components(separatedBy: vowels).joined()
+        
+        return strippedValue.isEmpty
+    }
+    
+    static func containsUppercasedCharacterAfterFirst(_ value: String) -> Bool {
+        return value.components(separatedBy: CharacterSet(charactersIn: " -")).contains { word in
+            guard word.count > 1 else { return false }
+            return word.suffix(word.count - 1).contains(where: \.isUppercase)
+        }
+    }
+    
+    static func containsInvalidCharacters(_ value: String) -> Bool {
+        let containsInvalidCharacters = value.unicodeScalars.contains(where: invalidCharacters.contains)
+
+        return containsInvalidCharacters
+    }
+    
+    static func endsWithInvalidSuffix(_ value: String) -> Bool {
+        return invalidSuffixes.contains(where: value.hasSuffix)
+    }
+    
+    static func containsInvalidName(_ value: String) -> Bool {
+        return invalidNames.contains(where: value.lowercased().contains)
+    }
+    
 }
