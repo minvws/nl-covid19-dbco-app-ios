@@ -332,7 +332,7 @@ final class CaseManager: CaseManaging, Logging {
                     // Not modified by the user yet, so we can just replace it entirely
                     tasks[existingTaskIndex] = task
                 } else {
-                    switch tasks[existingTaskIndex].taskType{
+                    switch tasks[existingTaskIndex].taskType {
                     case .contact:
                         // Update only the communication type
                         let existingContact = tasks[existingTaskIndex].contact!
