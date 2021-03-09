@@ -384,6 +384,8 @@ final class CaseManager: CaseManaging, Logging {
     func save(_ task: Task) throws {
         guard hasCaseData else { throw CaseManagingError.noCaseData }
         
+        let wasSynced = isSynced
+        
         func storeNewTask() -> Int {
             tasks.append(task)
             return tasks.count - 1
@@ -443,6 +445,10 @@ final class CaseManager: CaseManaging, Logging {
         }
         
         listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
+        
+        if wasSynced != isSynced {
+            listeners.forEach { $0.listener?.caseManagerDidUpdateSyncState(self) }
+        }
     }
     
     private static let valueDateFormatter: DateFormatter = {

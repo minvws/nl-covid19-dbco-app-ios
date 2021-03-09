@@ -105,7 +105,7 @@ final class SelectContactCoordinator: Coordinator, Logging {
     }
     
     private func requestContactsAuthorization() {
-        let viewModel = ContactsAuthorizationViewModel(contactName: task?.contactFirstName)
+        let viewModel = ContactsAuthorizationViewModel(contactName: task?.contactFirstName, style: .selectContact)
         let controller = ContactsAuthorizationViewController(viewModel: viewModel)
         controller.delegate = self
         controller.onDismissed = { [weak self] _ in
