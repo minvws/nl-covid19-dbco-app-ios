@@ -185,7 +185,21 @@ extension DetermineContagiousPeriodCoordinator: SelectSymptomOnsetDateViewContro
     }
     
     func selectSymptomOnsetDateViewControllerWantsHelp(_ controller: SelectSymptomOnsetDateViewController) {
+        let viewModel = OnsetHelpViewModel()
+        let helpController = OnsetHelpViewController(viewModel: viewModel)
+        helpController.delegate = self
         
+        let wrapperController = NavigationController(rootViewController: helpController)
+        
+        navigationController.present(wrapperController, animated: true)
     }
     
+}
+
+extension DetermineContagiousPeriodCoordinator: OnsetHelpViewControllerDelegate {
+    
+    func onsetHelpViewControllerDidSelectClose(_ controller: OnsetHelpViewController) {
+        controller.dismiss(animated: true)
+    }
+
 }

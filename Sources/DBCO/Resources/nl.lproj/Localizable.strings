@@ -45,9 +45,9 @@
 "onboarding.consent.title" = "Zo gaat GGD Contact om met je gegevens";
 "onboarding.consent.message" = "In de  <a href=\"https://ggdcontact.nl/nl/privacy-in-app\">privacyverklaring</a> staat hoe GGD Contact jouw gegevens gebruikt. Dit zijn de belangrijkste punten:";
 "onboarding.consent.item1" = "Gegevens worden versleuteld en via een veilige verbinding gedeeld";
-"onboarding.consent.item2" = "Gegevens worden pas met de GGD gedeeld als jij laat weten dat je klaar bent";
-"onboarding.consent.item3" = "Alleen gegevens die je zelf invult worden gedeeld";
-"onboarding.consent.item4" = "Je kunt na het delen zelf de gegevens verwijderen";
+"onboarding.consent.item2" = "Alleen gegevens die jij invult worden gedeeld";
+"onboarding.consent.item3" = "Gegevens worden pas met de GGD gedeeld als jij laat weten dat je klaar bent";
+"onboarding.consent.item4" = "Het gebruik van de app en delen van gegevens is vrijwillig";
 "onboarding.consent.buttonTitle" = "Ik heb de privacyverklaring gelezen en begrijp hoe GGD Contact mijn gegevens gebruikt";
 
 /* MARK: - Onboarding Error */
@@ -70,6 +70,8 @@
 "contagiousPeriodSelectOnsetDate.title" = "Sinds wanneer heb je deze klachten?";
 "contagiousPeriodSelectOnsetDate.message" = "Twijfel je over je eerste ziektedag? Kies dan een dag eerder.";
 "contagiousPeriodSelectOnsetDate.helpButtonTitle" = "Ik weet het niet";
+"contagiousPeriodOnsetDateHelp.title" = "Ziektedag bepalen";
+"contagiousPeriodOnsetDateHelp.message" = "<b>Je hebt chronische klachten</b><br/>Werden je klachten erger voordat je de coronatest deed? Zo ja, wanneer kreeg je die klachten? Kies die dag als eerste ziektedag.<br/><br/><b>Je bent al eerder getest</b><br/>Kreeg je ergere klachten tussen de laatste test en de test ervoor? Kies dan de dag waarop je die klachten kreeg als eerste ziektedag.<br/><br/>Als je het echt niet weet, dan kies je de datum waarop je de coronatest hebt gedaan.";
 
 "contagiousPeriodNoSymptomsVerify.title" = "Weet je zeker dat je geen klachten hebt die passen bij corona?";
 "contagiousPeriodNoSymptomsVerify.message" = "Ook lichtere klachten zoals een snotneus of vermoeidheid tellen mee.";
@@ -87,7 +89,6 @@
 "onboardingDetermineContactsIntro.message" = "We gaan een overzicht maken van mensen die je hebt ontmoet. Goed om te weten: niet iedereen hoeft direct in quarantaine.";
 
 "determineContactsAuthorization.title" = "Wil je je contactenlijst gebruiken om contactgegevens in te vullen?";
-"determineContactsAuthorization.message" = "Gebruik je contactenlijst om makkelijk contacten te vinden en contactgegevens in te vullen. Je bepaalt daarna zelf welke gegevens je met de GGD deelt.";
 "determineContactsAuthorization.allowButton" = "Toegang geven";
 "determineContactsAuthorization.addManuallyButton" = "Handmatig toevoegen";
 
@@ -111,7 +112,7 @@
 
 "contactsTimeline.shortTitle" = "Contacten";
 "contactsTimeline.title" = "Wie heb je ontmoet tussen %@ en vandaag?";
-"contactsTimeline.message" = "Weet je niet hoe iemand heet? Zet het contact er dan toch in. Bijvoorbeeld als trainer, kapper of buurvrouw. Je hoeft hier geen huisgenoten toe te voegen.";
+"contactsTimeline.message" = "Weet je niet hoe iemand heet? Zet het contact er dan toch in. Bijvoorbeeld als trainer, kapper of buurvrouw. Je hoeft hier geen huisgenoten toe te voegen.<br/><b><a href=\"/\">Wat deel ik precies met de GGD?</a></b>";
 
 "contactsTimelineAddContact" = "Contact toevoegen";
 
@@ -145,6 +146,11 @@
 "contactsTimelineActivityTip.car" = "Samen in de auto zitten";
 "contactsTimelineActivityTip.meetings" = "Ontmoetingen buiten of bij jou thuis";
 "contactsTimelineActivityTip.conversations" = "Een onverwachts gesprek op werk";
+
+"contactsTimelineHelp.title" = "Wat deel ik precies?";
+"contactsTimelineHelp.item1" = "Alleen gegevens die jij invult worden gedeeld";
+"contactsTimelineHelp.item2" = "De GGD heeft <b>geen</b> toegang tot je hele contactenlijst";
+"contactsTimelineHelp.item3" = "Gegevens worden pas met de GGD gedeeld als jij op ‘Deel gegevens met GGD’ klikt";
 
 /* MARK: - Task Overview */
 "taskOverviewTipsTitle" = "Geen contacten vergeten?";
