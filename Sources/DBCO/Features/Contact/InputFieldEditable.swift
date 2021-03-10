@@ -52,12 +52,14 @@ extension InputFieldEditable {
 // MARK: - ContactValue Extensions
 extension FirstName: InputFieldEditable {
     var label: String? { .contactInformationFirstName }
+    var validator: Validator.Type? { NameValidator.self }
     var autocapitalizationType: UITextAutocapitalizationType { .words }
     var textContentType: UITextContentType? { .givenName }
 }
 
 extension LastName: InputFieldEditable {
     var label: String? { .contactInformationLastName }
+    var validator: Validator.Type? { NameValidator.self }
     var autocapitalizationType: UITextAutocapitalizationType { .words }
     var textContentType: UITextContentType? { .familyName }
 }

@@ -189,6 +189,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     
     @objc private func handleEditingDidBegin() {
         iconContainerView.isHidden = true
+        currentValidationTask?.cancel()
     }
     
     @objc private func handleDateValueChanged(_ datePicker: UIDatePicker) {
@@ -209,16 +210,21 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     
     private func updateValidationStateIfNeeded() {
         guard let validator = object?[keyPath: path].validator else { return }
+        currentValidationTask?.cancel()
         
-        switch validator.validate(object?[keyPath: path].value) {
-        case .invalid:
-            iconContainerView.isHidden = false
-            validationIconView.isHighlighted = false
-        case .valid:
-            iconContainerView.isHidden = false
-            validationIconView.isHighlighted = true
-        case .unknown:
-            iconContainerView.isHidden = true
+        currentValidationTask = validator.validate(object?[keyPath: path].value) { [weak self] in
+            guard let self = self else { return }
+            
+            switch $0 {
+            case .invalid:
+                self.iconContainerView.isHidden = false
+                self.validationIconView.isHighlighted = false
+            case .valid:
+                self.iconContainerView.isHidden = false
+                self.validationIconView.isHighlighted = true
+            case .unknown:
+                self.iconContainerView.isHidden = true
+            }
         }
     }
     
@@ -229,6 +235,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     private var validationIconView = UIImageView()
     private var dropdownIconView = UIImageView()
     private lazy var iconContainerView = UIStackView()
+    
+    private var currentValidationTask: ValidationTask?
     
     // MARK: - Delegate implementations
     
