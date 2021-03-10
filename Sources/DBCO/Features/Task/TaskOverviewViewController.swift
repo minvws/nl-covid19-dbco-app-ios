@@ -82,7 +82,7 @@ class TaskOverviewViewModel {
         formatter.dateFormat = .taskOverviewTipsDateFormat
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         
-        let date = Services.caseManager.dateOfContagiousPeriodStart ?? Date()
+        let date = Services.caseManager.startOfContagiousPeriod ?? Date()
         
         let dateString = formatter.string(from: date)
         

@@ -39,7 +39,7 @@ protocol CaseManaging {
     
     var dateOfSymptomOnset: Date? { get }
     var dateOfTest: Date? { get }
-    var dateOfContagiousPeriodStart: Date? { get }
+    var startOfContagiousPeriod: Date? { get }
     
     var symptoms: [String] { get }
     
@@ -140,7 +140,7 @@ final class CaseManager: CaseManaging, Logging {
         set { appData.dateOfTest = newValue }
     }
     
-    var dateOfContagiousPeriodStart: Date? {
+    var startOfContagiousPeriod: Date? {
         switch (dateOfTest, dateOfSymptomOnset) {
         case (_, .some(let dateOfSymptomOnset)):
             return Calendar.current.date(byAdding: .day, value: -2, to: dateOfSymptomOnset)

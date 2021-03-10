@@ -322,7 +322,7 @@ class LastExposureDateAnswerManager: AnswerManaging {
         self.question = question
         
         let endDate = Date()
-        let startDate = Services.caseManager.dateOfContagiousPeriodStart ?? endDate
+        let startDate = Services.caseManager.startOfContagiousPeriod ?? endDate
         
         let numberOfDays = Calendar.current.dateComponents([.day], from: startDate, to: endDate).day ?? 0
         
