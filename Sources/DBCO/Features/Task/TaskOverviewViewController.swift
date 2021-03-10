@@ -82,7 +82,9 @@ class TaskOverviewViewModel {
         formatter.dateFormat = .taskOverviewTipsDateFormat
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         
-        let dateString = formatter.string(from: Services.caseManager.dateOfSymptomOnset)
+        let date = Services.caseManager.dateOfContagiousPeriodStart ?? Date()
+        
+        let dateString = formatter.string(from: date)
         
         let fullString: String = .taskOverviewTipsMessage(date: dateString)
         let dateRange = (fullString as NSString).range(of: dateString)

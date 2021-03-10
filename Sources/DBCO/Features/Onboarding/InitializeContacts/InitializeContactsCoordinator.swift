@@ -195,7 +195,14 @@ extension InitializeContactsCoordinator: ContactsExplanationViewControllerDelega
         case .finishedWithTestDate(let date):
             viewModel = ContactsTimelineViewModel(testDate: date)
         case .undetermined where Services.caseManager.hasCaseData:
-            viewModel = ContactsTimelineViewModel(dateOfSymptomOnset: Services.caseManager.dateOfSymptomOnset)
+            if let date = Services.caseManager.dateOfSymptomOnset {
+                viewModel = ContactsTimelineViewModel(dateOfSymptomOnset: date)
+            } else if let date = Services.caseManager.dateOfTest {
+                viewModel = ContactsTimelineViewModel(testDate: date)
+            } else {
+                fatalError("Date should exist at this point")
+            }
+            
         default:
             fatalError("Date should exist at this point")
         }
