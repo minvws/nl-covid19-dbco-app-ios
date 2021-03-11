@@ -25,10 +25,10 @@ final class OnboardingCoordinator: Coordinator {
         self.window = window
         
         let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding1")!,
-                                                title: .onboardingStep1Title,
-                                                message: .onboardingStep1Message,
-                                                primaryButtonTitle: .onboardingStep1HasCodeButton,
-                                                secondaryButtonTitle: .onboardingStep1NoCodeButton)
+                                                title: .onboardingStartTitle,
+                                                message: .onboardingStartMessage,
+                                                primaryButtonTitle: .onboardingStartHasCodeButton,
+                                                secondaryButtonTitle: .onboardingStartNoCodeButton)
         let stepController = OnboardingStepViewController(viewModel: viewModel)
         navigationController = NavigationController(rootViewController: stepController)
 
@@ -49,8 +49,7 @@ final class OnboardingCoordinator: Coordinator {
             startChildCoordinator(initializeContactsCoordinator)
         }
         
-        window.rootViewController = navigationController
-        window.makeKeyAndVisible()
+        window.transition(to: navigationController, with: [.transitionCrossDissolve])
     }
 
 }

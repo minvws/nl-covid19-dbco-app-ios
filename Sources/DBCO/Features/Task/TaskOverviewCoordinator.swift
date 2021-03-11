@@ -25,10 +25,12 @@ final class TaskOverviewCoordinator: Coordinator, Logging {
     private let window: UIWindow
     private let overviewController: TaskOverviewViewController
     private let navigationController: NavigationController
+    private let useFlipTransition: Bool
     
-    init(window: UIWindow, delegate: TaskOverviewCoordinatorDelegate) {
+    init(window: UIWindow, delegate: TaskOverviewCoordinatorDelegate, useFlipTransition: Bool = false) {
         self.window = window
         self.delegate = delegate
+        self.useFlipTransition = useFlipTransition
         
         let viewModel = TaskOverviewViewModel()
         
@@ -42,19 +44,8 @@ final class TaskOverviewCoordinator: Coordinator, Logging {
     }
     
     override func start() {
-        if window.rootViewController == nil {
-            window.rootViewController = navigationController
-            window.makeKeyAndVisible()
-        } else {
-            let snapshotView = window.snapshotView(afterScreenUpdates: true)!
-            
-            window.rootViewController = navigationController
-            navigationController.view.addSubview(snapshotView)
-            
-            UIView.transition(with: window, duration: 0.5, options: [.transitionFlipFromRight]) {
-                snapshotView.removeFromSuperview()
-            }
-        }
+        window.transition(to: navigationController,
+                          with: useFlipTransition ? [.transitionFlipFromRight] : [.transitionCrossDissolve])
         
         loadCaseData(userInitiated: false)
     }

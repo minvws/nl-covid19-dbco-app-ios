@@ -35,6 +35,16 @@ class SelectRoommatesViewModel {
         return contacts
     }()
     
+    @Bindable private(set) var continueButtonTitle: String = .next
+    
+    func setNumberOfEnteredContacts(_ value: Int) {
+        if value > 0 {
+            continueButtonTitle = .next
+        } else {
+            continueButtonTitle = .determineRoommatesNoContactsButtonTitle
+        }
+    }
+    
 }
 
 class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdjusting {
@@ -81,13 +91,20 @@ class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdju
                                                contacts: contacts,
                                                delegate: self)
         
+        viewModel.setNumberOfEnteredContacts(contacts.count)
+        
+        let continueButton = Button(title: .next, style: .primary)
+            .touchUpInside(self, action: #selector(handleContinue))
+        
+        viewModel.$continueButtonTitle.binding = { continueButton.setTitle($0, for: .normal) }
+        
         let stack =
             VStack(spacing: 24,
                    VStack(spacing: 16,
                           Label(title2: .determineRoommatesTitle).multiline(),
                           Label(body: .determineRoommatesMessage, textColor: Theme.colors.captionGray).multiline()),
                    contactListView,
-                   Button(title: .next, style: .primary).touchUpInside(self, action: #selector(handleContinue)))
+                   continueButton)
                 .distribution(.fill)
                 .embed(in: scrollView.readableWidth, insets: margin)
         
@@ -173,6 +190,10 @@ extension SelectRoommatesViewController: ContactListInputViewDelegate {
         
         // Next runcycle so keyboard size is properly incorporated
         DispatchQueue.main.async(execute: scrollVisible)
+    }
+    
+    func contactListInputView(_ view: ContactListInputView, didEndEditingIn textField: UITextField) {
+        viewModel.setNumberOfEnteredContacts(view.contacts.count)
     }
     
     func viewForPresentingSuggestionsFromContactListInputView(_ view: ContactListInputView) -> UIView {

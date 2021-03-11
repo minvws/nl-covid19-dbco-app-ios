@@ -28,16 +28,10 @@ final class AppCoordinator: Coordinator {
         
         window.tintColor = Theme.colors.primary
         
-        // Check if the app is the minimum version. If not, show the app update screen
-        updateConfiguration()
+        let launchCoordinator = LaunchCoordinator(window: window)
+        launchCoordinator.delegate = self
         
-        if Services.onboardingManager.needsOnboarding {
-            let onboardingCoordinator = OnboardingCoordinator(window: window)
-            onboardingCoordinator.delegate = self
-            startChildCoordinator(onboardingCoordinator)
-        } else {
-            startChildCoordinator(TaskOverviewCoordinator(window: window, delegate: self))
-        }
+        startChildCoordinator(launchCoordinator)
     }
     
     private var isUpdatingConfiguration = false
@@ -81,12 +75,32 @@ final class AppCoordinator: Coordinator {
 
 }
 
+extension AppCoordinator: LaunchCoordinatorDelegate {
+    
+    func launchCoordinator(_ coordinator: LaunchCoordinator, needsRequiredUpdate version: AppVersionInformation) {
+        showRequiredUpdate(with: version)
+    }
+    
+    func launchCoordinatorDidFinish(_ coordinator: LaunchCoordinator) {
+        removeChildCoordinator(coordinator)
+        
+        if Services.onboardingManager.needsOnboarding {
+            let onboardingCoordinator = OnboardingCoordinator(window: window)
+            onboardingCoordinator.delegate = self
+            startChildCoordinator(onboardingCoordinator)
+        } else {
+            startChildCoordinator(TaskOverviewCoordinator(window: window, delegate: self))
+        }
+    }
+    
+}
+
 extension AppCoordinator: OnboardingCoordinatorDelegate {
     
     func onboardingCoordinatorDidFinish(_ coordinator: OnboardingCoordinator) {
         removeChildCoordinator(coordinator)
         
-        startChildCoordinator(TaskOverviewCoordinator(window: window, delegate: self))
+        startChildCoordinator(TaskOverviewCoordinator(window: window, delegate: self, useFlipTransition: true))
     }
     
 }

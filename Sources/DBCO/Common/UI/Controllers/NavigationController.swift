@@ -35,4 +35,8 @@ class NavigationController: UINavigationController, DismissActionable {
         
         super.setViewControllers(viewControllers, animated: true)
     }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return topViewController?.preferredStatusBarStyle ?? .default
+    }
 }

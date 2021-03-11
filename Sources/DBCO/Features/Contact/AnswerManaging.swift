@@ -10,8 +10,7 @@ import Contacts
 
 extension AnswerOption {
     static let lastExposureDateEarlierOption = AnswerOption(label: .contactInformationLastExposureEarlier,
-                                                            value: "earlier",
-                                                            trigger: nil)
+                                                            value: "earlier")
 }
 
 /// - Tag: AnswerManaging
@@ -54,14 +53,17 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
             baseAnswer.value = .classificationDetails(contactCategory: contactCategory)
         }
         
-        guard case .classificationDetails(let sameHouseholdRisk, let distanceRisk, let physicalContactRisk, let sameRoomRisk) = baseAnswer.value else {
+        guard case .classificationDetails(let category) = baseAnswer.value else {
             fatalError()
         }
         
-        self.sameHouseholdRisk = sameHouseholdRisk
-        self.distanceRisk = distanceRisk
-        self.physicalContactRisk = physicalContactRisk
-        self.sameRoomRisk = sameRoomRisk
+        if let category = category {
+            ClassificationHelper.setValues(for: category,
+                                           sameHouseholdRisk: &sameHouseholdRisk,
+                                           distanceRisk: &distanceRisk,
+                                           physicalContactRisk: &physicalContactRisk,
+                                           sameRoomRisk: &sameRoomRisk)
+        }
         
         classification = .needsAssessmentFor(.sameHousehold)
         determineGroupVisibility()
@@ -98,12 +100,9 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         
         switch classification {
         case .success(let category):
-            answer.value = .classificationDetails(contactCategory: category)
+            answer.value = .classificationDetails(category)
         case .needsAssessmentFor:
-            answer.value = .classificationDetails(sameHouseholdRisk: sameHouseholdRisk,
-                                                  distanceRisk: distanceRisk,
-                                                  physicalContactRisk: physicalContactRisk,
-                                                  sameRoomRisk: sameRoomRisk)
+            answer.value = .classificationDetails(nil)
         }
         
         return answer
@@ -322,21 +321,18 @@ class LastExposureDateAnswerManager: AnswerManaging {
         self.baseAnswer = answer
         self.question = question
         
-        // Dates should range from 2 days before symptom onset to today
         let endDate = Date()
-        let startDate = Calendar.current.date(byAdding: .day, value: -2, to: Services.caseManager.dateOfSymptomOnset) ?? endDate
+        let startDate = Services.caseManager.startOfContagiousPeriod ?? endDate
         
         let numberOfDays = Calendar.current.dateComponents([.day], from: startDate, to: endDate).day ?? 0
         
         let dateOptions = (0...numberOfDays)
             .compactMap { Calendar.current.date(byAdding: .day, value: $0, to: startDate) }
             .map { AnswerOption(label: Self.displayDateFormatter.string(from: $0),
-                                value: Self.valueDateFormatter.string(from: $0),
-                                trigger: nil) }
+                                value: Self.valueDateFormatter.string(from: $0)) }
         
         let everyDayOption = AnswerOption(label: .contactInformationLastExposureEveryDay,
-                                          value: Self.valueDateFormatter.string(from: endDate),
-                                          trigger: nil)
+                                          value: Self.valueDateFormatter.string(from: endDate))
         
         var answerOptions = [.lastExposureDateEarlierOption] + dateOptions + [everyDayOption]
         
@@ -346,8 +342,7 @@ class LastExposureDateAnswerManager: AnswerManaging {
             } else if let date = Self.valueDateFormatter.date(from: lastExposureDate) {
                 // If we got a different valid date, create an option for it
                 let option = AnswerOption(label: Self.displayDateFormatter.string(from: date),
-                                          value: lastExposureDate,
-                                          trigger: nil)
+                                          value: lastExposureDate)
                 answerOptions.append(option)
                 baseAnswer.value = .lastExposureDate(option)
             }

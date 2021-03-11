@@ -61,6 +61,7 @@ extension String {
     static var done: String { return Localization.string(for: "done") }
     static var ok: String { return Localization.string(for: "ok") }
     static var tryAgain: String { return Localization.string(for: "tryAgain") }
+    static var back: String { return Localization.string(for: "back") }
     static var delete: String { return Localization.string(for: "delete") }
     static var errorTitle: String { return Localization.string(for: "error.title") }
     static var other: String { return Localization.string(for: "other") }
@@ -68,7 +69,8 @@ extension String {
     static var expanded: String { return Localization.string(for: "expanded") }
     static var completed: String { return Localization.string(for: "completed") }
     static var disabled: String { return Localization.string(for: "disabled") }
-        
+    static var loading: String { return Localization.string(for: "loading") }
+    
     // MARK: - Update App
     static var updateAppErrorMessage: String { return Localization.string(for: "updateApp.error.message") }
     static var updateAppTitle: String { return Localization.string(for: "updateApp.title") }
@@ -77,14 +79,14 @@ extension String {
     static var updateAppButton: String { return Localization.string(for: "updateApp.button") }
     
     /* MARK: - Onboarding */
-    static var onboardingStep1Title: String { return Localization.string(for: "onboarding.step1.title") }
-    static var onboardingStep1Message: String { return Localization.string(for: "onboarding.step1.message") }
-    static var onboardingStep1HasCodeButton: String { return Localization.string(for: "onboarding.step1.hasCodeButton") }
-    static var onboardingStep1NoCodeButton: String { return Localization.string(for: "onboarding.step1.noCodeButton") }
-    static var onboardingStep2Title: String { return Localization.string(for: "onboarding.step2.title") }
-    static var onboardingStep2CodeHint: String { return Localization.string(for: "onboarding.step2.codeHint") }
-    static var onboardingStep3Title: String { return Localization.string(for: "onboarding.step3.title") }
-    static var onboardingStep3Message: String { return Localization.string(for: "onboarding.step3.message") }
+    static var onboardingStartTitle: String { return Localization.string(for: "onboarding.start.title") }
+    static var onboardingStartMessage: String { return Localization.string(for: "onboarding.start.message") }
+    static var onboardingStartHasCodeButton: String { return Localization.string(for: "onboarding.start.hasCodeButton") }
+    static var onboardingStartNoCodeButton: String { return Localization.string(for: "onboarding.start.noCodeButton") }
+    static var onboardingPairingIntroTitle: String { return Localization.string(for: "onboarding.pairingIntro.title") }
+    static var onboardingPairingIntroMessage: String { return Localization.string(for: "onboarding.pairingIntro.message") }
+    static var onboardingPairingTitle: String { return Localization.string(for: "onboarding.pairing.title") }
+    static var onboardingPairingCodeHint: String { return Localization.string(for: "onboarding.pairing.codeHint") }
     
     /* MARK: - Privacy */
     static var onboardingConsentShortTitle: String { return Localization.string(for: "onboarding.consent.shortTitle") }
@@ -117,6 +119,9 @@ extension String {
     static var contagiousPeriodSelectOnsetDateMessage: String { return Localization.string(for: "contagiousPeriodSelectOnsetDate.message") }
     static var contagiousPeriodSelectOnsetDateHelpButtonTitle: String { return Localization.string(for: "contagiousPeriodSelectOnsetDate.helpButtonTitle") }
     
+    static var contagiousPeriodOnsetDateHelpTitle: String { return Localization.string(for: "contagiousPeriodOnsetDateHelp.title") }
+    static var contagiousPeriodOnsetDateHelpMessage: String { return Localization.string(for: "contagiousPeriodOnsetDateHelp.message") }
+    
     static var contagiousPeriodNoSymptomsVerifyTitle: String { return Localization.string(for: "contagiousPeriodNoSymptomsVerify.title") }
     static var contagiousPeriodNoSymptomsVerifyMessage: String { return Localization.string(for: "contagiousPeriodNoSymptomsVerify.message") }
     static var contagiousPeriodNoSymptomsVerifyConfirmButton: String { return Localization.string(for: "contagiousPeriodNoSymptomsVerify.confirmButton") }
@@ -135,7 +140,6 @@ extension String {
     static var onboardingDetermineContactsIntroMessage: String { return Localization.string(for: "onboardingDetermineContactsIntro.message") }
     
     static var determineContactsAuthorizationTitle: String { return Localization.string(for: "determineContactsAuthorization.title") }
-    static var determineContactsAuthorizationMessage: String { return Localization.string(for: "determineContactsAuthorization.message") }
     static var determineContactsAuthorizationAllowButton: String { return Localization.string(for: "determineContactsAuthorization.allowButton") }
     static var determineContactsAuthorizationAddManuallyButton: String { return Localization.string(for: "determineContactsAuthorization.addManuallyButton") }
     
@@ -143,6 +147,7 @@ extension String {
     static var determineRoommatesTitle: String { return Localization.string(for: "determineRoommates.title") }
     static var determineRoommatesMessage: String { return Localization.string(for: "determineRoommates.message") }
     static var determineRoommatesAddContact: String { return Localization.string(for: "determineRoommatesAddContact") }
+    static var determineRoommatesNoContactsButtonTitle: String { return Localization.string(for: "determineRoommatesNoContactsButtonTitle") }
     
     static var determineContactsExplanationShortTitle: String { return Localization.string(for: "determineContactsExplanation.shortTitle") }
     static var determineContactsExplanationTitle: String { return Localization.string(for: "determineContactsExplanation.title") }
@@ -197,6 +202,11 @@ extension String {
     static var contactsTimelineActivityTipMeetings: String { return Localization.string(for: "contactsTimelineActivityTip.meetings") }
     static var contactsTimelineActivityTipConversations: String { return Localization.string(for: "contactsTimelineActivityTip.conversations") }
     
+    static var contactsTimelineHelpTitle: String { return Localization.string(for: "contactsTimelineHelp.title") }
+    static var contactsTimelineHelpItem1: String { return Localization.string(for: "contactsTimelineHelp.item1") }
+    static var contactsTimelineHelpItem2: String { return Localization.string(for: "contactsTimelineHelp.item2") }
+    static var contactsTimelineHelpItem3: String { return Localization.string(for: "contactsTimelineHelp.item3") }
+    
     /* MARK: - Task Overview */
     static var taskOverviewTipsTitle: String { return Localization.string(for: "taskOverviewTipsTitle") }
     static var taskOverviewTipsDateFormat: String { return Localization.string(for: "taskOverviewTipsDateFormat") }
@@ -210,10 +220,8 @@ extension String {
     static var taskOverviewDeleteDataButtonTitle: String { return Localization.string(for: "taskOverviewDeleteDataButtonTitle") }
     static var taskOverviewAddContactButtonTitle: String { return Localization.string(for: "taskOverviewAddContactButtonTitle") }
     
-    static var taskOverviewUninformedContactsHeaderTitle: String { return Localization.string(for: "taskOverviewUninformedContactsHeader.title") }
-    static var taskOverviewUninformedContactsHeaderSubtitle: String { return Localization.string(for: "taskOverviewUninformedContactsHeader.subtitle") }
-    static var taskOverviewInformedContactsHeaderTitle: String { return Localization.string(for: "taskOverviewInformedContactsHeader.title") }
-    static var taskOverviewInformedContactsHeaderSubtitle: String { return Localization.string(for: "taskOverviewInformedContactsHeader.subtitle") }
+    static var taskOverviewUnsyncedContactsHeader: String { return Localization.string(for: "taskOverviewUnsyncedContactsHeader") }
+    static var taskOverviewSyncedContactsHeader: String { return Localization.string(for: "taskOverviewSyncedContactsHeader") }
     
     static var taskContactUnknownName: String { return Localization.string(for: "taskContactUnknownName") }
     
@@ -272,7 +280,12 @@ extension String {
     
     static func selectContactAuthorizationTitle(name: String) -> String { return Localization.string(for: "selectContactAuthorizationTitle", [name]) }
     
+    static var selectContactAuthorizationFallbackTitle: String { return Localization.string(for: "selectContactAuthorizationFallbackTitle") }
+    
     static var selectContactAuthorizationMessage: String { return Localization.string(for: "selectContactAuthorizationMessage") }
+    static var selectContactAuthorizationItem1: String { return Localization.string(for: "selectContactAuthorization.item1") }
+    static var selectContactAuthorizationItem2: String { return Localization.string(for: "selectContactAuthorization.item2") }
+    static var selectContactAuthorizationItem3: String { return Localization.string(for: "selectContactAuthorization.item3") }
     static var selectContactAuthorizationAllowButton: String { return Localization.string(for: "selectContactAuthorizationAllowButton") }
     static var selectContactAuthorizationManualButton: String { return Localization.string(for: "selectContactAuthorizationManualButton") }
     
@@ -295,14 +308,9 @@ extension String {
     static var informContactSectionTitle: String { return Localization.string(for: "informContactSection.title") }
     static var informContactSectionMessage: String { return Localization.string(for: "informContactSection.message") }
     
-    static func informContactTitleIndex(firstName: String?) -> String {
+    static func informContactTitle(firstName: String?) -> String {
         let firstName = firstName ?? .contactPromptNameFallback
-        return Localization.string(for: "informContactTitle.index", [firstName])
-    }
-    
-    static func informContactTitleStaff(firstName: String?) -> String {
-        let firstName = firstName ?? .contactPromptNameFallback
-        return Localization.string(for: "informContactTitle.staff", [firstName])
+        return Localization.string(for: "informContactTitle", [firstName])
     }
     
     static func informContactFooterIndex(firstName: String?) -> String {
@@ -315,16 +323,25 @@ extension String {
         return Localization.string(for: "informContactFooter.staff", [firstName])
     }
     
+    static func informContactFooterUnknown(firstName: String?) -> String {
+        let firstName = firstName ?? .contactPromptNameFallback
+        return Localization.string(for: "informContactFooter.unknown", [firstName])
+    }
+    
     static var informContactGuidelinesDateFormat: String { return Localization.string(for: "informContactGuidelines.dateFormat") }
     
-    static func informContactGuidelines(category: Task.Contact.Category, exposureDatePlus5: String, exposureDatePlus10: String, exposureDatePlus11: String, exposureDatePlus14: String) -> String {
+    static func informContactGuidelines(category: Task.Contact.Category, exposureDatePlus5: String, exposureDatePlus10: String, exposureDatePlus11: String, exposureDatePlus14: String, within4Days: Bool) -> String {
         switch category {
         case .category1:
             return Localization.string(for: "informContactGuidelines.category1", [exposureDatePlus11])
         case .category2a, .category2b:
-            return Localization.string(for: "informContactGuidelines.category2", [exposureDatePlus5, exposureDatePlus10])
+            if within4Days {
+                return Localization.string(for: "informContactGuidelines.category2.within4Days", [exposureDatePlus5, exposureDatePlus5, exposureDatePlus10])
+            } else {
+                return Localization.string(for: "informContactGuidelines.category2.after4Days", [exposureDatePlus5, exposureDatePlus10])
+            }
         case .category3a, .category3b:
-            return Localization.string(for: "informContactGuidelines.category3", [exposureDatePlus14])
+            return Localization.string(for: "informContactGuidelines.category3", [exposureDatePlus5])
         default:
             return ""
         }
@@ -433,6 +450,7 @@ extension String {
     static var earlierExposureDateMessage: String { return Localization.string(for: "earlierExposureDateMessage") }
     
     static var contactDeletePromptTitle: String { return Localization.string(for: "contactDeletePromptTitle") }
+    static var contactDeletePromptMessage: String { return Localization.string(for: "contactDeletePromptMessage") }
     
     static var contactQuestionDisabledMessage: String { return Localization.string(for: "contactQuestionDisabledMessage") }
     

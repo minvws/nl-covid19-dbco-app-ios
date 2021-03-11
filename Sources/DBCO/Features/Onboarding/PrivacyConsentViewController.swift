@@ -63,13 +63,6 @@ class PrivacyConsentViewController: PromptableViewController, ScrollViewNavivati
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
         widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         
-        func listItem(_ text: String) -> UIView {
-            return HStack(spacing: 16,
-                          ImageView(imageName: "PrivacyItem").asIcon(),
-                          Label(body: text, textColor: Theme.colors.captionGray).multiline())
-                .alignment(.top)
-        }
-        
         let margin: UIEdgeInsets = .top(32) + .bottom(18)
         
         let stack =
@@ -142,12 +135,12 @@ private class ConsentButton: UIButton {
     
     override var accessibilityTraits: UIAccessibilityTraits {
         get { return UISwitch().accessibilityTraits }
-        set {}
+        set { super.accessibilityTraits = newValue }
     }
     
     override var accessibilityValue: String? {
         get { return isSelected ? "1" : "0" }
-        set {}
+        set { super.accessibilityValue = newValue }
     }
     
     var useHapticFeedback = true

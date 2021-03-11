@@ -52,13 +52,6 @@ class ContactsExplanationViewController: PromptableViewController, ScrollViewNav
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
         widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         
-        func listItem(_ text: String, icon: String) -> UIView {
-            return HStack(spacing: 16,
-                          ImageView(imageName: "ListItem/\(icon)").asIcon(),
-                          Label(body: text, textColor: Theme.colors.captionGray).multiline())
-                .alignment(.top)
-        }
-        
         let margin: UIEdgeInsets = .top(32) + .bottom(18) + .right(16)
         
         let stack =
@@ -68,10 +61,10 @@ class ContactsExplanationViewController: PromptableViewController, ScrollViewNav
                               Label(title2: .determineContactsExplanationTitle).multiline(),
                               Label(body: .determineContactsExplanationMessage, textColor: Theme.colors.captionGray).multiline()),
                        VStack(spacing: 16,
-                              listItem(.determineContactsExplanationItem1, icon: "Checkmark"),
-                              listItem(.determineContactsExplanationItem2, icon: "Checkmark"),
-                              listItem(.determineContactsExplanationItem3, icon: "Questionmark"),
-                              listItem(.determineContactsExplanationItem4, icon: "Stop"))),
+                              listItem(.determineContactsExplanationItem1, imageName: "ListItem/Checkmark"),
+                              listItem(.determineContactsExplanationItem2, imageName: "ListItem/Checkmark"),
+                              listItem(.determineContactsExplanationItem3, imageName: "ListItem/Questionmark"),
+                              htmlListItem(.determineContactsExplanationItem4, imageName: "ListItem/Stop"))),
                    UIView()) // Empty view for spacing
                 .distribution(.equalSpacing)
                 .embed(in: scrollView.readableWidth, insets: margin)

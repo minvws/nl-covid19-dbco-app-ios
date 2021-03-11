@@ -105,33 +105,16 @@ final class SelectContactCoordinator: Coordinator, Logging {
     }
     
     private func requestContactsAuthorization() {
-        let viewModel: OnboardingStepViewModel
-        
-        if let name = task?.contactName {
-            viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding4")!,
-                                                title: .selectContactAuthorizationTitle(name: name),
-                                                message: .selectContactAuthorizationMessage,
-                                                primaryButtonTitle: .selectContactAuthorizationAllowButton,
-                                                secondaryButtonTitle: .selectContactAuthorizationManualButton,
-                                                showSecondaryButtonOnTop: true)
-        } else {
-            viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding4")!,
-                                                title: .determineContactsAuthorizationTitle,
-                                                message: .determineContactsAuthorizationMessage,
-                                                primaryButtonTitle: .determineContactsAuthorizationAllowButton,
-                                                secondaryButtonTitle: .determineContactsAuthorizationAddManuallyButton,
-                                                showSecondaryButtonOnTop: true)
-        }
-        
-        let stepController = OnboardingStepViewController(viewModel: viewModel)
-        stepController.delegate = self
-        stepController.onDismissed = { [weak self] _ in
+        let viewModel = ContactsAuthorizationViewModel(contactName: task?.contactFirstName, style: .selectContact)
+        let controller = ContactsAuthorizationViewController(viewModel: viewModel)
+        controller.delegate = self
+        controller.onDismissed = { [weak self] _ in
             guard let self = self else { return }
             
             self.callDelegate()
         }
         
-        presenter?.present(stepController, animated: true)
+        presenter?.present(controller, animated: true)
     }
     
     private func continueWithoutAuthorization() {
@@ -185,9 +168,9 @@ final class SelectContactCoordinator: Coordinator, Logging {
     }
 }
 
-extension SelectContactCoordinator: OnboardingStepViewControllerDelegate {
+extension SelectContactCoordinator: ContactsAuthorizationViewControllerDelegate {
     
-    func onboardingStepViewControllerDidSelectPrimaryButton(_ controller: OnboardingStepViewController) {
+    func contactsAuthorizationViewControllerDidSelectAllow(_ controller: ContactsAuthorizationViewController) {
         CNContactStore().requestAccess(for: .contacts) { authorized, error in
             DispatchQueue.main.async {
                 controller.onDismissed = nil
@@ -202,7 +185,7 @@ extension SelectContactCoordinator: OnboardingStepViewControllerDelegate {
         }
     }
     
-    func onboardingStepViewControllerDidSelectSecondaryButton(_ controller: OnboardingStepViewController) {
+    func contactsAuthorizationViewControllerDidSelectManual(_ controller: ContactsAuthorizationViewController) {
         controller.onDismissed = nil
         didSelectManualEntry = true
         controller.dismiss(animated: true) {

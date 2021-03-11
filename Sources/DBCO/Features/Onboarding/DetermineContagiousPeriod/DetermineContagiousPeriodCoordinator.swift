@@ -9,7 +9,7 @@ import UIKit
 
 protocol DetermineContagiousPeriodCoordinatorDelegate: class {
     func determineContagiousPeriodCoordinator(_ coordinator: DetermineContagiousPeriodCoordinator, didFinishWith testDate: Date)
-    func determineContagiousPeriodCoordinator(_ coordinator: DetermineContagiousPeriodCoordinator, didFinishWith symptoms: [String], dateOfSymptomOnset: Date)
+    func determineContagiousPeriodCoordinator(_ coordinator: DetermineContagiousPeriodCoordinator, didFinishWith symptoms: [Symptom], dateOfSymptomOnset: Date)
     func determineContagiousPeriodCoordinatorDidCancel(_ coordinator: DetermineContagiousPeriodCoordinator)
 }
 
@@ -18,7 +18,7 @@ final class DetermineContagiousPeriodCoordinator: Coordinator, Logging {
     
     private var testDate = Date.distantPast
     private var symptomOnsetDate = Date.distantPast
-    private var symptoms = [String]()
+    private var symptoms = [Symptom]()
     
     weak var delegate: DetermineContagiousPeriodCoordinatorDelegate?
     
@@ -50,7 +50,7 @@ final class DetermineContagiousPeriodCoordinator: Coordinator, Logging {
 
 extension DetermineContagiousPeriodCoordinator: SelectSymptomsViewControllerDelegate {
     
-    func selectSymptomsViewController(_ controller: SelectSymptomsViewController, didSelect symptoms: [String]) {
+    func selectSymptomsViewController(_ controller: SelectSymptomsViewController, didSelect symptoms: [Symptom]) {
         if !symptoms.isEmpty {
             self.symptoms = symptoms
             
@@ -185,7 +185,21 @@ extension DetermineContagiousPeriodCoordinator: SelectSymptomOnsetDateViewContro
     }
     
     func selectSymptomOnsetDateViewControllerWantsHelp(_ controller: SelectSymptomOnsetDateViewController) {
+        let viewModel = OnsetHelpViewModel()
+        let helpController = OnsetHelpViewController(viewModel: viewModel)
+        helpController.delegate = self
         
+        let wrapperController = NavigationController(rootViewController: helpController)
+        
+        navigationController.present(wrapperController, animated: true)
     }
     
+}
+
+extension DetermineContagiousPeriodCoordinator: OnsetHelpViewControllerDelegate {
+    
+    func onsetHelpViewControllerDidSelectClose(_ controller: OnsetHelpViewController) {
+        controller.dismiss(animated: true)
+    }
+
 }

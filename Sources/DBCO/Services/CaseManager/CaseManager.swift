@@ -37,7 +37,12 @@ protocol CaseManaging {
     /// Indicates that tasks can no longer be uploaded to the backedn
     var isWindowExpired: Bool { get }
     
-    var dateOfSymptomOnset: Date { get }
+    var dateOfSymptomOnset: Date? { get }
+    var dateOfTest: Date? { get }
+    var startOfContagiousPeriod: Date? { get }
+    
+    var symptoms: [String] { get }
+    
     var tasks: [Task] { get }
     
     /// Returns the tasks as fetched by the portal without modifications by the index
@@ -51,6 +56,7 @@ protocol CaseManaging {
     func loadCaseData(userInitiated: Bool, completion: @escaping (_ success: Bool, _ error: CaseManagingError?) -> Void)
     
     func startLocalCase(dateOfSymptomOnset: Date) throws
+    func startLocalCase(dateOfTest: Date) throws
     
     /// Clears all stored data. Using any method or property except for `hasCaseData` on CaseManager before pairing and loading the data again is an invalid operation.
     /// Throws an `notPaired` error when called befored paired.
@@ -65,6 +71,8 @@ protocol CaseManaging {
     func save(_ task: Task) throws
     
     func addContactTask(name: String, category: Task.Contact.Category, contactIdentifier: String?, dateOfLastExposure: Date?)
+    
+    func setSymptoms(symptoms: [String])
     
     /// Uploads all the tasks to the backend.
     /// Throws an `notPaired` error when called befored paired.
@@ -103,11 +111,8 @@ final class CaseManager: CaseManaging, Logging {
     @Keychain(name: "appData", service: Constants.keychainService, clearOnReinstall: true)
     private var appData: AppData = .empty // swiftlint:disable:this let_var_whitespace
     
-    @UserDefaults(key: "isSynced")
-    private(set) var isSynced: Bool = true { // swiftlint:disable:this let_var_whitespace
-        didSet {
-            listeners.forEach { $0.listener?.caseManagerDidUpdateSyncState(self) }
-        }
+    var isSynced: Bool {
+        return tasks.allSatisfy(\.isSyncedWithPortal)
     }
     
     private(set) var tasks: [Task] {
@@ -125,9 +130,30 @@ final class CaseManager: CaseManaging, Logging {
         set { appData.questionnaires = newValue }
     }
     
-    private(set) var dateOfSymptomOnset: Date {
+    private(set) var dateOfSymptomOnset: Date? {
         get { appData.dateOfSymptomOnset }
         set { appData.dateOfSymptomOnset = newValue }
+    }
+    
+    private(set) var dateOfTest: Date? {
+        get { appData.dateOfTest }
+        set { appData.dateOfTest = newValue }
+    }
+    
+    var startOfContagiousPeriod: Date? {
+        switch (dateOfTest, dateOfSymptomOnset) {
+        case (_, .some(let dateOfSymptomOnset)):
+            return Calendar.current.date(byAdding: .day, value: -2, to: dateOfSymptomOnset)
+        case (.some(let dateOfTest), _):
+            return dateOfTest
+        default:
+            return nil
+        }
+    }
+    
+    private(set) var symptoms: [String] {
+        get { appData.symptoms }
+        set { appData.symptoms = newValue }
     }
     
     private(set) var windowExpiresAt: Date {
@@ -188,7 +214,9 @@ final class CaseManager: CaseManaging, Logging {
                     case .success(let result):
                         self.setTasks(result.tasks)
                         self.dateOfSymptomOnset = result.dateOfSymptomOnset
+                        self.dateOfTest = result.dateOfTest
                         self.windowExpiresAt = result.windowExpiresAt
+                        self.symptoms = result.symptoms
                         
                         self.fetchDate = Date() // Set the fetchdate here again to the actual date
             
@@ -231,16 +259,25 @@ final class CaseManager: CaseManaging, Logging {
         loadTasksIfNeeded()
     }
     
-    func startLocalCase(dateOfSymptomOnset: Date) throws {
-        guard !hasCaseData else { throw CaseManagingError.alreadyHaseCase }
-        
+    private func reinterpretAsGMT0(_ date: Date) -> Date {
         // During onboarding date calculations are in the user's current timezone.
         // We need to reinterpret them as being in GMT+00
         let offset = TimeInterval(TimeZone.current.secondsFromGMT())
-        self.dateOfSymptomOnset = dateOfSymptomOnset.addingTimeInterval(offset)
+        return date.addingTimeInterval(offset)
+    }
+    
+    func startLocalCase(dateOfSymptomOnset: Date) throws {
+        guard !hasCaseData else { throw CaseManagingError.alreadyHaseCase }
         
+        self.dateOfSymptomOnset = reinterpretAsGMT0(dateOfSymptomOnset)
         windowExpiresAt = .distantFuture
-        isSynced = false
+    }
+    
+    func startLocalCase(dateOfTest: Date) throws {
+        guard !hasCaseData else { throw CaseManagingError.alreadyHaseCase }
+            
+        self.dateOfTest = reinterpretAsGMT0(dateOfTest)
+        windowExpiresAt = .distantFuture
     }
     
     func removeCaseData() throws {
@@ -286,22 +323,18 @@ final class CaseManager: CaseManaging, Logging {
                 
                 // Insert a .lastExposureDate question
                 let lastExposureQuestion = Question(uuid: UUID(),
-                                                    group: .contactDetails,
+                                                    group: .classification,
                                                     questionType: .lastExposureDate,
                                                     label: .contactInformationLastExposure,
                                                     description: nil,
-                                                    relevantForCategories: [.category1, .category2a, .category2b, .category3a, .category3b],
+                                                    relevantForCategories: [.category1, .category2a, .category2b, .category3a, .category3b, .other],
                                                     answerOptions: nil,
                                                     disabledForSources: [.portal])
                 
-                // Find the index of the question modifying the communication type. (Via triggers)
-                let communicationQuestionIndex = questionnaire.questions
-                    .firstIndex { $0.answerOptions?.contains { $0.trigger == .setCommunicationToIndex } == true }
-                
-                if let index = communicationQuestionIndex {
-                    questions.insert(lastExposureQuestion, at: index)
-                } else {
+                if questions.isEmpty { // Just to be safe
                     questions.append(lastExposureQuestion)
+                } else {
+                    questions.insert(lastExposureQuestion, at: 0)
                 }
                 
                 return Questionnaire(uuid: questionnaire.uuid,
@@ -327,7 +360,18 @@ final class CaseManager: CaseManaging, Logging {
         fetchedTasks.forEach { task in
             if let existingTaskIndex = tasks.firstIndex(where: { $0.uuid == task.uuid }) {
                 if tasks[existingTaskIndex].questionnaireResult == nil {
+                    // Not modified by the user yet, so we can just replace it entirely
                     tasks[existingTaskIndex] = task
+                } else {
+                    switch tasks[existingTaskIndex].taskType {
+                    case .contact:
+                        // Update only the communication type
+                        let existingContact = tasks[existingTaskIndex].contact!
+                        tasks[existingTaskIndex].contact = Task.Contact(category: existingContact.category,
+                                                                        communication: task.contact.communication,
+                                                                        informedByIndexAt: existingContact.informedByIndexAt,
+                                                                        dateOfLastExposure: existingContact.dateOfLastExposure)
+                    }
                 }
             } else {
                 tasks.append(task)
@@ -370,6 +414,8 @@ final class CaseManager: CaseManaging, Logging {
     
     func save(_ task: Task) throws {
         guard hasCaseData else { throw CaseManagingError.noCaseData }
+        
+        let wasSynced = isSynced
         
         func storeNewTask() -> Int {
             tasks.append(task)
@@ -416,27 +462,24 @@ final class CaseManager: CaseManaging, Logging {
         switch updatedTask.taskType {
         case .contact:
             updatedTask.contact = task.contact
-            
-            // Fallback to .index for communication if currently .none
-            if let contact = updatedTask.contact, contact.communication == .none {
-                updatedTask.contact = Task.Contact(category: contact.category,
-                                                   communication: .index,
-                                                   informedByIndexAt: contact.informedByIndexAt,
-                                                   dateOfLastExposure: contact.dateOfLastExposure)
-            }
         }
         
         // Update deletion
         if task.deletedByIndex {
             updatedTask.deletedByIndex = true
         }
-        
-        // If the data was synced and the updatedTask is the same as the current task, data is still synced
-        isSynced = isSynced && tasks[index] == updatedTask
-        
-        tasks[index] = updatedTask
+    
+        // Update task if needed and set sync state
+        if tasks[index] != updatedTask {
+            tasks[index] = updatedTask
+            tasks[index].isSyncedWithPortal = false
+        }
         
         listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
+        
+        if wasSynced != isSynced {
+            listeners.forEach { $0.listener?.caseManagerDidUpdateSyncState(self) }
+        }
     }
     
     private static let valueDateFormatter: DateFormatter = {
@@ -452,13 +495,17 @@ final class CaseManager: CaseManaging, Logging {
     func addContactTask(name: String, category: Task.Contact.Category, contactIdentifier: String?, dateOfLastExposure: Date?) {
         var task = Task(type: .contact, label: name, source: .app)
         task.contact = Task.Contact(category: category,
-                                    communication: .none,
+                                    communication: .unknown,
                                     informedByIndexAt: nil,
                                     dateOfLastExposure: dateOfLastExposure.map(Self.valueDateFormatter.string),
                                     contactIdentifier: contactIdentifier)
         tasks.append(task)
         
         listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
+    }
+    
+    func setSymptoms(symptoms: [String]) {
+        self.symptoms = symptoms
     }
     
     func addListener(_ listener: CaseManagerListener) {
@@ -472,26 +519,38 @@ final class CaseManager: CaseManaging, Logging {
         }
     }
     
+    private func markAllTasksAsSynced() {
+        for index in 0 ..< tasks.count {
+            tasks[index].isSyncedWithPortal = true
+        }
+        
+        listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
+    }
+    
     func sync(completionHandler: ((Bool) -> Void)?) throws {
         guard hasCaseData else { throw CaseManagingError.noCaseData }
         guard !isWindowExpired else { throw CaseManagingError.windowExpired }
         
         do {
-            let value = Case(dateOfSymptomOnset: dateOfSymptomOnset, windowExpiresAt: windowExpiresAt, tasks: tasks)
+            let value = Case(dateOfTest: dateOfTest,
+                             dateOfSymptomOnset: dateOfSymptomOnset,
+                             windowExpiresAt: windowExpiresAt,
+                             tasks: tasks,
+                             symptoms: symptoms)
             let identifier = try Services.pairingManager.caseToken()
             Services.networkManager.putCase(identifier: identifier, value: value) {
                 switch $0 {
                 case .success:
-                    self.isSynced = true
+                    self.markAllTasksAsSynced()
                     completionHandler?(true)
                 case .failure(let error):
                     self.logError("Could not sync case: \(error)")
                     completionHandler?(false)
                 }
             }
-        } catch {
+        } catch let error {
             completionHandler?(false)
-            return
+            throw error
         }
     }
     

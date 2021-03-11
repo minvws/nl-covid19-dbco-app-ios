@@ -13,6 +13,7 @@
 "done" = "Klaar";
 "ok" = "Oké";
 "tryAgain" = "Opnieuw proberen";
+"back" = "Terug";
 "delete" = "Verwijderen";
 "error.title" = "Er ging iets mis";
 "other" = "Anders";
@@ -20,6 +21,7 @@
 "expanded" = "Uitgeklapt";
 "completed" = "Afgerond";
 "disabled" = "Uitgeschakeld";
+"loading" = "Aan het laden";
 
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
@@ -29,23 +31,23 @@
 "updateApp.button" = "Updaten";
 
 /* MARK: - Onboarding */
-"onboarding.step1.title" = "Help de GGD bij het contactonderzoek";
-"onboarding.step1.message" = "Je kunt via deze app bepalen wie van je contacten een grote kans op besmetting heeft gelopen. Ook kun je contactgegevens met de GGD delen voor het contactonderzoek.";
-"onboarding.step1.hasCodeButton" = "Ik heb al een code";
-"onboarding.step1.noCodeButton" = "Ik heb nog geen code";
-"onboarding.step2.title" = "Vul de code in die je hebt gekregen van de GGD-medewerker";
-"onboarding.step2.codeHint" = "De code bestaat uit 12 cijfers";
-"onboarding.step3.title" = "Voeg de gegevens van je contacten toe";
-"onboarding.step3.message" = "De GGD heeft contactgegevens nodig van mensen die jij hebt ontmoet, omdat je hen misschien hebt besmet. Via deze app kun je gemakkelijk gegevens delen. Je bepaalt zelf welke gegevens je deelt en wanneer je dat doet.";
+"onboarding.start.title" = "Waarschuw de mensen die je misschien hebt besmet";
+"onboarding.start.message" = "Je kunt via deze app bepalen wie van je contacten een grote kans op besmetting heeft gelopen. Ook kun je contactgegevens met de GGD delen voor het contactonderzoek.";
+"onboarding.start.hasCodeButton" = "Ik heb al een code";
+"onboarding.start.noCodeButton" = "Ik heb nog geen code";
+"onboarding.pairing.title" = "Vul de code in die je hebt gekregen van de GGD-medewerker";
+"onboarding.pairing.codeHint" = "De code bestaat uit 12 cijfers";
+"onboarding.pairingIntro.title" = "Deel de gegevens van contacten met de GGD";
+"onboarding.pairingIntro.message" = "Zo kunnen we mensen die misschien zijn besmet zo snel mogelijk informeren. Goed om te weten: niet iedereen hoeft direct in quarantaine.";
 
 /* MARK: - Privacy */
 "onboarding.consent.shortTitle" = "Privacy";
 "onboarding.consent.title" = "Zo gaat GGD Contact om met je gegevens";
 "onboarding.consent.message" = "In de  <a href=\"https://ggdcontact.nl/nl/privacy-in-app\">privacyverklaring</a> staat hoe GGD Contact jouw gegevens gebruikt. Dit zijn de belangrijkste punten:";
 "onboarding.consent.item1" = "Gegevens worden versleuteld en via een veilige verbinding gedeeld";
-"onboarding.consent.item2" = "Gegevens worden pas met de GGD gedeeld als jij laat weten dat je klaar bent";
-"onboarding.consent.item3" = "Alleen gegevens die je zelf invult worden gedeeld";
-"onboarding.consent.item4" = "Je kunt na het delen zelf de gegevens verwijderen";
+"onboarding.consent.item2" = "Alleen gegevens die jij invult worden gedeeld";
+"onboarding.consent.item3" = "Gegevens worden pas met de GGD gedeeld als jij laat weten dat je klaar bent";
+"onboarding.consent.item4" = "Het gebruik van de app en delen van gegevens is vrijwillig";
 "onboarding.consent.buttonTitle" = "Ik heb de privacyverklaring gelezen en begrijp hoe GGD Contact mijn gegevens gebruikt";
 
 /* MARK: - Onboarding Error */
@@ -63,11 +65,13 @@
 "contagiousPeriodNoSymptomsButton" = "Ik heb geen klachten";
 
 "contagiousPeriodSelectTestDate.title" = "Wanneer heb je je laten testen op corona?";
-"contagiousPeriodSelectTestDate.message" = "Kies de datum waarop de test bij je is afgenomen.";
+"contagiousPeriodSelectTestDate.message" = "Kies de datum waarop je de (laatste) coronatest hebt gedaan.";
 
 "contagiousPeriodSelectOnsetDate.title" = "Sinds wanneer heb je deze klachten?";
 "contagiousPeriodSelectOnsetDate.message" = "Twijfel je over je eerste ziektedag? Kies dan een dag eerder.";
 "contagiousPeriodSelectOnsetDate.helpButtonTitle" = "Ik weet het niet";
+"contagiousPeriodOnsetDateHelp.title" = "Ziektedag bepalen";
+"contagiousPeriodOnsetDateHelp.message" = "<b>Je hebt chronische klachten</b><br/>Werden je klachten erger voordat je de coronatest deed? Zo ja, wanneer kreeg je die klachten? Kies die dag als eerste ziektedag.<br/><br/><b>Je bent al eerder getest</b><br/>Kreeg je ergere klachten tussen de laatste test en de test ervoor? Kies dan de dag waarop je die klachten kreeg als eerste ziektedag.<br/><br/>Als je het echt niet weet, dan kies je de datum waarop je de coronatest hebt gedaan.";
 
 "contagiousPeriodNoSymptomsVerify.title" = "Weet je zeker dat je geen klachten hebt die passen bij corona?";
 "contagiousPeriodNoSymptomsVerify.message" = "Ook lichtere klachten zoals een snotneus of vermoeidheid tellen mee.";
@@ -78,14 +82,13 @@
 "contagiousPeriodOnsetDateVerify.title" =  "Weet je zeker dat je geen klachten had op %@?";
 "contagiousPeriodOnsetDateVerify.message" = "Ook lichtere klachten zoals een snotneus of vermoeidheid tellen mee.";
 "contagiousPeriodOnsetDateVerify.confirmButton" = "Geen klachten";
-"contagiousPeriodOnsetDateVerify.cancelButton" = "Ik had toch klachten";
+"contagiousPeriodOnsetDateVerify.cancelButton" = "Ik had ook die dag klachten";
 
 /* MARK: - Determine contacts */
-"onboardingDetermineContactsIntro.title" = "Ontdek welke leefregels gelden voor je contacten";
-"onboardingDetermineContactsIntro.message" = "Goed om te weten: niet iedereen hoeft direct in quarantaine om de verspreiding van het coronavirus te stoppen.";
+"onboardingDetermineContactsIntro.title" = "Bepaal wie van je contacten misschien zijn besmet en informeer hen";
+"onboardingDetermineContactsIntro.message" = "We gaan een overzicht maken van mensen die je hebt ontmoet. Goed om te weten: niet iedereen hoeft direct in quarantaine.";
 
 "determineContactsAuthorization.title" = "Wil je je contactenlijst gebruiken om contactgegevens in te vullen?";
-"determineContactsAuthorization.message" = "Gebruik je contactenlijst om makkelijk contacten te vinden en contactgegevens in te vullen. Je bepaalt daarna zelf welke gegevens je met de GGD deelt.";
 "determineContactsAuthorization.allowButton" = "Toegang geven";
 "determineContactsAuthorization.addManuallyButton" = "Handmatig toevoegen";
 
@@ -93,14 +96,15 @@
 "determineRoommates.title" = "Wie zijn je huisgenoten?";
 "determineRoommates.message" = "Dit zijn de mensen met wie je in één huis woont.";
 "determineRoommatesAddContact" = "Voeg huisgenoot toe";
+"determineRoommatesNoContactsButtonTitle" = "Ik woon alleen";
 
 "determineContactsExplanation.shortTitle" = "Contacten";
 "determineContactsExplanation.title" = "We gaan een overzicht maken van mensen die je hebt ontmoet";
 "determineContactsExplanation.message" = "Niet iedereen die je hebt ontmoet heeft risico op besmetting gelopen. We zijn op zoek naar mensen met wie je:";
-"determineContactsExplanation.item.1" = "Langer dan 15 minuten in dezelfde ruimte bent geweest";
+"determineContactsExplanation.item.1" = "Bij wie je in de buurt en/of een tijdje in dezelfde ruimte bent geweest";
 "determineContactsExplanation.item.2" = "Intens contact hebt gehad door zoenen of seksueel contact";
 "determineContactsExplanation.item.3" = "Twijfel je? Voeg de persoon dan toch toe";
-"determineContactsExplanation.item.4" = "Je hoeft je huisgenoten niet nog een keer toe te voegen";
+"determineContactsExplanation.item.4" = "Je hoeft je huisgenoten <b>hierna</b> niet nog een keer toe te voegen";
 
 /* MARK: - Onboarding Contacts Timeline */
 "contactsTimeline.dateFormat" = "EEEE d MMMM";
@@ -108,7 +112,7 @@
 
 "contactsTimeline.shortTitle" = "Contacten";
 "contactsTimeline.title" = "Wie heb je ontmoet tussen %@ en vandaag?";
-"contactsTimeline.message" = "Weet je niet hoe iemand heet? Zet het contact er dan toch in. Bijvoorbeeld als trainer, kapper of buurvrouw. Je hoeft hier geen huisgenoten toe te voegen.";
+"contactsTimeline.message" = "Weet je niet hoe iemand heet? Zet het contact er dan toch in. Bijvoorbeeld als trainer, kapper of buurvrouw. Je hoeft hier geen huisgenoten toe te voegen.<br/><b><a href=\"/\">Wat deel ik precies met de GGD?</a></b>";
 
 "contactsTimelineAddContact" = "Contact toevoegen";
 
@@ -117,10 +121,10 @@
 "contactsTimelineSectionTitle.2daysAgoFormat" = "Eergisteren (%@)";
 
 "contactsTimelineSectionSubtitle.symptomOnset" = "De eerste dag dat je klachten had";
-"contactsTimelineSectionSubtitle.beforeOnset" = "Deze dag was je ook al besmettelijk";
+"contactsTimelineSectionSubtitle.beforeOnset" = "Deze dag was je mogelijk al besmettelijk";
 "contactsTimelineSectionSubtitle.testDate" = "Op deze dag liet je jezelf testen";
 
-"contactsTimelineAddExtraDay.title" = "Weet je zeker dat je voor %@ nog geen klachten had?";
+"contactsTimelineAddExtraDay.title" = "Ter controle: %@ was de eerste dag dat je klachten had. Klopt dit?";
 "contactsTimelineAddExtraDay.button" = "Ik had al eerder klachten";
 
 "contactsTimelineEmptyDays.title" = "Je hebt niet aan iedere dag contacten toegevoegd";
@@ -143,6 +147,11 @@
 "contactsTimelineActivityTip.meetings" = "Ontmoetingen buiten of bij jou thuis";
 "contactsTimelineActivityTip.conversations" = "Een onverwachts gesprek op werk";
 
+"contactsTimelineHelp.title" = "Wat deel ik precies?";
+"contactsTimelineHelp.item1" = "Alleen gegevens die jij invult worden gedeeld";
+"contactsTimelineHelp.item2" = "De GGD heeft <b>geen</b> toegang tot je hele contactenlijst";
+"contactsTimelineHelp.item3" = "Gegevens worden pas met de GGD gedeeld als jij op ‘Deel gegevens met GGD’ klikt";
+
 /* MARK: - Task Overview */
 "taskOverviewTipsTitle" = "Geen contacten vergeten?";
 "taskOverviewTipsDateFormat" = "'vanaf' d MMMM";
@@ -154,10 +163,8 @@
 "taskOverviewDeleteDataButtonTitle" = "Verwijder gegevens";
 "taskOverviewAddContactButtonTitle" = "Contact toevoegen";
 
-"taskOverviewUninformedContactsHeader.title" = "Ga hiermee aan de slag";
-"taskOverviewUninformedContactsHeader.subtitle" = "Deze contacten moeten weten dat je besmet bent";
-"taskOverviewInformedContactsHeader.title" = "Deze contacten zijn klaar";
-"taskOverviewInformedContactsHeader.subtitle" = "Jij hebt ze geïnformeerd of de GGD doet dit";
+"taskOverviewUnsyncedContactsHeader" = "Nog niet gedeeld met de GGD";
+"taskOverviewSyncedContactsHeader" = "Gedeeld met de GGD";
 
 "taskContactUnknownName" = "Geen naam bekend";
 
@@ -173,7 +180,7 @@
 
 "contactTaskStatusStaffWillInform" = "GGD gaat informeren";
 "contactTaskStatusIndexDidInform" = "Jij hebt geïnformeerd";
-"contactTaskStatusIndexWillInform" = "Jij informeert dit contact";
+"contactTaskStatusIndexWillInform" = "Informeer dit contact";
 "contactTaskStatusMissingDetails" = "Vul gegevens aan";
 
 "taskOverviewWaitingForPairing" = "Wachten op koppeling met de GGD";
@@ -199,7 +206,7 @@
 
 "overviewTipsSection2.title" = "Zet de contacten in de app";
 "overviewTipsSection2.intro" = "Niet iedereen die je hebt ontmoet heeft risico op besmetting gelopen. We zijn op zoek naar mensen met wie je:";
-"overviewTipsSection2.item1" = "Langer dan 15 minuten in dezelfde ruimte bent geweest";
+"overviewTipsSection2.item1" = "Bij wie je in de buurt en/of een tijdje in dezelfde ruimte was";
 "overviewTipsSection2.item2" = "Intens contact hebt gehad door zoenen of seksueel contact";
 "overviewTipsSection2.item3" = "Twijfel je? Voeg de persoon dan toch toe";
 
@@ -213,7 +220,11 @@
 "selectContactAddManuallyFallback" = "Handmatig toevoegen";
 
 "selectContactAuthorizationTitle" = "‘%@’ opzoeken in je contactenlijst?";
-"selectContactAuthorizationMessage" = "Zo kun je snel de gegevens van dit contact invullen. Je bepaalt altijd zelf welke gegevens je met de GGD deelt en wanneer je dat doet.";
+"selectContactAuthorizationFallbackTitle" = "Dit nieuwe contact opzoeken in je contactenlijst?";
+"selectContactAuthorizationMessage" = "Gebruik je contactenlijst om makkelijk contacten te vinden en contactgegevens in te vullen. Bijvoorbeeld een achternaam of een telefoonnummer.";
+"selectContactAuthorization.item1" = "Alleen gegevens die jij invult worden gedeeld";
+"selectContactAuthorization.item2" = "De GGD heeft <b>geen</b> toegang tot je hele contactenlijst";
+"selectContactAuthorization.item3" = "Gegevens worden pas met de GGD gedeeld als jij laat weten dat je klaar bent";
 "selectContactAuthorizationAllowButton" = "Ja, opzoekhulp gebruiken";
 "selectContactAuthorizationManualButton" = "Nee, zelf invullen";
 
@@ -221,8 +232,8 @@
 "contactSection.label" = "%@. Stap %d. %@. %@.";
 "contactSection.completed" = "Je hebt stap %d afgerond.";
 
-"contactTypeSection.title" = "Soort contact";
-"contactTypeSection.message" = "Beantwoord vragen over ontmoeting";
+"contactTypeSection.title" = "Over de ontmoeting";
+"contactTypeSection.message" = "Beantwoord een paar vragen";
 
 "contactDetailsSection.title" = "Contactgegevens";
 "contactDetailsSection.message" = "Vul zo veel mogelijk gegevens aan";
@@ -230,28 +241,135 @@
 "informContactSection.title" = "Informatie voor dit contact";
 "informContactSection.message" = "De leefregels voor deze persoon";
 
-"informContactTitle.index" = "Dit zijn de leefregels voor %@:";
-"informContactTitle.staff" = "Dit zijn de leefregels voor %@:";
+"informContactTitle" = "Dit zijn de leefregels voor %@:";
 "informContactFooter.index" = "Je hebt met de GGD afgesproken dat jij %@ informeert";
-"informContactFooter.staff" = "De GGD neemt ook contact op met %@.";
+"informContactFooter.staff" = "Je hebt met de GGD afgesproken dat zij %@ informeren. Je kunt natuurlijk wel zelf alvast de leefregels delen.";
+"informContactFooter.unknown" = "De GGD raadt aan om %@ alvast te informeren en deze leefregels te delen.";
 
 "informContactGuidelines.dateFormat" = "EEEE d MMMM";
-"informContactGuidelines.category1" = "<ul><li>Blijf thuis, vermijd contact met je besmette huisgenoot en ontvang geen bezoek</li><li>Doe een coronatest <b>5 dagen</b> na het laatste contact met je besmette huisgenoot. Ook als je geen klachten hebt. De GGD helpt je bij het bepalen van de juiste testdatum. De afspraak voor een coronatest maak je daarna via 0800-2035</li><li>Doe je geen coronatest? Dan blijf je thuis tot en met <b>10 dagen</b> na het laatste contact. Je mag op z’n vroegst weer naar buiten op %@</li><li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt</li><li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li></ul>";
+"informContactGuidelines.category1" = "<ul>
+
+<li>Blijf thuis, vermijd contact met je besmette huisgenoot en ontvang geen bezoek</li>
+
+<li>Doe zo snel mogelijk een coronatest. Als je besmet blijkt, kun je samen met de GGD meteen maatregelen nemen.</li>
+
+<li>Doe <b>5 dagen</b> na het laatste contact met je besmette huisgenoot nog een coronatest. Ook als je geen klachten hebt gekregen. Blijkt uit die test dat je geen corona hebt? Dan mag je weer naar buiten.</li>
+
+<li>De afspraak voor een coronatest maak je via 0800-2035.</li>
+
+<li>Doe je geen coronatest? Dan blijf je thuis tot en met <b>10 dagen</b> na het laatste contact. Je mag op z’n vroegst weer naar buiten op %@.</li>
+
+<li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt.</li>
+
+<li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog.</li>
+
+</ul>";
+
 "informContactGuidelines.category1.intro" = "Je bent een huisgenoot van iemand die corona heeft. Je bent hierdoor misschien besmet geraakt of kan dat nog worden.<br/><br/>Als je inderdaad besmet bent, kun je het virus aan anderen doorgeven. Ook als je je nu niet ziek voelt. Daarom vraagt de GGD je om je aan deze leefregels te houden:";
 
-"informContactGuidelines.category2" = "<ul><li>Blijf thuis en ontvang geen bezoek</li><li>Doe een coronatest op of na <b>%@</b>. Ook als je geen klachten hebt. Bel 0800-2035 om een afspraak voor een coronatest te maken. Blijkt uit de test dat je geen corona hebt? Dan mag je weer naar buiten</li><li>Doe je geen coronatest? Dan blijf je thuis tot en met <b>%@</b></li><li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt</li><li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li></ul>";
+"informContactGuidelines.category2.within4Days" = "<ul>
+
+<li>Blijf thuis en ontvang geen bezoek</li>
+
+<li>Doe zo snel mogelijk een coronatest. Als je besmet blijkt, kun je samen met de GGD meteen maatregelen nemen.</li>
+
+<li>De afspraak voor een coronatest maak je via 0800-2035.</li>
+
+<li>Maak ook meteen een afspraak om je op of na <b>%@</b> nog een keer te laten testen. Het kan soms namelijk een aantal dagen duren voordat een test kan meten dat je bent besmet.</li>
+
+<li>Blijf dus thuis tot uit de test op of na <b>%@</b> blijkt dat je geen corona hebt.</li>
+
+<li>Doe je geen coronatest? Dan blijf je thuis tot en met <b>%@</b></li>
+
+<li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt.</li>
+
+<li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li>
+
+</ul>";
+
+"informContactGuidelines.category2.after4Days" = "<ul>
+
+<li>Blijf thuis en ontvang geen bezoek</li>
+
+<li>Maak een afspraak voor een coronatest  op of na <b>%@</b>. Blijkt uit de test dat je geen corona hebt? Dan mag je weer naar buiten.</li>
+
+<li>De afspraak voor een coronatest maak je via 0800-2035.</li>
+
+<li>Doe je geen coronatest? Dan blijf je thuis tot en met <b>%@</b></li>
+
+<li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt.</li>
+
+<li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li>
+
+</ul>";
+
 "informContactGuidelines.category2.intro" = "Je bent (op %@) in nauw contact geweest met iemand die corona heeft. Je bent hierdoor misschien besmet geraakt.<br/><br/>Als je inderdaad besmet bent, kun je het virus aan anderen doorgeven. Ook als je je nu niet ziek voelt. Daarom vraagt de GGD je om je aan deze leefregels te houden:";
 
-"informContactGuidelines.category3" = "<ul><li>Houd 1,5 meter afstand van anderen en vermijd bezoek aan drukke plekken</li><li>Let tot en met <b>%@</b> extra goed op gezondheidsklachten die passen bij COVID-19</li><li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li></ul>";
+"informContactGuidelines.category3" = "<ul>
+
+<li>Doe een coronatest op of na <b>%@</b>. Ook als je geen klachten hebt.</li>
+
+<li>De afspraak voor een coronatest maak je via 0800-2035.</li>
+
+<li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt.</li>
+
+<li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li>
+
+</ul>";
+
 "informContactGuidelines.category3.intro" = "Je bent (op %@) in de buurt geweest van iemand die corona heeft. De kans dat je hierdoor misschien besmet geraakt is klein.<br/><br/>Als je wel besmet bent, kun je het virus aan anderen doorgeven. Ook als je je nu niet ziek voelt.";
 
-"informContactGuidelines.generic.category1" = "<ul><li>Blijf thuis, vermijd contact met je besmette huisgenoot en ontvang geen bezoek</li><li>Doe een coronatest <b>5 dagen</b> na het laatste contact met je besmette huisgenoot. Ook als je geen klachten hebt. De GGD helpt je bij het bepalen van de juiste testdatum. De afspraak voor een coronatest maak je daarna via 0800-2035</li><li>Doe je geen coronatest? Dan blijf je thuis tot en met <b>10 dagen</b> na het laatste contact</li><li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt</li><li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li></ul>";
+"informContactGuidelines.generic.category1" = "<ul>
+
+<li>Blijf thuis, vermijd contact met je besmette huisgenoot en ontvang geen bezoek.</li>
+
+<li>Doe zo snel mogelijk een coronatest. Als je besmet blijkt, kun je samen met de GGD meteen maatregelen nemen.</li>
+
+<li>Doe <b>5 dagen</b> na het laatste contact met je besmette huisgenoot nog een coronatest. Ook als je geen klachten hebt gekregen.
+Blijkt uit die test dat je geen corona hebt? Dan mag je weer naar buiten.</li>
+
+<li>De afspraak voor een coronatest maak je via 0800-2035.</li>
+
+<li>Doe je geen coronatest? Dan blijf je thuis tot en met <b>10 dagen</b> na het laatste contact.</li>
+
+<li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt</li>
+
+<li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li>
+
+</ul>";
+
 "informContactGuidelines.generic.category1.intro" = "Je bent een huisgenoot van iemand die corona heeft. Je bent hierdoor misschien besmet geraakt of kan dat nog worden.<br/><br/>Als je inderdaad besmet bent, kun je het virus aan anderen doorgeven. Ook als je je nu niet ziek voelt. Daarom vraagt de GGD je om je aan deze leefregels te houden:";
 
-"informContactGuidelines.generic.category2" = "<ul><li>Blijf thuis en ontvang geen bezoek</li><li>Doe een coronatest <b>5 dagen</b> na het laatste contact met de besmette persoon. Ook als je geen klachten hebt. Bel 0800-2035 om een afspraak voor een coronatest te maken. Blijkt uit de test dat je geen corona hebt? Dan mag je weer naar buiten</li><li>Doe je geen coronatest? Dan blijf je thuis tot en met <b>10 dagen</b> na het laatste contact</li><li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt</li><li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li></ul>";
+"informContactGuidelines.generic.category2" = "<ul>
+
+<li>Blijf thuis en ontvang geen bezoek</li>
+
+<li>Doe zo snel mogelijk een coronatest. En ook <b>5 dagen</b> na het laatste contact. Als uit beide tests blijkt dat je niet besmet bent, mag je weer naar buiten.</li>
+
+<li>De afspraak voor een coronatest maak je via 0800-2035.</li>
+
+<li>Doe je geen coronatest? Dan blijf je thuis tot en met <b>10 dagen</b> na het laatste contact.</li>
+
+<li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt</li>
+
+<li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li>
+
+</ul>";
+
 "informContactGuidelines.generic.category2.intro" = "Je bent in nauw contact geweest met iemand die corona heeft. Je bent hierdoor misschien besmet geraakt.<br/><br/>Als je inderdaad besmet bent, kun je het virus aan anderen doorgeven. Ook als je je nu niet ziek voelt. Daarom vraagt de GGD je om je aan deze leefregels te houden:";
 
-"informContactGuidelines.generic.category3" = "<ul><li>Houd 1,5 meter afstand van anderen en vermijd bezoek aan drukke plekken</li><li>Let tot en met <b>14 dagen</b> na het laatste contact met de besmette persoon extra goed op gezondheidsklachten die passen bij COVID-19</li><li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li></ul>";
+"informContactGuidelines.generic.category3" = "<ul>
+
+<li>Doe een coronatest <b>5 dagen</b> na het laatste contact. Ook als je geen klachten hebt.</li>
+
+<li>De afspraak voor een coronatest maak je via 0800-2035.</li>
+
+<li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt</li>
+
+<li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li>
+
+</ul>";
+
 "informContactGuidelines.generic.category3.intro" = "Je bent in de buurt geweest van iemand die corona heeft. De kans dat je hierdoor misschien besmet geraakt is klein.<br/><br/>Als je wel besmet bent, kun je het virus aan anderen doorgeven. Ook als je je nu niet ziek voelt.";
 
 "informContactLink.category1" = "Meer informatie over omgaan met een besmette huisgenoot en algemene regels als je met iemand woont die corona heeft, lees je op: <a href=\"https://lci.rivm.nl/covid-19-huisgenoten\">lci.rivm.nl/covid-19-huisgenoten</a>";
@@ -268,7 +386,7 @@
 "sameHouseholdRiskQuestion.answer.positive" = "Ja";
 "sameHouseholdRiskQuestion.answer.negative" = "Nee";
 
-"distanceRiskQuestion" = "Zijn jullie dicht bij elkaar geweest? (minder dan 1,5 meter)";
+"distanceRiskQuestion" = "Zijn jullie die dag dicht bij elkaar geweest? (minder dan 1,5 meter)";
 "distanceRiskQuestion.answer.moreThan15Min" = "Ja, in totaal langer dan een kwartier";
 "distanceRiskQuestion.answer.lessThan15Min" = "Ja, in totaal korter dan een kwartier";
 "distanceRiskQuestion.answer.negative" = "Nee, we hielden genoeg afstand";
@@ -282,8 +400,8 @@
 "sameRoomRiskQuestion.answer.positive" = "Ja, denk het wel";
 "sameRoomRiskQuestion.answer.negative" = "Nee, denk het niet";
 
-"otherCategoryTitle" = "Dit contact heeft geen extra risico op besmetting gelopen";
-"otherCategoryMessage" = "Je hoeft deze persoon dus niet te laten weten dat je besmet bent.";
+"otherCategoryTitle" = "Deze persoon heeft geen extra risico op besmetting gelopen";
+"otherCategoryMessage" = "Je hoeft dus niet te laten weten dat je besmet bent.";
 
 "contactFallbackTitle" = "Contact toevoegen";
 "contactInformationFirstName" = "Voornaam";
@@ -300,7 +418,8 @@
 "earlierExposureDateTitle" = "Je hoeft geen gegevens te delen van deze persoon";
 "earlierExposureDateMessage" = "Jullie waren namelijk bij elkaar in de buurt toen je nog niet besmettelijk was";
 
-"contactDeletePromptTitle" = "Weet je zeker dat je dit contact wilt verwijderen?";
+"contactDeletePromptTitle" = "Dit contact heeft geen extra risico op besmetting gelopen";
+"contactDeletePromptMessage" = "Je hoeft deze persoon dus niet te laten weten dat je besmet bent. Ook heeft de GGD geen gegevens van deze persoon nodig.";
 
 "contactQuestionDisabledMessage" = "Ingevuld door een GGD-medewerker";
 
@@ -337,7 +456,7 @@
 
 /* MARK: - Uploading */
 "unfinishedTasksOverviewTitle" = "Bijna klaar";
-"unfinishedTasksOverviewMessage" = "Kun je deze contacten nog even controleren?";
+"unfinishedTasksOverviewMessage" = "Bijna klaar. Wil je dit nog doen?";
 
 "unfinishedTaskOverviewIndexContactsHeader.title" = "Contacten die nog niet zijn geïnformeerd";
 "unfinishedTaskOverviewIndexContactsHeader.subtitle" = "Vul contactgegevens aan";

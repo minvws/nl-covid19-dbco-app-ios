@@ -12,6 +12,7 @@ protocol ContactsTimelineViewControllerDelegate: class {
     func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [Onboarding.Contact], dateOfSymptomOnset: Date)
     func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [Onboarding.Contact], testDate: Date)
     func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didCancelWith contacts: [Onboarding.Contact])
+    func contactsTimelineViewControllerDidRequestHelp(_ controller: ContactsTimelineViewController)
 }
 
 private extension Date {
@@ -282,11 +283,12 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
             VStack(spacing: 40,
                    VStack(spacing: 16,
                           titleLabel.multiline(),
-                          Label(body: .contactsTimelineMessage, textColor: Theme.colors.captionGray).multiline()),
+                          TextView(htmlText: .contactsTimelineMessage, font: Theme.fonts.body, textColor: Theme.colors.captionGray, boldTextColor: Theme.colors.primary)
+                            .linkTouched { [weak self] _ in self?.openHelp() }),
                    sectionStackView,
                    VStack(spacing: 16,
                           addExtraDaySectionView,
-                          Button(title: .next, style: .primary).touchUpInside(self, action: #selector(handleContinue))))
+                          Button(title: .done, style: .primary).touchUpInside(self, action: #selector(handleContinue))))
                 .distribution(.fill)
                 .embed(in: scrollView.readableWidth, insets: margin)
         
@@ -353,6 +355,10 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
                 guard case .day(let date, _, _) = sectionView.section else { return [] }
                 return sectionView.contactList.contacts.map { Onboarding.Contact(date: date, name: $0.name, contactIdentifier: $0.cnContactIdentifier, isRoommate: false) }
             }
+    }
+    
+    private func openHelp() {
+        delegate?.contactsTimelineViewControllerDidRequestHelp(self)
     }
     
     @objc private func handleContinue() {
@@ -453,6 +459,8 @@ extension ContactsTimelineViewController: ContactListInputViewDelegate {
         // Next runcycle so keyboard size is properly incorporated
         DispatchQueue.main.async(execute: scrollVisible)
     }
+    
+    func contactListInputView(_ view: ContactListInputView, didEndEditingIn textField: UITextField) {}
     
     func viewForPresentingSuggestionsFromContactListInputView(_ view: ContactListInputView) -> UIView {
         return self.view

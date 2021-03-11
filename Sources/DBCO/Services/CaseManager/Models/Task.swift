@@ -18,6 +18,7 @@ import Foundation
 struct Task: Equatable {
     enum Status: Equatable {
         case missingEssentialInput
+        case indexShouldInform
         case inProgress(Double)
         case completed
     }
@@ -50,7 +51,7 @@ struct Task: Equatable {
         enum Communication: String, Codable {
             case staff
             case index
-            case none
+            case unknown
         }
         
         let category: Category
@@ -80,17 +81,21 @@ struct Task: Equatable {
     
     var questionnaireResult: QuestionnaireResult?
     
+    var isSyncedWithPortal: Bool
+    
     /// - Tag: Task.status
     var status: Status {
         guard !deletedByIndex else { return .completed }
         
         switch taskType {
         case .contact:
-            guard contact.communication != .none else {
+            guard let result = questionnaireResult, result.hasAllEssentialAnswers else {
                 return .missingEssentialInput
             }
             
-            guard let result = questionnaireResult, result.hasAllEssentialAnswers, isOrCanBeInformed else {
+            if [.index, .unknown].contains(contact.communication), contact.informedByIndexAt == nil {
+                return .indexShouldInform
+            } else if isOrCanBeInformed == false {
                 return .missingEssentialInput
             }
             
@@ -108,10 +113,11 @@ struct Task: Equatable {
         self.label = label
         self.taskContext = nil
         self.deletedByIndex = false
+        self.isSyncedWithPortal = false
         
         switch taskType {
         case .contact:
-            contact = Contact(category: .other, communication: .none, informedByIndexAt: nil, dateOfLastExposure: nil, contactIdentifier: nil)
+            contact = Contact(category: .other, communication: .unknown, informedByIndexAt: nil, dateOfLastExposure: nil, contactIdentifier: nil)
         }
     }
     
@@ -170,6 +176,7 @@ extension Task: Codable {
         }
         
         deletedByIndex = (try? container.decode(Bool?.self, forKey: .deletedByIndex)) ?? false
+        isSyncedWithPortal = (try container.decodeIfPresent(Bool.self, forKey: .isSyncedWithPortal)) ?? false
     }
     
     func encode(to encoder: Encoder) throws {
@@ -191,6 +198,11 @@ extension Task: Codable {
         guard !(encoder.target == .api && deletedByIndex) else { return }
         
         try container.encode(questionnaireResult, forKey: .questionnaireResult)
+        
+        if encoder.target == .internalStorage {
+            try container.encode(isSyncedWithPortal, forKey: .isSyncedWithPortal)
+        }
+        
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -205,6 +217,7 @@ extension Task: Codable {
         case didInform
         case questionnaireResult
         case deletedByIndex
+        case isSyncedWithPortal
     }
 }
 
@@ -224,7 +237,7 @@ extension Task {
                                             Answer(uuid: UUID(),
                                                    questionUuid: classificationUuid,
                                                    lastModified: Date(),
-                                                   value: .classificationDetails(sameHouseholdRisk: nil, distanceRisk: nil, physicalContactRisk: nil, sameRoomRisk: nil))
+                                                   value: .classificationDetails(nil))
                                           ])
         
         return task
