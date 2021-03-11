@@ -54,65 +54,49 @@ class OnboardingStepViewController: ViewController {
         view.backgroundColor = .white
         navigationItem.largeTitleDisplayMode = .never
         
-        let buttonStack: UIView
-        let primaryButton = Button(title: viewModel.primaryButtonTitle, style: .primary)
-            .touchUpInside(self, action: #selector(handlePrimary))
-        
-        if let secondaryButtonTitle = viewModel.secondaryButtonTitle {
-            let secondaryButton = Button(title: secondaryButtonTitle, style: .secondary)
-                .touchUpInside(self, action: #selector(handleSecondary))
-            
-            if viewModel.showSecondaryButtonOnTop {
-                buttonStack = VStack(spacing: 16,
-                                     secondaryButton,
-                                     primaryButton)
-            } else {
-                buttonStack = VStack(spacing: 16,
-                                     primaryButton,
-                                     secondaryButton)
-            }
-        } else {
-            buttonStack = primaryButton
-        }
-        
-        let textContainerView =
-            VStack(spacing: 32,
-                   VStack(spacing: 16,
-                          Label(title2: viewModel.title).multiline(),
-                          Label(body: viewModel.message, textColor: Theme.colors.captionGray).multiline()),
-                   buttonStack)
-            .distribution(.equalSpacing)
-        
-        textContainerView.snap(to: .bottom,
-                               of: view.readableContentGuide,
-                               insets: .bottom(8))
-        
-        let heightConstraint = textContainerView.heightAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.4)
-        heightConstraint.priority = .defaultHigh
-        heightConstraint.isActive = true
-        
+        // Image
         imageView = UIImageView(image: viewModel.image)
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.setContentHuggingPriority(.required, for: .vertical)
         imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         
-        view.addSubview(imageView)
+        // Labels
+        let labels = VStack(spacing: 16,
+            Label(title2: viewModel.title).multiline(),
+            Label(body: viewModel.message, textColor: Theme.colors.captionGray).multiline()
+        )
         
-        imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        imageView.widthAnchor.constraint(lessThanOrEqualTo: textContainerView.widthAnchor, multiplier: 1).isActive = true
+        // Buttons
+        let buttons: UIView = {
+            let primaryButton = Button(title: viewModel.primaryButtonTitle, style: .primary)
+                                  .touchUpInside(self, action: #selector(handlePrimary))
+            
+            if let secondaryButtonTitle = viewModel.secondaryButtonTitle {
+                let secondaryButton = Button(title: secondaryButtonTitle, style: .secondary)
+                                        .touchUpInside(self, action: #selector(handleSecondary))
+                
+                if viewModel.showSecondaryButtonOnTop {
+                    return VStack(spacing: 16, secondaryButton, primaryButton)
+                } else {
+                    return VStack(spacing: 16, primaryButton, secondaryButton)
+                }
+            } else {
+                return primaryButton
+            }
+        }()
+                
+        // Container
+        let container =
+            VStack(spacing: 32, imageView, labels, buttons)
+            .distribution(.equalSpacing)
+            .wrappedInReadableWidth(insets: .topBottom(32))
         
-        let imageCenterYConstraint = imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        imageCenterYConstraint.priority = .defaultLow
-        imageCenterYConstraint.isActive = true
-        
-        imageView.bottomAnchor.constraint(lessThanOrEqualTo: textContainerView.topAnchor, constant: -32).isActive = true
-        
-        let imageTextSpacingConstraint = imageView.bottomAnchor.constraint(lessThanOrEqualTo: textContainerView.topAnchor, constant: -105)
-        imageTextSpacingConstraint.priority = .defaultLow
-        imageTextSpacingConstraint.isActive = true
-        
-        imageView.topAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        // ScrollView
+        let scrollView = UIScrollView()
+        container.embed(in: scrollView.readableWidth)
+        container.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.safeAreaLayoutGuide.heightAnchor, multiplier: 1, constant: 0).isActive = true
+        scrollView.embed(in: view)
     }
     
     @objc private func handlePrimary() {
@@ -121,12 +105,5 @@ class OnboardingStepViewController: ViewController {
     
     @objc private func handleSecondary() {
         delegate?.onboardingStepViewControllerDidSelectSecondaryButton(self)
-    }
-
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        
-        // Hide image on landscape orientation (= width > height)
-        imageView.isHidden = (UIScreen.main.bounds.width > UIScreen.main.bounds.height)
     }
 }
