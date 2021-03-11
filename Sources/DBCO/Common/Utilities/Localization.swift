@@ -330,18 +330,28 @@ extension String {
     
     static var informContactGuidelinesDateFormat: String { return Localization.string(for: "informContactGuidelines.dateFormat") }
     
-    static func informContactGuidelines(category: Task.Contact.Category, exposureDatePlus5: String, exposureDatePlus10: String, exposureDatePlus11: String, exposureDatePlus14: String, within4Days: Bool) -> String {
+    static func informContactGuidelinesReference(reference: String?) -> String {
+        if let caseNumber = reference {
+            return Localization.string(for: "informContactGuidelines.reference", [caseNumber])
+        } else {
+            return ""
+        }
+    }
+    
+    static func informContactGuidelines(category: Task.Contact.Category, exposureDatePlus5: String, exposureDatePlus10: String, exposureDatePlus11: String, exposureDatePlus14: String, within4Days: Bool, reference: String?) -> String {
+        let referenceText = informContactGuidelinesReference(reference: reference)
+        
         switch category {
         case .category1:
-            return Localization.string(for: "informContactGuidelines.category1", [exposureDatePlus11])
+            return Localization.string(for: "informContactGuidelines.category1", [exposureDatePlus11, referenceText])
         case .category2a, .category2b:
             if within4Days {
-                return Localization.string(for: "informContactGuidelines.category2.within4Days", [exposureDatePlus5, exposureDatePlus5, exposureDatePlus10])
+                return Localization.string(for: "informContactGuidelines.category2.within4Days", [exposureDatePlus5, exposureDatePlus5, exposureDatePlus10, referenceText])
             } else {
-                return Localization.string(for: "informContactGuidelines.category2.after4Days", [exposureDatePlus5, exposureDatePlus10])
+                return Localization.string(for: "informContactGuidelines.category2.after4Days", [exposureDatePlus5, exposureDatePlus10, referenceText])
             }
         case .category3a, .category3b:
-            return Localization.string(for: "informContactGuidelines.category3", [exposureDatePlus5])
+            return Localization.string(for: "informContactGuidelines.category3", [exposureDatePlus5, referenceText])
         default:
             return ""
         }
@@ -360,14 +370,16 @@ extension String {
         }
     }
     
-    static func informContactGuidelinesGeneric(category: Task.Contact.Category) -> String {
+    static func informContactGuidelinesGeneric(category: Task.Contact.Category, reference: String?) -> String {
+        let referenceText = informContactGuidelinesReference(reference: reference)
+        
         switch category {
         case .category1:
-            return Localization.string(for: "informContactGuidelines.generic.category1")
+            return Localization.string(for: "informContactGuidelines.generic.category1", [referenceText])
         case .category2a, .category2b:
-            return Localization.string(for: "informContactGuidelines.generic.category2")
+            return Localization.string(for: "informContactGuidelines.generic.category2", [referenceText])
         case .category3a, .category3b:
-            return Localization.string(for: "informContactGuidelines.generic.category3")
+            return Localization.string(for: "informContactGuidelines.generic.category3", [referenceText])
         default:
             return ""
         }

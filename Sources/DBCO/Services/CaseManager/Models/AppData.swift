@@ -14,6 +14,7 @@ struct AppData {
     
     let version: String
     
+    var reference: String?
     var dateOfSymptomOnset: Date?
     var dateOfTest: Date?
     var windowExpiresAt: Date
@@ -26,6 +27,7 @@ struct AppData {
 extension AppData {
     static var empty: AppData {
         AppData(version: Constants.currentVersion,
+                reference: nil,
                 dateOfSymptomOnset: nil,
                 dateOfTest: nil,
                 windowExpiresAt: .distantFuture,
@@ -43,6 +45,7 @@ extension AppData: Codable {
         
         version = try container.decode(String.self, forKey: .version)
         
+        reference = try container.decodeIfPresent(String.self, forKey: .reference)
         dateOfSymptomOnset = try container.decodeIfPresent(Date.self, forKey: .dateOfSymptomOnset)
         dateOfTest = try container.decodeIfPresent(Date.self, forKey: .dateOfTest)
         windowExpiresAt = try container.decode(Date.self, forKey: .windowExpiresAt)
