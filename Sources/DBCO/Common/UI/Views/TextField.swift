@@ -10,6 +10,7 @@ import UIKit
 /// Styled subclass of UITextField.
 /// Optionally shows a label above the textfield.
 class TextField: UITextField {
+    var isEmphasized: Bool = false
     
     init() {
         super.init(frame: .zero)
