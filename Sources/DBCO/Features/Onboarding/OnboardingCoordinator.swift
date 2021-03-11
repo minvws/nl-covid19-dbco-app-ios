@@ -37,7 +37,6 @@ final class OnboardingCoordinator: Coordinator {
         
         super.init()
         
-        navigationController.delegate = self
         stepController.delegate = self
     }
     
@@ -51,15 +50,6 @@ final class OnboardingCoordinator: Coordinator {
         
         window.transition(to: navigationController, with: [.transitionCrossDissolve])
     }
-
-}
-
-extension OnboardingCoordinator: UINavigationControllerDelegate {
-    
-    func navigationControllerSupportedInterfaceOrientations(_ navigationController: UINavigationController) -> UIInterfaceOrientationMask {
-        return .portrait
-    }
-    
 }
 
 extension OnboardingCoordinator: OnboardingStepViewControllerDelegate {
