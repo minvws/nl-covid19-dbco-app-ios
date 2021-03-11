@@ -98,7 +98,7 @@ class OnboardingManager: OnboardingManaging, Logging {
                 let symptoms = Self.onboardingData.symptoms?.map(\.value) ?? []
                 Services.caseManager.setSymptoms(symptoms: symptoms)
             } else if let testDate = Self.onboardingData.testDate {
-                try! Services.caseManager.startLocalCase(dateOfSymptomOnset: testDate) // swiftlint:disable:this force_try
+                try! Services.caseManager.startLocalCase(dateOfTest: testDate) // swiftlint:disable:this force_try
             }
         }
         
