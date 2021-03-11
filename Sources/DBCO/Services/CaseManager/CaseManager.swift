@@ -37,7 +37,10 @@ protocol CaseManaging {
     /// Indicates that tasks can no longer be uploaded to the backedn
     var isWindowExpired: Bool { get }
     
-    var dateOfSymptomOnset: Date { get }
+    var dateOfSymptomOnset: Date? { get }
+    var dateOfTest: Date? { get }
+    var startOfContagiousPeriod: Date? { get }
+    
     var symptoms: [String] { get }
     
     var tasks: [Task] { get }
@@ -53,6 +56,7 @@ protocol CaseManaging {
     func loadCaseData(userInitiated: Bool, completion: @escaping (_ success: Bool, _ error: CaseManagingError?) -> Void)
     
     func startLocalCase(dateOfSymptomOnset: Date) throws
+    func startLocalCase(dateOfTest: Date) throws
     
     /// Clears all stored data. Using any method or property except for `hasCaseData` on CaseManager before pairing and loading the data again is an invalid operation.
     /// Throws an `notPaired` error when called befored paired.
@@ -126,9 +130,25 @@ final class CaseManager: CaseManaging, Logging {
         set { appData.questionnaires = newValue }
     }
     
-    private(set) var dateOfSymptomOnset: Date {
+    private(set) var dateOfSymptomOnset: Date? {
         get { appData.dateOfSymptomOnset }
         set { appData.dateOfSymptomOnset = newValue }
+    }
+    
+    private(set) var dateOfTest: Date? {
+        get { appData.dateOfTest }
+        set { appData.dateOfTest = newValue }
+    }
+    
+    var startOfContagiousPeriod: Date? {
+        switch (dateOfTest, dateOfSymptomOnset) {
+        case (_, .some(let dateOfSymptomOnset)):
+            return Calendar.current.date(byAdding: .day, value: -2, to: dateOfSymptomOnset)
+        case (.some(let dateOfTest), _):
+            return dateOfTest
+        default:
+            return nil
+        }
     }
     
     private(set) var symptoms: [String] {
@@ -194,6 +214,7 @@ final class CaseManager: CaseManaging, Logging {
                     case .success(let result):
                         self.setTasks(result.tasks)
                         self.dateOfSymptomOnset = result.dateOfSymptomOnset
+                        self.dateOfTest = result.dateOfTest
                         self.windowExpiresAt = result.windowExpiresAt
                         self.symptoms = result.symptoms
                         
@@ -238,14 +259,24 @@ final class CaseManager: CaseManaging, Logging {
         loadTasksIfNeeded()
     }
     
-    func startLocalCase(dateOfSymptomOnset: Date) throws {
-        guard !hasCaseData else { throw CaseManagingError.alreadyHaseCase }
-        
+    private func reinterpretAsGMT0(_ date: Date) -> Date {
         // During onboarding date calculations are in the user's current timezone.
         // We need to reinterpret them as being in GMT+00
         let offset = TimeInterval(TimeZone.current.secondsFromGMT())
-        self.dateOfSymptomOnset = dateOfSymptomOnset.addingTimeInterval(offset)
+        return date.addingTimeInterval(offset)
+    }
+    
+    func startLocalCase(dateOfSymptomOnset: Date) throws {
+        guard !hasCaseData else { throw CaseManagingError.alreadyHaseCase }
         
+        self.dateOfSymptomOnset = reinterpretAsGMT0(dateOfSymptomOnset)
+        windowExpiresAt = .distantFuture
+    }
+    
+    func startLocalCase(dateOfTest: Date) throws {
+        guard !hasCaseData else { throw CaseManagingError.alreadyHaseCase }
+            
+        self.dateOfTest = reinterpretAsGMT0(dateOfTest)
         windowExpiresAt = .distantFuture
     }
     
@@ -501,7 +532,8 @@ final class CaseManager: CaseManaging, Logging {
         guard !isWindowExpired else { throw CaseManagingError.windowExpired }
         
         do {
-            let value = Case(dateOfSymptomOnset: dateOfSymptomOnset,
+            let value = Case(dateOfTest: dateOfTest,
+                             dateOfSymptomOnset: dateOfSymptomOnset,
                              windowExpiresAt: windowExpiresAt,
                              tasks: tasks,
                              symptoms: symptoms)
@@ -516,9 +548,9 @@ final class CaseManager: CaseManaging, Logging {
                     completionHandler?(false)
                 }
             }
-        } catch {
+        } catch let error {
             completionHandler?(false)
-            return
+            throw error
         }
     }
     

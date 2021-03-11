@@ -321,9 +321,8 @@ class LastExposureDateAnswerManager: AnswerManaging {
         self.baseAnswer = answer
         self.question = question
         
-        // Dates should range from 2 days before symptom onset to today
         let endDate = Date()
-        let startDate = Calendar.current.date(byAdding: .day, value: -2, to: Services.caseManager.dateOfSymptomOnset) ?? endDate
+        let startDate = Services.caseManager.startOfContagiousPeriod ?? endDate
         
         let numberOfDays = Calendar.current.dateComponents([.day], from: startDate, to: endDate).day ?? 0
         

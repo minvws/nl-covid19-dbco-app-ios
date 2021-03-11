@@ -14,7 +14,7 @@ protocol OverviewTipsViewControllerDelegate: class {
 class OverviewTipsViewModel {
     
     var titleText: String {
-        let date = Services.caseManager.dateOfSymptomOnset
+        let date = Services.caseManager.startOfContagiousPeriod ?? Date()
         
         guard !Calendar.current.isDateInToday(date) else {
             return .overviewTipsTitleTodayOnly
