@@ -82,6 +82,10 @@ class ViewController: UIViewController, DismissActionable, PopActionable {
         }
     }
     
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .all // Allows all orientations on all devices
+    }
+    
     private func removeDidBecomeActiveObserverIfNeeded() {
         if let observer = didBecomeActiveObserver {
             NotificationCenter.default.removeObserver(observer)
