@@ -31,7 +31,7 @@ class OnboardingStepViewModel {
 }
 
 /// - Tag: OnboardingStepViewController
-class OnboardingStepViewController: ViewController {
+class OnboardingStepViewController: PromptableViewController {
     private let viewModel: OnboardingStepViewModel
     private var imageView: UIImageView!
     
@@ -54,6 +54,11 @@ class OnboardingStepViewController: ViewController {
         view.backgroundColor = .white
         navigationItem.largeTitleDisplayMode = .never
         
+        // ScrollView
+        let scrollView = UIScrollView()
+        scrollView.embed(in: contentView)
+        scrollView.delaysContentTouches = true
+        
         // Image
         imageView = UIImageView(image: viewModel.image)
         imageView.contentMode = .scaleAspectFit
@@ -66,9 +71,19 @@ class OnboardingStepViewController: ViewController {
             Label(title2: viewModel.title).multiline(),
             Label(body: viewModel.message, textColor: Theme.colors.captionGray).multiline()
         )
+          
+        // Stack
+        let margin: UIEdgeInsets = .top(64) + .bottom(64)
+        let stack =
+            VStack(spacing: 32, imageView, labels)
+            .distribution(.equalCentering)
+            .embed(in: scrollView.readableWidth, insets: margin)
+        stack.heightAnchor.constraint(greaterThanOrEqualTo: contentView.safeAreaLayoutGuide.heightAnchor,
+                                      multiplier: 1,
+                                      constant: -(margin.top + margin.bottom)).isActive = true
         
         // Buttons
-        let buttons: UIView = {
+        promptView = {
             let primaryButton = Button(title: viewModel.primaryButtonTitle, style: .primary)
                                   .touchUpInside(self, action: #selector(handlePrimary))
             
@@ -85,18 +100,6 @@ class OnboardingStepViewController: ViewController {
                 return primaryButton
             }
         }()
-                
-        // Container
-        let container =
-            VStack(spacing: 32, imageView, labels, buttons)
-            .distribution(.equalSpacing)
-            .wrappedInReadableWidth(insets: .topBottom(32))
-        
-        // ScrollView
-        let scrollView = UIScrollView()
-        container.embed(in: scrollView.readableWidth)
-        container.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.safeAreaLayoutGuide.heightAnchor, multiplier: 1, constant: 0).isActive = true
-        scrollView.embed(in: view)
     }
     
     @objc private func handlePrimary() {
