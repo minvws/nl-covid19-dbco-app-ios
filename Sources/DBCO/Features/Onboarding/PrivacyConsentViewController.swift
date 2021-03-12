@@ -160,8 +160,8 @@ private class ConsentButton: UIButton {
         addTarget(self, action: #selector(touchDownAnimation), for: .touchDown)
         
         icon.tintColor = Theme.colors.primary
-        icon.contentMode = .top
-        icon.snap(to: .left, of: self, insets: .left(16) + .top(16))
+        icon.contentMode = .center
+        icon.snap(to: .left, of: self, insets: .left(16) + .top(16) + .bottom(16))
         
         isSelected = selected
         
