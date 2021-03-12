@@ -24,11 +24,6 @@ class Label: UILabel {
         }
     }
     
-    init(_ text: NSAttributedString) {
-        super.init(frame: .zero)
-        self.attributedText = text
-    }
-    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
@@ -55,6 +50,11 @@ class Label: UILabel {
     
     convenience init(body: String?, textColor: UIColor = .darkText) {
         self.init(body, font: Theme.fonts.body, textColor: textColor)
+    }
+    
+    convenience init(attributedString: NSAttributedString?, textColor: UIColor = .darkText) {
+        self.init(nil, font: Theme.fonts.body, textColor: textColor)
+        self.attributedText = attributedString
     }
     
     convenience init(bodyBold: String?, textColor: UIColor = .darkText) {
