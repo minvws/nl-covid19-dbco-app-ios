@@ -30,6 +30,7 @@ protocol PairingManaging {
     init()
     
     var isPaired: Bool { get }
+    var isPollingForPairing: Bool { get }
     
     /// Returns the token used to construct the URL for sending and fetching case data
     /// Throws an `notPaired` error when called befored paired.
@@ -42,6 +43,10 @@ protocol PairingManaging {
     
     func startPollingForPairing()
     func stopPollingForPairing()
+    
+    var canResumePolling: Bool { get }
+    var lastPairingCode: String? { get }
+    var lastPollingError: PairingManagingError? { get }
     
     /// Adds a listener
     /// - parameter listener: The object conforming to [PairingManagerrListener](x-source-tag://PairingManagerListener) that will receive updates. Will be stored with a weak reference
@@ -88,10 +93,18 @@ class PairingManager: PairingManaging, Logging {
         _ = NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
             self?.resumePollingIfNeeded()
         }
+        
+        if let info = self.reversePairingInfo {
+            resumePolling(with: info)
+        }
     }
     
     var isPaired: Bool {
         return $pairing.exists
+    }
+    
+    var isPollingForPairing: Bool {
+        return isBusyReversePairing
     }
     
     func caseToken() throws -> String {
@@ -180,6 +193,8 @@ class PairingManager: PairingManaging, Logging {
     
     func stopPollingForPairing() {
         isBusyReversePairing = false
+        reversePairingInfo = nil
+        
         pollingTask?.cancel()
         pollingTimer?.invalidate()
         pollingResumeBlock = nil
@@ -191,6 +206,14 @@ class PairingManager: PairingManaging, Logging {
     
     func addListener(_ listener: PairingManagerListener) {
         listeners.append(ListenerWrapper(listener: listener))
+        
+        reversePairingInfo.map {
+            listener.pairingManager(self, didReceiveReversePairingCode: $0.code)
+        }
+        
+        lastPollingError.map {
+            listener.pairingManager(self, didFailWith: $0)
+        }
     }
     
     func seal<T: Encodable>(_ value: T) throws -> (ciperText: String, nonce: String) {
@@ -266,7 +289,19 @@ class PairingManager: PairingManaging, Logging {
     
     // MARK: - Polling
     private var isBusyReversePairing: Bool = false
+    
+    @UserDefaults(key: "reversePairingInfo", defaultValue: nil)
     private var reversePairingInfo: ReversePairingInfo?
+    
+    private(set) var lastPollingError: PairingManagingError?
+    
+    var lastPairingCode: String? {
+        return reversePairingInfo?.code
+    }
+    
+    var canResumePolling: Bool {
+        return (reversePairingInfo?.expiresAt.timeIntervalSinceNow ?? 0) > 0
+    }
     
     private var backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
     private var pollingTask: URLSessionTask?
@@ -344,18 +379,29 @@ class PairingManager: PairingManaging, Logging {
     private func startPollingRequest() {
         startBackgroundTask()
         isBusyReversePairing = true
+        lastPollingError = nil
         
         logDebug("Getting code and polling token")
-        Services.networkManager.postPairingRequest { result in
-            switch result {
-            case .success(let reversePairingInfo):
-                self.reversePairingInfo = reversePairingInfo
-                self.listeners.forEach { $0.listener?.pairingManager(self, didReceiveReversePairingCode: reversePairingInfo.code) }
-                self.processPolling(reversePairingInfo.statusInfo,
-                            token: reversePairingInfo.token,
-                            errorCount: 0)
-            case .failure(let error):
-                self.failPolling(with: .couldNotPair(error))
+        if let pairingInfo = reversePairingInfo, pairingInfo.expiresAt.timeIntervalSinceNow > 0 {
+            logDebug("Still has valid pairing token. Resuming polling.")
+            
+            listeners.forEach { $0.listener?.pairingManager(self, didReceiveReversePairingCode: pairingInfo.code) }
+            processPolling(pairingInfo.statusInfo,
+                        token: pairingInfo.token,
+                        errorCount: 0)
+        } else {
+            logDebug("Making new polling token request")
+            Services.networkManager.postPairingRequest { result in
+                switch result {
+                case .success(let reversePairingInfo):
+                    self.reversePairingInfo = reversePairingInfo
+                    self.listeners.forEach { $0.listener?.pairingManager(self, didReceiveReversePairingCode: reversePairingInfo.code) }
+                    self.processPolling(reversePairingInfo.statusInfo,
+                                token: reversePairingInfo.token,
+                                errorCount: 0)
+                case .failure(let error):
+                    self.failPolling(with: .couldNotPair(error))
+                }
             }
         }
     }
@@ -373,6 +419,7 @@ class PairingManager: PairingManaging, Logging {
     private func failPolling(with error: PairingManagingError) {
         isBusyReversePairing = false
         pollingResumeBlock = nil
+        lastPollingError = error
         
         switch error {
         case .pairingCancelled:
@@ -392,6 +439,8 @@ class PairingManager: PairingManaging, Logging {
         }
         
         pollingResumeBlock = nil
+        lastPollingError = nil
+        reversePairingInfo = nil // Should pairing fail at this point, the info won't be valid anymore
         
         pair(pairingCode: pairingCode) { success, error in
             self.isBusyReversePairing = false
