@@ -242,6 +242,8 @@ extension String {
     
     static var taskOverviewWaitingForPairing: String { return Localization.string(for: "taskOverviewWaitingForPairing") }
     static var taskOverviewPairingTryAgain: String { return Localization.string(for: "taskOverviewPairingTryAgain") }
+    static var taskOverviewPairingFailed: String { return Localization.string(for: "taskOverviewPairingFailed") }
+    static var taskOverviewPairingExpired: String { return Localization.string(for: "taskOverviewPairingExpired") }
     
     /* MARK: - Overview Tips */
     static var overviewTipsShortTitle: String { return Localization.string(for: "overviewTipsShortTitle") }
@@ -494,8 +496,10 @@ extension String {
     static var reversePairingStep2Title: String { return Localization.string(for: "reversePairingStep2.title") }
     static var reversePairingStep2Message: String { return Localization.string(for: "reversePairingStep2.message") }
     
-    static var reversePairingErrorTitle: String { return Localization.string(for: "reversePairingError.title") }
-    static var reversePairingErrorMessage: String { return Localization.string(for: "reversePairingError.message") }
+    static var reversePairingExpired: String { return Localization.string(for: "reversePairingExpired") }
+    static var reversePairingError: String { return Localization.string(for: "reversePairingError") }
+    static var reversePairingTryAgain: String { return Localization.string(for: "reversePairingTryAgain") }
+    static var reversePairingNewCode: String { return Localization.string(for: "reversePairingNewCode") }
     
     static var reversePairingCloseAlert: String { return Localization.string(for: "reversePairingCloseAlert") }
     

@@ -127,7 +127,7 @@ class ReversePairViewController: PromptableViewController {
         let codeLabel = Label(nil, font: .monospacedDigitSystemFont(ofSize: 22, weight: .semibold))
         codeLabel.textAlignment = .center
         
-        let codeExpiredView = createErrorView(label: "De code is verlopen. Geef een nieuwe code door aan de GGD.", button: "Maak nieuwe code")
+        let codeExpiredView = createErrorView(label: .reversePairingExpired, button: .reversePairingNewCode)
         
         VStack(codeActivityIndicator, codeLabel, codeExpiredView)
             .embed(in: codeContainerView)
@@ -172,7 +172,7 @@ class ReversePairViewController: PromptableViewController {
                                         Label(body: .reversePairingFinished, textColor: Theme.colors.captionGray)))
             .alignment(.center)
         
-        let errorView = createErrorView(label: "Er ging iets mis. Controleer of de GGD de juiste code heeft en of je internetverbinding werkt.", button: "Probeer opnieuw")
+        let errorView = createErrorView(label: .reversePairingError, button: .reversePairingTryAgain)
         
         VStack(waitingView, successView, errorView)
             .embed(in: statusContainerView)

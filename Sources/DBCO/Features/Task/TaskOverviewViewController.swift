@@ -197,8 +197,8 @@ extension TaskOverviewViewModel: PairingManagerListener {
         pairingTimeoutTimer?.invalidate()
         
         pairingErrorText = Services.pairingManager.canResumePolling ?
-            "Koppelen mislukt. Controleer of de GGD de juiste code heeft en of je internetverbinding werkt." :
-            "Koppelen mislukt. De code is verlopen. Geef een nieuwe code door aan de GGD."
+            .taskOverviewPairingFailed :
+            .taskOverviewPairingExpired
         
         isPairingViewHidden = true
         isPairingErrorViewHidden = false
