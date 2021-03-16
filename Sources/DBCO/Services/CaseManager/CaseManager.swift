@@ -41,6 +41,8 @@ protocol CaseManaging {
     var dateOfTest: Date? { get }
     var startOfContagiousPeriod: Date? { get }
     
+    var reference: String? { get }
+    
     var symptoms: [String] { get }
     
     var tasks: [Task] { get }
@@ -140,6 +142,11 @@ final class CaseManager: CaseManaging, Logging {
         set { appData.dateOfTest = newValue }
     }
     
+    private(set) var reference: String? {
+        get { appData.reference }
+        set { appData.reference = newValue }
+    }
+    
     var startOfContagiousPeriod: Date? {
         switch (dateOfTest, dateOfSymptomOnset) {
         case (_, .some(let dateOfSymptomOnset)):
@@ -217,6 +224,7 @@ final class CaseManager: CaseManaging, Logging {
                         self.dateOfTest = result.dateOfTest
                         self.windowExpiresAt = result.windowExpiresAt
                         self.symptoms = result.symptoms
+                        self.reference = result.reference
                         
                         self.fetchDate = Date() // Set the fetchdate here again to the actual date
             
