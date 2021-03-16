@@ -391,7 +391,9 @@ class LastExposureDateAnswerManager: AnswerManaging {
     
     private(set) lazy var view: UIView = {
         VStack(spacing: 8,
-               inputField.decorateWithDescriptionIfNeeded(description: question.description),
+               inputField
+                .emphasized()
+                .decorateWithDescriptionIfNeeded(description: question.description),
                disabledIndicatorView,
                earlierIndicatorView)
     }()

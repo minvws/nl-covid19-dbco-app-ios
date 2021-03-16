@@ -14,6 +14,7 @@ import Foundation
 ///
 /// - Tag: Case
 struct Case: Codable {
+    let reference: String?
     let dateOfSymptomOnset: Date?
     let dateOfTest: Date?
     @ISO8601DateFormat var windowExpiresAt: Date
@@ -26,10 +27,13 @@ struct Case: Codable {
         self.windowExpiresAt = windowExpiresAt
         self.tasks = tasks
         self.symptoms = symptoms
+        self.reference = nil
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        reference = try container.decodeIfPresent(String.self, forKey: .reference)
         
         dateOfSymptomOnset = try container.decodeIfPresent(Date.self, forKey: .dateOfSymptomOnset)
         dateOfTest = try container.decode(Date.self, forKey: .dateOfTest) // Should always exist

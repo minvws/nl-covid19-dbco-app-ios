@@ -122,6 +122,7 @@ struct BSN: ContactValue {
 struct Text: ContactValue {
     var label: String?
     var value: String?
+    var labelFont: UIFont? = Theme.fonts.subhead
 }
 
 struct Options: ContactValue {
