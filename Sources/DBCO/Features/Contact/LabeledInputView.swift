@@ -13,6 +13,8 @@ protocol LabeledInputView: UIView {
     var label: LabelType { get }
     var labelText: String? { get set }
     var isLabelHidden: Bool { get set }
+    
+    var isEmphasized: Bool { get }
 }
 
 extension LabeledInputView {
@@ -42,9 +44,21 @@ extension LabeledInputView {
         
         isLabelHidden = true
         
-        return VStack(spacing: 16,
-                      Label(bodyBold: labelText).multiline().hideIfEmpty(),
-                      TextView(htmlText: description),
+        let isEmphasized = self.isEmphasized
+        
+        let labelFont = isEmphasized ? Theme.fonts.bodyBold : Theme.fonts.subhead
+        let descriptionFont = isEmphasized ? Theme.fonts.body : Theme.fonts.subhead
+        let spacing: CGFloat = isEmphasized ? 16 : 0
+        
+        return VStack(spacing: max(spacing, 6),
+                      VStack(spacing: spacing,
+                             Label(labelText)
+                                .applyFont(labelFont)
+                                .multiline()
+                                .hideIfEmpty(),
+                             TextView(htmlText: description,
+                                      font: descriptionFont,
+                                      textColor: Theme.colors.captionGray)),
                       self)
     }
 }

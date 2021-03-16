@@ -92,4 +92,10 @@ class Label: UILabel {
         isHidden = text?.isEmpty == true
         return self
     }
+    
+    @discardableResult
+    func applyFont(_ font: UIFont) -> Self {
+        self.font = font
+        return self
+    }
 }
