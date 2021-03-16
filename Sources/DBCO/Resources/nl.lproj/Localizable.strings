@@ -250,7 +250,7 @@
 "informContactGuidelines.reference" = "<li>Blijkt uit de test dat je corona hebt? Geef dan dit casenummer door aan de GGD: <b>%@</b></li>";
 "informContactGuidelines.category1" = "<ul>
 
-<li>Blijf thuis, vermijd contact met je besmette huisgenoot en ontvang geen bezoek</li>
+<li>Blijf thuis, vermijd contact met je besmette huisgenoot en ontvang geen bezoek.</li>
 
 <li>Doe zo snel mogelijk een coronatest. Als je besmet blijkt, kun je samen met de GGD meteen maatregelen nemen.</li>
 
@@ -272,7 +272,7 @@
 
 "informContactGuidelines.category2.within4Days" = "<ul>
 
-<li>Blijf thuis en ontvang geen bezoek</li>
+<li>Blijf thuis en ontvang geen bezoek.</li>
 
 <li>Doe zo snel mogelijk een coronatest. Als je besmet blijkt, kun je samen met de GGD meteen maatregelen nemen.</li>
 
@@ -294,7 +294,7 @@
 
 "informContactGuidelines.category2.after4Days" = "<ul>
 
-<li>Blijf thuis en ontvang geen bezoek</li>
+<li>Blijf thuis en ontvang geen bezoek.</li>
 
 <li>Maak een afspraak voor een coronatest  op of na <b>%@</b>. Blijkt uit de test dat je geen corona hebt? Dan mag je weer naar buiten.</li>
 
@@ -353,7 +353,7 @@ Blijkt uit die test dat je geen corona hebt? Dan mag je weer naar buiten.</li>
 
 "informContactGuidelines.generic.category2" = "<ul>
 
-<li>Blijf thuis en ontvang geen bezoek</li>
+<li>Blijf thuis en ontvang geen bezoek.</li>
 
 <li>Doe zo snel mogelijk een coronatest. En ook <b>5 dagen</b> na het laatste contact. Als uit beide tests blijkt dat je niet besmet bent, mag je weer naar buiten.</li>
 
