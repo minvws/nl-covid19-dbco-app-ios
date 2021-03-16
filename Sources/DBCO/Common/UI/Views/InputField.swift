@@ -34,6 +34,12 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         fatalError("init(coder:) has not been implemented")
     }
     
+    override var isEmphasized: Bool {
+        didSet {
+            label.font = isEmphasized ? Theme.fonts.bodyBold : Theme.fonts.subhead
+        }
+    }
+    
     private func setup() {
         delegate = self
         
@@ -63,7 +69,6 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         addTarget(self, action: #selector(handleEditingDidBegin), for: .editingDidBegin)
         
         label.text = object?[keyPath: path].label
-        label.font = object?[keyPath: path].labelFont
         placeholder = object?[keyPath: path].placeholder
         
         text = object?[keyPath: path].value
@@ -169,6 +174,12 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     @discardableResult
     func delegate(_ delegate: InputFieldDelegate?) -> Self {
         inputFieldDelegate = delegate
+        return self
+    }
+    
+    @discardableResult
+    func emphasized() -> Self {
+        isEmphasized = true
         return self
     }
     

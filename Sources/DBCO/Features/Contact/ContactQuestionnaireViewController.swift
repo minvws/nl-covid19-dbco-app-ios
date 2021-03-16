@@ -304,6 +304,8 @@ class ContactQuestionnaireViewModel {
         
         promptButtonTitle = .save
         
+        let reference = Services.caseManager.reference
+        
         if let dateValue = updatedContact.dateOfLastExposure,
            let exposureDate = LastExposureDateAnswerManager.valueDateFormatter.date(from: dateValue),
            let exposureDatePlus5 = Calendar.current.date(byAdding: .day, value: 5, to: exposureDate),
@@ -324,11 +326,13 @@ class ContactQuestionnaireViewModel {
                                                      exposureDatePlus10: formatter.string(from: exposureDatePlus10),
                                                      exposureDatePlus11: formatter.string(from: exposureDatePlus11),
                                                      exposureDatePlus14: formatter.string(from: exposureDatePlus14),
-                                                     within4Days: isWithin4Days)
+                                                     within4Days: isWithin4Days,
+                                                     reference: reference)
             informIntro = .informContactGuidelinesIntro(category: updatedContact.category,
                                                         exposureDate: formatter.string(from: exposureDate))
         } else {
-            informContent = .informContactGuidelinesGeneric(category: updatedContact.category)
+            informContent = .informContactGuidelinesGeneric(category: updatedContact.category,
+                                                            reference: reference)
             informIntro = .informContactGuidelinesIntroGeneric(category: updatedContact.category)
         }
         

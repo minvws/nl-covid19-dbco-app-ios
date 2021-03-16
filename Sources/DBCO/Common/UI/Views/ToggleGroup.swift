@@ -55,6 +55,10 @@ class ToggleGroup: UIStackView {
         }
     }
     
+    var isEmphasized: Bool {
+        return true
+    }
+    
     /// - Tag: ToggleGroup.didSelect
     @discardableResult
     func didSelect(handler: @escaping (Int) -> Void) -> Self {
