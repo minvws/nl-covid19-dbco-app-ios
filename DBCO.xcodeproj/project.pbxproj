@@ -42,6 +42,7 @@
 		CD2F7CAB255943E400F2F73A /* ISO8601DateFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2F7CAA255943E400F2F73A /* ISO8601DateFormat.swift */; };
 		CD2F7CB1255949F300F2F73A /* ContactSuggestionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2F7CB0255949F300F2F73A /* ContactSuggestionHelper.swift */; };
 		CD2F7CB525594BDA00F2F73A /* ContactSuggestionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2F7CB425594BDA00F2F73A /* ContactSuggestionTests.swift */; };
+		CD35F65826020EB800D29DDF /* UIView+Assign.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD35F65726020EB800D29DDF /* UIView+Assign.swift */; };
 		CD3DA9432555565800F738EE /* PairResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3DA93A255554A700F738EE /* PairResponse.swift */; };
 		CD3DA94925556ACF00F738EE /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3DA94825556ACF00F738EE /* AppData.swift */; };
 		CD3EFC5325C2F56800EB2087 /* OverviewTipsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3EFC5225C2F56800EB2087 /* OverviewTipsViewController.swift */; };
@@ -196,6 +197,7 @@
 		CD2F7CAA255943E400F2F73A /* ISO8601DateFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISO8601DateFormat.swift; sourceTree = "<group>"; };
 		CD2F7CB0255949F300F2F73A /* ContactSuggestionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactSuggestionHelper.swift; sourceTree = "<group>"; };
 		CD2F7CB425594BDA00F2F73A /* ContactSuggestionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactSuggestionTests.swift; sourceTree = "<group>"; };
+		CD35F65726020EB800D29DDF /* UIView+Assign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Assign.swift"; sourceTree = "<group>"; };
 		CD3DA93A255554A700F738EE /* PairResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairResponse.swift; sourceTree = "<group>"; };
 		CD3DA94825556ACF00F738EE /* AppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		CD3EFC5225C2F56800EB2087 /* OverviewTipsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewTipsViewController.swift; sourceTree = "<group>"; };
@@ -735,6 +737,7 @@
 				CDADF7DD2534773800424492 /* UIToolbar+Done.swift */,
 				CDE25F8E254C21B900E9AE49 /* String+SHA256.swift */,
 				CD0E968025E3B8D9006E70BD /* UIWindow+Transition.swift */,
+				CD35F65726020EB800D29DDF /* UIView+Assign.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -996,6 +999,7 @@
 				CD756C50252C6AC9005FEDA0 /* StepViewController.swift in Sources */,
 				CD2963442514BF4E008443AF /* SelectContactViewController.swift in Sources */,
 				CD10F08625AF2E52000295B9 /* DetermineContagiousPeriodCoordinator.swift in Sources */,
+				CD35F65826020EB800D29DDF /* UIView+Assign.swift in Sources */,
 				CDDC05642543120D0079C2F4 /* Coordinator.swift in Sources */,
 				CD29634C2518CE8E008443AF /* TableViewManager.swift in Sources */,
 				CDC7C87E2538487B00FE7E05 /* HTTPMethod.swift in Sources */,

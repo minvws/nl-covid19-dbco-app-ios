@@ -113,8 +113,43 @@ class ReversePairViewController: PromptableViewController {
         
         promptView = continueButton
         
-        let step1IconView: UIView = ImageView(imageName: "Step1").asIcon()
+        var step1IconView: UIView!
+        var step2IconView: UIView!
         
+        VStack(spacing: 24,
+               VStack(spacing: 16,
+                      Label(title2: .reversePairingStep1Title).multiline(),
+                      Label(body: .reversePairingStep1Message, textColor: Theme.colors.captionGray).multiline()),
+               VStack(spacing: 16,
+                      HStack(spacing: 16,
+                             ImageView(imageName: "Step1").asIcon().assign(to: &step1IconView),
+                             Label(title3: .reversePairingStep1Code).multiline())
+                        .alignment(.top),
+                      createCodeContainerView().withInsets(.left(40))),
+               VStack(spacing: 16,
+                      HStack(spacing: 16,
+                             ImageView(imageName: "Step2").asIcon().assign(to: &step2IconView),
+                             VStack(spacing: 4,
+                                    Label(title3: .reversePairingStep2Title).multiline(),
+                                    Label(body: .reversePairingStep2Message, textColor: Theme.colors.captionGray).multiline()))
+                        .alignment(.top),
+                      createStatusContainerView().withInsets(.left(40))))
+            .embed(in: scrollView.readableWidth, insets: .top(32) + .bottom(16))
+        
+        let lineView = UIView()
+        lineView.translatesAutoresizingMaskIntoConstraints = false
+        lineView.backgroundColor = Theme.colors.graySeparator
+        lineView.layer.zPosition = -10
+        
+        scrollView.addSubview(lineView)
+        
+        lineView.topAnchor.constraint(equalTo: step1IconView.bottomAnchor, constant: 2).isActive = true
+        lineView.bottomAnchor.constraint(equalTo: step2IconView.topAnchor, constant: -2).isActive = true
+        lineView.centerXAnchor.constraint(equalTo: step1IconView.centerXAnchor).isActive = true
+        lineView.widthAnchor.constraint(equalToConstant: 4).isActive = true
+    }
+    
+    private func createCodeContainerView() -> UIView {
         let codeContainerView = UIView()
         codeContainerView.backgroundColor = Theme.colors.graySeparator
         codeContainerView.layer.cornerRadius = 8
@@ -151,8 +186,10 @@ class ReversePairViewController: PromptableViewController {
             }
         }
         
-        let step2IconView: UIView = ImageView(imageName: "Step2").asIcon()
-        
+        return codeContainerView
+    }
+    
+    private func createStatusContainerView() -> UIView {
         let statusContainerView = UIView()
         statusContainerView.backgroundColor = Theme.colors.graySeparator
         statusContainerView.layer.cornerRadius = 8
@@ -183,37 +220,7 @@ class ReversePairViewController: PromptableViewController {
             errorView.isHidden = $0 != .error
         }
         
-        VStack(spacing: 24,
-               VStack(spacing: 16,
-                      Label(title2: .reversePairingStep1Title).multiline(),
-                      Label(body: .reversePairingStep1Message, textColor: Theme.colors.captionGray).multiline()),
-               VStack(spacing: 16,
-                      HStack(spacing: 16,
-                             step1IconView,
-                             Label(title3: .reversePairingStep1Code).multiline())
-                        .alignment(.top),
-                      codeContainerView.withInsets(.left(40))),
-               VStack(spacing: 16,
-                      HStack(spacing: 16,
-                             step2IconView,
-                             VStack(spacing: 4,
-                                    Label(title3: .reversePairingStep2Title).multiline(),
-                                    Label(body: .reversePairingStep2Message, textColor: Theme.colors.captionGray).multiline()))
-                        .alignment(.top),
-                      statusContainerView.withInsets(.left(40))))
-            .embed(in: scrollView.readableWidth, insets: .top(32) + .bottom(16))
-        
-        let lineView = UIView()
-        lineView.translatesAutoresizingMaskIntoConstraints = false
-        lineView.backgroundColor = Theme.colors.graySeparator
-        lineView.layer.zPosition = -10
-        
-        scrollView.addSubview(lineView)
-        
-        lineView.topAnchor.constraint(equalTo: step1IconView.bottomAnchor, constant: 2).isActive = true
-        lineView.bottomAnchor.constraint(equalTo: step2IconView.topAnchor, constant: -2).isActive = true
-        lineView.centerXAnchor.constraint(equalTo: step1IconView.centerXAnchor).isActive = true
-        lineView.widthAnchor.constraint(equalToConstant: 4).isActive = true
+        return statusContainerView
     }
     
     private func createErrorView(label: String, button: String) -> UIView {
