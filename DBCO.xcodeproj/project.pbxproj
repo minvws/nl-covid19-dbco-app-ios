@@ -65,7 +65,7 @@
 		CD7282C3250F9AFE00D68911 /* TaskOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C2250F9AFE00D68911 /* TaskOverviewViewController.swift */; };
 		CD7282C6250F9D2400D68911 /* TaskOverviewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C5250F9D2400D68911 /* TaskOverviewCoordinator.swift */; };
 		CD756C4A252C6A30005FEDA0 /* OnboardingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C49252C6A30005FEDA0 /* OnboardingCoordinator.swift */; };
-		CD756C50252C6AC9005FEDA0 /* OnboardingStepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C4F252C6AC9005FEDA0 /* OnboardingStepViewController.swift */; };
+		CD756C50252C6AC9005FEDA0 /* StepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C4F252C6AC9005FEDA0 /* StepViewController.swift */; };
 		CD756C5E252C9A7F005FEDA0 /* PairViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C5D252C9A7E005FEDA0 /* PairViewController.swift */; };
 		CD756C64252CA787005FEDA0 /* PairingCodeField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C63252CA787005FEDA0 /* PairingCodeField.swift */; };
 		CD756C70252DC629005FEDA0 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C6F252DC629005FEDA0 /* SeparatorView.swift */; };
@@ -221,7 +221,7 @@
 		CD756C32252B3D36005FEDA0 /* DBCOTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DBCOTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD756C36252B3D37005FEDA0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CD756C49252C6A30005FEDA0 /* OnboardingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinator.swift; sourceTree = "<group>"; };
-		CD756C4F252C6AC9005FEDA0 /* OnboardingStepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStepViewController.swift; sourceTree = "<group>"; };
+		CD756C4F252C6AC9005FEDA0 /* StepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepViewController.swift; sourceTree = "<group>"; };
 		CD756C5D252C9A7E005FEDA0 /* PairViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairViewController.swift; sourceTree = "<group>"; };
 		CD756C63252CA787005FEDA0 /* PairingCodeField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingCodeField.swift; sourceTree = "<group>"; };
 		CD756C6F252DC629005FEDA0 /* SeparatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
@@ -483,7 +483,7 @@
 				CD24CBF725C0305100A2F634 /* ScrollViewNavivationbarAdjusting.swift */,
 				CDFCF906250FA6E80062269A /* ViewController.swift */,
 				CD995B5F256FDA63007A8B2C /* PrivacyConsentViewController.swift */,
-				CD756C4F252C6AC9005FEDA0 /* OnboardingStepViewController.swift */,
+				CD756C4F252C6AC9005FEDA0 /* StepViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -993,7 +993,7 @@
 				CD2F7CB1255949F300F2F73A /* ContactSuggestionHelper.swift in Sources */,
 				CDE30E72251E278200862A40 /* EditContactCoordinator.swift in Sources */,
 				CDA0F6912539F0D9009FD2A9 /* AnswerManaging.swift in Sources */,
-				CD756C50252C6AC9005FEDA0 /* OnboardingStepViewController.swift in Sources */,
+				CD756C50252C6AC9005FEDA0 /* StepViewController.swift in Sources */,
 				CD2963442514BF4E008443AF /* SelectContactViewController.swift in Sources */,
 				CD10F08625AF2E52000295B9 /* DetermineContagiousPeriodCoordinator.swift in Sources */,
 				CDDC05642543120D0079C2F4 /* Coordinator.swift in Sources */,

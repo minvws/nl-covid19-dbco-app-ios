@@ -13,7 +13,7 @@ protocol OnboardingCoordinatorDelegate: class {
 
 // TODO: Update onboarding coordinator documentation
 /// Coordinator managing the onboarding of the user, pairing with the backend and guiding the user through the process of creating a list of at-risk contacts.
-/// Uses [PairViewController](x-source-tag://PairViewController) and [OnboardingStepViewController](x-source-tag://OnboardingStepViewController)
+/// Uses [PairViewController](x-source-tag://PairViewController) and [StepViewController](x-source-tag://StepViewController)
 final class OnboardingCoordinator: Coordinator {
     private let window: UIWindow
     private let navigationController: NavigationController
@@ -24,12 +24,12 @@ final class OnboardingCoordinator: Coordinator {
     init(window: UIWindow) {
         self.window = window
         
-        let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding1")!,
+        let viewModel = StepViewModel(image: UIImage(named: "Onboarding1")!,
                                                 title: .onboardingStartTitle,
                                                 message: .onboardingStartMessage,
                                                 primaryButtonTitle: .onboardingStartHasCodeButton,
                                                 secondaryButtonTitle: .onboardingStartNoCodeButton)
-        let stepController = OnboardingStepViewController(viewModel: viewModel)
+        let stepController = StepViewController(viewModel: viewModel)
         navigationController = NavigationController(rootViewController: stepController)
 
         navigationController.navigationBar.shadowImage = UIImage()
@@ -62,15 +62,15 @@ extension OnboardingCoordinator: UINavigationControllerDelegate {
     
 }
 
-extension OnboardingCoordinator: OnboardingStepViewControllerDelegate {
+extension OnboardingCoordinator: StepViewControllerDelegate {
     
-    func onboardingStepViewControllerDidSelectPrimaryButton(_ controller: OnboardingStepViewController) {
+    func stepViewControllerDidSelectPrimaryButton(_ controller: StepViewController) {
         let pairingCoordinator = OnboardingPairingCoordinator(navigationController: navigationController)
         pairingCoordinator.delegate = self
         startChildCoordinator(pairingCoordinator)
     }
     
-    func onboardingStepViewControllerDidSelectSecondaryButton(_ controller: OnboardingStepViewController) {
+    func stepViewControllerDidSelectSecondaryButton(_ controller: StepViewController) {
         let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, canCancel: true)
         initializeContactsCoordinator.delegate = self
         startChildCoordinator(initializeContactsCoordinator)

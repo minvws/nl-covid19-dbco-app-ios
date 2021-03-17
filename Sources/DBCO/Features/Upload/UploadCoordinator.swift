@@ -83,11 +83,11 @@ final class UploadCoordinator: Coordinator, Logging {
         
         do {
             try Services.caseManager.sync { _ in
-                let viewModel = OnboardingStepViewModel(image: UIImage(named: "UploadSuccess")!,
+                let viewModel = StepViewModel(image: UIImage(named: "UploadSuccess")!,
                                                         title: .uploadFinishedTitle,
                                                         message: .uploadFinishedMessage,
                                                         primaryButtonTitle: .done)
-                let stepController = OnboardingStepViewController(viewModel: viewModel)
+                let stepController = StepViewController(viewModel: viewModel)
                 stepController.delegate = self
                 
                 self.navigationController.setViewControllers([stepController], animated: true)
@@ -172,13 +172,13 @@ extension UploadCoordinator: EditContactCoordinatorDelegate {
     
 }
 
-extension UploadCoordinator: OnboardingStepViewControllerDelegate {
+extension UploadCoordinator: StepViewControllerDelegate {
     
-    func onboardingStepViewControllerDidSelectPrimaryButton(_ controller: OnboardingStepViewController) {
+    func stepViewControllerDidSelectPrimaryButton(_ controller: StepViewController) {
         navigationController.dismiss(animated: true)
     }
     
-    func onboardingStepViewControllerDidSelectSecondaryButton(_ controller: OnboardingStepViewController) {}
+    func stepViewControllerDidSelectSecondaryButton(_ controller: StepViewController) {}
     
 }
 

@@ -28,11 +28,11 @@ final class InitializeContactsCoordinator: Coordinator, Logging {
     }
     
     override func start() {
-        let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding2")!,
+        let viewModel = StepViewModel(image: UIImage(named: "Onboarding2")!,
                                                 title: .onboardingDetermineContactsIntroTitle,
                                                 message: .onboardingDetermineContactsIntroMessage,
                                                 primaryButtonTitle: .next)
-        let stepController = OnboardingStepViewController(viewModel: viewModel)
+        let stepController = StepViewController(viewModel: viewModel)
         stepController.delegate = self
         
         if canCancel {
@@ -109,13 +109,13 @@ extension InitializeContactsCoordinator: ContactsAuthorizationViewControllerDele
     
 }
 
-extension InitializeContactsCoordinator: OnboardingStepViewControllerDelegate {
+extension InitializeContactsCoordinator: StepViewControllerDelegate {
     
-    func onboardingStepViewControllerDidSelectPrimaryButton(_ controller: OnboardingStepViewController) {
+    func stepViewControllerDidSelectPrimaryButton(_ controller: StepViewController) {
         requestPrivacyConsent()
     }
     
-    func onboardingStepViewControllerDidSelectSecondaryButton(_ controller: OnboardingStepViewController) {}
+    func stepViewControllerDidSelectSecondaryButton(_ controller: StepViewController) {}
     
     private func requestPrivacyConsent() {
         let viewModel = PrivacyConsentViewModel(buttonTitle: .next)

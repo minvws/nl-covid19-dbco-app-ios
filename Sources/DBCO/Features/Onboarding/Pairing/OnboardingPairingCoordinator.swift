@@ -27,11 +27,11 @@ final class OnboardingPairingCoordinator: Coordinator {
     }
     
     override func start() {
-        let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding2")!,
+        let viewModel = StepViewModel(image: UIImage(named: "Onboarding2")!,
                                                 title: .onboardingPairingIntroTitle,
                                                 message: .onboardingPairingIntroMessage,
                                                 primaryButtonTitle: .next)
-        let stepController = OnboardingStepViewController(viewModel: viewModel)
+        let stepController = StepViewController(viewModel: viewModel)
         stepController.delegate = self
         stepController.onPopped = { [weak self] _ in
             guard let self = self else { return }
@@ -54,16 +54,16 @@ final class OnboardingPairingCoordinator: Coordinator {
 
 }
 
-extension OnboardingPairingCoordinator: OnboardingStepViewControllerDelegate {
+extension OnboardingPairingCoordinator: StepViewControllerDelegate {
     
-    func onboardingStepViewControllerDidSelectPrimaryButton(_ controller: OnboardingStepViewController) {
+    func stepViewControllerDidSelectPrimaryButton(_ controller: StepViewController) {
         let pairingController = PairViewController(viewModel: PairViewModel())
         pairingController.delegate = self
         
         navigationController.pushViewController(pairingController, animated: true)
     }
     
-    func onboardingStepViewControllerDidSelectSecondaryButton(_ controller: OnboardingStepViewController) {}
+    func stepViewControllerDidSelectSecondaryButton(_ controller: StepViewController) {}
 }
 
 extension OnboardingPairingCoordinator: PairViewControllerDelegate {
