@@ -96,8 +96,7 @@ extension Question: Codable {
             let category: Task.Contact.Category
         }
         
-        // TODO: Once the API supports categories 3a and 3b, the fallback here should be removed
-        let categories = (try? container.decode([CategoryWrapper].self, forKey: .relevantForCategories)) ?? Task.Contact.Category.allCases.map(CategoryWrapper.init)
+        let categories = try container.decode([CategoryWrapper].self, forKey: .relevantForCategories)
         relevantForCategories = categories.map { $0.category }
         
         answerOptions = try? container.decode([AnswerOption]?.self, forKey: .answerOptions)

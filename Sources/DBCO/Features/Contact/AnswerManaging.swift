@@ -502,7 +502,7 @@ class MultipleChoiceAnswerManager: AnswerManaging {
     private var buttons: ToggleGroup!
     private var selectedButtonIndex: Int?
  
-    init(question: Question, answer: Answer, contact: Task.Contact) {
+    init(question: Question, answer: Answer) {
         self.baseAnswer = answer
         self.question = question
         
