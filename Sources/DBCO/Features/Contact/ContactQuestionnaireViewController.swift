@@ -262,17 +262,17 @@ class ContactQuestionnaireViewModel {
         updateInformSectionContent()
     }
     
+    private func setInformButtonTitle(firstName: String?) {
+        if updatedTask.contactPhoneNumber != nil && Services.configManager.featureFlags.enableContactCalling {
+            informButtonTitle = .informContactCall(firstName: firstName)
+            informButtonHidden = false
+        } else {
+            informButtonHidden = true
+        }
+    }
+    
     private func updateInformSectionContent() {
         let firstName = updatedTask.contactFirstName
-        
-        func setInformButtonTitle() {
-            if updatedTask.contactPhoneNumber != nil && Services.configManager.featureFlags.enableContactCalling {
-                informButtonTitle = .informContactCall(firstName: firstName)
-                informButtonHidden = false
-            } else {
-                informButtonHidden = true
-            }
-        }
         
         copyButtonHidden = !Services.configManager.featureFlags.enablePerspectiveCopy
         
@@ -282,20 +282,19 @@ class ContactQuestionnaireViewModel {
             informFooter = .informContactFooterIndex(firstName: firstName)
             informButtonType = .primary
             promptButtonType = .secondary
-            setInformButtonTitle()
         case .staff:
             informTitle = .informContactTitle(firstName: firstName)
             informFooter = .informContactFooterStaff(firstName: firstName)
             informButtonType = .secondary
             promptButtonType = .primary
-            setInformButtonTitle()
         case .unknown:
             informTitle = .informContactTitle(firstName: firstName)
             informFooter = .informContactFooterUnknown(firstName: firstName)
             informButtonType = .secondary
             promptButtonType = .primary
-            setInformButtonTitle()
         }
+        
+        setInformButtonTitle(firstName: firstName)
         
         informFooterHidden = didCreateNewTask
         
