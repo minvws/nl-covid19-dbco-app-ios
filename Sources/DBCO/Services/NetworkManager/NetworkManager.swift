@@ -19,14 +19,14 @@ class NetworkManager: NetworkManaging, Logging {
                                   delegateQueue: nil)
     }
     
-    func getAppConfiguration(completion: @escaping (Result<AppConfiguration, NetworkError>) -> Void) {
+    func getAppConfiguration(completion: @escaping (Result<AppConfiguration, NetworkError>) -> Void) -> URLSessionTask? {
         let urlRequest = constructRequest(url: configuration.appConfigurationUrl,
                                           method: .GET)
 
-        decodedJSONData(request: urlRequest, completion: completion)
+        return decodedJSONData(request: urlRequest, completion: completion)
     }
     
-    func pair(code: String, sealedClientPublicKey: Data, completion: @escaping (Result<PairResponse, NetworkError>) -> Void) {
+    func pair(code: String, sealedClientPublicKey: Data, completion: @escaping (Result<PairResponse, NetworkError>) -> Void) -> URLSessionTask? {
         struct PairBody: Encodable {
             let pairingCode: String
             let sealedClientPublicKey: Data
@@ -39,10 +39,10 @@ class NetworkManager: NetworkManaging, Logging {
                                                          sealedClientPublicKey: sealedClientPublicKey,
                                                          generalHealthAuthorityPublicKeyVersion: configuration.haPublicKey.keyVersion))
         
-        decodedJSONData(request: urlRequest, completion: completion)
+        return decodedJSONData(request: urlRequest, completion: completion)
     }
     
-    func getCase(identifier: String, completion: @escaping (Result<Case, NetworkError>) -> Void) {
+    func getCase(identifier: String, completion: @escaping (Result<Case, NetworkError>) -> Void) -> URLSessionTask? {
         let urlRequest = constructRequest(url: configuration.caseUrl(identifier: identifier),
                                           method: .GET)
         
@@ -54,10 +54,10 @@ class NetworkManager: NetworkManaging, Logging {
             completion(result.map { $0.sealedCase.value })
         }
 
-        decodedJSONData(request: urlRequest, completion: open)
+        return decodedJSONData(request: urlRequest, completion: open)
     }
     
-    func putCase(identifier: String, value: Case, completion: @escaping (Result<Void, NetworkError>) -> Void) {
+    func putCase(identifier: String, value: Case, completion: @escaping (Result<Void, NetworkError>) -> Void) -> URLSessionTask? {
         struct CaseBody: Encodable {
             let sealedCase: Sealed<Case>
         }
@@ -66,7 +66,7 @@ class NetworkManager: NetworkManaging, Logging {
                                           method: .PUT,
                                           body: CaseBody(sealedCase: .init(value)))
         
-        data(request: urlRequest) { result in
+        return data(request: urlRequest) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success:
@@ -78,7 +78,7 @@ class NetworkManager: NetworkManaging, Logging {
         }
     }
     
-    func getQuestionnaires(completion: @escaping (Result<[Questionnaire], NetworkError>) -> Void) {
+    func getQuestionnaires(completion: @escaping (Result<[Questionnaire], NetworkError>) -> Void) -> URLSessionTask? {
         let urlRequest = constructRequest(url: configuration.questionnairesUrl,
                                           method: .GET)
         
@@ -86,21 +86,21 @@ class NetworkManager: NetworkManaging, Logging {
             completion(result.map { $0.items })
         }
         
-        decodedJSONData(request: urlRequest, completion: open)
+        return decodedJSONData(request: urlRequest, completion: open)
     }
     
-    func postPairingRequest(completion: @escaping (Result<ReversePairingInfo, NetworkError>) -> Void) {
+    func postPairingRequest(completion: @escaping (Result<ReversePairingInfo, NetworkError>) -> Void) -> URLSessionTask? {
         let urlRequest = constructRequest(url: configuration.pairingRequestsUrl(token: nil),
                                           method: .POST)
 
-        decodedJSONData(request: urlRequest, completion: completion)
+        return decodedJSONData(request: urlRequest, completion: completion)
     }
     
-    func getPairingRequestStatus(token: String, completion: @escaping (Result<ReversePairingStatusInfo, NetworkError>) -> Void) {
+    func getPairingRequestStatus(token: String, completion: @escaping (Result<ReversePairingStatusInfo, NetworkError>) -> Void) -> URLSessionTask? {
         let urlRequest = constructRequest(url: configuration.pairingRequestsUrl(token: token),
                                           method: .GET)
 
-        decodedJSONData(request: urlRequest, completion: completion)
+        return decodedJSONData(request: urlRequest, completion: completion)
     }
     
     // MARK: - Construct Request
@@ -144,22 +144,24 @@ class NetworkManager: NetworkManaging, Logging {
     }
 
     // MARK: - Download Data
-    func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
-        session
-            .dataTask(with: request, completionHandler: completionHandler)
-            .resume()
+    func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionTask {
+        let task = session.dataTask(with: request, completionHandler: completionHandler)
+        task.resume()
+        
+        return task
     }
     
-    private func data(request: Result<URLRequest, NetworkError>, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) {
+    private func data(request: Result<URLRequest, NetworkError>, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) -> URLSessionTask? {
         switch request {
         case let .success(request):
-            data(request: request, completion: completion)
+            return data(request: request, completion: completion)
         case let .failure(error):
             completion(.failure(error))
+            return nil
         }
     }
 
-    private func data(request: URLRequest, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) {
+    private func data(request: URLRequest, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) -> URLSessionTask? {
         dataTask(with: request) { data, response, error in
             self.handleNetworkResponse(data,
                                        response: response,
@@ -168,7 +170,7 @@ class NetworkManager: NetworkManaging, Logging {
         }
     }
     
-    private func decodedJSONData<Object: Decodable>(request: Result<URLRequest, NetworkError>, completion: @escaping (Result<Object, NetworkError>) -> Void) {
+    private func decodedJSONData<Object: Decodable>(request: Result<URLRequest, NetworkError>, completion: @escaping (Result<Object, NetworkError>) -> Void) -> URLSessionTask? {
         data(request: request) { result in
             let decodedResult: Result<Object, NetworkError> = self.jsonResponseHandler(result: result)
             

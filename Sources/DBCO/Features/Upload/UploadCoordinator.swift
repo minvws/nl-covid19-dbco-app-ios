@@ -67,7 +67,12 @@ final class UploadCoordinator: Coordinator, Logging {
         
         navigationController.setViewControllers([pairingController], animated: false)
         
-        Services.pairingManager.startPollingForPairing()
+        if let error = Services.pairingManager.lastPollingError {
+            Services.pairingManager.lastPairingCode.map { pairingController.applyPairingCode($0) }
+            pairingManager(Services.pairingManager, didFailWith: error)
+        } else {
+            Services.pairingManager.startPollingForPairing()
+        }
     }
     
     private func showUnfinishedTasks(animated: Bool) {
@@ -184,6 +189,11 @@ extension UploadCoordinator: OnboardingStepViewControllerDelegate {
 
 extension UploadCoordinator: ReversePairViewControllerDelegate {
     
+    func reversePairViewControllerWantsToResumePairing(_ controller: ReversePairViewController) {
+        Services.pairingManager.startPollingForPairing()
+        controller.clearError()
+    }
+    
     func reversePairViewControllerWantsToContinue(_ controller: ReversePairViewController) {
         continueToUnfinishedTasksIfNeeded(animated: true)
     }
@@ -193,7 +203,7 @@ extension UploadCoordinator: ReversePairViewControllerDelegate {
             navigationController.dismiss(animated: true)
         }
         
-        guard !Services.pairingManager.isPaired else { return close() }
+        guard Services.pairingManager.isPollingForPairing else { return close() }
        
         let alertController = UIAlertController(title: .reversePairingCloseAlert,
                                                 message: nil,
@@ -215,42 +225,29 @@ extension UploadCoordinator: ReversePairViewControllerDelegate {
 
 extension UploadCoordinator: PairingManagerListener {
     
-    func pairingManagerDidStartPollingForPairing(_ pairingManager: PairingManaging) {}
+    private var pairViewController: ReversePairViewController? {
+        return navigationController.viewControllers.compactMap { $0 as? ReversePairViewController }.first
+    }
+    
+    func pairingManagerDidStartPollingForPairing(_ pairingManager: PairingManaging) {
+        pairViewController?.clearPairingCode()
+    }
     
     func pairingManager(_ pairingManager: PairingManaging, didFailWith error: PairingManagingError) {
-        
-        switch error {
-        case .pairingCodeExpired:
-            // Create a new code and continue
-            pairingManager.startPollingForPairing()
-        default:
-            let alertController = UIAlertController(title: .reversePairingErrorTitle,
-                                                    message: .reversePairingErrorMessage,
-                                                    preferredStyle: .alert)
-            
-            alertController.addAction(UIAlertAction(title: .cancel, style: .cancel) { _ in
-                self.navigationController.dismiss(animated: true)
-            })
-            
-            alertController.addAction(UIAlertAction(title: .tryAgain, style: .default) { _ in
-                pairingManager.startPollingForPairing()
-            })
-            
-            navigationController.present(alertController, animated: true, completion: nil)
+        if pairingManager.canResumePolling {
+            pairViewController?.showError()
+        } else {
+            pairViewController?.showPairingCodeExpired()
         }
     }
     
     func pairingManagerDidCancelPollingForPairing(_ pairingManager: PairingManaging) {}
     
     func pairingManager(_ pairingManager: PairingManaging, didReceiveReversePairingCode code: String) {
-        let pairViewController = navigationController.viewControllers.compactMap { $0 as? ReversePairViewController }.first
-        
         pairViewController?.applyPairingCode(code)
     }
     
     func pairingManagerDidFinishPairing(_ pairingManager: PairingManaging) {
-        let pairViewController = navigationController.viewControllers.compactMap { $0 as? ReversePairViewController }.first
-        
         pairViewController?.showPairingSuccessful()
     }
     

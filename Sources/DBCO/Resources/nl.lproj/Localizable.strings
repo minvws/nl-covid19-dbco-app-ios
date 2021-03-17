@@ -185,6 +185,8 @@
 
 "taskOverviewWaitingForPairing" = "Wachten op koppeling met de GGD";
 "taskOverviewPairingTryAgain" = "Probeer opnieuw";
+"taskOverviewPairingExpired" = "Koppelen mislukt. De code is verlopen. Geef een nieuwe code door aan de GGD.";
+"taskOverviewPairingFailed" = "Koppelen mislukt. Controleer of de GGD de juiste code heeft en of je internetverbinding werkt.";
 
 /* MARK: - Overview Tips */
 "overviewTipsShortTitle" = "Tips";
@@ -464,8 +466,10 @@ Blijkt uit die test dat je geen corona hebt? Dan mag je weer naar buiten.</li>
 "reversePairingStep2.title" = "Wacht tot de GGD-medewerker de code heeft ingevoerd";
 "reversePairingStep2.message" = "Wil je ondertussen nog gegevens aanvullen? Dan kun je dit scherm sluiten.";
 
-"reversePairingError.title" = "Er ging iets mis";
-"reversePairingError.message" = "Controleer de internetverbinding en probeer het opnieuw.";
+"reversePairingExpired" = "De code is verlopen. Geef een nieuwe code door aan de GGD.";
+"reversePairingError" = "Er ging iets mis. Controleer of de GGD de juiste code heeft en of je internetverbinding werkt.";
+"reversePairingTryAgain" = "Probeer opnieuw";
+"reversePairingNewCode" = "Maak nieuwe code";
 
 "reversePairingCloseAlert" = "Heb je de code gedeeld met de GGD-medewerker?";
 
