@@ -41,6 +41,8 @@ class TaskOverviewViewModel {
     @Bindable private(set) var isAddContactButtonHidden: Bool = false
     @Bindable private(set) var isWindowExpiredMessageHidden: Bool = true
     @Bindable private(set) var isPairingViewHidden: Bool = true
+    @Bindable private(set) var isPairingErrorViewHidden: Bool = true
+    @Bindable private(set) var pairingErrorText: String = ""
     
     init() {
         tableViewManager = .init()
@@ -178,34 +180,48 @@ extension TaskOverviewViewModel: CaseManagerListener {
 
 extension TaskOverviewViewModel: PairingManagerListener {
     
-    func pairingManagerDidStartPollingForPairing(_ pairingManager: PairingManaging) {
+    func showPairingView() {
         pairingTimeoutTimer?.invalidate()
         pairingTimeoutTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [unowned self] _ in
             self.isPairingViewHidden = false
+            self.isPairingErrorViewHidden = true
             self.isDoneButtonHidden = true
         }
+    }
+    
+    func pairingManagerDidStartPollingForPairing(_ pairingManager: PairingManaging) {
+        showPairingView()
     }
     
     func pairingManager(_ pairingManager: PairingManaging, didFailWith error: PairingManagingError) {
         pairingTimeoutTimer?.invalidate()
         
+        pairingErrorText = Services.pairingManager.canResumePolling ?
+            .taskOverviewPairingFailed :
+            .taskOverviewPairingExpired
+        
         isPairingViewHidden = true
-        isDoneButtonHidden = false
+        isPairingErrorViewHidden = false
+        isDoneButtonHidden = true
     }
     
     func pairingManagerDidCancelPollingForPairing(_ pairingManager: PairingManaging) {
         pairingTimeoutTimer?.invalidate()
         
         isPairingViewHidden = true
+        isPairingErrorViewHidden = true
         isDoneButtonHidden = false
     }
     
-    func pairingManager(_ pairingManager: PairingManaging, didReceiveReversePairingCode code: String) {}
+    func pairingManager(_ pairingManager: PairingManaging, didReceiveReversePairingCode code: String) {
+        showPairingView()
+    }
     
     func pairingManagerDidFinishPairing(_ pairingManager: PairingManaging) {
         pairingTimeoutTimer?.invalidate()
         
         isPairingViewHidden = true
+        isPairingErrorViewHidden = true
         isDoneButtonHidden = false
     }
     
@@ -250,17 +266,11 @@ class TaskOverviewViewController: PromptableViewController {
         let resetButton = Button(title: .taskOverviewDeleteDataButtonTitle)
             .touchUpInside(self, action: #selector(reset))
         
-        let pairingActivityView = ActivityIndicatorView(style: .gray)
-        pairingActivityView.startAnimating()
-        pairingActivityView.setContentHuggingPriority(.required, for: .horizontal)
-        let pairingView = VStack(spacing: 16,
-                                 HStack(spacing: 6,
-                                        pairingActivityView,
-                                        Label(subhead: .taskOverviewWaitingForPairing, textColor: Theme.colors.primary).multiline()),
-                                 Button(title: .taskOverviewPairingTryAgain, style: .secondary)
-                                    .touchUpInside(self, action: #selector(upload)))
+        let pairingView = createPairingView()
+        let pairingErrorView = createPairingErrorView()
         
         promptView = VStack(spacing: 16,
+                            pairingErrorView,
                             pairingView,
                             windowExpiredMessage,
                             doneButton,
@@ -271,11 +281,42 @@ class TaskOverviewViewController: PromptableViewController {
         viewModel.$isWindowExpiredMessageHidden.binding = { windowExpiredMessage.isHidden = $0 }
         
         viewModel.$isPairingViewHidden.binding = { pairingView.isHidden = $0 }
+        viewModel.$isPairingErrorViewHidden.binding = { pairingErrorView.isHidden = $0 }
         
         viewModel.setHidePrompt { [unowned self] in self.hidePrompt(animated: $0) }
         viewModel.setShowPrompt { [unowned self] in self.showPrompt(animated: $0) }
         
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+    }
+    
+    private func createPairingView() -> UIView {
+        let pairingActivityView = ActivityIndicatorView(style: .gray)
+        pairingActivityView.startAnimating()
+        pairingActivityView.setContentHuggingPriority(.required, for: .horizontal)
+        let pairingView = VStack(spacing: 16,
+                                 HStack(spacing: 6,
+                                        pairingActivityView,
+                                        Label(subhead: .taskOverviewWaitingForPairing, textColor: Theme.colors.primary).multiline()),
+                                 Button(title: .taskOverviewPairingTryAgain, style: .secondary)
+                                    .touchUpInside(self, action: #selector(upload)))
+        
+        return pairingView
+    }
+    
+    private func createPairingErrorView() -> UIView {
+        let label = Label(subhead: "", textColor: Theme.colors.warning).multiline()
+        
+        viewModel.$pairingErrorText.binding = { label.text = $0 }
+        
+        let pairingView = VStack(spacing: 16,
+                                 HStack(spacing: 6,
+                                        ImageView(imageName: "Warning").asIcon(color: Theme.colors.warning),
+                                        label)
+                                    .alignment(.top),
+                                 Button(title: .taskOverviewPairingTryAgain, style: .secondary)
+                                    .touchUpInside(self, action: #selector(upload)))
+        
+        return pairingView
     }
     
     private func setupTableView() {
@@ -308,6 +349,7 @@ class TaskOverviewViewController: PromptableViewController {
     }
     
     @objc private func upload() {
+        viewModel.showPairingView()
         delegate?.taskOverviewViewControllerDidRequestUpload(self)
     }
     

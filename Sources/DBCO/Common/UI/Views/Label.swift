@@ -88,6 +88,12 @@ class Label: UILabel {
     }
     
     @discardableResult
+    func textAlignment(_ alignment: NSTextAlignment) -> Self {
+        textAlignment = alignment
+        return self
+    }
+    
+    @discardableResult
     func hideIfEmpty() -> Self {
         isHidden = text?.isEmpty == true
         return self

@@ -22,10 +22,10 @@ class ImageView: UIImageView {
     }
     
     @discardableResult
-    func asIcon() -> Self {
+    func asIcon(color: UIColor = Theme.colors.primary) -> Self {
         contentMode = .center
         setContentHuggingPriority(.required, for: .horizontal)
-        tintColor = Theme.colors.primary
+        tintColor = color
         return self
     }
     
