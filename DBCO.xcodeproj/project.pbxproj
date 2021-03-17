@@ -453,6 +453,7 @@
 			children = (
 				2859E74F25DE95AE00359BA1 /* ActivityIndicator.swift */,
 				CD29635725191941008443AF /* Button.swift */,
+				CDA0F6952539F1A3009FD2A9 /* LabeledInputView.swift */,
 				CD1824ED2524B3E4006EB272 /* InputField.swift */,
 				CD2AC0752530601900E8AF78 /* InputTextView.swift */,
 				CD756C63252CA787005FEDA0 /* PairingCodeField.swift */,
@@ -481,6 +482,8 @@
 				CD0E968625E58709006E70BD /* RequestContactsAuthorizationViewController.swift */,
 				CD24CBF725C0305100A2F634 /* ScrollViewNavivationbarAdjusting.swift */,
 				CDFCF906250FA6E80062269A /* ViewController.swift */,
+				CD995B5F256FDA63007A8B2C /* PrivacyConsentViewController.swift */,
+				CD756C4F252C6AC9005FEDA0 /* OnboardingStepViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -554,9 +557,7 @@
 				CD10F07F25AF07B8000295B9 /* InitializeContacts */,
 				CD10F07625AEFD21000295B9 /* Pairing */,
 				CD756C49252C6A30005FEDA0 /* OnboardingCoordinator.swift */,
-				CD756C4F252C6AC9005FEDA0 /* OnboardingStepViewController.swift */,
 				CD756C5D252C9A7E005FEDA0 /* PairViewController.swift */,
-				CD995B5F256FDA63007A8B2C /* PrivacyConsentViewController.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -594,7 +595,6 @@
 				CDA5C11725135A46009440D1 /* SelectContactCoordinator.swift */,
 				CD2963432514BF4E008443AF /* SelectContactViewController.swift */,
 				CDA0F6902539F0D9009FD2A9 /* AnswerManaging.swift */,
-				CDA0F6952539F1A3009FD2A9 /* LabeledInputView.swift */,
 			);
 			path = Contact;
 			sourceTree = "<group>";
