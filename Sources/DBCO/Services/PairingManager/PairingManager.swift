@@ -291,7 +291,7 @@ class PairingManager: PairingManaging, Logging {
     private var isBusyReversePairing: Bool = false
     
     @UserDefaults(key: "reversePairingInfo", defaultValue: nil)
-    private var reversePairingInfo: ReversePairingInfo?
+    private var reversePairingInfo: ReversePairingInfo? // swiftlint:disable:this let_var_whitespace
     
     private(set) var lastPollingError: PairingManagingError?
     
