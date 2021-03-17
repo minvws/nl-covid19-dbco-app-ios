@@ -436,62 +436,12 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         
         viewModel.setInputFieldDelegate(self)
         
-        // Type
-        let classificationSectionView = SectionView(title: .contactTypeSectionTitle, caption: .contactTypeSectionMessage, index: 1)
-        classificationSectionView.expand(animated: false)
+        let classificationSectionView = createClassificationSectionView()
+        let contactDetailsSection = createDetailsSectionView()
+        let informContactSection = createInformSectionView()
         
-        VStack(spacing: 24, viewModel.classificationViews)
-            .embed(in: classificationSectionView.contentView.readableWidth)
-        
-        // Details
-        let contactDetailsSection = SectionView(title: .contactDetailsSectionTitle, caption: .contactDetailsSectionMessage, index: 2)
-        contactDetailsSection.collapse(animated: false)
-        
-        VStack(spacing: 16, viewModel.contactDetailViews)
-            .embed(in: contactDetailsSection.contentView.readableWidth)
-        
-        // Inform
-        let informContactSection = SectionView(title: .informContactSectionTitle, caption: .informContactSectionMessage, index: 3)
-        informContactSection.showBottomSeparator = false
-        informContactSection.collapse(animated: false)
-        
-        let informTitleLabel = Label(bodyBold: "").multiline()
-        let informTextView = TextView().linkTouched { [unowned self] in
-            delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0)
-        }
-        let informLinkView = TextView().linkTouched { [unowned self] in
-            delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0)
-        }
-        let informFooterLabel = Label(bodyBold: "").multiline()
-        
-        let informButton = Button(title: "", style: .primary)
-            .touchUpInside(self, action: #selector(informContact))
-        
-        let copyButton = Button(title: .informContactCopyGuidelines, style: .secondary)
-            .touchUpInside(self, action: #selector(copyGuidelines))
-        
-        viewModel.$informTitle.binding = { informTitleLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
-        viewModel.$informContent.binding = { informTextView.html($0, textColor: Theme.colors.captionGray) }
-        viewModel.$informLink.binding = { informLinkView.html($0, textColor: Theme.colors.captionGray) }
-        viewModel.$informFooter.binding = { informFooterLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
-        viewModel.$informFooterHidden.binding = { informFooterLabel.isHidden = $0 }
-        viewModel.$copyButtonHidden.binding = { copyButton.isHidden = $0 }
-        viewModel.$informButtonTitle.binding = { informButton.title = $0 }
-        viewModel.$informButtonHidden.binding = { informButton.isHidden = $0 }
-        viewModel.$informButtonType.binding = { informButton.style = $0 }
         viewModel.$promptButtonType.binding = { promptButton.style = $0 }
         viewModel.$promptButtonTitle.binding = { promptButton.title = $0 }
-
-        VStack(spacing: 24,
-               VStack(spacing: 16,
-                      informTitleLabel,
-                      informTextView,
-                      informLinkView,
-                      informFooterLabel),
-               VStack(spacing: 16,
-                      copyButton,
-                      informButton))
-            .embed(in: informContactSection.contentView.readableWidth)
         
         viewModel.classificationSectionView = classificationSectionView
         viewModel.detailsSectionView = contactDetailsSection
@@ -508,6 +458,70 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         
         registerForKeyboardNotifications()
+    }
+    
+    private func createClassificationSectionView() -> SectionView {
+        let sectionView = SectionView(title: .contactTypeSectionTitle, caption: .contactTypeSectionMessage, index: 1)
+        sectionView.expand(animated: false)
+        
+        VStack(spacing: 24, viewModel.classificationViews)
+            .embed(in: sectionView.contentView.readableWidth)
+        
+        return sectionView
+    }
+    
+    private func createDetailsSectionView() -> SectionView {
+        let sectionView = SectionView(title: .contactDetailsSectionTitle, caption: .contactDetailsSectionMessage, index: 2)
+        sectionView.collapse(animated: false)
+        
+        VStack(spacing: 16, viewModel.contactDetailViews)
+            .embed(in: sectionView.contentView.readableWidth)
+        
+        return sectionView
+    }
+    
+    private func createInformSectionView() -> SectionView {
+        let sectionView = SectionView(title: .informContactSectionTitle, caption: .informContactSectionMessage, index: 3)
+        sectionView.showBottomSeparator = false
+        sectionView.collapse(animated: false)
+        
+        let informTitleLabel = Label(bodyBold: "").multiline()
+        let informTextView = TextView().linkTouched { [unowned self] in
+            delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0)
+        }
+        let informLinkView = TextView().linkTouched { [unowned self] in
+            delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0)
+        }
+        let informFooterLabel = Label(bodyBold: "").multiline()
+        
+        let informButton = Button(title: "", style: .primary)
+            .touchUpInside(self, action: #selector(informContact))
+        
+        let copyButton = Button(title: .informContactCopyGuidelines, style: .secondary)
+            .touchUpInside(self, action: #selector(copyGuidelines))
+        
+        VStack(spacing: 24,
+               VStack(spacing: 16,
+                      informTitleLabel,
+                      informTextView,
+                      informLinkView,
+                      informFooterLabel),
+               VStack(spacing: 16,
+                      copyButton,
+                      informButton))
+            .embed(in: sectionView.contentView.readableWidth)
+        
+        viewModel.$informTitle.binding = { informTitleLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
+        viewModel.$informContent.binding = { informTextView.html($0, textColor: Theme.colors.captionGray) }
+        viewModel.$informLink.binding = { informLinkView.html($0, textColor: Theme.colors.captionGray) }
+        viewModel.$informFooter.binding = { informFooterLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
+        viewModel.$informFooterHidden.binding = { informFooterLabel.isHidden = $0 }
+        viewModel.$copyButtonHidden.binding = { copyButton.isHidden = $0 }
+        viewModel.$informButtonTitle.binding = { informButton.title = $0 }
+        viewModel.$informButtonHidden.binding = { informButton.isHidden = $0 }
+        viewModel.$informButtonType.binding = { informButton.style = $0 }
+        
+        return sectionView
     }
     
     private var contactDetailsSection: SectionView!
