@@ -62,18 +62,18 @@ class ContactQuestionnaireViewModel {
     weak var informSectionView: SectionView?            { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
     // swiftlint:enable opening_brace
     
-    @Bindable private(set) var informTitle: String
-    @Bindable private(set) var informIntro: String
-    @Bindable private(set) var informContent: String
-    @Bindable private(set) var informLink: String
-    @Bindable private(set) var informFooter: String
-    @Bindable private(set) var informFooterHidden: Bool
-    @Bindable private(set) var informButtonTitle: String
-    @Bindable private(set) var informButtonHidden: Bool
-    @Bindable private(set) var copyButtonHidden: Bool
-    @Bindable private(set) var informButtonType: Button.ButtonType
-    @Bindable private(set) var promptButtonType: Button.ButtonType
-    @Bindable private(set) var promptButtonTitle: String
+    @Bindable private(set) var informTitle: String = ""
+    @Bindable private(set) var informIntro: String = ""
+    @Bindable private(set) var informContent: String = ""
+    @Bindable private(set) var informLink: String = ""
+    @Bindable private(set) var informFooter: String = ""
+    @Bindable private(set) var informFooterHidden: Bool = true
+    @Bindable private(set) var informButtonTitle: String = ""
+    @Bindable private(set) var informButtonHidden: Bool = true
+    @Bindable private(set) var copyButtonHidden: Bool = true
+    @Bindable private(set) var informButtonType: Button.ButtonType = .secondary
+    @Bindable private(set) var promptButtonType: Button.ButtonType = .primary
+    @Bindable private(set) var promptButtonTitle: String = .save
     
     init(task: Task?, questionnaire: Questionnaire, contact: CNContact? = nil, showCancelButton: Bool = false) {
         self.didCreateNewTask = task == nil
@@ -85,19 +85,6 @@ class ContactQuestionnaireViewModel {
         self.title = task.contactName ?? .contactFallbackTitle
         self.showCancelButton = showCancelButton
         
-        self.informTitle = ""
-        self.informIntro = ""
-        self.informContent = ""
-        self.informLink = ""
-        self.informFooter = ""
-        self.informFooterHidden = true
-        self.copyButtonHidden = true
-        self.informButtonTitle = ""
-        self.informButtonHidden = true
-        self.informButtonType = .secondary
-        self.promptButtonType = .primary
-        self.promptButtonTitle = .save
-        
         let questionsAndAnswers: [(question: Question, answer: Answer)] = {
             let currentAnswers = task.questionnaireResult?.answers ?? []
             
@@ -108,33 +95,12 @@ class ContactQuestionnaireViewModel {
         
         self.baseResult = QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: questionsAndAnswers.map(\.answer))
         
-        self.answerManagers = []
+        self.answerManagers = Self.createAnswerManagers(for: questionsAndAnswers,
+                                                        contact: contact,
+                                                        category: initialCategory,
+                                                        dateOfLastExposure: updatedContact.dateOfLastExposure,
+                                                        source: task.source)
         self.updatedClassification = .success(task.contact.category)
-        
-        self.answerManagers = questionsAndAnswers.compactMap { question, answer in
-            let manager: AnswerManaging
-            
-            switch answer.value {
-            case .classificationDetails:
-                manager = ClassificationDetailsAnswerManager(question: question, answer: answer, contactCategory: initialCategory)
-            case .contactDetails:
-                manager = ContactDetailsAnswerManager(question: question, answer: answer, contact: contact)
-            case .contactDetailsFull:
-                manager = ContactDetailsAnswerManager(question: question, answer: answer, contact: contact)
-            case .date:
-                manager = DateAnswerManager(question: question, answer: answer)
-            case .open:
-                manager = OpenAnswerManager(question: question, answer: answer)
-            case .multipleChoice:
-                manager = MultipleChoiceAnswerManager(question: question, answer: answer, contact: task.contact)
-            case .lastExposureDate:
-                manager = LastExposureDateAnswerManager(question: question, answer: answer, lastExposureDate: updatedContact.dateOfLastExposure)
-            }
-            
-            manager.isEnabled = !question.disabledForSources.contains(task.source)
-            
-            return manager
-        }
         
         answerManagers.forEach {
             $0.updateHandler = { [unowned self] in
@@ -154,6 +120,37 @@ class ContactQuestionnaireViewModel {
         self.title = updatedTask.contactName ?? .contactFallbackTitle
         
         updateInformSectionContent()
+    }
+    
+    private static func createAnswerManagers(for questionsAndAnswers: [(question: Question, answer: Answer)],
+                                             contact: CNContact?,
+                                             category: Task.Contact.Category?,
+                                             dateOfLastExposure: String?,
+                                             source: Task.Source) -> [AnswerManaging] {
+        return questionsAndAnswers.compactMap { question, answer in
+            let manager: AnswerManaging
+            
+            switch answer.value {
+            case .classificationDetails:
+                manager = ClassificationDetailsAnswerManager(question: question, answer: answer, contactCategory: category)
+            case .contactDetails:
+                manager = ContactDetailsAnswerManager(question: question, answer: answer, contact: contact)
+            case .contactDetailsFull:
+                manager = ContactDetailsAnswerManager(question: question, answer: answer, contact: contact)
+            case .date:
+                manager = DateAnswerManager(question: question, answer: answer)
+            case .open:
+                manager = OpenAnswerManager(question: question, answer: answer)
+            case .multipleChoice:
+                manager = MultipleChoiceAnswerManager(question: question, answer: answer)
+            case .lastExposureDate:
+                manager = LastExposureDateAnswerManager(question: question, answer: answer, lastExposureDate: dateOfLastExposure)
+            }
+            
+            manager.isEnabled = !question.disabledForSources.contains(source)
+            
+            return manager
+        }
     }
     
     func registerDidInform() {
