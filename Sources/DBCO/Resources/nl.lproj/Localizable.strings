@@ -166,6 +166,9 @@
 "taskOverviewUnsyncedContactsHeader" = "Nog niet gedeeld met de GGD";
 "taskOverviewSyncedContactsHeader" = "Gedeeld met de GGD";
 
+"taskOverviewUninformedContactsHeader" = "Ga hiermee aan de slag";
+"taskOverviewInformedContactsHeader" = "Dit is al gedaan";
+
 "taskContactUnknownName" = "Geen naam bekend";
 
 "taskLoadingErrorTitle" = "Kon de gegevens niet ophalen";

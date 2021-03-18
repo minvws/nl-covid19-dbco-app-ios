@@ -34,6 +34,9 @@ protocol CaseManaging {
     /// Indicates that alls the tasks are uploaded to the backend in their current state
     var isSynced: Bool { get }
     
+    /// Indicates that an upload occured at least once
+    var hasSynced: Bool { get }
+    
     /// Indicates that tasks can no longer be uploaded to the backedn
     var isWindowExpired: Bool { get }
     
@@ -116,6 +119,9 @@ final class CaseManager: CaseManaging, Logging {
     var isSynced: Bool {
         return tasks.allSatisfy(\.isSyncedWithPortal)
     }
+
+    @UserDefaults(key: "CaseManager.appData")
+    private(set) var hasSynced: Bool = false // swiftlint:disable:this let_var_whitespace
     
     private(set) var tasks: [Task] {
         get { appData.tasks }
@@ -550,6 +556,7 @@ final class CaseManager: CaseManaging, Logging {
                 switch $0 {
                 case .success:
                     self.markAllTasksAsSynced()
+                    self.hasSynced = true
                     completionHandler?(true)
                 case .failure(let error):
                     self.logError("Could not sync case: \(error)")

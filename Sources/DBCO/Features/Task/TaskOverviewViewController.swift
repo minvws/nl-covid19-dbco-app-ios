@@ -122,23 +122,35 @@ class TaskOverviewViewModel {
         sections = []
         sections.append((tableHeaderBuilder?(), [], nil))
         
+        if Services.caseManager.hasSynced {
+            buildSections(split: \.isSyncedWithPortal,
+                          failingSectionTitle: .taskOverviewUnsyncedContactsHeader,
+                          passingSectionTitle: .taskOverviewSyncedContactsHeader)
+        } else {
+            buildSections(split: \.isOrCanBeInformed,
+                          failingSectionTitle: .taskOverviewUninformedContactsHeader,
+                          passingSectionTitle: .taskOverviewInformedContactsHeader)
+        }
+    }
+    
+    private func buildSections(split: KeyPath<Task, Bool>, failingSectionTitle: String, passingSectionTitle: String) {
         let tasks = Services.caseManager.tasks.filter { !$0.deletedByIndex }
         
-        let syncedContacts = tasks.filter { !$0.isSyncedWithPortal }
-        let unsyncedContacts = tasks.filter { $0.isSyncedWithPortal }
+        let failingContacts = tasks.filter { !$0[keyPath: split] }
+        let passingContacts = tasks.filter { $0[keyPath: split] }
         
-        let unsyncedSectionHeader = SectionHeaderContent(.taskOverviewUnsyncedContactsHeader, nil)
-        let syncedSectionHeader = SectionHeaderContent(.taskOverviewSyncedContactsHeader, nil)
+        let failingSectionHeader = SectionHeaderContent(failingSectionTitle, nil)
+        let passingSectionHeader = SectionHeaderContent(passingSectionTitle, nil)
         
-        if !syncedContacts.isEmpty {
-            sections.append((header: sectionHeaderBuilder?(unsyncedSectionHeader),
-                             tasks: syncedContacts,
+        if !failingContacts.isEmpty {
+            sections.append((header: sectionHeaderBuilder?(failingSectionHeader),
+                             tasks: failingContacts,
                              footer: addContactFooterBuilder?()))
         }
         
-        if !unsyncedContacts.isEmpty {
-            sections.append((header: sectionHeaderBuilder?(syncedSectionHeader),
-                             tasks: unsyncedContacts,
+        if !passingContacts.isEmpty {
+            sections.append((header: sectionHeaderBuilder?(passingSectionHeader),
+                             tasks: passingContacts,
                              footer: nil))
         }
         
@@ -146,8 +158,8 @@ class TaskOverviewViewModel {
         
         let windowExpired = Services.caseManager.isWindowExpired
         
-        isHeaderAddContactButtonHidden = !syncedContacts.isEmpty || windowExpired
-        isAddContactButtonHidden = syncedContacts.isEmpty || windowExpired
+        isHeaderAddContactButtonHidden = !failingContacts.isEmpty || windowExpired
+        isAddContactButtonHidden = failingContacts.isEmpty || windowExpired
     }
 }
 
