@@ -58,7 +58,7 @@ class KeychainItem<T: Codable> {
         value = nil
     }
     
-    // JSONDecoder/Encoder doesn't like fragments
+    // JSONDecoder/Encoder doesn't like fragments, so wrap the value to be safe.
     private struct Wrapped: Codable {
         let value: T
     }
