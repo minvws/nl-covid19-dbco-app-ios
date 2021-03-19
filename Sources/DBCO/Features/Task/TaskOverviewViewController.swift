@@ -122,23 +122,65 @@ class TaskOverviewViewModel {
         sections = []
         sections.append((tableHeaderBuilder?(), [], nil))
         
-        let tasks = Services.caseManager.tasks.filter { !$0.deletedByIndex }
+        if Services.caseManager.hasSynced {
+            buildSections(split: \.isSyncedWithPortal,
+                          failingSectionTitle: .taskOverviewUnsyncedContactsHeader,
+                          passingSectionTitle: .taskOverviewSyncedContactsHeader)
+        } else {
+            buildSections(split: \.isOrCanBeInformed,
+                          failingSectionTitle: .taskOverviewUninformedContactsHeader,
+                          passingSectionTitle: .taskOverviewInformedContactsHeader)
+        }
+    }
+    
+    private func sortTasks(left: Task, right: Task) -> Bool {
+        guard left.taskType == .contact && right.taskType == .contact else {
+            return true // To be adjusted whenever more taskTypes are added
+        }
         
-        let syncedContacts = tasks.filter { !$0.isSyncedWithPortal }
-        let unsyncedContacts = tasks.filter { $0.isSyncedWithPortal }
+        // category1 before anything else
+        if left.contact.category == .category1 && right.contact.category != .category1 {
+            return true
+        } else if right.contact.category == .category1 && left.contact.category != .category1 {
+            return false
+        }
         
-        let unsyncedSectionHeader = SectionHeaderContent(.taskOverviewUnsyncedContactsHeader, nil)
-        let syncedSectionHeader = SectionHeaderContent(.taskOverviewSyncedContactsHeader, nil)
+        let fallbackDate = "9999-12-31"
+        let leftDate = left.contact.dateOfLastExposure ?? fallbackDate
+        let rightDate = right.contact.dateOfLastExposure ?? fallbackDate
         
-        if !syncedContacts.isEmpty {
-            sections.append((header: sectionHeaderBuilder?(unsyncedSectionHeader),
-                             tasks: syncedContacts,
+        // sort by date
+        switch leftDate.compare(rightDate, options: .numeric) {
+        case .orderedDescending:
+            return true
+        case .orderedAscending:
+            return false
+        case .orderedSame:
+            // sort alphabetically for same date
+            return (left.contactName ?? "") < (right.contactName ?? "")
+        }
+    }
+    
+    private func buildSections(split: KeyPath<Task, Bool>, failingSectionTitle: String, passingSectionTitle: String) {
+        let tasks = Services.caseManager.tasks
+            .filter { !$0.deletedByIndex }
+            .sorted(by: sortTasks)
+        
+        let failingContacts = tasks.filter { !$0[keyPath: split] }
+        let passingContacts = tasks.filter { $0[keyPath: split] }
+        
+        let failingSectionHeader = SectionHeaderContent(failingSectionTitle, nil)
+        let passingSectionHeader = SectionHeaderContent(passingSectionTitle, nil)
+        
+        if !failingContacts.isEmpty {
+            sections.append((header: sectionHeaderBuilder?(failingSectionHeader),
+                             tasks: failingContacts,
                              footer: addContactFooterBuilder?()))
         }
         
-        if !unsyncedContacts.isEmpty {
-            sections.append((header: sectionHeaderBuilder?(syncedSectionHeader),
-                             tasks: unsyncedContacts,
+        if !passingContacts.isEmpty {
+            sections.append((header: sectionHeaderBuilder?(passingSectionHeader),
+                             tasks: passingContacts,
                              footer: nil))
         }
         
@@ -146,8 +188,8 @@ class TaskOverviewViewModel {
         
         let windowExpired = Services.caseManager.isWindowExpired
         
-        isHeaderAddContactButtonHidden = !syncedContacts.isEmpty || windowExpired
-        isAddContactButtonHidden = syncedContacts.isEmpty || windowExpired
+        isHeaderAddContactButtonHidden = !failingContacts.isEmpty || windowExpired
+        isAddContactButtonHidden = failingContacts.isEmpty || windowExpired
     }
 }
 

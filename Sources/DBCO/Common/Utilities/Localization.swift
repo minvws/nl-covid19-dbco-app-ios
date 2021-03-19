@@ -223,6 +223,9 @@ extension String {
     static var taskOverviewUnsyncedContactsHeader: String { return Localization.string(for: "taskOverviewUnsyncedContactsHeader") }
     static var taskOverviewSyncedContactsHeader: String { return Localization.string(for: "taskOverviewSyncedContactsHeader") }
     
+    static var taskOverviewUninformedContactsHeader: String { return Localization.string(for: "taskOverviewUninformedContactsHeader") }
+    static var taskOverviewInformedContactsHeader: String { return Localization.string(for: "taskOverviewInformedContactsHeader") }
+    
     static var taskContactUnknownName: String { return Localization.string(for: "taskContactUnknownName") }
     
     static var taskLoadingErrorTitle: String { return Localization.string(for: "taskLoadingErrorTitle") }
