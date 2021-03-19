@@ -67,7 +67,6 @@ class ContactQuestionnaireViewModel {
     @Bindable private(set) var informContent: String = ""
     @Bindable private(set) var informLink: String = ""
     @Bindable private(set) var informFooter: String = ""
-    @Bindable private(set) var informFooterHidden: Bool = true
     @Bindable private(set) var informButtonTitle: String = ""
     @Bindable private(set) var informButtonHidden: Bool = true
     @Bindable private(set) var copyButtonHidden: Bool = true
@@ -296,8 +295,6 @@ class ContactQuestionnaireViewModel {
         
         setInformButtonTitle(firstName: firstName)
         
-        informFooterHidden = didCreateNewTask
-        
         promptButtonTitle = .save
         
         let reference = Services.caseManager.reference
@@ -511,7 +508,6 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         viewModel.$informContent.binding = { informTextView.html($0, textColor: Theme.colors.captionGray) }
         viewModel.$informLink.binding = { informLinkView.html($0, textColor: Theme.colors.captionGray) }
         viewModel.$informFooter.binding = { informFooterLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
-        viewModel.$informFooterHidden.binding = { informFooterLabel.isHidden = $0 }
         viewModel.$copyButtonHidden.binding = { copyButton.isHidden = $0 }
         viewModel.$informButtonTitle.binding = { informButton.title = $0 }
         viewModel.$informButtonHidden.binding = { informButton.isHidden = $0 }
