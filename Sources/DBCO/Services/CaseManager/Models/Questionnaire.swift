@@ -57,17 +57,6 @@ struct Question {
     ///
     /// - Tag: disabledForSources
     let disabledForSources: [Task.Source]
-    
-    init(uuid: UUID, group: Group, questionType: QuestionType, label: String?, description: String?, relevantForCategories: [Task.Contact.Category], answerOptions: [AnswerOption]?, disabledForSources: [Task.Source]) {
-        self.uuid = uuid
-        self.group = group
-        self.questionType = questionType
-        self.label = label
-        self.description = description
-        self.relevantForCategories = relevantForCategories
-        self.answerOptions = answerOptions
-        self.disabledForSources = disabledForSources
-    }
 }
 
 extension Question: Codable {
