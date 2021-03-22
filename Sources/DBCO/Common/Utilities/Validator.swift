@@ -59,6 +59,12 @@ struct PhoneNumberValidator: Validator {
         return validCharacters
     }()
     
+    static let digitCharacters: CharacterSet = {
+        var digitCharacters = CharacterSet.decimalDigits
+        digitCharacters.insert(charactersIn: "+")
+        return digitCharacters
+    }()
+    
     static func validate(_ value: String?, completionHandler: @escaping (ValidationResult) -> Void) -> ValidationTask {
         let task = SimpleTask(completionHandler)
         
@@ -66,10 +72,30 @@ struct PhoneNumberValidator: Validator {
     
         let strippedValue = value.components(separatedBy: validCharacters.inverted).joined()
         
-        guard strippedValue == value else { return task.applying(.invalid(nil)) }
-        guard strippedValue.count >= 6 else { return task.applying(.invalid(nil)) }
+        guard strippedValue == value else { return task.applying(.invalid(.contactInformationPhoneNumberGeneralError)) }
         
-        return task.applying(.valid)
+        let digits = value
+            .components(separatedBy: digitCharacters.inverted)
+            .joined()
+        
+        switch digits.count {
+        case ...9:
+            return task.applying(.invalid(.contactInformationPhoneNumberTooShortError))
+        case 10:
+            return task.applying(.valid)
+        case 11...13:
+            let countryCodes = ["+31", "031", // Netherlands country code
+                                "+32", "032", // Belgium country code
+                                "+49", "049"] // Germany country code
+            
+            if countryCodes.contains(where: digits.starts) {
+                return task.applying(.valid)
+            } else {
+                return task.applying(.invalid(.contactInformationPhoneNumberGeneralError))
+            }
+        default:
+            return task.applying(.invalid(.contactInformationPhoneNumberTooLongError))
+        }
     }
 }
 
@@ -86,7 +112,7 @@ struct EmailAddressValidator: Validator {
         if emailPredicate.evaluate(with: value) {
             return task.applying(.valid)
         } else {
-            return task.applying(.invalid(nil))
+            return task.applying(.invalid(.contactInformationEmailAddressGeneralError))
         }
     }
 }
