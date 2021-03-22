@@ -44,7 +44,12 @@ class TextField: UITextField {
         font = Theme.fonts.body
         
         addSubview(label)
+        addSubview(warningLabel)
+        addSubview(warningIcon)
         addSubview(backgroundView)
+        
+        warningLabel.adjustsFontSizeToFitWidth = true
+        hideWarning()
     }
 
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
@@ -69,30 +74,58 @@ class TextField: UITextField {
     
     override var intrinsicContentSize: CGSize {
         let labelHeight = label.intrinsicContentSize.height
+        let warningHeight = warningLabel.intrinsicContentSize.height
         let backgroundHeight = baseFieldHeight + Constants.backgroundBaseHeight
         
+        var height = backgroundHeight
+        
         if label.text?.isEmpty == false {
-            return CGSize(width: 100, height: labelHeight + Constants.spacing + backgroundHeight)
-        } else {
-            return CGSize(width: 100, height: backgroundHeight)
+            height += labelHeight + Constants.spacing
         }
+        
+        if warningLabel.text?.isEmpty == false, warningLabel.isHidden == false {
+            height += warningHeight + Constants.warningSpacing
+        }
+        
+        return CGSize(width: 100, height: height)
     }
     
     override func layoutSubviews() {
-        let labelSize = label.intrinsicContentSize
+        let labelHeight = label.intrinsicContentSize.height
+        let warningHeight = warningLabel.intrinsicContentSize.height
         let backgroundHeight = baseFieldHeight + Constants.backgroundBaseHeight
         
-        label.frame = CGRect(x: 0, y: 0, width: bounds.width, height: labelSize.height)
+        label.frame = CGRect(x: 0, y: 0, width: bounds.width, height: labelHeight)
+        warningLabel.frame = CGRect(x: 20, y: labelHeight + Constants.warningSpacing, width: bounds.width - 20, height: warningHeight)
+        warningIcon.frame = CGRect(x: 0, y: labelHeight + Constants.warningSpacing, width: 16, height: warningHeight)
         backgroundView.frame = CGRect(x: 0, y: bounds.height - backgroundHeight, width: bounds.width, height: backgroundHeight)
         
         // Call super last because the _rect(forBounts: ..) calculations depend on backgroundView.frame
         super.layoutSubviews()
     }
     
+    func showWarning(_ warning: String) {
+        warningLabel.text = warning
+        warningLabel.isHidden = false
+        warningIcon.isHidden = false
+        
+        setNeedsLayout()
+        invalidateIntrinsicContentSize()
+    }
+    
+    func hideWarning() {
+        warningLabel.isHidden = true
+        warningIcon.isHidden = true
+        
+        setNeedsLayout()
+        invalidateIntrinsicContentSize()
+    }
+    
     // MARK: - Private
     
     private struct Constants {
         static let spacing: CGFloat = 8
+        static let warningSpacing: CGFloat = 2
         static let backgroundBaseHeight: CGFloat = 26
     }
     
@@ -101,6 +134,8 @@ class TextField: UITextField {
     }
     
     private(set) var label = Label(subhead: nil)
+    private(set) var warningLabel = Label(subhead: nil, textColor: Theme.colors.primary)
+    private(set) var warningIcon = ImageView(imageName: "Validation/Warning").asIcon(color: Theme.colors.primary)
     private(set) var backgroundView = UIView()
     
 }
