@@ -426,6 +426,7 @@ Blijkt uit die test dat je geen corona hebt? Dan mag je weer naar buiten.</li>
 "contactFallbackTitle" = "Contact toevoegen";
 "contactInformationFirstName" = "Voornaam";
 "contactInformationLastName" = "Achternaam";
+"contactInformationNameWarning" = "Klopt deze naam?";
 "contactInformationPhoneNumber" = "Telefoonnummer";
 "contactInformationPhoneNumberPlaceholder" = "Selecteer telefoonnummer";
 "contactInformationEmailAddress" = "E-mailadres";

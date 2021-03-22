@@ -453,6 +453,7 @@ extension String {
     static var contactFallbackTitle: String { return Localization.string(for: "contactFallbackTitle") }
     static var contactInformationFirstName: String { return Localization.string(for: "contactInformationFirstName") }
     static var contactInformationLastName: String { return Localization.string(for: "contactInformationLastName") }
+    static var contactInformationNameWarning: String { return Localization.string(for: "contactInformationNameWarning") }
     static var contactInformationPhoneNumber: String { return Localization.string(for: "contactInformationPhoneNumber") }
     static var contactInformationPhoneNumberPlaceholder: String { return Localization.string(for: "contactInformationPhoneNumberPlaceholder") }
     static var contactInformationEmailAddress: String { return Localization.string(for: "contactInformationEmailAddress") }
