@@ -222,7 +222,9 @@ extension TaskOverviewViewModel: CaseManagerListener {
 
 extension TaskOverviewViewModel: PairingManagerListener {
     
-    func showPairingView() {
+    func showPairingViewIfNeeded() {
+        guard !Services.pairingManager.isPaired else { return }
+        
         pairingTimeoutTimer?.invalidate()
         pairingTimeoutTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [unowned self] _ in
             self.isPairingViewHidden = false
@@ -232,7 +234,7 @@ extension TaskOverviewViewModel: PairingManagerListener {
     }
     
     func pairingManagerDidStartPollingForPairing(_ pairingManager: PairingManaging) {
-        showPairingView()
+        showPairingViewIfNeeded()
     }
     
     func pairingManager(_ pairingManager: PairingManaging, didFailWith error: PairingManagingError) {
@@ -256,7 +258,7 @@ extension TaskOverviewViewModel: PairingManagerListener {
     }
     
     func pairingManager(_ pairingManager: PairingManaging, didReceiveReversePairingCode code: String) {
-        showPairingView()
+        showPairingViewIfNeeded()
     }
     
     func pairingManagerDidFinishPairing(_ pairingManager: PairingManaging) {
@@ -391,7 +393,7 @@ class TaskOverviewViewController: PromptableViewController {
     }
     
     @objc private func upload() {
-        viewModel.showPairingView()
+        viewModel.showPairingViewIfNeeded()
         delegate?.taskOverviewViewControllerDidRequestUpload(self)
     }
     
