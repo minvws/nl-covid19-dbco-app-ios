@@ -9,7 +9,8 @@ import Foundation
 
 enum ValidationResult {
     case valid
-    case invalid
+    case invalid(String?)
+    case warning(String?)
     case unknown
 }
 
@@ -65,8 +66,8 @@ struct PhoneNumberValidator: Validator {
     
         let strippedValue = value.components(separatedBy: validCharacters.inverted).joined()
         
-        guard strippedValue == value else { return task.applying(.invalid) }
-        guard strippedValue.count >= 6 else { return task.applying(.invalid) }
+        guard strippedValue == value else { return task.applying(.invalid(nil)) }
+        guard strippedValue.count >= 6 else { return task.applying(.invalid(nil)) }
         
         return task.applying(.valid)
     }
@@ -85,7 +86,7 @@ struct EmailAddressValidator: Validator {
         if emailPredicate.evaluate(with: value) {
             return task.applying(.valid)
         } else {
-            return task.applying(.invalid)
+            return task.applying(.invalid(nil))
         }
     }
 }
@@ -112,7 +113,7 @@ struct NameValidator: Validator {
             let hasFailingCondition = failingConditions.contains { $0(value) }
             
             if hasFailingCondition {
-                task.apply(.invalid)
+                task.apply(.warning(.contactInformationNameWarning))
             } else {
                 task.apply(.unknown)
             }
