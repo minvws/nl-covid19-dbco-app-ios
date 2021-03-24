@@ -543,7 +543,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         }
         
         switch task.contact.communication {
-        case .index where task.contact.informedByIndexAt != nil,
+        case _ where task.contact.informedByIndexAt != nil,
              .staff where task.isOrCanBeInformed:
             delegate?.contactQuestionnaireViewController(self, didSave: viewModel.updatedTask)
         case .index, .unknown:
