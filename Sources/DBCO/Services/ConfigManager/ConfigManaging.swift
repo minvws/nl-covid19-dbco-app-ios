@@ -13,10 +13,15 @@ protocol AppVersionInformation {
     var appStoreURL: URL? { get }
 }
 
-protocol FeatureFlags {
-    var enableContactCalling: Bool { get }
-    var enablePerspectiveSharing: Bool { get }
-    var enablePerspectiveCopy: Bool { get }
+struct FeatureFlags: Codable {
+    let enableContactCalling: Bool
+    let enablePerspectiveSharing: Bool
+    let enablePerspectiveCopy: Bool
+    let enableSelfBCO: Bool
+    
+    static var empty: FeatureFlags {
+        return FeatureFlags(enableContactCalling: false, enablePerspectiveSharing: false, enablePerspectiveCopy: false, enableSelfBCO: false)
+    }
 }
 
 struct Symptom: Codable, Equatable {
@@ -29,32 +34,6 @@ struct Symptom: Codable, Equatable {
 }
 
 struct AppConfiguration: AppVersionInformation, Decodable {
-    struct Flags: FeatureFlags, Decodable {
-        let enableContactCalling: Bool
-        let enablePerspectiveSharing: Bool
-        let enablePerspectiveCopy: Bool
-        
-        enum CodingKeys: String, CodingKey {
-            case enableContactCalling
-            case enablePerspectiveSharing
-            case enablePerspectiveCopy
-        }
-        
-        init(from decoder: Decoder) throws {
-            let container = try decoder.container(keyedBy: CodingKeys.self)
-            
-            enableContactCalling = (try? container.decode(Bool?.self, forKey: .enableContactCalling)) ?? false
-            enablePerspectiveSharing = (try? container.decode(Bool?.self, forKey: .enablePerspectiveSharing)) ?? false
-            enablePerspectiveCopy = (try? container.decode(Bool?.self, forKey: .enablePerspectiveCopy)) ?? false
-        }
-        
-        init(enableContactCalling: Bool, enablePerspectiveSharing: Bool, enablePerspectiveCopy: Bool) {
-            self.enableContactCalling = enableContactCalling
-            self.enablePerspectiveSharing = enablePerspectiveSharing
-            self.enablePerspectiveCopy = enablePerspectiveCopy
-        }
-    }
-    
     let minimumVersion: String
     let minimumVersionMessage: String?
     let appStoreURL: URL?
@@ -81,7 +60,7 @@ struct AppConfiguration: AppVersionInformation, Decodable {
             appStoreURL = nil
         }
         
-        featureFlags = (try container.decodeIfPresent(Flags.self, forKey: .featureFlags)) ?? Flags(enableContactCalling: false, enablePerspectiveSharing: false, enablePerspectiveCopy: false)
+        featureFlags = (try container.decodeIfPresent(FeatureFlags.self, forKey: .featureFlags)) ?? .empty
         symptoms = try container.decode([Symptom].self, forKey: .symptoms)
     }
 }

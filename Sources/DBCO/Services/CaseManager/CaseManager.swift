@@ -43,6 +43,7 @@ protocol CaseManaging {
     var dateOfSymptomOnset: Date? { get }
     var dateOfTest: Date? { get }
     var startOfContagiousPeriod: Date? { get }
+    var contagiousPeriodKnown: Bool { get }
     
     var reference: String? { get }
     
@@ -60,8 +61,8 @@ protocol CaseManaging {
     
     func loadCaseData(userInitiated: Bool, completion: @escaping (_ success: Bool, _ error: CaseManagingError?) -> Void)
     
-    func startLocalCase(dateOfSymptomOnset: Date) throws
-    func startLocalCase(dateOfTest: Date) throws
+    func startLocalCaseIfNeeded(dateOfSymptomOnset: Date)
+    func startLocalCaseIfNeeded(dateOfTest: Date)
     
     /// Clears all stored data. Using any method or property except for `hasCaseData` on CaseManager before pairing and loading the data again is an invalid operation.
     /// Throws an `notPaired` error when called befored paired.
@@ -164,6 +165,11 @@ final class CaseManager: CaseManaging, Logging {
         }
     }
     
+    private(set) var contagiousPeriodKnown: Bool {
+        get { appData.contagiousPeriodKnown }
+        set { appData.contagiousPeriodKnown = newValue }
+    }
+    
     private(set) var symptoms: [String] {
         get { appData.symptoms }
         set { appData.symptoms = newValue }
@@ -231,6 +237,7 @@ final class CaseManager: CaseManaging, Logging {
                         self.windowExpiresAt = result.windowExpiresAt
                         self.symptoms = result.symptoms
                         self.reference = result.reference
+                        self.contagiousPeriodKnown = result.contagiousPeriodKnown
                         
                         self.fetchDate = Date() // Set the fetchdate here again to the actual date
             
@@ -280,18 +287,22 @@ final class CaseManager: CaseManaging, Logging {
         return date.addingTimeInterval(offset)
     }
     
-    func startLocalCase(dateOfSymptomOnset: Date) throws {
-        guard !hasCaseData else { throw CaseManagingError.alreadyHaseCase }
+    func startLocalCaseIfNeeded(dateOfSymptomOnset: Date) {
+        if !hasCaseData {
+            windowExpiresAt = .distantFuture
+        }
         
         self.dateOfSymptomOnset = reinterpretAsGMT0(dateOfSymptomOnset)
-        windowExpiresAt = .distantFuture
+        appData.contagiousPeriodKnown = true
     }
     
-    func startLocalCase(dateOfTest: Date) throws {
-        guard !hasCaseData else { throw CaseManagingError.alreadyHaseCase }
-            
+    func startLocalCaseIfNeeded(dateOfTest: Date) {
+        if !hasCaseData {
+            windowExpiresAt = .distantFuture
+        }
+        
         self.dateOfTest = reinterpretAsGMT0(dateOfTest)
-        windowExpiresAt = .distantFuture
+        appData.contagiousPeriodKnown = true
     }
     
     func removeCaseData() throws {
@@ -548,6 +559,7 @@ final class CaseManager: CaseManaging, Logging {
         do {
             let value = Case(dateOfTest: dateOfTest,
                              dateOfSymptomOnset: dateOfSymptomOnset,
+                             contagiousPeriodKnown: contagiousPeriodKnown,
                              windowExpiresAt: windowExpiresAt,
                              tasks: tasks,
                              symptoms: symptoms)
