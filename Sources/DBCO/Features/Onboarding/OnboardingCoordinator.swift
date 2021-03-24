@@ -55,7 +55,7 @@ final class OnboardingCoordinator: Coordinator {
     override func start() {
         let needsPairingOption = Services.onboardingManager.needsPairingOption
         if needsPairingOption == false {
-            let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, canCancel: false)
+            let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, skipIntro: false)
             initializeContactsCoordinator.delegate = self
             startChildCoordinator(initializeContactsCoordinator)
         }
@@ -82,7 +82,7 @@ extension OnboardingCoordinator: StepViewControllerDelegate {
     }
     
     func stepViewControllerDidSelectSecondaryButton(_ controller: StepViewController) {
-        let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, canCancel: true)
+        let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, skipIntro: true)
         initializeContactsCoordinator.delegate = self
         startChildCoordinator(initializeContactsCoordinator)
     }
@@ -91,18 +91,12 @@ extension OnboardingCoordinator: StepViewControllerDelegate {
 
 extension OnboardingCoordinator: OnboardingPairingCoordinatorDelegate {
     
-    func onboardingPairingCoordinatorDidFinish(_ coordinator: OnboardingPairingCoordinator, hasTasks: Bool) {
+    func onboardingPairingCoordinatorDidFinish(_ coordinator: OnboardingPairingCoordinator) {
         removeChildCoordinator(coordinator)
         
-        if hasTasks {
-            // go to task overview
-            Services.onboardingManager.finishOnboarding(createTasks: false)
-            delegate?.onboardingCoordinatorDidFinish(self)
-        } else {
-            let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, canCancel: false)
-            initializeContactsCoordinator.delegate = self
-            startChildCoordinator(initializeContactsCoordinator)
-        }
+        let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, skipIntro: false)
+        initializeContactsCoordinator.delegate = self
+        startChildCoordinator(initializeContactsCoordinator)
     }
     
     func onboardingPairingCoordinatorDidCancel(_ coordinator: OnboardingPairingCoordinator) {
@@ -117,7 +111,7 @@ extension OnboardingCoordinator: InitializeContactsCoordinatorDelegate {
         removeChildCoordinator(coordinator)
         
         // go to task overview
-        Services.onboardingManager.finishOnboarding(createTasks: true)
+        Services.onboardingManager.finishOnboarding()
         delegate?.onboardingCoordinatorDidFinish(self)
     }
     
