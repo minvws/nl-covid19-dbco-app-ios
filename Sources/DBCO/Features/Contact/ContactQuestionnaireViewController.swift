@@ -643,7 +643,6 @@ final class ContactQuestionnaireViewController: PromptableViewController {
     }
     
     @objc private func deleteTask() {
-        
         let alert = UIAlertController(title: .informContactDeletePromptTitle, message: nil, preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: .back, style: .default))
