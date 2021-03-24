@@ -429,13 +429,21 @@ Blijkt uit die test dat je geen corona hebt? Dan mag je weer naar buiten.</li>
 "otherCategoryMessage" = "Je hoeft dus niet te laten weten dat je besmet bent.";
 
 "contactFallbackTitle" = "Contact toevoegen";
+
 "contactInformationFirstName" = "Voornaam";
 "contactInformationLastName" = "Achternaam";
 "contactInformationNameWarning" = "Klopt deze naam?";
+
 "contactInformationPhoneNumber" = "Telefoonnummer";
 "contactInformationPhoneNumberPlaceholder" = "Selecteer telefoonnummer";
+"contactInformationPhoneNumberGeneralError" = "Dit telefoonnummer lijkt niet geldig, weet je zeker dat dit klopt?";
+"contactInformationPhoneNumberTooShortError" = "Dit telefoonnummer lijkt te weinig cijfers te bevatten, weet je zeker dat dit klopt?";
+"contactInformationPhoneNumberTooLongError" = "Dit telefoonnummer lijkt te veel cijfers te bevatten, weet je zeker dat dit klopt?";
+
 "contactInformationEmailAddress" = "E-mailadres";
 "contactInformationEmailAddressPlaceholder" = "Selecteer e-mailadres";
+"contactInformationEmailAddressGeneralError" = "Vul een geldig e-mailadres in";
+
 "contactInformationBSN" = "Burgerservice nummer";
 "contactInformationLastExposure" = "Wanneer was de laatste ontmoeting?";
 "contactInformationLastExposure.earlier" = "Eerder";

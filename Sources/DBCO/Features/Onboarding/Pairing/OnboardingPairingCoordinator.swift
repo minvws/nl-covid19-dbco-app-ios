@@ -9,7 +9,7 @@ import UIKit
 import SafariServices
 
 protocol OnboardingPairingCoordinatorDelegate: class {
-    func onboardingPairingCoordinatorDidFinish(_ coordinator: OnboardingPairingCoordinator, hasTasks: Bool)
+    func onboardingPairingCoordinatorDidFinish(_ coordinator: OnboardingPairingCoordinator)
     func onboardingPairingCoordinatorDidCancel(_ coordinator: OnboardingPairingCoordinator)
 }
 
@@ -40,16 +40,8 @@ final class OnboardingPairingCoordinator: Coordinator {
         
         navigationController.pushViewController(stepController, animated: true)
     }
-    
-    private func continueWithTasks() {
-        let viewModel = PrivacyConsentViewModel(buttonTitle: .next)
-        let consentController = PrivacyConsentViewController(viewModel: viewModel)
-        consentController.delegate = self
-        navigationController.setViewControllers([consentController], animated: true)
-    }
-    
-    private func continueWithoutTasks() {
-        delegate?.onboardingPairingCoordinatorDidFinish(self, hasTasks: false)
+    private func finish() {
+        delegate?.onboardingPairingCoordinatorDidFinish(self)
     }
 
 }
@@ -70,20 +62,6 @@ extension OnboardingPairingCoordinator: PairViewControllerDelegate {
     
     func pairViewController(_ controller: PairViewController, wantsToPairWith code: String) {
         pair(code: code, controller: controller)
-    }
-    
-}
-
-extension OnboardingPairingCoordinator: PrivacyConsentViewControllerDelegate {
-    
-    func privacyConsentViewControllerWantsToContinue(_ controller: PrivacyConsentViewController) {
-        delegate?.onboardingPairingCoordinatorDidFinish(self, hasTasks: true)
-    }
-    
-    func privacyConsentViewController(_ controller: PrivacyConsentViewController, wantsToOpen url: URL) {
-        let safariController = SFSafariViewController(url: url)
-        safariController.preferredControlTintColor = Theme.colors.primary
-        navigationController.present(safariController, animated: true)
     }
     
 }
@@ -167,11 +145,7 @@ extension OnboardingPairingCoordinator {
     private func finish(controller: PairViewController) {
         controller.stopLoadingAnimation()
         navigationController.navigationBar.isUserInteractionEnabled = true
-        
-        if Services.caseManager.tasks.isEmpty == false {
-            continueWithTasks()
-        } else {
-            continueWithoutTasks()
-        }
+    
+        finish()
     }
 }

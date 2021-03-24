@@ -113,6 +113,12 @@ class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdju
                                       constant: -(margin.top + margin.bottom)).isActive = true
         
         registerForKeyboardNotifications()
+        
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideSuggestions)))
+    }
+    
+    @objc private func hideSuggestions() {
+        contactListView.hideSuggestions()
     }
     
     override func viewDidDisappear(_ animated: Bool) {

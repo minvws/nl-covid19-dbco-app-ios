@@ -90,27 +90,23 @@ class OnboardingManager: OnboardingManaging, Logging {
         Self.onboardingData.contacts = contacts
     }
     
-    func finishOnboarding(createTasks: Bool) {
-        if !Services.caseManager.hasCaseData {
-            if let dateOfSymptomOnset = Self.onboardingData.dateOfSymptomOnset {
-                try! Services.caseManager.startLocalCase(dateOfSymptomOnset: dateOfSymptomOnset) // swiftlint:disable:this force_try
-                
-                let symptoms = Self.onboardingData.symptoms?.map(\.value) ?? []
-                Services.caseManager.setSymptoms(symptoms: symptoms)
-            } else if let testDate = Self.onboardingData.testDate {
-                try! Services.caseManager.startLocalCase(dateOfTest: testDate) // swiftlint:disable:this force_try
-            }
+    func finishOnboarding() {
+        let symptoms = Self.onboardingData.symptoms?.map(\.value) ?? []
+        
+        if let dateOfSymptomOnset = Self.onboardingData.dateOfSymptomOnset {
+            Services.caseManager.startLocalCaseIfNeeded(dateOfSymptomOnset: dateOfSymptomOnset)
+            Services.caseManager.setSymptoms(symptoms: symptoms)
+        } else if let testDate = Self.onboardingData.testDate {
+            Services.caseManager.startLocalCaseIfNeeded(dateOfTest: testDate)
         }
         
-        if createTasks {
-            mergeContacts(roommates: Self.onboardingData.roommates,
-                          contacts: Self.onboardingData.contacts).forEach {
-                            
-                Services.caseManager.addContactTask(name: $0.name,
-                                                    category: $0.isRoommate ? .category1 : .other,
-                                                    contactIdentifier: $0.contactIdentifier,
-                                                    dateOfLastExposure: $0.date)
-            }
+        mergeContacts(roommates: Self.onboardingData.roommates,
+                      contacts: Self.onboardingData.contacts).forEach {
+                        
+            Services.caseManager.addContactTask(name: $0.name,
+                                                category: $0.isRoommate ? .category1 : .other,
+                                                contactIdentifier: $0.contactIdentifier,
+                                                dateOfLastExposure: $0.date)
         }
         
         Self.$onboardingData.clearData()
