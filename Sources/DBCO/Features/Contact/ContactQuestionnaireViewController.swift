@@ -62,6 +62,10 @@ class ContactQuestionnaireViewModel {
         return updatedTask == task
     }
     
+    var showDeleteButton: Bool {
+        return updatedTask.source == .app && !didCreateNewTask
+    }
+    
     // swiftlint:disable opening_brace
     weak var classificationSectionView: SectionView?    { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
     weak var detailsSectionView: SectionView?           { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
@@ -426,6 +430,10 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
         
+        if viewModel.showDeleteButton {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "DeleteContact"), style: .plain, target: self, action: #selector(deleteTask))
+        }
+        
         if #available(iOS 13.0, *) {
             isModalInPresentation = true
         }
@@ -630,6 +638,22 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         })
         
         alert.addAction(UIAlertAction(title: .no, style: .default, handler: nil))
+        
+        present(alert, animated: true)
+    }
+    
+    @objc private func deleteTask() {
+        
+        let alert = UIAlertController(title: .informContactDeletePromptTitle, message: nil, preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: .back, style: .default))
+        
+        alert.addAction(UIAlertAction(title: .delete, style: .default) { _ in
+            // mark task as deleted
+            var task = self.viewModel.updatedTask
+            task.deletedByIndex = true
+            self.delegate?.contactQuestionnaireViewController(self, didSave: task)
+        })
         
         present(alert, animated: true)
     }

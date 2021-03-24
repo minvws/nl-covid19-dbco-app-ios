@@ -234,6 +234,8 @@
 "selectContactAuthorizationManualButton" = "Nee, zelf invullen";
 
 // MARK: - Editing Contacts
+"informContactDeletePrompt.title" = "Weet je zeker dat je dit contact wilt verwijderen?";
+
 "informContactCancelPrompt.title" = "Weet je zeker dat je terug wilt gaan?";
 "informContactCancelPrompt.message" = "De gegevens die je hebt ingevuld worden niet opgeslagen.";
 

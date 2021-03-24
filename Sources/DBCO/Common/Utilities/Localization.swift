@@ -295,6 +295,8 @@ extension String {
     static var selectContactAuthorizationManualButton: String { return Localization.string(for: "selectContactAuthorizationManualButton") }
     
     // MARK: - Editing Contacts
+    static var informContactDeletePromptTitle: String { return Localization.string(for: "informContactDeletePrompt.title") }
+    
     static var informContactCancelPromptTitle: String { return Localization.string(for: "informContactCancelPrompt.title") }
     static var informContactCancelPromptMessage: String { return Localization.string(for: "informContactCancelPrompt.message") }
     
