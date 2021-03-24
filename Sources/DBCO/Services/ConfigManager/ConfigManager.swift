@@ -16,9 +16,7 @@ class ConfigManager: ConfigManaging, Logging {
     // swiftlint:disable:next force_cast
     let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
     
-    var featureFlags: FeatureFlags = AppConfiguration.Flags(enableContactCalling: false,
-                                                            enablePerspectiveSharing: false,
-                                                            enablePerspectiveCopy: false)
+    var featureFlags: FeatureFlags = .empty
     var symptoms: [Symptom] = fallbackSymptoms
     
     func update(completion: @escaping (UpdateState, FeatureFlags) -> Void) {

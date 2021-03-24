@@ -24,11 +24,22 @@ final class OnboardingCoordinator: Coordinator {
     init(window: UIWindow) {
         self.window = window
         
+        let primaryButtonTitle: String
+        let secondaryButtonTitle: String?
+        
+        if Services.configManager.featureFlags.enableSelfBCO {
+            primaryButtonTitle = .onboardingStartHasCodeButton
+            secondaryButtonTitle = .onboardingStartNoCodeButton
+        } else {
+            primaryButtonTitle = .next
+            secondaryButtonTitle = nil
+        }
+        
         let viewModel = StepViewModel(image: UIImage(named: "Onboarding1")!,
                                                 title: .onboardingStartTitle,
                                                 message: .onboardingStartMessage,
-                                                primaryButtonTitle: .onboardingStartHasCodeButton,
-                                                secondaryButtonTitle: .onboardingStartNoCodeButton)
+                                                primaryButtonTitle: primaryButtonTitle,
+                                                secondaryButtonTitle: secondaryButtonTitle)
         let stepController = StepViewController(viewModel: viewModel)
         navigationController = NavigationController(rootViewController: stepController)
 
