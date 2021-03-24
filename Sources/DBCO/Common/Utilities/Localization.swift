@@ -295,6 +295,9 @@ extension String {
     static var selectContactAuthorizationManualButton: String { return Localization.string(for: "selectContactAuthorizationManualButton") }
     
     // MARK: - Editing Contacts
+    static var informContactCancelPromptTitle: String { return Localization.string(for: "informContactCancelPrompt.title") }
+    static var informContactCancelPromptMessage: String { return Localization.string(for: "informContactCancelPrompt.message") }
+    
     static func contactSectionLabel(index: Int, title: String, caption: String, isCollapsed: Bool, isCompleted: Bool, isEnabled: Bool) -> String {
         let status = !isEnabled ? disabled : isCompleted ? completed : isCollapsed ? collapsed : expanded
         return Localization.string(for: "contactSection.label", [status, index, title, caption])

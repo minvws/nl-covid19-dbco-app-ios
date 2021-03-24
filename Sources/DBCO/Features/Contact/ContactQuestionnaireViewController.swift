@@ -52,9 +52,15 @@ class ContactQuestionnaireViewModel {
     }
     
     private(set) var title: String
-    let showCancelButton: Bool
     
     private(set) var answerManagers: [AnswerManaging]
+    
+    var canSafelyCancel: Bool {
+        if updatedTask.contact.category == .other && updatedTask.contact.dateOfLastExposure == nil {
+            return true
+        }
+        return updatedTask == task
+    }
     
     // swiftlint:disable opening_brace
     weak var classificationSectionView: SectionView?    { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
@@ -74,7 +80,7 @@ class ContactQuestionnaireViewModel {
     @Bindable private(set) var promptButtonType: Button.ButtonType = .primary
     @Bindable private(set) var promptButtonTitle: String = .save
     
-    init(task: Task?, questionnaire: Questionnaire, contact: CNContact? = nil, showCancelButton: Bool = false) {
+    init(task: Task?, questionnaire: Questionnaire, contact: CNContact? = nil) {
         self.didCreateNewTask = task == nil
         
         let initialCategory = task?.contact.category
@@ -82,7 +88,6 @@ class ContactQuestionnaireViewModel {
         self.task = task
         self.updatedContact = task.contact
         self.title = task.contactName ?? .contactFallbackTitle
-        self.showCancelButton = showCancelButton
         
         let questionsAndAnswers: [(question: Question, answer: Answer)] = {
             let currentAnswers = task.questionnaireResult?.answers ?? []
@@ -419,9 +424,12 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         // Do any additional setup after loading the view.
         title = viewModel.title
         
-        if viewModel.showCancelButton {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+        
+        if #available(iOS 13.0, *) {
+            isModalInPresentation = true
         }
+        
         let promptButton = Button(title: .save)
             .touchUpInside(self, action: #selector(save))
         
@@ -605,7 +613,25 @@ final class ContactQuestionnaireViewController: PromptableViewController {
     }
     
     @objc private func cancel() {
-        delegate?.contactQuestionnaireViewControllerDidCancel(self)
+        func cancel() {
+            if navigationController?.viewControllers.count ?? 0 > 1 {
+                navigationController?.popViewController(animated: true)
+            } else {
+                delegate?.contactQuestionnaireViewControllerDidCancel(self)
+            }
+        }
+        
+        guard !viewModel.canSafelyCancel else { return cancel() }
+        
+        let alert = UIAlertController(title: .informContactCancelPromptTitle, message: .informContactCancelPromptMessage, preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: .yes, style: .default) { _ in
+            cancel()
+        })
+        
+        alert.addAction(UIAlertAction(title: .no, style: .default, handler: nil))
+        
+        present(alert, animated: true)
     }
     
     @objc private func informContact() {
