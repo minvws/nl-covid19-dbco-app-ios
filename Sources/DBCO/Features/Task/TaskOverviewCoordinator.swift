@@ -165,6 +165,9 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
     func taskOverviewViewController(_ controller: TaskOverviewViewController, didSelect task: Task) {
         switch task.taskType {
         case .contact:
+            // If the window is expired show the edit flow, to show the disabled questionnaire
+            guard !Services.caseManager.isWindowExpired else { return editContact(for: task) }
+            
             if task.questionnaireResult != nil {
                 // edit flow
                 editContact(for: task)

@@ -14,6 +14,15 @@ class InputTextView<Object: AnyObject, Field: Editable>: UIView {
     
     private let textView = TextView()
     
+    var isEnabled: Bool {
+        get { textView.isEditable }
+        
+        set {
+            textView.isEditable = newValue
+            textView.textColor = newValue ? .black : .init(white: 0, alpha: 0.5)
+        }
+    }
+    
     var isEmphasized: Bool {
         didSet {
             label.font = isEmphasized ? Theme.fonts.bodyBold : Theme.fonts.subhead

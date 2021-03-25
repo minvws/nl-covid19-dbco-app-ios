@@ -34,8 +34,6 @@ class ToggleGroup: UIStackView {
         
         buttons.forEach(addArrangedSubview)
         buttons.forEach { $0.addTarget(self, action: #selector(handleToggle), for: .valueChanged) }
-        
-        addArrangedSubview(disabledIndicatorView)
     }
     
     required init(coder: NSCoder) {
@@ -50,8 +48,6 @@ class ToggleGroup: UIStackView {
                     button.isHidden = button.isSelected ? false : !isEnabled
                 }
             }
-            
-            disabledIndicatorView.isHidden = isEnabled
         }
     }
     
@@ -68,17 +64,6 @@ class ToggleGroup: UIStackView {
     
     // MARK: - Private
     private var selectionHandler: ((Int) -> Void)?
-    
-    private let disabledIndicatorView: UIView = {
-        let stack = HStack(spacing: 6,
-                           ImageView(imageName: "Warning").asIcon(),
-                           Label(subhead: .contactQuestionDisabledMessage,
-                                 textColor: Theme.colors.primary).multiline())
-        
-        stack.isHidden = true
-        
-        return stack
-    }()
     
     @objc private func handleToggle(_ sender: ToggleButton) {
         guard sender.isSelected else {

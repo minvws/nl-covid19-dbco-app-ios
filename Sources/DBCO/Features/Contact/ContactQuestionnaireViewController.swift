@@ -62,9 +62,7 @@ class ContactQuestionnaireViewModel {
         return updatedTask == task
     }
     
-    var showDeleteButton: Bool {
-        return updatedTask.source == .app && !didCreateNewTask
-    }
+    private(set) var showDeleteButton: Bool = false
     
     // swiftlint:disable opening_brace
     weak var classificationSectionView: SectionView?    { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
@@ -128,6 +126,17 @@ class ContactQuestionnaireViewModel {
         self.title = updatedTask.contactName ?? .contactFallbackTitle
         
         updateInformSectionContent()
+        
+        if Services.caseManager.isWindowExpired {
+            promptButtonType = .secondary
+            promptButtonTitle = .close
+            
+            answerManagers.forEach {
+                $0.isEnabled = false
+            }
+        } else {
+            showDeleteButton = updatedTask.source == .app && !didCreateNewTask
+        }
     }
     
     private static func createAnswerManagers(for questionsAndAnswers: [(question: Question, answer: Answer)],
@@ -226,7 +235,7 @@ class ContactQuestionnaireViewModel {
             .map(\.answer)
             .allSatisfy(isCompleted)
         
-        let classificationIsHidden = classificationManagers.allSatisfy { !$0.isEnabled }
+        let classificationIsHidden = classificationManagers.allSatisfy { $0.view.isHidden }
         classificationSectionView?.isCompleted = classificationCompleted
         classificationSectionView?.isHidden = classificationIsHidden
         classificationSectionView?.index = 1
@@ -349,7 +358,8 @@ class ContactQuestionnaireViewModel {
     private func view(manager: AnswerManaging) -> UIView {
         let view = manager.view
         let isRelevant = manager.question.isRelevant(in: task.contact.category)
-        view.isHidden = !isRelevant || !manager.isEnabled
+        let disabledForSource = manager.question.disabledForSources.contains(task.source)
+        view.isHidden = !isRelevant || disabledForSource
         
         return view
     }
@@ -535,6 +545,11 @@ final class ContactQuestionnaireViewController: PromptableViewController {
     private var contactDetailsSection: SectionView!
     
     @objc private func save() {
+        guard !Services.caseManager.isWindowExpired else {
+            delegate?.contactQuestionnaireViewControllerDidCancel(self)
+            return
+        }
+        
         var task = viewModel.updatedTask
         let firstName = task.contactFirstName ?? .contactPromptNameFallback
         
