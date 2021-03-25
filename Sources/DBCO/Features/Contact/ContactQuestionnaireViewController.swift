@@ -36,6 +36,7 @@ class ContactQuestionnaireViewModel {
     private var updatedContact: Task.Contact { didSet { updateProgress() } }
 
     let didCreateNewTask: Bool
+    let isDisabled: Bool
     
     var updatedTask: Task {
         let updatedCategory = updatedClassification.category ?? task.contact.category
@@ -46,7 +47,9 @@ class ContactQuestionnaireViewModel {
                                            informedByIndexAt: updatedContact.informedByIndexAt,
                                            dateOfLastExposure: updatedContact.dateOfLastExposure)
         updatedTask.questionnaireResult = baseResult
-        updatedTask.questionnaireResult?.answers = answerManagers.map(\.answer)
+        updatedTask.questionnaireResult?.answers = answerManagers
+            .filter { $0.question.isRelevant(in: updatedCategory) }
+            .map(\.answer)
         
         return updatedTask
     }
@@ -107,6 +110,7 @@ class ContactQuestionnaireViewModel {
                                                         dateOfLastExposure: updatedContact.dateOfLastExposure,
                                                         source: task.source)
         self.updatedClassification = .success(task.contact.category)
+        self.isDisabled = Services.caseManager.isWindowExpired
         
         answerManagers.forEach {
             $0.updateHandler = { [unowned self] in
@@ -127,10 +131,7 @@ class ContactQuestionnaireViewModel {
         
         updateInformSectionContent()
         
-        if Services.caseManager.isWindowExpired {
-            promptButtonType = .secondary
-            promptButtonTitle = .close
-            
+        if isDisabled {
             answerManagers.forEach {
                 $0.isEnabled = false
             }
@@ -313,7 +314,12 @@ class ContactQuestionnaireViewModel {
         
         setInformButtonTitle(firstName: firstName)
         
-        promptButtonTitle = .save
+        if isDisabled {
+            promptButtonTitle = .close
+            promptButtonType = .secondary
+        } else {
+            promptButtonTitle = .save
+        }
         
         let reference = Services.caseManager.reference
         
@@ -479,6 +485,18 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         registerForKeyboardNotifications()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if viewModel.isDisabled {
+            let alert = UIAlertController(title: .contactReadonlyPromptTitle, message: .contactReadonlyPromptMessage, preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: .contactReadonlyPromptButton, style: .default))
+            
+            present(alert, animated: true)
+        }
+    }
+    
     private func createClassificationSectionView() -> SectionView {
         let sectionView = SectionView(title: .contactTypeSectionTitle, caption: .contactTypeSectionMessage, index: 1)
         sectionView.expand(animated: false)
@@ -545,7 +563,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
     private var contactDetailsSection: SectionView!
     
     @objc private func save() {
-        guard !Services.caseManager.isWindowExpired else {
+        guard !viewModel.isDisabled else {
             delegate?.contactQuestionnaireViewControllerDidCancel(self)
             return
         }

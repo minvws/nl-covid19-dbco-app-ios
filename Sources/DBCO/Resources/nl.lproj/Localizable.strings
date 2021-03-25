@@ -455,7 +455,9 @@ Blijkt uit die test dat je geen corona hebt? Dan mag je weer naar buiten.</li>
 "contactDeletePromptTitle" = "Dit contact heeft geen extra risico op besmetting gelopen";
 "contactDeletePromptMessage" = "Je hoeft deze persoon dus niet te laten weten dat je besmet bent. Ook heeft de GGD geen gegevens van deze persoon nodig.";
 
-"contactQuestionDisabledMessage" = "Ingevuld door een GGD-medewerker";
+"contactReadonlyPromptTitle" = "Je kunt geen gegevens meer in de app aanpassen";
+"contactReadonlyPromptMessage" = "Neem contact op met de GGD om aanpassingen door te geven.";
+"contactReadonlyPromptButton" = "Ik snap het";
 
 /* MARK: - Informing contacts */
 "contactPromptNameFallback" = "deze persoon";

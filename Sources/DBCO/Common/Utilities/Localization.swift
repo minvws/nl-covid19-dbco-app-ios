@@ -482,7 +482,9 @@ extension String {
     static var contactDeletePromptTitle: String { return Localization.string(for: "contactDeletePromptTitle") }
     static var contactDeletePromptMessage: String { return Localization.string(for: "contactDeletePromptMessage") }
     
-    static var contactQuestionDisabledMessage: String { return Localization.string(for: "contactQuestionDisabledMessage") }
+    static var contactReadonlyPromptTitle: String { return Localization.string(for: "contactReadonlyPromptTitle") }
+    static var contactReadonlyPromptMessage: String { return Localization.string(for: "contactReadonlyPromptMessage") }
+    static var contactReadonlyPromptButton: String { return Localization.string(for: "contactReadonlyPromptButton") }
     
     /* MARK: - Informing contacts */
     static var contactPromptNameFallback: String { return Localization.string(for: "contactPromptNameFallback") }
