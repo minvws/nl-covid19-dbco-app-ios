@@ -16,36 +16,37 @@ protocol InitializeContactsCoordinatorDelegate: class {
 
 final class InitializeContactsCoordinator: Coordinator, Logging {
     private let navigationController: UINavigationController
-    private let canCancel: Bool
+    private let skipIntro: Bool
     
     weak var delegate: InitializeContactsCoordinatorDelegate?
     
-    init(navigationController: UINavigationController, canCancel: Bool) {
+    init(navigationController: UINavigationController, skipIntro: Bool) {
         self.navigationController = navigationController
-        self.canCancel = canCancel
+        self.skipIntro = skipIntro
         
         super.init()
     }
     
     override func start() {
-        let viewModel = StepViewModel(image: UIImage(named: "Onboarding2")!,
-                                                title: .onboardingDetermineContactsIntroTitle,
-                                                message: .onboardingDetermineContactsIntroMessage,
-                                                primaryButtonTitle: .next)
-        let stepController = StepViewController(viewModel: viewModel)
-        stepController.delegate = self
-        
-        if canCancel {
-            stepController.onPopped = { [weak self] _ in
-                guard let self = self else { return }
-                
-                self.delegate?.initializeContactsCoordinatorDidCancel(self)
-            }
-            
-            navigationController.pushViewController(stepController, animated: true)
+        if skipIntro {
+            navigationController.setViewControllers([privacyConsentViewController()], animated: true)
         } else {
-            navigationController.setViewControllers([stepController], animated: true)
+            let viewModel = StepViewModel(image: UIImage(named: "Onboarding2")!,
+                                                    title: .onboardingDetermineContactsIntroTitle,
+                                                    message: .onboardingDetermineContactsIntroMessage,
+                                                    primaryButtonTitle: .next)
+            let stepController = StepViewController(viewModel: viewModel)
+            stepController.delegate = self
+            navigationController.pushViewController(stepController, animated: true)
         }
+    }
+    
+    private func privacyConsentViewController() -> PrivacyConsentViewController {
+        let viewModel = PrivacyConsentViewModel(buttonTitle: .next)
+        let consentController = PrivacyConsentViewController(viewModel: viewModel)
+        consentController.delegate = self
+        
+        return consentController
     }
     
     private func continueToContacts() {
@@ -118,10 +119,7 @@ extension InitializeContactsCoordinator: StepViewControllerDelegate {
     func stepViewControllerDidSelectSecondaryButton(_ controller: StepViewController) {}
     
     private func requestPrivacyConsent() {
-        let viewModel = PrivacyConsentViewModel(buttonTitle: .next)
-        let consentController = PrivacyConsentViewController(viewModel: viewModel)
-        consentController.delegate = self
-        navigationController.pushViewController(consentController, animated: true)
+        navigationController.pushViewController(privacyConsentViewController(), animated: true)
     }
     
 }
@@ -129,12 +127,14 @@ extension InitializeContactsCoordinator: StepViewControllerDelegate {
 extension InitializeContactsCoordinator: PrivacyConsentViewControllerDelegate {
     
     func privacyConsentViewControllerWantsToContinue(_ controller: PrivacyConsentViewController) {
-        if Services.caseManager.hasCaseData {
-            continueToContacts()
-        } else {
+        if Services.caseManager.contagiousPeriodKnown == false {
             let contagiousPeriodCoordinator = DetermineContagiousPeriodCoordinator(navigationController: navigationController)
             contagiousPeriodCoordinator.delegate = self
             startChildCoordinator(contagiousPeriodCoordinator)
+        } else if Services.caseManager.tasks.isEmpty {
+            continueToContacts()
+        } else {
+            delegate?.initializeContactsCoordinatorDidFinish(self)
         }
     }
     
@@ -148,18 +148,27 @@ extension InitializeContactsCoordinator: PrivacyConsentViewControllerDelegate {
 
 extension InitializeContactsCoordinator: DetermineContagiousPeriodCoordinatorDelegate {
     
+    private func continueToContactsIfNeeded() {
+        // Not removing the coordinator here, so the user can go back and adjust if needed
+        if Services.caseManager.tasks.isEmpty {
+            continueToContacts()
+        } else {
+            delegate?.initializeContactsCoordinatorDidFinish(self)
+        }
+    }
+    
     func determineContagiousPeriodCoordinator(_ coordinator: DetermineContagiousPeriodCoordinator, didFinishWith testDate: Date) {
         Services.onboardingManager.registerTestDate(testDate)
         
         // Not removing the coordinator here, so the user can go back and adjust if needed
-        continueToContacts()
+        continueToContactsIfNeeded()
     }
     
     func determineContagiousPeriodCoordinator(_ coordinator: DetermineContagiousPeriodCoordinator, didFinishWith symptoms: [Symptom], dateOfSymptomOnset: Date) {
         Services.onboardingManager.registerSymptoms(symptoms, dateOfOnset: dateOfSymptomOnset)
         
         // Not removing the coordinator here, so the user can go back and adjust if needed
-        continueToContacts()
+        continueToContactsIfNeeded()
     }
     
     func determineContagiousPeriodCoordinatorDidCancel(_ coordinator: DetermineContagiousPeriodCoordinator) {

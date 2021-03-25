@@ -459,10 +459,17 @@ extension String {
     static var contactInformationFirstName: String { return Localization.string(for: "contactInformationFirstName") }
     static var contactInformationLastName: String { return Localization.string(for: "contactInformationLastName") }
     static var contactInformationNameWarning: String { return Localization.string(for: "contactInformationNameWarning") }
+    
     static var contactInformationPhoneNumber: String { return Localization.string(for: "contactInformationPhoneNumber") }
     static var contactInformationPhoneNumberPlaceholder: String { return Localization.string(for: "contactInformationPhoneNumberPlaceholder") }
+    static var contactInformationPhoneNumberGeneralError: String { return Localization.string(for: "contactInformationPhoneNumberGeneralError") }
+    static var contactInformationPhoneNumberTooShortError: String { return Localization.string(for: "contactInformationPhoneNumberTooShortError") }
+    static var contactInformationPhoneNumberTooLongError: String { return Localization.string(for: "contactInformationPhoneNumberTooLongError") }
+    
     static var contactInformationEmailAddress: String { return Localization.string(for: "contactInformationEmailAddress") }
     static var contactInformationEmailAddressPlaceholder: String { return Localization.string(for: "contactInformationEmailAddressPlaceholder") }
+    static var contactInformationEmailAddressGeneralError: String { return Localization.string(for: "contactInformationEmailAddressGeneralError") }
+    
     static var contactInformationBirthDate: String { return Localization.string(for: "contactInformationBirthDate") }
     static var contactInformationBSN: String { return Localization.string(for: "contactInformationBSN") }
     static var contactInformationLastExposure: String { return Localization.string(for: "contactInformationLastExposure") }

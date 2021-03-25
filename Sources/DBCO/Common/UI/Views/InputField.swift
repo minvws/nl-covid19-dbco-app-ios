@@ -201,6 +201,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     @objc private func handleEditingDidBegin() {
         iconContainerView.isHidden = true
         hideWarning()
+        hideError()
         currentValidationTask?.cancel()
     }
     
@@ -228,6 +229,9 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             guard let self = self else { return }
             
             switch $0 {
+            case .invalid(let error) where error?.isEmpty == false:
+                self.showError(error!)
+                self.iconContainerView.isHidden = true
             case .invalid:
                 self.iconContainerView.isHidden = false
                 self.validationIconView.isHighlighted = false

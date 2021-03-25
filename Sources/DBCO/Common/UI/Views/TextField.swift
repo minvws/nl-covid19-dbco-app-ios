@@ -47,9 +47,13 @@ class TextField: UITextField {
         addSubview(warningLabel)
         addSubview(warningIcon)
         addSubview(backgroundView)
+        addSubview(errorLabel)
+        addSubview(errorIcon)
         
         warningLabel.adjustsFontSizeToFitWidth = true
+        
         hideWarning()
+        hideError()
     }
 
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
@@ -65,16 +69,18 @@ class TextField: UITextField {
     }
     
     override func textRect(forBounds bounds: CGRect) -> CGRect {
-        if isEditing {
-            return bounds.inset(by: .bottom(self.bounds.height - backgroundView.frame.height))
-        } else {
-            return bounds.inset(by: .leftRight(12) + .top(self.bounds.height - backgroundView.frame.height))
-        }
+        // The supplied bounds might be something completely different from the views bounds.
+        // So, we need to inset the supplied bounds as if the field would be placed within those bounds.
+        // For this, we need to treat the textfield as expanding or collapsing vertically
+        return bounds.inset(by: .top(backgroundView.frame.minY) +
+                                .bottom(self.bounds.height - backgroundView.frame.maxY) +
+                                .leftRight(12))
     }
     
     override var intrinsicContentSize: CGSize {
         let labelHeight = label.intrinsicContentSize.height
         let warningHeight = warningLabel.intrinsicContentSize.height
+        let errorHeight = errorLabel.intrinsicContentSize.height
         let backgroundHeight = baseFieldHeight + Constants.backgroundBaseHeight
         
         var height = backgroundHeight
@@ -87,18 +93,46 @@ class TextField: UITextField {
             height += warningHeight + Constants.warningSpacing
         }
         
+        if errorLabel.text?.isEmpty == false, errorLabel.isHidden == false {
+            height += errorHeight + Constants.errorSpacing
+        }
+        
         return CGSize(width: 100, height: height)
     }
     
     override func layoutSubviews() {
+        let iconWidth: CGFloat = 16
+        let iconSpacing: CGFloat = 4
+        let warningOffset = iconWidth + iconSpacing
+        
+        errorLabel.preferredMaxLayoutWidth = bounds.width - warningOffset
+        
         let labelHeight = label.intrinsicContentSize.height
         let warningHeight = warningLabel.intrinsicContentSize.height
+        let errorHeight = errorLabel.intrinsicContentSize.height
         let backgroundHeight = baseFieldHeight + Constants.backgroundBaseHeight
         
         label.frame = CGRect(x: 0, y: 0, width: bounds.width, height: labelHeight)
-        warningLabel.frame = CGRect(x: 20, y: labelHeight + Constants.warningSpacing, width: bounds.width - 20, height: warningHeight)
-        warningIcon.frame = CGRect(x: 0, y: labelHeight + Constants.warningSpacing, width: 16, height: warningHeight)
-        backgroundView.frame = CGRect(x: 0, y: bounds.height - backgroundHeight, width: bounds.width, height: backgroundHeight)
+        
+        warningLabel.frame = CGRect(x: warningOffset,
+                                    y: labelHeight + Constants.warningSpacing,
+                                    width: bounds.width - warningOffset,
+                                    height: warningHeight)
+        warningIcon.frame = CGRect(x: 0, y: labelHeight + Constants.warningSpacing, width: iconWidth, height: warningHeight)
+        
+        var backgroundOffset = bounds.height - backgroundHeight
+        
+        if errorLabel.text?.isEmpty == false, errorLabel.isHidden == false {
+            backgroundOffset -= errorHeight + Constants.errorSpacing
+        }
+        
+        backgroundView.frame = CGRect(x: 0, y: backgroundOffset, width: bounds.width, height: backgroundHeight)
+        
+        errorLabel.frame = CGRect(x: warningOffset,
+                                    y: bounds.height - errorHeight,
+                                    width: bounds.width - warningOffset,
+                                    height: errorHeight)
+        errorIcon.frame = CGRect(x: 0, y: errorLabel.frame.minY, width: iconWidth, height: errorHeight)
         
         // Call super last because the _rect(forBounts: ..) calculations depend on backgroundView.frame
         super.layoutSubviews()
@@ -121,12 +155,35 @@ class TextField: UITextField {
         invalidateIntrinsicContentSize()
     }
     
+    func showError(_ error: String) {
+        errorLabel.text = error
+        errorLabel.isHidden = false
+        errorIcon.isHidden = false
+        
+        backgroundView.layer.borderWidth = 1
+        backgroundView.layer.borderColor = Theme.colors.warning.cgColor
+        
+        setNeedsLayout()
+        invalidateIntrinsicContentSize()
+    }
+    
+    func hideError() {
+        errorLabel.isHidden = true
+        errorIcon.isHidden = true
+        
+        backgroundView.layer.borderWidth = 0
+        
+        setNeedsLayout()
+        invalidateIntrinsicContentSize()
+    }
+    
     // MARK: - Private
     
     private struct Constants {
         static let spacing: CGFloat = 8
         static let warningSpacing: CGFloat = 2
         static let backgroundBaseHeight: CGFloat = 26
+        static let errorSpacing: CGFloat = 2
     }
     
     private var baseFieldHeight: CGFloat {
@@ -134,8 +191,12 @@ class TextField: UITextField {
     }
     
     private(set) var label = Label(subhead: nil)
+    private(set) var backgroundView = UIView()
+    
     private(set) var warningLabel = Label(subhead: nil, textColor: Theme.colors.primary)
     private(set) var warningIcon = ImageView(imageName: "Validation/Warning").asIcon(color: Theme.colors.primary)
-    private(set) var backgroundView = UIView()
+    
+    private(set) var errorLabel = Label(subhead: nil, textColor: Theme.colors.warning).multiline()
+    private(set) var errorIcon = ImageView(imageName: "Validation/Invalid").asIcon(color: Theme.colors.warning)
     
 }
