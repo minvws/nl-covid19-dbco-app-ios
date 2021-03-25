@@ -13,7 +13,7 @@ jobs:
         env:
           SIGRID_CI_ACCOUNT: "${{ secrets.SIGRID_CI_ACCOUNT }}"
           SIGRID_CI_TOKEN: "${{ secrets.SIGRID_CI_TOKEN }}"
-        run: "./sigridci/sigridci/sigridci.py --customer ggd --system Dbco-app-ios --source ./Sources --targetquality 3.0"
+        run: "./sigridci/sigridci/sigridci.py --customer vws --system Dbco-app-ios --source ./Sources --targetquality 3.0"
       - name: "Save results for Sigrid CI"
         uses: actions/upload-artifact@v2
         with:
