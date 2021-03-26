@@ -68,6 +68,7 @@ class ToggleButton: UIButton {
         tintColor = .white
         backgroundColor = Theme.colors.tertiary
         setTitleColor(.black, for: .normal)
+        setTitleColor(UIColor.black.withAlphaComponent(0.5), for: [.selected, .disabled])
         contentHorizontalAlignment = .left
         
         applyState()
@@ -85,6 +86,7 @@ class ToggleButton: UIButton {
             layer.borderColor = Theme.colors.disabledBorder.cgColor
             icon.tintColor = Theme.colors.disabledIcon
             icon.isHighlighted = true
+            
         default:
             layer.borderWidth = 0
             icon.tintColor = Theme.colors.primary
@@ -112,100 +114,4 @@ class ToggleButton: UIButton {
     }
     
     fileprivate let icon: UIImageView
-}
-
-/// ToggleButton subclass that displays and manages a date value.
-/// When toggled it will show a datepicker to change the date value.
-/// For this it creates an offscreen `UITextField` with a `UIDatePicker` as its `inputView`
-///
-/// # See also:
-/// [ToggleButton](x-source-tag://ToggleButton),
-/// [ToggleGroup](x-source-tag://ToggleGroup)
-///
-/// - Tag: DateToggleButton
-class DateToggleButton: ToggleButton {
-    
-    var date: Date?
-    
-    override var isSelected: Bool {
-        didSet {
-            if !isSelected {
-                offscreenTextField.resignFirstResponder()
-            }
-        }
-    }
-    
-    override fileprivate func setup() {
-        super.setup()
-        
-        let editLabel = UILabel()
-        editLabel.translatesAutoresizingMaskIntoConstraints = false
-        editLabel.font = Theme.fonts.body
-        editLabel.textColor = Theme.colors.primary
-        editLabel.text = .edit
-        
-        addSubview(editLabel)
-        
-        editLabel.trailingAnchor.constraint(equalTo: icon.leadingAnchor, constant: -16).isActive = true
-        editLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        
-        datePicker.datePickerMode = .date
-        datePicker.addTarget(self, action: #selector(updateDateValue), for: .editingDidEnd)
-        datePicker.tintColor = .black
-        datePicker.maximumDate = Date()
-        
-        if let date = date {
-            datePicker.date = date
-        } else {
-            date = datePicker.date
-        }
-        
-        datePicker.addTarget(self, action: #selector(updateDateValue), for: .valueChanged)
-        offscreenTextField.delegate = self
-        offscreenTextField.inputView = datePicker
-        offscreenTextField.inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
-        offscreenTextField.frame = CGRect(x: -2000, y: 0, width: 10, height: 10)
-        
-        setTitle(Self.dateFormatter.string(from: datePicker.date), for: .normal)
-        
-        addSubview(offscreenTextField)
-        
-        addTarget(self, action: #selector(showPicker), for: .touchUpInside)
-    }
-    
-    // MARK: - Private
-    @objc private func showPicker() {
-        offscreenTextField.becomeFirstResponder()
-    }
-    
-    @objc private func done() {
-        offscreenTextField.resignFirstResponder()
-    }
-    
-    @objc private func updateDateValue() {
-        date = datePicker.date
-        isSelected = true
-        sendActions(for: .valueChanged)
-
-        setTitle(Self.dateFormatter.string(from: datePicker.date), for: .normal)
-    }
-    
-    private let datePicker = UIDatePicker()
-    private let offscreenTextField = UITextField()
-    private static let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
-        formatter.calendar = Calendar.current
-        formatter.locale = Locale.current
-        
-        return formatter
-    }()
-}
-
-extension DateToggleButton: UITextFieldDelegate {
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        return false
-    }
 }

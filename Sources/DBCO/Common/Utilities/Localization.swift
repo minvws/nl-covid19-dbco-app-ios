@@ -295,6 +295,11 @@ extension String {
     static var selectContactAuthorizationManualButton: String { return Localization.string(for: "selectContactAuthorizationManualButton") }
     
     // MARK: - Editing Contacts
+    static var informContactDeletePromptTitle: String { return Localization.string(for: "informContactDeletePrompt.title") }
+    
+    static var informContactCancelPromptTitle: String { return Localization.string(for: "informContactCancelPrompt.title") }
+    static var informContactCancelPromptMessage: String { return Localization.string(for: "informContactCancelPrompt.message") }
+    
     static func contactSectionLabel(index: Int, title: String, caption: String, isCollapsed: Bool, isCompleted: Bool, isEnabled: Bool) -> String {
         let status = !isEnabled ? disabled : isCompleted ? completed : isCollapsed ? collapsed : expanded
         return Localization.string(for: "contactSection.label", [status, index, title, caption])
@@ -477,7 +482,9 @@ extension String {
     static var contactDeletePromptTitle: String { return Localization.string(for: "contactDeletePromptTitle") }
     static var contactDeletePromptMessage: String { return Localization.string(for: "contactDeletePromptMessage") }
     
-    static var contactQuestionDisabledMessage: String { return Localization.string(for: "contactQuestionDisabledMessage") }
+    static var contactReadonlyPromptTitle: String { return Localization.string(for: "contactReadonlyPromptTitle") }
+    static var contactReadonlyPromptMessage: String { return Localization.string(for: "contactReadonlyPromptMessage") }
+    static var contactReadonlyPromptButton: String { return Localization.string(for: "contactReadonlyPromptButton") }
     
     /* MARK: - Informing contacts */
     static var contactPromptNameFallback: String { return Localization.string(for: "contactPromptNameFallback") }

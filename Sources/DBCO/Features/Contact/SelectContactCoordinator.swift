@@ -55,8 +55,7 @@ final class SelectContactCoordinator: Coordinator, Logging {
             if let contactIdentifier = task?.contact.contactIdentifier {
                 let editViewModel = ContactQuestionnaireViewModel(task: task,
                                                                   questionnaire: questionnaire,
-                                                                  contact: findContact(with: contactIdentifier),
-                                                                  showCancelButton: true)
+                                                                  contact: findContact(with: contactIdentifier))
                 let editController = ContactQuestionnaireViewController(viewModel: editViewModel)
                 editController.delegate = self
                 
@@ -146,7 +145,7 @@ final class SelectContactCoordinator: Coordinator, Logging {
     }
     
     private func continueManually() {
-        let editViewModel = ContactQuestionnaireViewModel(task: task, questionnaire: questionnaire, showCancelButton: true)
+        let editViewModel = ContactQuestionnaireViewModel(task: task, questionnaire: questionnaire)
         let editController = ContactQuestionnaireViewController(viewModel: editViewModel)
         editController.delegate = self
         
@@ -245,7 +244,7 @@ extension SelectContactCoordinator: CNContactPickerDelegate {
     
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
         picker.dismiss(animated: true) {
-            let viewModel = ContactQuestionnaireViewModel(task: self.task, questionnaire: self.questionnaire, contact: contact, showCancelButton: true)
+            let viewModel = ContactQuestionnaireViewModel(task: self.task, questionnaire: self.questionnaire, contact: contact)
             let editController = ContactQuestionnaireViewController(viewModel: viewModel)
             editController.delegate = self
             

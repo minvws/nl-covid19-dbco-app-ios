@@ -232,13 +232,18 @@ class ContactDetailsAnswerManager: AnswerManaging, InputFieldDelegate {
     
     let question: Question
     
+    private(set) lazy var firstNameField = InputField(for: self, path: \.firstName).delegate(self)
+    private(set) lazy var lastNameField = InputField(for: self, path: \.lastName).delegate(self)
+    private(set) lazy var phoneNumberField = InputField(for: self, path: \.phoneNumber).delegate(self)
+    private(set) lazy var emailField = InputField(for: self, path: \.email).delegate(self)
+    
     private(set) lazy var view: UIView =
         VStack(spacing: 16,
                HStack(spacing: 15,
-                      InputField(for: self, path: \.firstName).delegate(self),
-                      InputField(for: self, path: \.lastName).delegate(self)).distribution(.fillEqually),
-               InputField(for: self, path: \.phoneNumber).delegate(self),
-               InputField(for: self, path: \.email).delegate(self))
+                      firstNameField,
+                      lastNameField).distribution(.fillEqually),
+               phoneNumberField,
+               emailField)
     
     var answer: Answer {
         var answer = baseAnswer
@@ -249,7 +254,14 @@ class ContactDetailsAnswerManager: AnswerManaging, InputFieldDelegate {
         return answer
     }
     
-    var isEnabled: Bool = true
+    var isEnabled: Bool = true {
+        didSet {
+            firstNameField.isEnabled = isEnabled
+            lastNameField.isEnabled = isEnabled
+            phoneNumberField.isEnabled = isEnabled
+            emailField.isEnabled = isEnabled
+        }
+    }
     
     var hasValidAnswer: Bool {
         return answer.progressElements.contains(true)
@@ -285,7 +297,8 @@ class DateAnswerManager: AnswerManaging {
     
     let question: Question
     
-    private(set) lazy var view: UIView = InputField(for: self, path: \.date)
+    private lazy var inputField = InputField(for: self, path: \.date)
+    private(set) lazy var view: UIView = inputField
         .decorateWithDescriptionIfNeeded(description: question.description)
     
     var answer: Answer {
@@ -294,7 +307,9 @@ class DateAnswerManager: AnswerManaging {
         return answer
     }
     
-    var isEnabled: Bool = true
+    var isEnabled: Bool = true {
+        didSet { inputField.isEnabled = isEnabled }
+    }
     
     var hasValidAnswer: Bool {
         return date.value != nil
@@ -362,17 +377,6 @@ class LastExposureDateAnswerManager: AnswerManaging {
     let question: Question
     private let answerOptions: [AnswerOption]
     
-    private let disabledIndicatorView: UIView = {
-        let stack = HStack(spacing: 6,
-                           ImageView(imageName: "Warning").asIcon(),
-                           Label(subhead: .contactQuestionDisabledMessage,
-                                 textColor: Theme.colors.primary).multiline())
-        
-        stack.isHidden = true
-        
-        return stack
-    }()
-    
     private let earlierIndicatorView: UIView = {
         let containerView = UIView()
         containerView.backgroundColor = Theme.colors.tertiary
@@ -394,7 +398,6 @@ class LastExposureDateAnswerManager: AnswerManaging {
                inputField
                 .emphasized()
                 .decorateWithDescriptionIfNeeded(description: question.description),
-               disabledIndicatorView,
                earlierIndicatorView)
     }()
     
@@ -416,7 +419,6 @@ class LastExposureDateAnswerManager: AnswerManaging {
     var isEnabled: Bool = true {
         didSet {
             inputField.isEnabled = isEnabled
-            disabledIndicatorView.isHidden = isEnabled
         }
     }
     
@@ -473,7 +475,8 @@ class OpenAnswerManager: AnswerManaging {
     
     let question: Question
     
-    private(set) lazy var view: UIView = InputTextView(for: self, path: \.text)
+    private lazy var inputTextView = InputTextView(for: self, path: \.text)
+    private(set) lazy var view: UIView = inputTextView
         .decorateWithDescriptionIfNeeded(description: question.description)
     
     var answer: Answer {
@@ -482,7 +485,9 @@ class OpenAnswerManager: AnswerManaging {
         return answer
     }
     
-    var isEnabled: Bool = true
+    var isEnabled: Bool = true {
+        didSet { inputTextView.isEnabled = isEnabled }
+    }
     
     var hasValidAnswer: Bool {
         return text.value != nil
@@ -529,10 +534,10 @@ class MultipleChoiceAnswerManager: AnswerManaging {
     
     let question: Question
     
+    private(set) lazy var inputField = InputField(for: self, path: \.options)
     private(set) lazy var view: UIView = {
         if options != nil {
-            return InputField(for: self, path: \.options)
-                .decorateWithDescriptionIfNeeded(description: question.description)
+            return inputField.decorateWithDescriptionIfNeeded(description: question.description)
         } else {
             return buttons
                 .decorateWithDescriptionIfNeeded(description: question.description)
@@ -559,6 +564,7 @@ class MultipleChoiceAnswerManager: AnswerManaging {
     
     var isEnabled: Bool = true {
         didSet {
+            inputField.isEnabled = isEnabled
             buttons?.isEnabled = isEnabled
         }
     }

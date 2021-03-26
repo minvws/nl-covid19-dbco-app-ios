@@ -72,8 +72,6 @@ class TaskOverviewViewModel {
         self.addContactFooterBuilder = addContactFooterBuilder
         self.tableFooterBuilder = tableFooterBuilder
         
-        tableView.allowsSelection = !Services.caseManager.isWindowExpired
-        
         buildSections()
     }
     
@@ -213,8 +211,6 @@ extension TaskOverviewViewModel: CaseManagerListener {
         isAddContactButtonHidden = true
         isHeaderAddContactButtonHidden = true
         isWindowExpiredMessageHidden = false
-        
-        tableViewManager.tableView?.allowsSelection = false
         
         showPrompt?(true)
     }
@@ -440,7 +436,7 @@ private extension TaskOverviewViewController {
         
         VStack(VStack(spacing: 4,
                       Label(bodyBold: .taskOverviewTipsTitle).multiline(),
-                      Label(viewModel.tipMessageText).multiline()),
+                      Label(attributedString: viewModel.tipMessageText).multiline()),
                tipButton)
             .embed(in: tipContainerView, insets: .right(92) + .left(16) + .top(16) + .bottom(11))
         
