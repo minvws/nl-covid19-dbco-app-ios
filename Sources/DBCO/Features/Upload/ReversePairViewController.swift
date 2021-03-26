@@ -50,22 +50,27 @@ class ReversePairViewModel {
 
     func showPairingSuccessful() {
         pairingStatus = .finished
+        isContinueButtonEnabled = true
     }
     
     func showPairingError() {
         pairingStatus = .error
+        isContinueButtonEnabled = false
     }
     
     func showPairingCodeExpired() {
         pairingCodeStatus = .expired
+        isContinueButtonEnabled = false
     }
     
     func clearPairingCode() {
         pairingCodeStatus = .waiting
+        isContinueButtonEnabled = false
     }
     
     func clearError() {
         pairingStatus = .waiting
+        isContinueButtonEnabled = false
     }
     
 }
