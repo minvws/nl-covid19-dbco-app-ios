@@ -21,16 +21,6 @@ private extension Date {
     }
 }
 
-extension String {
-    func capitalizingFirstLetter() -> String {
-        return prefix(1).capitalized + dropFirst()
-    }
-
-    mutating func capitalizeFirstLetter() {
-        self = self.capitalizingFirstLetter()
-    }
-}
-
 class ContactsTimelineViewModel {
     
     enum Section {
@@ -299,6 +289,14 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
         configureSections()
         
         registerForKeyboardNotifications()
+        
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideSuggestions)))
+    }
+    
+    @objc private func hideSuggestions() {
+        sectionStackView.arrangedSubviews
+            .compactMap { $0 as? DaySectionView }
+            .forEach { $0.contactList.hideSuggestions() }
     }
     
     override func viewDidDisappear(_ animated: Bool) {

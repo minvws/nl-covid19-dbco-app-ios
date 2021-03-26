@@ -223,6 +223,9 @@ extension String {
     static var taskOverviewUnsyncedContactsHeader: String { return Localization.string(for: "taskOverviewUnsyncedContactsHeader") }
     static var taskOverviewSyncedContactsHeader: String { return Localization.string(for: "taskOverviewSyncedContactsHeader") }
     
+    static var taskOverviewUninformedContactsHeader: String { return Localization.string(for: "taskOverviewUninformedContactsHeader") }
+    static var taskOverviewInformedContactsHeader: String { return Localization.string(for: "taskOverviewInformedContactsHeader") }
+    
     static var taskContactUnknownName: String { return Localization.string(for: "taskContactUnknownName") }
     
     static var taskLoadingErrorTitle: String { return Localization.string(for: "taskLoadingErrorTitle") }
@@ -242,6 +245,8 @@ extension String {
     
     static var taskOverviewWaitingForPairing: String { return Localization.string(for: "taskOverviewWaitingForPairing") }
     static var taskOverviewPairingTryAgain: String { return Localization.string(for: "taskOverviewPairingTryAgain") }
+    static var taskOverviewPairingFailed: String { return Localization.string(for: "taskOverviewPairingFailed") }
+    static var taskOverviewPairingExpired: String { return Localization.string(for: "taskOverviewPairingExpired") }
     
     /* MARK: - Overview Tips */
     static var overviewTipsShortTitle: String { return Localization.string(for: "overviewTipsShortTitle") }
@@ -330,18 +335,28 @@ extension String {
     
     static var informContactGuidelinesDateFormat: String { return Localization.string(for: "informContactGuidelines.dateFormat") }
     
-    static func informContactGuidelines(category: Task.Contact.Category, exposureDatePlus5: String, exposureDatePlus10: String, exposureDatePlus11: String, exposureDatePlus14: String, within4Days: Bool) -> String {
+    static func informContactGuidelinesReference(reference: String?) -> String {
+        if let caseNumber = reference {
+            return Localization.string(for: "informContactGuidelines.reference", [caseNumber])
+        } else {
+            return ""
+        }
+    }
+    
+    static func informContactGuidelines(category: Task.Contact.Category, exposureDatePlus5: String, exposureDatePlus10: String, exposureDatePlus11: String, exposureDatePlus14: String, within4Days: Bool, reference: String?) -> String {
+        let referenceText = informContactGuidelinesReference(reference: reference)
+        
         switch category {
         case .category1:
-            return Localization.string(for: "informContactGuidelines.category1", [exposureDatePlus11])
+            return Localization.string(for: "informContactGuidelines.category1", [exposureDatePlus11, referenceText])
         case .category2a, .category2b:
             if within4Days {
-                return Localization.string(for: "informContactGuidelines.category2.within4Days", [exposureDatePlus5, exposureDatePlus5, exposureDatePlus10])
+                return Localization.string(for: "informContactGuidelines.category2.within4Days", [exposureDatePlus5, exposureDatePlus5, exposureDatePlus10, referenceText])
             } else {
-                return Localization.string(for: "informContactGuidelines.category2.after4Days", [exposureDatePlus5, exposureDatePlus10])
+                return Localization.string(for: "informContactGuidelines.category2.after4Days", [exposureDatePlus5, exposureDatePlus10, referenceText])
             }
         case .category3a, .category3b:
-            return Localization.string(for: "informContactGuidelines.category3", [exposureDatePlus5])
+            return Localization.string(for: "informContactGuidelines.category3", [exposureDatePlus5, referenceText])
         default:
             return ""
         }
@@ -360,14 +375,16 @@ extension String {
         }
     }
     
-    static func informContactGuidelinesGeneric(category: Task.Contact.Category) -> String {
+    static func informContactGuidelinesGeneric(category: Task.Contact.Category, reference: String?) -> String {
+        let referenceText = informContactGuidelinesReference(reference: reference)
+        
         switch category {
         case .category1:
-            return Localization.string(for: "informContactGuidelines.generic.category1")
+            return Localization.string(for: "informContactGuidelines.generic.category1", [referenceText])
         case .category2a, .category2b:
-            return Localization.string(for: "informContactGuidelines.generic.category2")
+            return Localization.string(for: "informContactGuidelines.generic.category2", [referenceText])
         case .category3a, .category3b:
-            return Localization.string(for: "informContactGuidelines.generic.category3")
+            return Localization.string(for: "informContactGuidelines.generic.category3", [referenceText])
         default:
             return ""
         }
@@ -436,10 +453,18 @@ extension String {
     static var contactFallbackTitle: String { return Localization.string(for: "contactFallbackTitle") }
     static var contactInformationFirstName: String { return Localization.string(for: "contactInformationFirstName") }
     static var contactInformationLastName: String { return Localization.string(for: "contactInformationLastName") }
+    static var contactInformationNameWarning: String { return Localization.string(for: "contactInformationNameWarning") }
+    
     static var contactInformationPhoneNumber: String { return Localization.string(for: "contactInformationPhoneNumber") }
     static var contactInformationPhoneNumberPlaceholder: String { return Localization.string(for: "contactInformationPhoneNumberPlaceholder") }
+    static var contactInformationPhoneNumberGeneralError: String { return Localization.string(for: "contactInformationPhoneNumberGeneralError") }
+    static var contactInformationPhoneNumberTooShortError: String { return Localization.string(for: "contactInformationPhoneNumberTooShortError") }
+    static var contactInformationPhoneNumberTooLongError: String { return Localization.string(for: "contactInformationPhoneNumberTooLongError") }
+    
     static var contactInformationEmailAddress: String { return Localization.string(for: "contactInformationEmailAddress") }
     static var contactInformationEmailAddressPlaceholder: String { return Localization.string(for: "contactInformationEmailAddressPlaceholder") }
+    static var contactInformationEmailAddressGeneralError: String { return Localization.string(for: "contactInformationEmailAddressGeneralError") }
+    
     static var contactInformationBirthDate: String { return Localization.string(for: "contactInformationBirthDate") }
     static var contactInformationBSN: String { return Localization.string(for: "contactInformationBSN") }
     static var contactInformationLastExposure: String { return Localization.string(for: "contactInformationLastExposure") }
@@ -482,8 +507,10 @@ extension String {
     static var reversePairingStep2Title: String { return Localization.string(for: "reversePairingStep2.title") }
     static var reversePairingStep2Message: String { return Localization.string(for: "reversePairingStep2.message") }
     
-    static var reversePairingErrorTitle: String { return Localization.string(for: "reversePairingError.title") }
-    static var reversePairingErrorMessage: String { return Localization.string(for: "reversePairingError.message") }
+    static var reversePairingExpired: String { return Localization.string(for: "reversePairingExpired") }
+    static var reversePairingError: String { return Localization.string(for: "reversePairingError") }
+    static var reversePairingTryAgain: String { return Localization.string(for: "reversePairingTryAgain") }
+    static var reversePairingNewCode: String { return Localization.string(for: "reversePairingNewCode") }
     
     static var reversePairingCloseAlert: String { return Localization.string(for: "reversePairingCloseAlert") }
     

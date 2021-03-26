@@ -1394,6 +1394,7 @@ Hogeschool
 Huisgenoot
 ICE
 Mama
+Mamma
 Mammie
 Mams
 Manager
@@ -1403,6 +1404,7 @@ Neefje
 Nichtje
 Oma
 Opa
+Papa
 Pappa
 Pappie
 Paps

@@ -14,8 +14,10 @@ struct AppData {
     
     let version: String
     
+    var reference: String?
     var dateOfSymptomOnset: Date?
     var dateOfTest: Date?
+    var contagiousPeriodKnown: Bool
     var windowExpiresAt: Date
     var tasks: [Task]
     var portalTasks: [Task]
@@ -26,8 +28,10 @@ struct AppData {
 extension AppData {
     static var empty: AppData {
         AppData(version: Constants.currentVersion,
+                reference: nil,
                 dateOfSymptomOnset: nil,
                 dateOfTest: nil,
+                contagiousPeriodKnown: false,
                 windowExpiresAt: .distantFuture,
                 tasks: [],
                 portalTasks: [],
@@ -43,8 +47,10 @@ extension AppData: Codable {
         
         version = try container.decode(String.self, forKey: .version)
         
+        reference = try container.decodeIfPresent(String.self, forKey: .reference)
         dateOfSymptomOnset = try container.decodeIfPresent(Date.self, forKey: .dateOfSymptomOnset)
         dateOfTest = try container.decodeIfPresent(Date.self, forKey: .dateOfTest)
+        contagiousPeriodKnown = try container.decode(Bool.self, forKey: .contagiousPeriodKnown)
         windowExpiresAt = try container.decode(Date.self, forKey: .windowExpiresAt)
         tasks = try container.decode([Task].self, forKey: .tasks)
         portalTasks = (try? container.decode([Task].self, forKey: .portalTasks)) ?? []

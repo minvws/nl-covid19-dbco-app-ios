@@ -13,7 +13,7 @@ protocol OnboardingCoordinatorDelegate: class {
 
 // TODO: Update onboarding coordinator documentation
 /// Coordinator managing the onboarding of the user, pairing with the backend and guiding the user through the process of creating a list of at-risk contacts.
-/// Uses [PairViewController](x-source-tag://PairViewController) and [OnboardingStepViewController](x-source-tag://OnboardingStepViewController)
+/// Uses [PairViewController](x-source-tag://PairViewController) and [StepViewController](x-source-tag://StepViewController)
 final class OnboardingCoordinator: Coordinator {
     private let window: UIWindow
     private let navigationController: NavigationController
@@ -24,12 +24,23 @@ final class OnboardingCoordinator: Coordinator {
     init(window: UIWindow) {
         self.window = window
         
-        let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding1")!,
+        let primaryButtonTitle: String
+        let secondaryButtonTitle: String?
+        
+        if Services.configManager.featureFlags.enableSelfBCO {
+            primaryButtonTitle = .onboardingStartHasCodeButton
+            secondaryButtonTitle = .onboardingStartNoCodeButton
+        } else {
+            primaryButtonTitle = .next
+            secondaryButtonTitle = nil
+        }
+        
+        let viewModel = StepViewModel(image: UIImage(named: "Onboarding1")!,
                                                 title: .onboardingStartTitle,
                                                 message: .onboardingStartMessage,
-                                                primaryButtonTitle: .onboardingStartHasCodeButton,
-                                                secondaryButtonTitle: .onboardingStartNoCodeButton)
-        let stepController = OnboardingStepViewController(viewModel: viewModel)
+                                                primaryButtonTitle: primaryButtonTitle,
+                                                secondaryButtonTitle: secondaryButtonTitle)
+        let stepController = StepViewController(viewModel: viewModel)
         navigationController = NavigationController(rootViewController: stepController)
 
         navigationController.navigationBar.shadowImage = UIImage()
@@ -43,7 +54,7 @@ final class OnboardingCoordinator: Coordinator {
     override func start() {
         let needsPairingOption = Services.onboardingManager.needsPairingOption
         if needsPairingOption == false {
-            let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, canCancel: false)
+            let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, skipIntro: false)
             initializeContactsCoordinator.delegate = self
             startChildCoordinator(initializeContactsCoordinator)
         }
@@ -52,16 +63,16 @@ final class OnboardingCoordinator: Coordinator {
     }
 }
 
-extension OnboardingCoordinator: OnboardingStepViewControllerDelegate {
+extension OnboardingCoordinator: StepViewControllerDelegate {
     
-    func onboardingStepViewControllerDidSelectPrimaryButton(_ controller: OnboardingStepViewController) {
+    func stepViewControllerDidSelectPrimaryButton(_ controller: StepViewController) {
         let pairingCoordinator = OnboardingPairingCoordinator(navigationController: navigationController)
         pairingCoordinator.delegate = self
         startChildCoordinator(pairingCoordinator)
     }
     
-    func onboardingStepViewControllerDidSelectSecondaryButton(_ controller: OnboardingStepViewController) {
-        let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, canCancel: true)
+    func stepViewControllerDidSelectSecondaryButton(_ controller: StepViewController) {
+        let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, skipIntro: true)
         initializeContactsCoordinator.delegate = self
         startChildCoordinator(initializeContactsCoordinator)
     }
@@ -70,18 +81,12 @@ extension OnboardingCoordinator: OnboardingStepViewControllerDelegate {
 
 extension OnboardingCoordinator: OnboardingPairingCoordinatorDelegate {
     
-    func onboardingPairingCoordinatorDidFinish(_ coordinator: OnboardingPairingCoordinator, hasTasks: Bool) {
+    func onboardingPairingCoordinatorDidFinish(_ coordinator: OnboardingPairingCoordinator) {
         removeChildCoordinator(coordinator)
         
-        if hasTasks {
-            // go to task overview
-            Services.onboardingManager.finishOnboarding(createTasks: false)
-            delegate?.onboardingCoordinatorDidFinish(self)
-        } else {
-            let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, canCancel: false)
-            initializeContactsCoordinator.delegate = self
-            startChildCoordinator(initializeContactsCoordinator)
-        }
+        let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, skipIntro: false)
+        initializeContactsCoordinator.delegate = self
+        startChildCoordinator(initializeContactsCoordinator)
     }
     
     func onboardingPairingCoordinatorDidCancel(_ coordinator: OnboardingPairingCoordinator) {
@@ -96,7 +101,7 @@ extension OnboardingCoordinator: InitializeContactsCoordinatorDelegate {
         removeChildCoordinator(coordinator)
         
         // go to task overview
-        Services.onboardingManager.finishOnboarding(createTasks: true)
+        Services.onboardingManager.finishOnboarding()
         delegate?.onboardingCoordinatorDidFinish(self)
     }
     

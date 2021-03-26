@@ -41,6 +41,8 @@ class TaskOverviewViewModel {
     @Bindable private(set) var isAddContactButtonHidden: Bool = false
     @Bindable private(set) var isWindowExpiredMessageHidden: Bool = true
     @Bindable private(set) var isPairingViewHidden: Bool = true
+    @Bindable private(set) var isPairingErrorViewHidden: Bool = true
+    @Bindable private(set) var pairingErrorText: String = ""
     
     init() {
         tableViewManager = .init()
@@ -120,23 +122,65 @@ class TaskOverviewViewModel {
         sections = []
         sections.append((tableHeaderBuilder?(), [], nil))
         
-        let tasks = Services.caseManager.tasks.filter { !$0.deletedByIndex }
+        if Services.caseManager.hasSynced {
+            buildSections(split: \.isSyncedWithPortal,
+                          failingSectionTitle: .taskOverviewUnsyncedContactsHeader,
+                          passingSectionTitle: .taskOverviewSyncedContactsHeader)
+        } else {
+            buildSections(split: \.isOrCanBeInformed,
+                          failingSectionTitle: .taskOverviewUninformedContactsHeader,
+                          passingSectionTitle: .taskOverviewInformedContactsHeader)
+        }
+    }
+    
+    private func sortTasks(left: Task, right: Task) -> Bool {
+        guard left.taskType == .contact && right.taskType == .contact else {
+            return true // To be adjusted whenever more taskTypes are added
+        }
         
-        let syncedContacts = tasks.filter { !$0.isSyncedWithPortal }
-        let unsyncedContacts = tasks.filter { $0.isSyncedWithPortal }
+        // category1 before anything else
+        if left.contact.category == .category1 && right.contact.category != .category1 {
+            return true
+        } else if right.contact.category == .category1 && left.contact.category != .category1 {
+            return false
+        }
         
-        let unsyncedSectionHeader = SectionHeaderContent(.taskOverviewUnsyncedContactsHeader, nil)
-        let syncedSectionHeader = SectionHeaderContent(.taskOverviewSyncedContactsHeader, nil)
+        let fallbackDate = "9999-12-31"
+        let leftDate = left.contact.dateOfLastExposure ?? fallbackDate
+        let rightDate = right.contact.dateOfLastExposure ?? fallbackDate
         
-        if !syncedContacts.isEmpty {
-            sections.append((header: sectionHeaderBuilder?(unsyncedSectionHeader),
-                             tasks: syncedContacts,
+        // sort by date
+        switch leftDate.compare(rightDate, options: .numeric) {
+        case .orderedDescending:
+            return true
+        case .orderedAscending:
+            return false
+        case .orderedSame:
+            // sort alphabetically for same date
+            return (left.contactName ?? "") < (right.contactName ?? "")
+        }
+    }
+    
+    private func buildSections(split: KeyPath<Task, Bool>, failingSectionTitle: String, passingSectionTitle: String) {
+        let tasks = Services.caseManager.tasks
+            .filter { !$0.deletedByIndex }
+            .sorted(by: sortTasks)
+        
+        let failingContacts = tasks.filter { !$0[keyPath: split] }
+        let passingContacts = tasks.filter { $0[keyPath: split] }
+        
+        let failingSectionHeader = SectionHeaderContent(failingSectionTitle, nil)
+        let passingSectionHeader = SectionHeaderContent(passingSectionTitle, nil)
+        
+        if !failingContacts.isEmpty {
+            sections.append((header: sectionHeaderBuilder?(failingSectionHeader),
+                             tasks: failingContacts,
                              footer: addContactFooterBuilder?()))
         }
         
-        if !unsyncedContacts.isEmpty {
-            sections.append((header: sectionHeaderBuilder?(syncedSectionHeader),
-                             tasks: unsyncedContacts,
+        if !passingContacts.isEmpty {
+            sections.append((header: sectionHeaderBuilder?(passingSectionHeader),
+                             tasks: passingContacts,
                              footer: nil))
         }
         
@@ -144,8 +188,8 @@ class TaskOverviewViewModel {
         
         let windowExpired = Services.caseManager.isWindowExpired
         
-        isHeaderAddContactButtonHidden = !syncedContacts.isEmpty || windowExpired
-        isAddContactButtonHidden = syncedContacts.isEmpty || windowExpired
+        isHeaderAddContactButtonHidden = !failingContacts.isEmpty || windowExpired
+        isAddContactButtonHidden = failingContacts.isEmpty || windowExpired
     }
 }
 
@@ -178,34 +222,50 @@ extension TaskOverviewViewModel: CaseManagerListener {
 
 extension TaskOverviewViewModel: PairingManagerListener {
     
-    func pairingManagerDidStartPollingForPairing(_ pairingManager: PairingManaging) {
+    func showPairingViewIfNeeded() {
+        guard !Services.pairingManager.isPaired else { return }
+        
         pairingTimeoutTimer?.invalidate()
         pairingTimeoutTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [unowned self] _ in
             self.isPairingViewHidden = false
+            self.isPairingErrorViewHidden = true
             self.isDoneButtonHidden = true
         }
+    }
+    
+    func pairingManagerDidStartPollingForPairing(_ pairingManager: PairingManaging) {
+        showPairingViewIfNeeded()
     }
     
     func pairingManager(_ pairingManager: PairingManaging, didFailWith error: PairingManagingError) {
         pairingTimeoutTimer?.invalidate()
         
+        pairingErrorText = Services.pairingManager.canResumePolling ?
+            .taskOverviewPairingFailed :
+            .taskOverviewPairingExpired
+        
         isPairingViewHidden = true
-        isDoneButtonHidden = false
+        isPairingErrorViewHidden = false
+        isDoneButtonHidden = true
     }
     
     func pairingManagerDidCancelPollingForPairing(_ pairingManager: PairingManaging) {
         pairingTimeoutTimer?.invalidate()
         
         isPairingViewHidden = true
+        isPairingErrorViewHidden = true
         isDoneButtonHidden = false
     }
     
-    func pairingManager(_ pairingManager: PairingManaging, didReceiveReversePairingCode code: String) {}
+    func pairingManager(_ pairingManager: PairingManaging, didReceiveReversePairingCode code: String) {
+        showPairingViewIfNeeded()
+    }
     
     func pairingManagerDidFinishPairing(_ pairingManager: PairingManaging) {
         pairingTimeoutTimer?.invalidate()
         
         isPairingViewHidden = true
+        isPairingErrorViewHidden = true
         isDoneButtonHidden = false
     }
     
@@ -250,17 +310,11 @@ class TaskOverviewViewController: PromptableViewController {
         let resetButton = Button(title: .taskOverviewDeleteDataButtonTitle)
             .touchUpInside(self, action: #selector(reset))
         
-        let pairingActivityView = ActivityIndicatorView(style: .gray)
-        pairingActivityView.startAnimating()
-        pairingActivityView.setContentHuggingPriority(.required, for: .horizontal)
-        let pairingView = VStack(spacing: 16,
-                                 HStack(spacing: 6,
-                                        pairingActivityView,
-                                        Label(subhead: .taskOverviewWaitingForPairing, textColor: Theme.colors.primary).multiline()),
-                                 Button(title: .taskOverviewPairingTryAgain, style: .secondary)
-                                    .touchUpInside(self, action: #selector(upload)))
+        let pairingView = createPairingView()
+        let pairingErrorView = createPairingErrorView()
         
         promptView = VStack(spacing: 16,
+                            pairingErrorView,
                             pairingView,
                             windowExpiredMessage,
                             doneButton,
@@ -271,6 +325,7 @@ class TaskOverviewViewController: PromptableViewController {
         viewModel.$isWindowExpiredMessageHidden.binding = { windowExpiredMessage.isHidden = $0 }
         
         viewModel.$isPairingViewHidden.binding = { pairingView.isHidden = $0 }
+        viewModel.$isPairingErrorViewHidden.binding = { pairingErrorView.isHidden = $0 }
         
         viewModel.setHidePrompt { [unowned self] in self.hidePrompt(animated: $0) }
         viewModel.setShowPrompt { [unowned self] in self.showPrompt(animated: $0) }
@@ -278,88 +333,44 @@ class TaskOverviewViewController: PromptableViewController {
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
     
+    private func createPairingView() -> UIView {
+        let pairingActivityView = ActivityIndicatorView(style: .gray)
+        pairingActivityView.startAnimating()
+        pairingActivityView.setContentHuggingPriority(.required, for: .horizontal)
+        let pairingView = VStack(spacing: 16,
+                                 HStack(spacing: 6,
+                                        pairingActivityView,
+                                        Label(subhead: .taskOverviewWaitingForPairing, textColor: Theme.colors.primary).multiline()),
+                                 Button(title: .taskOverviewPairingTryAgain, style: .secondary)
+                                    .touchUpInside(self, action: #selector(upload)))
+        
+        return pairingView
+    }
+    
+    private func createPairingErrorView() -> UIView {
+        let label = Label(subhead: "", textColor: Theme.colors.warning).multiline()
+        
+        viewModel.$pairingErrorText.binding = { label.text = $0 }
+        
+        let pairingView = VStack(spacing: 16,
+                                 HStack(spacing: 6,
+                                        ImageView(imageName: "Warning").asIcon(color: Theme.colors.warning),
+                                        label)
+                                    .alignment(.top),
+                                 Button(title: .taskOverviewPairingTryAgain, style: .secondary)
+                                    .touchUpInside(self, action: #selector(upload)))
+        
+        return pairingView
+    }
+    
     private func setupTableView() {
         tableView.embed(in: contentView, preservesSuperviewLayoutMargins: false)
         tableView.delaysContentTouches = false
         tableView.refreshControl = refreshControl
         
-        let tableHeaderBuilder = { [unowned self] () -> UIView in
-            let tipContainerView = UIView()
-            tipContainerView.backgroundColor = Theme.colors.graySeparator
-            tipContainerView.layer.cornerRadius = 8
-            
-            let thinkingImage = UIImage(named: "Thinking")!
-            let thinkingImageView = UIImageView(image: thinkingImage)
-            thinkingImageView.snap(to: .bottomRight,
-                                   of: tipContainerView,
-                                   width: thinkingImage.size.width + 8) // add 1 cornerradius worth of margin on the left
-            thinkingImageView.contentMode = .bottomRight
-            thinkingImageView.layer.cornerRadius = 8
-            thinkingImageView.clipsToBounds = true
-            
-            let tipButton = Button(title: .taskOverviewTipsButton, style: .info)
-            tipButton.contentHorizontalAlignment = .left
-            tipButton.contentEdgeInsets = .zero
-            tipButton.titleLabel?.font = Theme.fonts.subheadBold
-            tipButton.touchUpInside(self, action: #selector(requestTips))
-            
-            VStack(VStack(spacing: 4,
-                          Label(bodyBold: .taskOverviewTipsTitle).multiline(),
-                          Label(attributedString: viewModel.tipMessageText).multiline()),
-                   tipButton)
-                .embed(in: tipContainerView, insets: .right(92) + .left(16) + .top(16) + .bottom(11))
-            
-            let addContactButton = Button(title: .taskOverviewAddContactButtonTitle, style: .info)
-                .touchUpInside(self, action: #selector(requestContact))
-            
-            addContactButton.setImage(UIImage(named: "Plus"), for: .normal)
-            addContactButton.titleEdgeInsets = .left(5)
-            addContactButton.imageEdgeInsets = .right(5)
-            
-            self.viewModel.$isHeaderAddContactButtonHidden.binding = { addContactButton.isHidden = $0 }
-            
-            return VStack(spacing: 12,
-                          tipContainerView,
-                          addContactButton)
-                .wrappedInReadableWidth(insets: .top(32))
-        }
-        
-        let sectionHeaderBuilder = { (title: String, subtitle: String?) -> UIView in
-            VStack(spacing: 4,
-                   Label(bodyBold: title).multiline(),
-                   Label(subhead: subtitle, textColor: Theme.colors.captionGray).multiline().hideIfEmpty())
-                .wrappedInReadableWidth(insets: .top(20) + .bottom(0))
-        }
-        
-        let addContactFooterBuilder = { [unowned self] () -> UIView in
-            let addContactButton = Button(title: .taskOverviewAddContactButtonTitle, style: .info)
-                .touchUpInside(self, action: #selector(requestContact))
-            
-            addContactButton.setImage(UIImage(named: "Plus"), for: .normal)
-            addContactButton.titleEdgeInsets = .left(5)
-            addContactButton.imageEdgeInsets = .right(5)
-            
-            self.viewModel.$isAddContactButtonHidden.binding = { addContactButton.isHidden = $0 }
-            
-            return addContactButton
-                .wrappedInReadableWidth(insets: .top(2) + .bottom(16))
-        }
-        
-        let tableFooterBuilder = { [unowned self] () -> UIView in
-            
-            let versionLabel = Label(caption1: .mainAppVersionTitle, textColor: Theme.colors.captionGray)
-            versionLabel.textAlignment = .center
-            versionLabel.sizeToFit()
-            versionLabel.frame = CGRect(x: 0, y: 0, width: versionLabel.frame.width, height: 60.0)
-            versionLabel.isUserInteractionEnabled = true
-            
-            let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openDebugMenu))
-            gestureRecognizer.numberOfTapsRequired = 4
-            
-            versionLabel.addGestureRecognizer(gestureRecognizer)
-            
-            return versionLabel.wrappedInReadableWidth(insets: .top(8) + .bottom(8))
-        }
+        let tableHeaderBuilder = { [unowned self] in self.tableHeaderBuilder() }
+        let addContactFooterBuilder = { [unowned self] in self.addContactFooterBuilder() }
+        let tableFooterBuilder = { [unowned self] in self.tableFooterBuilder() }
         
         viewModel.setupTableView(tableView,
                                  tableHeaderBuilder: tableHeaderBuilder,
@@ -382,6 +393,7 @@ class TaskOverviewViewController: PromptableViewController {
     }
     
     @objc private func upload() {
+        viewModel.showPairingViewIfNeeded()
         delegate?.taskOverviewViewControllerDidRequestUpload(self)
     }
     
@@ -402,4 +414,86 @@ class TaskOverviewViewController: PromptableViewController {
         set { newValue ? refreshControl.beginRefreshing() : refreshControl.endRefreshing() }
     }
 
+}
+
+private extension TaskOverviewViewController {
+    
+    func tableHeaderBuilder() -> UIView {
+        let tipContainerView = UIView()
+        tipContainerView.backgroundColor = Theme.colors.graySeparator
+        tipContainerView.layer.cornerRadius = 8
+        
+        let thinkingImage = UIImage(named: "Thinking")!
+        let thinkingImageView = UIImageView(image: thinkingImage)
+        thinkingImageView.snap(to: .bottomRight,
+                               of: tipContainerView,
+                               width: thinkingImage.size.width + 8) // add 1 cornerradius worth of margin on the left
+        thinkingImageView.contentMode = .bottomRight
+        thinkingImageView.layer.cornerRadius = 8
+        thinkingImageView.clipsToBounds = true
+        
+        let tipButton = Button(title: .taskOverviewTipsButton, style: .info)
+        tipButton.contentHorizontalAlignment = .left
+        tipButton.contentEdgeInsets = .zero
+        tipButton.titleLabel?.font = Theme.fonts.subheadBold
+        tipButton.touchUpInside(self, action: #selector(requestTips))
+        
+        VStack(VStack(spacing: 4,
+                      Label(bodyBold: .taskOverviewTipsTitle).multiline(),
+                      Label(attributedString: viewModel.tipMessageText).multiline()),
+               tipButton)
+            .embed(in: tipContainerView, insets: .right(92) + .left(16) + .top(16) + .bottom(11))
+        
+        let addContactButton = Button(title: .taskOverviewAddContactButtonTitle, style: .info)
+            .touchUpInside(self, action: #selector(requestContact))
+        
+        addContactButton.setImage(UIImage(named: "Plus"), for: .normal)
+        addContactButton.titleEdgeInsets = .left(5)
+        addContactButton.imageEdgeInsets = .right(5)
+        
+        self.viewModel.$isHeaderAddContactButtonHidden.binding = { addContactButton.isHidden = $0 }
+        
+        return VStack(spacing: 12,
+                      tipContainerView,
+                      addContactButton)
+            .wrappedInReadableWidth(insets: .top(32))
+    }
+    
+    func sectionHeaderBuilder(title: String, subtitle: String?) -> UIView {
+        return VStack(spacing: 4,
+                      Label(bodyBold: title).multiline(),
+                      Label(subhead: subtitle, textColor: Theme.colors.captionGray).multiline().hideIfEmpty())
+                   .wrappedInReadableWidth(insets: .top(20) + .bottom(0))
+    }
+    
+    func addContactFooterBuilder() -> UIView {
+        let addContactButton = Button(title: .taskOverviewAddContactButtonTitle, style: .info)
+            .touchUpInside(self, action: #selector(requestContact))
+        
+        addContactButton.setImage(UIImage(named: "Plus"), for: .normal)
+        addContactButton.titleEdgeInsets = .left(5)
+        addContactButton.imageEdgeInsets = .right(5)
+        
+        self.viewModel.$isAddContactButtonHidden.binding = { addContactButton.isHidden = $0 }
+        
+        return addContactButton
+            .wrappedInReadableWidth(insets: .top(2) + .bottom(16))
+    }
+    
+    func tableFooterBuilder() -> UIView {
+        let versionLabel = Label(caption1: .mainAppVersionTitle, textColor: Theme.colors.captionGray)
+        versionLabel.textAlignment = .center
+        versionLabel.sizeToFit()
+        versionLabel.frame = CGRect(x: 0, y: 0, width: versionLabel.frame.width, height: 60.0)
+        versionLabel.isUserInteractionEnabled = true
+        
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openDebugMenu))
+        gestureRecognizer.numberOfTapsRequired = 4
+        
+        versionLabel.addGestureRecognizer(gestureRecognizer)
+        
+        return versionLabel.wrappedInReadableWidth(insets: .top(8) + .bottom(8))
+        
+    }
+    
 }

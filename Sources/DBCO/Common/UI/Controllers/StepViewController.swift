@@ -7,12 +7,12 @@
 
 import UIKit
 
-protocol OnboardingStepViewControllerDelegate: class {
-    func onboardingStepViewControllerDidSelectPrimaryButton(_ controller: OnboardingStepViewController)
-    func onboardingStepViewControllerDidSelectSecondaryButton(_ controller: OnboardingStepViewController)
+protocol StepViewControllerDelegate: class {
+    func stepViewControllerDidSelectPrimaryButton(_ controller: StepViewController)
+    func stepViewControllerDidSelectSecondaryButton(_ controller: StepViewController)
 }
 
-class OnboardingStepViewModel {
+class StepViewModel {
     let image: UIImage
     let title: String
     let message: String
@@ -30,14 +30,14 @@ class OnboardingStepViewModel {
     }
 }
 
-/// - Tag: OnboardingStepViewController
-class OnboardingStepViewController: PromptableViewController {
-    private let viewModel: OnboardingStepViewModel
+/// - Tag: StepViewController
+class StepViewController: PromptableViewController {
+    private let viewModel: StepViewModel
     private var imageView: UIImageView!
     
-    weak var delegate: OnboardingStepViewControllerDelegate?
+    weak var delegate: StepViewControllerDelegate?
     
-    init(viewModel: OnboardingStepViewModel, showSecondaryButtonOnTop: Bool = false) {
+    init(viewModel: StepViewModel, showSecondaryButtonOnTop: Bool = false) {
         self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)
@@ -103,10 +103,10 @@ class OnboardingStepViewController: PromptableViewController {
     }
     
     @objc private func handlePrimary() {
-        delegate?.onboardingStepViewControllerDidSelectPrimaryButton(self)
+        delegate?.stepViewControllerDidSelectPrimaryButton(self)
     }
     
     @objc private func handleSecondary() {
-        delegate?.onboardingStepViewControllerDidSelectSecondaryButton(self)
+        delegate?.stepViewControllerDidSelectSecondaryButton(self)
     }
 }

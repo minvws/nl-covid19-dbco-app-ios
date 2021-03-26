@@ -169,6 +169,10 @@ class ContactListInputView: UIView {
         activeField?.endEditing(false)
     }
     
+    func hideSuggestions() {
+        suggestionContainerView.removeFromSuperview()
+    }
+    
     private class SuggestionButton: UIButton {
         let contact: CNContact
         

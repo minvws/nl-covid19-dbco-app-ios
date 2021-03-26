@@ -62,18 +62,17 @@ class ContactQuestionnaireViewModel {
     weak var informSectionView: SectionView?            { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
     // swiftlint:enable opening_brace
     
-    @Bindable private(set) var informTitle: String
-    @Bindable private(set) var informIntro: String
-    @Bindable private(set) var informContent: String
-    @Bindable private(set) var informLink: String
-    @Bindable private(set) var informFooter: String
-    @Bindable private(set) var informFooterHidden: Bool
-    @Bindable private(set) var informButtonTitle: String
-    @Bindable private(set) var informButtonHidden: Bool
-    @Bindable private(set) var copyButtonHidden: Bool
-    @Bindable private(set) var informButtonType: Button.ButtonType
-    @Bindable private(set) var promptButtonType: Button.ButtonType
-    @Bindable private(set) var promptButtonTitle: String
+    @Bindable private(set) var informTitle: String = ""
+    @Bindable private(set) var informIntro: String = ""
+    @Bindable private(set) var informContent: String = ""
+    @Bindable private(set) var informLink: String = ""
+    @Bindable private(set) var informFooter: String = ""
+    @Bindable private(set) var informButtonTitle: String = ""
+    @Bindable private(set) var informButtonHidden: Bool = true
+    @Bindable private(set) var copyButtonHidden: Bool = true
+    @Bindable private(set) var informButtonType: Button.ButtonType = .secondary
+    @Bindable private(set) var promptButtonType: Button.ButtonType = .primary
+    @Bindable private(set) var promptButtonTitle: String = .save
     
     init(task: Task?, questionnaire: Questionnaire, contact: CNContact? = nil, showCancelButton: Bool = false) {
         self.didCreateNewTask = task == nil
@@ -85,19 +84,6 @@ class ContactQuestionnaireViewModel {
         self.title = task.contactName ?? .contactFallbackTitle
         self.showCancelButton = showCancelButton
         
-        self.informTitle = ""
-        self.informIntro = ""
-        self.informContent = ""
-        self.informLink = ""
-        self.informFooter = ""
-        self.informFooterHidden = true
-        self.copyButtonHidden = true
-        self.informButtonTitle = ""
-        self.informButtonHidden = true
-        self.informButtonType = .secondary
-        self.promptButtonType = .primary
-        self.promptButtonTitle = .save
-        
         let questionsAndAnswers: [(question: Question, answer: Answer)] = {
             let currentAnswers = task.questionnaireResult?.answers ?? []
             
@@ -108,33 +94,12 @@ class ContactQuestionnaireViewModel {
         
         self.baseResult = QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: questionsAndAnswers.map(\.answer))
         
-        self.answerManagers = []
+        self.answerManagers = Self.createAnswerManagers(for: questionsAndAnswers,
+                                                        contact: contact,
+                                                        category: initialCategory,
+                                                        dateOfLastExposure: updatedContact.dateOfLastExposure,
+                                                        source: task.source)
         self.updatedClassification = .success(task.contact.category)
-        
-        self.answerManagers = questionsAndAnswers.compactMap { question, answer in
-            let manager: AnswerManaging
-            
-            switch answer.value {
-            case .classificationDetails:
-                manager = ClassificationDetailsAnswerManager(question: question, answer: answer, contactCategory: initialCategory)
-            case .contactDetails:
-                manager = ContactDetailsAnswerManager(question: question, answer: answer, contact: contact)
-            case .contactDetailsFull:
-                manager = ContactDetailsAnswerManager(question: question, answer: answer, contact: contact)
-            case .date:
-                manager = DateAnswerManager(question: question, answer: answer)
-            case .open:
-                manager = OpenAnswerManager(question: question, answer: answer)
-            case .multipleChoice:
-                manager = MultipleChoiceAnswerManager(question: question, answer: answer, contact: task.contact)
-            case .lastExposureDate:
-                manager = LastExposureDateAnswerManager(question: question, answer: answer, lastExposureDate: updatedContact.dateOfLastExposure)
-            }
-            
-            manager.isEnabled = !question.disabledForSources.contains(task.source)
-            
-            return manager
-        }
         
         answerManagers.forEach {
             $0.updateHandler = { [unowned self] in
@@ -154,6 +119,37 @@ class ContactQuestionnaireViewModel {
         self.title = updatedTask.contactName ?? .contactFallbackTitle
         
         updateInformSectionContent()
+    }
+    
+    private static func createAnswerManagers(for questionsAndAnswers: [(question: Question, answer: Answer)],
+                                             contact: CNContact?,
+                                             category: Task.Contact.Category?,
+                                             dateOfLastExposure: String?,
+                                             source: Task.Source) -> [AnswerManaging] {
+        return questionsAndAnswers.compactMap { question, answer in
+            let manager: AnswerManaging
+            
+            switch answer.value {
+            case .classificationDetails:
+                manager = ClassificationDetailsAnswerManager(question: question, answer: answer, contactCategory: category)
+            case .contactDetails:
+                manager = ContactDetailsAnswerManager(question: question, answer: answer, contact: contact)
+            case .contactDetailsFull:
+                manager = ContactDetailsAnswerManager(question: question, answer: answer, contact: contact)
+            case .date:
+                manager = DateAnswerManager(question: question, answer: answer)
+            case .open:
+                manager = OpenAnswerManager(question: question, answer: answer)
+            case .multipleChoice:
+                manager = MultipleChoiceAnswerManager(question: question, answer: answer)
+            case .lastExposureDate:
+                manager = LastExposureDateAnswerManager(question: question, answer: answer, lastExposureDate: dateOfLastExposure)
+            }
+            
+            manager.isEnabled = !question.disabledForSources.contains(source)
+            
+            return manager
+        }
     }
     
     func registerDidInform() {
@@ -265,17 +261,17 @@ class ContactQuestionnaireViewModel {
         updateInformSectionContent()
     }
     
+    private func setInformButtonTitle(firstName: String?) {
+        if updatedTask.contactPhoneNumber != nil && Services.configManager.featureFlags.enableContactCalling {
+            informButtonTitle = .informContactCall(firstName: firstName)
+            informButtonHidden = false
+        } else {
+            informButtonHidden = true
+        }
+    }
+    
     private func updateInformSectionContent() {
         let firstName = updatedTask.contactFirstName
-        
-        func setInformButtonTitle() {
-            if updatedTask.contactPhoneNumber != nil && Services.configManager.featureFlags.enableContactCalling {
-                informButtonTitle = .informContactCall(firstName: firstName)
-                informButtonHidden = false
-            } else {
-                informButtonHidden = true
-            }
-        }
         
         copyButtonHidden = !Services.configManager.featureFlags.enablePerspectiveCopy
         
@@ -285,24 +281,23 @@ class ContactQuestionnaireViewModel {
             informFooter = .informContactFooterIndex(firstName: firstName)
             informButtonType = .primary
             promptButtonType = .secondary
-            setInformButtonTitle()
         case .staff:
             informTitle = .informContactTitle(firstName: firstName)
             informFooter = .informContactFooterStaff(firstName: firstName)
             informButtonType = .secondary
             promptButtonType = .primary
-            setInformButtonTitle()
         case .unknown:
             informTitle = .informContactTitle(firstName: firstName)
             informFooter = .informContactFooterUnknown(firstName: firstName)
             informButtonType = .secondary
             promptButtonType = .primary
-            setInformButtonTitle()
         }
         
-        informFooterHidden = didCreateNewTask
+        setInformButtonTitle(firstName: firstName)
         
         promptButtonTitle = .save
+        
+        let reference = Services.caseManager.reference
         
         if let dateValue = updatedContact.dateOfLastExposure,
            let exposureDate = LastExposureDateAnswerManager.valueDateFormatter.date(from: dateValue),
@@ -324,11 +319,13 @@ class ContactQuestionnaireViewModel {
                                                      exposureDatePlus10: formatter.string(from: exposureDatePlus10),
                                                      exposureDatePlus11: formatter.string(from: exposureDatePlus11),
                                                      exposureDatePlus14: formatter.string(from: exposureDatePlus14),
-                                                     within4Days: isWithin4Days)
+                                                     within4Days: isWithin4Days,
+                                                     reference: reference)
             informIntro = .informContactGuidelinesIntro(category: updatedContact.category,
                                                         exposureDate: formatter.string(from: exposureDate))
         } else {
-            informContent = .informContactGuidelinesGeneric(category: updatedContact.category)
+            informContent = .informContactGuidelinesGeneric(category: updatedContact.category,
+                                                            reference: reference)
             informIntro = .informContactGuidelinesIntroGeneric(category: updatedContact.category)
         }
         
@@ -432,62 +429,12 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         
         viewModel.setInputFieldDelegate(self)
         
-        // Type
-        let classificationSectionView = SectionView(title: .contactTypeSectionTitle, caption: .contactTypeSectionMessage, index: 1)
-        classificationSectionView.expand(animated: false)
+        let classificationSectionView = createClassificationSectionView()
+        let contactDetailsSection = createDetailsSectionView()
+        let informContactSection = createInformSectionView()
         
-        VStack(spacing: 24, viewModel.classificationViews)
-            .embed(in: classificationSectionView.contentView.readableWidth)
-        
-        // Details
-        let contactDetailsSection = SectionView(title: .contactDetailsSectionTitle, caption: .contactDetailsSectionMessage, index: 2)
-        contactDetailsSection.collapse(animated: false)
-        
-        VStack(spacing: 16, viewModel.contactDetailViews)
-            .embed(in: contactDetailsSection.contentView.readableWidth)
-        
-        // Inform
-        let informContactSection = SectionView(title: .informContactSectionTitle, caption: .informContactSectionMessage, index: 3)
-        informContactSection.showBottomSeparator = false
-        informContactSection.collapse(animated: false)
-        
-        let informTitleLabel = Label(bodyBold: "").multiline()
-        let informTextView = TextView().linkTouched { [unowned self] in
-            delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0)
-        }
-        let informLinkView = TextView().linkTouched { [unowned self] in
-            delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0)
-        }
-        let informFooterLabel = Label(bodyBold: "").multiline()
-        
-        let informButton = Button(title: "", style: .primary)
-            .touchUpInside(self, action: #selector(informContact))
-        
-        let copyButton = Button(title: .informContactCopyGuidelines, style: .secondary)
-            .touchUpInside(self, action: #selector(copyGuidelines))
-        
-        viewModel.$informTitle.binding = { informTitleLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
-        viewModel.$informContent.binding = { informTextView.html($0, textColor: Theme.colors.captionGray) }
-        viewModel.$informLink.binding = { informLinkView.html($0, textColor: Theme.colors.captionGray) }
-        viewModel.$informFooter.binding = { informFooterLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
-        viewModel.$informFooterHidden.binding = { informFooterLabel.isHidden = $0 }
-        viewModel.$copyButtonHidden.binding = { copyButton.isHidden = $0 }
-        viewModel.$informButtonTitle.binding = { informButton.title = $0 }
-        viewModel.$informButtonHidden.binding = { informButton.isHidden = $0 }
-        viewModel.$informButtonType.binding = { informButton.style = $0 }
         viewModel.$promptButtonType.binding = { promptButton.style = $0 }
         viewModel.$promptButtonTitle.binding = { promptButton.title = $0 }
-
-        VStack(spacing: 24,
-               VStack(spacing: 16,
-                      informTitleLabel,
-                      informTextView,
-                      informLinkView,
-                      informFooterLabel),
-               VStack(spacing: 16,
-                      copyButton,
-                      informButton))
-            .embed(in: informContactSection.contentView.readableWidth)
         
         viewModel.classificationSectionView = classificationSectionView
         viewModel.detailsSectionView = contactDetailsSection
@@ -504,6 +451,69 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         
         registerForKeyboardNotifications()
+    }
+    
+    private func createClassificationSectionView() -> SectionView {
+        let sectionView = SectionView(title: .contactTypeSectionTitle, caption: .contactTypeSectionMessage, index: 1)
+        sectionView.expand(animated: false)
+        
+        VStack(spacing: 24, viewModel.classificationViews)
+            .embed(in: sectionView.contentView.readableWidth)
+        
+        return sectionView
+    }
+    
+    private func createDetailsSectionView() -> SectionView {
+        let sectionView = SectionView(title: .contactDetailsSectionTitle, caption: .contactDetailsSectionMessage, index: 2)
+        sectionView.collapse(animated: false)
+        
+        VStack(spacing: 16, viewModel.contactDetailViews)
+            .embed(in: sectionView.contentView.readableWidth)
+        
+        return sectionView
+    }
+    
+    private func createInformSectionView() -> SectionView {
+        let sectionView = SectionView(title: .informContactSectionTitle, caption: .informContactSectionMessage, index: 3)
+        sectionView.showBottomSeparator = false
+        sectionView.collapse(animated: false)
+        
+        let informTitleLabel = Label(bodyBold: "").multiline()
+        let informTextView = TextView().linkTouched { [unowned self] in
+            delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0)
+        }
+        let informLinkView = TextView().linkTouched { [unowned self] in
+            delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0)
+        }
+        let informFooterLabel = Label(bodyBold: "").multiline()
+        
+        let informButton = Button(title: "", style: .primary)
+            .touchUpInside(self, action: #selector(informContact))
+        
+        let copyButton = Button(title: .informContactCopyGuidelines, style: .secondary)
+            .touchUpInside(self, action: #selector(copyGuidelines))
+        
+        VStack(spacing: 24,
+               VStack(spacing: 16,
+                      informTitleLabel,
+                      informTextView,
+                      informLinkView,
+                      informFooterLabel),
+               VStack(spacing: 16,
+                      copyButton,
+                      informButton))
+            .embed(in: sectionView.contentView.readableWidth)
+        
+        viewModel.$informTitle.binding = { informTitleLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
+        viewModel.$informContent.binding = { informTextView.html($0, textColor: Theme.colors.captionGray) }
+        viewModel.$informLink.binding = { informLinkView.html($0, textColor: Theme.colors.captionGray) }
+        viewModel.$informFooter.binding = { informFooterLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
+        viewModel.$copyButtonHidden.binding = { copyButton.isHidden = $0 }
+        viewModel.$informButtonTitle.binding = { informButton.title = $0 }
+        viewModel.$informButtonHidden.binding = { informButton.isHidden = $0 }
+        viewModel.$informButtonType.binding = { informButton.style = $0 }
+        
+        return sectionView
     }
     
     private var contactDetailsSection: SectionView!

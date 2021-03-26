@@ -57,17 +57,6 @@ struct Question {
     ///
     /// - Tag: disabledForSources
     let disabledForSources: [Task.Source]
-    
-    init(uuid: UUID, group: Group, questionType: QuestionType, label: String?, description: String?, relevantForCategories: [Task.Contact.Category], answerOptions: [AnswerOption]?, disabledForSources: [Task.Source]) {
-        self.uuid = uuid
-        self.group = group
-        self.questionType = questionType
-        self.label = label
-        self.description = description
-        self.relevantForCategories = relevantForCategories
-        self.answerOptions = answerOptions
-        self.disabledForSources = disabledForSources
-    }
 }
 
 extension Question: Codable {
@@ -96,8 +85,7 @@ extension Question: Codable {
             let category: Task.Contact.Category
         }
         
-        // TODO: Once the API supports categories 3a and 3b, the fallback here should be removed
-        let categories = (try? container.decode([CategoryWrapper].self, forKey: .relevantForCategories)) ?? Task.Contact.Category.allCases.map(CategoryWrapper.init)
+        let categories = try container.decode([CategoryWrapper].self, forKey: .relevantForCategories)
         relevantForCategories = categories.map { $0.category }
         
         answerOptions = try? container.decode([AnswerOption]?.self, forKey: .answerOptions)

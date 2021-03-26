@@ -391,7 +391,9 @@ class LastExposureDateAnswerManager: AnswerManaging {
     
     private(set) lazy var view: UIView = {
         VStack(spacing: 8,
-               inputField.decorateWithDescriptionIfNeeded(description: question.description),
+               inputField
+                .emphasized()
+                .decorateWithDescriptionIfNeeded(description: question.description),
                disabledIndicatorView,
                earlierIndicatorView)
     }()
@@ -500,7 +502,7 @@ class MultipleChoiceAnswerManager: AnswerManaging {
     private var buttons: ToggleGroup!
     private var selectedButtonIndex: Int?
  
-    init(question: Question, answer: Answer, contact: Task.Contact) {
+    init(question: Question, answer: Answer) {
         self.baseAnswer = answer
         self.question = question
         

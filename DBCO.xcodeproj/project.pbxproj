@@ -45,6 +45,8 @@
 		CD2F7CAB255943E400F2F73A /* ISO8601DateFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2F7CAA255943E400F2F73A /* ISO8601DateFormat.swift */; };
 		CD2F7CB1255949F300F2F73A /* ContactSuggestionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2F7CB0255949F300F2F73A /* ContactSuggestionHelper.swift */; };
 		CD2F7CB525594BDA00F2F73A /* ContactSuggestionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2F7CB425594BDA00F2F73A /* ContactSuggestionTests.swift */; };
+		CD35F65826020EB800D29DDF /* UIView+Assign.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD35F65726020EB800D29DDF /* UIView+Assign.swift */; };
+		CD35F662260389E200D29DDF /* String+Capitalize.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD35F661260389E200D29DDF /* String+Capitalize.swift */; };
 		CD3DA9432555565800F738EE /* PairResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3DA93A255554A700F738EE /* PairResponse.swift */; };
 		CD3DA94925556ACF00F738EE /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3DA94825556ACF00F738EE /* AppData.swift */; };
 		CD3EFC5325C2F56800EB2087 /* OverviewTipsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3EFC5225C2F56800EB2087 /* OverviewTipsViewController.swift */; };
@@ -68,7 +70,7 @@
 		CD7282C3250F9AFE00D68911 /* TaskOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C2250F9AFE00D68911 /* TaskOverviewViewController.swift */; };
 		CD7282C6250F9D2400D68911 /* TaskOverviewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C5250F9D2400D68911 /* TaskOverviewCoordinator.swift */; };
 		CD756C4A252C6A30005FEDA0 /* OnboardingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C49252C6A30005FEDA0 /* OnboardingCoordinator.swift */; };
-		CD756C50252C6AC9005FEDA0 /* OnboardingStepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C4F252C6AC9005FEDA0 /* OnboardingStepViewController.swift */; };
+		CD756C50252C6AC9005FEDA0 /* StepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C4F252C6AC9005FEDA0 /* StepViewController.swift */; };
 		CD756C5E252C9A7F005FEDA0 /* PairViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C5D252C9A7E005FEDA0 /* PairViewController.swift */; };
 		CD756C64252CA787005FEDA0 /* PairingCodeField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C63252CA787005FEDA0 /* PairingCodeField.swift */; };
 		CD756C70252DC629005FEDA0 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD756C6F252DC629005FEDA0 /* SeparatorView.swift */; };
@@ -202,6 +204,8 @@
 		CD2F7CAA255943E400F2F73A /* ISO8601DateFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISO8601DateFormat.swift; sourceTree = "<group>"; };
 		CD2F7CB0255949F300F2F73A /* ContactSuggestionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactSuggestionHelper.swift; sourceTree = "<group>"; };
 		CD2F7CB425594BDA00F2F73A /* ContactSuggestionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactSuggestionTests.swift; sourceTree = "<group>"; };
+		CD35F65726020EB800D29DDF /* UIView+Assign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Assign.swift"; sourceTree = "<group>"; };
+		CD35F661260389E200D29DDF /* String+Capitalize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Capitalize.swift"; sourceTree = "<group>"; };
 		CD3DA93A255554A700F738EE /* PairResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairResponse.swift; sourceTree = "<group>"; };
 		CD3DA94825556ACF00F738EE /* AppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		CD3EFC5225C2F56800EB2087 /* OverviewTipsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewTipsViewController.swift; sourceTree = "<group>"; };
@@ -227,7 +231,7 @@
 		CD756C32252B3D36005FEDA0 /* DBCOTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DBCOTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD756C36252B3D37005FEDA0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CD756C49252C6A30005FEDA0 /* OnboardingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinator.swift; sourceTree = "<group>"; };
-		CD756C4F252C6AC9005FEDA0 /* OnboardingStepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStepViewController.swift; sourceTree = "<group>"; };
+		CD756C4F252C6AC9005FEDA0 /* StepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepViewController.swift; sourceTree = "<group>"; };
 		CD756C5D252C9A7E005FEDA0 /* PairViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairViewController.swift; sourceTree = "<group>"; };
 		CD756C63252CA787005FEDA0 /* PairingCodeField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingCodeField.swift; sourceTree = "<group>"; };
 		CD756C6F252DC629005FEDA0 /* SeparatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
@@ -459,6 +463,7 @@
 			children = (
 				2859E74F25DE95AE00359BA1 /* ActivityIndicator.swift */,
 				CD29635725191941008443AF /* Button.swift */,
+				CDA0F6952539F1A3009FD2A9 /* LabeledInputView.swift */,
 				CD1824ED2524B3E4006EB272 /* InputField.swift */,
 				CD2AC0752530601900E8AF78 /* InputTextView.swift */,
 				CD756C63252CA787005FEDA0 /* PairingCodeField.swift */,
@@ -487,6 +492,8 @@
 				CD0E968625E58709006E70BD /* RequestContactsAuthorizationViewController.swift */,
 				CD24CBF725C0305100A2F634 /* ScrollViewNavivationbarAdjusting.swift */,
 				CDFCF906250FA6E80062269A /* ViewController.swift */,
+				CD995B5F256FDA63007A8B2C /* PrivacyConsentViewController.swift */,
+				CD756C4F252C6AC9005FEDA0 /* StepViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -560,9 +567,7 @@
 				CD10F07F25AF07B8000295B9 /* InitializeContacts */,
 				CD10F07625AEFD21000295B9 /* Pairing */,
 				CD756C49252C6A30005FEDA0 /* OnboardingCoordinator.swift */,
-				CD756C4F252C6AC9005FEDA0 /* OnboardingStepViewController.swift */,
 				CD756C5D252C9A7E005FEDA0 /* PairViewController.swift */,
-				CD995B5F256FDA63007A8B2C /* PrivacyConsentViewController.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -600,7 +605,6 @@
 				CDA5C11725135A46009440D1 /* SelectContactCoordinator.swift */,
 				CD2963432514BF4E008443AF /* SelectContactViewController.swift */,
 				CDA0F6902539F0D9009FD2A9 /* AnswerManaging.swift */,
-				CDA0F6952539F1A3009FD2A9 /* LabeledInputView.swift */,
 			);
 			path = Contact;
 			sourceTree = "<group>";
@@ -744,6 +748,8 @@
 				CDADF7DD2534773800424492 /* UIToolbar+Done.swift */,
 				CDE25F8E254C21B900E9AE49 /* String+SHA256.swift */,
 				CD0E968025E3B8D9006E70BD /* UIWindow+Transition.swift */,
+				CD35F65726020EB800D29DDF /* UIView+Assign.swift */,
+				CD35F661260389E200D29DDF /* String+Capitalize.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1002,12 +1008,14 @@
 				CD2F7CB1255949F300F2F73A /* ContactSuggestionHelper.swift in Sources */,
 				CDE30E72251E278200862A40 /* EditContactCoordinator.swift in Sources */,
 				CDA0F6912539F0D9009FD2A9 /* AnswerManaging.swift in Sources */,
-				CD756C50252C6AC9005FEDA0 /* OnboardingStepViewController.swift in Sources */,
+				CD756C50252C6AC9005FEDA0 /* StepViewController.swift in Sources */,
 				CD2963442514BF4E008443AF /* SelectContactViewController.swift in Sources */,
 				CD10F08625AF2E52000295B9 /* DetermineContagiousPeriodCoordinator.swift in Sources */,
+				CD35F65826020EB800D29DDF /* UIView+Assign.swift in Sources */,
 				CDDC05642543120D0079C2F4 /* Coordinator.swift in Sources */,
 				CD29634C2518CE8E008443AF /* TableViewManager.swift in Sources */,
 				CDC7C87E2538487B00FE7E05 /* HTTPMethod.swift in Sources */,
+				CD35F662260389E200D29DDF /* String+Capitalize.swift in Sources */,
 				CDF817272552BEF100C60771 /* Bindable.swift in Sources */,
 				CDE30E69251C89FF00862A40 /* NavigationController.swift in Sources */,
 				CD5DA76425516301003660CC /* ConfigManager.swift in Sources */,

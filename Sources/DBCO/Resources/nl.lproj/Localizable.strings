@@ -166,6 +166,9 @@
 "taskOverviewUnsyncedContactsHeader" = "Nog niet gedeeld met de GGD";
 "taskOverviewSyncedContactsHeader" = "Gedeeld met de GGD";
 
+"taskOverviewUninformedContactsHeader" = "Ga hiermee aan de slag";
+"taskOverviewInformedContactsHeader" = "Dit is al gedaan";
+
 "taskContactUnknownName" = "Geen naam bekend";
 
 "taskLoadingErrorTitle" = "Kon de gegevens niet ophalen";
@@ -185,6 +188,8 @@
 
 "taskOverviewWaitingForPairing" = "Wachten op koppeling met de GGD";
 "taskOverviewPairingTryAgain" = "Probeer opnieuw";
+"taskOverviewPairingExpired" = "Koppelen mislukt. De code is verlopen. Geef een nieuwe code door aan de GGD.";
+"taskOverviewPairingFailed" = "Koppelen mislukt. Controleer of de GGD de juiste code heeft en of je internetverbinding werkt.";
 
 /* MARK: - Overview Tips */
 "overviewTipsShortTitle" = "Tips";
@@ -247,9 +252,10 @@
 "informContactFooter.unknown" = "De GGD raadt aan om %@ alvast te informeren en deze leefregels te delen.";
 
 "informContactGuidelines.dateFormat" = "EEEE d MMMM";
+"informContactGuidelines.reference" = "<li>Blijkt uit de test dat je corona hebt? Geef dan dit casenummer door aan de GGD: <b>%@</b></li>";
 "informContactGuidelines.category1" = "<ul>
 
-<li>Blijf thuis, vermijd contact met je besmette huisgenoot en ontvang geen bezoek</li>
+<li>Blijf thuis, vermijd contact met je besmette huisgenoot en ontvang geen bezoek.</li>
 
 <li>Doe zo snel mogelijk een coronatest. Als je besmet blijkt, kun je samen met de GGD meteen maatregelen nemen.</li>
 
@@ -263,13 +269,15 @@
 
 <li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog.</li>
 
+%@
+
 </ul>";
 
 "informContactGuidelines.category1.intro" = "Je bent een huisgenoot van iemand die corona heeft. Je bent hierdoor misschien besmet geraakt of kan dat nog worden.<br/><br/>Als je inderdaad besmet bent, kun je het virus aan anderen doorgeven. Ook als je je nu niet ziek voelt. Daarom vraagt de GGD je om je aan deze leefregels te houden:";
 
 "informContactGuidelines.category2.within4Days" = "<ul>
 
-<li>Blijf thuis en ontvang geen bezoek</li>
+<li>Blijf thuis en ontvang geen bezoek.</li>
 
 <li>Doe zo snel mogelijk een coronatest. Als je besmet blijkt, kun je samen met de GGD meteen maatregelen nemen.</li>
 
@@ -285,11 +293,13 @@
 
 <li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li>
 
+%@
+
 </ul>";
 
 "informContactGuidelines.category2.after4Days" = "<ul>
 
-<li>Blijf thuis en ontvang geen bezoek</li>
+<li>Blijf thuis en ontvang geen bezoek.</li>
 
 <li>Maak een afspraak voor een coronatest  op of na <b>%@</b>. Blijkt uit de test dat je geen corona hebt? Dan mag je weer naar buiten.</li>
 
@@ -300,6 +310,8 @@
 <li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt.</li>
 
 <li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li>
+
+%@
 
 </ul>";
 
@@ -314,6 +326,8 @@
 <li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt.</li>
 
 <li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li>
+
+%@
 
 </ul>";
 
@@ -336,13 +350,15 @@ Blijkt uit die test dat je geen corona hebt? Dan mag je weer naar buiten.</li>
 
 <li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li>
 
+%@
+
 </ul>";
 
 "informContactGuidelines.generic.category1.intro" = "Je bent een huisgenoot van iemand die corona heeft. Je bent hierdoor misschien besmet geraakt of kan dat nog worden.<br/><br/>Als je inderdaad besmet bent, kun je het virus aan anderen doorgeven. Ook als je je nu niet ziek voelt. Daarom vraagt de GGD je om je aan deze leefregels te houden:";
 
 "informContactGuidelines.generic.category2" = "<ul>
 
-<li>Blijf thuis en ontvang geen bezoek</li>
+<li>Blijf thuis en ontvang geen bezoek.</li>
 
 <li>Doe zo snel mogelijk een coronatest. En ook <b>5 dagen</b> na het laatste contact. Als uit beide tests blijkt dat je niet besmet bent, mag je weer naar buiten.</li>
 
@@ -353,6 +369,8 @@ Blijkt uit die test dat je geen corona hebt? Dan mag je weer naar buiten.</li>
 <li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt</li>
 
 <li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li>
+
+%@
 
 </ul>";
 
@@ -367,6 +385,8 @@ Blijkt uit die test dat je geen corona hebt? Dan mag je weer naar buiten.</li>
 <li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt</li>
 
 <li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li>
+
+%@
 
 </ul>";
 
@@ -404,12 +424,21 @@ Blijkt uit die test dat je geen corona hebt? Dan mag je weer naar buiten.</li>
 "otherCategoryMessage" = "Je hoeft dus niet te laten weten dat je besmet bent.";
 
 "contactFallbackTitle" = "Contact toevoegen";
+
 "contactInformationFirstName" = "Voornaam";
 "contactInformationLastName" = "Achternaam";
+"contactInformationNameWarning" = "Klopt deze naam?";
+
 "contactInformationPhoneNumber" = "Telefoonnummer";
 "contactInformationPhoneNumberPlaceholder" = "Selecteer telefoonnummer";
+"contactInformationPhoneNumberGeneralError" = "Dit telefoonnummer lijkt niet geldig, weet je zeker dat dit klopt?";
+"contactInformationPhoneNumberTooShortError" = "Dit telefoonnummer lijkt te weinig cijfers te bevatten, weet je zeker dat dit klopt?";
+"contactInformationPhoneNumberTooLongError" = "Dit telefoonnummer lijkt te veel cijfers te bevatten, weet je zeker dat dit klopt?";
+
 "contactInformationEmailAddress" = "E-mailadres";
 "contactInformationEmailAddressPlaceholder" = "Selecteer e-mailadres";
+"contactInformationEmailAddressGeneralError" = "Vul een geldig e-mailadres in";
+
 "contactInformationBSN" = "Burgerservice nummer";
 "contactInformationLastExposure" = "Wanneer was de laatste ontmoeting?";
 "contactInformationLastExposure.earlier" = "Eerder";
@@ -449,8 +478,10 @@ Blijkt uit die test dat je geen corona hebt? Dan mag je weer naar buiten.</li>
 "reversePairingStep2.title" = "Wacht tot de GGD-medewerker de code heeft ingevoerd";
 "reversePairingStep2.message" = "Wil je ondertussen nog gegevens aanvullen? Dan kun je dit scherm sluiten.";
 
-"reversePairingError.title" = "Er ging iets mis";
-"reversePairingError.message" = "Controleer de internetverbinding en probeer het opnieuw.";
+"reversePairingExpired" = "De code is verlopen. Geef een nieuwe code door aan de GGD.";
+"reversePairingError" = "Er ging iets mis. Controleer of de GGD de juiste code heeft en of je internetverbinding werkt.";
+"reversePairingTryAgain" = "Probeer opnieuw";
+"reversePairingNewCode" = "Maak nieuwe code";
 
 "reversePairingCloseAlert" = "Heb je de code gedeeld met de GGD-medewerker?";
 

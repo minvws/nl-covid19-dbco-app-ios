@@ -34,12 +34,18 @@ protocol CaseManaging {
     /// Indicates that alls the tasks are uploaded to the backend in their current state
     var isSynced: Bool { get }
     
+    /// Indicates that an upload occured at least once
+    var hasSynced: Bool { get }
+    
     /// Indicates that tasks can no longer be uploaded to the backedn
     var isWindowExpired: Bool { get }
     
     var dateOfSymptomOnset: Date? { get }
     var dateOfTest: Date? { get }
     var startOfContagiousPeriod: Date? { get }
+    var contagiousPeriodKnown: Bool { get }
+    
+    var reference: String? { get }
     
     var symptoms: [String] { get }
     
@@ -55,8 +61,8 @@ protocol CaseManaging {
     
     func loadCaseData(userInitiated: Bool, completion: @escaping (_ success: Bool, _ error: CaseManagingError?) -> Void)
     
-    func startLocalCase(dateOfSymptomOnset: Date) throws
-    func startLocalCase(dateOfTest: Date) throws
+    func startLocalCaseIfNeeded(dateOfSymptomOnset: Date)
+    func startLocalCaseIfNeeded(dateOfTest: Date)
     
     /// Clears all stored data. Using any method or property except for `hasCaseData` on CaseManager before pairing and loading the data again is an invalid operation.
     /// Throws an `notPaired` error when called befored paired.
@@ -114,6 +120,9 @@ final class CaseManager: CaseManaging, Logging {
     var isSynced: Bool {
         return tasks.allSatisfy(\.isSyncedWithPortal)
     }
+
+    @UserDefaults(key: "CaseManager.appData")
+    private(set) var hasSynced: Bool = false // swiftlint:disable:this let_var_whitespace
     
     private(set) var tasks: [Task] {
         get { appData.tasks }
@@ -140,6 +149,11 @@ final class CaseManager: CaseManaging, Logging {
         set { appData.dateOfTest = newValue }
     }
     
+    private(set) var reference: String? {
+        get { appData.reference }
+        set { appData.reference = newValue }
+    }
+    
     var startOfContagiousPeriod: Date? {
         switch (dateOfTest, dateOfSymptomOnset) {
         case (_, .some(let dateOfSymptomOnset)):
@@ -149,6 +163,11 @@ final class CaseManager: CaseManaging, Logging {
         default:
             return nil
         }
+    }
+    
+    private(set) var contagiousPeriodKnown: Bool {
+        get { appData.contagiousPeriodKnown }
+        set { appData.contagiousPeriodKnown = newValue }
     }
     
     private(set) var symptoms: [String] {
@@ -217,6 +236,8 @@ final class CaseManager: CaseManaging, Logging {
                         self.dateOfTest = result.dateOfTest
                         self.windowExpiresAt = result.windowExpiresAt
                         self.symptoms = result.symptoms
+                        self.reference = result.reference
+                        self.contagiousPeriodKnown = result.contagiousPeriodKnown
                         
                         self.fetchDate = Date() // Set the fetchdate here again to the actual date
             
@@ -266,18 +287,22 @@ final class CaseManager: CaseManaging, Logging {
         return date.addingTimeInterval(offset)
     }
     
-    func startLocalCase(dateOfSymptomOnset: Date) throws {
-        guard !hasCaseData else { throw CaseManagingError.alreadyHaseCase }
+    func startLocalCaseIfNeeded(dateOfSymptomOnset: Date) {
+        if !hasCaseData {
+            windowExpiresAt = .distantFuture
+        }
         
         self.dateOfSymptomOnset = reinterpretAsGMT0(dateOfSymptomOnset)
-        windowExpiresAt = .distantFuture
+        appData.contagiousPeriodKnown = true
     }
     
-    func startLocalCase(dateOfTest: Date) throws {
-        guard !hasCaseData else { throw CaseManagingError.alreadyHaseCase }
-            
+    func startLocalCaseIfNeeded(dateOfTest: Date) {
+        if !hasCaseData {
+            windowExpiresAt = .distantFuture
+        }
+        
         self.dateOfTest = reinterpretAsGMT0(dateOfTest)
-        windowExpiresAt = .distantFuture
+        appData.contagiousPeriodKnown = true
     }
     
     func removeCaseData() throws {
@@ -534,6 +559,7 @@ final class CaseManager: CaseManaging, Logging {
         do {
             let value = Case(dateOfTest: dateOfTest,
                              dateOfSymptomOnset: dateOfSymptomOnset,
+                             contagiousPeriodKnown: contagiousPeriodKnown,
                              windowExpiresAt: windowExpiresAt,
                              tasks: tasks,
                              symptoms: symptoms)
@@ -542,6 +568,7 @@ final class CaseManager: CaseManaging, Logging {
                 switch $0 {
                 case .success:
                     self.markAllTasksAsSynced()
+                    self.hasSynced = true
                     completionHandler?(true)
                 case .failure(let error):
                     self.logError("Could not sync case: \(error)")

@@ -14,8 +14,16 @@ class InputTextView<Object: AnyObject, Field: Editable>: UIView {
     
     private let textView = TextView()
     
+    var isEmphasized: Bool {
+        didSet {
+            label.font = isEmphasized ? Theme.fonts.bodyBold : Theme.fonts.subhead
+        }
+    }
+    
     init(for object: Object, path: WritableKeyPath<Object, Field>) {
         self.object = object
+        
+        isEmphasized = false
         
         super.init(frame: .zero)
         
@@ -52,6 +60,12 @@ class InputTextView<Object: AnyObject, Field: Editable>: UIView {
     @objc private func handleTap(_ recognizer: UITapGestureRecognizer) {
         guard recognizer.state == .recognized else { return }
         textView.becomeFirstResponder()
+    }
+    
+    @discardableResult
+    func emphasized() -> Self {
+        isEmphasized = true
+        return self
     }
     
     required init?(coder: NSCoder) {

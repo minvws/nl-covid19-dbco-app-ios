@@ -34,6 +34,12 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         fatalError("init(coder:) has not been implemented")
     }
     
+    override var isEmphasized: Bool {
+        didSet {
+            label.font = isEmphasized ? Theme.fonts.bodyBold : Theme.fonts.subhead
+        }
+    }
+    
     private func setup() {
         delegate = self
         
@@ -63,7 +69,6 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         addTarget(self, action: #selector(handleEditingDidBegin), for: .editingDidBegin)
         
         label.text = object?[keyPath: path].label
-        label.font = object?[keyPath: path].labelFont
         placeholder = object?[keyPath: path].placeholder
         
         text = object?[keyPath: path].value
@@ -172,6 +177,12 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         return self
     }
     
+    @discardableResult
+    func emphasized() -> Self {
+        isEmphasized = true
+        return self
+    }
+    
     // MARK: - Private
     
     @objc private func handleEditingDidEnd() {
@@ -189,6 +200,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     
     @objc private func handleEditingDidBegin() {
         iconContainerView.isHidden = true
+        hideWarning()
+        hideError()
         currentValidationTask?.cancel()
     }
     
@@ -216,7 +229,16 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             guard let self = self else { return }
             
             switch $0 {
+            case .invalid(let error) where error?.isEmpty == false:
+                self.showError(error!)
+                self.iconContainerView.isHidden = true
             case .invalid:
+                self.iconContainerView.isHidden = false
+                self.validationIconView.isHighlighted = false
+            case .warning(let warning) where warning?.isEmpty == false:
+                self.showWarning(warning!)
+                self.iconContainerView.isHidden = true
+            case .warning:
                 self.iconContainerView.isHidden = false
                 self.validationIconView.isHighlighted = false
             case .valid:
