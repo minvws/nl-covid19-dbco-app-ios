@@ -31,7 +31,7 @@ class StepViewModel {
 }
 
 /// - Tag: StepViewController
-class StepViewController: ViewController {
+class StepViewController: PromptableViewController {
     private let viewModel: StepViewModel
     private var imageView: UIImageView!
     
@@ -54,65 +54,52 @@ class StepViewController: ViewController {
         view.backgroundColor = .white
         navigationItem.largeTitleDisplayMode = .never
         
-        let buttonStack: UIView
-        let primaryButton = Button(title: viewModel.primaryButtonTitle, style: .primary)
-            .touchUpInside(self, action: #selector(handlePrimary))
+        // ScrollView
+        let scrollView = UIScrollView()
+        scrollView.embed(in: contentView)
+        scrollView.delaysContentTouches = true
         
-        if let secondaryButtonTitle = viewModel.secondaryButtonTitle {
-            let secondaryButton = Button(title: secondaryButtonTitle, style: .secondary)
-                .touchUpInside(self, action: #selector(handleSecondary))
-            
-            if viewModel.showSecondaryButtonOnTop {
-                buttonStack = VStack(spacing: 16,
-                                     secondaryButton,
-                                     primaryButton)
-            } else {
-                buttonStack = VStack(spacing: 16,
-                                     primaryButton,
-                                     secondaryButton)
-            }
-        } else {
-            buttonStack = primaryButton
-        }
-        
-        let textContainerView =
-            VStack(spacing: 32,
-                   VStack(spacing: 16,
-                          Label(title2: viewModel.title).multiline(),
-                          Label(body: viewModel.message, textColor: Theme.colors.captionGray).multiline()),
-                   buttonStack)
-            .distribution(.equalSpacing)
-        
-        textContainerView.snap(to: .bottom,
-                               of: view.readableContentGuide,
-                               insets: .bottom(8))
-        
-        let heightConstraint = textContainerView.heightAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.4)
-        heightConstraint.priority = .defaultHigh
-        heightConstraint.isActive = true
-        
+        // Image
         imageView = UIImageView(image: viewModel.image)
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.setContentHuggingPriority(.required, for: .vertical)
         imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         
-        view.addSubview(imageView)
+        // Labels
+        let labels = VStack(spacing: 16,
+            Label(title2: viewModel.title).multiline(),
+            Label(body: viewModel.message, textColor: Theme.colors.captionGray).multiline()
+        )
+          
+        // Stack
+        let margin: UIEdgeInsets = .top(64) + .bottom(64)
+        let stack =
+            VStack(spacing: 32, imageView, labels)
+            .distribution(.equalCentering)
+            .embed(in: scrollView.readableWidth, insets: margin)
+        stack.heightAnchor.constraint(greaterThanOrEqualTo: contentView.safeAreaLayoutGuide.heightAnchor,
+                                      multiplier: 1,
+                                      constant: -(margin.top + margin.bottom)).isActive = true
         
-        imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        imageView.widthAnchor.constraint(lessThanOrEqualTo: textContainerView.widthAnchor, multiplier: 1).isActive = true
-        
-        let imageCenterYConstraint = imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        imageCenterYConstraint.priority = .defaultLow
-        imageCenterYConstraint.isActive = true
-        
-        imageView.bottomAnchor.constraint(lessThanOrEqualTo: textContainerView.topAnchor, constant: -32).isActive = true
-        
-        let imageTextSpacingConstraint = imageView.bottomAnchor.constraint(lessThanOrEqualTo: textContainerView.topAnchor, constant: -105)
-        imageTextSpacingConstraint.priority = .defaultLow
-        imageTextSpacingConstraint.isActive = true
-        
-        imageView.topAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        // Buttons
+        promptView = {
+            let primaryButton = Button(title: viewModel.primaryButtonTitle, style: .primary)
+                                  .touchUpInside(self, action: #selector(handlePrimary))
+            
+            if let secondaryButtonTitle = viewModel.secondaryButtonTitle {
+                let secondaryButton = Button(title: secondaryButtonTitle, style: .secondary)
+                                        .touchUpInside(self, action: #selector(handleSecondary))
+                
+                if viewModel.showSecondaryButtonOnTop {
+                    return VStack(spacing: 16, secondaryButton, primaryButton)
+                } else {
+                    return VStack(spacing: 16, primaryButton, secondaryButton)
+                }
+            } else {
+                return primaryButton
+            }
+        }()
     }
     
     @objc private func handlePrimary() {
@@ -122,5 +109,4 @@ class StepViewController: ViewController {
     @objc private func handleSecondary() {
         delegate?.stepViewControllerDidSelectSecondaryButton(self)
     }
-
 }
