@@ -72,8 +72,6 @@ class TaskOverviewViewModel {
         self.addContactFooterBuilder = addContactFooterBuilder
         self.tableFooterBuilder = tableFooterBuilder
         
-        tableView.allowsSelection = !Services.caseManager.isWindowExpired
-        
         buildSections()
     }
     
@@ -213,8 +211,6 @@ extension TaskOverviewViewModel: CaseManagerListener {
         isAddContactButtonHidden = true
         isHeaderAddContactButtonHidden = true
         isWindowExpiredMessageHidden = false
-        
-        tableViewManager.tableView?.allowsSelection = false
         
         showPrompt?(true)
     }

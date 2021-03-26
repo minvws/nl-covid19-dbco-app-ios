@@ -36,6 +36,7 @@ class ContactQuestionnaireViewModel {
     private var updatedContact: Task.Contact { didSet { updateProgress() } }
 
     let didCreateNewTask: Bool
+    let isDisabled: Bool
     
     var updatedTask: Task {
         let updatedCategory = updatedClassification.category ?? task.contact.category
@@ -46,15 +47,25 @@ class ContactQuestionnaireViewModel {
                                            informedByIndexAt: updatedContact.informedByIndexAt,
                                            dateOfLastExposure: updatedContact.dateOfLastExposure)
         updatedTask.questionnaireResult = baseResult
-        updatedTask.questionnaireResult?.answers = answerManagers.map(\.answer)
+        updatedTask.questionnaireResult?.answers = answerManagers
+            .filter { $0.question.isRelevant(in: updatedCategory) }
+            .map(\.answer)
         
         return updatedTask
     }
     
     private(set) var title: String
-    let showCancelButton: Bool
     
     private(set) var answerManagers: [AnswerManaging]
+    
+    var canSafelyCancel: Bool {
+        if updatedTask.contact.category == .other && updatedTask.contact.dateOfLastExposure == nil {
+            return true
+        }
+        return updatedTask == task
+    }
+    
+    private(set) var showDeleteButton: Bool = false
     
     // swiftlint:disable opening_brace
     weak var classificationSectionView: SectionView?    { didSet { updateProgress(expandFirstUnfinishedSection: true) } }
@@ -74,7 +85,7 @@ class ContactQuestionnaireViewModel {
     @Bindable private(set) var promptButtonType: Button.ButtonType = .primary
     @Bindable private(set) var promptButtonTitle: String = .save
     
-    init(task: Task?, questionnaire: Questionnaire, contact: CNContact? = nil, showCancelButton: Bool = false) {
+    init(task: Task?, questionnaire: Questionnaire, contact: CNContact? = nil) {
         self.didCreateNewTask = task == nil
         
         let initialCategory = task?.contact.category
@@ -82,7 +93,6 @@ class ContactQuestionnaireViewModel {
         self.task = task
         self.updatedContact = task.contact
         self.title = task.contactName ?? .contactFallbackTitle
-        self.showCancelButton = showCancelButton
         
         let questionsAndAnswers: [(question: Question, answer: Answer)] = {
             let currentAnswers = task.questionnaireResult?.answers ?? []
@@ -100,6 +110,7 @@ class ContactQuestionnaireViewModel {
                                                         dateOfLastExposure: updatedContact.dateOfLastExposure,
                                                         source: task.source)
         self.updatedClassification = .success(task.contact.category)
+        self.isDisabled = Services.caseManager.isWindowExpired
         
         answerManagers.forEach {
             $0.updateHandler = { [unowned self] in
@@ -119,6 +130,14 @@ class ContactQuestionnaireViewModel {
         self.title = updatedTask.contactName ?? .contactFallbackTitle
         
         updateInformSectionContent()
+        
+        if isDisabled {
+            answerManagers.forEach {
+                $0.isEnabled = false
+            }
+        } else {
+            showDeleteButton = updatedTask.source == .app && !didCreateNewTask
+        }
     }
     
     private static func createAnswerManagers(for questionsAndAnswers: [(question: Question, answer: Answer)],
@@ -217,7 +236,7 @@ class ContactQuestionnaireViewModel {
             .map(\.answer)
             .allSatisfy(isCompleted)
         
-        let classificationIsHidden = classificationManagers.allSatisfy { !$0.isEnabled }
+        let classificationIsHidden = classificationManagers.allSatisfy { $0.view.isHidden }
         classificationSectionView?.isCompleted = classificationCompleted
         classificationSectionView?.isHidden = classificationIsHidden
         classificationSectionView?.index = 1
@@ -295,7 +314,12 @@ class ContactQuestionnaireViewModel {
         
         setInformButtonTitle(firstName: firstName)
         
-        promptButtonTitle = .save
+        if isDisabled {
+            promptButtonTitle = .close
+            promptButtonType = .secondary
+        } else {
+            promptButtonTitle = .save
+        }
         
         let reference = Services.caseManager.reference
         
@@ -340,7 +364,8 @@ class ContactQuestionnaireViewModel {
     private func view(manager: AnswerManaging) -> UIView {
         let view = manager.view
         let isRelevant = manager.question.isRelevant(in: task.contact.category)
-        view.isHidden = !isRelevant || !manager.isEnabled
+        let disabledForSource = manager.question.disabledForSources.contains(task.source)
+        view.isHidden = !isRelevant || disabledForSource
         
         return view
     }
@@ -419,9 +444,16 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         // Do any additional setup after loading the view.
         title = viewModel.title
         
-        if viewModel.showCancelButton {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+        
+        if viewModel.showDeleteButton {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "DeleteContact"), style: .plain, target: self, action: #selector(deleteTask))
         }
+        
+        if #available(iOS 13.0, *) {
+            isModalInPresentation = true
+        }
+        
         let promptButton = Button(title: .save)
             .touchUpInside(self, action: #selector(save))
         
@@ -451,6 +483,18 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         
         registerForKeyboardNotifications()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if viewModel.isDisabled {
+            let alert = UIAlertController(title: .contactReadonlyPromptTitle, message: .contactReadonlyPromptMessage, preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: .contactReadonlyPromptButton, style: .default))
+            
+            present(alert, animated: true)
+        }
     }
     
     private func createClassificationSectionView() -> SectionView {
@@ -519,6 +563,11 @@ final class ContactQuestionnaireViewController: PromptableViewController {
     private var contactDetailsSection: SectionView!
     
     @objc private func save() {
+        guard !viewModel.isDisabled else {
+            delegate?.contactQuestionnaireViewControllerDidCancel(self)
+            return
+        }
+        
         var task = viewModel.updatedTask
         let firstName = task.contactFirstName ?? .contactPromptNameFallback
         
@@ -543,7 +592,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         }
         
         switch task.contact.communication {
-        case .index where task.contact.informedByIndexAt != nil,
+        case _ where task.contact.informedByIndexAt != nil,
              .staff where task.isOrCanBeInformed:
             delegate?.contactQuestionnaireViewController(self, didSave: viewModel.updatedTask)
         case .index, .unknown:
@@ -605,7 +654,40 @@ final class ContactQuestionnaireViewController: PromptableViewController {
     }
     
     @objc private func cancel() {
-        delegate?.contactQuestionnaireViewControllerDidCancel(self)
+        func cancel() {
+            if navigationController?.viewControllers.count ?? 0 > 1 {
+                navigationController?.popViewController(animated: true)
+            } else {
+                delegate?.contactQuestionnaireViewControllerDidCancel(self)
+            }
+        }
+        
+        guard !viewModel.canSafelyCancel else { return cancel() }
+        
+        let alert = UIAlertController(title: .informContactCancelPromptTitle, message: .informContactCancelPromptMessage, preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: .yes, style: .default) { _ in
+            cancel()
+        })
+        
+        alert.addAction(UIAlertAction(title: .no, style: .default, handler: nil))
+        
+        present(alert, animated: true)
+    }
+    
+    @objc private func deleteTask() {
+        let alert = UIAlertController(title: .informContactDeletePromptTitle, message: nil, preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: .back, style: .default))
+        
+        alert.addAction(UIAlertAction(title: .delete, style: .default) { _ in
+            // mark task as deleted
+            var task = self.viewModel.updatedTask
+            task.deletedByIndex = true
+            self.delegate?.contactQuestionnaireViewController(self, didSave: task)
+        })
+        
+        present(alert, animated: true)
     }
     
     @objc private func informContact() {

@@ -32,7 +32,7 @@ class TextField: UITextField {
     
     override var isEnabled: Bool {
         didSet {
-            backgroundView.backgroundColor = isEnabled ? Theme.colors.tertiary : Theme.colors.disabledBorder
+            textColor = isEnabled ? .black : .init(white: 0, alpha: 0.5)
         }
     }
     
