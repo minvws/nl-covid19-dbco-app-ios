@@ -440,7 +440,7 @@ private extension TaskOverviewViewController {
         
         VStack(VStack(spacing: 4,
                       Label(bodyBold: .taskOverviewTipsTitle).multiline(),
-                      Label(viewModel.tipMessageText).multiline()),
+                      Label(attributedString: viewModel.tipMessageText).multiline()),
                tipButton)
             .embed(in: tipContainerView, insets: .right(92) + .left(16) + .top(16) + .bottom(11))
         

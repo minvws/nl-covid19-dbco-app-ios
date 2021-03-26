@@ -15,15 +15,12 @@ func listItem(_ text: String, imageName: String = "PrivacyItem") -> UIView {
 }
 
 func htmlListItem(_ text: String, imageName: String = "PrivacyItem") -> UIView {
-    let attributedString: NSAttributedString = .makeFromHtml(text: text,
-                                                             font: Theme.fonts.body,
-                                                             textColor: Theme.colors.captionGray,
-                                                             boldTextColor: .black)
-    let label = Label("")
-    label.attributedText = attributedString
-    
+    let attributedString = NSAttributedString.makeFromHtml(text: text,
+                                                         font: Theme.fonts.body,
+                                                         textColor: Theme.colors.captionGray,
+                                                         boldTextColor: .black)
     return HStack(spacing: 16,
                   ImageView(imageName: imageName).asIcon(),
-                  label.multiline())
+                  Label(attributedString: attributedString, textColor: Theme.colors.captionGray).multiline())
         .alignment(.top)
 }

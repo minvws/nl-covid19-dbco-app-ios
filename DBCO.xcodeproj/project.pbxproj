@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2859E72A25DE693F00359BA1 /* UIAccessibility+Management.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2859E72925DE693F00359BA1 /* UIAccessibility+Management.swift */; };
+		2859E72E25DE69E900359BA1 /* DispatchQueue+Delay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2859E72D25DE69E900359BA1 /* DispatchQueue+Delay.swift */; };
+		2859E73825DE79C100359BA1 /* UIView+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2859E73725DE79C100359BA1 /* UIView+Search.swift */; };
 		2859E75025DE95AE00359BA1 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2859E74F25DE95AE00359BA1 /* ActivityIndicator.swift */; };
 		6A6A1EA99F603F8A68B3CFE6 /* Pods_DBCO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13C8941476779FBFFBD8A4C7 /* Pods_DBCO.framework */; };
 		91E5A9010414FC25C0F3B864 /* Pods_DBCOTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C5D22DA740F30F804D7F95E /* Pods_DBCOTests.framework */; };
@@ -155,6 +158,9 @@
 		13C8941476779FBFFBD8A4C7 /* Pods_DBCO.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DBCO.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		15DD27ADC58F767AEF653836 /* Pods-DBCOTests.ad hoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc.xcconfig"; sourceTree = "<group>"; };
 		27736E44777314C870221718 /* Pods-DBCO.ad hoc acc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc acc.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc acc.xcconfig"; sourceTree = "<group>"; };
+		2859E72925DE693F00359BA1 /* UIAccessibility+Management.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAccessibility+Management.swift"; sourceTree = "<group>"; };
+		2859E72D25DE69E900359BA1 /* DispatchQueue+Delay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+Delay.swift"; sourceTree = "<group>"; };
+		2859E73725DE79C100359BA1 /* UIView+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Search.swift"; sourceTree = "<group>"; };
 		2859E74F25DE95AE00359BA1 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		338AE82F669A00159A255C14 /* Pods-DBCOTests.ad hoc p.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc p.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc p.xcconfig"; sourceTree = "<group>"; };
 		3C5D22DA740F30F804D7F95E /* Pods_DBCOTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DBCOTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -730,11 +736,14 @@
 		CDFCF9132510EB250062269A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				2859E72D25DE69E900359BA1 /* DispatchQueue+Delay.swift */,
 				CDFCF9142510EB4D0062269A /* NSAttributedString+Extension.swift */,
+				2859E72925DE693F00359BA1 /* UIAccessibility+Management.swift */,
 				CD29634E2518ED51008443AF /* UIEdgeInsets+Convenience.swift */,
 				CDA5C11B25139D36009440D1 /* UIStackView+Axis.swift */,
 				CD2963542518F59E008443AF /* UITableView+Defaults.swift */,
 				CDFCF9162510ECC70062269A /* UIView+Embed.swift */,
+				2859E73725DE79C100359BA1 /* UIView+Search.swift */,
 				CD756C73252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift */,
 				CDADF7DD2534773800424492 /* UIToolbar+Done.swift */,
 				CDE25F8E254C21B900E9AE49 /* String+SHA256.swift */,
@@ -1062,12 +1071,14 @@
 				CD49BAEB2525CE7C0079D018 /* PromptableViewController.swift in Sources */,
 				CDFCF90C2510C47E0062269A /* Localization.swift in Sources */,
 				CDC4A8EA250B87E5001BABC6 /* SceneDelegate.swift in Sources */,
+				2859E72A25DE693F00359BA1 /* UIAccessibility+Management.swift in Sources */,
 				CD4DBE7C25F65E060037B144 /* ListItem.swift in Sources */,
 				CDF0AE7D25C82D310054AF87 /* ReversePairViewController.swift in Sources */,
 				CD756C74252DDF00005FEDA0 /* UIResponder+CurrentFirstResponder.swift in Sources */,
 				CDC7C873253842A200FE7E05 /* Endpoint.swift in Sources */,
 				CD756C4A252C6A30005FEDA0 /* OnboardingCoordinator.swift in Sources */,
 				CD65CD8525360F5C00BB761A /* UnfinishedTasksViewController.swift in Sources */,
+				2859E72E25DE69E900359BA1 /* DispatchQueue+Delay.swift in Sources */,
 				CD926AEC25B59AEA0076113C /* ContactListInputView.swift in Sources */,
 				CDC7C8772538469B00FE7E05 /* NetworkManagerURLSessionDelegate.swift in Sources */,
 				CDC7C89425385AD600FE7E05 /* Task.swift in Sources */,
@@ -1105,6 +1116,7 @@
 				CD2963472514E129008443AF /* ContactTableViewCell.swift in Sources */,
 				CDC7C898253873CE00FE7E05 /* Envelope.swift in Sources */,
 				CDA5C11C25139D36009440D1 /* UIStackView+Axis.swift in Sources */,
+				2859E73825DE79C100359BA1 /* UIView+Search.swift in Sources */,
 				CD4DBE7025F635E10037B144 /* OnsetHelpViewController.swift in Sources */,
 				CDADF7DE2534773800424492 /* UIToolbar+Done.swift in Sources */,
 				CD7FACA1251B3FCD00AB8142 /* TextView.swift in Sources */,
