@@ -11,7 +11,7 @@ func listItem(_ text: String, imageName: String = "PrivacyItem") -> UIView {
     return HStack(spacing: 16,
                   ImageView(imageName: imageName).asIcon(),
                   Label(body: text, textColor: Theme.colors.captionGray).multiline())
-        .alignment(.center)
+        .alignment(.top)
 }
 
 func htmlListItem(_ text: String, imageName: String = "PrivacyItem") -> UIView {
@@ -22,5 +22,5 @@ func htmlListItem(_ text: String, imageName: String = "PrivacyItem") -> UIView {
     return HStack(spacing: 16,
                   ImageView(imageName: imageName).asIcon(),
                   Label(attributedString: attributedString, textColor: Theme.colors.captionGray).multiline())
-        .alignment(.center)
+        .alignment(.top)
 }
