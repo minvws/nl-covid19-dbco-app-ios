@@ -176,7 +176,6 @@ class ReversePairViewController: PromptableViewController {
             switch $0 {
             case .done(let code):
                 codeLabel.attributedText = code
-                
                 codeActivityIndicator.isHidden = true
                 codeLabel.isHidden = false
                 codeExpiredView.isHidden = true
