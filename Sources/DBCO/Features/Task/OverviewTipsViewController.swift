@@ -60,22 +60,10 @@ class OverviewTipsViewController: ViewController {
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
         widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
-        func createTipItem(icon: String, text: String) -> UIView {
-            let icon = UIImageView(image: UIImage(named: icon))
-            icon.contentMode = .top
-            icon.widthAnchor.constraint(equalToConstant: 22).isActive = true
-            
-            return HStack(spacing: 16,
-                          icon,
-                          Label(body: text, textColor: Theme.colors.tipItemColor).multiline())
-        }
-        
-        func createSectionHeader(icon: String, title: String) -> UIView {
-            return HStack(spacing: 8,
-                          ImageView(imageName: icon).asIcon(),
-                          Label(title2: title))
-        }
-        
+        setupContent(with: scrollView)
+    }
+    
+    private func createHeaderView() -> UIView {
         let imageContainerView = UIView()
         
         let headerImage = UIImage(named: "Onboarding2")!
@@ -85,8 +73,12 @@ class OverviewTipsViewController: ViewController {
         
         imageView.embed(in: imageContainerView)
         
+        return imageContainerView
+    }
+    
+    private func setupContent(with scrollView: UIScrollView) {
         VStack(spacing: 40,
-               imageContainerView,
+               createHeaderView(),
                VStack(spacing: 16,
                       Label(title2: viewModel.titleText).multiline(),
                       Label(body: .overviewTipsMessage, textColor: Theme.colors.tipItemColor).multiline()),
@@ -112,6 +104,22 @@ class OverviewTipsViewController: ViewController {
                                     createTipItem(icon: "ListItem/Checkmark", text: .overviewTipsSection2Item2),
                                     createTipItem(icon: "ListItem/Questionmark", text: .overviewTipsSection2Item3)))))
             .embed(in: scrollView.readableWidth, insets: .top(16) + .bottom(16))
+    }
+    
+    private func createTipItem(icon: String, text: String) -> UIView {
+        let icon = UIImageView(image: UIImage(named: icon))
+        icon.contentMode = .top
+        icon.widthAnchor.constraint(equalToConstant: 22).isActive = true
+        
+        return HStack(spacing: 16,
+                      icon,
+                      Label(body: text, textColor: Theme.colors.tipItemColor).multiline())
+    }
+    
+    private func createSectionHeader(icon: String, title: String) -> UIView {
+        return HStack(spacing: 8,
+                      ImageView(imageName: icon).asIcon(),
+                      Label(title2: title))
     }
     
     @objc private func close() {

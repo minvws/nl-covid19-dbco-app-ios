@@ -80,9 +80,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         inputAccessoryView = nil
         inputView = nil
         
-        guard let object = object else {
-            return
-        }
+        guard let object = object else { return }
 
         switch object[keyPath: path].inputType {
         case .text:
@@ -93,55 +91,65 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             keyboardType = .numberPad
             inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
         case .date(let dateFormatter):
-            let datePicker = UIDatePicker()
-            
-            if let text = text, let date = dateFormatter.date(from: text) {
-                datePicker.date = date
-            } else {
-                datePicker.date = DateComponents(calendar: Calendar.current,
-                                                 timeZone: TimeZone.current,
-                                                 year: 1980,
-                                                 month: 1,
-                                                 day: 1).date ?? Date()
-            }
-            
-            datePicker.datePickerMode = .date
-            datePicker.tintColor = .black
-            datePicker.maximumDate = Date()
-            datePicker.minimumDate = Calendar.current.date(byAdding: .year, value: -120, to: Date())
-            datePicker.addTarget(self, action: #selector(handleDateValueChanged), for: .valueChanged)
-            
-            if #available(iOS 13.4, *) {
-                datePicker.preferredDatePickerStyle = .wheels
-            }
-            
-            self.datePicker = datePicker
-            
-            inputView = datePicker
-            inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
-            tintColor = .clear
+            setupAsDatePicker(with: dateFormatter)
         case .picker(let options):
-            pickerOptions = [("", "")] + options
-
-            let picker = UIPickerView()
-            picker.dataSource = self
-            picker.delegate = self
-            
-            let selectedIdentifier = object[keyPath: path].value
-
-            pickerOptions?
-                .firstIndex { $0.identifier == selectedIdentifier }
-                .map { picker.selectRow($0, inComponent: 0, animated: false) }
-            
-            text = pickerOptions?.first { $0.identifier == selectedIdentifier }?.value
-
-            inputView = picker
-            inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
-            tintColor = .clear
-            optionPicker = picker
-            
-            dropdownIconView.isHidden = false
+            setupAsPicker(with: options)
         }
+    }
+    
+    private func setupAsDatePicker(with dateFormatter: DateFormatter) {
+        let datePicker = UIDatePicker()
+        
+        if let text = text, let date = dateFormatter.date(from: text) {
+            datePicker.date = date
+        } else {
+            datePicker.date = DateComponents(calendar: Calendar.current,
+                                             timeZone: TimeZone.current,
+                                             year: 1980,
+                                             month: 1,
+                                             day: 1).date ?? Date()
+        }
+        
+        datePicker.datePickerMode = .date
+        datePicker.tintColor = .black
+        datePicker.maximumDate = Date()
+        datePicker.minimumDate = Calendar.current.date(byAdding: .year, value: -120, to: Date())
+        datePicker.addTarget(self, action: #selector(handleDateValueChanged), for: .valueChanged)
+        
+        if #available(iOS 13.4, *) {
+            datePicker.preferredDatePickerStyle = .wheels
+        }
+        
+        self.datePicker = datePicker
+        
+        inputView = datePicker
+        inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
+        tintColor = .clear
+    }
+    
+    private func setupAsPicker(with options: [InputType.PickerOption]) {
+        guard let object = object else { return }
+        
+        pickerOptions = [("", "")] + options
+
+        let picker = UIPickerView()
+        picker.dataSource = self
+        picker.delegate = self
+        
+        let selectedIdentifier = object[keyPath: path].value
+
+        pickerOptions?
+            .firstIndex { $0.identifier == selectedIdentifier }
+            .map { picker.selectRow($0, inComponent: 0, animated: false) }
+        
+        text = pickerOptions?.first { $0.identifier == selectedIdentifier }?.value
+
+        inputView = picker
+        inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
+        tintColor = .clear
+        optionPicker = picker
+        
+        dropdownIconView.isHidden = false
     }
     
     override func layoutSubviews() {
