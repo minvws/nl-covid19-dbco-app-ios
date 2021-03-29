@@ -17,8 +17,6 @@ extension UIView {
     
     /// Finds the first subview with the provided accessibility traits
     func find(traits: UIAccessibilityTraits) -> UIView? {
-        return allSubviews().filter { (view) -> Bool in
-            view.accessibilityTraits.contains(accessibilityTraits)
-        }.first
+        return allSubviews().first { $0.accessibilityTraits.contains(accessibilityTraits) }
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 /// Executes the provided closure after the given amount of seconds.
-func delay(_ seconds: Double, closure: @escaping () -> ()) {
+func delay(_ seconds: Double, closure: @escaping () -> Void) {
     if seconds > 0 {
         DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
             closure()
