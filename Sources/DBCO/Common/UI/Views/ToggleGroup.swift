@@ -81,6 +81,6 @@ class ToggleGroup: UIStackView {
         }
     }
     
-    private(set) var label = Label(bodyBold: nil).multiline()
+    private(set) var label = UILabel(bodyBold: nil).multiline()
     
 }

@@ -232,7 +232,7 @@ class SectionView: UIView {
     private let headerContainerView = UIView()
     private let icon = UIImageView()
     private let collapseIndicator = UIImageView()
-    private let titleLabel = Label(bodyBold: "")
-    private let captionLabel = Label(subhead: "", textColor: Theme.colors.captionGray)
+    private let titleLabel = UILabel(bodyBold: "")
+    private let captionLabel = UILabel(subhead: "", textColor: Theme.colors.captionGray)
     private let bottomSeparator = SeparatorView()
 }

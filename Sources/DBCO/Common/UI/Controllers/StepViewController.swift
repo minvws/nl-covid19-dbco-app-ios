@@ -68,8 +68,8 @@ class StepViewController: PromptableViewController {
         
         // Labels
         let labels = VStack(spacing: 16,
-            Label(title2: viewModel.title).multiline(),
-            Label(body: viewModel.message, textColor: Theme.colors.captionGray).multiline()
+            UILabel(title2: viewModel.title).multiline(),
+            UILabel(body: viewModel.message, textColor: Theme.colors.captionGray).multiline()
         )
           
         // Stack

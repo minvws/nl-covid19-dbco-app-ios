@@ -122,15 +122,15 @@ class UnfinishedTasksViewController: PromptableViewController {
         tableView.delaysContentTouches = false
         
         let tableHeaderBuilder = {
-            Label(title2: .unfinishedTasksOverviewMessage)
+            UILabel(title2: .unfinishedTasksOverviewMessage)
                 .multiline()
                 .wrappedInReadableWidth(insets: .top(60) + .bottom(20))
         }
         
         let sectionHeaderBuilder = { (title: String, subtitle: String) -> UIView in
             VStack(spacing: 4,
-                   Label(bodyBold: title).multiline(),
-                   Label(subhead: subtitle, textColor: Theme.colors.captionGray).multiline())
+                   UILabel(bodyBold: title).multiline(),
+                   UILabel(subhead: subtitle, textColor: Theme.colors.captionGray).multiline())
                 .wrappedInReadableWidth(insets: .top(20) + .bottom(16))
         }
         

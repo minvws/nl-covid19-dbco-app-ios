@@ -19,7 +19,7 @@ class LoadingViewController: UIViewController {
         activityIndicator.color = .black
         activityIndicator.startAnimating()
         
-        let stack = VStack(spacing: 8, activityIndicator, Label(body: .uploadInProgressMessage)).alignment(.center)
+        let stack = VStack(spacing: 8, activityIndicator, UILabel(body: .uploadInProgressMessage)).alignment(.center)
         
         stack.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(stack)

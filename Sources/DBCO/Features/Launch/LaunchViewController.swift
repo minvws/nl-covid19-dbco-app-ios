@@ -31,9 +31,9 @@ class LaunchViewController: ViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        ImageView(imageName: "LaunchScreen/Background").embed(in: view)
+        UIImageView(imageName: "LaunchScreen/Background").embed(in: view)
         
-        let icon = ImageView(imageName: "LaunchScreen/Icon")
+        let icon = UIImageView(imageName: "LaunchScreen/Icon")
         icon.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(icon)
         

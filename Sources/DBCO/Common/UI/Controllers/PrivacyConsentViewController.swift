@@ -69,7 +69,7 @@ class PrivacyConsentViewController: PromptableViewController, ScrollViewNavivati
             VStack(spacing: 24,
                    VStack(spacing: 24,
                        VStack(spacing: 16,
-                              Label(title2: .onboardingConsentTitle).multiline(),
+                              UILabel(title2: .onboardingConsentTitle).multiline(),
                               TextView(htmlText: .onboardingConsentMessage, textColor: Theme.colors.captionGray)
                                 .linkTouched { [unowned self] in self.open($0) }),
                        VStack(spacing: 16,

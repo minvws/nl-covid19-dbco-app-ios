@@ -76,8 +76,8 @@ class OnboardingDateViewController: ViewController {
         datePicker.setDate(viewModel.date ?? Date(), animated: false)
         
         VStack(VStack(spacing: 16,
-                      Label(title2: viewModel.title).multiline(),
-                      Label(body: viewModel.subtitle, textColor: Theme.colors.captionGray).multiline()),
+                      UILabel(title2: viewModel.title).multiline(),
+                      UILabel(body: viewModel.subtitle, textColor: Theme.colors.captionGray).multiline()),
                datePicker,
                VStack(spacing: 16,
                       secondaryButton,

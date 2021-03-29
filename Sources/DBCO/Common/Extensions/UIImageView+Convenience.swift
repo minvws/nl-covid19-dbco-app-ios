@@ -7,19 +7,19 @@
 
 import UIKit
 
-class ImageView: UIImageView {
+extension UIImageView {
     
-    init(imageName: String, highlightedImageName: String? = nil) {
-        super.init(image: UIImage(named: imageName))
+    convenience init(imageName: String, highlightedImageName: String? = nil) {
+        self.init(image: UIImage(named: imageName))
         
         if let highlightedImageName = highlightedImageName {
             highlightedImage = UIImage(named: highlightedImageName)
         }
     }
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
+}
+
+extension UIImageView {
     
     @discardableResult
     func asIcon(color: UIColor = Theme.colors.primary) -> Self {

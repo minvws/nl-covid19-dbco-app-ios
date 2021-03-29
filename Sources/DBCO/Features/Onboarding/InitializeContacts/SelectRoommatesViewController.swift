@@ -101,8 +101,8 @@ class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdju
         let stack =
             VStack(spacing: 24,
                    VStack(spacing: 16,
-                          Label(title2: .determineRoommatesTitle).multiline(),
-                          Label(body: .determineRoommatesMessage, textColor: Theme.colors.captionGray).multiline()),
+                          UILabel(title2: .determineRoommatesTitle).multiline(),
+                          UILabel(body: .determineRoommatesMessage, textColor: Theme.colors.captionGray).multiline()),
                    contactListView,
                    continueButton)
                 .distribution(.fill)

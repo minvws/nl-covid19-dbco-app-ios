@@ -125,8 +125,8 @@ class SelectSymptomsViewController: ViewController, ScrollViewNavivationbarAdjus
         
         VStack(spacing: 24,
                VStack(spacing: 16,
-                      Label(title2: .contagiousPeriodSelectSymptomsTitle).multiline(),
-                      Label(body: .contagiousPeriodSelectSymptomsMessage, textColor: Theme.colors.captionGray).multiline()),
+                      UILabel(title2: .contagiousPeriodSelectSymptomsTitle).multiline(),
+                      UILabel(body: .contagiousPeriodSelectSymptomsMessage, textColor: Theme.colors.captionGray).multiline()),
                buttonContainerView,
                showAllSymptomsButton,
                continueWithSymptomsButton,

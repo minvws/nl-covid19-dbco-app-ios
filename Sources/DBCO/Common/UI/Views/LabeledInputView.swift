@@ -52,7 +52,7 @@ extension LabeledInputView {
         
         return VStack(spacing: max(spacing, 6),
                       VStack(spacing: spacing,
-                             Label(labelText)
+                             UILabel(labelText)
                                 .applyFont(labelFont)
                                 .multiline()
                                 .hideIfEmpty(),

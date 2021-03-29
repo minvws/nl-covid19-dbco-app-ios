@@ -192,7 +192,7 @@ class SelectContactViewController: PromptableViewController {
         viewModel.setupContactsTableView(
             tableView,
             sectionHeaderViewBuilder: {
-                Label(caption1: $0.uppercased(), textColor: Theme.colors.primary)
+                UILabel(caption1: $0.uppercased(), textColor: Theme.colors.primary)
                     .wrappedInReadableContentGuide(insets: .top(10) + .bottom(5))
             },
             selectedContactHandler: { [weak self] contact, _ in
