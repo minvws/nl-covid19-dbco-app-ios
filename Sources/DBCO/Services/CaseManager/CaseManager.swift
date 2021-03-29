@@ -232,10 +232,20 @@ final class CaseManager: CaseManaging, Logging {
                     switch $0 {
                     case .success(let result):
                         self.setTasks(result.tasks)
-                        self.dateOfSymptomOnset = result.dateOfSymptomOnset
-                        self.dateOfTest = result.dateOfTest
+                        
+                        if self.dateOfSymptomOnset == nil {
+                            self.dateOfSymptomOnset = result.dateOfSymptomOnset
+                        }
+                        
+                        if self.dateOfTest == nil {
+                            self.dateOfTest = result.dateOfTest
+                        }
+                        
+                        if self.symptoms.isEmpty {
+                            self.symptoms = result.symptoms
+                        }
+                        
                         self.windowExpiresAt = result.windowExpiresAt
-                        self.symptoms = result.symptoms
                         self.reference = result.reference
                         self.contagiousPeriodKnown = result.contagiousPeriodKnown
                         
