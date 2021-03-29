@@ -303,10 +303,18 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let newText: String
         if let text = text {
             let replacementString = string.replacingOccurrences(of: "\n", with: "") // ignoring newlines like the textfield itself does
-            textWidthLabel.text = (text as NSString).replacingCharacters(in: range, with: replacementString) as String
+            newText = (text as NSString).replacingCharacters(in: range, with: replacementString)
+        } else {
+            newText = string
         }
+        
+        // Enforce max length
+        guard newText.count <= Constants.maxLength else { return false }
+        
+        textWidthLabel.text = newText
         
         guard let object = object else { return true }
         
@@ -334,4 +342,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         text = pickerOptions?[row].value
     }
     
+}
+
+private struct Constants {
+    static let maxLength = 255
 }
