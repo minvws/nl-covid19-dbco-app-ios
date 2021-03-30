@@ -190,13 +190,13 @@ class TextField: UITextField {
         return ceil(font!.lineHeight + 1)
     }
     
-    private(set) var label = Label(subhead: nil)
+    private(set) var label = UILabel(subhead: nil)
     private(set) var backgroundView = UIView()
     
-    private(set) var warningLabel = Label(subhead: nil, textColor: Theme.colors.primary)
-    private(set) var warningIcon = ImageView(imageName: "Validation/Warning").asIcon(color: Theme.colors.primary)
+    private(set) var warningLabel = UILabel(subhead: nil, textColor: Theme.colors.primary)
+    private(set) var warningIcon = UIImageView(imageName: "Validation/Warning").asIcon(color: Theme.colors.primary)
     
-    private(set) var errorLabel = Label(subhead: nil, textColor: Theme.colors.warning).multiline()
-    private(set) var errorIcon = ImageView(imageName: "Validation/Invalid").asIcon(color: Theme.colors.warning)
+    private(set) var errorLabel = UILabel(subhead: nil, textColor: Theme.colors.warning).multiline()
+    private(set) var errorIcon = UIImageView(imageName: "Validation/Invalid").asIcon(color: Theme.colors.warning)
     
 }

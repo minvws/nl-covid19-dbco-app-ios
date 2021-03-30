@@ -123,20 +123,20 @@ class ReversePairViewController: PromptableViewController {
         
         VStack(spacing: 24,
                VStack(spacing: 16,
-                      Label(title2: .reversePairingStep1Title).multiline(),
-                      Label(body: .reversePairingStep1Message, textColor: Theme.colors.captionGray).multiline()),
+                      UILabel(title2: .reversePairingStep1Title).multiline(),
+                      UILabel(body: .reversePairingStep1Message, textColor: Theme.colors.captionGray).multiline()),
                VStack(spacing: 16,
                       HStack(spacing: 16,
-                             ImageView(imageName: "Step1").asIcon().assign(to: &step1IconView),
-                             Label(title3: .reversePairingStep1Code).multiline())
+                             UIImageView(imageName: "Step1").asIcon().assign(to: &step1IconView),
+                             UILabel(title3: .reversePairingStep1Code).multiline())
                         .alignment(.top),
                       createCodeContainerView().withInsets(.left(40))),
                VStack(spacing: 16,
                       HStack(spacing: 16,
-                             ImageView(imageName: "Step2").asIcon().assign(to: &step2IconView),
+                             UIImageView(imageName: "Step2").asIcon().assign(to: &step2IconView),
                              VStack(spacing: 4,
-                                    Label(title3: .reversePairingStep2Title).multiline(),
-                                    Label(body: .reversePairingStep2Message, textColor: Theme.colors.captionGray).multiline()))
+                                    UILabel(title3: .reversePairingStep2Title).multiline(),
+                                    UILabel(body: .reversePairingStep2Message, textColor: Theme.colors.captionGray).multiline()))
                         .alignment(.top),
                       createStatusContainerView().withInsets(.left(40))))
             .embed(in: scrollView.readableWidth, insets: .top(32) + .bottom(16))
@@ -164,7 +164,7 @@ class ReversePairViewController: PromptableViewController {
         codeActivityIndicator.startAnimating()
         codeActivityIndicator.contentMode = .center
         
-        let codeLabel = Label(nil, font: .monospacedDigitSystemFont(ofSize: 22, weight: .semibold))
+        let codeLabel = UILabel(nil, font: .monospacedDigitSystemFont(ofSize: 22, weight: .semibold))
         codeLabel.textAlignment = .center
         
         let codeExpiredView = createErrorView(label: .reversePairingExpired, button: .reversePairingNewCode)
@@ -205,12 +205,12 @@ class ReversePairViewController: PromptableViewController {
         
         let waitingView = HStack(spacing: 8,
                                  activityIndicator,
-                                 Label(body: .reversePairingWaiting, textColor: Theme.colors.captionGray).multiline())
+                                 UILabel(body: .reversePairingWaiting, textColor: Theme.colors.captionGray).multiline())
             .withInsets(.left(24))
         
         let successView = VStack(HStack(spacing: 8,
-                                        ImageView(imageName: "ListItem/Checkmark").asIcon(),
-                                        Label(body: .reversePairingFinished, textColor: Theme.colors.captionGray)))
+                                        UIImageView(imageName: "ListItem/Checkmark").asIcon(),
+                                        UILabel(body: .reversePairingFinished, textColor: Theme.colors.captionGray)))
             .alignment(.center)
         
         let errorView = createErrorView(label: .reversePairingError, button: .reversePairingTryAgain)
@@ -228,7 +228,7 @@ class ReversePairViewController: PromptableViewController {
     }
     
     private func createErrorView(label: String, button: String) -> UIView {
-        return VStack(Label(body: label, textColor: Theme.colors.captionGray)
+        return VStack(UILabel(body: label, textColor: Theme.colors.captionGray)
                         .textAlignment(.center)
                         .multiline(),
                       Button(title: button, style: .info)

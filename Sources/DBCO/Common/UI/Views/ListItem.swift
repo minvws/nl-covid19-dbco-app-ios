@@ -9,8 +9,8 @@ import UIKit
 
 func listItem(_ text: String, imageName: String = "PrivacyItem") -> UIView {
     return HStack(spacing: 16,
-                  ImageView(imageName: imageName).asIcon(),
-                  Label(body: text, textColor: Theme.colors.captionGray).multiline())
+                  UIImageView(imageName: imageName).asIcon(),
+                  UILabel(body: text, textColor: Theme.colors.captionGray).multiline())
         .alignment(.top)
 }
 
@@ -20,7 +20,7 @@ func htmlListItem(_ text: String, imageName: String = "PrivacyItem") -> UIView {
                                                          textColor: Theme.colors.captionGray,
                                                          boldTextColor: .black)
     return HStack(spacing: 16,
-                  ImageView(imageName: imageName).asIcon(),
-                  Label(attributedString: attributedString, textColor: Theme.colors.captionGray).multiline())
+                  UIImageView(imageName: imageName).asIcon(),
+                  UILabel(attributedString: attributedString, textColor: Theme.colors.captionGray).multiline())
         .alignment(.top)
 }

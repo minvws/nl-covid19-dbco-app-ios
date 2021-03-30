@@ -105,15 +105,13 @@ class Button: UIButton {
     
     // Takes the intrinsic size of the title label into account for larger font sizes
     override var intrinsicContentSize: CGSize {
-        get {
-            let size = titleLabel?.intrinsicContentSize ?? CGSize.zero
-            let insets = contentEdgeInsets
-            
-            return CGSize(
-                width: size.width + insets.left + insets.right,
-                height: size.height + insets.top + insets.bottom
-            )
-        }
+        let size = titleLabel?.intrinsicContentSize ?? CGSize.zero
+        let insets = contentEdgeInsets
+        
+        return CGSize(
+            width: size.width + insets.left + insets.right,
+            height: size.height + insets.top + insets.bottom
+        )
     }
 
     // MARK: - Private

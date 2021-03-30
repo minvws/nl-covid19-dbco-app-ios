@@ -131,38 +131,10 @@ class TaskOverviewViewModel {
         }
     }
     
-    private func sortTasks(left: Task, right: Task) -> Bool {
-        guard left.taskType == .contact && right.taskType == .contact else {
-            return true // To be adjusted whenever more taskTypes are added
-        }
-        
-        // category1 before anything else
-        if left.contact.category == .category1 && right.contact.category != .category1 {
-            return true
-        } else if right.contact.category == .category1 && left.contact.category != .category1 {
-            return false
-        }
-        
-        let fallbackDate = "9999-12-31"
-        let leftDate = left.contact.dateOfLastExposure ?? fallbackDate
-        let rightDate = right.contact.dateOfLastExposure ?? fallbackDate
-        
-        // sort by date
-        switch leftDate.compare(rightDate, options: .numeric) {
-        case .orderedDescending:
-            return true
-        case .orderedAscending:
-            return false
-        case .orderedSame:
-            // sort alphabetically for same date
-            return (left.contactName ?? "") < (right.contactName ?? "")
-        }
-    }
-    
     private func buildSections(split: KeyPath<Task, Bool>, failingSectionTitle: String, passingSectionTitle: String) {
         let tasks = Services.caseManager.tasks
             .filter { !$0.deletedByIndex }
-            .sorted(by: sortTasks)
+            .sorted(by: <)
         
         let failingContacts = tasks.filter { !$0[keyPath: split] }
         let passingContacts = tasks.filter { $0[keyPath: split] }
@@ -295,8 +267,8 @@ class TaskOverviewViewController: PromptableViewController {
         
         let windowExpiredMessage =
             HStack(spacing: 8,
-                   ImageView(imageName: "Warning").asIcon().withInsets(.top(2)),
-                   Label(subhead: .windowExpiredMessage,
+                   UIImageView(imageName: "Warning").asIcon().withInsets(.top(2)),
+                   UILabel(subhead: .windowExpiredMessage,
                          textColor: Theme.colors.primary).multiline())
             .alignment(.top)
         
@@ -336,7 +308,7 @@ class TaskOverviewViewController: PromptableViewController {
         let pairingView = VStack(spacing: 16,
                                  HStack(spacing: 6,
                                         pairingActivityView,
-                                        Label(subhead: .taskOverviewWaitingForPairing, textColor: Theme.colors.primary).multiline()),
+                                        UILabel(subhead: .taskOverviewWaitingForPairing, textColor: Theme.colors.primary).multiline()),
                                  Button(title: .taskOverviewPairingTryAgain, style: .secondary)
                                     .touchUpInside(self, action: #selector(upload)))
         
@@ -344,13 +316,13 @@ class TaskOverviewViewController: PromptableViewController {
     }
     
     private func createPairingErrorView() -> UIView {
-        let label = Label(subhead: "", textColor: Theme.colors.warning).multiline()
+        let label = UILabel(subhead: "", textColor: Theme.colors.warning).multiline()
         
         viewModel.$pairingErrorText.binding = { label.text = $0 }
         
         let pairingView = VStack(spacing: 16,
                                  HStack(spacing: 6,
-                                        ImageView(imageName: "Warning").asIcon(color: Theme.colors.warning),
+                                        UIImageView(imageName: "Warning").asIcon(color: Theme.colors.warning),
                                         label)
                                     .alignment(.top),
                                  Button(title: .taskOverviewPairingTryAgain, style: .secondary)
@@ -435,8 +407,8 @@ private extension TaskOverviewViewController {
         tipButton.touchUpInside(self, action: #selector(requestTips))
         
         VStack(VStack(spacing: 4,
-                      Label(bodyBold: .taskOverviewTipsTitle).multiline(),
-                      Label(attributedString: viewModel.tipMessageText).multiline()),
+                      UILabel(bodyBold: .taskOverviewTipsTitle).multiline(),
+                      UILabel(attributedString: viewModel.tipMessageText).multiline()),
                tipButton)
             .embed(in: tipContainerView, insets: .right(92) + .left(16) + .top(16) + .bottom(11))
         
@@ -457,8 +429,8 @@ private extension TaskOverviewViewController {
     
     func sectionHeaderBuilder(title: String, subtitle: String?) -> UIView {
         return VStack(spacing: 4,
-                      Label(bodyBold: title).multiline(),
-                      Label(subhead: subtitle, textColor: Theme.colors.captionGray).multiline().hideIfEmpty())
+                      UILabel(bodyBold: title).multiline(),
+                      UILabel(subhead: subtitle, textColor: Theme.colors.captionGray).multiline().hideIfEmpty())
                    .wrappedInReadableWidth(insets: .top(20) + .bottom(0))
     }
     
@@ -477,7 +449,7 @@ private extension TaskOverviewViewController {
     }
     
     func tableFooterBuilder() -> UIView {
-        let versionLabel = Label(caption1: .mainAppVersionTitle, textColor: Theme.colors.captionGray)
+        let versionLabel = UILabel(caption1: .mainAppVersionTitle, textColor: Theme.colors.captionGray)
         versionLabel.textAlignment = .center
         versionLabel.sizeToFit()
         versionLabel.frame = CGRect(x: 0, y: 0, width: versionLabel.frame.width, height: 60.0)

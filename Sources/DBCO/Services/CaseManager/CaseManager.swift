@@ -217,77 +217,7 @@ final class CaseManager: CaseManaging, Logging {
     }
     
     func loadCaseData(userInitiated: Bool, completion: @escaping (Bool, CaseManagingError?) -> Void) {
-        func loadTasksIfNeeded() {
-            guard shouldLoadTasks(userInitiated: userInitiated) else {
-                logDebug("No task loading needed. Skipping.")
-                return loadQuestionnairesIfNeeded()
-            }
-            
-            do {
-                let previousFetchDate = fetchDate
-                fetchDate = Date() // Set the fetchdate here to prevent multiple request
-                
-                let identifier = try Services.pairingManager.caseToken()
-                Services.networkManager.getCase(identifier: identifier) {
-                    switch $0 {
-                    case .success(let result):
-                        self.setTasks(result.tasks)
-                        
-                        if self.dateOfSymptomOnset == nil {
-                            self.dateOfSymptomOnset = result.dateOfSymptomOnset
-                        }
-                        
-                        if self.dateOfTest == nil {
-                            self.dateOfTest = result.dateOfTest
-                        }
-                        
-                        if self.symptoms.isEmpty {
-                            self.symptoms = result.symptoms
-                        }
-                        
-                        self.windowExpiresAt = result.windowExpiresAt
-                        self.reference = result.reference
-                        self.contagiousPeriodKnown = result.contagiousPeriodKnown
-                        
-                        self.fetchDate = Date() // Set the fetchdate here again to the actual date
-            
-                        loadQuestionnairesIfNeeded()
-                        
-                        self.listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
-                    case .failure(let error):
-                        self.fetchDate = previousFetchDate // Reset the fetchdate since no data was fetched
-                        
-                        completion(false, .couldNotLoadTasks(error))
-                    }
-                }
-            } catch {
-                return completion(false, .noCaseData)
-            }
-        }
-        
-        func loadQuestionnairesIfNeeded() {
-            guard shouldLoadQuestionnaires else {
-                logDebug("No questionnaire loading needed. Skipping.")
-                return finish()
-            }
-            
-            Services.networkManager.getQuestionnaires {
-                switch $0 {
-                case .success(let questionnaires):
-                    self.setQuestionnaires(questionnaires)
-                    
-                    finish()
-                case .failure(let error):
-                    completion(false, .couldNotLoadQuestionnaires(error))
-                }
-            }
-        }
-        
-        func finish() {
-            completion(true, nil)
-        }
-        
-        loadTasksIfNeeded()
+        loadTasksIfNeeded(userInitiated: userInitiated, completion: completion)
     }
     
     private func reinterpretAsGMT0(_ date: Date) -> Date {
@@ -345,26 +275,11 @@ final class CaseManager: CaseManaging, Logging {
                     .map { $0.offset }
                 
                 for index in classificationIndices {
-                    let question = questions[index]
-                    questions[index] = Question(uuid: question.uuid,
-                                                group: question.group,
-                                                questionType: question.questionType,
-                                                label: question.label,
-                                                description: question.description,
-                                                relevantForCategories: question.relevantForCategories,
-                                                answerOptions: question.answerOptions,
-                                                disabledForSources: [.portal])
+                    questions[index] = questions[index].disabledForPortal
                 }
                 
                 // Insert a .lastExposureDate question
-                let lastExposureQuestion = Question(uuid: UUID(),
-                                                    group: .classification,
-                                                    questionType: .lastExposureDate,
-                                                    label: .contactInformationLastExposure,
-                                                    description: nil,
-                                                    relevantForCategories: [.category1, .category2a, .category2b, .category3a, .category3b, .other],
-                                                    answerOptions: nil,
-                                                    disabledForSources: [.portal])
+                let lastExposureQuestion = Question.lastExposureDateQuestion
                 
                 if questions.isEmpty { // Just to be safe
                     questions.append(lastExposureQuestion)
@@ -591,4 +506,97 @@ final class CaseManager: CaseManaging, Logging {
         }
     }
     
+}
+
+// MARK: - Loading
+extension CaseManager {
+    private func loadTasksIfNeeded(userInitiated: Bool, completion: @escaping (Bool, CaseManagingError?) -> Void) {
+        guard shouldLoadTasks(userInitiated: userInitiated) else {
+            logDebug("No task loading needed. Skipping.")
+            return loadQuestionnairesIfNeeded(completion: completion)
+        }
+        
+        do {
+            let previousFetchDate = fetchDate
+            fetchDate = Date() // Set the fetchdate here to prevent multiple request
+            
+            let identifier = try Services.pairingManager.caseToken()
+            Services.networkManager.getCase(identifier: identifier) {
+                switch $0 {
+                case .success(let result):
+                    self.setTasks(result.tasks)
+
+                    if self.dateOfSymptomOnset == nil {
+                        self.dateOfSymptomOnset = result.dateOfSymptomOnset
+                    }
+
+                    if self.dateOfTest == nil {
+                        self.dateOfTest = result.dateOfTest
+                    }
+
+                    if self.symptoms.isEmpty {
+                        self.symptoms = result.symptoms
+                    }
+
+                    self.windowExpiresAt = result.windowExpiresAt
+                    self.reference = result.reference
+                    self.contagiousPeriodKnown = result.contagiousPeriodKnown
+                    
+                    self.fetchDate = Date() // Set the fetchdate here again to the actual date
+        
+                    self.loadQuestionnairesIfNeeded(completion: completion)
+                    
+                    self.listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
+                case .failure(let error):
+                    self.fetchDate = previousFetchDate // Reset the fetchdate since no data was fetched
+                    
+                    completion(false, .couldNotLoadTasks(error))
+                }
+            }
+        } catch {
+            return completion(false, .noCaseData)
+        }
+    }
+    
+    private func loadQuestionnairesIfNeeded(completion: @escaping (Bool, CaseManagingError?) -> Void) {
+        guard shouldLoadQuestionnaires else {
+            logDebug("No questionnaire loading needed. Skipping.")
+            return completion(true, nil)
+        }
+        
+        Services.networkManager.getQuestionnaires {
+            switch $0 {
+            case .success(let questionnaires):
+                self.setQuestionnaires(questionnaires)
+                
+                completion(true, nil)
+            case .failure(let error):
+                completion(false, .couldNotLoadQuestionnaires(error))
+            }
+        }
+    }
+}
+
+private extension Question {
+    static var lastExposureDateQuestion: Question {
+        return Question(uuid: UUID(),
+                        group: .classification,
+                        questionType: .lastExposureDate,
+                        label: .contactInformationLastExposure,
+                        description: nil,
+                        relevantForCategories: [.category1, .category2a, .category2b, .category3a, .category3b, .other],
+                        answerOptions: nil,
+                        disabledForSources: [.portal])
+    }
+    
+    var disabledForPortal: Question {
+        return Question(uuid: uuid,
+                        group: group,
+                        questionType: questionType,
+                        label: label,
+                        description: description,
+                        relevantForCategories: relevantForCategories,
+                        answerOptions: answerOptions,
+                        disabledForSources: [.portal])
+    }
 }

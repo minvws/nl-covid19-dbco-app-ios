@@ -60,22 +60,10 @@ class OverviewTipsViewController: ViewController {
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
         widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
-        func createTipItem(icon: String, text: String) -> UIView {
-            let icon = UIImageView(image: UIImage(named: icon))
-            icon.contentMode = .top
-            icon.widthAnchor.constraint(equalToConstant: 22).isActive = true
-            
-            return HStack(spacing: 16,
-                          icon,
-                          Label(body: text, textColor: Theme.colors.tipItemColor).multiline())
-        }
-        
-        func createSectionHeader(icon: String, title: String) -> UIView {
-            return HStack(spacing: 8,
-                          ImageView(imageName: icon).asIcon(),
-                          Label(title2: title))
-        }
-        
+        setupContent(with: scrollView)
+    }
+    
+    private func createHeaderView() -> UIView {
         let imageContainerView = UIView()
         
         let headerImage = UIImage(named: "Onboarding2")!
@@ -85,20 +73,24 @@ class OverviewTipsViewController: ViewController {
         
         imageView.embed(in: imageContainerView)
         
+        return imageContainerView
+    }
+    
+    private func setupContent(with scrollView: UIScrollView) {
         VStack(spacing: 40,
-               imageContainerView,
+               createHeaderView(),
                VStack(spacing: 16,
-                      Label(title2: viewModel.titleText).multiline(),
-                      Label(body: .overviewTipsMessage, textColor: Theme.colors.tipItemColor).multiline()),
+                      UILabel(title2: viewModel.titleText).multiline(),
+                      UILabel(body: .overviewTipsMessage, textColor: Theme.colors.tipItemColor).multiline()),
                VStack(spacing: 16,
                       createSectionHeader(icon: "EditContact/Section1", title: .overviewTipsSection1Title),
-                      Label(body: .overviewTipsSection1Intro, textColor: Theme.colors.tipItemColor).multiline(),
+                      UILabel(body: .overviewTipsSection1Intro, textColor: Theme.colors.tipItemColor).multiline(),
                       VStack(spacing: 12,
                              createTipItem(icon: "MemoryTips/Photos", text: .overviewTipsSection1Photos),
                              createTipItem(icon: "MemoryTips/Calendar", text: .overviewTipsSection1Calendar),
                              createTipItem(icon: "MemoryTips/SocialMedia", text: .overviewTipsSection1SocialMedia),
                              createTipItem(icon: "MemoryTips/Transactions", text: .overviewTipsSection1Transactions)),
-                      Label(bodyBold: .overviewTipsSection1ActivitiesIntro).multiline(),
+                      UILabel(bodyBold: .overviewTipsSection1ActivitiesIntro).multiline(),
                       VStack(spacing: 12,
                              createTipItem(icon: "MemoryTips/Car", text: .overviewTipsSection1Car),
                              createTipItem(icon: "MemoryTips/Meetings", text: .overviewTipsSection1Meetings),
@@ -106,12 +98,28 @@ class OverviewTipsViewController: ViewController {
                VStack(spacing: 16,
                       createSectionHeader(icon: "EditContact/Section2", title: .overviewTipsSection2Title),
                       VStack(spacing: 12,
-                             Label(body: .overviewTipsSection2Intro, textColor: Theme.colors.tipItemColor).multiline(),
+                             UILabel(body: .overviewTipsSection2Intro, textColor: Theme.colors.tipItemColor).multiline(),
                              VStack(spacing: 16,
                                     createTipItem(icon: "ListItem/Checkmark", text: .overviewTipsSection2Item1),
                                     createTipItem(icon: "ListItem/Checkmark", text: .overviewTipsSection2Item2),
                                     createTipItem(icon: "ListItem/Questionmark", text: .overviewTipsSection2Item3)))))
             .embed(in: scrollView.readableWidth, insets: .top(16) + .bottom(16))
+    }
+    
+    private func createTipItem(icon: String, text: String) -> UIView {
+        let icon = UIImageView(image: UIImage(named: icon))
+        icon.contentMode = .top
+        icon.widthAnchor.constraint(equalToConstant: 22).isActive = true
+        
+        return HStack(spacing: 16,
+                      icon,
+                      UILabel(body: text, textColor: Theme.colors.tipItemColor).multiline())
+    }
+    
+    private func createSectionHeader(icon: String, title: String) -> UIView {
+        return HStack(spacing: 8,
+                      UIImageView(imageName: icon).asIcon(),
+                      UILabel(title2: title))
     }
     
     @objc private func close() {

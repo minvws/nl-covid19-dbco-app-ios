@@ -66,7 +66,7 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
         HStack(spacing: 16,
                statusView,
                VStack(spacing: 4, titleLabel, subtitleLabel),
-               ImageView(imageName: "Chevron").asIcon())
+               UIImageView(imageName: "Chevron").asIcon())
             .alignment(.center)
             .embed(in: containerView)
         

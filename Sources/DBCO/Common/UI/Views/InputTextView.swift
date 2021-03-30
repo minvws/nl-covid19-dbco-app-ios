@@ -82,5 +82,5 @@ class InputTextView<Object: AnyObject, Field: Editable>: UIView {
     }
     
     // MARK: - Private
-    private(set) var label = Label(subhead: nil)
+    private(set) var label = UILabel(subhead: nil)
 }

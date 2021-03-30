@@ -221,6 +221,36 @@ extension Task: Codable {
     }
 }
 
+extension Task: Comparable {
+    static func < (lhs: Task, rhs: Task) -> Bool {
+        guard lhs.taskType == .contact && rhs.taskType == .contact else {
+            return false // To be adjusted whenever more taskTypes are added
+        }
+        
+        // category1 before anything else
+        if lhs.contact.category == .category1 && rhs.contact.category != .category1 {
+            return true
+        } else if lhs.contact.category == .category1 && rhs.contact.category != .category1 {
+            return false
+        }
+        
+        let fallbackDate = "9999-12-31"
+        let leftDate = lhs.contact.dateOfLastExposure ?? fallbackDate
+        let rightDate = rhs.contact.dateOfLastExposure ?? fallbackDate
+        
+        // sort by date
+        switch leftDate.compare(rightDate, options: .numeric) {
+        case .orderedDescending:
+            return true
+        case .orderedAscending:
+            return false
+        case .orderedSame:
+            // sort alphabetically for same date
+            return (lhs.contactName ?? "") < (rhs.contactName ?? "")
+        }
+    }
+}
+
 extension Task {
     static var emptyContactTask: Task {
         

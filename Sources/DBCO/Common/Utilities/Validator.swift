@@ -84,9 +84,9 @@ struct PhoneNumberValidator: Validator {
         case 10:
             return task.applying(.valid)
         case 11...13:
-            let countryCodes = ["+31", "031", // Netherlands country code
-                                "+32", "032", // Belgium country code
-                                "+49", "049"] // Germany country code
+            let countryCodes = ["+31", "031", "0031",  // Netherlands country code
+                                "+32", "032", "0032",  // Belgium country code
+                                "+49", "049", "0049",] // Germany country code
             
             if countryCodes.contains(where: digits.starts) {
                 return task.applying(.valid)

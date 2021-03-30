@@ -56,7 +56,9 @@ class UnfinishedTasksViewModel {
         sections = []
         sections.append((tableHeaderBuilder?(), []))
         
-        let tasks = Services.caseManager.tasks.filter { relevantTaskIdentifiers.contains($0.uuid) }
+        let tasks = Services.caseManager.tasks
+            .filter { relevantTaskIdentifiers.contains($0.uuid) }
+            .sorted(by: <)
         
         let otherContacts = tasks.filter { [.index, .unknown].contains($0.contact.communication) }
         let staffContacts = tasks.filter { $0.contact.communication == .staff }
@@ -122,15 +124,15 @@ class UnfinishedTasksViewController: PromptableViewController {
         tableView.delaysContentTouches = false
         
         let tableHeaderBuilder = {
-            Label(title2: .unfinishedTasksOverviewMessage)
+            UILabel(title2: .unfinishedTasksOverviewMessage)
                 .multiline()
                 .wrappedInReadableWidth(insets: .top(60) + .bottom(20))
         }
         
         let sectionHeaderBuilder = { (title: String, subtitle: String) -> UIView in
             VStack(spacing: 4,
-                   Label(bodyBold: title).multiline(),
-                   Label(subhead: subtitle, textColor: Theme.colors.captionGray).multiline())
+                   UILabel(bodyBold: title).multiline(),
+                   UILabel(subhead: subtitle, textColor: Theme.colors.captionGray).multiline())
                 .wrappedInReadableWidth(insets: .top(20) + .bottom(16))
         }
         

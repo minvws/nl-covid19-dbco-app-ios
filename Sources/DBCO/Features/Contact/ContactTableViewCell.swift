@@ -38,5 +38,5 @@ final class ContactTableViewCell: UITableViewCell, Configurable, Reusable {
 
     // MARK: - Private
 
-    private let titleLabel = Label(body: "")
+    private let titleLabel = UILabel(body: "")
 }
