@@ -56,7 +56,9 @@ class UnfinishedTasksViewModel {
         sections = []
         sections.append((tableHeaderBuilder?(), []))
         
-        let tasks = Services.caseManager.tasks.filter { relevantTaskIdentifiers.contains($0.uuid) }
+        let tasks = Services.caseManager.tasks
+            .filter { relevantTaskIdentifiers.contains($0.uuid) }
+            .sorted(by: <)
         
         let otherContacts = tasks.filter { [.index, .unknown].contains($0.contact.communication) }
         let staffContacts = tasks.filter { $0.contact.communication == .staff }

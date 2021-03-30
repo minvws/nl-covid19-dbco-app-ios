@@ -131,38 +131,10 @@ class TaskOverviewViewModel {
         }
     }
     
-    private func sortTasks(left: Task, right: Task) -> Bool {
-        guard left.taskType == .contact && right.taskType == .contact else {
-            return true // To be adjusted whenever more taskTypes are added
-        }
-        
-        // category1 before anything else
-        if left.contact.category == .category1 && right.contact.category != .category1 {
-            return true
-        } else if right.contact.category == .category1 && left.contact.category != .category1 {
-            return false
-        }
-        
-        let fallbackDate = "9999-12-31"
-        let leftDate = left.contact.dateOfLastExposure ?? fallbackDate
-        let rightDate = right.contact.dateOfLastExposure ?? fallbackDate
-        
-        // sort by date
-        switch leftDate.compare(rightDate, options: .numeric) {
-        case .orderedDescending:
-            return true
-        case .orderedAscending:
-            return false
-        case .orderedSame:
-            // sort alphabetically for same date
-            return (left.contactName ?? "") < (right.contactName ?? "")
-        }
-    }
-    
     private func buildSections(split: KeyPath<Task, Bool>, failingSectionTitle: String, passingSectionTitle: String) {
         let tasks = Services.caseManager.tasks
             .filter { !$0.deletedByIndex }
-            .sorted(by: sortTasks)
+            .sorted(by: <)
         
         let failingContacts = tasks.filter { !$0[keyPath: split] }
         let passingContacts = tasks.filter { $0[keyPath: split] }
