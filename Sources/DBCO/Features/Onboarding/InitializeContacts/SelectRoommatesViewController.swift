@@ -121,19 +121,23 @@ class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdju
         contactListView.hideSuggestions()
     }
     
+    private var today: Date {
+        return Date().start
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
         if isMovingFromParent {
             delegate?.selectRoommatesViewController(self, didCancelWith: contactListView.contacts.map {
-                Onboarding.Contact(date: nil, name: $0.name, contactIdentifier: $0.cnContactIdentifier, isRoommate: true)
+                Onboarding.Contact(date: today, name: $0.name, contactIdentifier: $0.cnContactIdentifier, isRoommate: true)
             })
         }
     }
     
     @objc private func handleContinue() {
         delegate?.selectRoommatesViewController(self, didFinishWith: contactListView.contacts.map {
-            Onboarding.Contact(date: nil, name: $0.name, contactIdentifier: $0.cnContactIdentifier, isRoommate: true)
+            Onboarding.Contact(date: today, name: $0.name, contactIdentifier: $0.cnContactIdentifier, isRoommate: true)
         })
     }
     

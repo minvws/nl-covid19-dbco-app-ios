@@ -72,7 +72,7 @@ extension OnboardingCoordinator: StepViewControllerDelegate {
     }
     
     func stepViewControllerDidSelectSecondaryButton(_ controller: StepViewController) {
-        let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, skipIntro: true)
+        let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, skipIntro: false)
         initializeContactsCoordinator.delegate = self
         startChildCoordinator(initializeContactsCoordinator)
     }

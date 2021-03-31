@@ -33,6 +33,7 @@ class StepViewModel {
 /// - Tag: StepViewController
 class StepViewController: PromptableViewController {
     private let viewModel: StepViewModel
+    private let scrollView = UIScrollView()
     private var imageView: UIImageView!
     
     weak var delegate: StepViewControllerDelegate?
@@ -55,9 +56,12 @@ class StepViewController: PromptableViewController {
         navigationItem.largeTitleDisplayMode = .never
         
         // ScrollView
-        let scrollView = UIScrollView()
         scrollView.embed(in: contentView)
         scrollView.delaysContentTouches = true
+        
+        let widthProviderView = UIView()
+        widthProviderView.snap(to: .top, of: scrollView, height: 0)
+        widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         
         // Image
         imageView = UIImageView(image: viewModel.image)
@@ -100,6 +104,14 @@ class StepViewController: PromptableViewController {
                 return primaryButton
             }
         }()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        let scrollingHeight = scrollView.contentSize.height + scrollView.safeAreaInsets.top + scrollView.safeAreaInsets.bottom
+        let canScroll = scrollingHeight > scrollView.frame.height
+        showPromptViewSeparator = canScroll
     }
     
     @objc private func handlePrimary() {
