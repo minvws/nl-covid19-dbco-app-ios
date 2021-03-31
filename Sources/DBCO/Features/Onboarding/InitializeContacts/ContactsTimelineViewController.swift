@@ -15,12 +15,6 @@ protocol ContactsTimelineViewControllerDelegate: class {
     func contactsTimelineViewControllerDidRequestHelp(_ controller: ContactsTimelineViewController)
 }
 
-private extension Date {
-    var normalized: Date {
-        Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: self)!
-    }
-}
-
 class ContactsTimelineViewModel {
     
     enum Section {
@@ -63,11 +57,11 @@ class ContactsTimelineViewModel {
     }()
     
     init(dateOfSymptomOnset: Date) {
-        configuration = .dateOfSymptomOnset(dateOfSymptomOnset.normalized)
+        configuration = .dateOfSymptomOnset(dateOfSymptomOnset.start)
     }
     
     init(testDate: Date) {
-        configuration = .testDate(testDate.normalized)
+        configuration = .testDate(testDate.start)
     }
     
     private var endDate: Date {
@@ -84,7 +78,7 @@ class ContactsTimelineViewModel {
     }
     
     var sections: [Section] {
-        let today = Date().normalized
+        let today = Date().start
     
         let numberOfDays = Calendar.current.dateComponents([.day], from: endDate, to: today).day! + 1
         

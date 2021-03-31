@@ -131,6 +131,7 @@
 		CDE7C6ED2611CAA500941386 /* ContactQuestionnaireViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE7C6EC2611CAA500941386 /* ContactQuestionnaireViewModel.swift */; };
 		CDE7C6F32611DA8A00941386 /* UILabel+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE7C6F22611DA8A00941386 /* UILabel+Convenience.swift */; };
 		CDE7C6FC2611DBA000941386 /* UIImageView+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3EFC5A25C40F6100EB2087 /* UIImageView+Convenience.swift */; };
+		CDE7C71A26147E3E00941386 /* Date+Start.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE7C71926147E3E00941386 /* Date+Start.swift */; };
 		CDEB5E5025CBF9CD00DD5BEC /* ReversePairingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDEB5E4F25CBF9CD00DD5BEC /* ReversePairingInfo.swift */; };
 		CDF0AE7D25C82D310054AF87 /* ReversePairViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF0AE7C25C82D310054AF87 /* ReversePairViewController.swift */; };
 		CDF0AE8325C95BAA0054AF87 /* OnsetDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF0AE8225C95BAA0054AF87 /* OnsetDatePicker.swift */; };
@@ -297,6 +298,7 @@
 		CDE30E8625232FE200862A40 /* InputFieldEditable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputFieldEditable.swift; sourceTree = "<group>"; };
 		CDE7C6EC2611CAA500941386 /* ContactQuestionnaireViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactQuestionnaireViewModel.swift; sourceTree = "<group>"; };
 		CDE7C6F22611DA8A00941386 /* UILabel+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Convenience.swift"; sourceTree = "<group>"; };
+		CDE7C71926147E3E00941386 /* Date+Start.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Start.swift"; sourceTree = "<group>"; };
 		CDEB5E4F25CBF9CD00DD5BEC /* ReversePairingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReversePairingInfo.swift; sourceTree = "<group>"; };
 		CDF0AE7C25C82D310054AF87 /* ReversePairViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReversePairViewController.swift; sourceTree = "<group>"; };
 		CDF0AE8225C95BAA0054AF87 /* OnsetDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnsetDatePicker.swift; sourceTree = "<group>"; };
@@ -756,6 +758,7 @@
 				CDE7C6F22611DA8A00941386 /* UILabel+Convenience.swift */,
 				CD3EFC5A25C40F6100EB2087 /* UIImageView+Convenience.swift */,
 				CDADF7ED2535B6A500424492 /* UILabel+Styling.swift */,
+				CDE7C71926147E3E00941386 /* Date+Start.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1089,6 +1092,7 @@
 				CD65CD8525360F5C00BB761A /* UnfinishedTasksViewController.swift in Sources */,
 				2859E72E25DE69E900359BA1 /* DispatchQueue+Delay.swift in Sources */,
 				CD926AEC25B59AEA0076113C /* ContactListInputView.swift in Sources */,
+				CDE7C71A26147E3E00941386 /* Date+Start.swift in Sources */,
 				CDC7C8772538469B00FE7E05 /* NetworkManagerURLSessionDelegate.swift in Sources */,
 				CDC7C89425385AD600FE7E05 /* Task.swift in Sources */,
 				CDC7C88C2538507100FE7E05 /* Logging.swift in Sources */,
