@@ -230,7 +230,7 @@ extension Task: Comparable {
         // category1 before anything else
         if lhs.contact.category == .category1 && rhs.contact.category != .category1 {
             return true
-        } else if lhs.contact.category == .category1 && rhs.contact.category != .category1 {
+        } else if rhs.contact.category == .category1 && lhs.contact.category != .category1 {
             return false
         }
         
