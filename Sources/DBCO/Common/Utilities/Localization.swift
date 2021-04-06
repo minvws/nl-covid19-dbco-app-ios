@@ -534,4 +534,7 @@ extension String {
     static var uploadFinishedTitle: String { return Localization.string(for: "uploadFinishedTitle") }
     static var uploadFinishedMessage: String { return Localization.string(for: "uploadFinishedMessage") }
     
+    static var uploadErrorTitle: String { return Localization.string(for: "uploadErrorTitle") }
+    static var uploadErrorMessage: String { return Localization.string(for: "uploadErrorMessage") }
+    
 }
