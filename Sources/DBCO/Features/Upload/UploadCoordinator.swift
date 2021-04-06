@@ -83,25 +83,6 @@ final class UploadCoordinator: Coordinator, Logging {
         navigationController.setViewControllers([tasksController], animated: animated)
     }
     
-    private func sync(animated: Bool) {
-        navigationController.setViewControllers([LoadingViewController()], animated: animated)
-        
-        do {
-            try Services.caseManager.sync { _ in
-                let viewModel = StepViewModel(image: UIImage(named: "UploadSuccess")!,
-                                                        title: .uploadFinishedTitle,
-                                                        message: .uploadFinishedMessage,
-                                                        primaryButtonTitle: .done)
-                let stepController = StepViewController(viewModel: viewModel)
-                stepController.delegate = self
-                
-                self.navigationController.setViewControllers([stepController], animated: true)
-            }
-        } catch let error {
-            logError("Could not sync: \(error)")
-        }
-    }
-    
     private func selectContact(for task: Task) {
         guard Services.caseManager.hasCaseData else { return }
         
@@ -114,6 +95,53 @@ final class UploadCoordinator: Coordinator, Logging {
         startChildCoordinator(EditContactCoordinator(presenter: navigationController, contactTask: task, delegate: self))
     }
     
+}
+
+extension UploadCoordinator {
+    
+    private func showSyncingError() {
+        let alert = UIAlertController(title: .uploadErrorTitle, message: .uploadErrorMessage, preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: .tryAgain, style: .default) { _ in
+            self.attemptSync()
+        })
+        
+        alert.addAction(UIAlertAction(title: .cancel, style: .cancel) { _ in
+            self.navigationController.dismiss(animated: true)
+        })
+        
+        self.navigationController.present(alert, animated: true)
+    }
+    
+    private func attemptSync() {
+        do {
+            try Services.caseManager.sync { success in
+                guard success else { return self.showSyncingError() }
+                
+                self.continueAfterSyncing()
+            }
+        } catch let error {
+            logError("Could not sync: \(error)")
+            showSyncingError()
+        }
+    }
+    
+    private func continueAfterSyncing() {
+        let viewModel = StepViewModel(image: UIImage(named: "UploadSuccess")!,
+                                                title: .uploadFinishedTitle,
+                                                message: .uploadFinishedMessage,
+                                                primaryButtonTitle: .done)
+        let stepController = StepViewController(viewModel: viewModel)
+        stepController.delegate = self
+        
+        self.navigationController.setViewControllers([stepController], animated: true)
+    }
+    
+    private func sync(animated: Bool) {
+        navigationController.setViewControllers([LoadingViewController()], animated: animated)
+        
+        attemptSync()
+    }
 }
 
 extension UploadCoordinator: SelectContactCoordinatorDelegate {
