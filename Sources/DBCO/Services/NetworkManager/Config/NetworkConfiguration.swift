@@ -83,7 +83,7 @@ struct NetworkConfiguration {
             scheme: "https",
             host: "api.bco-portaal.nl",
             port: nil,
-            path: ["v1"],
+            path: ["v2"],
             sslSignature: Certificate.SSL.apiSignature,
             tokenParams: [:]
         ),
