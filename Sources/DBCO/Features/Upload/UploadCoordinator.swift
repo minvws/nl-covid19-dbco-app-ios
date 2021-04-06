@@ -128,13 +128,13 @@ extension UploadCoordinator {
     
     private func continueAfterSyncing() {
         let viewModel = StepViewModel(image: UIImage(named: "UploadSuccess")!,
-                                                title: .uploadFinishedTitle,
-                                                message: .uploadFinishedMessage,
-                                                primaryButtonTitle: .done)
+                                                    title: .uploadFinishedTitle,
+                                                    message: .uploadFinishedMessage,
+                                                    primaryButtonTitle: .done)
         let stepController = StepViewController(viewModel: viewModel)
         stepController.delegate = self
         
-        self.navigationController.setViewControllers([stepController], animated: true)
+        navigationController.setViewControllers([stepController], animated: true)
     }
     
     private func sync(animated: Bool) {
