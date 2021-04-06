@@ -110,7 +110,7 @@ extension UploadCoordinator {
             self.navigationController.dismiss(animated: true)
         })
         
-        self.navigationController.present(alert, animated: true)
+        navigationController.present(alert, animated: true)
     }
     
     private func attemptSync() {
