@@ -36,7 +36,17 @@ final class AppCoordinator: Coordinator {
     
     private var isUpdatingConfiguration = false
     
-    func updateConfiguration() {
+    func appWillBecomeVisible() {
+        updateConfiguration()
+        refreshCaseDataIfNeeded()
+        revealContent()
+    }
+    
+    func appDidHide() {
+        hideContent()
+    }
+    
+    private func updateConfiguration() {
         guard !isUpdatingConfiguration else { return }
         
         isUpdatingConfiguration = true
@@ -53,8 +63,30 @@ final class AppCoordinator: Coordinator {
         }
     }
     
-    func refreshCaseDataIfNeeded() {
+    private func refreshCaseDataIfNeeded() {
         Services.caseManager.loadCaseData(userInitiated: false) { _, _ in }
+    }
+    
+    private var privacyProtectionWindow: UIWindow?
+
+    private func hideContent() {
+        var sceneWindow: UIWindow?
+        
+        if #available(iOS 13.0, *) {
+            if let scene = window.windowScene {
+                sceneWindow = UIWindow(windowScene: scene)
+            }
+        }
+        
+        privacyProtectionWindow = sceneWindow ?? UIWindow(frame: UIScreen.main.bounds)
+        privacyProtectionWindow?.rootViewController = LaunchViewController(viewModel: .init())
+        privacyProtectionWindow?.windowLevel = .alert + 1
+        privacyProtectionWindow?.makeKeyAndVisible()
+    }
+    
+    private func revealContent() {
+        privacyProtectionWindow?.isHidden = true
+        privacyProtectionWindow = nil
     }
     
     private func showRequiredUpdate(with versionInformation: AppVersionInformation) {
