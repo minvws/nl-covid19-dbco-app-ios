@@ -54,7 +54,7 @@ final class OnboardingCoordinator: Coordinator {
     override func start() {
         let needsPairingOption = Services.onboardingManager.needsPairingOption
         if needsPairingOption == false {
-            let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, skipIntro: false)
+            let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, skipIntro: true)
             initializeContactsCoordinator.delegate = self
             startChildCoordinator(initializeContactsCoordinator)
         }
@@ -84,7 +84,7 @@ extension OnboardingCoordinator: OnboardingPairingCoordinatorDelegate {
     func onboardingPairingCoordinatorDidFinish(_ coordinator: OnboardingPairingCoordinator) {
         removeChildCoordinator(coordinator)
         
-        let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, skipIntro: false)
+        let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, skipIntro: true)
         initializeContactsCoordinator.delegate = self
         startChildCoordinator(initializeContactsCoordinator)
     }
