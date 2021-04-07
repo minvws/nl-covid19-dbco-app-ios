@@ -21,20 +21,24 @@ extension UIDatePicker: DatePicking {}
 class OnboardingDateViewModel {
     let title: String
     let subtitle: String
-    let primaryButtonTitle: String
-    let secondaryButtonTitle: String?
     let date: Date?
+    let actions: [OnboardingDateViewController.Action]
     
-    init(title: String, subtitle: String, primaryButtonTitle: String, secondaryButtonTitle: String?, date: Date?) {
+    init(title: String, subtitle: String, date: Date?, actions: [OnboardingDateViewController.Action]) {
         self.title = title
         self.subtitle = subtitle
-        self.primaryButtonTitle = primaryButtonTitle
-        self.secondaryButtonTitle = secondaryButtonTitle
         self.date = date
+        self.actions = actions
     }
 }
 
 class OnboardingDateViewController: ViewController {
+    struct Action {
+        let type: Button.ButtonType
+        let title: String
+        let action: (Date) -> Void
+    }
+    
     private let viewModel: OnboardingDateViewModel
     fileprivate let datePicker: DatePicking = {
         if #available(iOS 14, *) {
@@ -64,88 +68,35 @@ class OnboardingDateViewController: ViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
         
-        let primaryButton = Button(title: viewModel.primaryButtonTitle, style: .primary)
-            .touchUpInside(self, action: #selector(handlePrimaryButton))
-        let secondaryButton = Button(title: viewModel.secondaryButtonTitle ?? "", style: .secondary)
-            .touchUpInside(self, action: #selector(handleSecondaryButton))
-        
-        secondaryButton.isHidden = viewModel.secondaryButtonTitle == nil
-        
         datePicker.maximumDate = Date()
         datePicker.minimumDate = Calendar.current.date(byAdding: .month, value: -3, to: Date())
         datePicker.setDate(viewModel.date ?? Date(), animated: false)
         
+        func createButton(for action: Action) -> Button {
+            return Button(title: action.title, style: action.type)
+                .touchUpInside(self, action: #selector(handleButton))
+        }
+        
+        // Buttons
+        let buttons = VStack(spacing: 16,
+                             viewModel.actions.map(createButton))
+        
         VStack(VStack(spacing: 16,
                       UILabel(title2: viewModel.title).multiline(),
-                      UILabel(body: viewModel.subtitle, textColor: Theme.colors.captionGray).multiline()),
+                      TextView(htmlText: viewModel.subtitle)),
                datePicker,
-               VStack(spacing: 16,
-                      secondaryButton,
-                      primaryButton))
+               buttons)
             .distribution(.equalSpacing)
             .wrappedInReadableWidth()
             .embed(in: view.safeAreaLayoutGuide, insets: .top(32) + .bottom(16))
     }
     
-    @objc fileprivate func handlePrimaryButton() {}
-    
-    @objc fileprivate func handleSecondaryButton() {}
-    
-}
-
-protocol SelectTestDateViewControllerDelegate: class {
-    func selectTestDateViewController(_ controller: SelectTestDateViewController, didSelect date: Date)
-}
-
-class SelectTestDateViewController: OnboardingDateViewController {
-    weak var delegate: SelectTestDateViewControllerDelegate?
-    
-    init() {
-        super.init(viewModel: OnboardingDateViewModel(title: .contagiousPeriodSelectTestDateTitle,
-                                                      subtitle: .contagiousPeriodSelectTestDateMessage,
-                                                      primaryButtonTitle: .next,
-                                                      secondaryButtonTitle: nil,
-                                                      date: Services.onboardingManager.contagiousPeriod.testDate))
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    fileprivate override func handlePrimaryButton() {
-        delegate?.selectTestDateViewController(self, didSelect: datePicker.date)
-    }
-}
-
-protocol SelectSymptomOnsetDateViewControllerDelegate: class {
-    func selectSymptomOnsetDateViewController(_ controller: SelectSymptomOnsetDateViewController, didSelect date: Date)
-    func selectSymptomOnsetDateViewControllerWantsHelp(_ controller: SelectSymptomOnsetDateViewController)
-}
-
-class SelectSymptomOnsetDateViewController: OnboardingDateViewController {
-    weak var delegate: SelectSymptomOnsetDateViewControllerDelegate?
-    
-    init() {
-        super.init(viewModel: OnboardingDateViewModel(title: .contagiousPeriodSelectOnsetDateTitle,
-                                                      subtitle: .contagiousPeriodSelectOnsetDateMessage,
-                                                      primaryButtonTitle: .next,
-                                                      secondaryButtonTitle: .contagiousPeriodSelectOnsetDateHelpButtonTitle,
-                                                      date: Services.onboardingManager.contagiousPeriod.symptomOnsetDate))
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    fileprivate override func handlePrimaryButton() {
-        delegate?.selectSymptomOnsetDateViewController(self, didSelect: datePicker.date)
-    }
-    
-    fileprivate override func handleSecondaryButton() {
-        delegate?.selectSymptomOnsetDateViewControllerWantsHelp(self)
-    }
-    
     func selectDate(_ date: Date) {
         datePicker.setDate(date, animated: true)
+    }
+    
+    @objc private func handleButton(_ sender: Button) {
+        let action = viewModel.actions.first { $0.title == sender.title }
+        action?.action(datePicker.date)
     }
 }

@@ -300,11 +300,11 @@ class ContactQuestionnaireViewModel {
         let exposureDatePlus11: String
         let exposureDatePlus14: String
         
-        init?(exposureDate: Date) {
-            guard let exposureDatePlus5 = Calendar.current.date(byAdding: .day, value: 5, to: exposureDate) else { return nil }
-            guard let exposureDatePlus10 = Calendar.current.date(byAdding: .day, value: 10, to: exposureDate) else { return nil }
-            guard let exposureDatePlus11 = Calendar.current.date(byAdding: .day, value: 11, to: exposureDate) else { return nil }
-            guard let exposureDatePlus14 = Calendar.current.date(byAdding: .day, value: 14, to: exposureDate) else { return nil }
+        init(exposureDate: Date) {
+            let exposureDatePlus5 = exposureDate.dateByAddingDays(5)
+            let exposureDatePlus10 = exposureDate.dateByAddingDays(10)
+            let exposureDatePlus11 = exposureDate.dateByAddingDays(11)
+            let exposureDatePlus14 = exposureDate.dateByAddingDays(14)
             
             let formatter = DateFormatter()
             formatter.dateFormat = .informContactGuidelinesDateFormat
@@ -358,10 +358,10 @@ class ContactQuestionnaireViewModel {
         let reference = Services.caseManager.reference
         
         if let dateValue = updatedContact.dateOfLastExposure,
-           let exposureDate = LastExposureDateAnswerManager.valueDateFormatter.date(from: dateValue),
-           let dates = ExposureDates(exposureDate: exposureDate) {
+           let exposureDate = LastExposureDateAnswerManager.valueDateFormatter.date(from: dateValue) {
             
-            let isWithin4Days = (Calendar.current.dateComponents([.day], from: exposureDate, to: Date()).day ?? 0) < 4
+            let dates = ExposureDates(exposureDate: exposureDate)
+            let isWithin4Days = Date.today.numberOfDaysSince(exposureDate) < 4
             
             informContent = .informContactGuidelines(category: updatedContact.category,
                                                      exposureDatePlus5: dates.exposureDatePlus5,

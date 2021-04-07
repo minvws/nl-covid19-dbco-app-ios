@@ -157,7 +157,7 @@ final class CaseManager: CaseManaging, Logging {
     var startOfContagiousPeriod: Date? {
         switch (dateOfTest, dateOfSymptomOnset) {
         case (_, .some(let dateOfSymptomOnset)):
-            return Calendar.current.date(byAdding: .day, value: -2, to: dateOfSymptomOnset)
+            return dateOfSymptomOnset.dateByAddingDays(-2)
         case (.some(let dateOfTest), _):
             return dateOfTest
         default:
