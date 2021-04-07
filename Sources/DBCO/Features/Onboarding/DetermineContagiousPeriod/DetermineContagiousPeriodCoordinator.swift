@@ -225,13 +225,13 @@ extension DetermineContagiousPeriodCoordinator {
     private func verifyTwoWeeksAgoReason(for date: Date) {
         let viewModel = OnboardingPromptViewModel(
             image: UIImage(named: "Onboarding3"),
-            title: "Is een van deze zaken van toepassing?",
+            title: .verifyOnsetDateTwoWeeksAgoTitle,
             message: nil,
             actions: [
-                .init(type: .secondary, title: "Ik ben eerder getest (geen corona) ") { self.determineNegativeTestDate(onset: date, alwaysHasSymptoms: false) },
-                .init(type: .secondary, title: "Ik heb deze klachten altijd") { self.verifySymptomsGettingWorse(onset: date) },
-                .init(type: .secondary, title: "Beide") { self.determineNegativeTestDate(onset: date, alwaysHasSymptoms: true) },
-                .init(type: .primary, title: "Nee, volgende") { self.verifySelectedOnsetDate(date) }
+                .init(type: .secondary, title: .verifyOnsetDateTwoWeeksAgoTestedNegative) { self.determineNegativeTestDate(onset: date, alwaysHasSymptoms: false) },
+                .init(type: .secondary, title: .verifyOnsetDateTwoWeeksAgoAlwaysHaveSymptoms) { self.verifySymptomsGettingWorse(onset: date) },
+                .init(type: .secondary, title: .verifyOnsetDateTwoWeeksAgoBoth) { self.determineNegativeTestDate(onset: date, alwaysHasSymptoms: true) },
+                .init(type: .primary, title: .verifyOnsetDateTwoWeeksAgoNo) { self.verifySelectedOnsetDate(date) }
             ])
         
         let promptController = OnboardingPromptViewController(viewModel: viewModel)
@@ -240,8 +240,8 @@ extension DetermineContagiousPeriodCoordinator {
     
     private func determineNegativeTestDate(onset: Date, alwaysHasSymptoms: Bool) {
         let viewModel = OnboardingDateViewModel(
-            title: "Wanneer was je laatste negatieve coronatest?",
-            subtitle: "Dit is een test waaruit bleek dat je <b>geen</b> corona had.",
+            title: .determineNegativeTestDateTitle,
+            subtitle: .determineNegativeTestDateSubtitle,
             date: nil,
             actions: [
                 .init(type: .primary, title: .next) {
@@ -256,21 +256,16 @@ extension DetermineContagiousPeriodCoordinator {
     }
     
     private func handleNegativeTestDate(onset: Date, negativeTest: Date, alwaysHasSymptoms: Bool) {
-        let mostRecentDate = [onset, negativeTest]
-            .compactMap { $0 }
-            .sorted(by: <)
-            .last!
+        let mostRecentDate = [onset, negativeTest].sorted(by: <).last!
         
         if mostRecentDate.numberOfDaysAgo > 14 && alwaysHasSymptoms {
             verifySymptomsGettingWorse(onset: mostRecentDate)
         } else {
-            symptomOnsetDate = mostRecentDate
-            userConfirmedDateOfSymptomOnset()
+            continueWithMostRecentDate(mostRecentDate)
         }
     }
     
     private func verifySymptomsGettingWorse(onset: Date) {
-        
         let dateFormatter = DateFormatter()
         dateFormatter.calendar = .current
         dateFormatter.timeZone = .current
@@ -278,11 +273,9 @@ extension DetermineContagiousPeriodCoordinator {
         
         let dateString = dateFormatter.string(from: onset)
         
-        let title = String(format: "Was er een moment na %@ dat je klachten erger werden?", dateString)
-        
         let viewModel = OnboardingPromptViewModel(
             image: nil,
-            title: title,
+            title: .verifySymptomsGettingWorseTitle(date: dateString),
             message: nil,
             actions: [
                 .init(type: .secondary, title: .yes) { self.determineSymptomsIncreasingDate(onset) },
@@ -295,8 +288,8 @@ extension DetermineContagiousPeriodCoordinator {
     
     private func determineSymptomsIncreasingDate(_ currentOnset: Date) {
         let viewModel = OnboardingDateViewModel(
-            title: "Wanneer namen je klachten toe?",
-            subtitle: "Kies een datum voor je (laatste) coronatest. Dit is de test waaruit bleek dat je corona hebt.",
+            title: .determineSymptomsIncreasingDateTitle,
+            subtitle: .determineSymptomsIncreasingDateSubtitle,
             date: nil,
             actions: [
                 .init(type: .primary, title: .next) { self.continueWithMostRecentDate($0, currentOnset) }
@@ -308,8 +301,8 @@ extension DetermineContagiousPeriodCoordinator {
     
     private func determinePositiveTestDate(_ currentOnset: Date) {
         let viewModel = OnboardingDateViewModel(
-            title: "Wanneer was de test waaruit bleek dat je corona hebt? ",
-            subtitle: "Kies de datum waarop je de (laatste)  coronatest hebt gedaan.",
+            title: .determinePositiveTestDateTitle,
+            subtitle: .determinePositiveTestDateSubtitle,
             date: nil,
             actions: [
                 .init(type: .primary, title: .next) { self.continueWithMostRecentDate($0, currentOnset) }
@@ -320,10 +313,7 @@ extension DetermineContagiousPeriodCoordinator {
     }
     
     private func continueWithMostRecentDate(_ dates: Date...) {
-        let mostRecentDate = dates
-            .compactMap { $0 }
-            .sorted(by: <)
-            .last!
+        let mostRecentDate = dates.sorted(by: <).last!
         
         symptomOnsetDate = mostRecentDate
         userConfirmedDateOfSymptomOnset()

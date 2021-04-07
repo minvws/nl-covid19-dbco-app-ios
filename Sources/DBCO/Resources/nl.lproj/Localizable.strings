@@ -84,6 +84,23 @@
 "contagiousPeriodOnsetDateVerify.confirmButton" = "Geen klachten";
 "contagiousPeriodOnsetDateVerify.cancelButton" = "Ik had ook die dag klachten";
 
+"verifyOnsetDateTwoWeeksAgo.title" = "Is een van deze zaken van toepassing?";
+"verifyOnsetDateTwoWeeksAgo.testedNegative" = "Ik ben eerder getest (geen corona)";
+"verifyOnsetDateTwoWeeksAgo.alwaysHaveSymptoms" = "Ik heb deze klachten altijd";
+"verifyOnsetDateTwoWeeksAgo.both" = "Beide";
+"verifyOnsetDateTwoWeeksAgo.no" = "Nee, volgende";
+
+"determineNegativeTestDate.title" = "Wanneer was je laatste negatieve coronatest?";
+"determineNegativeTestDate.subtitle" = "Dit is een test waaruit bleek dat je <b>geen</b> corona had.";
+
+"verifySymptomsGettingWorse.title" = "Was er een moment na %@ dat je klachten erger werden?";
+
+"determineSymptomsIncreasingDate.title" = "Wanneer namen je klachten toe?";
+"determineSymptomsIncreasingDate.subtitle" = "Kies een datum voor je (laatste) coronatest. Dit is de test waaruit bleek dat je corona hebt.";
+
+"determinePositiveTestDate.title" = "Wanneer was de test waaruit bleek dat je corona hebt?";
+"determinePositiveTestDate.subtitle" = "Kies de datum waarop je de (laatste)  coronatest hebt gedaan.";
+
 /* MARK: - Determine contacts */
 "onboardingDetermineContactsIntro.title" = "Bepaal wie van je contacten misschien zijn besmet en informeer hen";
 "onboardingDetermineContactsIntro.message" = "We gaan een overzicht maken van mensen die je hebt ontmoet. Goed om te weten: niet iedereen hoeft direct in quarantaine.";
