@@ -161,7 +161,7 @@ class ContactsTimelineViewModel {
     func addExtraDay() {
         guard case .dateOfSymptomOnset(let date) = configuration else { return }
         
-        let adjustedDate = Calendar.current.date(byAdding: .day, value: -1, to: date)!
+        let adjustedDate = date.dateByAddingDays(-1)
         
         configuration = .dateOfSymptomOnset(adjustedDate)
     }

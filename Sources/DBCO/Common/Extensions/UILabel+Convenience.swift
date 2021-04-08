@@ -23,7 +23,7 @@ extension UILabel {
 
     @discardableResult
     func hideIfEmpty() -> Self {
-        isHidden = text?.isEmpty == true
+        isHidden = text == nil || text!.isEmpty == true
         return self
     }
 

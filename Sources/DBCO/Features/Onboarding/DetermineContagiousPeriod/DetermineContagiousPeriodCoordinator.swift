@@ -50,22 +50,39 @@ final class DetermineContagiousPeriodCoordinator: Coordinator, Logging {
 
 extension DetermineContagiousPeriodCoordinator: SelectSymptomsViewControllerDelegate {
     
+    private var onsetDatePickerViewModel: OnboardingDateViewModel {
+        return .init(
+            title: .contagiousPeriodSelectOnsetDateTitle,
+            subtitle: .contagiousPeriodSelectOnsetDateMessage,
+            date: Services.onboardingManager.contagiousPeriod.symptomOnsetDate,
+            actions: [
+                .init(type: .secondary, title: .contagiousPeriodSelectOnsetDateHelpButtonTitle, action: symptomOnsetHelp),
+                .init(type: .primary, title: .next, action: handleSymptomOnsetDate)
+            ])
+    }
+    
+    private var testDatePickerViewModel: OnboardingDateViewModel {
+        return .init(
+            title: .contagiousPeriodSelectTestDateTitle,
+            subtitle: .contagiousPeriodSelectTestDateMessage,
+            date: Services.onboardingManager.contagiousPeriod.testDate,
+            actions: [
+                .init(type: .primary, title: .next, action: handleTestDate)
+            ])
+    }
+    
     func selectSymptomsViewController(_ controller: SelectSymptomsViewController, didSelect symptoms: [Symptom]) {
-        if !symptoms.isEmpty {
-            self.symptoms = symptoms
-            
-            let dateController = SelectSymptomOnsetDateViewController()
-            dateController.delegate = self
-            
-            navigationController.pushViewController(dateController, animated: true)
-        } else {
+        let viewModel: OnboardingDateViewModel
+        
+        if symptoms.isEmpty {
             self.symptoms = []
-            
-            let dateController = SelectTestDateViewController()
-            dateController.delegate = self
-            
-            navigationController.pushViewController(dateController, animated: true)
+            viewModel = testDatePickerViewModel
+        } else {
+            self.symptoms = symptoms
+            viewModel = onsetDatePickerViewModel
         }
+        
+        navigationController.pushViewController(OnboardingDateViewController(viewModel: viewModel), animated: true)
     }
     
 }
@@ -121,25 +138,25 @@ extension DetermineContagiousPeriodCoordinator {
     
     private func userSelectedDayEarlier() {
         // Adjust the date to one day earlier
-        let adjustedDate = Calendar.current.date(byAdding: .day, value: -1, to: symptomOnsetDate)!
+        let adjustedDate = symptomOnsetDate.dateByAddingDays(-1)
         
-        let symtomOnsetViewController = navigationController
+        let dateViewController = navigationController
             .viewControllers
-            .compactMap { $0 as? SelectSymptomOnsetDateViewController }
-            .last
+            .compactMap { $0 as? OnboardingDateViewController }
+            .last!
         
-        (navigationController.topViewController as? ViewController)?.onPopped = { _ in
-            symtomOnsetViewController?.selectDate(adjustedDate)
+        delay(0.4) {
+            dateViewController.selectDate(adjustedDate)
         }
         
-        navigationController.popViewController(animated: true)
+        navigationController.popToViewController(dateViewController, animated: true)
     }
     
 }
 
-extension DetermineContagiousPeriodCoordinator: SelectTestDateViewControllerDelegate {
-    
-    func selectTestDateViewController(_ controller: SelectTestDateViewController, didSelect date: Date) {
+// MARK: - TestDate selection handling
+extension DetermineContagiousPeriodCoordinator {
+    func handleTestDate(_ date: Date) {
         testDate = date
         
         let viewModel = StepViewModel(image: UIImage(named: "Onboarding3")!,
@@ -157,12 +174,29 @@ extension DetermineContagiousPeriodCoordinator: SelectTestDateViewControllerDele
     
 }
 
-extension DetermineContagiousPeriodCoordinator: SelectSymptomOnsetDateViewControllerDelegate {
+// MARK: - OnsetDate selection handling
+extension DetermineContagiousPeriodCoordinator {
+    func handleSymptomOnsetDate(_ date: Date) {
+        if date.numberOfDaysAgo > 14 {
+            verifyTwoWeeksAgoReason(for: date)
+        } else {
+            verifySelectedOnsetDate(date)
+        }
+    }
     
-    func selectSymptomOnsetDateViewController(_ controller: SelectSymptomOnsetDateViewController, didSelect date: Date) {
-        symptomOnsetDate = date
+    func symptomOnsetHelp(_ date: Date) {
+        let viewModel = OnsetHelpViewModel()
+        let helpController = OnsetHelpViewController(viewModel: viewModel)
+        helpController.delegate = self
         
-        let verifyDate = Calendar.current.date(byAdding: .day, value: -1, to: date)!
+        let wrapperController = NavigationController(rootViewController: helpController)
+        
+        navigationController.present(wrapperController, animated: true)
+    }
+    
+    private func verifySelectedOnsetDate(_ date: Date) {
+        symptomOnsetDate = date
+        let verifyDate = date.dateByAddingDays(-1)
         
         let dateFormatter = DateFormatter()
         dateFormatter.calendar = .current
@@ -183,17 +217,107 @@ extension DetermineContagiousPeriodCoordinator: SelectSymptomOnsetDateViewContro
         
         navigationController.pushViewController(stepController, animated: true)
     }
+}
+
+// MARK: - Distant OnsetDate handling
+extension DetermineContagiousPeriodCoordinator {
     
-    func selectSymptomOnsetDateViewControllerWantsHelp(_ controller: SelectSymptomOnsetDateViewController) {
-        let viewModel = OnsetHelpViewModel()
-        let helpController = OnsetHelpViewController(viewModel: viewModel)
-        helpController.delegate = self
+    private func verifyTwoWeeksAgoReason(for date: Date) {
+        let viewModel = OnboardingPromptViewModel(
+            image: UIImage(named: "Onboarding3"),
+            title: .verifyOnsetDateTwoWeeksAgoTitle,
+            message: nil,
+            actions: [
+                .init(type: .secondary, title: .verifyOnsetDateTwoWeeksAgoTestedNegative) { self.determineNegativeTestDate(onset: date, alwaysHasSymptoms: false) },
+                .init(type: .secondary, title: .verifyOnsetDateTwoWeeksAgoAlwaysHaveSymptoms) { self.verifySymptomsGettingWorse(onset: date) },
+                .init(type: .secondary, title: .verifyOnsetDateTwoWeeksAgoBoth) { self.determineNegativeTestDate(onset: date, alwaysHasSymptoms: true) },
+                .init(type: .primary, title: .verifyOnsetDateTwoWeeksAgoNo) { self.verifySelectedOnsetDate(date) }
+            ])
         
-        let wrapperController = NavigationController(rootViewController: helpController)
-        
-        navigationController.present(wrapperController, animated: true)
+        let promptController = OnboardingPromptViewController(viewModel: viewModel)
+        navigationController.pushViewController(promptController, animated: true)
     }
     
+    private func determineNegativeTestDate(onset: Date, alwaysHasSymptoms: Bool) {
+        let viewModel = OnboardingDateViewModel(
+            title: .determineNegativeTestDateTitle,
+            subtitle: .determineNegativeTestDateSubtitle,
+            date: nil,
+            actions: [
+                .init(type: .primary, title: .next) {
+                    self.handleNegativeTestDate(onset: onset,
+                                                negativeTest: $0,
+                                                alwaysHasSymptoms: alwaysHasSymptoms)
+                }
+            ])
+        
+        navigationController.pushViewController(OnboardingDateViewController(viewModel: viewModel),
+                                                animated: true)
+    }
+    
+    private func handleNegativeTestDate(onset: Date, negativeTest: Date, alwaysHasSymptoms: Bool) {
+        let mostRecentDate = [onset, negativeTest].sorted(by: <).last!
+        
+        if mostRecentDate.numberOfDaysAgo > 14 && alwaysHasSymptoms {
+            verifySymptomsGettingWorse(onset: mostRecentDate)
+        } else {
+            continueWithMostRecentDate(mostRecentDate)
+        }
+    }
+    
+    private func verifySymptomsGettingWorse(onset: Date) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = .current
+        dateFormatter.timeZone = .current
+        dateFormatter.dateFormat = .contagiousPeriodOnsetDateVerifyDateFormat
+        
+        let dateString = dateFormatter.string(from: onset)
+        
+        let viewModel = OnboardingPromptViewModel(
+            image: nil,
+            title: .verifySymptomsGettingWorseTitle(date: dateString),
+            message: nil,
+            actions: [
+                .init(type: .secondary, title: .yes) { self.determineSymptomsIncreasingDate(onset) },
+                .init(type: .secondary, title: .no) { self.determinePositiveTestDate(onset) }
+            ])
+        
+        let promptController = OnboardingPromptViewController(viewModel: viewModel)
+        navigationController.pushViewController(promptController, animated: true)
+    }
+    
+    private func determineSymptomsIncreasingDate(_ currentOnset: Date) {
+        let viewModel = OnboardingDateViewModel(
+            title: .determineSymptomsIncreasingDateTitle,
+            subtitle: .determineSymptomsIncreasingDateSubtitle,
+            date: nil,
+            actions: [
+                .init(type: .primary, title: .next) { self.continueWithMostRecentDate($0, currentOnset) }
+            ])
+        
+        navigationController.pushViewController(OnboardingDateViewController(viewModel: viewModel),
+                                                animated: true)
+    }
+    
+    private func determinePositiveTestDate(_ currentOnset: Date) {
+        let viewModel = OnboardingDateViewModel(
+            title: .determinePositiveTestDateTitle,
+            subtitle: .determinePositiveTestDateSubtitle,
+            date: nil,
+            actions: [
+                .init(type: .primary, title: .next) { self.continueWithMostRecentDate($0, currentOnset) }
+            ])
+        
+        navigationController.pushViewController(OnboardingDateViewController(viewModel: viewModel),
+                                                animated: true)
+    }
+    
+    private func continueWithMostRecentDate(_ dates: Date...) {
+        let mostRecentDate = dates.sorted(by: <).last!
+        
+        symptomOnsetDate = mostRecentDate
+        userConfirmedDateOfSymptomOnset()
+    }
 }
 
 extension DetermineContagiousPeriodCoordinator: OnsetHelpViewControllerDelegate {
