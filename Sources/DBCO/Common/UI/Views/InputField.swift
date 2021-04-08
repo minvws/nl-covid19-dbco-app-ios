@@ -152,6 +152,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         optionPicker = picker
         
         dropdownIconView.isHidden = false
+        accessibilityTraits = [.button, .staticText]
     }
     
     override func layoutSubviews() {
@@ -279,6 +280,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         
         switch editable.inputType {
         case .date, .picker:
+            UIAccessibility.post(notification: .screenChanged, argument: inputView)
             return true
         default:
             break
@@ -287,17 +289,16 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         guard let delegate = inputFieldDelegate else { return true }
         
         if let options = editable.valueOptions, options.count > 1, text?.isEmpty == true, !overrideOptionPrompt {
-            delegate.promptOptionsForInputField(options) {
-                if $0 == nil {
+            delegate.promptOptionsForInputField(options) { (option) in
+                if let option = option {
+                    self.text = option
+                    self.handleEditingDidEnd()
+                } else {
                     self.overrideOptionPrompt = true
                     self.becomeFirstResponder()
                     self.overrideOptionPrompt = false
-                } else {
-                    self.text = $0
-                    self.handleEditingDidEnd()
                 }
             }
-            
             return false
         } else {
             return true
