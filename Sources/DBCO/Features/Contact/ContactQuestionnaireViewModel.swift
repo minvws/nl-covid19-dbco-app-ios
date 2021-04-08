@@ -62,6 +62,8 @@ class ContactQuestionnaireViewModel {
     private(set) var answerManagers: [AnswerManaging]
     
     var canSafelyCancel: Bool {
+        guard !isDisabled else { return true }
+        
         if updatedTask.contact.category == .other && updatedTask.contact.dateOfLastExposure == nil {
             return true
         }
