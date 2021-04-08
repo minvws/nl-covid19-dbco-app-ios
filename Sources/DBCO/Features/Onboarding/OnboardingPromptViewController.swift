@@ -24,6 +24,7 @@ class OnboardingPromptViewModel {
 
 /// - Tag: OnboardingPromptViewController
 class OnboardingPromptViewController: ViewController, ScrollViewNavivationbarAdjusting {
+    
     let shortTitle: String = ""
     
     struct Action {
@@ -56,7 +57,6 @@ class OnboardingPromptViewController: ViewController, ScrollViewNavivationbarAdj
         // ScrollView
         scrollView.embed(in: view)
         scrollView.delegate = self
-        scrollView.delaysContentTouches = false
         
         let widthProviderView = UIView()
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
@@ -67,7 +67,8 @@ class OnboardingPromptViewController: ViewController, ScrollViewNavivationbarAdj
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.setContentHuggingPriority(.required, for: .vertical)
-        imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(100), for: .vertical)
+        imageView.heightAnchor.constraint(greaterThanOrEqualToConstant: 80).isActive = true
         
         // Labels
         let labels = VStack(spacing: 16,
@@ -75,14 +76,16 @@ class OnboardingPromptViewController: ViewController, ScrollViewNavivationbarAdj
             UILabel(body: viewModel.message, textColor: Theme.colors.captionGray).multiline().hideIfEmpty()
         )
         
-        func createButton(for action: Action) -> Button {
-            return Button(title: action.title, style: action.type)
+        func createButton(for offset: Int, action: Action) -> Button {
+            let button = Button(title: action.title, style: action.type)
                 .touchUpInside(self, action: #selector(handleButton))
+            button.tag = offset
+            return button
         }
         
         // Buttons
         let buttons = VStack(spacing: 16,
-                             viewModel.actions.map(createButton))
+                             viewModel.actions.enumerated().map(createButton))
           
         // Stack
         let margin: UIEdgeInsets = .top(64) + .bottom(16)
@@ -91,22 +94,27 @@ class OnboardingPromptViewController: ViewController, ScrollViewNavivationbarAdj
                    imageView,
                    VStack(spacing: 32,
                           labels,
-                          buttons))
+                          buttons)
+                    .distribution(.equalSpacing)
+                    .heightConstraint(to: 300,
+                                      priority: UILayoutPriority(50)))
             .distribution(.equalSpacing)
             .embed(in: scrollView.readableWidth, insets: margin)
         stack.heightAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.heightAnchor,
                                       multiplier: 1,
                                       constant: -(margin.top + margin.bottom)).isActive = true
+        
+        let preferredHeightConstraint = stack.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor,
+                                                                      multiplier: 1,
+                                                                      constant: -(margin.top + margin.bottom))
+        preferredHeightConstraint.priority = UILayoutPriority(250)
+        preferredHeightConstraint.isActive = true
     }
     
     @objc private func handleButton(_ sender: Button) {
-        let action = viewModel.actions.first { $0.title == sender.title }
-        action?.action()
+        viewModel.actions[sender.tag].action()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-    }
 }
 
 extension OnboardingPromptViewController: UIScrollViewDelegate {

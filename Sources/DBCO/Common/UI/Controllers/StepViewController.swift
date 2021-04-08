@@ -31,7 +31,10 @@ class StepViewModel {
 }
 
 /// - Tag: StepViewController
-class StepViewController: PromptableViewController {
+class StepViewController: ViewController, ScrollViewNavivationbarAdjusting {
+    
+    let shortTitle: String = ""
+    
     private let viewModel: StepViewModel
     private let scrollView = UIScrollView()
     private var imageView: UIImageView!
@@ -56,38 +59,30 @@ class StepViewController: PromptableViewController {
         navigationItem.largeTitleDisplayMode = .never
         
         // ScrollView
-        scrollView.embed(in: contentView)
-        scrollView.delaysContentTouches = true
+        scrollView.embed(in: view)
+        scrollView.delegate = self
         
         let widthProviderView = UIView()
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
-        widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
+        widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
         // Image
         imageView = UIImageView(image: viewModel.image)
         imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.setContentHuggingPriority(.required, for: .vertical)
-        imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(100), for: .vertical)
+        imageView.heightAnchor.constraint(greaterThanOrEqualToConstant: 80).isActive = true
         
         // Labels
         let labels = VStack(spacing: 16,
             UILabel(title2: viewModel.title).multiline(),
-            UILabel(body: viewModel.message, textColor: Theme.colors.captionGray).multiline()
+            UILabel(body: viewModel.message, textColor: Theme.colors.captionGray)
+                .multiline()
+                .hideIfEmpty()
         )
-          
-        // Stack
-        let margin: UIEdgeInsets = .top(64) + .bottom(64)
-        let stack =
-            VStack(spacing: 32, imageView, labels)
-            .distribution(.equalCentering)
-            .embed(in: scrollView.readableWidth, insets: margin)
-        stack.heightAnchor.constraint(greaterThanOrEqualTo: contentView.safeAreaLayoutGuide.heightAnchor,
-                                      multiplier: 1,
-                                      constant: -(margin.top + margin.bottom)).isActive = true
         
         // Buttons
-        promptView = {
+        let buttons: UIView = {
             let primaryButton = Button(title: viewModel.primaryButtonTitle, style: .primary)
                                   .touchUpInside(self, action: #selector(handlePrimary))
             
@@ -104,14 +99,29 @@ class StepViewController: PromptableViewController {
                 return primaryButton
             }
         }()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+          
+        // Stack
+        let margin: UIEdgeInsets = .top(32) + .bottom(16)
+        let stack =
+            VStack(spacing: 32,
+                   imageView,
+                   VStack(spacing: 32,
+                          labels,
+                          buttons)
+                    .distribution(.equalSpacing)
+                    .heightConstraint(to: 300,
+                                      priority: UILayoutPriority(50)))
+            .distribution(.equalSpacing)
+            .embed(in: scrollView.readableWidth, insets: margin)
+        stack.heightAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.heightAnchor,
+                                      multiplier: 1,
+                                      constant: -(margin.top + margin.bottom)).isActive = true
         
-        let scrollingHeight = scrollView.contentSize.height + scrollView.safeAreaInsets.top + scrollView.safeAreaInsets.bottom
-        let canScroll = scrollingHeight > scrollView.frame.height
-        showPromptViewSeparator = canScroll
+        let preferredHeightConstraint = stack.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor,
+                                                                      multiplier: 1,
+                                                                      constant: -(margin.top + margin.bottom))
+        preferredHeightConstraint.priority = UILayoutPriority(250)
+        preferredHeightConstraint.isActive = true
     }
     
     @objc private func handlePrimary() {
@@ -121,4 +131,12 @@ class StepViewController: PromptableViewController {
     @objc private func handleSecondary() {
         delegate?.stepViewControllerDidSelectSecondaryButton(self)
     }
+}
+
+extension StepViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        adjustNavigationBar(for: scrollView)
+    }
+    
 }
