@@ -38,7 +38,7 @@ struct NetworkConfiguration {
             scheme: "https",
             host: "public.testing.dbco.egeniq.com",
             port: nil,
-            path: ["v1"],
+            path: ["v2"],
             sslSignature: nil,
             tokenParams: [:]
         ),
@@ -53,7 +53,7 @@ struct NetworkConfiguration {
             scheme: "https",
             host: "api-test.bco-portaal.nl",
             port: nil,
-            path: ["v1"],
+            path: ["v2"],
             sslSignature: nil,
             tokenParams: [:]
         ),
@@ -68,7 +68,7 @@ struct NetworkConfiguration {
             scheme: "https",
             host: "api-acc.bco-portaal.nl",
             port: nil,
-            path: ["v1"],
+            path: ["v2"],
             sslSignature: Certificate.SSL.apiSignature,
             tokenParams: [:]
         ),
