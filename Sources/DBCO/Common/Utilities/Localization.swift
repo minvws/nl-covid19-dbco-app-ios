@@ -135,6 +135,23 @@ extension String {
     static var contagiousPeriodOnsetDateVerifyConfirmButton: String { return Localization.string(for: "contagiousPeriodOnsetDateVerify.confirmButton") }
     static var contagiousPeriodOnsetDateVerifyCancelButton: String { return Localization.string(for: "contagiousPeriodOnsetDateVerify.cancelButton") }
     
+    static var verifyOnsetDateTwoWeeksAgoTitle: String { return Localization.string(for: "verifyOnsetDateTwoWeeksAgo.title") }
+    static var verifyOnsetDateTwoWeeksAgoTestedNegative: String { return Localization.string(for: "verifyOnsetDateTwoWeeksAgo.testedNegative") }
+    static var verifyOnsetDateTwoWeeksAgoAlwaysHaveSymptoms: String { return Localization.string(for: "verifyOnsetDateTwoWeeksAgo.alwaysHaveSymptoms") }
+    static var verifyOnsetDateTwoWeeksAgoBoth: String { return Localization.string(for: "verifyOnsetDateTwoWeeksAgo.both") }
+    static var verifyOnsetDateTwoWeeksAgoNo: String { return Localization.string(for: "verifyOnsetDateTwoWeeksAgo.no") }
+    
+    static var determineNegativeTestDateTitle: String { return Localization.string(for: "determineNegativeTestDate.title") }
+    static var determineNegativeTestDateSubtitle: String { return Localization.string(for: "determineNegativeTestDate.subtitle") }
+    
+    static func verifySymptomsGettingWorseTitle(date: String) -> String { return Localization.string(for: "verifySymptomsGettingWorse.title", [date]) }
+    
+    static var determineSymptomsIncreasingDateTitle: String { return Localization.string(for: "determineSymptomsIncreasingDate.title") }
+    static var determineSymptomsIncreasingDateSubtitle: String { return Localization.string(for: "determineSymptomsIncreasingDate.subtitle") }
+    
+    static var determinePositiveTestDateTitle: String { return Localization.string(for: "determinePositiveTestDate.title") }
+    static var determinePositiveTestDateSubtitle: String { return Localization.string(for: "determinePositiveTestDate.subtitle") }
+    
     /* MARK: - Determine contacts */
     static var onboardingDetermineContactsIntroTitle: String { return Localization.string(for: "onboardingDetermineContactsIntro.title") }
     static var onboardingDetermineContactsIntroMessage: String { return Localization.string(for: "onboardingDetermineContactsIntro.message") }
