@@ -191,7 +191,9 @@ extension SelectRoommatesViewController: ContactListInputViewDelegate {
             let maxOffset = minOffset - visibleHeight + convertedBounds.height + extraMargin.bottom
             let currentOffset = scrollView.contentOffset.y
             
-            if currentOffset > minOffset {
+            if traitCollection.verticalSizeClass == .compact {
+                scrollView.setContentOffset(CGPoint(x: 0, y: minOffset), animated: true)
+            } else if currentOffset > minOffset {
                 scrollView.setContentOffset(CGPoint(x: 0, y: minOffset), animated: true)
             } else if currentOffset < maxOffset {
                 scrollView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
