@@ -127,12 +127,17 @@ extension UploadCoordinator {
     }
     
     private func continueAfterSyncing() {
-        let viewModel = StepViewModel(image: UIImage(named: "UploadSuccess")!,
-                                                    title: .uploadFinishedTitle,
-                                                    message: .uploadFinishedMessage,
-                                                    primaryButtonTitle: .done)
+        let viewModel = StepViewModel(
+            image: UIImage(named: "UploadSuccess"),
+            title: .uploadFinishedTitle,
+            message: .uploadFinishedMessage,
+            actions: [
+                .init(type: .primary, title: .done) {
+                    self.navigationController.dismiss(animated: true)
+                }
+            ])
+        
         let stepController = StepViewController(viewModel: viewModel)
-        stepController.delegate = self
         
         navigationController.setViewControllers([stepController], animated: true)
     }
@@ -202,16 +207,6 @@ extension UploadCoordinator: EditContactCoordinatorDelegate {
     func editContactCoordinatorDidCancel(_ coordinator: EditContactCoordinator) {
         removeChildCoordinator(coordinator)
     }
-    
-}
-
-extension UploadCoordinator: StepViewControllerDelegate {
-    
-    func stepViewControllerDidSelectPrimaryButton(_ controller: StepViewController) {
-        navigationController.dismiss(animated: true)
-    }
-    
-    func stepViewControllerDidSelectSecondaryButton(_ controller: StepViewController) {}
     
 }
 

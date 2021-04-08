@@ -22,11 +22,6 @@ final class DetermineContagiousPeriodCoordinator: Coordinator, Logging {
     
     weak var delegate: DetermineContagiousPeriodCoordinatorDelegate?
     
-    private enum StepIdentifiers: Int {
-        case confirmNoSymptoms = 10001
-        case confirmSymptomOnset = 10002
-    }
-    
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
         
@@ -87,38 +82,6 @@ extension DetermineContagiousPeriodCoordinator: SelectSymptomsViewControllerDele
     
 }
 
-extension DetermineContagiousPeriodCoordinator: StepViewControllerDelegate {
-    
-    func stepViewControllerDidSelectPrimaryButton(_ controller: StepViewController) {
-        guard let identifier = StepIdentifiers(rawValue: controller.view.tag) else {
-            logError("No valid identifier set for onboarding step controller: \(controller)")
-            return
-        }
-        
-        switch identifier {
-        case .confirmNoSymptoms:
-            userConfirmedNoSymptoms()
-        case .confirmSymptomOnset:
-            userConfirmedDateOfSymptomOnset()
-        }
-    }
-    
-    func stepViewControllerDidSelectSecondaryButton(_ controller: StepViewController) {
-        guard let identifier = StepIdentifiers(rawValue: controller.view.tag) else {
-            logError("No valid identifier set for onboarding step controller: \(controller)")
-            return
-        }
-        
-        switch identifier {
-        case .confirmNoSymptoms:
-            userDidHaveSymptoms()
-        case .confirmSymptomOnset:
-            userSelectedDayEarlier()
-        }
-    }
-    
-}
-
 extension DetermineContagiousPeriodCoordinator {
     
     private func userConfirmedNoSymptoms() {
@@ -159,16 +122,16 @@ extension DetermineContagiousPeriodCoordinator {
     func handleTestDate(_ date: Date) {
         testDate = date
         
-        let viewModel = StepViewModel(image: UIImage(named: "Onboarding3")!,
-                                                title: .contagiousPeriodNoSymptomsVerifyTitle,
-                                                message: .contagiousPeriodNoSymptomsVerifyMessage,
-                                                primaryButtonTitle: .contagiousPeriodNoSymptomsVerifyConfirmButton,
-                                                secondaryButtonTitle: .contagiousPeriodNoSymptomsVerifyCancelButton,
-                                                showSecondaryButtonOnTop: true)
-        let stepController = StepViewController(viewModel: viewModel)
-        stepController.view.tag = StepIdentifiers.confirmNoSymptoms.rawValue
-        stepController.delegate = self
+        let viewModel = StepViewModel(
+            image: UIImage(named: "Onboarding3"),
+            title: .contagiousPeriodNoSymptomsVerifyTitle,
+            message: .contagiousPeriodNoSymptomsVerifyMessage,
+            actions: [
+                .init(type: .secondary, title: .contagiousPeriodNoSymptomsVerifyCancelButton, action:  userDidHaveSymptoms),
+                .init(type: .primary, title: .contagiousPeriodNoSymptomsVerifyConfirmButton, action:   userConfirmedNoSymptoms)
+            ])
         
+        let stepController = StepViewController(viewModel: viewModel)
         navigationController.pushViewController(stepController, animated: true)
     }
     
@@ -205,16 +168,16 @@ extension DetermineContagiousPeriodCoordinator {
         
         let dateString = dateFormatter.string(from: verifyDate)
         
-        let viewModel = StepViewModel(image: UIImage(named: "Onboarding3")!,
-                                                title: .contagiousPeriodOnsetDateVerifyTitle(date: dateString),
-                                                message: .contagiousPeriodOnsetDateVerifyMessage,
-                                                primaryButtonTitle: .contagiousPeriodOnsetDateVerifyConfirmButton,
-                                                secondaryButtonTitle: .contagiousPeriodOnsetDateVerifyCancelButton,
-                                                showSecondaryButtonOnTop: true)
-        let stepController = StepViewController(viewModel: viewModel)
-        stepController.view.tag = StepIdentifiers.confirmSymptomOnset.rawValue
-        stepController.delegate = self
+        let viewModel = StepViewModel(
+            image: UIImage(named: "Onboarding3"),
+            title: .contagiousPeriodOnsetDateVerifyTitle(date: dateString),
+            message: .contagiousPeriodOnsetDateVerifyMessage,
+            actions: [
+                .init(type: .secondary, title: .contagiousPeriodOnsetDateVerifyCancelButton, action:  userSelectedDayEarlier),
+                .init(type: .primary, title: .contagiousPeriodOnsetDateVerifyConfirmButton, action:   userConfirmedDateOfSymptomOnset)
+            ])
         
+        let stepController = StepViewController(viewModel: viewModel)
         navigationController.pushViewController(stepController, animated: true)
     }
 }
@@ -223,7 +186,7 @@ extension DetermineContagiousPeriodCoordinator {
 extension DetermineContagiousPeriodCoordinator {
     
     private func verifyTwoWeeksAgoReason(for date: Date) {
-        let viewModel = OnboardingPromptViewModel(
+        let viewModel = StepViewModel(
             image: UIImage(named: "Onboarding3"),
             title: .verifyOnsetDateTwoWeeksAgoTitle,
             message: nil,
@@ -234,7 +197,7 @@ extension DetermineContagiousPeriodCoordinator {
                 .init(type: .primary, title: .verifyOnsetDateTwoWeeksAgoNo) { self.verifySelectedOnsetDate(date) }
             ])
         
-        let promptController = OnboardingPromptViewController(viewModel: viewModel)
+        let promptController = StepViewController(viewModel: viewModel)
         navigationController.pushViewController(promptController, animated: true)
     }
     
@@ -273,7 +236,7 @@ extension DetermineContagiousPeriodCoordinator {
         
         let dateString = dateFormatter.string(from: onset)
         
-        let viewModel = OnboardingPromptViewModel(
+        let viewModel = StepViewModel(
             image: nil,
             title: .verifySymptomsGettingWorseTitle(date: dateString),
             message: nil,
@@ -282,7 +245,7 @@ extension DetermineContagiousPeriodCoordinator {
                 .init(type: .secondary, title: .no) { self.determinePositiveTestDate(onset) }
             ])
         
-        let promptController = OnboardingPromptViewController(viewModel: viewModel)
+        let promptController = StepViewController(viewModel: viewModel)
         navigationController.pushViewController(promptController, animated: true)
     }
     

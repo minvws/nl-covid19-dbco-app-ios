@@ -16,14 +16,17 @@ protocol OnboardingCoordinatorDelegate: class {
 /// Uses [PairViewController](x-source-tag://PairViewController) and [StepViewController](x-source-tag://StepViewController)
 final class OnboardingCoordinator: Coordinator {
     private let window: UIWindow
-    private let navigationController: NavigationController
+    private lazy var navigationController: NavigationController = setupNavigationController()
     private var didPair: Bool = false
     
     weak var delegate: OnboardingCoordinatorDelegate?
     
     init(window: UIWindow) {
         self.window = window
-        
+        super.init()
+    }
+    
+    private func setupNavigationController() -> NavigationController {
         let primaryButtonTitle: String
         let secondaryButtonTitle: String?
         
@@ -35,20 +38,22 @@ final class OnboardingCoordinator: Coordinator {
             secondaryButtonTitle = nil
         }
         
-        let viewModel = StepViewModel(image: UIImage(named: "Onboarding1")!,
-                                                title: .onboardingStartTitle,
-                                                message: .onboardingStartMessage,
-                                                primaryButtonTitle: primaryButtonTitle,
-                                                secondaryButtonTitle: secondaryButtonTitle)
+        let viewModel = StepViewModel(
+            image: UIImage(named: "Onboarding1"),
+            title: .onboardingStartTitle,
+            message: .onboardingStartMessage,
+            actions: [
+                .init(type: .primary, title: primaryButtonTitle, action: continueToPairing),
+                .init(type: .secondary, title: secondaryButtonTitle, action: continueToSelfBCO)
+            ])
+        
         let stepController = StepViewController(viewModel: viewModel)
-        navigationController = NavigationController(rootViewController: stepController)
+        let navigationController = NavigationController(rootViewController: stepController)
 
         navigationController.navigationBar.shadowImage = UIImage()
         navigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
         
-        super.init()
-        
-        stepController.delegate = self
+        return navigationController
     }
     
     override func start() {
@@ -63,15 +68,15 @@ final class OnboardingCoordinator: Coordinator {
     }
 }
 
-extension OnboardingCoordinator: StepViewControllerDelegate {
+extension OnboardingCoordinator {
     
-    func stepViewControllerDidSelectPrimaryButton(_ controller: StepViewController) {
+    func continueToPairing() {
         let pairingCoordinator = OnboardingPairingCoordinator(navigationController: navigationController)
         pairingCoordinator.delegate = self
         startChildCoordinator(pairingCoordinator)
     }
     
-    func stepViewControllerDidSelectSecondaryButton(_ controller: StepViewController) {
+    func continueToSelfBCO() {
         let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, skipIntro: false)
         initializeContactsCoordinator.delegate = self
         startChildCoordinator(initializeContactsCoordinator)

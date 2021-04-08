@@ -31,14 +31,21 @@ final class InitializeContactsCoordinator: Coordinator, Logging {
         if skipIntro {
             navigationController.setViewControllers([privacyConsentViewController()], animated: true)
         } else {
-            let viewModel = StepViewModel(image: UIImage(named: "Onboarding2")!,
-                                                    title: .onboardingDetermineContactsIntroTitle,
-                                                    message: .onboardingDetermineContactsIntroMessage,
-                                                    primaryButtonTitle: .next)
+            let viewModel = StepViewModel(
+                image: UIImage(named: "Onboarding2"),
+                title: .onboardingDetermineContactsIntroTitle,
+                message: .onboardingDetermineContactsIntroMessage,
+                actions: [
+                    .init(type: .primary, title: .next, action:  requestPrivacyConsent)
+                ])
+            
             let stepController = StepViewController(viewModel: viewModel)
-            stepController.delegate = self
             navigationController.pushViewController(stepController, animated: true)
         }
+    }
+    
+    private func requestPrivacyConsent() {
+        navigationController.pushViewController(privacyConsentViewController(), animated: true)
     }
     
     private func privacyConsentViewController() -> PrivacyConsentViewController {
@@ -106,20 +113,6 @@ extension InitializeContactsCoordinator: ContactsAuthorizationViewControllerDele
             // go to settings
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
         }
-    }
-    
-}
-
-extension InitializeContactsCoordinator: StepViewControllerDelegate {
-    
-    func stepViewControllerDidSelectPrimaryButton(_ controller: StepViewController) {
-        requestPrivacyConsent()
-    }
-    
-    func stepViewControllerDidSelectSecondaryButton(_ controller: StepViewController) {}
-    
-    private func requestPrivacyConsent() {
-        navigationController.pushViewController(privacyConsentViewController(), animated: true)
     }
     
 }
