@@ -85,6 +85,10 @@ final class Colors {
     var warning: UIColor {
         return color(for: "WarningColor")
     }
+    
+    var footer: UIColor {
+        return color(for: "Footer")
+    }
 
     var gray: UIColor {
         return color(for: "GrayColor")
