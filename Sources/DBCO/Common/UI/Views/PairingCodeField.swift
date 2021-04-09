@@ -90,7 +90,7 @@ class PairingCodeField: UITextField {
     private let placeholderLabel = UILabel()
     
     private struct Constants {
-        static let kerning: CGFloat = UIScreen.main.bounds.width < 330 ? 6.5 : 10.5
+        static let kerning: CGFloat = UIScreen.main.bounds.width < 330 ? 6 : 10.5
     }
 }
 

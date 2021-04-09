@@ -27,7 +27,6 @@
 		CD10F09825B08B03000295B9 /* SelectRoommatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F09725B08B02000295B9 /* SelectRoommatesViewController.swift */; };
 		CD1824EE2524B3E4006EB272 /* InputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1824ED2524B3E4006EB272 /* InputField.swift */; };
 		CD21D4A8258A07330079D085 /* Task+Unfinished.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD21D4A7258A07330079D085 /* Task+Unfinished.swift */; };
-		CD24562A261DBA3200EEC4B3 /* OnboardingPromptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD245629261DBA3200EEC4B3 /* OnboardingPromptViewController.swift */; };
 		CD24CBE825B9B34D00A2F634 /* OnboardingManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD24CBE725B9B34D00A2F634 /* OnboardingManaging.swift */; };
 		CD24CBEE25B9B3E500A2F634 /* OnboardingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD24CBED25B9B3E500A2F634 /* OnboardingManager.swift */; };
 		CD24CBF825C0305100A2F634 /* ScrollViewNavivationbarAdjusting.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD24CBF725C0305100A2F634 /* ScrollViewNavivationbarAdjusting.swift */; };
@@ -190,7 +189,6 @@
 		CD10F09725B08B02000295B9 /* SelectRoommatesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRoommatesViewController.swift; sourceTree = "<group>"; };
 		CD1824ED2524B3E4006EB272 /* InputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputField.swift; sourceTree = "<group>"; };
 		CD21D4A7258A07330079D085 /* Task+Unfinished.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Unfinished.swift"; sourceTree = "<group>"; };
-		CD245629261DBA3200EEC4B3 /* OnboardingPromptViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPromptViewController.swift; sourceTree = "<group>"; };
 		CD24CBE725B9B34D00A2F634 /* OnboardingManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingManaging.swift; sourceTree = "<group>"; };
 		CD24CBED25B9B3E500A2F634 /* OnboardingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingManager.swift; sourceTree = "<group>"; };
 		CD24CBF725C0305100A2F634 /* ScrollViewNavivationbarAdjusting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewNavivationbarAdjusting.swift; sourceTree = "<group>"; };
@@ -574,7 +572,6 @@
 				CD10F07625AEFD21000295B9 /* Pairing */,
 				CD756C49252C6A30005FEDA0 /* OnboardingCoordinator.swift */,
 				CD756C5D252C9A7E005FEDA0 /* PairViewController.swift */,
-				CD245629261DBA3200EEC4B3 /* OnboardingPromptViewController.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -1086,7 +1083,6 @@
 				CD49BAEB2525CE7C0079D018 /* PromptableViewController.swift in Sources */,
 				CDFCF90C2510C47E0062269A /* Localization.swift in Sources */,
 				CDC4A8EA250B87E5001BABC6 /* SceneDelegate.swift in Sources */,
-				CD24562A261DBA3200EEC4B3 /* OnboardingPromptViewController.swift in Sources */,
 				2859E72A25DE693F00359BA1 /* UIAccessibility+Management.swift in Sources */,
 				CD4DBE7C25F65E060037B144 /* ListItem.swift in Sources */,
 				CDF0AE7D25C82D310054AF87 /* ReversePairViewController.swift in Sources */,

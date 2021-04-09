@@ -37,7 +37,7 @@ class ContactListInputView: UIView {
     private var activeSuggestions: [CNContact] = [] {
         didSet { updateSuggestionView() }
     }
-    private var suggestionPresenter: UIView?
+    private weak var suggestionPresenter: UIView?
     
     private var suggestionContainerView: UIView!
     private var suggestedNamesStackView: UIStackView!

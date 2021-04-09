@@ -7,38 +7,50 @@
 
 import UIKit
 
-protocol StepViewControllerDelegate: class {
-    func stepViewControllerDidSelectPrimaryButton(_ controller: StepViewController)
-    func stepViewControllerDidSelectSecondaryButton(_ controller: StepViewController)
-}
-
 class StepViewModel {
-    let image: UIImage
-    let title: String
-    let message: String
-    let primaryButtonTitle: String
-    let secondaryButtonTitle: String?
-    let showSecondaryButtonOnTop: Bool
     
-    init(image: UIImage, title: String, message: String, primaryButtonTitle: String, secondaryButtonTitle: String? = nil, showSecondaryButtonOnTop: Bool = false) {
+    let image: UIImage?
+    let title: String
+    let message: String?
+    let actions: [StepViewController.Action]
+    
+    init(image: UIImage?, title: String, message: String?, actions: [StepViewController.Action]) {
         self.image = image
         self.title = title
         self.message = message
-        self.primaryButtonTitle = primaryButtonTitle
-        self.secondaryButtonTitle = secondaryButtonTitle
-        self.showSecondaryButtonOnTop = showSecondaryButtonOnTop
+        self.actions = actions
     }
 }
 
 /// - Tag: StepViewController
-class StepViewController: PromptableViewController {
+class StepViewController: ViewController, ScrollViewNavivationbarAdjusting {
+    
+    let shortTitle: String = ""
+    
+    struct Action {
+        let type: Button.ButtonType
+        let title: String?
+        let action: () -> Void
+        
+        init(type: Button.ButtonType, title: String?, action: @escaping () -> Void) {
+            self.type = type
+            self.title = title
+            self.action = action
+        }
+        
+        init(type: Button.ButtonType, title: String?, target: AnyObject, action: Selector) {
+            self.type = type
+            self.title = title
+            self.action = { [weak target] in
+                _ = target?.perform(action)
+            }
+        }
+    }
+    
     private let viewModel: StepViewModel
     private let scrollView = UIScrollView()
-    private var imageView: UIImageView!
-    
-    weak var delegate: StepViewControllerDelegate?
-    
-    init(viewModel: StepViewModel, showSecondaryButtonOnTop: Bool = false) {
+
+    init(viewModel: StepViewModel) {
         self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)
@@ -56,69 +68,80 @@ class StepViewController: PromptableViewController {
         navigationItem.largeTitleDisplayMode = .never
         
         // ScrollView
-        scrollView.embed(in: contentView)
-        scrollView.delaysContentTouches = true
+        scrollView.embed(in: view)
+        scrollView.delegate = self
         
         let widthProviderView = UIView()
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
-        widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
+        widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
-        // Image
-        imageView = UIImageView(image: viewModel.image)
+        setupStackView()
+    }
+    
+    private func createImage() -> UIView {
+        let imageView = UIImageView(image: viewModel.image)
         imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.setContentHuggingPriority(.required, for: .vertical)
-        imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority(100), for: .vertical)
+        imageView.heightAnchor.constraint(greaterThanOrEqualToConstant: 80).isActive = true
         
-        // Labels
-        let labels = VStack(spacing: 16,
-            UILabel(title2: viewModel.title).multiline(),
-            UILabel(body: viewModel.message, textColor: Theme.colors.captionGray).multiline()
-        )
-          
-        // Stack
-        let margin: UIEdgeInsets = .top(64) + .bottom(64)
+        return imageView
+    }
+    
+    private func createLabels() -> UIView {
+        return VStack(spacing: 16,
+                      UILabel(title2: viewModel.title).multiline(),
+                      UILabel(body: viewModel.message, textColor: Theme.colors.captionGray)
+                          .multiline()
+                          .hideIfEmpty())
+    }
+    
+    private func createButtons() -> UIView {
+        func createButton(for offset: Int, action: Action) -> Button {
+            let button = Button(title: action.title ?? "", style: action.type)
+                .touchUpInside(self, action: #selector(handleButton))
+            button.tag = offset
+            button.isHidden = action.title == nil
+            return button
+        }
+        
+        return VStack(spacing: 16,
+                      viewModel.actions.enumerated().map(createButton))
+    }
+    
+    private func setupStackView() {
+        let margin: UIEdgeInsets = .top(32) + .bottom(16)
         let stack =
-            VStack(spacing: 32, imageView, labels)
-            .distribution(.equalCentering)
+            VStack(spacing: 32,
+                   createImage(),
+                   VStack(spacing: 32,
+                          createLabels(),
+                          createButtons())
+                    .distribution(.equalSpacing)
+                    .heightConstraint(to: 300,
+                                      priority: UILayoutPriority(50)))
+            .distribution(.equalSpacing)
             .embed(in: scrollView.readableWidth, insets: margin)
-        stack.heightAnchor.constraint(greaterThanOrEqualTo: contentView.safeAreaLayoutGuide.heightAnchor,
+        stack.heightAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.heightAnchor,
                                       multiplier: 1,
                                       constant: -(margin.top + margin.bottom)).isActive = true
         
-        // Buttons
-        promptView = {
-            let primaryButton = Button(title: viewModel.primaryButtonTitle, style: .primary)
-                                  .touchUpInside(self, action: #selector(handlePrimary))
-            
-            if let secondaryButtonTitle = viewModel.secondaryButtonTitle {
-                let secondaryButton = Button(title: secondaryButtonTitle, style: .secondary)
-                                        .touchUpInside(self, action: #selector(handleSecondary))
-                
-                if viewModel.showSecondaryButtonOnTop {
-                    return VStack(spacing: 16, secondaryButton, primaryButton)
-                } else {
-                    return VStack(spacing: 16, primaryButton, secondaryButton)
-                }
-            } else {
-                return primaryButton
-            }
-        }()
+        let preferredHeightConstraint = stack.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor,
+                                                                      multiplier: 1,
+                                                                      constant: -(margin.top + margin.bottom))
+        preferredHeightConstraint.priority = UILayoutPriority(250)
+        preferredHeightConstraint.isActive = true
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        let scrollingHeight = scrollView.contentSize.height + scrollView.safeAreaInsets.top + scrollView.safeAreaInsets.bottom
-        let canScroll = scrollingHeight > scrollView.frame.height
-        showPromptViewSeparator = canScroll
+    @objc private func handleButton(_ sender: Button) {
+        viewModel.actions[sender.tag].action()
+    }
+}
+
+extension StepViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        adjustNavigationBar(for: scrollView)
     }
     
-    @objc private func handlePrimary() {
-        delegate?.stepViewControllerDidSelectPrimaryButton(self)
-    }
-    
-    @objc private func handleSecondary() {
-        delegate?.stepViewControllerDidSelectSecondaryButton(self)
-    }
 }
