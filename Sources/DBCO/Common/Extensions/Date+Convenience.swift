@@ -21,7 +21,7 @@ extension Date {
         return Calendar.current.dateComponents([.day], from: date.start, to: self.start).day ?? 0
     }
     
-    var numberOfDaysAgo:Int {
+    var numberOfDaysAgo: Int {
         return Date.today.numberOfDaysSince(self)
     }
     
