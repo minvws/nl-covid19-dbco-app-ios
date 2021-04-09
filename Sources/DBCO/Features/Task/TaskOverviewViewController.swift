@@ -337,6 +337,7 @@ class TaskOverviewViewController: PromptableViewController {
         tableView.refreshControl = refreshControl
         
         let tableHeaderBuilder = { [unowned self] in self.tableHeaderBuilder() }
+        let sectionHeaderBuilder = { [unowned self] in self.sectionHeaderBuilder(title: $0, subtitle: $1) }
         let addContactFooterBuilder = { [unowned self] in self.addContactFooterBuilder() }
         let tableFooterBuilder = { [unowned self] in self.tableFooterBuilder() }
         
