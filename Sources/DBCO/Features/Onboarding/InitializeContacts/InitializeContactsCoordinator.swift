@@ -36,7 +36,7 @@ final class InitializeContactsCoordinator: Coordinator, Logging {
                 title: .onboardingDetermineContactsIntroTitle,
                 message: .onboardingDetermineContactsIntroMessage,
                 actions: [
-                    .init(type: .primary, title: .next, action:  requestPrivacyConsent)
+                    .init(type: .primary, title: .next, target: self, action: #selector(requestPrivacyConsent))
                 ])
             
             let stepController = StepViewController(viewModel: viewModel)
@@ -44,7 +44,7 @@ final class InitializeContactsCoordinator: Coordinator, Logging {
         }
     }
     
-    private func requestPrivacyConsent() {
+    @objc private func requestPrivacyConsent() {
         navigationController.pushViewController(privacyConsentViewController(), animated: true)
     }
     

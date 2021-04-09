@@ -64,6 +64,10 @@ class ContactsTimelineViewModel {
         configuration = .testDate(testDate.start)
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     private var endDate: Date {
         switch configuration {
         case .dateOfSymptomOnset(let date):

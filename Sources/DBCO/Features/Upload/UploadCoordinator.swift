@@ -132,8 +132,8 @@ extension UploadCoordinator {
             title: .uploadFinishedTitle,
             message: .uploadFinishedMessage,
             actions: [
-                .init(type: .primary, title: .done) {
-                    self.navigationController.dismiss(animated: true)
+                .init(type: .primary, title: .done) { [weak self] in
+                    self?.navigationController.dismiss(animated: true)
                 }
             ])
         

@@ -43,8 +43,8 @@ final class OnboardingCoordinator: Coordinator {
             title: .onboardingStartTitle,
             message: .onboardingStartMessage,
             actions: [
-                .init(type: .primary, title: primaryButtonTitle, action: continueToPairing),
-                .init(type: .secondary, title: secondaryButtonTitle, action: continueToSelfBCO)
+                .init(type: .primary, title: primaryButtonTitle, target: self, action: #selector(continueToPairing)),
+                .init(type: .secondary, title: secondaryButtonTitle, target: self, action: #selector(continueToSelfBCO))
             ])
         
         let stepController = StepViewController(viewModel: viewModel)
@@ -70,13 +70,13 @@ final class OnboardingCoordinator: Coordinator {
 
 extension OnboardingCoordinator {
     
-    func continueToPairing() {
+    @objc func continueToPairing() {
         let pairingCoordinator = OnboardingPairingCoordinator(navigationController: navigationController)
         pairingCoordinator.delegate = self
         startChildCoordinator(pairingCoordinator)
     }
     
-    func continueToSelfBCO() {
+    @objc func continueToSelfBCO() {
         let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, skipIntro: false)
         initializeContactsCoordinator.delegate = self
         startChildCoordinator(initializeContactsCoordinator)

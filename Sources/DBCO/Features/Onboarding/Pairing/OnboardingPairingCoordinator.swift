@@ -32,7 +32,7 @@ final class OnboardingPairingCoordinator: Coordinator {
             title: .onboardingPairingIntroTitle,
             message: .onboardingPairingIntroMessage,
             actions: [
-                .init(type: .primary, title: .next, action: continueToPairing)
+                .init(type: .primary, title: .next, target: self, action: #selector(continueToPairing))
             ])
         
         let stepController = StepViewController(viewModel: viewModel)
@@ -45,7 +45,7 @@ final class OnboardingPairingCoordinator: Coordinator {
         navigationController.pushViewController(stepController, animated: true)
     }
     
-    private func continueToPairing() {
+    @objc private func continueToPairing() {
         let pairingController = PairViewController(viewModel: PairViewModel())
         pairingController.delegate = self
         

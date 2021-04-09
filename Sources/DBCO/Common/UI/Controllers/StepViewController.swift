@@ -31,6 +31,20 @@ class StepViewController: ViewController, ScrollViewNavivationbarAdjusting {
         let type: Button.ButtonType
         let title: String?
         let action: () -> Void
+        
+        init(type: Button.ButtonType, title: String?, action: @escaping () -> Void) {
+            self.type = type
+            self.title = title
+            self.action = action
+        }
+        
+        init(type: Button.ButtonType, title: String?, target: AnyObject, action: Selector) {
+            self.type = type
+            self.title = title
+            self.action = { [weak target] in
+                _ = target?.perform(action)
+            }
+        }
     }
     
     private let viewModel: StepViewModel

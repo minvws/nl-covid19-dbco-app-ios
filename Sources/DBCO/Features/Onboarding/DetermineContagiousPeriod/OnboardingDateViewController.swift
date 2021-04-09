@@ -40,6 +40,20 @@ class OnboardingDateViewController: ViewController, ScrollViewNavivationbarAdjus
         let type: Button.ButtonType
         let title: String
         let action: (Date) -> Void
+        
+        init(type: Button.ButtonType, title: String, action: @escaping (Date) -> Void) {
+            self.type = type
+            self.title = title
+            self.action = action
+        }
+        
+        init(type: Button.ButtonType, title: String, target: AnyObject, action: Selector) {
+            self.type = type
+            self.title = title
+            self.action = { [weak target] date in
+                _ = target?.perform(action, with: date)
+            }
+        }
     }
     
     private let viewModel: OnboardingDateViewModel
