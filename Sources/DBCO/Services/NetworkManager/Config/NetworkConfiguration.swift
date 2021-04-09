@@ -69,7 +69,7 @@ struct NetworkConfiguration {
             host: "api-acc.bco-portaal.nl",
             port: nil,
             path: ["v2"],
-            sslSignature: Certificate.SSL.apiSignature,
+            sslSignature: "TSSRQUz+lWdG7Ezvps9vcuKKEylDL52KkHrEy12twVo=",
             tokenParams: [:]
         ),
         haPublicKey: .init(
@@ -84,7 +84,7 @@ struct NetworkConfiguration {
             host: "api.bco-portaal.nl",
             port: nil,
             path: ["v2"],
-            sslSignature: Certificate.SSL.apiSignature,
+            sslSignature: "TSSRQUz+lWdG7Ezvps9vcuKKEylDL52KkHrEy12twVo=",
             tokenParams: [:]
         ),
         haPublicKey: .init(
