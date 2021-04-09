@@ -38,6 +38,10 @@ class OnboardingManager: OnboardingManaging, Logging {
     @Keychain(name: "onboardingData", service: Constants.keychainService, clearOnReinstall: true)
     private static var onboardingData: OnboardingData = .empty // swiftlint:disable:this let_var_whitespace
     
+    var dataModificationDate: Date? {
+        return Self.$onboardingData.modificationDate
+    }
+    
     var needsOnboarding: Bool {
         return Self.onboardingData.needsOnboarding
     }
@@ -55,6 +59,8 @@ class OnboardingManager: OnboardingManaging, Logging {
     var contacts: [Onboarding.Contact]? {
         return Self.onboardingData.contacts
     }
+    
+    
     
     required init() {
         if let symptoms = Self.onboardingData.symptoms, let onsetDate = Self.onboardingData.dateOfSymptomOnset {
@@ -109,8 +115,9 @@ class OnboardingManager: OnboardingManaging, Logging {
                                                 dateOfLastExposure: $0.date)
         }
         
-        Self.$onboardingData.clearData()
+        contagiousPeriod = .undetermined
         
+        Self.$onboardingData.clearData()
         Self.onboardingData.needsOnboarding = false
     }
     
@@ -142,6 +149,7 @@ class OnboardingManager: OnboardingManaging, Logging {
     
     func reset() {
         Self.$onboardingData.clearData()
+        contagiousPeriod = .undetermined
     }
     
 }

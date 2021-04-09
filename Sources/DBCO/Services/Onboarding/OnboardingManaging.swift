@@ -53,6 +53,8 @@ protocol OnboardingManaging {
     
     init()
     
+    var dataModificationDate: Date? { get }
+    
     var needsOnboarding: Bool { get }
     var needsPairingOption: Bool { get }
     
