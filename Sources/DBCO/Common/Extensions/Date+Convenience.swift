@@ -14,14 +14,14 @@ extension Date {
     }
     
     func dateByAddingDays(_ days: Int) -> Date {
-        return Calendar.current.date(byAdding: .day, value: -1, to: self) ?? self
+        return Calendar.current.date(byAdding: .day, value: days, to: self) ?? self
     }
     
     func numberOfDaysSince(_ date: Date) -> Int {
         return Calendar.current.dateComponents([.day], from: date.start, to: self.start).day ?? 0
     }
     
-    var numberOfDaysAgo:Int {
+    var numberOfDaysAgo: Int {
         return Date.today.numberOfDaysSince(self)
     }
     

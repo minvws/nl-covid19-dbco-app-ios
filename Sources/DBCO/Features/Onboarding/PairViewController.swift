@@ -57,6 +57,8 @@ class PairViewController: ViewController {
         nextButton.isEnabled = false
         codeField.didUpdatePairingCode { nextButton.isEnabled = $0 != nil }
         
+        let topMargin: CGFloat = UIScreen.main.bounds.height < 600 ? 0 : 66
+        
         let containerView =
             VStack(spacing: 32,
                    VStack(spacing: 16,
@@ -66,7 +68,7 @@ class PairViewController: ViewController {
                           nextButton,
                           keyboardSpacerView))
             .distribution(.equalSpacing)
-            .wrappedInReadableWidth(insets: .top(66))
+            .wrappedInReadableWidth(insets: .top(topMargin))
         
         containerView.embed(in: scrollView.readableWidth)
         
