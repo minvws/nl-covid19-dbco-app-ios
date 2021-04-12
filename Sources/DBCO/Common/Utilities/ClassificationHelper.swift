@@ -55,7 +55,7 @@ struct ClassificationHelper {
     }
 
     private static func evaluate(risks: Risks) -> ResultRiskPair {
-        return evaluateSameRoomRisk(risks)
+        return evaluateSameHouseholdRisk(risks)
     }
     
     private static func evaluateSameHouseholdRisk(_ risks: Risks) -> ResultRiskPair {
