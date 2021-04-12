@@ -45,124 +45,114 @@ struct ClassificationHelper {
             }
         }
     }
+    
+    private typealias ResultRiskPair = (result: Result, visibleRisks: [Risk])
+    struct Risks {
+        var sameHousehold: Bool?
+        var distance: Answer.Value.Distance?
+        var physicalContact: Bool?
+        var sameRoom: Bool?
+    }
 
-    private static func classification(for sameHouseholdRisk: Bool?,
-                                       distanceRisk: Answer.Value.Distance?,
-                                       physicalContactRisk: Bool?,
-                                       sameRoomRisk: Bool?) -> (result: Result, visibleRisks: [Risk]) {
-        
-        switch sameHouseholdRisk {
+    private static func evaluate(risks: Risks) -> ResultRiskPair {
+        return evaluateSameRoomRisk(risks)
+    }
+    
+    private static func evaluateSameHouseholdRisk(_ risks: Risks) -> ResultRiskPair {
+        switch risks.sameHousehold {
         case .none:
             return (.needsAssessmentFor(.sameHousehold), [.sameHousehold])
         case .some(true):
             return (.success(.category1), [.sameHousehold])
         case .some(false):
-            switch distanceRisk {
-            case .none:
-                return (.needsAssessmentFor(.distance), [.sameHousehold, .distance])
-            case .some(.yesMoreThan15min):
-                return (.success(.category2a), [.sameHousehold, .distance])
-            case .some(.yesLessThan15min):
-                switch physicalContactRisk {
-                case .none:
-                    return (.needsAssessmentFor(.physicalContact), [.sameHousehold, .distance, .physicalContact])
-                case .some(true):
-                    return (.success(.category2b), [.sameHousehold, .distance, .physicalContact])
-                case .some(false):
-                    return (.success(.category3a), [.sameHousehold, .distance, .physicalContact])
-                }
-            case .some(.no):
-                switch sameRoomRisk {
-                case .none:
-                    return (.needsAssessmentFor(.sameRoom), [.sameHousehold, .distance, .sameRoom])
-                case .some(true):
-                    return (.success(.category3b), [.sameHousehold, .distance, .sameRoom])
-                case .some(false):
-                    return (.success(.other), [.sameHousehold, .distance, .sameRoom])
-                }
-            }
+            return evaluateDistanceRisk(risks)
         }
     }
     
-    /// Returns the classification or unassessed risk for the supplied parameters
-    ///
-    /// - parameter sameHouseholdRisk: Optional Bool, set to nil if this risk has not been assessed yet.
-    /// - parameter distanceRisk: Optional DistanceAnswer, set to nil if this risk has not been assessed yet.
-    /// - parameter physicalContactRisk: Optional Bool, set to nil if this risk has not been assessed yet.
-    /// - parameter sameRoomRisk: Optional Bool, set to nil if this risk has not been assessed yet.
-    static func classificationResult(for sameHouseholdRisk: Bool?,
-                                     distanceRisk: Answer.Value.Distance?,
-                                     physicalContactRisk: Bool?,
-                                     sameRoomRisk: Bool?) -> Result {
-        
-        classification(for: sameHouseholdRisk,
-                       distanceRisk: distanceRisk,
-                       physicalContactRisk: physicalContactRisk,
-                       sameRoomRisk: sameRoomRisk)
-            .result
+    private static func evaluateDistanceRisk(_ risks: Risks) -> ResultRiskPair {
+        switch risks.distance {
+        case .none:
+            return (.needsAssessmentFor(.distance), [.sameHousehold, .distance])
+        case .some(.yesMoreThan15min):
+            return (.success(.category2a), [.sameHousehold, .distance])
+        case .some(.yesLessThan15min):
+            return evaluatePhysicalContactRisk(risks)
+        case .some(.no):
+            return evaluateSameRoomRisk(risks)
+        }
     }
     
-    /// Returns the risks that should be displayed/questioned in the UI for the supplied parameters
+    private static func evaluatePhysicalContactRisk(_ risks: Risks) -> ResultRiskPair {
+        switch risks.physicalContact {
+        case .none:
+            return (.needsAssessmentFor(.physicalContact), [.sameHousehold, .distance, .physicalContact])
+        case .some(true):
+            return (.success(.category2b), [.sameHousehold, .distance, .physicalContact])
+        case .some(false):
+            return (.success(.category3a), [.sameHousehold, .distance, .physicalContact])
+        }
+    }
+    
+    private static func evaluateSameRoomRisk(_ risks: Risks) -> ResultRiskPair {
+        switch risks.sameRoom {
+        case .none:
+            return (.needsAssessmentFor(.sameRoom), [.sameHousehold, .distance, .sameRoom])
+        case .some(true):
+            return (.success(.category3b), [.sameHousehold, .distance, .sameRoom])
+        case .some(false):
+            return (.success(.other), [.sameHousehold, .distance, .sameRoom])
+        }
+    }
+    
+    /// Returns the classification or unassessed risk for the supplied risks
     ///
-    /// - parameter sameHouseholdRisk: Optional Bool, set to nil if this risk has not been assessed yet.
-    /// - parameter distanceRisk: Optional DistanceAnswer, set to nil if this risk has not been assessed yet.
-    /// - parameter physicalContactRisk: Optional Bool, set to nil if this risk has not been assessed yet.
-    /// - parameter sameRoomRisk: Optional Bool, set to nil if this risk has not been assessed yet.
-    static func visibleRisks(for sameHouseholdRisk: Bool?,
-                             distanceRisk: Answer.Value.Distance?,
-                             physicalContactRisk: Bool?,
-                             sameRoomRisk: Bool?) -> [Risk] {
-        
-        classification(for: sameHouseholdRisk,
-                       distanceRisk: distanceRisk,
-                       physicalContactRisk: physicalContactRisk,
-                       sameRoomRisk: sameRoomRisk)
-            .visibleRisks
+    /// - parameter risks: Risks
+    static func classificationResult(for risks: Risks) -> Result {
+        return evaluate(risks: risks).result
+    }
+    
+    /// Returns the risks that should be displayed/questioned in the UI for the supplied risks
+    ///
+    /// - parameter risks: Risks
+    static func visibleRisks(for risks: Risks) -> [Risk] {
+        return evaluate(risks: risks).visibleRisks
     }
     
     /// Set the appropriate risk values for the supplied category
     ///
-    /// - parameter category: The category for which the risk values should be set
-    /// - parameter sameHouseholdRisk: Optional Bool.
-    /// - parameter distanceRisk: Optional Answer.Value.Distance
-    /// - parameter physicalContactRisk: Optional Bool.
-    /// - parameter sameRoomRisk: Optional Bool.
-    static func setValues(for category: Task.Contact.Category,
-                          sameHouseholdRisk: inout Bool?,
-                          distanceRisk: inout Answer.Value.Distance?,
-                          physicalContactRisk: inout Bool?,
-                          sameRoomRisk: inout Bool?) {
+    /// - parameter risks: Risks
+    static func setRisks(for category: Task.Contact.Category, risks: inout Risks) {
         switch category {
         case .category1:
-            sameHouseholdRisk = true
-            distanceRisk = nil
-            physicalContactRisk = nil
-            sameRoomRisk = nil
+            risks.sameHousehold = true
+            risks.distance = nil
+            risks.physicalContact = nil
+            risks.sameRoom = nil
         case .category2a:
-            sameHouseholdRisk = false
-            distanceRisk = .yesMoreThan15min
-            physicalContactRisk = nil
-            sameRoomRisk = nil
+            risks.sameHousehold = false
+            risks.distance = .yesMoreThan15min
+            risks.physicalContact = nil
+            risks.sameRoom = nil
         case .category2b:
-            sameHouseholdRisk = false
-            distanceRisk = .yesLessThan15min
-            physicalContactRisk = true
-            sameRoomRisk = nil
+            risks.sameHousehold = false
+            risks.distance = .yesLessThan15min
+            risks.physicalContact = true
+            risks.sameRoom = nil
         case .category3a:
-            sameHouseholdRisk = false
-            distanceRisk = .yesLessThan15min
-            physicalContactRisk = false
-            sameRoomRisk = nil
+            risks.sameHousehold = false
+            risks.distance = .yesLessThan15min
+            risks.physicalContact = false
+            risks.sameRoom = nil
         case .category3b:
-            sameHouseholdRisk = false
-            distanceRisk = .no
-            physicalContactRisk = false
-            sameRoomRisk = true
+            risks.sameHousehold = false
+            risks.distance = .no
+            risks.physicalContact = false
+            risks.sameRoom = true
         case .other:
-            sameHouseholdRisk = false
-            distanceRisk = .no
-            physicalContactRisk = false
-            sameRoomRisk = false
+            risks.sameHousehold = false
+            risks.distance = .no
+            risks.physicalContact = false
+            risks.sameRoom = false
         }
     }
     
