@@ -368,21 +368,8 @@ final class CaseManager: CaseManaging, Logging {
         return questionnaire
     }
     
-    func save(_ task: Task) throws {
-        guard hasCaseData else { throw CaseManagingError.noCaseData }
-        
-        let wasSynced = isSynced
-        
-        func storeNewTask() -> Int {
-            tasks.append(task)
-            return tasks.count - 1
-        }
-        
-        let index = tasks.lastIndex { $0.uuid == task.uuid } ?? storeNewTask()
-        
-        let questionnaire = try self.questionnaire(for: task.taskType)
-        
-        let currentAnswers = tasks[index].questionnaireResult?.answers ?? []
+    private func questionnaireResult(for task: Task, currentTask: Task, questionnaire: Questionnaire) -> QuestionnaireResult {
+        let currentAnswers = currentTask.questionnaireResult?.answers ?? []
         let newAnswers = task.questionnaireResult?.answers ?? []
         
         // Ensure we have (empty) answers for all necessary questions
@@ -409,10 +396,26 @@ final class CaseManager: CaseManaging, Logging {
             .filter { $0.relevantForCategories.contains(task.contact.category) }
             .map(answerForQuestion)
         
+        return QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: answers)
+    }
+    
+    func save(_ task: Task) throws {
+        guard hasCaseData else { throw CaseManagingError.noCaseData }
+        
+        let wasSynced = isSynced
+        let questionnaire = try self.questionnaire(for: task.taskType)
+        
+        func storeNewTask() -> Int {
+            tasks.append(task)
+            return tasks.count - 1
+        }
+        
+        let index = tasks.lastIndex { $0.uuid == task.uuid } ?? storeNewTask()
+        
         var updatedTask = tasks[index]
         
         // Update task results
-        updatedTask.questionnaireResult = QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: answers)
+        updatedTask.questionnaireResult = questionnaireResult(for: task, currentTask: tasks[index], questionnaire: questionnaire)
         
         // Update task type content
         switch updatedTask.taskType {
@@ -421,9 +424,7 @@ final class CaseManager: CaseManaging, Logging {
         }
         
         // Update deletion
-        if task.deletedByIndex {
-            updatedTask.deletedByIndex = true
-        }
+        updatedTask.deletedByIndex = updatedTask.deletedByIndex || task.deletedByIndex
     
         // Update task if needed and set sync state
         if tasks[index] != updatedTask {
@@ -487,28 +488,25 @@ final class CaseManager: CaseManaging, Logging {
         guard hasCaseData else { throw CaseManagingError.noCaseData }
         guard !isWindowExpired else { throw CaseManagingError.windowExpired }
         
+        let identifier: String
+        
         do {
-            let value = Case(dateOfTest: dateOfTest,
-                             dateOfSymptomOnset: dateOfSymptomOnset,
-                             contagiousPeriodKnown: contagiousPeriodKnown,
-                             windowExpiresAt: windowExpiresAt,
-                             tasks: tasks,
-                             symptoms: symptoms)
-            let identifier = try Services.pairingManager.caseToken()
-            Services.networkManager.putCase(identifier: identifier, value: value) {
-                switch $0 {
-                case .success:
-                    self.markAllTasksAsSynced()
-                    self.hasSynced = true
-                    completionHandler?(true)
-                case .failure(let error):
-                    self.logError("Could not sync case: \(error)")
-                    completionHandler?(false)
-                }
-            }
+            identifier = try Services.pairingManager.caseToken()
         } catch let error {
             completionHandler?(false)
             throw error
+        }
+        
+        Services.networkManager.putCase(identifier: identifier, value: appData.asCase) {
+            switch $0 {
+            case .success:
+                self.markAllTasksAsSynced()
+                self.hasSynced = true
+                completionHandler?(true)
+            case .failure(let error):
+                self.logError("Could not sync case: \(error)")
+                completionHandler?(false)
+            }
         }
     }
     
@@ -522,46 +520,33 @@ extension CaseManager {
             return loadQuestionnairesIfNeeded(completion: completion)
         }
         
-        do {
-            let previousFetchDate = fetchDate
-            fetchDate = Date() // Set the fetchdate here to prevent multiple request
-            
-            let identifier = try Services.pairingManager.caseToken()
-            Services.networkManager.getCase(identifier: identifier) {
-                switch $0 {
-                case .success(let result):
-                    self.setTasks(result.tasks)
-
-                    if self.dateOfSymptomOnset == nil {
-                        self.dateOfSymptomOnset = result.dateOfSymptomOnset
-                    }
-
-                    if self.dateOfTest == nil {
-                        self.dateOfTest = result.dateOfTest
-                    }
-
-                    if self.symptoms.isEmpty {
-                        self.symptoms = result.symptoms
-                    }
-
-                    self.windowExpiresAt = result.windowExpiresAt
-                    self.reference = result.reference
-                    self.contagiousPeriodKnown = result.contagiousPeriodKnown
-                    
-                    self.fetchDate = Date() // Set the fetchdate here again to the actual date
-        
-                    self.loadQuestionnairesIfNeeded(completion: completion)
-                    
-                    self.listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
-                case .failure(let error):
-                    self.fetchDate = previousFetchDate // Reset the fetchdate since no data was fetched
-                    
-                    completion(false, .couldNotLoadTasks(error))
-                }
-            }
-        } catch {
+        guard let identifier = try? Services.pairingManager.caseToken() else {
             return completion(false, .noCaseData)
         }
+        
+        let previousFetchDate = fetchDate
+        fetchDate = Date() // Set the fetchdate here to prevent multiple request
+        
+        Services.networkManager.getCase(identifier: identifier) {
+            switch $0 {
+            case .success(let result):
+                self.handleCaseResult(result, completion: completion)
+            case .failure(let error):
+                self.fetchDate = previousFetchDate // Reset the fetchdate since no data was fetched
+                
+                completion(false, .couldNotLoadTasks(error))
+            }
+        }
+    }
+    
+    private func handleCaseResult(_ result: Case, completion: @escaping (Bool, CaseManagingError?) -> Void) {
+        setTasks(result.tasks)
+        appData.update(with: result)
+        fetchDate = Date() // Set the fetchdate here again to the actual date
+
+        loadQuestionnairesIfNeeded(completion: completion)
+        
+        listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
     }
     
     private func loadQuestionnairesIfNeeded(completion: @escaping (Bool, CaseManagingError?) -> Void) {
@@ -604,5 +589,34 @@ private extension Question {
                         relevantForCategories: relevantForCategories,
                         answerOptions: answerOptions,
                         disabledForSources: [.portal])
+    }
+}
+
+private extension AppData {
+    var asCase: Case {
+        return Case(dateOfTest: dateOfTest,
+                    dateOfSymptomOnset: dateOfSymptomOnset,
+                    contagiousPeriodKnown: contagiousPeriodKnown,
+                    windowExpiresAt: windowExpiresAt,
+                    tasks: tasks,
+                    symptoms: symptoms)
+    }
+    
+    mutating func update(with caseResult: Case) {
+        if dateOfSymptomOnset == nil {
+            dateOfSymptomOnset = caseResult.dateOfSymptomOnset
+        }
+
+        if dateOfTest == nil {
+            dateOfTest = caseResult.dateOfTest
+        }
+
+        if symptoms.isEmpty {
+            symptoms = caseResult.symptoms
+        }
+
+        windowExpiresAt = caseResult.windowExpiresAt
+        reference = caseResult.reference
+        contagiousPeriodKnown = caseResult.contagiousPeriodKnown
     }
 }
