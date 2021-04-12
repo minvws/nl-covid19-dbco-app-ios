@@ -60,8 +60,6 @@ class OnboardingManager: OnboardingManaging, Logging {
         return Self.onboardingData.contacts
     }
     
-    
-    
     required init() {
         if let symptoms = Self.onboardingData.symptoms, let onsetDate = Self.onboardingData.dateOfSymptomOnset {
             contagiousPeriod = .finishedWithSymptoms(symptoms, onset: onsetDate)

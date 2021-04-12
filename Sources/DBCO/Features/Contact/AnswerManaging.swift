@@ -28,6 +28,24 @@ protocol AnswerManaging: class {
     var inputFieldDelegate: InputFieldDelegate? { get set }
 }
 
+extension Array where Element == AnswerManaging {
+    
+    var isFullyCompleted: Bool {
+        return map(\.answer)
+            .allSatisfy(\.isCompleted)
+    }
+    
+    var essentialsAreCompleted: Bool {
+        return map(\.answer)
+            .filter(\.isEssential)
+            .allSatisfy(\.isCompleted)
+    }
+    
+    var hasValidAnswers: Bool {
+        return allSatisfy(\.hasValidAnswer)
+    }
+}
+
 /// AnswerManager for the .classificationDetails question.
 /// Uses [ClassificationHelper](x-source-tag://ClassificationHelper) to determine the resulting category and which of the four (risk) questions should be displayed.
 /// The risk questions are displayed as [ToggleGroup](x-source-tag://ToggleGroup)
