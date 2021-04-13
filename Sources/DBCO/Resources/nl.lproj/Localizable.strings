@@ -208,6 +208,8 @@
 "taskOverviewPairingExpired" = "Koppelen mislukt. De code is verlopen. Geef een nieuwe code door aan de GGD.";
 "taskOverviewPairingFailed" = "Koppelen mislukt. Controleer of de GGD de juiste code heeft en of je internetverbinding werkt.";
 
+"taskOverviewPrivacyFooter" = "Help bij het bron- en contactonderzoek. Gegevens worden op jouw telefoon bewaard totdat je ze deelt met de GGD. Lees meer in de <a href=\"https://ggdcontact.nl/nl/privacy-in-app\">privacyverklaring</a>.";
+
 /* MARK: - Overview Tips */
 "overviewTipsShortTitle" = "Tips";
 "overviewTipsTitleTodayOnly" = "Maak een compleet overzicht van mensen die je vandaag hebt ontmoet";

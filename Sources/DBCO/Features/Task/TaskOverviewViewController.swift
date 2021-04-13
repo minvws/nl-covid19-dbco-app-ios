@@ -15,6 +15,7 @@ protocol TaskOverviewViewControllerDelegate: class {
     func taskOverviewViewControllerDidRequestRefresh(_ controller: TaskOverviewViewController)
     func taskOverviewViewControllerDidRequestDebugMenu(_ controller: TaskOverviewViewController)
     func taskOverviewViewControllerDidRequestReset(_ controller: TaskOverviewViewController)
+    func taskOverviewViewController(_ controller: TaskOverviewViewController, wantsToOpen url: URL)
 }
 
 /// - Tag: TaskOverviewViewModel
@@ -449,8 +450,18 @@ private extension TaskOverviewViewController {
             .wrappedInReadableWidth(insets: .top(2) + .bottom(16))
     }
     
-    func tableFooterBuilder() -> UIView {
-        let versionLabel = UILabel(caption1: .mainAppVersionTitle, textColor: Theme.colors.captionGray)
+    private var privacyTextView: TextView {
+        let privacyTextView = TextView(htmlText: .taskOverviewPrivacyFooter,
+                                       font: Theme.fonts.footnote,
+                                       textColor: Theme.colors.footer)
+            .linkTouched { self.delegate?.taskOverviewViewController(self, wantsToOpen: $0) }
+        privacyTextView.textAlignment = .center
+        
+        return privacyTextView
+    }
+    
+    private var versionLabel: UILabel {
+        let versionLabel = UILabel(footnote: .mainAppVersionTitle, textColor: Theme.colors.footer)
         versionLabel.textAlignment = .center
         versionLabel.sizeToFit()
         versionLabel.frame = CGRect(x: 0, y: 0, width: versionLabel.frame.width, height: 60.0)
@@ -458,11 +469,24 @@ private extension TaskOverviewViewController {
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openDebugMenu))
         gestureRecognizer.numberOfTapsRequired = 4
-        
+
         versionLabel.addGestureRecognizer(gestureRecognizer)
         
-        return versionLabel.wrappedInReadableWidth(insets: .top(8) + .bottom(8))
+        return versionLabel
+    }
+    
+    func tableFooterBuilder() -> UIView {
+        let resetButton = Button(title: .taskOverviewDeleteDataButtonTitle, style: .info)
+            .touchUpInside(self, action: #selector(reset))
         
+        resetButton.setTitleColor(Theme.colors.warning, for: .normal)
+        
+        return VStack(spacing: 12,
+                      privacyTextView,
+                      versionLabel,
+                      resetButton)
+            .alignment(.center)
+            .wrappedInReadableWidth()
     }
     
 }

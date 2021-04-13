@@ -7,6 +7,7 @@
 
 import UIKit
 import Contacts
+import SafariServices
 
 protocol TaskOverviewCoordinatorDelegate: class {
     func taskOverviewCoordinatorDidRequestReset(_ coordinator: TaskOverviewCoordinator)
@@ -249,6 +250,12 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
         alert.addAction(UIAlertAction(title: .deleteDataPromptOptionCancel, style: .cancel, handler: nil))
         
         controller.present(alert, animated: true)
+    }
+    
+    func taskOverviewViewController(_ controller: TaskOverviewViewController, wantsToOpen url: URL) {
+        let safariController = SFSafariViewController(url: url)
+        safariController.preferredControlTintColor = Theme.colors.primary
+        navigationController.present(safariController, animated: true)
     }
     
 }
