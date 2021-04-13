@@ -18,7 +18,7 @@ class ConfigManager: ConfigManaging, Logging {
     
     var featureFlags: FeatureFlags = .empty
     var symptoms: [Symptom] = fallbackSymptoms
-    var supportedZipRanges: [ZipRange] = fallbackZipRanges
+    var supportedZipCodeRanges: [ZipRange] = fallbackZipRanges
     
     func update(completion: @escaping (UpdateState, FeatureFlags) -> Void) {
         func fullVersionString(_ version: String) -> String {
@@ -39,7 +39,7 @@ class ConfigManager: ConfigManaging, Logging {
                 self.featureFlags = configuration.featureFlags
                 self.symptoms = configuration.symptoms
                 
-                self.supportedZipRanges = configuration.supportedZipRanges ?? Self.fallbackZipRanges
+                self.supportedZipCodeRanges = configuration.supportedZipCodeRanges ?? Self.fallbackZipRanges
                 
                 if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
                     completion(.updateRequired(configuration), self.featureFlags)

@@ -96,7 +96,7 @@ class VerifyZipCodeViewController: ViewController, ScrollViewNavivationbarAdjust
     @objc private func verify() {
         guard let codeString = codeField.code, let code = Int(codeString) else { return }
         
-        let isInRange = Services.configManager.supportedZipRanges.contains { $0.contains(code) }
+        let isInRange = Services.configManager.supportedZipCodeRanges.contains { $0.contains(code) }
         
         delegate?.verifyZipCodeViewController(self, didFinishWithActiveZipCode: isInRange)
     }
