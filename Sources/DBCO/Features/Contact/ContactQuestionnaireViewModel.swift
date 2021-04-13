@@ -154,8 +154,8 @@ class ContactQuestionnaireViewModel {
     
     private func setupUpdateHandlers() {
         answerManagers.forEach {
-            $0.updateHandler = { [unowned self] in
-                switch $0 {
+            $0.updateHandler = { [unowned self] manager in
+                switch manager {
                 case let classificationManager as ClassificationDetailsAnswerManager:
                     updateClassification(with: classificationManager.classification)
                 case let lastExposureManager as LastExposureDateAnswerManager:
@@ -170,7 +170,7 @@ class ContactQuestionnaireViewModel {
     }
     
     private func setupInitialState() {
-        self.title = updatedTask.contactName ?? .contactFallbackTitle
+        title = updatedTask.contactName ?? .contactFallbackTitle
         
         updateInformSectionContent()
         
