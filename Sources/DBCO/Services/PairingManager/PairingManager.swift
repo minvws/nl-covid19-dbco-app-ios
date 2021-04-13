@@ -143,31 +143,36 @@ class PairingManager: PairingManaging, Logging {
         Services.networkManager.pair(code: pairingCode, sealedClientPublicKey: Data(sealedClientPublicKey)) {
             switch $0 {
             case .success(let pairingResponse):
-                let sealedCaseHAPublicKey = Bytes(pairingResponse.sealedHealthAuthorityPublicKey)
-                
-                guard let caseHAPublicKey = self.sodium.box.open(anonymousCipherText: sealedCaseHAPublicKey,
-                                                                 recipientPublicKey: clientKeyPair.publicKey,
-                                                                 recipientSecretKey: clientKeyPair.secretKey) else {
-                    self.logError("Could not open sealed health authority public key for case")
-                    return completion(false, .couldNotPair(.invalidResponse))
-                }
-            
-                guard let sessionKeyPair = self.sodium.keyExchange.sessionKeyPair(publicKey: clientKeyPair.publicKey, secretKey: clientKeyPair.secretKey, otherPublicKey: caseHAPublicKey, side: .CLIENT) else {
-                    self.logError("Could not create session key pair")
-                    return completion(false, .couldNotPair(.invalidResponse))
-                }
-                
-                self.pairing = Pairing(publicKey: clientKeyPair.publicKey,
-                                       secretKey: clientKeyPair.secretKey,
-                                       rx: sessionKeyPair.rx,
-                                       tx: sessionKeyPair.tx)
-                self.$pairing.clearCache()
-                
-                completion(true, nil)
+                let (succes, error) = self.handlePairResponse(pairingResponse, clientKeyPair: clientKeyPair)
+                completion(succes, error)
             case .failure(let error):
                 completion(false, .couldNotPair(error))
             }
         }
+    }
+    
+    private func handlePairResponse(_ response: PairResponse, clientKeyPair: KeyExchange.KeyPair) -> (Bool, PairingManagingError?) {
+        let sealedCaseHAPublicKey = Bytes(response.sealedHealthAuthorityPublicKey)
+        
+        guard let caseHAPublicKey = sodium.box.open(anonymousCipherText: sealedCaseHAPublicKey,
+                                                    recipientPublicKey: clientKeyPair.publicKey,
+                                                    recipientSecretKey: clientKeyPair.secretKey) else {
+            logError("Could not open sealed health authority public key for case")
+            return (false, .couldNotPair(.invalidResponse))
+        }
+    
+        guard let sessionKeyPair = sodium.keyExchange.sessionKeyPair(publicKey: clientKeyPair.publicKey, secretKey: clientKeyPair.secretKey, otherPublicKey: caseHAPublicKey, side: .CLIENT) else {
+            logError("Could not create session key pair")
+            return (false, .couldNotPair(.invalidResponse))
+        }
+        
+        pairing = Pairing(publicKey: clientKeyPair.publicKey,
+                          secretKey: clientKeyPair.secretKey,
+                          rx: sessionKeyPair.rx,
+                          tx: sessionKeyPair.tx)
+        $pairing.clearCache()
+        
+        return (true, nil)
     }
     
     func unpair() {

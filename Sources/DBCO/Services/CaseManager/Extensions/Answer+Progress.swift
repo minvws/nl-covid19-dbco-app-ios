@@ -52,6 +52,10 @@ extension Answer {
         }
     }
     
+    var isCompleted: Bool {
+        return progressElements.allSatisfy { $0 }
+    }
+    
 }
 
 extension QuestionnaireResult {
