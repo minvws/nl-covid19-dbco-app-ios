@@ -162,6 +162,9 @@ extension String {
     static var onboardingDetermineContactsIntroMessageSupported: String { return Localization.string(for: "onboardingDetermineContactsIntro.message.supported") }
     static var onboardingDetermineContactsIntroMessageUnsupported: String { return Localization.string(for: "onboardingDetermineContactsIntro.message.unsupported") }
     
+    static var onboardingDetermineContactsIntroButtonSupported: String { return Localization.string(for: "onboardingDetermineContactsIntro.button.supported") }
+    static var onboardingDetermineContactsIntroButtonUnsupported: String { return Localization.string(for: "onboardingDetermineContactsIntro.button.unsupported") }
+    
     static var determineContactsAuthorizationTitle: String { return Localization.string(for: "determineContactsAuthorization.title") }
     static var determineContactsAuthorizationAllowButton: String { return Localization.string(for: "determineContactsAuthorization.allowButton") }
     static var determineContactsAuthorizationAddManuallyButton: String { return Localization.string(for: "determineContactsAuthorization.addManuallyButton") }

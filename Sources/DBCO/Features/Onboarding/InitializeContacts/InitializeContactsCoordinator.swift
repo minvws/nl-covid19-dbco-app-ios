@@ -89,16 +89,23 @@ final class InitializeContactsCoordinator: Coordinator, Logging {
 extension InitializeContactsCoordinator: VerifyZipCodeViewControllerDelegate {
     
     func verifyZipCodeViewController(_ controller: VerifyZipCodeViewController, didFinishWithActiveZipCode: Bool) {
-        let message: String = didFinishWithActiveZipCode ?
-            .onboardingDetermineContactsIntroMessageSupported :
-            .onboardingDetermineContactsIntroMessageUnsupported
+        let message: String
+        let buttonText: String
+        
+        if didFinishWithActiveZipCode {
+            message = .onboardingDetermineContactsIntroMessageSupported
+            buttonText = .onboardingDetermineContactsIntroButtonSupported
+        } else {
+            message = .onboardingDetermineContactsIntroMessageUnsupported
+            buttonText = .onboardingDetermineContactsIntroButtonUnsupported
+        }
         
         let viewModel = StepViewModel(
             image: UIImage(named: "Onboarding2"),
             title: .onboardingDetermineContactsIntroTitle,
             message: message,
             actions: [
-                .init(type: .primary, title: .next, target: self, action: #selector(requestPrivacyConsent))
+                .init(type: .primary, title: buttonText, target: self, action: #selector(requestPrivacyConsent))
             ])
         
         let stepController = StepViewController(viewModel: viewModel)
