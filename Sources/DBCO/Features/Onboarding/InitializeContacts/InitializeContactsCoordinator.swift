@@ -120,7 +120,7 @@ extension InitializeContactsCoordinator: ContactsAuthorizationViewControllerDele
 extension InitializeContactsCoordinator: PrivacyConsentViewControllerDelegate {
     
     func privacyConsentViewControllerWantsToContinue(_ controller: PrivacyConsentViewController) {
-        if Services.caseManager.contagiousPeriodKnown == false {
+        if Services.caseManager.symptomsKnown == false {
             let contagiousPeriodCoordinator = DetermineContagiousPeriodCoordinator(navigationController: navigationController)
             contagiousPeriodCoordinator.delegate = self
             startChildCoordinator(contagiousPeriodCoordinator)
