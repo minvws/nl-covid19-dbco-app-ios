@@ -250,9 +250,16 @@ extension DetermineContagiousPeriodCoordinator {
     }
     
     private func determineSymptomsIncreasingDate(_ currentOnset: Date) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = .current
+        dateFormatter.timeZone = .current
+        dateFormatter.dateFormat = .contagiousPeriodOnsetDateVerifyDateFormat
+        
+        let dateString = dateFormatter.string(from: currentOnset)
+        
         let viewModel = OnboardingDateViewModel(
             title: .determineSymptomsIncreasingDateTitle,
-            subtitle: .determineSymptomsIncreasingDateSubtitle,
+            subtitle: .determineSymptomsIncreasingDateSubtitle(date: dateString),
             date: nil,
             actions: [
                 .init(type: .primary, title: .next) { [weak self] in

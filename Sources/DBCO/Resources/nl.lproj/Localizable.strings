@@ -96,7 +96,7 @@
 "verifySymptomsGettingWorse.title" = "Was er een moment na %@ dat je klachten erger werden?";
 
 "determineSymptomsIncreasingDate.title" = "Wanneer namen je klachten toe?";
-"determineSymptomsIncreasingDate.subtitle" = "Kies een datum voor je (laatste) coronatest. Dit is de test waaruit bleek dat je corona hebt.";
+"determineSymptomsIncreasingDate.subtitle" = "Kies een datum na %@, maar die voor je (laatste) coronatest was.";
 
 "determinePositiveTestDate.title" = "Wanneer was de test waaruit bleek dat je corona hebt?";
 "determinePositiveTestDate.subtitle" = "Kies de datum waarop je de (laatste)  coronatest hebt gedaan.";
@@ -207,6 +207,8 @@
 "taskOverviewPairingTryAgain" = "Probeer opnieuw";
 "taskOverviewPairingExpired" = "Koppelen mislukt. De code is verlopen. Geef een nieuwe code door aan de GGD.";
 "taskOverviewPairingFailed" = "Koppelen mislukt. Controleer of de GGD de juiste code heeft en of je internetverbinding werkt.";
+
+"taskOverviewPrivacyFooter" = "Help bij het bron- en contactonderzoek. Gegevens worden op jouw telefoon bewaard totdat je ze deelt met de GGD. Lees meer in de <a href=\"https://ggdcontact.nl/nl/privacy-in-app\">privacyverklaring</a>.";
 
 /* MARK: - Overview Tips */
 "overviewTipsShortTitle" = "Tips";
