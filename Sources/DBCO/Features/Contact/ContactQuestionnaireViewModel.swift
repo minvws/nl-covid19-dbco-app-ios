@@ -117,32 +117,8 @@ class ContactQuestionnaireViewModel {
         self.updatedClassification = .success(task.contact.category)
         self.isDisabled = Services.caseManager.isWindowExpired
         
-        answerManagers.forEach {
-            $0.updateHandler = { [unowned self] in
-                switch $0 {
-                case let classificationManager as ClassificationDetailsAnswerManager:
-                    updateClassification(with: classificationManager.classification)
-                case let lastExposureManager as LastExposureDateAnswerManager:
-                    updateLastExposureDate(with: lastExposureManager.options.value)
-                default:
-                    break
-                }
-                
-                updateProgress()
-            }
-        }
-        
-        self.title = updatedTask.contactName ?? .contactFallbackTitle
-        
-        updateInformSectionContent()
-        
-        if isDisabled {
-            answerManagers.forEach {
-                $0.isEnabled = false
-            }
-        } else {
-            showDeleteButton = updatedTask.source == .app && !didCreateNewTask
-        }
+        setupUpdateHandlers()
+        setupInitialState()
     }
     
     private static func createAnswerManagers(for questionsAndAnswers: [(question: Question, answer: Answer)],
@@ -173,6 +149,37 @@ class ContactQuestionnaireViewModel {
             manager.isEnabled = !question.disabledForSources.contains(source)
             
             return manager
+        }
+    }
+    
+    private func setupUpdateHandlers() {
+        answerManagers.forEach {
+            $0.updateHandler = { [unowned self] in
+                switch $0 {
+                case let classificationManager as ClassificationDetailsAnswerManager:
+                    updateClassification(with: classificationManager.classification)
+                case let lastExposureManager as LastExposureDateAnswerManager:
+                    updateLastExposureDate(with: lastExposureManager.options.value)
+                default:
+                    break
+                }
+                
+                updateProgress()
+            }
+        }
+    }
+    
+    private func setupInitialState() {
+        self.title = updatedTask.contactName ?? .contactFallbackTitle
+        
+        updateInformSectionContent()
+        
+        if isDisabled {
+            answerManagers.forEach {
+                $0.isEnabled = false
+            }
+        } else {
+            showDeleteButton = updatedTask.source == .app && !didCreateNewTask
         }
     }
     
@@ -212,35 +219,29 @@ class ContactQuestionnaireViewModel {
         updateInformSectionContent()
     }
     
-    private func updateProgress(expandFirstUnfinishedSection: Bool = false) {
+    private var relevantManagers: [AnswerManaging] {
         var taskCategory = task.contact.category
         
         if case .success(let updatedCategory) = updatedClassification {
             taskCategory = updatedCategory
         }
         
-        let relevantManagers = answerManagers.filter { $0.question.isRelevant(in: taskCategory) }
-        let classificationManagers = relevantManagers.filter { $0.question.group == .classification }
-        let contactDetailsManagers = relevantManagers.filter { $0.question.group == .contactDetails }
-        
-        func isCompleted(_ answer: Answer) -> Bool {
-            return answer.progressElements.allSatisfy { $0 }
-        }
-        
-        let classificationCompleted = classificationManagers
-            .map(\.answer)
-            .filter(\.isEssential)
-            .allSatisfy(isCompleted)
-        
-        let detailsCompleted = contactDetailsManagers
-            .map(\.answer)
-            .filter(\.isEssential)
-            .allSatisfy(isCompleted)
-        
-        let allDetailsFilledIn = contactDetailsManagers
-            .map(\.answer)
-            .allSatisfy(isCompleted)
-        
+        return answerManagers.filter { $0.question.isRelevant(in: taskCategory) }
+    }
+    
+    private var classificationManagers: [AnswerManaging] {
+        return relevantManagers.filter { $0.question.group == .classification }
+    }
+    
+    private var contactDetailsManagers: [AnswerManaging] {
+        return relevantManagers.filter { $0.question.group == .contactDetails }
+    }
+    
+    private var classificationCompleted: Bool { classificationManagers.essentialsAreCompleted }
+    private var detailsCompleted: Bool { contactDetailsManagers.essentialsAreCompleted }
+    private var allDetailsFilledIn: Bool { contactDetailsManagers.isFullyCompleted }
+    
+    private func updateProgress(expandFirstUnfinishedSection: Bool = false) {
         let classificationIsHidden = classificationManagers.allSatisfy { $0.view.isHidden }
         classificationSectionView?.isCompleted = classificationCompleted
         classificationSectionView?.isHidden = classificationIsHidden
@@ -248,41 +249,40 @@ class ContactQuestionnaireViewModel {
         detailsSectionView?.isCompleted = detailsCompleted
         informSectionView?.isCompleted = updatedTask.isOrCanBeInformed
         
-        let detailsSectionWasDisabled = detailsSectionView?.isEnabled == false
-        detailsSectionView?.isEnabled =
-            classificationManagers.allSatisfy(\.hasValidAnswer) &&
-            !updatedContact.shouldBeDeleted
-        detailsSectionView?.index = classificationIsHidden ? 1 : 2
+        let startIndex = classificationIsHidden ? 1 : 2
+        detailsSectionView?.index = startIndex
+        informSectionView?.index = startIndex + 1
         
-        let informSectionWasDisabled = informSectionView?.isEnabled == false
-        informSectionView?.index = classificationIsHidden ? 2 : 3
-        informSectionView?.isEnabled =
-            classificationManagers.allSatisfy(\.hasValidAnswer) &&
-            !updatedContact.shouldBeDeleted
+        let detailsSectionWasDisabled = detailsSectionView?.isEnabled == false
+        let sectionsAreEnabled = classificationManagers.hasValidAnswers && !updatedContact.shouldBeDeleted
+        
+        detailsSectionView?.isEnabled = sectionsAreEnabled
+        informSectionView?.isEnabled = sectionsAreEnabled
+        
+        let detailsBecameEnabled = detailsSectionWasDisabled && sectionsAreEnabled
         
         if expandFirstUnfinishedSection {
-            let sections = [classificationSectionView, detailsSectionView, informSectionView].compactMap { $0 }
-            sections.forEach { $0.collapse(animated: false) }
-            
-            if !classificationCompleted {
-                classificationSectionView?.expand(animated: false)
-            } else if !allDetailsFilledIn {
-                detailsSectionView?.expand(animated: false)
-                if informSectionView?.isEnabled == true { // Since the inform section is not disabled, it wouldn't auto expand otherwise
-                    informSectionView?.expand(animated: false)
-                }
-            } else if sections.allSatisfy(\.isCollapsed) {
-                informSectionView?.expand(animated: false)
-            }
-        } else if detailsSectionWasDisabled && (detailsSectionView?.isEnabled == true) { // Expand details section if it became enabled
+            self.expandFirstUnfinishedSection()
+        } else if detailsBecameEnabled {
             detailsSectionView?.expand(animated: true)
-            informSectionView?.expand(animated: true)
-            
-        } else if informSectionWasDisabled && (informSectionView?.isEnabled == true) { // Expand inform section if it became enabled
             informSectionView?.expand(animated: true)
         }
         
         updateInformSectionContent()
+    }
+    
+    private func expandFirstUnfinishedSection() {
+        let sections = [classificationSectionView, detailsSectionView, informSectionView].compactMap { $0 }
+        sections.forEach { $0.collapse(animated: false) }
+        
+        if !classificationCompleted {
+            classificationSectionView?.expand(animated: false)
+        } else if !allDetailsFilledIn {
+            detailsSectionView?.expand(animated: false)
+            informSectionView?.expand(animated: false)
+        } else {
+            informSectionView?.expand(animated: false)
+        }
     }
     
     // MARK: - Inform Section Content

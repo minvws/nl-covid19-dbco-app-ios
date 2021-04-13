@@ -266,6 +266,8 @@ extension String {
     static var taskOverviewPairingFailed: String { return Localization.string(for: "taskOverviewPairingFailed") }
     static var taskOverviewPairingExpired: String { return Localization.string(for: "taskOverviewPairingExpired") }
     
+    static var taskOverviewPrivacyFooter: String { return Localization.string(for: "taskOverviewPrivacyFooter") }
+    
     /* MARK: - Overview Tips */
     static var overviewTipsShortTitle: String { return Localization.string(for: "overviewTipsShortTitle") }
     static var overviewTipsTitleTodayOnly: String { return Localization.string(for: "overviewTipsTitleTodayOnly") }
