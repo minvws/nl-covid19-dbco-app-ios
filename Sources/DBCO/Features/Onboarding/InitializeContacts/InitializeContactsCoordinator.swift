@@ -31,16 +31,16 @@ final class InitializeContactsCoordinator: Coordinator, Logging {
         if skipIntro {
             navigationController.setViewControllers([privacyConsentViewController()], animated: true)
         } else {
-            let viewModel = StepViewModel(
-                image: UIImage(named: "Onboarding2"),
-                title: .onboardingDetermineContactsIntroTitle,
-                message: .onboardingDetermineContactsIntroMessage,
-                actions: [
-                    .init(type: .primary, title: .next, target: self, action: #selector(requestPrivacyConsent))
-                ])
+            let viewModel = VerifyZipCodeViewModel()
+            let verifyController = VerifyZipCodeViewController(viewModel: viewModel)
+            verifyController.delegate = self
             
-            let stepController = StepViewController(viewModel: viewModel)
-            navigationController.pushViewController(stepController, animated: true)
+            verifyController.onPopped = { [weak self] _ in
+                guard let self = self else { return }
+                self.delegate?.initializeContactsCoordinatorDidCancel(self)
+            }
+            
+            navigationController.pushViewController(verifyController, animated: true)
         }
     }
     
@@ -82,6 +82,27 @@ final class InitializeContactsCoordinator: Coordinator, Logging {
         roommatesController.delegate = self
         
         navigationController.pushViewController(roommatesController, animated: true)
+    }
+    
+}
+
+extension InitializeContactsCoordinator: VerifyZipCodeViewControllerDelegate {
+    
+    func verifyZipCodeViewController(_ controller: VerifyZipCodeViewController, didFinishWithActiveZipCode: Bool) {
+        let message: String = didFinishWithActiveZipCode ?
+            .onboardingDetermineContactsIntroMessageSupported :
+            .onboardingDetermineContactsIntroMessageUnsupported
+        
+        let viewModel = StepViewModel(
+            image: UIImage(named: "Onboarding2"),
+            title: .onboardingDetermineContactsIntroTitle,
+            message: message,
+            actions: [
+                .init(type: .primary, title: .next, target: self, action: #selector(requestPrivacyConsent))
+            ])
+        
+        let stepController = StepViewController(viewModel: viewModel)
+        navigationController.pushViewController(stepController, animated: true)
     }
     
 }
