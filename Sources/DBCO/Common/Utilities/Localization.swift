@@ -147,7 +147,8 @@ extension String {
     static func verifySymptomsGettingWorseTitle(date: String) -> String { return Localization.string(for: "verifySymptomsGettingWorse.title", [date]) }
     
     static var determineSymptomsIncreasingDateTitle: String { return Localization.string(for: "determineSymptomsIncreasingDate.title") }
-    static var determineSymptomsIncreasingDateSubtitle: String { return Localization.string(for: "determineSymptomsIncreasingDate.subtitle") }
+    
+    static func determineSymptomsIncreasingDateSubtitle(date: String) -> String { return Localization.string(for: "determineSymptomsIncreasingDate.subtitle", [date]) }
     
     static var determinePositiveTestDateTitle: String { return Localization.string(for: "determinePositiveTestDate.title") }
     static var determinePositiveTestDateSubtitle: String { return Localization.string(for: "determinePositiveTestDate.subtitle") }
