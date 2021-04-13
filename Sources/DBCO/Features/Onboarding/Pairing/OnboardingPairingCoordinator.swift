@@ -27,12 +27,16 @@ final class OnboardingPairingCoordinator: Coordinator {
     }
     
     override func start() {
-        let viewModel = StepViewModel(image: UIImage(named: "Onboarding2")!,
-                                                title: .onboardingPairingIntroTitle,
-                                                message: .onboardingPairingIntroMessage,
-                                                primaryButtonTitle: .next)
+        let viewModel = StepViewModel(
+            image: UIImage(named: "Onboarding2"),
+            title: .onboardingPairingIntroTitle,
+            message: .onboardingPairingIntroMessage,
+            actions: [
+                .init(type: .primary, title: .next, target: self, action: #selector(continueToPairing))
+            ])
+        
         let stepController = StepViewController(viewModel: viewModel)
-        stepController.delegate = self
+        
         stepController.onPopped = { [weak self] _ in
             guard let self = self else { return }
             self.delegate?.onboardingPairingCoordinatorDidCancel(self)
@@ -40,22 +44,18 @@ final class OnboardingPairingCoordinator: Coordinator {
         
         navigationController.pushViewController(stepController, animated: true)
     }
-    private func finish() {
-        delegate?.onboardingPairingCoordinatorDidFinish(self)
-    }
-
-}
-
-extension OnboardingPairingCoordinator: StepViewControllerDelegate {
     
-    func stepViewControllerDidSelectPrimaryButton(_ controller: StepViewController) {
+    @objc private func continueToPairing() {
         let pairingController = PairViewController(viewModel: PairViewModel())
         pairingController.delegate = self
         
         navigationController.pushViewController(pairingController, animated: true)
     }
     
-    func stepViewControllerDidSelectSecondaryButton(_ controller: StepViewController) {}
+    private func finish() {
+        delegate?.onboardingPairingCoordinatorDidFinish(self)
+    }
+
 }
 
 extension OnboardingPairingCoordinator: PairViewControllerDelegate {

@@ -289,7 +289,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         guard let delegate = inputFieldDelegate else { return true }
         
         if let options = editable.valueOptions, options.count > 1, text?.isEmpty == true, !overrideOptionPrompt {
-            delegate.promptOptionsForInputField(options) { (option) in
+            delegate.promptOptionsForInputField(options) { option in
                 if let option = option {
                     self.text = option
                     self.handleEditingDidEnd()

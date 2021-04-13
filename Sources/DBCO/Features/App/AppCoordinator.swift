@@ -28,18 +28,50 @@ final class AppCoordinator: Coordinator {
         
         window.tintColor = Theme.colors.primary
         
+        _ = resetAppDataIfNeeded()
+        
         let launchCoordinator = LaunchCoordinator(window: window)
         launchCoordinator.delegate = self
         
         startChildCoordinator(launchCoordinator)
     }
     
+    private func resetAppDataIfNeeded() -> Bool {
+        let mostRecentModificationDate =
+            [Services.onboardingManager.dataModificationDate,
+             Services.caseManager.dataModificationDate]
+            .compactMap { $0 }
+            .sorted(by: <)
+            .last ?? .distantFuture // fallback to future, since there isn't any data to begin with
+        
+        let twoWeeksAgo = Date.now.dateByAddingDays(-14)
+        
+        if mostRecentModificationDate < twoWeeksAgo {
+            resetData()
+            return true
+        }
+        
+        return false
+    }
+    
+    private func resetData() {
+        Services.pairingManager.unpair()
+        try? Services.caseManager.removeCaseData()
+        Services.onboardingManager.reset()
+    }
+    
     private var isUpdatingConfiguration = false
     
     func appWillBecomeVisible() {
-        updateConfiguration()
-        refreshCaseDataIfNeeded()
         revealContent()
+        
+        if resetAppDataIfNeeded() {
+            children.forEach(removeChildCoordinator)
+            start()
+        } else {
+            updateConfiguration()
+            refreshCaseDataIfNeeded()
+        }
     }
     
     func appDidHide() {
@@ -148,13 +180,8 @@ extension AppCoordinator: AppUpdateViewControllerDelegate {
 extension AppCoordinator: TaskOverviewCoordinatorDelegate {
     
     func taskOverviewCoordinatorDidRequestReset(_ coordinator: TaskOverviewCoordinator) {
-    
-        Services.pairingManager.unpair()
-        try? Services.caseManager.removeCaseData()
-        Services.onboardingManager.reset()
-        
+        resetData()
         removeChildCoordinator(coordinator)
-        
         start()
     }
     

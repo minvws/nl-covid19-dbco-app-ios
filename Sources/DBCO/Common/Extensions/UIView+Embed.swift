@@ -215,3 +215,17 @@ extension UIView {
     }
     
 }
+
+extension UIView {
+    
+    @discardableResult
+    func heightConstraint(to height: CGFloat, priority: UILayoutPriority = UILayoutPriority(50)) -> Self {
+        
+        let heightConstraint = heightAnchor.constraint(equalToConstant: height)
+        heightConstraint.priority = priority
+        heightConstraint.isActive = true
+        
+        return self
+    }
+    
+}

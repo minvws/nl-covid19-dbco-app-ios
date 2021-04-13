@@ -29,6 +29,8 @@ protocol CaseManaging {
     
     init()
     
+    var dataModificationDate: Date? { get }
+    
     var hasCaseData: Bool { get }
     
     /// Indicates that alls the tasks are uploaded to the backend in their current state
@@ -116,6 +118,10 @@ final class CaseManager: CaseManaging, Logging {
     
     @Keychain(name: "appData", service: Constants.keychainService, clearOnReinstall: true)
     private var appData: AppData = .empty // swiftlint:disable:this let_var_whitespace
+    
+    var dataModificationDate: Date? {
+        return $appData.modificationDate
+    }
     
     var isSynced: Bool {
         return tasks.allSatisfy(\.isSyncedWithPortal)
