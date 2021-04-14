@@ -39,6 +39,7 @@ struct AppConfiguration: AppVersionInformation, Decodable {
     let appStoreURL: URL?
     let featureFlags: FeatureFlags
     let symptoms: [Symptom]
+    let supportedZipCodeRanges: [ZipRange]?
     
     enum CodingKeys: String, CodingKey {
         case minimumVersion = "iosMinimumVersion"
@@ -46,6 +47,7 @@ struct AppConfiguration: AppVersionInformation, Decodable {
         case appStoreURL = "iosAppStoreURL"
         case featureFlags
         case symptoms
+        case supportedZipCodeRanges
     }
     
     init(from decoder: Decoder) throws {
@@ -60,8 +62,9 @@ struct AppConfiguration: AppVersionInformation, Decodable {
             appStoreURL = nil
         }
         
-        featureFlags = (try container.decodeIfPresent(FeatureFlags.self, forKey: .featureFlags)) ?? .empty
+        featureFlags = try container.decode(FeatureFlags.self, forKey: .featureFlags)
         symptoms = try container.decode([Symptom].self, forKey: .symptoms)
+        supportedZipCodeRanges = try container.decodeIfPresent([ZipRange].self, forKey: .supportedZipCodeRanges)
     }
 }
 
@@ -77,6 +80,7 @@ protocol ConfigManaging {
     var appVersion: String { get }
     var featureFlags: FeatureFlags { get }
     var symptoms: [Symptom] { get }
+    var supportedZipCodeRanges: [ZipRange] { get }
     
     func update(completion: @escaping (UpdateState, FeatureFlags) -> Void)
 }

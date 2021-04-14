@@ -7,31 +7,32 @@
 
 import UIKit
 
-protocol PairViewControllerDelegate: class {
-    func pairViewController(_ controller: PairViewController, wantsToPairWith code: String)
+protocol VerifyZipCodeViewControllerDelegate: class {
+    func verifyZipCodeViewController(_ controller: VerifyZipCodeViewController, didFinishWithActiveZipCode: Bool)
 }
 
-class PairViewModel {}
+class VerifyZipCodeViewModel {
+    
+}
 
-/// - Tag: PairViewController
-class PairViewController: ViewController {
-    private let viewModel: PairViewModel
+class VerifyZipCodeViewController: ViewController, ScrollViewNavivationbarAdjusting {
+    let shortTitle: String = ""
+    
+    private let viewModel: VerifyZipCodeViewModel
     
     private let scrollView = UIScrollView()
     private let codeField =
         CodeField(with: CodeDescription(digitGroupSize: 4,
-                                        numberOfGroups: 3,
-                                        accessibilityLabel: .onboardingPairingTitle,
-                                        accessibilityHint: .onboardingPairingCodeHint,
-                                        adjustKerningForWidth: true))
+                                        numberOfGroups: 1,
+                                        accessibilityLabel: .onboardingVerifyZipCodeTitle,
+                                        accessibilityHint: .onboardingVerifyZipCodeAccessibilityHint,
+                                        adjustKerningForWidth: false))
     
-    private let loadingOverlay = UIView()
-    private let loadingIndicator = ActivityIndicatorView(style: .white)
     private var keyboardSpacerHeightConstraint: NSLayoutConstraint!
     
-    weak var delegate: PairViewControllerDelegate?
-    
-    init(viewModel: PairViewModel) {
+    weak var delegate: VerifyZipCodeViewControllerDelegate?
+
+    init(viewModel: VerifyZipCodeViewModel) {
         self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)
@@ -41,34 +42,33 @@ class PairViewController: ViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
 
-        let titleLabel = UILabel(title2: .onboardingPairingTitle).multiline()
+        let titleLabel = UILabel(title2: .onboardingVerifyZipCodeTitle).multiline()
+        
+        let subtitleLabel = UILabel(body: .onboardingVerifyZipCodeMessage, textColor: Theme.colors.captionGray).multiline()
         
         let keyboardSpacerView = UIView()
         keyboardSpacerHeightConstraint = keyboardSpacerView.heightAnchor.constraint(equalToConstant: 0)
         keyboardSpacerHeightConstraint.isActive = true
         
         let nextButton = Button(title: .next, style: .primary)
-            .touchUpInside(self, action: #selector(pair))
+            .touchUpInside(self, action: #selector(verify))
         
         nextButton.isEnabled = false
         codeField.didUpdatePairingCode { nextButton.isEnabled = $0 != nil }
         
-        let topMargin: CGFloat = UIScreen.main.bounds.height < 600 ? 0 : 66
+        let topMargin: CGFloat = UIScreen.main.bounds.height < 600 ? 0 : 32
         
         let containerView =
             VStack(spacing: 32,
                    VStack(spacing: 16,
                           titleLabel,
+                          subtitleLabel,
                           codeField),
                    VStack(spacing: 20,
                           nextButton,
@@ -83,39 +83,7 @@ class PairViewController: ViewController {
         scrollView.embed(in: view)
         scrollView.delegate = self
         
-        loadingOverlay.backgroundColor = UIColor(white: 0, alpha: 0.4)
-        loadingOverlay.embed(in: view)
-        loadingOverlay.isHidden = true
-        
-        loadingOverlay.addSubview(loadingIndicator)
-        loadingIndicator.color = .white
-        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
-        loadingIndicator.centerYAnchor.constraint(equalTo: nextButton.centerYAnchor).isActive = true
-        loadingIndicator.trailingAnchor.constraint(equalTo: nextButton.trailingAnchor, constant: -16).isActive = true
-        loadingIndicator.startAnimating()
-        
         registerForKeyboardNotifications()
-    }
-    
-    func startLoadingAnimation() {
-        loadingOverlay.isHidden = false
-        loadingOverlay.alpha = 0
-        codeField.isIgnoringInput = true
-        
-        UIAccessibility.post(notification: .announcement, argument: String.loading)
-        
-        UIView.animate(withDuration: 0.3) {
-            self.loadingOverlay.alpha = 1
-        }
-    }
-    
-    func stopLoadingAnimation() {
-        UIView.animate(withDuration: 0.3, delay: 0.1, options: [], animations: {
-            self.loadingOverlay.alpha = 0
-        }, completion: { _ in
-            self.loadingOverlay.isHidden = true
-            self.codeField.isIgnoringInput = false
-        })
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -125,12 +93,12 @@ class PairViewController: ViewController {
         codeField.becomeFirstResponder()
     }
     
-    @objc private func pair() {
-        guard let code = codeField.code else {
-            return
-        }
+    @objc private func verify() {
+        guard let codeString = codeField.code, let code = Int(codeString) else { return }
         
-        delegate?.pairViewController(self, wantsToPairWith: code)
+        let isInRange = Services.configManager.supportedZipCodeRanges.contains { $0.contains(code) }
+        
+        delegate?.verifyZipCodeViewController(self, didFinishWithActiveZipCode: isInRange)
     }
     
     // MARK: - Keyboard handling
@@ -157,9 +125,14 @@ class PairViewController: ViewController {
 
 // MARK: - UIScrollViewDelegate
 
-extension PairViewController: UIScrollViewDelegate {
+extension VerifyZipCodeViewController: UIScrollViewDelegate {
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         codeField.resignFirstResponder() // Hide keyboard on scroll
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        adjustNavigationBar(for: scrollView)
+    }
+    
 }
