@@ -45,7 +45,7 @@ protocol CaseManaging {
     var dateOfSymptomOnset: Date? { get }
     var dateOfTest: Date? { get }
     var startOfContagiousPeriod: Date? { get }
-    var contagiousPeriodKnown: Bool { get }
+    var symptomsKnown: Bool { get }
     
     var reference: String? { get }
     
@@ -171,9 +171,9 @@ final class CaseManager: CaseManaging, Logging {
         }
     }
     
-    private(set) var contagiousPeriodKnown: Bool {
-        get { appData.contagiousPeriodKnown }
-        set { appData.contagiousPeriodKnown = newValue }
+    private(set) var symptomsKnown: Bool {
+        get { appData.symptomsKnown }
+        set { appData.symptomsKnown = newValue }
     }
     
     private(set) var symptoms: [String] {
@@ -239,7 +239,7 @@ final class CaseManager: CaseManaging, Logging {
         }
         
         self.dateOfSymptomOnset = reinterpretAsGMT0(dateOfSymptomOnset)
-        appData.contagiousPeriodKnown = true
+        appData.symptomsKnown = true
     }
     
     func startLocalCaseIfNeeded(dateOfTest: Date) {
@@ -248,7 +248,7 @@ final class CaseManager: CaseManaging, Logging {
         }
         
         self.dateOfTest = reinterpretAsGMT0(dateOfTest)
-        appData.contagiousPeriodKnown = true
+        appData.symptomsKnown = true
     }
     
     func removeCaseData() throws {
@@ -596,7 +596,7 @@ private extension AppData {
     var asCase: Case {
         return Case(dateOfTest: dateOfTest,
                     dateOfSymptomOnset: dateOfSymptomOnset,
-                    contagiousPeriodKnown: contagiousPeriodKnown,
+                    symptomsKnown: symptomsKnown,
                     windowExpiresAt: windowExpiresAt,
                     tasks: tasks,
                     symptoms: symptoms)
@@ -617,6 +617,6 @@ private extension AppData {
 
         windowExpiresAt = caseResult.windowExpiresAt
         reference = caseResult.reference
-        contagiousPeriodKnown = caseResult.contagiousPeriodKnown
+        symptomsKnown = caseResult.symptomsKnown
     }
 }
