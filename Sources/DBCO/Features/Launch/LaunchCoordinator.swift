@@ -6,6 +6,8 @@
  */
 
 import UIKit
+import IOSSecuritySuite
+import LocalAuthentication
 
 protocol LaunchCoordinatorDelegate: class {
     func launchCoordinator(_ coordinator: LaunchCoordinator, needsRequiredUpdate version: AppVersionInformation)
@@ -29,6 +31,28 @@ final class LaunchCoordinator: Coordinator {
         window.rootViewController = LaunchViewController(viewModel: .init())
         window.makeKeyAndVisible()
         
+        verifySystemIntegrity()
+    }
+    
+    private func verifySystemIntegrity() {
+        if IOSSecuritySuite.amIJailbroken() {
+            showJailbreakAlert { self.verifySystemSecurity() }
+        } else {
+            verifySystemSecurity()
+        }
+    }
+        
+    private func verifySystemSecurity() {
+        let isPasscodeEnabled = LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
+        
+        if !isPasscodeEnabled {
+            showNoPasscodeAlert { self.fetchConfigurationAndContinue() }
+        } else {
+            fetchConfigurationAndContinue()
+        }
+    }
+    
+    private func fetchConfigurationAndContinue() {
         Services.configManager.update { [unowned self] updateState, _ in
             switch updateState {
             case .updateRequired(let versionInformation):
@@ -37,5 +61,41 @@ final class LaunchCoordinator: Coordinator {
                 self.delegate?.launchCoordinatorDidFinish(self)
             }
         }
+    }
+    
+    // MARK: - Alerts
+    
+    private func showJailbreakAlert(completion: @escaping () -> Void) {
+        guard let launchController = window.rootViewController else { return completion() }
+        
+        let alert = UIAlertController(title: .launchJailbreakAlertTitle,
+                                      message: .launchJailbreakAlertMessage,
+                                      preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: .launchJailbreakAlertReadMoreButton, style: .default) { _ in
+            UIApplication.shared.open(URL(string: .launchJailbreakAlertReadMoreURL)!)
+            completion()
+        })
+        
+        launchController.present(alert, animated: true, completion: nil)
+    }
+    
+    private func showNoPasscodeAlert(completion: @escaping () -> Void) {
+        guard let launchController = window.rootViewController else { return completion() }
+        
+        let alert = UIAlertController(title: .launchNoPasscodeAlertTitle,
+                                      message: .launchNoPasscodeAlertMessage,
+                                      preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: .launchNoPasscodeAlertNotNowButton, style: .default) { _ in
+            completion()
+        })
+        
+        alert.addAction(UIAlertAction(title: .launchNoPasscodeAlertToSettingsButton, style: .default) { _ in
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+            completion()
+        })
+        
+        launchController.present(alert, animated: true, completion: nil)
     }
 }
