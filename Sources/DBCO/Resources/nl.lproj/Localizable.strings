@@ -30,6 +30,17 @@
 "updateApp.content" = "Update de app om te zorgen dat deze goed blijft werken.";
 "updateApp.button" = "Updaten";
 
+// MARK: - Launch
+"launchJailbreakAlert.title" = "Het besturingssysteem van je telefoon is aangepast";
+"launchJailbreakAlert.message" = "GGD Contact vraagt je naar gevoelige gegevens. We raden aan je gegevens te beveiligen door het originele besturingssysteem van je telefoon te gebruiken.";
+"launchJailbreakAlert.readMoreButton" = "Lees meer";
+"launchJailbreakAlert.readMoreURL" = "https://support.apple.com/nl-nl/HT201954";
+
+"launchNoPasscodeAlert.title" = "Je telefoon is niet beveiligd";
+"launchNoPasscodeAlert.message" = "Je hebt geen schermvergrendeling aanstaan. Daardoor kunnen anderen makkelijk toegang krijgen tot je gegevens. Ga naar instellingen om je telefoon te beveiligen met bijvoorbeeld een pincode.";
+"launchNoPasscodeAlert.notNowButton" = "Niet nu";
+"launchNoPasscodeAlert.toSettingsButton" = "Naar instellingen";
+
 /* MARK: - Onboarding */
 "onboarding.start.title" = "Waarschuw de mensen die je misschien hebt besmet";
 "onboarding.start.message" = "Je kunt via deze app bepalen wie van je contacten een grote kans op besmetting heeft gelopen. Ook kun je contactgegevens met de GGD delen voor het contactonderzoek.";
