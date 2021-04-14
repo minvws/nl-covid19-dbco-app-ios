@@ -75,5 +75,12 @@
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
+	<key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>cydia</string>
+        <string>undecimus</string>
+        <string>sileo</string>
+        <string>zbra</string>
+	</array>
 </dict>
 </plist>

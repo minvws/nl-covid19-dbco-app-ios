@@ -78,6 +78,17 @@ extension String {
     static var updateAppContent: String { return Localization.string(for: "updateApp.content") }
     static var updateAppButton: String { return Localization.string(for: "updateApp.button") }
     
+    // MARK: - Launch
+    static var launchJailbreakAlertTitle: String { return Localization.string(for: "launchJailbreakAlert.title") }
+    static var launchJailbreakAlertMessage: String { return Localization.string(for: "launchJailbreakAlert.message") }
+    static var launchJailbreakAlertReadMoreButton: String { return Localization.string(for: "launchJailbreakAlert.readMoreButton") }
+    static var launchJailbreakAlertReadMoreURL: String { return Localization.string(for: "launchJailbreakAlert.readMoreURL") }
+    
+    static var launchNoPasscodeAlertTitle: String { return Localization.string(for: "launchNoPasscodeAlert.title") }
+    static var launchNoPasscodeAlertMessage: String { return Localization.string(for: "launchNoPasscodeAlert.message") }
+    static var launchNoPasscodeAlertNotNowButton: String { return Localization.string(for: "launchNoPasscodeAlert.notNowButton") }
+    static var launchNoPasscodeAlertToSettingsButton: String { return Localization.string(for: "launchNoPasscodeAlert.toSettingsButton") }
+    
     /* MARK: - Onboarding */
     static var onboardingStartTitle: String { return Localization.string(for: "onboarding.start.title") }
     static var onboardingStartMessage: String { return Localization.string(for: "onboarding.start.message") }

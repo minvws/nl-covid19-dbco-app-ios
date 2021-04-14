@@ -17,19 +17,19 @@ struct Case: Codable {
     let reference: String?
     let dateOfSymptomOnset: Date?
     let dateOfTest: Date?
-    let contagiousPeriodKnown: Bool
+    let symptomsKnown: Bool
     @ISO8601DateFormat var windowExpiresAt: Date
     let tasks: [Task]
     let symptoms: [String]
     
-    init(dateOfTest: Date?, dateOfSymptomOnset: Date?, contagiousPeriodKnown: Bool, windowExpiresAt: Date, tasks: [Task], symptoms: [String]) {
+    init(dateOfTest: Date?, dateOfSymptomOnset: Date?, symptomsKnown: Bool, windowExpiresAt: Date, tasks: [Task], symptoms: [String]) {
         self.dateOfTest = dateOfTest
         self.dateOfSymptomOnset = dateOfSymptomOnset
         self.windowExpiresAt = windowExpiresAt
         self.tasks = tasks
         self.symptoms = symptoms
         self.reference = nil
-        self.contagiousPeriodKnown = contagiousPeriodKnown
+        self.symptomsKnown = symptomsKnown
     }
     
     init(from decoder: Decoder) throws {
@@ -43,6 +43,6 @@ struct Case: Codable {
         _windowExpiresAt = try container.decode(ISO8601DateFormat.self, forKey: .windowExpiresAt)
         tasks = try container.decode([Task].self, forKey: .tasks)
         symptoms = (try container.decodeIfPresent([String].self, forKey: .symptoms)) ?? []
-        contagiousPeriodKnown = (try container.decodeIfPresent(Bool.self, forKey: .contagiousPeriodKnown)) ?? true
+        symptomsKnown = (try container.decodeIfPresent(Bool.self, forKey: .symptomsKnown)) ?? true
     }
 }
