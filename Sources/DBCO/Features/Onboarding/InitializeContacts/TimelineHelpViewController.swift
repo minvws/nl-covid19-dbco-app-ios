@@ -47,6 +47,9 @@ class TimelineHelpViewController: ViewController {
         widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
         VStack(spacing: 16,
+               UILabel(body: .contactsTimelineHelpMessage,
+                       textColor: Theme.colors.captionGray)
+                .multiline(),
                listItem(.contactsTimelineHelpItem1),
                htmlListItem(.contactsTimelineHelpItem2),
                listItem(.contactsTimelineHelpItem3))
