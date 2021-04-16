@@ -36,8 +36,8 @@
 "launchJailbreakAlert.readMoreButton" = "Lees meer";
 "launchJailbreakAlert.readMoreURL" = "https://support.apple.com/nl-nl/HT201954";
 
-"launchNoPasscodeAlert.title" = "Je telefoon is niet beveiligd";
-"launchNoPasscodeAlert.message" = "Je hebt geen schermvergrendeling aanstaan. Daardoor kunnen anderen makkelijk toegang krijgen tot je gegevens. Ga naar instellingen om je telefoon te beveiligen met bijvoorbeeld een pincode.";
+"launchNoPasscodeAlert.title" = "Je telefoon heeft geen toegangscode";
+"launchNoPasscodeAlert.message" = "GGD Contact vraagt je naar gevoelige gegevens. We raden aan je gegevens te beveiligen door een toegangscode in te stellen.";
 "launchNoPasscodeAlert.notNowButton" = "Niet nu";
 "launchNoPasscodeAlert.toSettingsButton" = "Naar instellingen";
 
@@ -55,9 +55,9 @@
 "onboarding.consent.shortTitle" = "Privacy";
 "onboarding.consent.title" = "Zo gaat GGD Contact om met je gegevens";
 "onboarding.consent.message" = "In de  <a href=\"https://ggdcontact.nl/nl/privacy-in-app\">privacyverklaring</a> staat hoe GGD Contact jouw gegevens gebruikt. Dit zijn de belangrijkste punten:";
-"onboarding.consent.item1" = "Gegevens worden versleuteld en via een veilige verbinding gedeeld";
-"onboarding.consent.item2" = "Alleen gegevens die jij invult worden gedeeld";
-"onboarding.consent.item3" = "Gegevens worden pas met de GGD gedeeld als jij laat weten dat je klaar bent";
+"onboarding.consent.item1" = "Gegevens worden pas met de GGD gedeeld als jij laat weten dat je klaar bent en je GGD de app ondersteunt";
+"onboarding.consent.item2" = "Gegevens worden versleuteld en via een veilige verbinding gedeeld";
+"onboarding.consent.item3" = "Alleen gegevens die jij invult worden gedeeld";
 "onboarding.consent.item4" = "Het gebruik van de app en delen van gegevens is vrijwillig";
 "onboarding.consent.buttonTitle" = "Ik heb de privacyverklaring gelezen en begrijp hoe GGD Contact mijn gegevens gebruikt";
 
@@ -183,6 +183,7 @@
 "contactsTimelineActivityTip.conversations" = "Een onverwachts gesprek op werk";
 
 "contactsTimelineHelp.title" = "Wat deel ik precies?";
+"contactsTimelineHelp.message" = "Je kunt alleen gegevens delen met de GGD als de app wordt ondersteund in jouw GGD-regio.";
 "contactsTimelineHelp.item1" = "Alleen gegevens die jij invult worden gedeeld";
 "contactsTimelineHelp.item2" = "De GGD heeft <b>geen</b> toegang tot je hele contactenlijst";
 "contactsTimelineHelp.item3" = "Gegevens worden pas met de GGD gedeeld als jij op ‘Deel gegevens met GGD’ klikt";
@@ -264,9 +265,9 @@
 "selectContactAuthorizationTitle" = "‘%@’ opzoeken in je contactenlijst?";
 "selectContactAuthorizationFallbackTitle" = "Dit nieuwe contact opzoeken in je contactenlijst?";
 "selectContactAuthorizationMessage" = "Gebruik je contactenlijst om makkelijk contacten te vinden en contactgegevens in te vullen. Bijvoorbeeld een achternaam of een telefoonnummer.";
-"selectContactAuthorization.item1" = "Alleen gegevens die jij invult worden gedeeld";
-"selectContactAuthorization.item2" = "De GGD heeft <b>geen</b> toegang tot je hele contactenlijst";
-"selectContactAuthorization.item3" = "Gegevens worden pas met de GGD gedeeld als jij laat weten dat je klaar bent";
+"selectContactAuthorization.item1" = "Gegevens worden pas met de GGD gedeeld als jij laat weten dat je klaar bent en je GGD de app ondersteunt";
+"selectContactAuthorization.item2" = "Alleen gegevens die jij invult worden gedeeld";
+"selectContactAuthorization.item3" = "De GGD heeft <b>geen</b> toegang tot je hele contactenlijst";
 "selectContactAuthorizationAllowButton" = "Ja, opzoekhulp gebruiken";
 "selectContactAuthorizationManualButton" = "Nee, zelf invullen";
 
