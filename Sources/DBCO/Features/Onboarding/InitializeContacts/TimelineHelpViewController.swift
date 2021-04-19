@@ -51,7 +51,7 @@ class TimelineHelpViewController: ViewController {
                        textColor: Theme.colors.captionGray)
                 .multiline(),
                listItem(.contactsTimelineHelpItem1),
-               htmlListItem(.contactsTimelineHelpItem2),
+               listItem(.contactsTimelineHelpItem2),
                listItem(.contactsTimelineHelpItem3))
             .embed(in: scrollView.readableWidth, insets: .topBottom(32))
     }

@@ -8,13 +8,6 @@
 import UIKit
 
 func listItem(_ text: String, imageName: String = "PrivacyItem") -> UIView {
-    return HStack(spacing: 16,
-                  UIImageView(imageName: imageName).asIcon(),
-                  UILabel(body: text, textColor: Theme.colors.captionGray).multiline())
-        .alignment(.top)
-}
-
-func htmlListItem(_ text: String, imageName: String = "PrivacyItem") -> UIView {
     let attributedString = NSAttributedString.makeFromHtml(text: text,
                                                          font: Theme.fonts.body,
                                                          textColor: Theme.colors.captionGray,
