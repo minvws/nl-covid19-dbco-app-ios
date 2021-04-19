@@ -15,12 +15,11 @@ protocol AppVersionInformation {
 
 struct FeatureFlags: Codable {
     let enableContactCalling: Bool
-    let enablePerspectiveSharing: Bool
     let enablePerspectiveCopy: Bool
     let enableSelfBCO: Bool
     
     static var empty: FeatureFlags {
-        return FeatureFlags(enableContactCalling: false, enablePerspectiveSharing: false, enablePerspectiveCopy: false, enableSelfBCO: false)
+        return FeatureFlags(enableContactCalling: false, enablePerspectiveCopy: false, enableSelfBCO: false)
     }
 }
 
