@@ -121,6 +121,7 @@ final class AppCoordinator: Coordinator {
         privacyProtectionWindow = nil
     }
     
+    /// - Tag: AppCoordinator.showRequiredUpdate
     private func showRequiredUpdate(with versionInformation: AppVersionInformation) {
         guard var topController = window.rootViewController else { return }
 

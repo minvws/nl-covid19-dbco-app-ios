@@ -7,6 +7,10 @@
 
 import Foundation
 
+/// Not all GGD regions are actively using the app. To determine whether or not the user is located in a "active" GGD region, the four digits of the zip code are asked.
+/// The config fetched by the app contains all the [ZipRange](x-source-tag://ZipRange) that are part of municipalities within the active GGD regions.
+///
+/// - Tag: ZipRange
 struct ZipRange: Codable {
     let start: Int
     let end: Int

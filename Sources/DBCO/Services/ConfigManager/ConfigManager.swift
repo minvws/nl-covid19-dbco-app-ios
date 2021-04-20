@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// - Tag: ConfigManager
 class ConfigManager: ConfigManaging, Logging {
     
     let loggingCategory = "ConfigManager"

@@ -58,6 +58,7 @@ class SelectSymptomsViewModel {
     }
 }
 
+/// - Tag: SelectSymptomsViewController
 class SelectSymptomsViewController: ViewController, ScrollViewNavivationbarAdjusting {
     private let viewModel: SelectSymptomsViewModel
     private var symptomButtonStackView: UIStackView!

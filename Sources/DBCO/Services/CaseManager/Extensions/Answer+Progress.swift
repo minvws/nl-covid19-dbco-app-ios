@@ -38,6 +38,8 @@ extension Answer {
         }
     }
     
+    /// A boolean indicating whether or not the asnwer is essential for a complete and usable questionnaire result.
+    /// - Tag: Answer.isEssential
     var isEssential: Bool {
         switch value {
         case .classificationDetails,
@@ -66,6 +68,11 @@ extension QuestionnaireResult {
         return answers.flatMap(\.progressElements)
     }
     
+    /// A boolean indicating whether or not all the essential answers are completed
+    /// Used for calculating the [task's status](x-source-tag://Task.status)
+    ///
+    /// # See also:
+    /// [Answer.isEssential](x-source-tag://Answer.isEssential)
     var hasAllEssentialAnswers: Bool {
         return answers.filter(\.isEssential).allSatisfy {
             $0.progressElements.allSatisfy { $0 }
