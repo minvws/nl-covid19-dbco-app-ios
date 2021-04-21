@@ -133,6 +133,7 @@ final class AppCoordinator: Coordinator {
         return topController
     }
     
+    /// - Tag: AppCoordinator.showRequiredUpdate
     private func showRequiredUpdate(with versionInformation: AppVersionInformation) {
         guard let topController = topViewController else { return }
         guard !(topController is AppUpdateViewController) else { return }

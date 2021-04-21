@@ -25,6 +25,11 @@ protocol PairingManagerListener: class {
     func pairingManagerDidFinishPairing(_ pairingManager: PairingManaging)
 }
 
+/// Handles pairing (exchanging keys via libSodium) with the api.
+///
+/// # See also
+/// [Sealed](x-source-tag://Sealed): Used for encrypting and decrypting data after pairing
+///
 /// - Tag: PairingManaging
 protocol PairingManaging {
     init()
@@ -49,13 +54,16 @@ protocol PairingManaging {
     var lastPollingError: PairingManagingError? { get }
     
     /// Adds a listener
-    /// - parameter listener: The object conforming to [PairingManagerrListener](x-source-tag://PairingManagerListener) that will receive updates. Will be stored with a weak reference
+    /// - parameter listener: The object conforming to [PairingManagerListener](x-source-tag://PairingManagerListener) that will receive updates. Will be stored with a weak reference
     func addListener(_ listener: PairingManagerListener)
     
     func seal<T: Encodable>(_ value: T) throws -> (ciperText: String, nonce: String)
     func open<T: Decodable>(cipherText: String, nonce: String) throws -> T
 }
 
+/// # See
+/// [PairingManaging](x-source-tag://PairingManaging)
+/// - Tag: PairingManager
 class PairingManager: PairingManaging, Logging {
     let loggingCategory = "PairingManager"
     

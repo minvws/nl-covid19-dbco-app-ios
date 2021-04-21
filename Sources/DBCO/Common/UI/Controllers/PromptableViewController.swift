@@ -7,6 +7,12 @@
 
 import UIKit
 
+/// [ViewController](x-source-tag://ViewController) subclass with its view divided into two sections:
+/// A `contentView` for normal content and a `promptView` for content that should be shown fixed to the bottom.
+/// `contentView` will adjust its size to accomodate the `promptView`.
+/// The promptView can be hidden or shown with animation.
+///
+/// - Tag: PromptableViewController
 class PromptableViewController: ViewController {
     
     private class PromptView: UIView {

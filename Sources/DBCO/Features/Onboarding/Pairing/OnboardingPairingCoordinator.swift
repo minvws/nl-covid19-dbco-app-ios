@@ -15,6 +15,8 @@ protocol OnboardingPairingCoordinatorDelegate: class {
 
 /// Coordinator managing pairing with the backend during onboarding.
 /// Uses [PairViewController](x-source-tag://PairViewController) and [PrivacyConsentViewController](x-source-tag://PrivacyConsentViewController)
+///
+/// - Tag: OnboardingPairingCoordinator
 final class OnboardingPairingCoordinator: Coordinator {
     private let navigationController: UINavigationController
     

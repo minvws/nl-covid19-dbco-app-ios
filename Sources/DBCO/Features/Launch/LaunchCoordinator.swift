@@ -14,6 +14,10 @@ protocol LaunchCoordinatorDelegate: class {
     func launchCoordinatorDidFinish(_ coordinator: LaunchCoordinator)
 }
 
+/// Coordinator that does jailbreak detection (via iOSSecuritySuite), verifies the user has setup a passcode and fetches the configuration if needed while showing [LaunchViewController](x-source-tag://LaunchViewController)
+///
+/// [LaunchViewController](x-source-tag://LaunchViewController)
+/// - Tag: LaunchCoordinator
 final class LaunchCoordinator: Coordinator {
     private let window: UIWindow
     
