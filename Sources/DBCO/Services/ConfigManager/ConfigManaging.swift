@@ -28,7 +28,6 @@ protocol AppVersionInformation {
 struct FeatureFlags: Codable {
     /// Enables the "call [name]" button in the [ContactQuestionnaireViewController's](x-source-tag://ContactQuestionnaireViewController) inform section
     let enableContactCalling: Bool
-    let enablePerspectiveSharing: Bool
     
     /// Enables the "copy guidelines" button in the [ContactQuestionnaireViewController's](x-source-tag://ContactQuestionnaireViewController) inform section
     let enablePerspectiveCopy: Bool
@@ -37,7 +36,7 @@ struct FeatureFlags: Codable {
     let enableSelfBCO: Bool
     
     static var empty: FeatureFlags {
-        return FeatureFlags(enableContactCalling: false, enablePerspectiveSharing: false, enablePerspectiveCopy: false, enableSelfBCO: false)
+        return FeatureFlags(enableContactCalling: false, enablePerspectiveCopy: false, enableSelfBCO: false)
     }
 }
 
@@ -53,16 +52,14 @@ struct Symptom: Codable, Equatable {
     }
 }
 
-/// The configuration object supplied by the api
-///
-/// - Tag: AppConfiguration
-struct AppConfiguration: AppVersionInformation, Decodable {
+struct AppConfiguration: AppVersionInformation, Codable {
     let minimumVersion: String
     let minimumVersionMessage: String?
     let appStoreURL: URL?
     let featureFlags: FeatureFlags
     let symptoms: [Symptom]
-    let supportedZipCodeRanges: [ZipRange]?
+    let supportedZipCodeRanges: [ZipRange]
+    let fetchDate: Date
     
     enum CodingKeys: String, CodingKey {
         case minimumVersion = "iosMinimumVersion"
@@ -71,6 +68,7 @@ struct AppConfiguration: AppVersionInformation, Decodable {
         case featureFlags
         case symptoms
         case supportedZipCodeRanges
+        case fetchDate
     }
     
     init(from decoder: Decoder) throws {
@@ -87,12 +85,15 @@ struct AppConfiguration: AppVersionInformation, Decodable {
         
         featureFlags = try container.decode(FeatureFlags.self, forKey: .featureFlags)
         symptoms = try container.decode([Symptom].self, forKey: .symptoms)
-        supportedZipCodeRanges = try container.decodeIfPresent([ZipRange].self, forKey: .supportedZipCodeRanges)
+        supportedZipCodeRanges = try container.decode([ZipRange].self, forKey: .supportedZipCodeRanges)
+        
+        fetchDate = (try container.decodeIfPresent(Date.self, forKey: .fetchDate)) ?? Date()
     }
 }
 
-enum UpdateState {
+enum ConfigUpdateResult {
     case updateRequired(AppVersionInformation)
+    case updateFailed
     case noActionNeeded
 }
 
@@ -119,6 +120,5 @@ protocol ConfigManaging {
     /// The most recent fetched [ZipRanges](x-source-tag://ZipRange) that are part of GGD regions using GGD Contact.
     var supportedZipCodeRanges: [ZipRange] { get }
     
-    /// Update the configuration
-    func update(completion: @escaping (UpdateState, FeatureFlags) -> Void)
+    func update(completion: @escaping (ConfigUpdateResult) -> Void)
 }

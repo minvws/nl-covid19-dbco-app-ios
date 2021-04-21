@@ -10,7 +10,7 @@ import IOSSecuritySuite
 import LocalAuthentication
 
 protocol LaunchCoordinatorDelegate: class {
-    func launchCoordinator(_ coordinator: LaunchCoordinator, needsRequiredUpdate version: AppVersionInformation)
+    func launchCoordinator(_ coordinator: LaunchCoordinator, needsConfigurationUpdate completion: @escaping () -> Void)
     func launchCoordinatorDidFinish(_ coordinator: LaunchCoordinator)
 }
 
@@ -57,14 +57,9 @@ final class LaunchCoordinator: Coordinator {
     }
     
     private func fetchConfigurationAndContinue() {
-        Services.configManager.update { [unowned self] updateState, _ in
-            switch updateState {
-            case .updateRequired(let versionInformation):
-                self.delegate?.launchCoordinator(self, needsRequiredUpdate: versionInformation)
-            case .noActionNeeded:
-                self.delegate?.launchCoordinatorDidFinish(self)
-            }
-        }
+        delegate?.launchCoordinator(self, needsConfigurationUpdate: {
+            self.delegate?.launchCoordinatorDidFinish(self)
+        })
     }
     
     // MARK: - Alerts
