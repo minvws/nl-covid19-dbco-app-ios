@@ -78,17 +78,19 @@ final class AppCoordinator: Coordinator {
         hideContent()
     }
     
-    private func updateConfiguration() {
+    private func updateConfiguration(completionHandler: (() -> Void)? = nil) {
         guard !isUpdatingConfiguration else { return }
         
         isUpdatingConfiguration = true
         
-        Services.configManager.update { [unowned self] updateState, _ in
+        Services.configManager.update { [unowned self] updateState in
             switch updateState {
             case .updateRequired(let versionInformation):
                 showRequiredUpdate(with: versionInformation)
+            case .updateFailed:
+                showConfigUpdateFailed(retryHandler: { updateConfiguration(completionHandler: completionHandler) })
             case .noActionNeeded:
-                break
+                completionHandler?()
             }
             
             isUpdatingConfiguration = false
@@ -121,13 +123,19 @@ final class AppCoordinator: Coordinator {
         privacyProtectionWindow = nil
     }
     
-    private func showRequiredUpdate(with versionInformation: AppVersionInformation) {
-        guard var topController = window.rootViewController else { return }
+    private var topViewController: UIViewController? {
+        guard var topController = window.rootViewController else { return nil }
 
         while let newTopController = topController.presentedViewController {
             topController = newTopController
         }
         
+        return topController
+    }
+    
+    /// - Tag: AppCoordinator.showRequiredUpdate
+    private func showRequiredUpdate(with versionInformation: AppVersionInformation) {
+        guard let topController = topViewController else { return }
         guard !(topController is AppUpdateViewController) else { return }
         
         let viewModel = AppUpdateViewModel(versionInformation: versionInformation)
@@ -136,13 +144,25 @@ final class AppCoordinator: Coordinator {
         
         topController.present(updateController, animated: true)
     }
+    
+    private func showConfigUpdateFailed(retryHandler: @escaping () -> Void) {
+        guard let topController = topViewController else { return }
+        
+        let alert = UIAlertController(title: .launchConfigAlertTitle, message: .launchConfigAlertMessage, preferredStyle: .alert)
+        
+        alert.addAction(.init(title: .tryAgain, style: .default) { _ in
+            retryHandler()
+        })
+        
+        topController.present(alert, animated: true)
+    }
 
 }
 
 extension AppCoordinator: LaunchCoordinatorDelegate {
     
-    func launchCoordinator(_ coordinator: LaunchCoordinator, needsRequiredUpdate version: AppVersionInformation) {
-        showRequiredUpdate(with: version)
+    func launchCoordinator(_ coordinator: LaunchCoordinator, needsConfigurationUpdate completion: @escaping () -> Void) {
+        updateConfiguration(completionHandler: completion)
     }
     
     func launchCoordinatorDidFinish(_ coordinator: LaunchCoordinator) {

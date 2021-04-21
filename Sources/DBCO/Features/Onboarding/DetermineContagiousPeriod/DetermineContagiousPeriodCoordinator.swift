@@ -13,6 +13,15 @@ protocol DetermineContagiousPeriodCoordinatorDelegate: class {
     func determineContagiousPeriodCoordinatorDidCancel(_ coordinator: DetermineContagiousPeriodCoordinator)
 }
 
+/// Coordinator managing the flow of determining the range of dates for which to perform contact tracing.
+/// When the user has symptoms the contagious period usually starts 2 days before the day the symptoms started appearing.
+/// Without symptoms the contagious period starts the day the positive test result was received.
+/// Separate rules apply in scenarios where the user always has symptoms or the symptoms started more than two weeks ago. In those cases, the user will be asked for the last negative test date, the date where symtoms started increasing or the date of the last (positive) corona test. Whichever is the most recent date will be the start of the contagious period.
+///
+/// Uses [StepViewController](x-source-tag://StepViewController),
+/// [SelectSymptomsViewController](x-source-tag://SelectSymptomsViewController)
+/// and [OnboardingDateViewController](x-source-tag://OnboardingDateViewController).
+/// - Tag: DetermineContagiousPeriodCoordinator
 final class DetermineContagiousPeriodCoordinator: Coordinator, Logging {
     private let navigationController: UINavigationController
     

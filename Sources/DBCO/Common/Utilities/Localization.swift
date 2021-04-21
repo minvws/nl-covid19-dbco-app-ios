@@ -89,6 +89,9 @@ extension String {
     static var launchNoPasscodeAlertNotNowButton: String { return Localization.string(for: "launchNoPasscodeAlert.notNowButton") }
     static var launchNoPasscodeAlertToSettingsButton: String { return Localization.string(for: "launchNoPasscodeAlert.toSettingsButton") }
     
+    static var launchConfigAlertTitle: String { return Localization.string(for: "launchConfigAlert.title") }
+    static var launchConfigAlertMessage: String { return Localization.string(for: "launchConfigAlert.message") }
+    
     /* MARK: - Onboarding */
     static var onboardingStartTitle: String { return Localization.string(for: "onboarding.start.title") }
     static var onboardingStartMessage: String { return Localization.string(for: "onboarding.start.message") }
@@ -564,6 +567,10 @@ extension String {
     /* MARK: - Uploading */
     static var unfinishedTasksOverviewTitle: String { return Localization.string(for: "unfinishedTasksOverviewTitle") }
     static var unfinishedTasksOverviewMessage: String { return Localization.string(for: "unfinishedTasksOverviewMessage") }
+    
+    static var uploadConfirmAlertTitle: String { return Localization.string(for: "uploadConfirmAlert.title") }
+    static var uploadConfirmAlertMessage: String { return Localization.string(for: "uploadConfirmAlert.message") }
+    static var uploadConfirmAlertConfirmButton: String { return Localization.string(for: "uploadConfirmAlert.confirmButton") }
     
     static var unfinishedTaskOverviewIndexContactsHeaderTitle: String { return Localization.string(for: "unfinishedTaskOverviewIndexContactsHeader.title") }
     static var unfinishedTaskOverviewIndexContactsHeaderSubtitle: String { return Localization.string(for: "unfinishedTaskOverviewIndexContactsHeader.subtitle") }

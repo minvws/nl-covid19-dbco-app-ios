@@ -41,6 +41,9 @@
 "launchNoPasscodeAlert.notNowButton" = "Niet nu";
 "launchNoPasscodeAlert.toSettingsButton" = "Naar instellingen";
 
+"launchConfigAlert.title" = "De app kan niet geopend worden";
+"launchConfigAlert.message" = "Dit komt waarschijnlijk doordat de app geen verbinding met internet kan maken. Controleer je verbinding en probeer het opnieuw.";
+
 /* MARK: - Onboarding */
 "onboarding.start.title" = "Waarschuw de mensen die je misschien hebt besmet";
 "onboarding.start.message" = "Je kunt via deze app bepalen wie van je contacten een grote kans op besmetting heeft gelopen. Ook kun je contactgegevens met de GGD delen voor het contactonderzoek.";
@@ -532,7 +535,11 @@ Blijkt uit die test dat je geen corona hebt? Dan mag je weer naar buiten.</li>
 
 /* MARK: - Uploading */
 "unfinishedTasksOverviewTitle" = "Bijna klaar";
-"unfinishedTasksOverviewMessage" = "Bijna klaar. Wil je dit nog doen?";
+"unfinishedTasksOverviewMessage" = "Bijna klaar. Je gaat de gegevens delen met de GGD. Wil je dit nu doen?";
+
+"uploadConfirmAlert.title" = "Wil je nu de gegevens met de GGD delen?";
+"uploadConfirmAlert.message" = "Goed om te weten: je kunt hierna nog gegevens aanpassen en deze opnieuw delen.";
+"uploadConfirmAlert.confirmButton" = "Delen";
 
 "unfinishedTaskOverviewIndexContactsHeader.title" = "Contacten die nog niet zijn geïnformeerd";
 "unfinishedTaskOverviewIndexContactsHeader.subtitle" = "Vul contactgegevens aan";

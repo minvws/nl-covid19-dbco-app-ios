@@ -115,7 +115,6 @@
 		CDC7C8872538498700FE7E05 /* JSONDecoder+Decoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C8832538497C00FE7E05 /* JSONDecoder+Decoding.swift */; };
 		CDC7C88C2538507100FE7E05 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C88B25384FF600FE7E05 /* Logging.swift */; };
 		CDC7C89425385AD600FE7E05 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C89325385AD600FE7E05 /* Task.swift */; };
-		CDC7C898253873CE00FE7E05 /* Envelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C897253873CE00FE7E05 /* Envelope.swift */; };
 		CDC7C89E25387E2000FE7E05 /* Questionnaire.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C89D25387E2000FE7E05 /* Questionnaire.swift */; };
 		CDC7C8A225387E4400FE7E05 /* CaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C8A125387E4400FE7E05 /* CaseManager.swift */; };
 		CDD68BA6254D511D00E96E9C /* KeychainItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD68BA5254D511D00E96E9C /* KeychainItem.swift */; };
@@ -142,7 +141,6 @@
 		CDFCF90C2510C47E0062269A /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF90B2510C47E0062269A /* Localization.swift */; };
 		CDFCF9152510EBC40062269A /* NSAttributedString+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF9142510EB4D0062269A /* NSAttributedString+Extension.swift */; };
 		CDFCF9172510ECC70062269A /* UIView+Embed.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF9162510ECC70062269A /* UIView+Embed.swift */; };
-		CDFCF9192510FC760062269A /* SelfSizingTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF9182510FC760062269A /* SelfSizingTableView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -284,7 +282,6 @@
 		CDC7C8832538497C00FE7E05 /* JSONDecoder+Decoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSONDecoder+Decoding.swift"; sourceTree = "<group>"; };
 		CDC7C88B25384FF600FE7E05 /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		CDC7C89325385AD600FE7E05 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
-		CDC7C897253873CE00FE7E05 /* Envelope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Envelope.swift; sourceTree = "<group>"; };
 		CDC7C89D25387E2000FE7E05 /* Questionnaire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Questionnaire.swift; sourceTree = "<group>"; };
 		CDC7C8A125387E4400FE7E05 /* CaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseManager.swift; sourceTree = "<group>"; };
 		CDD68BA5254D511D00E96E9C /* KeychainItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainItem.swift; sourceTree = "<group>"; };
@@ -311,7 +308,6 @@
 		CDFCF90B2510C47E0062269A /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
 		CDFCF9142510EB4D0062269A /* NSAttributedString+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Extension.swift"; sourceTree = "<group>"; };
 		CDFCF9162510ECC70062269A /* UIView+Embed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Embed.swift"; sourceTree = "<group>"; };
-		CDFCF9182510FC760062269A /* SelfSizingTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingTableView.swift; sourceTree = "<group>"; };
 		D2AD6924D68CE50CD7E415A6 /* Pods-DBCO.ad hoc prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc prod.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc prod.xcconfig"; sourceTree = "<group>"; };
 		D34E71FC855BE93CC1FC3C40 /* Pods-DBCO.ad hoc test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc test.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc test.xcconfig"; sourceTree = "<group>"; };
 		DE63011D372615A2F530B706 /* Pods-DBCOTests.ad hoc test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc test.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc test.xcconfig"; sourceTree = "<group>"; };
@@ -479,7 +475,6 @@
 				CD2AC0752530601900E8AF78 /* InputTextView.swift */,
 				CD756C63252CA787005FEDA0 /* CodeField.swift */,
 				CD756C77252DDF30005FEDA0 /* SectionView.swift */,
-				CDFCF9182510FC760062269A /* SelfSizingTableView.swift */,
 				CD756C6F252DC629005FEDA0 /* SeparatorView.swift */,
 				CD2AC08925308B6500E8AF78 /* StatusView.swift */,
 				CDE30E63251BC02100862A40 /* TextField.swift */,
@@ -702,7 +697,6 @@
 		CDC7C8672538411300FE7E05 /* NetworkManager */ = {
 			isa = PBXGroup;
 			children = (
-				CDC7C897253873CE00FE7E05 /* Envelope.swift */,
 				CDE25F64254B316F00E9AE49 /* NetworkManaging.swift */,
 				CDC7C8682538412600FE7E05 /* NetworkManager.swift */,
 				CDC7C8762538469B00FE7E05 /* NetworkManagerURLSessionDelegate.swift */,
@@ -1026,7 +1020,6 @@
 			files = (
 				CD0E968125E3B8D9006E70BD /* UIWindow+Transition.swift in Sources */,
 				CDC7C8692538412600FE7E05 /* NetworkManager.swift in Sources */,
-				CDFCF9192510FC760062269A /* SelfSizingTableView.swift in Sources */,
 				CDD68BA6254D511D00E96E9C /* KeychainItem.swift in Sources */,
 				CD2F7CB1255949F300F2F73A /* ContactSuggestionHelper.swift in Sources */,
 				CDE30E72251E278200862A40 /* EditContactCoordinator.swift in Sources */,
@@ -1142,7 +1135,6 @@
 				CD926AF425B5C3E40076113C /* ContactsTimelineViewController.swift in Sources */,
 				CD756C5E252C9A7F005FEDA0 /* PairViewController.swift in Sources */,
 				CD2963472514E129008443AF /* ContactTableViewCell.swift in Sources */,
-				CDC7C898253873CE00FE7E05 /* Envelope.swift in Sources */,
 				CDA5C11C25139D36009440D1 /* UIStackView+Axis.swift in Sources */,
 				2859E73825DE79C100359BA1 /* UIView+Search.swift in Sources */,
 				CD4DBE7025F635E10037B144 /* OnsetHelpViewController.swift in Sources */,

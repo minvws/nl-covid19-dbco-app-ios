@@ -7,6 +7,12 @@
 
 import Foundation
 
+/// Used for encrypting and decrypting data after pairing
+///
+/// # See
+/// [PairingManaging](x-source-tag://PairingManaging)
+///
+/// - Tag: Sealed
 struct Sealed<T: Codable>: Codable {
     let value: T
     
