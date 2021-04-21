@@ -7,6 +7,14 @@
 
 import Foundation
 
+/// The data stored by [CaseManager](x-source-tag://CaseManager).
+/// Similar to [Case](x-source-tag://Case) but stores additional data like the questionnaires and a version string to allow for migrations.
+///
+/// # See also:
+/// [Case](x-source-tag://Case),
+/// [CaseManager](x-source-tag://CaseManager)
+///
+/// - Tag: AppData
 struct AppData {
     struct Constants {
         static let currentVersion = "1.0.0"
@@ -20,9 +28,37 @@ struct AppData {
     var symptomsKnown: Bool
     var windowExpiresAt: Date
     var tasks: [Task]
-    var portalTasks: [Task]
     var questionnaires: [Questionnaire]
     var symptoms: [String]
+}
+
+extension AppData {
+    var asCase: Case {
+        return Case(dateOfTest: dateOfTest,
+                    dateOfSymptomOnset: dateOfSymptomOnset,
+                    symptomsKnown: symptomsKnown,
+                    windowExpiresAt: windowExpiresAt,
+                    tasks: tasks,
+                    symptoms: symptoms)
+    }
+    
+    mutating func update(with caseResult: Case) {
+        if dateOfSymptomOnset == nil {
+            dateOfSymptomOnset = caseResult.dateOfSymptomOnset
+        }
+
+        if dateOfTest == nil {
+            dateOfTest = caseResult.dateOfTest
+        }
+
+        if symptoms.isEmpty {
+            symptoms = caseResult.symptoms
+        }
+
+        windowExpiresAt = caseResult.windowExpiresAt
+        reference = caseResult.reference
+        symptomsKnown = caseResult.symptomsKnown
+    }
 }
 
 extension AppData {
@@ -34,7 +70,6 @@ extension AppData {
                 symptomsKnown: false,
                 windowExpiresAt: .distantFuture,
                 tasks: [],
-                portalTasks: [],
                 questionnaires: [],
                 symptoms: [])
     }
@@ -53,7 +88,6 @@ extension AppData: Codable {
         symptomsKnown = try container.decode(Bool.self, forKey: .symptomsKnown)
         windowExpiresAt = try container.decode(Date.self, forKey: .windowExpiresAt)
         tasks = try container.decode([Task].self, forKey: .tasks)
-        portalTasks = (try? container.decode([Task].self, forKey: .portalTasks)) ?? []
         questionnaires = try container.decode([Questionnaire].self, forKey: .questionnaires)
         symptoms = (try container.decodeIfPresent([String].self, forKey: .symptoms)) ?? []
     }

@@ -209,6 +209,9 @@ class ContactsTimelineViewModel {
     }()
 }
 
+/// [ViewController](x-source-tag://ViewController) showing a [ContactListInputView](x-source-tag://ContactListInputView) for each day of the contagious period along with some tips for the user.
+///
+/// - Tag: ContactsTimelineViewController
 class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdjusting {
     private let viewModel: ContactsTimelineViewModel
     private let navigationBackgroundView = UIView()

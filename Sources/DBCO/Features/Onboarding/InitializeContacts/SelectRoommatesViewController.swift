@@ -47,6 +47,7 @@ class SelectRoommatesViewModel {
     
 }
 
+/// - Tag: SelectRoommatesViewController
 class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdjusting {
     private let viewModel: SelectRoommatesViewModel
     private let navigationBackgroundView = UIView()

@@ -22,6 +22,8 @@ enum CaseManagingError: Error {
 ///
 /// # See also:
 /// [Task](x-source-tag://Task),
+/// [AppData](x-source-tag://AppData),
+/// [CaseManager](x-source-tag://CaseManager),
 /// [Questionnaire](x-source-tag://Questionnaire)
 ///
 /// - Tag: CaseManaging
@@ -52,9 +54,6 @@ protocol CaseManaging {
     var symptoms: [String] { get }
     
     var tasks: [Task] { get }
-    
-    /// Returns the tasks as fetched by the portal without modifications by the index
-    var portalTasks: [Task] { get }
     
     /// Returns the [Questionnaire](x-source-tag://Questionnaire) associated with a task type.
     /// Throws an `notPaired` error when called befored paired.
@@ -133,11 +132,6 @@ final class CaseManager: CaseManaging, Logging {
     private(set) var tasks: [Task] {
         get { appData.tasks }
         set { appData.tasks = newValue }
-    }
-    
-    private(set) var portalTasks: [Task] {
-        get { appData.portalTasks }
-        set { appData.portalTasks = newValue }
     }
     
     private var questionnaires: [Questionnaire] {
@@ -306,8 +300,6 @@ final class CaseManager: CaseManaging, Logging {
     ///
     /// Updates existing tasks if the user has not yet started them and adds any new tasks
     private func setTasks(_ fetchedTasks: [Task]) {
-        portalTasks = fetchedTasks.filter { $0.source == .portal }
-        
         guard !tasks.isEmpty else {
             tasks = fetchedTasks
             return
@@ -589,34 +581,5 @@ private extension Question {
                         relevantForCategories: relevantForCategories,
                         answerOptions: answerOptions,
                         disabledForSources: [.portal])
-    }
-}
-
-private extension AppData {
-    var asCase: Case {
-        return Case(dateOfTest: dateOfTest,
-                    dateOfSymptomOnset: dateOfSymptomOnset,
-                    symptomsKnown: symptomsKnown,
-                    windowExpiresAt: windowExpiresAt,
-                    tasks: tasks,
-                    symptoms: symptoms)
-    }
-    
-    mutating func update(with caseResult: Case) {
-        if dateOfSymptomOnset == nil {
-            dateOfSymptomOnset = caseResult.dateOfSymptomOnset
-        }
-
-        if dateOfTest == nil {
-            dateOfTest = caseResult.dateOfTest
-        }
-
-        if symptoms.isEmpty {
-            symptoms = caseResult.symptoms
-        }
-
-        windowExpiresAt = caseResult.windowExpiresAt
-        reference = caseResult.reference
-        symptomsKnown = caseResult.symptomsKnown
     }
 }

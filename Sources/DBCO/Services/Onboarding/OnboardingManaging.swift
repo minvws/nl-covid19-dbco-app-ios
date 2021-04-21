@@ -48,6 +48,8 @@ struct Onboarding {
     }
 }
 
+/// Manages data needed during onboarding and facilitates basic state restoration for the onboarding screens.
+///
 /// - Tag: OnboardingManaging
 protocol OnboardingManaging {
     
@@ -68,6 +70,9 @@ protocol OnboardingManaging {
     func registerRoommates(_ roommates: [Onboarding.Contact])
     func registerContacts(_ contacts: [Onboarding.Contact])
     
+    /// Finish the onboarding and handover the data to the [CaseManager](x-source-tag://CaseManaging).
+    /// Contacts and roommates will be merged and any duplicates will be removed.
+    /// After finishing, data will be reset and the `needsOnboardingFlag` will be set to `false`
     func finishOnboarding()
     
     func reset()

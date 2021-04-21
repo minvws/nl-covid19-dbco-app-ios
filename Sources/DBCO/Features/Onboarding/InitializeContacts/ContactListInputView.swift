@@ -15,6 +15,9 @@ protocol ContactListInputViewDelegate: class {
     func contactsAvailableForSuggestionInContactListInputView(_ view: ContactListInputView) -> [CNContact]
 }
 
+/// An auto expanding list of names. When the app has permission to acces Contacts, tappable suggestions will be shown on the view provided by the delegate.
+///
+/// - Tag: ContactListInputView
 class ContactListInputView: UIView {
     struct Contact {
         var name: String

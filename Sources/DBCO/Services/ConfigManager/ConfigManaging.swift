@@ -7,15 +7,32 @@
 
 import Foundation
 
+/// Used for the required update dialog
+///
+/// # See also:
+/// [AppCoordinator.showRequiredUpdate](x-source-tag://AppCoordinator.showRequiredUpdate)
+///
+/// - Tag: AppVersionInformation
 protocol AppVersionInformation {
     var minimumVersion: String { get }
     var minimumVersionMessage: String? { get }
     var appStoreURL: URL? { get }
 }
 
+/// Used to enable or disable parts of the app.
+/// - enableContactCalling: Enables the "call [name]" button in the [ContactQuestionnaireViewController's](x-source-tag://ContactQuestionnaireViewController) inform section
+/// - enablePerspectiveCopy: Enables the "copy guidelines" button in the [ContactQuestionnaireViewController's](x-source-tag://ContactQuestionnaireViewController) inform section
+/// - enableSelfBCO: Enables the self bco flow, allowing users to gather contacts and determining the contagious period without first pairing with the GGD.
+///
+/// - Tag: FeatureFlags
 struct FeatureFlags: Codable {
+    /// Enables the "call [name]" button in the [ContactQuestionnaireViewController's](x-source-tag://ContactQuestionnaireViewController) inform section
     let enableContactCalling: Bool
+    
+    /// Enables the "copy guidelines" button in the [ContactQuestionnaireViewController's](x-source-tag://ContactQuestionnaireViewController) inform section
     let enablePerspectiveCopy: Bool
+    
+    /// Enables the self bco flow, allowing users to gather contacts and determining the contagious period without first pairing with the GGD.
     let enableSelfBCO: Bool
     
     static var empty: FeatureFlags {
@@ -23,6 +40,9 @@ struct FeatureFlags: Codable {
     }
 }
 
+/// Used for the list of selectable symptoms in [SelectSymptomsViewController](x-source-tag://SelectSymptomsViewController)
+///
+/// - Tag: Symptom
 struct Symptom: Codable, Equatable {
     let label: String
     let value: String
@@ -77,13 +97,27 @@ enum ConfigUpdateResult {
     case noActionNeeded
 }
 
+/// Manages fetching the configuration and keeping it up to date.
+///
+/// # See also:
+/// [AppConfiguration](x-source-tag://AppConfiguration),
+/// [FeatureFlags](x-source-tag://FeatureFlags),
+/// [ConfigManager](x-source-tag://ConfigManager)
+///
 /// - Tag: ConfigManaging
 protocol ConfigManaging {
     init()
     
+    /// The current version as a semantic version string
     var appVersion: String { get }
+    
+    /// The most recent fetched [FeatureFlags](x-source-tag://FeatureFlags)
     var featureFlags: FeatureFlags { get }
+    
+    /// The most recent fetched [Symptoms](x-source-tag://Symptom)
     var symptoms: [Symptom] { get }
+    
+    /// The most recent fetched [ZipRanges](x-source-tag://ZipRange) that are part of GGD regions using GGD Contact.
     var supportedZipCodeRanges: [ZipRange] { get }
     
     func update(completion: @escaping (ConfigUpdateResult) -> Void)

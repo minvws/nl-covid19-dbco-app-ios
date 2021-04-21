@@ -22,6 +22,9 @@ class StepViewModel {
     }
 }
 
+/// [ViewController](x-source-tag://ViewController) showing an optional image, title and optional message along with a set of buttons linked to actions.
+/// Similar to how UIAlertController works, but tapping a button (action) won't dismiss (or pop) the `StepViewController`.
+///
 /// - Tag: StepViewController
 class StepViewController: ViewController, ScrollViewNavivationbarAdjusting {
     

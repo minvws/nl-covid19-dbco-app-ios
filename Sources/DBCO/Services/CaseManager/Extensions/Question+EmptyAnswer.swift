@@ -9,6 +9,7 @@ import Foundation
 
 extension Question {
     
+    /// An anwer with the values  set to nil, a newly generated UUID() and lastModified set to Date()
     var emptyAnswer: Answer {
         let value: Answer.Value = {
             switch questionType {

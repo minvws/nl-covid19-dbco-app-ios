@@ -82,8 +82,12 @@ class NetworkManager: NetworkManaging, Logging {
         let urlRequest = constructRequest(url: configuration.questionnairesUrl,
                                           method: .GET)
         
-        func open(result: Result<ArrayEnvelope<Questionnaire>, NetworkError>) {
-            completion(result.map { $0.items })
+        struct QuestionnaireArrayWrapper: Codable {
+            let questionnaires: [Questionnaire]
+        }
+        
+        func open(result: Result<QuestionnaireArrayWrapper, NetworkError>) {
+            completion(result.map { $0.questionnaires })
         }
         
         return decodedJSONData(request: urlRequest, completion: open)

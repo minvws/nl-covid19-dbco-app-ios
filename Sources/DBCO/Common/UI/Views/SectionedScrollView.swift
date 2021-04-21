@@ -7,7 +7,9 @@
 
 import UIKit
 
-/// A UIScrollView subclass for SectionViews that automatically calls [updateHeaderForOffset](x-source-tag://SectionView.updateHeaderForOffset)
+/// A UIScrollView subclass for SectionViews that automatically calls [updateHeaderForOffset](x-source-tag://SectionView.updateHeaderForOffset) for its [SectionView](x-source-tag://SectionView)s
+///
+/// - Tag: SectionedScrollView
 class SectionedScrollView: UIScrollView {
     private let stackView = VStack()
     private var sectionViews = [SectionView]()

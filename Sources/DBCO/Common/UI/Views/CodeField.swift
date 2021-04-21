@@ -15,8 +15,8 @@ struct CodeDescription {
     let adjustKerningForWidth: Bool
 }
 
-/// A styled subclass of UITextField showing 3 groups of 3 digits representing a pairing code.
-/// Calls listeners when a valid pairincode is entered or removed.
+/// A styled subclass of UITextField showing `CodeDescription.numberOfGroups` groups of`CodeDescription.digitGroupSize` digits separated by a `-` representing a code.
+/// Calls listeners when a valid code is entered or removed.
 class CodeField: UITextField {
     private let codeDescription: CodeDescription
     private var codeHandlers = [(String?) -> Void]()
