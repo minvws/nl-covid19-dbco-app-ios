@@ -89,6 +89,9 @@ extension String {
     static var launchNoPasscodeAlertNotNowButton: String { return Localization.string(for: "launchNoPasscodeAlert.notNowButton") }
     static var launchNoPasscodeAlertToSettingsButton: String { return Localization.string(for: "launchNoPasscodeAlert.toSettingsButton") }
     
+    static var launchConfigAlertTitle: String { return Localization.string(for: "launchConfigAlert.title") }
+    static var launchConfigAlertMessage: String { return Localization.string(for: "launchConfigAlert.message") }
+    
     /* MARK: - Onboarding */
     static var onboardingStartTitle: String { return Localization.string(for: "onboarding.start.title") }
     static var onboardingStartMessage: String { return Localization.string(for: "onboarding.start.message") }

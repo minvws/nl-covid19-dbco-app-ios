@@ -15,12 +15,11 @@ protocol AppVersionInformation {
 
 struct FeatureFlags: Codable {
     let enableContactCalling: Bool
-    let enablePerspectiveSharing: Bool
     let enablePerspectiveCopy: Bool
     let enableSelfBCO: Bool
     
     static var empty: FeatureFlags {
-        return FeatureFlags(enableContactCalling: false, enablePerspectiveSharing: false, enablePerspectiveCopy: false, enableSelfBCO: false)
+        return FeatureFlags(enableContactCalling: false, enablePerspectiveCopy: false, enableSelfBCO: false)
     }
 }
 
@@ -33,13 +32,14 @@ struct Symptom: Codable, Equatable {
     }
 }
 
-struct AppConfiguration: AppVersionInformation, Decodable {
+struct AppConfiguration: AppVersionInformation, Codable {
     let minimumVersion: String
     let minimumVersionMessage: String?
     let appStoreURL: URL?
     let featureFlags: FeatureFlags
     let symptoms: [Symptom]
-    let supportedZipCodeRanges: [ZipRange]?
+    let supportedZipCodeRanges: [ZipRange]
+    let fetchDate: Date
     
     enum CodingKeys: String, CodingKey {
         case minimumVersion = "iosMinimumVersion"
@@ -48,6 +48,7 @@ struct AppConfiguration: AppVersionInformation, Decodable {
         case featureFlags
         case symptoms
         case supportedZipCodeRanges
+        case fetchDate
     }
     
     init(from decoder: Decoder) throws {
@@ -64,12 +65,15 @@ struct AppConfiguration: AppVersionInformation, Decodable {
         
         featureFlags = try container.decode(FeatureFlags.self, forKey: .featureFlags)
         symptoms = try container.decode([Symptom].self, forKey: .symptoms)
-        supportedZipCodeRanges = try container.decodeIfPresent([ZipRange].self, forKey: .supportedZipCodeRanges)
+        supportedZipCodeRanges = try container.decode([ZipRange].self, forKey: .supportedZipCodeRanges)
+        
+        fetchDate = (try container.decodeIfPresent(Date.self, forKey: .fetchDate)) ?? Date()
     }
 }
 
-enum UpdateState {
+enum ConfigUpdateResult {
     case updateRequired(AppVersionInformation)
+    case updateFailed
     case noActionNeeded
 }
 
@@ -82,5 +86,5 @@ protocol ConfigManaging {
     var symptoms: [Symptom] { get }
     var supportedZipCodeRanges: [ZipRange] { get }
     
-    func update(completion: @escaping (UpdateState, FeatureFlags) -> Void)
+    func update(completion: @escaping (ConfigUpdateResult) -> Void)
 }
