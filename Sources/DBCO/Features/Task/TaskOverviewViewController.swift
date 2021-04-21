@@ -35,6 +35,7 @@ class TaskOverviewViewModel {
     private var showPrompt: PromptFunction?
     
     private var pairingTimeoutTimer: Timer?
+    private var isSetup: Bool = false
     
     @Bindable private(set) var isDoneButtonHidden: Bool = false
     @Bindable private(set) var isResetButtonHidden: Bool = true
@@ -74,6 +75,9 @@ class TaskOverviewViewModel {
         self.tableFooterBuilder = tableFooterBuilder
         
         buildSections()
+        tableView.reloadData()
+        
+        isSetup = true
     }
     
     var tipMessageText: NSAttributedString {
@@ -166,6 +170,8 @@ class TaskOverviewViewModel {
 
 extension TaskOverviewViewModel: CaseManagerListener {
     func caseManagerDidUpdateTasks(_ caseManager: CaseManaging) {
+        guard isSetup else { return }
+        
         buildSections()
         tableViewManager.reloadData()
     }

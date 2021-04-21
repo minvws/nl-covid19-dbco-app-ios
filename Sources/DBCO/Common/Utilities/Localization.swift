@@ -565,6 +565,10 @@ extension String {
     static var unfinishedTasksOverviewTitle: String { return Localization.string(for: "unfinishedTasksOverviewTitle") }
     static var unfinishedTasksOverviewMessage: String { return Localization.string(for: "unfinishedTasksOverviewMessage") }
     
+    static var uploadConfirmAlertTitle: String { return Localization.string(for: "uploadConfirmAlert.title") }
+    static var uploadConfirmAlertMessage: String { return Localization.string(for: "uploadConfirmAlert.message") }
+    static var uploadConfirmAlertConfirmButton: String { return Localization.string(for: "uploadConfirmAlert.confirmButton") }
+    
     static var unfinishedTaskOverviewIndexContactsHeaderTitle: String { return Localization.string(for: "unfinishedTaskOverviewIndexContactsHeader.title") }
     static var unfinishedTaskOverviewIndexContactsHeaderSubtitle: String { return Localization.string(for: "unfinishedTaskOverviewIndexContactsHeader.subtitle") }
     static var unfinishedTaskOverviewStaffContactsHeaderTitle: String { return Localization.string(for: "unfinishedTaskOverviewStaffContactsHeader.title") }

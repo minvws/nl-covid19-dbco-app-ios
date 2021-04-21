@@ -19,7 +19,6 @@ class UnfinishedTasksViewModel {
     
     private let tableViewManager: TableViewManager<TaskTableViewCell>
     private var tableHeaderBuilder: (() -> UIView?)?
-    private var sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?
     
     private let relevantTaskIdentifiers: [UUID]
     
@@ -43,11 +42,10 @@ class UnfinishedTasksViewModel {
         Services.caseManager.addListener(self)
     }
     
-    func setupTableView(_ tableView: UITableView, tableHeaderBuilder: (() -> UIView?)?, sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?, selectedTaskHandler: @escaping (Task, IndexPath) -> Void) {
+    func setupTableView(_ tableView: UITableView, tableHeaderBuilder: (() -> UIView?)?, selectedTaskHandler: @escaping (Task, IndexPath) -> Void) {
         tableViewManager.manage(tableView)
         tableViewManager.didSelectItem = selectedTaskHandler
         self.tableHeaderBuilder = tableHeaderBuilder
-        self.sectionHeaderBuilder = sectionHeaderBuilder
         
         buildSections()
     }
@@ -60,21 +58,7 @@ class UnfinishedTasksViewModel {
             .filter { relevantTaskIdentifiers.contains($0.uuid) }
             .sorted(by: <)
         
-        let otherContacts = tasks.filter { [.index, .unknown].contains($0.contact.communication) }
-        let staffContacts = tasks.filter { $0.contact.communication == .staff }
-        
-        let otherSectionHeader = SectionHeaderContent(.unfinishedTaskOverviewIndexContactsHeaderTitle, .unfinishedTaskOverviewIndexContactsHeaderSubtitle)
-        let staffSectionHeader = SectionHeaderContent(.unfinishedTaskOverviewStaffContactsHeaderTitle, .unfinishedTaskOverviewStaffContactsHeaderSubtitle)
-        
-        if !otherContacts.isEmpty {
-            sections.append((header: sectionHeaderBuilder?(otherSectionHeader),
-                             tasks: otherContacts))
-        }
-        
-        if !staffContacts.isEmpty {
-            sections.append((header: sectionHeaderBuilder?(staffSectionHeader),
-                             tasks: staffContacts))
-        }
+        sections.append((nil, tasks))
     }
 }
 
@@ -115,7 +99,7 @@ class UnfinishedTasksViewController: PromptableViewController {
         
         setupTableView()
         
-        promptView = Button(title: .next)
+        promptView = Button(title: .taskOverviewDoneButtonTitle)
             .touchUpInside(self, action: #selector(upload))
     }
     
@@ -126,17 +110,10 @@ class UnfinishedTasksViewController: PromptableViewController {
         let tableHeaderBuilder = {
             UILabel(title2: .unfinishedTasksOverviewMessage)
                 .multiline()
-                .wrappedInReadableWidth(insets: .top(60) + .bottom(20))
+                .wrappedInReadableWidth(insets: .top(60))
         }
         
-        let sectionHeaderBuilder = { (title: String, subtitle: String) -> UIView in
-            VStack(spacing: 4,
-                   UILabel(bodyBold: title).multiline(),
-                   UILabel(subhead: subtitle, textColor: Theme.colors.captionGray).multiline())
-                .wrappedInReadableWidth(insets: .top(20) + .bottom(16))
-        }
-        
-        viewModel.setupTableView(tableView, tableHeaderBuilder: tableHeaderBuilder, sectionHeaderBuilder: sectionHeaderBuilder) { [weak self] task, indexPath in
+        viewModel.setupTableView(tableView, tableHeaderBuilder: tableHeaderBuilder) { [weak self] task, indexPath in
             guard let self = self else { return }
             
             self.delegate?.unfinishedTasksViewController(self, didSelect: task)
