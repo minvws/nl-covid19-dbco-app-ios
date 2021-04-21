@@ -147,7 +147,7 @@ final class AppCoordinator: Coordinator {
     private func showConfigUpdateFailed(retryHandler: @escaping () -> Void) {
         guard let topController = topViewController else { return }
         
-        let alert = UIAlertController(title: "Er ging iets mis", message: "Je telefoon heeft nu geen internetverbinding. Die is nodig om de laatste versie van (RIVM beleid en leefregels) op te halen. Controleer je internetverbinding en probeer het opnieuw", preferredStyle: .alert)
+        let alert = UIAlertController(title: .launchConfigAlertTitle, message: .launchConfigAlertMessage)
         
         alert.addAction(.init(title: .tryAgain, style: .default) { _ in
             retryHandler()
