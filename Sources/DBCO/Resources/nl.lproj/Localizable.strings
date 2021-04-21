@@ -535,7 +535,11 @@ Blijkt uit die test dat je geen corona hebt? Dan mag je weer naar buiten.</li>
 
 /* MARK: - Uploading */
 "unfinishedTasksOverviewTitle" = "Bijna klaar";
-"unfinishedTasksOverviewMessage" = "Bijna klaar. Wil je dit nog doen?";
+"unfinishedTasksOverviewMessage" = "Bijna klaar. Je gaat de gegevens delen met de GGD. Wil je dit nu doen?";
+
+"uploadConfirmAlert.title" = "Wil je nu de gegevens met de GGD delen?";
+"uploadConfirmAlert.message" = "Goed om te weten: je kunt hierna nog gegevens aanpassen en deze opnieuw delen.";
+"uploadConfirmAlert.confirmButton" = "Delen";
 
 "unfinishedTaskOverviewIndexContactsHeader.title" = "Contacten die nog niet zijn geïnformeerd";
 "unfinishedTaskOverviewIndexContactsHeader.subtitle" = "Vul contactgegevens aan";

@@ -31,9 +31,29 @@ final class UploadCoordinator: Coordinator, Logging {
         self.navigationController = NavigationController()
     }
     
+    private var hasUnfinishedTasks: Bool {
+        return !Services.caseManager.tasks.filter(\.isUnfinished).isEmpty
+    }
+    
     override func start() {
         Services.pairingManager.addListener(self)
         
+        if Services.pairingManager.isPaired && !hasUnfinishedTasks {
+            showSyncConfirmationAlert(
+                presenter: presenter,
+                syncHandler: {
+                    self.sync(animated: false)
+                    self.presenter?.present(self.navigationController, animated: true)
+                },
+                cancelHandler: {
+                    self.delegate?.uploadCoordinatorDidFinish(self)
+                })
+        } else {
+            continueStart()
+        }
+    }
+    
+    private func continueStart() {
         navigationController.onDismissed = { [weak self] _ in
             guard let self = self else { return }
             
@@ -41,27 +61,38 @@ final class UploadCoordinator: Coordinator, Logging {
         }
         
         if Services.pairingManager.isPaired {
-            continueToUnfinishedTasksIfNeeded(animated: false)
+            continueToUnfinishedTasksOrSync(animated: false)
         } else {
             pair()
         }
         
         presenter?.present(navigationController, animated: true)
-        
     }
     
-    private func continueToUnfinishedTasksIfNeeded(animated: Bool) {
-        let unfinishedTasks = Services.caseManager.tasks.filter(\.isUnfinished)
-        
-        if !unfinishedTasks.isEmpty {
+    private func continueToUnfinishedTasksOrSync(animated: Bool) {
+        if hasUnfinishedTasks {
             showUnfinishedTasks(animated: animated)
         } else {
             sync(animated: animated)
         }
     }
     
+    private func showSyncConfirmationAlert(presenter: UIViewController?, syncHandler: @escaping () -> Void, cancelHandler: @escaping () -> Void) {
+        let alert = UIAlertController(title: .uploadConfirmAlertTitle, message: .uploadConfirmAlertMessage, preferredStyle: .alert)
+        
+        alert.addAction(.init(title: .uploadConfirmAlertConfirmButton, style: .default) { _ in
+            syncHandler()
+        })
+        
+        alert.addAction(.init(title: .cancel, style: .cancel) { _ in
+            cancelHandler()
+        })
+        
+        presenter?.present(alert, animated: true)
+    }
+    
     private func pair() {
-        let viewModel = ReversePairViewModel()
+        let viewModel = ReversePairViewModel(hasUnfinishedTasks: hasUnfinishedTasks)
         let pairingController = ReversePairViewController(viewModel: viewModel)
         pairingController.delegate = self
         
@@ -218,7 +249,20 @@ extension UploadCoordinator: ReversePairViewControllerDelegate {
     }
     
     func reversePairViewControllerWantsToContinue(_ controller: ReversePairViewController) {
-        continueToUnfinishedTasksIfNeeded(animated: true)
+        guard hasUnfinishedTasks else {
+            showSyncConfirmationAlert(
+                presenter: navigationController,
+                syncHandler: {
+                    self.sync(animated: true)
+                },
+                cancelHandler: {
+                    self.navigationController.dismiss(animated: true)
+                })
+            
+            return
+        }
+        
+        showUnfinishedTasks(animated: true)
     }
     
     func reversePairViewControllerWantsToClose(_ controller: ReversePairViewController) {

@@ -31,6 +31,12 @@ class ReversePairViewModel {
     
     @Bindable private(set) var isContinueButtonEnabled: Bool = false
     
+    private(set) var continueButtonTitle: String
+    
+    init(hasUnfinishedTasks: Bool) {
+        continueButtonTitle = hasUnfinishedTasks ? .next : .taskOverviewDoneButtonTitle
+    }
+    
     func applyPairingCode(_ code: String) {
         var code = code
         var codeSegments = [String]()
@@ -111,7 +117,7 @@ class ReversePairViewController: PromptableViewController {
         scrollView.embed(in: contentView)
         scrollView.delaysContentTouches = false
         
-        let continueButton = Button(title: .next, style: .primary)
+        let continueButton = Button(title: viewModel.continueButtonTitle, style: .primary)
             .touchUpInside(self, action: #selector(handleContinue))
         
         viewModel.$isContinueButtonEnabled.binding = { continueButton.isEnabled = $0 }
