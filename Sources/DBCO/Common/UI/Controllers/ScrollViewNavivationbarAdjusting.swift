@@ -9,7 +9,7 @@ import UIKit
 
 /// Adopting this protocol and calling `adjustNavigationBar` in `scrollViewDidScroll`
 /// will insert a background with separator to the `view` when the content of the scrollview is behind the navigationbar.
-/// Used in cases where the NavigationController's bar doesn't have a background normally, but should show a bacgkround when scrolling.
+/// Used in cases where the NavigationController's bar doesn't have a background normally, but should show a background when scrolling.
 ///
 /// - Tag: ScrollViewNavivationbarAdjusting
 protocol ScrollViewNavivationbarAdjusting {
