@@ -15,6 +15,12 @@ class VerifyZipCodeViewModel {
     
 }
 
+/// Not all GGD Regions might be using GGD Contact. This ViewController asking for the users zip code helps inform the user about if the app is supported in their region and what that entails.
+///
+/// # See also
+/// [ZipRange](x-source-tag://ZipRange)
+/// 
+/// - Tag: VerifyZipCodeViewController
 class VerifyZipCodeViewController: ViewController, ScrollViewNavivationbarAdjusting {
     let shortTitle: String = ""
     

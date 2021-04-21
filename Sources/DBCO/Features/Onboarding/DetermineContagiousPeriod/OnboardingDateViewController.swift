@@ -32,6 +32,10 @@ class OnboardingDateViewModel {
     }
 }
 
+/// [ViewController](x-source-tag://ViewController) showing a title, message and `UIDatePicker` along with a set of buttons linked to actions.
+/// Similar to how UIAlertController works, but tapping a button (action) won't dismiss (or pop) the `OnboardingDateViewController`.
+///
+/// - Tag: OnboardingDateViewController
 class OnboardingDateViewController: ViewController, ScrollViewNavivationbarAdjusting {
     
     let shortTitle: String = ""

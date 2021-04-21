@@ -23,6 +23,12 @@ protocol AppUpdateViewControllerDelegate: class {
     func appUpdateViewController(_ controller: AppUpdateViewController, wantsToOpen url: URL)
 }
 
+/// Fullscreen alert forcing the user to update the app to the latest version
+///
+/// # See also:
+/// [AppCoordinator.showRequiredUpdate](x-source-tag://AppCoordinator.showRequiredUpdate)
+///
+/// - Tag: AppUpdateViewController
 class AppUpdateViewController: ViewController {
     private let viewModel: AppUpdateViewModel
     

@@ -25,6 +25,8 @@ protocol PopActionable {
 
 /// A UIViewController subclass to be used as base for ViewController in the app.
 /// Conforms to [DismissActionable](x-source-tag://DismissActionable) and [PopActionable](x-source-tag://PopActionable)
+///
+/// - Tag: ViewController
 class ViewController: UIViewController, DismissActionable, PopActionable {
     var onDismissed: ((ViewController) -> Void)?
     var onPopped: ((ViewController) -> Void)?

@@ -14,6 +14,10 @@ protocol InitializeContactsCoordinatorDelegate: class {
     func initializeContactsCoordinatorDidCancel(_ coordinator: InitializeContactsCoordinator)
 }
 
+/// Coordinator guiding the user through gathering the contacts needed for contact tracing.
+/// Uses [DetermineContagiousPeriodCoordinator](x-source-tag://DetermineContagiousPeriodCoordinator) when no contagious period is known, asks permissing for accessing Contacts if needed  and continues with [SelectRoommatesViewController](x-source-tag://SelectRoommatesViewController) and [ContactsTimelineViewController](x-source-tag://ContactsTimelineViewController)
+///
+/// - Tag: OnboardingPairingCoordinator
 final class InitializeContactsCoordinator: Coordinator, Logging {
     private let navigationController: UINavigationController
     private let skipIntro: Bool

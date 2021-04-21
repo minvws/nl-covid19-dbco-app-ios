@@ -11,6 +11,11 @@ class LaunchViewModel {
     
 }
 
+/// [ViewController](x-source-tag://ViewController) simulating the LaunchScreen.storyboard. Used for hiding the app's contents in the background and delay showin the app when loading the configuration
+///
+/// # See also
+/// [LaunchCoordinator](x-source-tag://LaunchCoordinator)
+/// - Tag: LaunchViewController
 class LaunchViewController: ViewController {
     private let viewModel: LaunchViewModel
     

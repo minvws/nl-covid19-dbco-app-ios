@@ -11,9 +11,8 @@ protocol OnboardingCoordinatorDelegate: class {
     func onboardingCoordinatorDidFinish(_ coordinator: OnboardingCoordinator)
 }
 
-// TODO: Update onboarding coordinator documentation
 /// Coordinator managing the onboarding of the user, pairing with the backend and guiding the user through the process of creating a list of at-risk contacts.
-/// Uses [PairViewController](x-source-tag://PairViewController) and [StepViewController](x-source-tag://StepViewController)
+/// Uses [OnboardingPairingCoordinator](x-source-tag://OnboardingPairingCoordinator) and continues with [InitializeContactsCoordinator](x-source-tag://InitializeContactsCoordinator)
 final class OnboardingCoordinator: Coordinator {
     private let window: UIWindow
     private lazy var navigationController: NavigationController = setupNavigationController()

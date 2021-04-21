@@ -141,7 +141,6 @@
 		CDFCF90C2510C47E0062269A /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF90B2510C47E0062269A /* Localization.swift */; };
 		CDFCF9152510EBC40062269A /* NSAttributedString+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF9142510EB4D0062269A /* NSAttributedString+Extension.swift */; };
 		CDFCF9172510ECC70062269A /* UIView+Embed.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF9162510ECC70062269A /* UIView+Embed.swift */; };
-		CDFCF9192510FC760062269A /* SelfSizingTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFCF9182510FC760062269A /* SelfSizingTableView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -309,7 +308,6 @@
 		CDFCF90B2510C47E0062269A /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
 		CDFCF9142510EB4D0062269A /* NSAttributedString+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Extension.swift"; sourceTree = "<group>"; };
 		CDFCF9162510ECC70062269A /* UIView+Embed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Embed.swift"; sourceTree = "<group>"; };
-		CDFCF9182510FC760062269A /* SelfSizingTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingTableView.swift; sourceTree = "<group>"; };
 		D2AD6924D68CE50CD7E415A6 /* Pods-DBCO.ad hoc prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc prod.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc prod.xcconfig"; sourceTree = "<group>"; };
 		D34E71FC855BE93CC1FC3C40 /* Pods-DBCO.ad hoc test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc test.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc test.xcconfig"; sourceTree = "<group>"; };
 		DE63011D372615A2F530B706 /* Pods-DBCOTests.ad hoc test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc test.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc test.xcconfig"; sourceTree = "<group>"; };
@@ -477,7 +475,6 @@
 				CD2AC0752530601900E8AF78 /* InputTextView.swift */,
 				CD756C63252CA787005FEDA0 /* CodeField.swift */,
 				CD756C77252DDF30005FEDA0 /* SectionView.swift */,
-				CDFCF9182510FC760062269A /* SelfSizingTableView.swift */,
 				CD756C6F252DC629005FEDA0 /* SeparatorView.swift */,
 				CD2AC08925308B6500E8AF78 /* StatusView.swift */,
 				CDE30E63251BC02100862A40 /* TextField.swift */,
@@ -1023,7 +1020,6 @@
 			files = (
 				CD0E968125E3B8D9006E70BD /* UIWindow+Transition.swift in Sources */,
 				CDC7C8692538412600FE7E05 /* NetworkManager.swift in Sources */,
-				CDFCF9192510FC760062269A /* SelfSizingTableView.swift in Sources */,
 				CDD68BA6254D511D00E96E9C /* KeychainItem.swift in Sources */,
 				CD2F7CB1255949F300F2F73A /* ContactSuggestionHelper.swift in Sources */,
 				CDE30E72251E278200862A40 /* EditContactCoordinator.swift in Sources */,

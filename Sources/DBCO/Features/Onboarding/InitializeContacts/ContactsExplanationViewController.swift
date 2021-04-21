@@ -15,7 +15,9 @@ class ContactsExplanationViewModel {
     
 }
 
-/// - Tag: ContactsExplanationViewControlle
+/// A viewcontroller showing a list of items explaining the benefits of giving permission to access contacts, and what that acces entails.
+///
+/// - Tag: ContactsExplanationViewController
 class ContactsExplanationViewController: PromptableViewController, ScrollViewNavivationbarAdjusting {
     private let viewModel: ContactsExplanationViewModel
     private let scrollView = UIScrollView(frame: .zero)

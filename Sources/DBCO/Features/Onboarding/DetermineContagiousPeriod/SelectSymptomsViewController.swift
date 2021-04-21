@@ -58,6 +58,7 @@ class SelectSymptomsViewModel {
     }
 }
 
+/// Shows a list of selectable [Symptom](x-source-tag://Symptom)s. The symptoms are fetched by the [ConfigManager](x-source-tag://ConfigManaging)
 /// - Tag: SelectSymptomsViewController
 class SelectSymptomsViewController: ViewController, ScrollViewNavivationbarAdjusting {
     private let viewModel: SelectSymptomsViewModel
