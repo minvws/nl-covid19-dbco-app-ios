@@ -147,7 +147,7 @@ final class AppCoordinator: Coordinator {
     private func showConfigUpdateFailed(retryHandler: @escaping () -> Void) {
         guard let topController = topViewController else { return }
         
-        let alert = UIAlertController(title: .launchConfigAlertTitle, message: .launchConfigAlertMessage)
+        let alert = UIAlertController(title: .launchConfigAlertTitle, message: .launchConfigAlertMessage, preferredStyle: .alert)
         
         alert.addAction(.init(title: .tryAgain, style: .default) { _ in
             retryHandler()
