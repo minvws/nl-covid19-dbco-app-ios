@@ -92,7 +92,7 @@ class ContactsAuthorizationViewController: PromptableViewController, ScrollViewN
                               UILabel(body: .selectContactAuthorizationMessage, textColor: Theme.colors.captionGray).multiline()),
                        VStack(spacing: 16,
                               listItem(.selectContactAuthorizationItem1),
-                              htmlListItem(.selectContactAuthorizationItem2),
+                              listItem(.selectContactAuthorizationItem2),
                               listItem(.selectContactAuthorizationItem3))),
                    UIView())
                 .distribution(.equalSpacing)

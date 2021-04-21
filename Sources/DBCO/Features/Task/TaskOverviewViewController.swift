@@ -454,7 +454,7 @@ private extension TaskOverviewViewController {
         let privacyTextView = TextView(htmlText: .taskOverviewPrivacyFooter,
                                        font: Theme.fonts.footnote,
                                        textColor: Theme.colors.footer)
-            .linkTouched { self.delegate?.taskOverviewViewController(self, wantsToOpen: $0) }
+            .linkTouched { [unowned self] in self.delegate?.taskOverviewViewController(self, wantsToOpen: $0) }
         privacyTextView.textAlignment = .center
         
         return privacyTextView

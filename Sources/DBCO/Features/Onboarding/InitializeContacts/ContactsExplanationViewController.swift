@@ -64,7 +64,7 @@ class ContactsExplanationViewController: PromptableViewController, ScrollViewNav
                               listItem(.determineContactsExplanationItem1, imageName: "ListItem/Checkmark"),
                               listItem(.determineContactsExplanationItem2, imageName: "ListItem/Checkmark"),
                               listItem(.determineContactsExplanationItem3, imageName: "ListItem/Questionmark"),
-                              htmlListItem(.determineContactsExplanationItem4, imageName: "ListItem/Stop"))),
+                              listItem(.determineContactsExplanationItem4, imageName: "ListItem/Stop"))),
                    UIView()) // Empty view for spacing
                 .distribution(.equalSpacing)
                 .embed(in: scrollView.readableWidth, insets: margin)
