@@ -57,11 +57,14 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
@@ -72,10 +75,12 @@
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
-	<key>ValidCodes</key>
-	<array>
-		<string>a6f3cb251db58a4cceaaec27090241216e69bdf8b28900dbcacb0cdf1f8c9813</string>
-		<string>022819c49acf699b5030995565cdb86bb183e23ed155300980e86baada1b908a</string>
+	<key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>cydia</string>
+        <string>undecimus</string>
+        <string>sileo</string>
+        <string>zbra</string>
 	</array>
 </dict>
 </plist>

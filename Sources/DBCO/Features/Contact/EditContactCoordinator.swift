@@ -39,7 +39,7 @@ final class EditContactCoordinator: Coordinator, Logging {
             return
         }
         
-        let viewModel = ContactQuestionnaireViewModel(task: task, questionnaire: questionnaire, showCancelButton: true)
+        let viewModel = ContactQuestionnaireViewModel(task: task, questionnaire: questionnaire)
         let editController = ContactQuestionnaireViewController(viewModel: viewModel)
         editController.delegate = self
 

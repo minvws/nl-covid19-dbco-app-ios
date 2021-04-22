@@ -25,6 +25,10 @@ class KeychainItem<T: Codable> {
         }
     }
     
+    var modificationDate: Date? {
+        return try? readModificationDate()
+    }
+    
     var exists: Bool {
         var query = baseQuery()
         query[kSecMatchLimit as String] = kSecMatchLimitOne
@@ -58,7 +62,7 @@ class KeychainItem<T: Codable> {
         value = nil
     }
     
-    // JSONDecoder/Encoder doesn't like fragments
+    // JSONDecoder/Encoder doesn't like fragments, so wrap the value to be safe.
     private struct Wrapped: Codable {
         let value: T
     }
@@ -97,6 +101,29 @@ class KeychainItem<T: Codable> {
         } else {
             throw KeychainError.unexpectedData
         }
+    }
+        
+    fileprivate func readModificationDate() throws -> Date {
+        var query = baseQuery()
+        query[kSecMatchLimit as String] = kSecMatchLimitOne
+        query[kSecReturnAttributes as String] = kCFBooleanTrue
+        
+        // Try to fetch the existing keychain item that matches the query.
+        var queryResult: AnyObject?
+        let status = withUnsafeMutablePointer(to: &queryResult) {
+            SecItemCopyMatching(query as CFDictionary, UnsafeMutablePointer($0))
+        }
+        
+        // Check the return status and throw an error if appropriate.
+        guard status != errSecItemNotFound else { throw KeychainError.notFound }
+        guard status == noErr else { throw KeychainError.unhandledError(status: status) }
+        
+        // Parse the value from the query result.
+        guard let existingItem = queryResult as? [String: AnyObject], let date = existingItem[kSecAttrModificationDate as String] as? Date else {
+            throw KeychainError.unexpectedData
+        }
+        
+        return date
     }
     
     fileprivate func store(value: T?) throws {
@@ -169,17 +196,24 @@ class CachedKeychainItem<T: Codable>: KeychainItem<T> {
     
     override var value: T? {
         get {
-            cachedValue = cachedValue ?? (try? read())
+            cachedValue = cachedValue ?? super.value
             return cachedValue
         }
         
         set {
             cachedValue = newValue
+            cachedModificationDate = Date()
             try? store(value: newValue)
         }
     }
     
+    override var modificationDate: Date? {
+        cachedModificationDate = cachedModificationDate ?? super.modificationDate
+        return cachedModificationDate
+    }
+    
     private var cachedValue: T?
+    private var cachedModificationDate: Date?
     
     func clearCache() {
         cachedValue = nil

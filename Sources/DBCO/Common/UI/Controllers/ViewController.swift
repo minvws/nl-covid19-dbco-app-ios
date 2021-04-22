@@ -25,6 +25,8 @@ protocol PopActionable {
 
 /// A UIViewController subclass to be used as base for ViewController in the app.
 /// Conforms to [DismissActionable](x-source-tag://DismissActionable) and [PopActionable](x-source-tag://PopActionable)
+///
+/// - Tag: ViewController
 class ViewController: UIViewController, DismissActionable, PopActionable {
     var onDismissed: ((ViewController) -> Void)?
     var onPopped: ((ViewController) -> Void)?
@@ -37,7 +39,6 @@ class ViewController: UIViewController, DismissActionable, PopActionable {
 
     func startReceivingDidBecomeActiveNotifications() {
         shouldAddDidBecomeActiveObserver = true
-        
     }
     
     func stopReceivingDidBecomeActiveNotifications() {
@@ -47,7 +48,8 @@ class ViewController: UIViewController, DismissActionable, PopActionable {
     
     private var didBecomeActiveObserver: NSObjectProtocol?
     private var shouldAddDidBecomeActiveObserver = false
-    
+    private var needsFocus = true
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
@@ -69,6 +71,21 @@ class ViewController: UIViewController, DismissActionable, PopActionable {
                 self?.applicationDidBecomeActive()
             }
         }
+        
+        // Move focus to the first header when the ViewControler appears for the first time.
+        if needsFocus {
+            needsFocus = false
+            
+            UIAccessibility.screenChanged(self)
+
+            if let header = view.find(traits: .header) {
+                UIAccessibility.layoutChanged(header)
+            }
+        }
+    }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .all // Allows all orientations on all devices
     }
     
     private func removeDidBecomeActiveObserverIfNeeded() {

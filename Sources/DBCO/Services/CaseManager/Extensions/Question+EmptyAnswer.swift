@@ -9,11 +9,12 @@ import Foundation
 
 extension Question {
     
+    /// An anwer with the values  set to nil, a newly generated UUID() and lastModified set to Date()
     var emptyAnswer: Answer {
         let value: Answer.Value = {
             switch questionType {
             case .classificationDetails:
-                return .classificationDetails(sameHouseholdRisk: nil, distanceRisk: nil, physicalContactRisk: nil, sameRoomRisk: nil)
+                return .classificationDetails(nil)
             case .contactDetails:
                 return .contactDetails(firstName: nil, lastName: nil, email: nil, phoneNumber: nil)
             case .contactDetailsFull:

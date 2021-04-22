@@ -14,44 +14,50 @@ protocol InitializeContactsCoordinatorDelegate: class {
     func initializeContactsCoordinatorDidCancel(_ coordinator: InitializeContactsCoordinator)
 }
 
+/// Coordinator guiding the user through gathering the contacts needed for contact tracing.
+/// Uses [DetermineContagiousPeriodCoordinator](x-source-tag://DetermineContagiousPeriodCoordinator) when no contagious period is known, asks permission for accessing Contacts if needed and continues with [SelectRoommatesViewController](x-source-tag://SelectRoommatesViewController) and [ContactsTimelineViewController](x-source-tag://ContactsTimelineViewController)
+///
+/// - Tag: OnboardingPairingCoordinator
 final class InitializeContactsCoordinator: Coordinator, Logging {
     private let navigationController: UINavigationController
-    private let canCancel: Bool
+    private let skipIntro: Bool
     
     weak var delegate: InitializeContactsCoordinatorDelegate?
     
-    private enum StepIdentifiers: Int {
-        case start = 10001
-        case requestContactsAuthorization
-    }
-    
-    init(navigationController: UINavigationController, canCancel: Bool) {
+    init(navigationController: UINavigationController, skipIntro: Bool) {
         self.navigationController = navigationController
-        self.canCancel = canCancel
+        self.skipIntro = skipIntro
         
         super.init()
     }
     
     override func start() {
-        let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding2")!,
-                                                title: .onboardingDetermineContactsIntroTitle,
-                                                message: .onboardingDetermineContactsIntroMessage,
-                                                primaryButtonTitle: .next)
-        let stepController = OnboardingStepViewController(viewModel: viewModel)
-        stepController.view.tag = StepIdentifiers.start.rawValue
-        stepController.delegate = self
-        
-        if canCancel {
-            stepController.onPopped = { [weak self] _ in
+        if skipIntro {
+            navigationController.setViewControllers([privacyConsentViewController()], animated: true)
+        } else {
+            let viewModel = VerifyZipCodeViewModel()
+            let verifyController = VerifyZipCodeViewController(viewModel: viewModel)
+            verifyController.delegate = self
+            
+            verifyController.onPopped = { [weak self] _ in
                 guard let self = self else { return }
-                
                 self.delegate?.initializeContactsCoordinatorDidCancel(self)
             }
             
-            navigationController.pushViewController(stepController, animated: true)
-        } else {
-            navigationController.setViewControllers([stepController], animated: true)
+            navigationController.pushViewController(verifyController, animated: true)
         }
+    }
+    
+    @objc private func requestPrivacyConsent() {
+        navigationController.pushViewController(privacyConsentViewController(), animated: true)
+    }
+    
+    private func privacyConsentViewController() -> PrivacyConsentViewController {
+        let viewModel = PrivacyConsentViewModel(buttonTitle: .next)
+        let consentController = PrivacyConsentViewController(viewModel: viewModel)
+        consentController.delegate = self
+        
+        return consentController
     }
     
     private func continueToContacts() {
@@ -66,17 +72,12 @@ final class InitializeContactsCoordinator: Coordinator, Logging {
     }
     
     private func requestContactsAuthorization() {
-        let viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding4")!,
-                                                title: .determineContactsAuthorizationTitle,
-                                                message: .determineContactsAuthorizationMessage,
-                                                primaryButtonTitle: .determineContactsAuthorizationAllowButton,
-                                                secondaryButtonTitle: .determineContactsAuthorizationAddManuallyButton,
-                                                showSecondaryButtonOnTop: true)
-        let stepController = OnboardingStepViewController(viewModel: viewModel)
-        stepController.view.tag = StepIdentifiers.requestContactsAuthorization.rawValue
-        stepController.delegate = self
+        let viewModel = ContactsAuthorizationViewModel(contactName: nil, style: .onboarding)
         
-        navigationController.pushViewController(stepController, animated: true)
+        let authorizationController = ContactsAuthorizationViewController(viewModel: viewModel)
+        authorizationController.delegate = self
+        
+        navigationController.pushViewController(authorizationController, animated: true)
     }
     
     private func continueToRoommates() {
@@ -89,41 +90,42 @@ final class InitializeContactsCoordinator: Coordinator, Logging {
     
 }
 
-extension InitializeContactsCoordinator: OnboardingStepViewControllerDelegate {
+extension InitializeContactsCoordinator: VerifyZipCodeViewControllerDelegate {
     
-    func onboardingStepViewControllerDidSelectPrimaryButton(_ controller: OnboardingStepViewController) {
-        guard let identifier = StepIdentifiers(rawValue: controller.view.tag) else {
-            logError("No valid identifier set for onboarding step controller: \(controller)")
-            return
+    func verifyZipCodeViewController(_ controller: VerifyZipCodeViewController, didFinishWithActiveZipCode: Bool) {
+        let message: String
+        let buttonText: String
+        
+        if didFinishWithActiveZipCode {
+            message = .onboardingDetermineContactsIntroMessageSupported
+            buttonText = .onboardingDetermineContactsIntroButtonSupported
+        } else {
+            message = .onboardingDetermineContactsIntroMessageUnsupported
+            buttonText = .onboardingDetermineContactsIntroButtonUnsupported
         }
         
-        switch identifier {
-        case .start:
-            requestPrivacyConsent()
-        case .requestContactsAuthorization:
-            promptContactsAuthorization()
-        }
-    }
-    
-    func onboardingStepViewControllerDidSelectSecondaryButton(_ controller: OnboardingStepViewController) {
-        guard let identifier = StepIdentifiers(rawValue: controller.view.tag) else {
-            logError("No valid identifier set for onboarding step controller: \(controller)")
-            return
-        }
+        let viewModel = StepViewModel(
+            image: UIImage(named: "Onboarding2"),
+            title: .onboardingDetermineContactsIntroTitle,
+            message: message,
+            actions: [
+                .init(type: .primary, title: buttonText, target: self, action: #selector(requestPrivacyConsent))
+            ])
         
-        switch identifier {
-        case .start:
-            break
-        case .requestContactsAuthorization:
-            continueToRoommates()
-        }
+        let stepController = StepViewController(viewModel: viewModel)
+        navigationController.pushViewController(stepController, animated: true)
     }
     
-    private func requestPrivacyConsent() {
-        let viewModel = PrivacyConsentViewModel(buttonTitle: .next)
-        let consentController = PrivacyConsentViewController(viewModel: viewModel)
-        consentController.delegate = self
-        navigationController.pushViewController(consentController, animated: true)
+}
+
+extension InitializeContactsCoordinator: ContactsAuthorizationViewControllerDelegate {
+    
+    func contactsAuthorizationViewControllerDidSelectAllow(_ controller: ContactsAuthorizationViewController) {
+        promptContactsAuthorization()
+    }
+    
+    func contactsAuthorizationViewControllerDidSelectManual(_ controller: ContactsAuthorizationViewController) {
+        continueToRoommates()
     }
     
     private func promptContactsAuthorization() {
@@ -150,12 +152,14 @@ extension InitializeContactsCoordinator: OnboardingStepViewControllerDelegate {
 extension InitializeContactsCoordinator: PrivacyConsentViewControllerDelegate {
     
     func privacyConsentViewControllerWantsToContinue(_ controller: PrivacyConsentViewController) {
-        if Services.caseManager.hasCaseData {
-            continueToContacts()
-        } else {
+        if Services.caseManager.symptomsKnown == false {
             let contagiousPeriodCoordinator = DetermineContagiousPeriodCoordinator(navigationController: navigationController)
             contagiousPeriodCoordinator.delegate = self
             startChildCoordinator(contagiousPeriodCoordinator)
+        } else if Services.caseManager.tasks.isEmpty {
+            continueToContacts()
+        } else {
+            delegate?.initializeContactsCoordinatorDidFinish(self)
         }
     }
     
@@ -169,18 +173,27 @@ extension InitializeContactsCoordinator: PrivacyConsentViewControllerDelegate {
 
 extension InitializeContactsCoordinator: DetermineContagiousPeriodCoordinatorDelegate {
     
+    private func continueToContactsIfNeeded() {
+        // Not removing the coordinator here, so the user can go back and adjust if needed
+        if Services.caseManager.tasks.isEmpty {
+            continueToContacts()
+        } else {
+            delegate?.initializeContactsCoordinatorDidFinish(self)
+        }
+    }
+    
     func determineContagiousPeriodCoordinator(_ coordinator: DetermineContagiousPeriodCoordinator, didFinishWith testDate: Date) {
         Services.onboardingManager.registerTestDate(testDate)
         
         // Not removing the coordinator here, so the user can go back and adjust if needed
-        continueToContacts()
+        continueToContactsIfNeeded()
     }
     
-    func determineContagiousPeriodCoordinator(_ coordinator: DetermineContagiousPeriodCoordinator, didFinishWith symptoms: [String], dateOfSymptomOnset: Date) {
+    func determineContagiousPeriodCoordinator(_ coordinator: DetermineContagiousPeriodCoordinator, didFinishWith symptoms: [Symptom], dateOfSymptomOnset: Date) {
         Services.onboardingManager.registerSymptoms(symptoms, dateOfOnset: dateOfSymptomOnset)
         
         // Not removing the coordinator here, so the user can go back and adjust if needed
-        continueToContacts()
+        continueToContactsIfNeeded()
     }
     
     func determineContagiousPeriodCoordinatorDidCancel(_ coordinator: DetermineContagiousPeriodCoordinator) {
@@ -216,7 +229,14 @@ extension InitializeContactsCoordinator: ContactsExplanationViewControllerDelega
         case .finishedWithTestDate(let date):
             viewModel = ContactsTimelineViewModel(testDate: date)
         case .undetermined where Services.caseManager.hasCaseData:
-            viewModel = ContactsTimelineViewModel(dateOfSymptomOnset: Services.caseManager.dateOfSymptomOnset)
+            if let date = Services.caseManager.dateOfSymptomOnset {
+                viewModel = ContactsTimelineViewModel(dateOfSymptomOnset: date)
+            } else if let date = Services.caseManager.dateOfTest {
+                viewModel = ContactsTimelineViewModel(testDate: date)
+            } else {
+                fatalError("Date should exist at this point")
+            }
+            
         default:
             fatalError("Date should exist at this point")
         }
@@ -256,4 +276,22 @@ extension InitializeContactsCoordinator: ContactsTimelineViewControllerDelegate 
         Services.onboardingManager.registerContacts(contacts)
     }
     
+    func contactsTimelineViewControllerDidRequestHelp(_ controller: ContactsTimelineViewController) {
+        let viewModel = TimelineHelpViewModel()
+        let helpController = TimelineHelpViewController(viewModel: viewModel)
+        helpController.delegate = self
+        
+        let wrapperController = NavigationController(rootViewController: helpController)
+        
+        navigationController.present(wrapperController, animated: true)
+    }
+    
+}
+
+extension InitializeContactsCoordinator: TimelineHelpViewControllerDelegate {
+    
+    func timelineHelpViewControllerDidSelectClose(_ controller: TimelineHelpViewController) {
+        controller.dismiss(animated: true)
+    }
+
 }

@@ -23,6 +23,12 @@ protocol AppUpdateViewControllerDelegate: class {
     func appUpdateViewController(_ controller: AppUpdateViewController, wantsToOpen url: URL)
 }
 
+/// Fullscreen alert forcing the user to update the app to the latest version
+///
+/// # See also:
+/// [AppCoordinator.showRequiredUpdate](x-source-tag://AppCoordinator.showRequiredUpdate)
+///
+/// - Tag: AppUpdateViewController
 class AppUpdateViewController: ViewController {
     private let viewModel: AppUpdateViewModel
     
@@ -52,8 +58,8 @@ class AppUpdateViewController: ViewController {
         let textContainerView =
             VStack(spacing: 32,
                    VStack(spacing: 16,
-                          Label(title2: .updateAppTitle).multiline(),
-                          Label(body: viewModel.message, textColor: Theme.colors.captionGray).multiline()),
+                          UILabel(title2: .updateAppTitle).multiline(),
+                          UILabel(body: viewModel.message, textColor: Theme.colors.captionGray).multiline()),
                    Button(title: .updateAppButton, style: .primary)
                        .touchUpInside(self, action: #selector(update)))
         

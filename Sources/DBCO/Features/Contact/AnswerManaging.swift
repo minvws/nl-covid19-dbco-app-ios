@@ -10,8 +10,7 @@ import Contacts
 
 extension AnswerOption {
     static let lastExposureDateEarlierOption = AnswerOption(label: .contactInformationLastExposureEarlier,
-                                                            value: "earlier",
-                                                            trigger: nil)
+                                                            value: "earlier")
 }
 
 /// - Tag: AnswerManaging
@@ -29,18 +28,31 @@ protocol AnswerManaging: class {
     var inputFieldDelegate: InputFieldDelegate? { get set }
 }
 
+extension Array where Element == AnswerManaging {
+    
+    var isFullyCompleted: Bool {
+        return map(\.answer)
+            .allSatisfy(\.isCompleted)
+    }
+    
+    var essentialsAreCompleted: Bool {
+        return map(\.answer)
+            .filter(\.isEssential)
+            .allSatisfy(\.isCompleted)
+    }
+    
+    var hasValidAnswers: Bool {
+        return allSatisfy(\.hasValidAnswer)
+    }
+}
+
 /// AnswerManager for the .classificationDetails question.
 /// Uses [ClassificationHelper](x-source-tag://ClassificationHelper) to determine the resulting category and which of the four (risk) questions should be displayed.
 /// The risk questions are displayed as [ToggleGroup](x-source-tag://ToggleGroup)
 class ClassificationDetailsAnswerManager: AnswerManaging {
     private var baseAnswer: Answer
     
-    // swiftlint:disable opening_brace
-    private var sameHouseholdRisk: Bool?                { didSet { determineGroupVisibility() } }
-    private var distanceRisk: Answer.Value.Distance?    { didSet { determineGroupVisibility() } }
-    private var physicalContactRisk: Bool?              { didSet { determineGroupVisibility() } }
-    private var sameRoomRisk: Bool?                     { didSet { determineGroupVisibility() } }
-    // swiftlint:enable opening_brace
+    private var risks: ClassificationHelper.Risks { didSet { determineGroupVisibility() } }
     
     private(set) var classification: ClassificationHelper.Result
     
@@ -54,24 +66,22 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
             baseAnswer.value = .classificationDetails(contactCategory: contactCategory)
         }
         
-        guard case .classificationDetails(let sameHouseholdRisk, let distanceRisk, let physicalContactRisk, let sameRoomRisk) = baseAnswer.value else {
+        guard case .classificationDetails(let category) = baseAnswer.value else {
             fatalError()
         }
         
-        self.sameHouseholdRisk = sameHouseholdRisk
-        self.distanceRisk = distanceRisk
-        self.physicalContactRisk = physicalContactRisk
-        self.sameRoomRisk = sameRoomRisk
+        self.risks = .init(sameHousehold: nil, distance: nil, physicalContact: nil, sameRoom: nil)
+        
+        if let category = category {
+            ClassificationHelper.setRisks(for: category, risks: &risks)
+        }
         
         classification = .needsAssessmentFor(.sameHousehold)
         determineGroupVisibility()
     }
     
     private func determineClassification() {
-        classification = ClassificationHelper.classificationResult(for: sameHouseholdRisk,
-                                                                   distanceRisk: distanceRisk,
-                                                                   physicalContactRisk: physicalContactRisk,
-                                                                   sameRoomRisk: sameRoomRisk)
+        classification = ClassificationHelper.classificationResult(for: risks)
         
         updateHandler?(self)
     }
@@ -79,15 +89,12 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
     private func determineGroupVisibility() {
         determineClassification()
         
-        let risks = ClassificationHelper.visibleRisks(for: sameHouseholdRisk,
-                                                      distanceRisk: distanceRisk,
-                                                      physicalContactRisk: physicalContactRisk,
-                                                      sameRoomRisk: sameRoomRisk)
+        let visibleRisks = ClassificationHelper.visibleRisks(for: risks)
         
-        sameHouseholdRiskGroup.isHidden = !risks.contains(.sameHousehold)
-        distanceRiskGroup.isHidden = !risks.contains(.distance)
-        physicalContactRiskGroup.isHidden = !risks.contains(.physicalContact)
-        sameRoomRiskGroup.isHidden = !risks.contains(.sameRoom)
+        sameHouseholdRiskGroup.isHidden = !visibleRisks.contains(.sameHousehold)
+        distanceRiskGroup.isHidden = !visibleRisks.contains(.distance)
+        physicalContactRiskGroup.isHidden = !visibleRisks.contains(.physicalContact)
+        sameRoomRiskGroup.isHidden = !visibleRisks.contains(.sameRoom)
         otherCategoryView.isHidden = classification.category != .other
     }
     
@@ -98,12 +105,9 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         
         switch classification {
         case .success(let category):
-            answer.value = .classificationDetails(contactCategory: category)
+            answer.value = .classificationDetails(category)
         case .needsAssessmentFor:
-            answer.value = .classificationDetails(sameHouseholdRisk: sameHouseholdRisk,
-                                                  distanceRisk: distanceRisk,
-                                                  physicalContactRisk: physicalContactRisk,
-                                                  sameRoomRisk: sameRoomRisk)
+            answer.value = .classificationDetails(nil)
         }
         
         return answer
@@ -129,31 +133,31 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
     
     private lazy var sameHouseholdRiskGroup =
         ToggleGroup(label: .sameHouseholdRiskQuestion,
-                    ToggleButton(title: .sameHouseholdRiskQuestionAnswerNegative, selected: sameHouseholdRisk == false),
-                    ToggleButton(title: .sameHouseholdRiskQuestionAnswerPositive, selected: sameHouseholdRisk == true))
-        .didSelect { [unowned self] in self.sameHouseholdRisk = $0 == 1 }
+                    ToggleButton(title: .sameHouseholdRiskQuestionAnswerNegative, selected: risks.sameHousehold == false),
+                    ToggleButton(title: .sameHouseholdRiskQuestionAnswerPositive, selected: risks.sameHousehold == true))
+        .didSelect { [unowned self] in self.risks.sameHousehold = $0 == 1 }
     
     private lazy var distanceRiskGroup =
         ToggleGroup(label: .distanceRiskQuestion,
-                    ToggleButton(title: .distanceRiskQuestionAnswerMoreThan15Min, selected: distanceRisk == .yesMoreThan15min),
-                    ToggleButton(title: .distanceRiskQuestionAnswerLessThan15Min, selected: distanceRisk == .yesLessThan15min),
-                    ToggleButton(title: .distanceRiskQuestionAnswerNegative, selected: distanceRisk == .no))
+                    ToggleButton(title: .distanceRiskQuestionAnswerMoreThan15Min, selected: risks.distance == .yesMoreThan15min),
+                    ToggleButton(title: .distanceRiskQuestionAnswerLessThan15Min, selected: risks.distance == .yesLessThan15min),
+                    ToggleButton(title: .distanceRiskQuestionAnswerNegative, selected: risks.distance == .no))
         .didSelect { [unowned self] in
             switch $0 {
             case 0:
-                self.distanceRisk = .yesMoreThan15min
+                self.risks.distance = .yesMoreThan15min
             case 1:
-                self.distanceRisk = .yesLessThan15min
+                self.risks.distance = .yesLessThan15min
             default:
-                self.distanceRisk = .no
+                self.risks.distance = .no
             }
         }
     
     private lazy var physicalContactRiskGroupUndecorated =
         ToggleGroup(label: .physicalContactRiskQuestion,
-                    ToggleButton(title: .physicalContactRiskQuestionAnswerPositive, selected: physicalContactRisk == true),
-                    ToggleButton(title: .physicalContactRiskQuestionAnswerNegative, selected: physicalContactRisk == false))
-        .didSelect { [unowned self] in self.physicalContactRisk = $0 == 0 }
+                    ToggleButton(title: .physicalContactRiskQuestionAnswerPositive, selected: risks.physicalContact == true),
+                    ToggleButton(title: .physicalContactRiskQuestionAnswerNegative, selected: risks.physicalContact == false))
+        .didSelect { [unowned self] in self.risks.physicalContact = $0 == 0 }
     
     private lazy var physicalContactRiskGroup =
         physicalContactRiskGroupUndecorated
@@ -161,9 +165,9 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
     
     private lazy var sameRoomRiskGroup =
         ToggleGroup(label: .sameRoomRiskQuestion,
-                    ToggleButton(title: .sameRoomRiskQuestionAnswerPositive, selected: sameRoomRisk == true),
-                    ToggleButton(title: .sameRoomRiskQuestionAnswerNegative, selected: sameRoomRisk == false))
-        .didSelect { [unowned self] in self.sameRoomRisk = $0 == 0 }
+                    ToggleButton(title: .sameRoomRiskQuestionAnswerPositive, selected: risks.sameRoom == true),
+                    ToggleButton(title: .sameRoomRiskQuestionAnswerNegative, selected: risks.sameRoom == false))
+        .didSelect { [unowned self] in self.risks.sameRoom = $0 == 0 }
     
     private lazy var otherCategoryView: UIView = {
         let containerView = UIView()
@@ -171,8 +175,8 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         containerView.layer.cornerRadius = 8
         
         VStack(spacing: 16,
-               Label(bodyBold: .otherCategoryTitle).multiline(),
-               Label(body: .otherCategoryMessage, textColor: Theme.colors.captionGray).multiline())
+               UILabel(bodyBold: .otherCategoryTitle).multiline(),
+               UILabel(body: .otherCategoryMessage, textColor: Theme.colors.captionGray).multiline())
             .embed(in: containerView, insets: .leftRight(16) + .topBottom(24))
         
         return containerView
@@ -233,13 +237,18 @@ class ContactDetailsAnswerManager: AnswerManaging, InputFieldDelegate {
     
     let question: Question
     
+    private(set) lazy var firstNameField = InputField(for: self, path: \.firstName).delegate(self)
+    private(set) lazy var lastNameField = InputField(for: self, path: \.lastName).delegate(self)
+    private(set) lazy var phoneNumberField = InputField(for: self, path: \.phoneNumber).delegate(self)
+    private(set) lazy var emailField = InputField(for: self, path: \.email).delegate(self)
+    
     private(set) lazy var view: UIView =
         VStack(spacing: 16,
                HStack(spacing: 15,
-                      InputField(for: self, path: \.firstName).delegate(self),
-                      InputField(for: self, path: \.lastName).delegate(self)).distribution(.fillEqually),
-               InputField(for: self, path: \.phoneNumber).delegate(self),
-               InputField(for: self, path: \.email).delegate(self))
+                      firstNameField,
+                      lastNameField).distribution(.fillEqually),
+               phoneNumberField,
+               emailField)
     
     var answer: Answer {
         var answer = baseAnswer
@@ -250,7 +259,14 @@ class ContactDetailsAnswerManager: AnswerManaging, InputFieldDelegate {
         return answer
     }
     
-    var isEnabled: Bool = true
+    var isEnabled: Bool = true {
+        didSet {
+            firstNameField.isEnabled = isEnabled
+            lastNameField.isEnabled = isEnabled
+            phoneNumberField.isEnabled = isEnabled
+            emailField.isEnabled = isEnabled
+        }
+    }
     
     var hasValidAnswer: Bool {
         return answer.progressElements.contains(true)
@@ -286,7 +302,8 @@ class DateAnswerManager: AnswerManaging {
     
     let question: Question
     
-    private(set) lazy var view: UIView = InputField(for: self, path: \.date)
+    private lazy var inputField = InputField(for: self, path: \.date)
+    private(set) lazy var view: UIView = inputField
         .decorateWithDescriptionIfNeeded(description: question.description)
     
     var answer: Answer {
@@ -295,7 +312,9 @@ class DateAnswerManager: AnswerManaging {
         return answer
     }
     
-    var isEnabled: Bool = true
+    var isEnabled: Bool = true {
+        didSet { inputField.isEnabled = isEnabled }
+    }
     
     var hasValidAnswer: Bool {
         return date.value != nil
@@ -322,21 +341,18 @@ class LastExposureDateAnswerManager: AnswerManaging {
         self.baseAnswer = answer
         self.question = question
         
-        // Dates should range from 2 days before symptom onset to today
         let endDate = Date()
-        let startDate = Calendar.current.date(byAdding: .day, value: -2, to: Services.caseManager.dateOfSymptomOnset) ?? endDate
+        let startDate = Services.caseManager.startOfContagiousPeriod ?? endDate
         
         let numberOfDays = Calendar.current.dateComponents([.day], from: startDate, to: endDate).day ?? 0
         
         let dateOptions = (0...numberOfDays)
             .compactMap { Calendar.current.date(byAdding: .day, value: $0, to: startDate) }
             .map { AnswerOption(label: Self.displayDateFormatter.string(from: $0),
-                                value: Self.valueDateFormatter.string(from: $0),
-                                trigger: nil) }
+                                value: Self.valueDateFormatter.string(from: $0)) }
         
         let everyDayOption = AnswerOption(label: .contactInformationLastExposureEveryDay,
-                                          value: Self.valueDateFormatter.string(from: endDate),
-                                          trigger: nil)
+                                          value: Self.valueDateFormatter.string(from: endDate))
         
         var answerOptions = [.lastExposureDateEarlierOption] + dateOptions + [everyDayOption]
         
@@ -346,8 +362,7 @@ class LastExposureDateAnswerManager: AnswerManaging {
             } else if let date = Self.valueDateFormatter.date(from: lastExposureDate) {
                 // If we got a different valid date, create an option for it
                 let option = AnswerOption(label: Self.displayDateFormatter.string(from: date),
-                                          value: lastExposureDate,
-                                          trigger: nil)
+                                          value: lastExposureDate)
                 answerOptions.append(option)
                 baseAnswer.value = .lastExposureDate(option)
             }
@@ -367,17 +382,6 @@ class LastExposureDateAnswerManager: AnswerManaging {
     let question: Question
     private let answerOptions: [AnswerOption]
     
-    private let disabledIndicatorView: UIView = {
-        let stack = HStack(spacing: 6,
-                           ImageView(imageName: "Warning").asIcon(),
-                           Label(subhead: .contactQuestionDisabledMessage,
-                                 textColor: Theme.colors.primary).multiline())
-        
-        stack.isHidden = true
-        
-        return stack
-    }()
-    
     private let earlierIndicatorView: UIView = {
         let containerView = UIView()
         containerView.backgroundColor = Theme.colors.tertiary
@@ -385,8 +389,8 @@ class LastExposureDateAnswerManager: AnswerManaging {
         containerView.isHidden = true
         
         VStack(spacing: 16,
-               Label(bodyBold: .earlierExposureDateTitle).multiline(),
-               Label(body: .earlierExposureDateMessage, textColor: Theme.colors.captionGray).multiline())
+               UILabel(bodyBold: .earlierExposureDateTitle).multiline(),
+               UILabel(body: .earlierExposureDateMessage, textColor: Theme.colors.captionGray).multiline())
             .embed(in: containerView, insets: .leftRight(16) + .topBottom(24))
         
         return containerView
@@ -396,8 +400,9 @@ class LastExposureDateAnswerManager: AnswerManaging {
     
     private(set) lazy var view: UIView = {
         VStack(spacing: 8,
-               inputField.decorateWithDescriptionIfNeeded(description: question.description),
-               disabledIndicatorView,
+               inputField
+                .emphasized()
+                .decorateWithDescriptionIfNeeded(description: question.description),
                earlierIndicatorView)
     }()
     
@@ -419,7 +424,6 @@ class LastExposureDateAnswerManager: AnswerManaging {
     var isEnabled: Bool = true {
         didSet {
             inputField.isEnabled = isEnabled
-            disabledIndicatorView.isHidden = isEnabled
         }
     }
     
@@ -476,7 +480,8 @@ class OpenAnswerManager: AnswerManaging {
     
     let question: Question
     
-    private(set) lazy var view: UIView = InputTextView(for: self, path: \.text)
+    private lazy var inputTextView = InputTextView(for: self, path: \.text)
+    private(set) lazy var view: UIView = inputTextView
         .decorateWithDescriptionIfNeeded(description: question.description)
     
     var answer: Answer {
@@ -485,7 +490,9 @@ class OpenAnswerManager: AnswerManaging {
         return answer
     }
     
-    var isEnabled: Bool = true
+    var isEnabled: Bool = true {
+        didSet { inputTextView.isEnabled = isEnabled }
+    }
     
     var hasValidAnswer: Bool {
         return text.value != nil
@@ -505,7 +512,7 @@ class MultipleChoiceAnswerManager: AnswerManaging {
     private var buttons: ToggleGroup!
     private var selectedButtonIndex: Int?
  
-    init(question: Question, answer: Answer, contact: Task.Contact) {
+    init(question: Question, answer: Answer) {
         self.baseAnswer = answer
         self.question = question
         
@@ -532,10 +539,10 @@ class MultipleChoiceAnswerManager: AnswerManaging {
     
     let question: Question
     
+    private(set) lazy var inputField = InputField(for: self, path: \.options)
     private(set) lazy var view: UIView = {
         if options != nil {
-            return InputField(for: self, path: \.options)
-                .decorateWithDescriptionIfNeeded(description: question.description)
+            return inputField.decorateWithDescriptionIfNeeded(description: question.description)
         } else {
             return buttons
                 .decorateWithDescriptionIfNeeded(description: question.description)
@@ -562,6 +569,7 @@ class MultipleChoiceAnswerManager: AnswerManaging {
     
     var isEnabled: Bool = true {
         didSet {
+            inputField.isEnabled = isEnabled
             buttons?.isEnabled = isEnabled
         }
     }

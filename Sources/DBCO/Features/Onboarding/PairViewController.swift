@@ -17,9 +17,16 @@ class PairViewModel {}
 class PairViewController: ViewController {
     private let viewModel: PairViewModel
     
-    private let codeField = PairingCodeField()
+    private let scrollView = UIScrollView()
+    private let codeField =
+        CodeField(with: CodeDescription(digitGroupSize: 4,
+                                        numberOfGroups: 3,
+                                        accessibilityLabel: .onboardingPairingTitle,
+                                        accessibilityHint: .onboardingPairingCodeHint,
+                                        adjustKerningForWidth: true))
+    
     private let loadingOverlay = UIView()
-    private let loadingIndicator = UIActivityIndicatorView(style: .white)
+    private let loadingIndicator = ActivityIndicatorView(style: .white)
     private var keyboardSpacerHeightConstraint: NSLayoutConstraint!
     
     weak var delegate: PairViewControllerDelegate?
@@ -44,7 +51,7 @@ class PairViewController: ViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
 
-        let titleLabel = Label(title2: .onboardingStep2Title).multiline()
+        let titleLabel = UILabel(title2: .onboardingPairingTitle).multiline()
         
         let keyboardSpacerView = UIView()
         keyboardSpacerHeightConstraint = keyboardSpacerView.heightAnchor.constraint(equalToConstant: 0)
@@ -56,6 +63,8 @@ class PairViewController: ViewController {
         nextButton.isEnabled = false
         codeField.didUpdatePairingCode { nextButton.isEnabled = $0 != nil }
         
+        let topMargin: CGFloat = UIScreen.main.bounds.height < 600 ? 0 : 66
+        
         let containerView =
             VStack(spacing: 32,
                    VStack(spacing: 16,
@@ -65,9 +74,14 @@ class PairViewController: ViewController {
                           nextButton,
                           keyboardSpacerView))
             .distribution(.equalSpacing)
-            .wrappedInReadableWidth(insets: .top(66))
+            .wrappedInReadableWidth(insets: .top(topMargin))
         
-        containerView.embed(in: view.safeAreaLayoutGuide)
+        containerView.embed(in: scrollView.readableWidth)
+        
+        containerView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.safeAreaLayoutGuide.heightAnchor, multiplier: 1, constant: 0).isActive = true
+        
+        scrollView.embed(in: view)
+        scrollView.delegate = self
         
         loadingOverlay.backgroundColor = UIColor(white: 0, alpha: 0.4)
         loadingOverlay.embed(in: view)
@@ -87,6 +101,8 @@ class PairViewController: ViewController {
         loadingOverlay.isHidden = false
         loadingOverlay.alpha = 0
         codeField.isIgnoringInput = true
+        
+        UIAccessibility.post(notification: .announcement, argument: String.loading)
         
         UIView.animate(withDuration: 0.3) {
             self.loadingOverlay.alpha = 1
@@ -110,7 +126,7 @@ class PairViewController: ViewController {
     }
     
     @objc private func pair() {
-        guard let code = codeField.pairingCode else {
+        guard let code = codeField.code else {
             return
         }
         
@@ -137,5 +153,13 @@ class PairViewController: ViewController {
     @objc private func keyboardWillHide(notification: NSNotification) {
         keyboardSpacerHeightConstraint.constant = 0
     }
+}
 
+// MARK: - UIScrollViewDelegate
+
+extension PairViewController: UIScrollViewDelegate {
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        codeField.resignFirstResponder() // Hide keyboard on scroll
+    }
 }

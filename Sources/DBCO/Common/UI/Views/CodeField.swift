@@ -7,44 +7,53 @@
 
 import UIKit
 
-/// A styled subclass of UITextField showing 3 groups of 3 digits representing a pairing code.
-/// Calls listeners when a valid pairincode is entered or removed.
-class PairingCodeField: UITextField {
-    private var pairingCodeHandlers = [(String?) -> Void]()
+struct CodeDescription {
+    let digitGroupSize: Int
+    let numberOfGroups: Int
+    let accessibilityLabel: String
+    let accessibilityHint: String
+    let adjustKerningForWidth: Bool
+}
+
+/// A styled subclass of UITextField showing `CodeDescription.numberOfGroups` groups of`CodeDescription.digitGroupSize` digits separated by a `-` representing a code.
+/// Calls listeners when a valid code is entered or removed.
+class CodeField: UITextField {
+    private let codeDescription: CodeDescription
+    private var codeHandlers = [(String?) -> Void]()
     
-    private(set) var pairingCode: String? {
+    private(set) var code: String? {
         didSet {
-            pairingCodeHandlers.forEach { $0(pairingCode) }
+            codeHandlers.forEach { $0(code) }
         }
     }
     
     /// Setting this to `true` lets the field stay first responder, ignoring all input
     var isIgnoringInput: Bool = false
     
-    init() {
+    init(with description: CodeDescription) {
+        self.codeDescription = description
         super.init(frame: .zero)
         setup()
     }
     
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setup()
+        fatalError("init(coder:) has not been implemented")
     }
     
     @discardableResult
     func didUpdatePairingCode(handler: @escaping (String?) -> Void) -> Self {
-        pairingCodeHandlers.append(handler)
+        codeHandlers.append(handler)
         return self
     }
     
     private func setup() {
         let attributes: [NSAttributedString.Key: Any] = [
-            .kern: Constants.kerning,
+            .kern: kerning,
             .font: UIFont.monospacedDigitSystemFont(ofSize: 22, weight: .regular)
         ]
         
-        accessibilityLabel = .onboardingStep2Title
-        accessibilityHint = .onboardingStep2CodeHint
+        accessibilityLabel = codeDescription.accessibilityLabel
+        accessibilityHint = codeDescription.accessibilityHint
         
         placeholderLabel.embed(in: self)
         sendSubviewToBack(placeholderLabel)
@@ -68,11 +77,19 @@ class PairingCodeField: UITextField {
         return CGSize(width: superSize.width, height: superSize.height + 18)
     }
     
-    private func updatePlaceholder(textLength: Int = 0) {
-        let fullPlaceholder = "0000-0000-0000"
+    private lazy var fullPlaceholder: String = {
+        let group = Array(repeating: "0",
+                          count: codeDescription.digitGroupSize)
+            .joined()
         
+        return Array(repeating: group,
+                     count: codeDescription.numberOfGroups)
+            .joined(separator: "-")
+    }()
+    
+    private func updatePlaceholder(textLength: Int = 0) {
         let text = NSMutableAttributedString(string: fullPlaceholder, attributes: [
-            .kern: Constants.kerning,
+            .kern: kerning,
             .font: UIFont.monospacedDigitSystemFont(ofSize: 22, weight: .regular)
         ])
         
@@ -90,15 +107,26 @@ class PairingCodeField: UITextField {
     private let placeholderLabel = UILabel()
     
     private struct Constants {
-        static let kerning: CGFloat = UIScreen.main.bounds.width < 330 ? 6.5 : 10.5
+        static let minKerning: CGFloat = 6
+        static let preferredKerning: CGFloat = 10.5
+    }
+    
+    private var kerning: CGFloat {
+        if codeDescription.adjustKerningForWidth && UIScreen.main.bounds.width < 330 {
+            return Constants.minKerning
+        } else {
+            return Constants.preferredKerning
+        }
     }
 }
 
-extension PairingCodeField: UITextFieldDelegate {
+extension CodeField: UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         guard !isIgnoringInput else { return false }
         
+        let maxLength = codeDescription.digitGroupSize * codeDescription.numberOfGroups
+
         let text = (self.text ?? "") as NSString
         
         let allowedCharacters = CharacterSet(charactersIn: "0123456789")
@@ -107,11 +135,11 @@ extension PairingCodeField: UITextFieldDelegate {
             .replacingCharacters(in: range, with: string)
             .components(separatedBy: allowedCharacters.inverted)
             .joined()
-            .prefix(12)
+            .prefix(maxLength)
         
         var codeWithSeparators = String()
         String(trimmedCode).enumerated().forEach { index, character in
-            if index % 4 == 0, index > 0 {
+            if index % codeDescription.digitGroupSize == 0, index > 0 {
                 codeWithSeparators.append("-")
             }
             codeWithSeparators.append(character)
@@ -128,10 +156,11 @@ extension PairingCodeField: UITextFieldDelegate {
 
         updatePlaceholder(textLength: codeWithSeparators.count)
         
-        if trimmedCode.count == 12 {
-            pairingCode = String(trimmedCode)
+        if trimmedCode.count == maxLength {
+            code = String(trimmedCode)
+            resignFirstResponder() // Hide keyboard to show submit button
         } else {
-            pairingCode = nil
+            code = nil
         }
     
         return false

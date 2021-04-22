@@ -7,16 +7,9 @@
 
 import Foundation
 
-/// - Tag: AnswerTrigger
-enum AnswerTrigger: String, Codable {
-    case setCommunicationToIndex = "communication_index"
-    case setCommunicationToStaff = "communication_staff"
-}
-
 struct AnswerOption: Codable, Equatable {
     let label: String
     let value: String
-    let trigger: AnswerTrigger?
 }
 
 /// - Tag: Question
@@ -64,17 +57,6 @@ struct Question {
     ///
     /// - Tag: disabledForSources
     let disabledForSources: [Task.Source]
-    
-    init(uuid: UUID, group: Group, questionType: QuestionType, label: String?, description: String?, relevantForCategories: [Task.Contact.Category], answerOptions: [AnswerOption]?, disabledForSources: [Task.Source]) {
-        self.uuid = uuid
-        self.group = group
-        self.questionType = questionType
-        self.label = label
-        self.description = description
-        self.relevantForCategories = relevantForCategories
-        self.answerOptions = answerOptions
-        self.disabledForSources = disabledForSources
-    }
 }
 
 extension Question: Codable {
@@ -103,8 +85,7 @@ extension Question: Codable {
             let category: Task.Contact.Category
         }
         
-        // TODO: Once the API supports categories 3a and 3b, the fallback here should be removed
-        let categories = (try? container.decode([CategoryWrapper].self, forKey: .relevantForCategories)) ?? Task.Contact.Category.allCases.map(CategoryWrapper.init)
+        let categories = try container.decode([CategoryWrapper].self, forKey: .relevantForCategories)
         relevantForCategories = categories.map { $0.category }
         
         answerOptions = try? container.decode([AnswerOption]?.self, forKey: .answerOptions)
@@ -148,6 +129,39 @@ struct Questionnaire: Codable {
     let uuid: UUID
     let taskType: Task.TaskType
     let questions: [Question]
+    
+    init(uuid: UUID, taskType: Task.TaskType, questions: [Question]) {
+        self.uuid = uuid
+        self.taskType = taskType
+        self.questions = questions
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        uuid = try container.decode(UUID.self, forKey: .uuid)
+        taskType = try container.decode(Task.TaskType.self, forKey: .taskType)
+        
+        struct FailableQuestion: Decodable, Logging {
+            let question: Question?
+            
+            init(from decoder: Decoder) throws {
+                let container = try decoder.singleValueContainer()
+                
+                do {
+                    question = try container.decode(Question.self)
+                } catch let error {
+                    question = nil
+                    
+                    logError("Failed to decode Question: \(error)")
+                }
+            }
+        }
+        
+        let questions = try container.decode([FailableQuestion].self, forKey: .questions)
+        
+        self.questions = questions.compactMap(\.question)
+    }
 }
 
 /// - Tag: Answer
@@ -163,10 +177,7 @@ struct Answer: Codable, Equatable {
             case no
         }
         
-        case classificationDetails(sameHouseholdRisk: Bool?,
-                                   distanceRisk: Distance?,
-                                   physicalContactRisk: Bool?,
-                                   sameRoomRisk: Bool?)
+        case classificationDetails(Task.Contact.Category?)
         case contactDetails(firstName: String?,
                             lastName: String?,
                             email: String?,
@@ -184,8 +195,8 @@ struct Answer: Codable, Equatable {
         
         var description: String {
             switch self {
-            case .classificationDetails(let sameHouseholdRisk, let distanceRisk, let physicalContactRisk, let sameRoomRisk):
-                return "classificationDetails(\(String(describing: sameHouseholdRisk)), \(String(describing: distanceRisk)), \(String(describing: physicalContactRisk)), \(String(describing: sameRoomRisk)))"
+            case .classificationDetails(let category):
+                return "classificationDetails(\(String(describing: category)))"
             case .contactDetails(let firstName, let lastName, let email, let phoneNumber):
                 return "contactDetails(\(String(describing: firstName)), \(String(describing: lastName)), \(String(describing: email)), \(String(describing: phoneNumber)))"
             case .contactDetailsFull(let firstName, let lastName, let email, let phoneNumber):
@@ -217,10 +228,6 @@ extension Answer.Value: Codable {
         case email
         case phoneNumber
         case value
-        case sameHouseholdRisk
-        case distanceRisk
-        case physicalContactRisk
-        case sameRoomRisk
     }
     
     init(from decoder: Decoder) throws {
@@ -229,10 +236,7 @@ extension Answer.Value: Codable {
         
         switch type {
         case .classificationDetails:
-            self = .classificationDetails(sameHouseholdRisk: try container.decode(Bool?.self, forKey: .sameHouseholdRisk),
-                                          distanceRisk: try container.decode(Distance?.self, forKey: .distanceRisk),
-                                          physicalContactRisk: try container.decode(Bool?.self, forKey: .physicalContactRisk),
-                                          sameRoomRisk: try container.decode(Bool?.self, forKey: .sameRoomRisk))
+            self = .classificationDetails(try container.decode(Task.Contact.Category?.self, forKey: .value))
         case .contactDetails:
             self = .contactDetails(firstName: try container.decode(String?.self, forKey: .firstName),
                                    lastName: try container.decode(String?.self, forKey: .lastName),
@@ -266,12 +270,9 @@ extension Answer.Value: Codable {
     private func encodeForLocalStorage(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         switch self {
-        case .classificationDetails(let sameHouseholdRisk, let distanceRisk, let physicalContactRisk, let sameRoomRisk):
+        case .classificationDetails(let category):
             try container.encode(Question.QuestionType.classificationDetails, forKey: .type)
-            try container.encode(sameHouseholdRisk, forKey: .sameHouseholdRisk)
-            try container.encode(distanceRisk, forKey: .distanceRisk)
-            try container.encode(physicalContactRisk, forKey: .physicalContactRisk)
-            try container.encode(sameRoomRisk, forKey: .sameRoomRisk)
+            try container.encode(category, forKey: .value)
         case .contactDetails(let firstName, let lastName, let email, let phoneNumber):
             try container.encode(Question.QuestionType.contactDetails, forKey: .type)
             try container.encode(firstName, forKey: .firstName)
@@ -302,11 +303,8 @@ extension Answer.Value: Codable {
     private func encodeForAPI(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         switch self {
-        case .classificationDetails(let sameHouseholdRisk, let distanceRisk, let physicalContactRisk, let sameRoomRisk):
-            try container.encode(sameHouseholdRisk ?? false, forKey: .sameHouseholdRisk)
-            try container.encode(distanceRisk ?? .no, forKey: .distanceRisk)
-            try container.encode(physicalContactRisk ?? false, forKey: .physicalContactRisk)
-            try container.encode(sameRoomRisk ?? false, forKey: .sameRoomRisk)
+        case .classificationDetails(let category):
+            try container.encode(category, forKey: .value)
         case .contactDetails(let firstName, let lastName, let email, let phoneNumber):
             try container.encode(firstName, forKey: .firstName)
             try container.encode(lastName, forKey: .lastName)

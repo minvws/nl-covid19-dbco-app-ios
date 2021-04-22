@@ -12,22 +12,7 @@ protocol ContactsTimelineViewControllerDelegate: class {
     func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [Onboarding.Contact], dateOfSymptomOnset: Date)
     func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [Onboarding.Contact], testDate: Date)
     func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didCancelWith contacts: [Onboarding.Contact])
-}
-
-private extension Date {
-    var normalized: Date {
-        Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: self)!
-    }
-}
-
-extension String {
-    func capitalizingFirstLetter() -> String {
-        return prefix(1).capitalized + dropFirst()
-    }
-
-    mutating func capitalizeFirstLetter() {
-        self = self.capitalizingFirstLetter()
-    }
+    func contactsTimelineViewControllerDidRequestHelp(_ controller: ContactsTimelineViewController)
 }
 
 class ContactsTimelineViewModel {
@@ -72,11 +57,11 @@ class ContactsTimelineViewModel {
     }()
     
     init(dateOfSymptomOnset: Date) {
-        configuration = .dateOfSymptomOnset(dateOfSymptomOnset.normalized)
+        configuration = .dateOfSymptomOnset(dateOfSymptomOnset.start)
     }
     
     init(testDate: Date) {
-        configuration = .testDate(testDate.normalized)
+        configuration = .testDate(testDate.start)
     }
     
     private var endDate: Date {
@@ -93,7 +78,7 @@ class ContactsTimelineViewModel {
     }
     
     var sections: [Section] {
-        let today = Date().normalized
+        let today = Date().start
     
         let numberOfDays = Calendar.current.dateComponents([.day], from: endDate, to: today).day! + 1
         
@@ -176,7 +161,7 @@ class ContactsTimelineViewModel {
     func addExtraDay() {
         guard case .dateOfSymptomOnset(let date) = configuration else { return }
         
-        let adjustedDate = Calendar.current.date(byAdding: .day, value: -1, to: date)!
+        let adjustedDate = date.dateByAddingDays(-1)
         
         configuration = .dateOfSymptomOnset(adjustedDate)
     }
@@ -224,13 +209,16 @@ class ContactsTimelineViewModel {
     }()
 }
 
+/// [ViewController](x-source-tag://ViewController) showing a [ContactListInputView](x-source-tag://ContactListInputView) for each day of the contagious period along with some tips for the user.
+///
+/// - Tag: ContactsTimelineViewController
 class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdjusting {
     private let viewModel: ContactsTimelineViewModel
     private let navigationBackgroundView = UIView()
     private let separatorView = SeparatorView()
-    private let titleLabel = Label(title2: nil)
+    private let titleLabel = UILabel(title2: nil)
     private var addExtraDaySectionView: UIStackView!
-    private let addExtraDayTitleLabel = Label(bodyBold: nil)
+    private let addExtraDayTitleLabel = UILabel(bodyBold: nil)
     
     private let scrollView = UIScrollView(frame: .zero)
     private var sectionStackView: UIStackView!
@@ -247,6 +235,10 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     override func viewDidLoad() {
@@ -282,11 +274,12 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
             VStack(spacing: 40,
                    VStack(spacing: 16,
                           titleLabel.multiline(),
-                          Label(body: .contactsTimelineMessage, textColor: Theme.colors.captionGray).multiline()),
+                          TextView(htmlText: .contactsTimelineMessage, font: Theme.fonts.body, textColor: Theme.colors.captionGray, boldTextColor: Theme.colors.primary)
+                            .linkTouched { [weak self] _ in self?.openHelp() }),
                    sectionStackView,
                    VStack(spacing: 16,
                           addExtraDaySectionView,
-                          Button(title: .next, style: .primary).touchUpInside(self, action: #selector(handleContinue))))
+                          Button(title: .done, style: .primary).touchUpInside(self, action: #selector(handleContinue))))
                 .distribution(.fill)
                 .embed(in: scrollView.readableWidth, insets: margin)
         
@@ -297,6 +290,14 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
         configureSections()
         
         registerForKeyboardNotifications()
+        
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideSuggestions)))
+    }
+    
+    @objc private func hideSuggestions() {
+        sectionStackView.arrangedSubviews
+            .compactMap { $0 as? DaySectionView }
+            .forEach { $0.contactList.hideSuggestions() }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -353,6 +354,10 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
                 guard case .day(let date, _, _) = sectionView.section else { return [] }
                 return sectionView.contactList.contacts.map { Onboarding.Contact(date: date, name: $0.name, contactIdentifier: $0.cnContactIdentifier, isRoommate: false) }
             }
+    }
+    
+    private func openHelp() {
+        delegate?.contactsTimelineViewControllerDidRequestHelp(self)
     }
     
     @objc private func handleContinue() {
@@ -443,7 +448,9 @@ extension ContactsTimelineViewController: ContactListInputViewDelegate {
             let maxOffset = minOffset - visibleHeight + convertedBounds.height + extraMargin.bottom
             let currentOffset = scrollView.contentOffset.y
             
-            if currentOffset > minOffset {
+            if traitCollection.verticalSizeClass == .compact {
+                scrollView.setContentOffset(CGPoint(x: 0, y: minOffset), animated: true)
+            } else if currentOffset > minOffset {
                 scrollView.setContentOffset(CGPoint(x: 0, y: minOffset), animated: true)
             } else if currentOffset < maxOffset {
                 scrollView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
@@ -453,6 +460,8 @@ extension ContactsTimelineViewController: ContactListInputViewDelegate {
         // Next runcycle so keyboard size is properly incorporated
         DispatchQueue.main.async(execute: scrollVisible)
     }
+    
+    func contactListInputView(_ view: ContactListInputView, didEndEditingIn textField: UITextField) {}
     
     func viewForPresentingSuggestionsFromContactListInputView(_ view: ContactListInputView) -> UIView {
         return self.view
@@ -493,7 +502,7 @@ private class TimelineSectionView: UIView {
         headerContainerView.layer.cornerRadius = 4
         headerContainerView.backgroundColor = Theme.colors.tipHeaderBackground
         
-        Label(caption1: "Geheugentip".uppercased(), textColor: .white)
+        UILabel(caption1: "Geheugentip".uppercased(), textColor: .white)
             .embed(in: headerContainerView, insets: .all(4))
         
         return VStack(headerContainerView).alignment(.leading)
@@ -506,13 +515,13 @@ private class TimelineSectionView: UIView {
         
         return HStack(spacing: 12,
                       icon,
-                      Label(body: text, textColor: Theme.colors.tipItemColor).multiline())
+                      UILabel(body: text, textColor: Theme.colors.tipItemColor).multiline())
     }
 }
 
 private class DaySectionView: TimelineSectionView {
-    private let titleLabel = Label(bodyBold: nil)
-    private let subtitleLabel = Label(body: nil, textColor: Theme.colors.captionGray)
+    private let titleLabel = UILabel(bodyBold: nil)
+    private let subtitleLabel = UILabel(body: nil, textColor: Theme.colors.captionGray)
     private(set) var contactList = ContactListInputView(placeholder: .contactsTimelineAddContact)
     
     weak var contactListDelegate: ContactListInputViewDelegate? {
@@ -560,7 +569,7 @@ private class ReviewTipsSectionView: TimelineSectionView {
         VStack(spacing: 16,
                VStack(spacing: 6,
                       createTipHeaderLabel(),
-                      Label(bodyBold: .contactsTimelineReviewTipTitle).multiline()),
+                      UILabel(bodyBold: .contactsTimelineReviewTipTitle).multiline()),
                HStack(spacing: 24,
                       VStack(spacing: 16,
                              createTipItem(icon: "Photos", text: .contactsTimelineReviewTipPhotos),
@@ -586,7 +595,7 @@ private class ActivityTipsSectionView: TimelineSectionView {
         VStack(spacing: 16,
                VStack(spacing: 6,
                       createTipHeaderLabel(),
-                      Label(bodyBold: .contactsTimelineActivityTipTitle).multiline()),
+                      UILabel(bodyBold: .contactsTimelineActivityTipTitle).multiline()),
                VStack(spacing: 16,
                       createTipItem(icon: "Car", text: .contactsTimelineActivityTipCar),
                       createTipItem(icon: "Meetings", text: .contactsTimelineActivityTipMeetings),

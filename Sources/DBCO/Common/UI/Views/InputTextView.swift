@@ -14,8 +14,25 @@ class InputTextView<Object: AnyObject, Field: Editable>: UIView {
     
     private let textView = TextView()
     
+    var isEnabled: Bool {
+        get { textView.isEditable }
+        
+        set {
+            textView.isEditable = newValue
+            textView.textColor = newValue ? .black : .init(white: 0, alpha: 0.5)
+        }
+    }
+    
+    var isEmphasized: Bool {
+        didSet {
+            label.font = isEmphasized ? Theme.fonts.bodyBold : Theme.fonts.subhead
+        }
+    }
+    
     init(for object: Object, path: WritableKeyPath<Object, Field>) {
         self.object = object
+        
+        isEmphasized = false
         
         super.init(frame: .zero)
         
@@ -54,10 +71,16 @@ class InputTextView<Object: AnyObject, Field: Editable>: UIView {
         textView.becomeFirstResponder()
     }
     
+    @discardableResult
+    func emphasized() -> Self {
+        isEmphasized = true
+        return self
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - Private
-    private(set) var label = Label(subhead: nil)
+    private(set) var label = UILabel(subhead: nil)
 }

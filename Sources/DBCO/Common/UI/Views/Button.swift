@@ -51,11 +51,14 @@ class Button: UIButton {
 
         self.setTitle(title, for: .normal)
         self.title = title
+        
         self.titleLabel?.font = Theme.fonts.headline
-
+        self.titleLabel?.numberOfLines = 0
+        self.titleLabel?.lineBreakMode = .byWordWrapping
+        
         self.layer.cornerRadius = 10
         self.clipsToBounds = true
-
+        
         self.addTarget(self, action: #selector(self.touchUpAnimation), for: .touchDragExit)
         self.addTarget(self, action: #selector(self.touchUpAnimation), for: .touchCancel)
         self.addTarget(self, action: #selector(self.touchUpAnimation), for: .touchUpInside)
@@ -97,6 +100,18 @@ class Button: UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
         updateRoundedCorners()
+        titleLabel?.preferredMaxLayoutWidth = titleLabel?.frame.size.width ?? 0
+    }
+    
+    // Takes the intrinsic size of the title label into account for larger font sizes
+    override var intrinsicContentSize: CGSize {
+        let size = titleLabel?.intrinsicContentSize ?? CGSize.zero
+        let insets = contentEdgeInsets
+        
+        return CGSize(
+            width: size.width + insets.left + insets.right,
+            height: size.height + insets.top + insets.bottom
+        )
     }
 
     // MARK: - Private

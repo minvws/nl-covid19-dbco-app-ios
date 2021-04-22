@@ -8,6 +8,10 @@
 import UIKit
 
 /// A collapsible container view for a with a header consisting of a title, a caption, a status indicator and a collapse indicator
+///
+/// # See also
+/// [SectionedScrollView](x-source-tag://SectionedScrollView)
+///
 /// - Tag: SectionView
 class SectionView: UIView {
     
@@ -232,7 +236,7 @@ class SectionView: UIView {
     private let headerContainerView = UIView()
     private let icon = UIImageView()
     private let collapseIndicator = UIImageView()
-    private let titleLabel = Label(bodyBold: "")
-    private let captionLabel = Label(subhead: "", textColor: Theme.colors.captionGray)
+    private let titleLabel = UILabel(bodyBold: "")
+    private let captionLabel = UILabel(subhead: "", textColor: Theme.colors.captionGray)
     private let bottomSeparator = SeparatorView()
 }

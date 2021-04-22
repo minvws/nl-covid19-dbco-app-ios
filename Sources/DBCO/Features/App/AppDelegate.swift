@@ -27,8 +27,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Will only trigger here for iOS 12; On 13 and higher appCoordinator will be nil
-        appCoordinator?.updateConfiguration()
-        appCoordinator?.refreshCaseDataIfNeeded()
+        appCoordinator?.appWillBecomeVisible()
+    }
+    
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        // Will only trigger here for iOS 12; On 13 and higher appCoordinator will be nil
+        appCoordinator?.appDidHide()
     }
 
     // MARK: UISceneSession Lifecycle

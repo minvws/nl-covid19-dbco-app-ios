@@ -28,8 +28,145 @@ final class AppCoordinator: Coordinator {
         
         window.tintColor = Theme.colors.primary
         
-        // Check if the app is the minimum version. If not, show the app update screen
-        updateConfiguration()
+        _ = resetAppDataIfNeeded()
+        
+        let launchCoordinator = LaunchCoordinator(window: window)
+        launchCoordinator.delegate = self
+        
+        startChildCoordinator(launchCoordinator)
+    }
+    
+    private func resetAppDataIfNeeded() -> Bool {
+        let mostRecentModificationDate =
+            [Services.onboardingManager.dataModificationDate,
+             Services.caseManager.dataModificationDate]
+            .compactMap { $0 }
+            .sorted(by: <)
+            .last ?? .distantFuture // fallback to future, since there isn't any data to begin with
+        
+        let twoWeeksAgo = Date.now.dateByAddingDays(-14)
+        
+        if mostRecentModificationDate < twoWeeksAgo {
+            resetData()
+            return true
+        }
+        
+        return false
+    }
+    
+    private func resetData() {
+        Services.pairingManager.unpair()
+        try? Services.caseManager.removeCaseData()
+        Services.onboardingManager.reset()
+    }
+    
+    private var isUpdatingConfiguration = false
+    
+    func appWillBecomeVisible() {
+        revealContent()
+        
+        if resetAppDataIfNeeded() {
+            children.forEach(removeChildCoordinator)
+            start()
+        } else {
+            updateConfiguration()
+            refreshCaseDataIfNeeded()
+        }
+    }
+    
+    func appDidHide() {
+        hideContent()
+    }
+    
+    private func updateConfiguration(completionHandler: (() -> Void)? = nil) {
+        guard !isUpdatingConfiguration else { return }
+        
+        isUpdatingConfiguration = true
+        
+        Services.configManager.update { [unowned self] updateState in
+            switch updateState {
+            case .updateRequired(let versionInformation):
+                showRequiredUpdate(with: versionInformation)
+            case .updateFailed:
+                showConfigUpdateFailed(retryHandler: { updateConfiguration(completionHandler: completionHandler) })
+            case .noActionNeeded:
+                completionHandler?()
+            }
+            
+            isUpdatingConfiguration = false
+        }
+    }
+    
+    private func refreshCaseDataIfNeeded() {
+        Services.caseManager.loadCaseData(userInitiated: false) { _, _ in }
+    }
+    
+    private var privacyProtectionWindow: UIWindow?
+
+    private func hideContent() {
+        var sceneWindow: UIWindow?
+        
+        if #available(iOS 13.0, *) {
+            if let scene = window.windowScene {
+                sceneWindow = UIWindow(windowScene: scene)
+            }
+        }
+        
+        privacyProtectionWindow = sceneWindow ?? UIWindow(frame: UIScreen.main.bounds)
+        privacyProtectionWindow?.rootViewController = LaunchViewController(viewModel: .init())
+        privacyProtectionWindow?.windowLevel = .alert + 1
+        privacyProtectionWindow?.makeKeyAndVisible()
+    }
+    
+    private func revealContent() {
+        privacyProtectionWindow?.isHidden = true
+        privacyProtectionWindow = nil
+    }
+    
+    private var topViewController: UIViewController? {
+        guard var topController = window.rootViewController else { return nil }
+
+        while let newTopController = topController.presentedViewController {
+            topController = newTopController
+        }
+        
+        return topController
+    }
+    
+    /// - Tag: AppCoordinator.showRequiredUpdate
+    private func showRequiredUpdate(with versionInformation: AppVersionInformation) {
+        guard let topController = topViewController else { return }
+        guard !(topController is AppUpdateViewController) else { return }
+        
+        let viewModel = AppUpdateViewModel(versionInformation: versionInformation)
+        let updateController = AppUpdateViewController(viewModel: viewModel)
+        updateController.delegate = self
+        
+        topController.present(updateController, animated: true)
+    }
+    
+    private func showConfigUpdateFailed(retryHandler: @escaping () -> Void) {
+        guard let topController = topViewController else { return }
+        
+        let alert = UIAlertController(title: .launchConfigAlertTitle, message: .launchConfigAlertMessage, preferredStyle: .alert)
+        
+        alert.addAction(.init(title: .tryAgain, style: .default) { _ in
+            retryHandler()
+        })
+        
+        topController.present(alert, animated: true)
+    }
+
+}
+
+extension AppCoordinator: LaunchCoordinatorDelegate {
+    
+    func launchCoordinator(_ coordinator: LaunchCoordinator, needsConfigurationUpdate completion: @escaping () -> Void) {
+        updateConfiguration(completionHandler: completion)
+    }
+    
+    func launchCoordinatorDidFinish(_ coordinator: LaunchCoordinator) {
+        removeChildCoordinator(coordinator)
         
         if Services.onboardingManager.needsOnboarding {
             let onboardingCoordinator = OnboardingCoordinator(window: window)
@@ -40,45 +177,6 @@ final class AppCoordinator: Coordinator {
         }
     }
     
-    private var isUpdatingConfiguration = false
-    
-    func updateConfiguration() {
-        guard !isUpdatingConfiguration else { return }
-        
-        isUpdatingConfiguration = true
-        
-        Services.configManager.update { [unowned self] updateState, _ in
-            switch updateState {
-            case .updateRequired(let versionInformation):
-                showRequiredUpdate(with: versionInformation)
-            case .noActionNeeded:
-                break
-            }
-            
-            isUpdatingConfiguration = false
-        }
-    }
-    
-    func refreshCaseDataIfNeeded() {
-        Services.caseManager.loadCaseData(userInitiated: false) { _, _ in }
-    }
-    
-    private func showRequiredUpdate(with versionInformation: AppVersionInformation) {
-        guard var topController = window.rootViewController else { return }
-
-        while let newTopController = topController.presentedViewController {
-            topController = newTopController
-        }
-        
-        guard !(topController is AppUpdateViewController) else { return }
-        
-        let viewModel = AppUpdateViewModel(versionInformation: versionInformation)
-        let updateController = AppUpdateViewController(viewModel: viewModel)
-        updateController.delegate = self
-        
-        topController.present(updateController, animated: true)
-    }
-
 }
 
 extension AppCoordinator: OnboardingCoordinatorDelegate {
@@ -86,7 +184,7 @@ extension AppCoordinator: OnboardingCoordinatorDelegate {
     func onboardingCoordinatorDidFinish(_ coordinator: OnboardingCoordinator) {
         removeChildCoordinator(coordinator)
         
-        startChildCoordinator(TaskOverviewCoordinator(window: window, delegate: self))
+        startChildCoordinator(TaskOverviewCoordinator(window: window, delegate: self, useFlipTransition: true))
     }
     
 }
@@ -102,13 +200,8 @@ extension AppCoordinator: AppUpdateViewControllerDelegate {
 extension AppCoordinator: TaskOverviewCoordinatorDelegate {
     
     func taskOverviewCoordinatorDidRequestReset(_ coordinator: TaskOverviewCoordinator) {
-    
-        Services.pairingManager.unpair()
-        try? Services.caseManager.removeCaseData()
-        Services.onboardingManager.reset()
-        
+        resetData()
         removeChildCoordinator(coordinator)
-        
         start()
     }
     

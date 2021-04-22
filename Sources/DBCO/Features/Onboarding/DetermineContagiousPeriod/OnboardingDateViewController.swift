@@ -21,21 +21,48 @@ extension UIDatePicker: DatePicking {}
 class OnboardingDateViewModel {
     let title: String
     let subtitle: String
-    let primaryButtonTitle: String
-    let secondaryButtonTitle: String?
     let date: Date?
+    let actions: [OnboardingDateViewController.Action]
     
-    init(title: String, subtitle: String, primaryButtonTitle: String, secondaryButtonTitle: String?, date: Date?) {
+    init(title: String, subtitle: String, date: Date?, actions: [OnboardingDateViewController.Action]) {
         self.title = title
         self.subtitle = subtitle
-        self.primaryButtonTitle = primaryButtonTitle
-        self.secondaryButtonTitle = secondaryButtonTitle
         self.date = date
+        self.actions = actions
     }
 }
 
-class OnboardingDateViewController: ViewController {
+/// [ViewController](x-source-tag://ViewController) showing a title, message and `UIDatePicker` along with a set of buttons linked to actions.
+/// Similar to how UIAlertController works, but tapping a button (action) won't dismiss (or pop) the `OnboardingDateViewController`.
+///
+/// - Tag: OnboardingDateViewController
+class OnboardingDateViewController: ViewController, ScrollViewNavivationbarAdjusting {
+    
+    let shortTitle: String = ""
+    
+    struct Action {
+        let type: Button.ButtonType
+        let title: String
+        let action: (Date) -> Void
+        
+        init(type: Button.ButtonType, title: String, action: @escaping (Date) -> Void) {
+            self.type = type
+            self.title = title
+            self.action = action
+        }
+        
+        init(type: Button.ButtonType, title: String, target: AnyObject, action: Selector) {
+            self.type = type
+            self.title = title
+            self.action = { [weak target] date in
+                _ = target?.perform(action, with: date)
+            }
+        }
+    }
+    
     private let viewModel: OnboardingDateViewModel
+    private let scrollView = UIScrollView()
+    
     fileprivate let datePicker: DatePicking = {
         if #available(iOS 14, *) {
             let datePicker = UIDatePicker(frame: CGRect(x: 0, y: 0, width: 280, height: 100))
@@ -64,88 +91,68 @@ class OnboardingDateViewController: ViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
         
-        let primaryButton = Button(title: viewModel.primaryButtonTitle, style: .primary)
-            .touchUpInside(self, action: #selector(handlePrimaryButton))
-        let secondaryButton = Button(title: viewModel.secondaryButtonTitle ?? "", style: .secondary)
-            .touchUpInside(self, action: #selector(handleSecondaryButton))
+        // ScrollView
+        scrollView.embed(in: view)
+        scrollView.delegate = self
         
-        secondaryButton.isHidden = viewModel.secondaryButtonTitle == nil
+        let widthProviderView = UIView()
+        widthProviderView.snap(to: .top, of: scrollView, height: 0)
+        widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
         datePicker.maximumDate = Date()
         datePicker.minimumDate = Calendar.current.date(byAdding: .month, value: -3, to: Date())
         datePicker.setDate(viewModel.date ?? Date(), animated: false)
         
-        VStack(VStack(spacing: 16,
-                      Label(title2: viewModel.title).multiline(),
-                      Label(body: viewModel.subtitle, textColor: Theme.colors.captionGray).multiline()),
-               datePicker,
-               VStack(spacing: 16,
-                      secondaryButton,
-                      primaryButton))
+        setupStackView()
+    }
+    
+    private func createButtons() -> UIView {
+        func createButton(for action: Action) -> Button {
+            return Button(title: action.title, style: action.type)
+                .touchUpInside(self, action: #selector(handleButton))
+        }
+        
+        return VStack(spacing: 16, viewModel.actions.map(createButton))
+    }
+    
+    private func setupStackView() {
+        let topMargin: CGFloat = UIScreen.main.bounds.height < 600 ? 0 : 32
+        let margin: UIEdgeInsets = .top(topMargin) + .bottom(16)
+        
+        let stack =
+            VStack(VStack(spacing: 16,
+                          UILabel(title2: viewModel.title).multiline(),
+                          TextView(htmlText: viewModel.subtitle)),
+                   datePicker,
+                   createButtons())
             .distribution(.equalSpacing)
-            .wrappedInReadableWidth()
-            .embed(in: view.safeAreaLayoutGuide, insets: .top(32) + .bottom(16))
-    }
-    
-    @objc fileprivate func handlePrimaryButton() {}
-    
-    @objc fileprivate func handleSecondaryButton() {}
-    
-}
-
-protocol SelectTestDateViewControllerDelegate: class {
-    func selectTestDateViewController(_ controller: SelectTestDateViewController, didSelect date: Date)
-}
-
-class SelectTestDateViewController: OnboardingDateViewController {
-    weak var delegate: SelectTestDateViewControllerDelegate?
-    
-    init() {
-        super.init(viewModel: OnboardingDateViewModel(title: .contagiousPeriodSelectTestDateTitle,
-                                                      subtitle: .contagiousPeriodSelectTestDateMessage,
-                                                      primaryButtonTitle: .next,
-                                                      secondaryButtonTitle: nil,
-                                                      date: Services.onboardingManager.contagiousPeriod.testDate))
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    fileprivate override func handlePrimaryButton() {
-        delegate?.selectTestDateViewController(self, didSelect: datePicker.date)
-    }
-}
-
-protocol SelectSymptomOnsetDateViewControllerDelegate: class {
-    func selectSymptomOnsetDateViewController(_ controller: SelectSymptomOnsetDateViewController, didSelect date: Date)
-    func selectSymptomOnsetDateViewControllerWantsHelp(_ controller: SelectSymptomOnsetDateViewController)
-}
-
-class SelectSymptomOnsetDateViewController: OnboardingDateViewController {
-    weak var delegate: SelectSymptomOnsetDateViewControllerDelegate?
-    
-    init() {
-        super.init(viewModel: OnboardingDateViewModel(title: .contagiousPeriodSelectOnsetDateTitle,
-                                                      subtitle: .contagiousPeriodSelectOnsetDateMessage,
-                                                      primaryButtonTitle: .next,
-                                                      secondaryButtonTitle: nil,
-                                                      date: Services.onboardingManager.contagiousPeriod.symptomOnsetDate))
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    fileprivate override func handlePrimaryButton() {
-        delegate?.selectSymptomOnsetDateViewController(self, didSelect: datePicker.date)
-    }
-    
-    fileprivate override func handleSecondaryButton() {
-        delegate?.selectSymptomOnsetDateViewControllerWantsHelp(self)
+            .embed(in: scrollView.readableWidth, insets: margin)
+        stack.heightAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.heightAnchor,
+                                      multiplier: 1,
+                                      constant: -(margin.top + margin.bottom)).isActive = true
+        
+        let preferredHeightConstraint = stack.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor,
+                                                                      multiplier: 1,
+                                                                      constant: -(margin.top + margin.bottom))
+        preferredHeightConstraint.priority = UILayoutPriority(250)
+        preferredHeightConstraint.isActive = true
     }
     
     func selectDate(_ date: Date) {
         datePicker.setDate(date, animated: true)
     }
+    
+    @objc private func handleButton(_ sender: Button) {
+        let action = viewModel.actions.first { $0.title == sender.title }
+        action?.action(datePicker.date)
+    }
+    
+}
+
+extension OnboardingDateViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        adjustNavigationBar(for: scrollView)
+    }
+    
 }

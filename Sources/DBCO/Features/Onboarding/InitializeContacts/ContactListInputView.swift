@@ -10,10 +10,14 @@ import Contacts
 
 protocol ContactListInputViewDelegate: class {
     func contactListInputView(_ view: ContactListInputView, didBeginEditingIn textField: UITextField)
+    func contactListInputView(_ view: ContactListInputView, didEndEditingIn textField: UITextField)
     func viewForPresentingSuggestionsFromContactListInputView(_ view: ContactListInputView) -> UIView
     func contactsAvailableForSuggestionInContactListInputView(_ view: ContactListInputView) -> [CNContact]
 }
 
+/// An auto expanding list of names. When the app has permission to acces Contacts, tappable suggestions will be shown on the view provided by the delegate.
+///
+/// - Tag: ContactListInputView
 class ContactListInputView: UIView {
     struct Contact {
         var name: String
@@ -36,7 +40,7 @@ class ContactListInputView: UIView {
     private var activeSuggestions: [CNContact] = [] {
         didSet { updateSuggestionView() }
     }
-    private var suggestionPresenter: UIView?
+    private weak var suggestionPresenter: UIView?
     
     private var suggestionContainerView: UIView!
     private var suggestedNamesStackView: UIStackView!
@@ -129,6 +133,8 @@ class ContactListInputView: UIView {
         if sender.text?.isEmpty == true, !isLastField {
             sender.removeFromSuperview()
         }
+        
+        delegate?.contactListInputView(self, didEndEditingIn: sender)
     }
     
     private func updateSuggestionView() {
@@ -164,6 +170,10 @@ class ContactListInputView: UIView {
         activeField?.text = sender.contact.fullName
         activeField?.acceptedSuggestedContactIdentifier = sender.contact.identifier
         activeField?.endEditing(false)
+    }
+    
+    func hideSuggestions() {
+        suggestionContainerView.removeFromSuperview()
     }
     
     private class SuggestionButton: UIButton {

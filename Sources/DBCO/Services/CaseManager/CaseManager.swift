@@ -22,6 +22,8 @@ enum CaseManagingError: Error {
 ///
 /// # See also:
 /// [Task](x-source-tag://Task),
+/// [AppData](x-source-tag://AppData),
+/// [CaseManager](x-source-tag://CaseManager),
 /// [Questionnaire](x-source-tag://Questionnaire)
 ///
 /// - Tag: CaseManaging
@@ -29,19 +31,29 @@ protocol CaseManaging {
     
     init()
     
+    var dataModificationDate: Date? { get }
+    
     var hasCaseData: Bool { get }
     
     /// Indicates that alls the tasks are uploaded to the backend in their current state
     var isSynced: Bool { get }
     
+    /// Indicates that an upload occured at least once
+    var hasSynced: Bool { get }
+    
     /// Indicates that tasks can no longer be uploaded to the backedn
     var isWindowExpired: Bool { get }
     
-    var dateOfSymptomOnset: Date { get }
-    var tasks: [Task] { get }
+    var dateOfSymptomOnset: Date? { get }
+    var dateOfTest: Date? { get }
+    var startOfContagiousPeriod: Date? { get }
+    var symptomsKnown: Bool { get }
     
-    /// Returns the tasks as fetched by the portal without modifications by the index
-    var portalTasks: [Task] { get }
+    var reference: String? { get }
+    
+    var symptoms: [String] { get }
+    
+    var tasks: [Task] { get }
     
     /// Returns the [Questionnaire](x-source-tag://Questionnaire) associated with a task type.
     /// Throws an `notPaired` error when called befored paired.
@@ -50,7 +62,8 @@ protocol CaseManaging {
     
     func loadCaseData(userInitiated: Bool, completion: @escaping (_ success: Bool, _ error: CaseManagingError?) -> Void)
     
-    func startLocalCase(dateOfSymptomOnset: Date) throws
+    func startLocalCaseIfNeeded(dateOfSymptomOnset: Date)
+    func startLocalCaseIfNeeded(dateOfTest: Date)
     
     /// Clears all stored data. Using any method or property except for `hasCaseData` on CaseManager before pairing and loading the data again is an invalid operation.
     /// Throws an `notPaired` error when called befored paired.
@@ -65,6 +78,8 @@ protocol CaseManaging {
     func save(_ task: Task) throws
     
     func addContactTask(name: String, category: Task.Contact.Category, contactIdentifier: String?, dateOfLastExposure: Date?)
+    
+    func setSymptoms(symptoms: [String])
     
     /// Uploads all the tasks to the backend.
     /// Throws an `notPaired` error when called befored paired.
@@ -103,21 +118,20 @@ final class CaseManager: CaseManaging, Logging {
     @Keychain(name: "appData", service: Constants.keychainService, clearOnReinstall: true)
     private var appData: AppData = .empty // swiftlint:disable:this let_var_whitespace
     
-    @UserDefaults(key: "isSynced")
-    private(set) var isSynced: Bool = true { // swiftlint:disable:this let_var_whitespace
-        didSet {
-            listeners.forEach { $0.listener?.caseManagerDidUpdateSyncState(self) }
-        }
+    var dataModificationDate: Date? {
+        return $appData.modificationDate
     }
+    
+    var isSynced: Bool {
+        return tasks.allSatisfy(\.isSyncedWithPortal)
+    }
+
+    @UserDefaults(key: "CaseManager.appData")
+    private(set) var hasSynced: Bool = false // swiftlint:disable:this let_var_whitespace
     
     private(set) var tasks: [Task] {
         get { appData.tasks }
         set { appData.tasks = newValue }
-    }
-    
-    private(set) var portalTasks: [Task] {
-        get { appData.portalTasks }
-        set { appData.portalTasks = newValue }
     }
     
     private var questionnaires: [Questionnaire] {
@@ -125,9 +139,40 @@ final class CaseManager: CaseManaging, Logging {
         set { appData.questionnaires = newValue }
     }
     
-    private(set) var dateOfSymptomOnset: Date {
+    private(set) var dateOfSymptomOnset: Date? {
         get { appData.dateOfSymptomOnset }
         set { appData.dateOfSymptomOnset = newValue }
+    }
+    
+    private(set) var dateOfTest: Date? {
+        get { appData.dateOfTest }
+        set { appData.dateOfTest = newValue }
+    }
+    
+    private(set) var reference: String? {
+        get { appData.reference }
+        set { appData.reference = newValue }
+    }
+    
+    var startOfContagiousPeriod: Date? {
+        switch (dateOfTest, dateOfSymptomOnset) {
+        case (_, .some(let dateOfSymptomOnset)):
+            return dateOfSymptomOnset.dateByAddingDays(-2)
+        case (.some(let dateOfTest), _):
+            return dateOfTest
+        default:
+            return nil
+        }
+    }
+    
+    private(set) var symptomsKnown: Bool {
+        get { appData.symptomsKnown }
+        set { appData.symptomsKnown = newValue }
+    }
+    
+    private(set) var symptoms: [String] {
+        get { appData.symptoms }
+        set { appData.symptoms = newValue }
     }
     
     private(set) var windowExpiresAt: Date {
@@ -172,75 +217,32 @@ final class CaseManager: CaseManaging, Logging {
     }
     
     func loadCaseData(userInitiated: Bool, completion: @escaping (Bool, CaseManagingError?) -> Void) {
-        func loadTasksIfNeeded() {
-            guard shouldLoadTasks(userInitiated: userInitiated) else {
-                logDebug("No task loading needed. Skipping.")
-                return loadQuestionnairesIfNeeded()
-            }
-            
-            do {
-                let previousFetchDate = fetchDate
-                fetchDate = Date() // Set the fetchdate here to prevent multiple request
-                
-                let identifier = try Services.pairingManager.caseToken()
-                Services.networkManager.getCase(identifier: identifier) {
-                    switch $0 {
-                    case .success(let result):
-                        self.setTasks(result.tasks)
-                        self.dateOfSymptomOnset = result.dateOfSymptomOnset
-                        self.windowExpiresAt = result.windowExpiresAt
-                        
-                        self.fetchDate = Date() // Set the fetchdate here again to the actual date
-            
-                        loadQuestionnairesIfNeeded()
-                        
-                        self.listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
-                    case .failure(let error):
-                        self.fetchDate = previousFetchDate // Reset the fetchdate since no data was fetched
-                        
-                        completion(false, .couldNotLoadTasks(error))
-                    }
-                }
-            } catch {
-                return completion(false, .noCaseData)
-            }
-        }
-        
-        func loadQuestionnairesIfNeeded() {
-            guard shouldLoadQuestionnaires else {
-                logDebug("No questionnaire loading needed. Skipping.")
-                return finish()
-            }
-            
-            Services.networkManager.getQuestionnaires {
-                switch $0 {
-                case .success(let questionnaires):
-                    self.setQuestionnaires(questionnaires)
-                    
-                    finish()
-                case .failure(let error):
-                    completion(false, .couldNotLoadQuestionnaires(error))
-                }
-            }
-        }
-        
-        func finish() {
-            completion(true, nil)
-        }
-        
-        loadTasksIfNeeded()
+        loadTasksIfNeeded(userInitiated: userInitiated, completion: completion)
     }
     
-    func startLocalCase(dateOfSymptomOnset: Date) throws {
-        guard !hasCaseData else { throw CaseManagingError.alreadyHaseCase }
-        
+    private func reinterpretAsGMT0(_ date: Date) -> Date {
         // During onboarding date calculations are in the user's current timezone.
         // We need to reinterpret them as being in GMT+00
         let offset = TimeInterval(TimeZone.current.secondsFromGMT())
-        self.dateOfSymptomOnset = dateOfSymptomOnset.addingTimeInterval(offset)
+        return date.addingTimeInterval(offset)
+    }
+    
+    func startLocalCaseIfNeeded(dateOfSymptomOnset: Date) {
+        if !hasCaseData {
+            windowExpiresAt = .distantFuture
+        }
         
-        windowExpiresAt = .distantFuture
-        isSynced = false
+        self.dateOfSymptomOnset = reinterpretAsGMT0(dateOfSymptomOnset)
+        appData.symptomsKnown = true
+    }
+    
+    func startLocalCaseIfNeeded(dateOfTest: Date) {
+        if !hasCaseData {
+            windowExpiresAt = .distantFuture
+        }
+        
+        self.dateOfTest = reinterpretAsGMT0(dateOfTest)
+        appData.symptomsKnown = true
     }
     
     func removeCaseData() throws {
@@ -273,35 +275,16 @@ final class CaseManager: CaseManaging, Logging {
                     .map { $0.offset }
                 
                 for index in classificationIndices {
-                    let question = questions[index]
-                    questions[index] = Question(uuid: question.uuid,
-                                                group: question.group,
-                                                questionType: question.questionType,
-                                                label: question.label,
-                                                description: question.description,
-                                                relevantForCategories: question.relevantForCategories,
-                                                answerOptions: question.answerOptions,
-                                                disabledForSources: [.portal])
+                    questions[index] = questions[index].disabledForPortal
                 }
                 
                 // Insert a .lastExposureDate question
-                let lastExposureQuestion = Question(uuid: UUID(),
-                                                    group: .contactDetails,
-                                                    questionType: .lastExposureDate,
-                                                    label: .contactInformationLastExposure,
-                                                    description: nil,
-                                                    relevantForCategories: [.category1, .category2a, .category2b, .category3a, .category3b],
-                                                    answerOptions: nil,
-                                                    disabledForSources: [.portal])
+                let lastExposureQuestion = Question.lastExposureDateQuestion
                 
-                // Find the index of the question modifying the communication type. (Via triggers)
-                let communicationQuestionIndex = questionnaire.questions
-                    .firstIndex { $0.answerOptions?.contains { $0.trigger == .setCommunicationToIndex } == true }
-                
-                if let index = communicationQuestionIndex {
-                    questions.insert(lastExposureQuestion, at: index)
-                } else {
+                if questions.isEmpty { // Just to be safe
                     questions.append(lastExposureQuestion)
+                } else {
+                    questions.insert(lastExposureQuestion, at: 0)
                 }
                 
                 return Questionnaire(uuid: questionnaire.uuid,
@@ -317,8 +300,6 @@ final class CaseManager: CaseManaging, Logging {
     ///
     /// Updates existing tasks if the user has not yet started them and adds any new tasks
     private func setTasks(_ fetchedTasks: [Task]) {
-        portalTasks = fetchedTasks.filter { $0.source == .portal }
-        
         guard !tasks.isEmpty else {
             tasks = fetchedTasks
             return
@@ -327,7 +308,18 @@ final class CaseManager: CaseManaging, Logging {
         fetchedTasks.forEach { task in
             if let existingTaskIndex = tasks.firstIndex(where: { $0.uuid == task.uuid }) {
                 if tasks[existingTaskIndex].questionnaireResult == nil {
+                    // Not modified by the user yet, so we can just replace it entirely
                     tasks[existingTaskIndex] = task
+                } else {
+                    switch tasks[existingTaskIndex].taskType {
+                    case .contact:
+                        // Update only the communication type
+                        let existingContact = tasks[existingTaskIndex].contact!
+                        tasks[existingTaskIndex].contact = Task.Contact(category: existingContact.category,
+                                                                        communication: task.contact.communication,
+                                                                        informedByIndexAt: existingContact.informedByIndexAt,
+                                                                        dateOfLastExposure: existingContact.dateOfLastExposure)
+                    }
                 }
             } else {
                 tasks.append(task)
@@ -368,19 +360,8 @@ final class CaseManager: CaseManaging, Logging {
         return questionnaire
     }
     
-    func save(_ task: Task) throws {
-        guard hasCaseData else { throw CaseManagingError.noCaseData }
-        
-        func storeNewTask() -> Int {
-            tasks.append(task)
-            return tasks.count - 1
-        }
-        
-        let index = tasks.lastIndex { $0.uuid == task.uuid } ?? storeNewTask()
-        
-        let questionnaire = try self.questionnaire(for: task.taskType)
-        
-        let currentAnswers = tasks[index].questionnaireResult?.answers ?? []
+    private func questionnaireResult(for task: Task, currentTask: Task, questionnaire: Questionnaire) -> QuestionnaireResult {
+        let currentAnswers = currentTask.questionnaireResult?.answers ?? []
         let newAnswers = task.questionnaireResult?.answers ?? []
         
         // Ensure we have (empty) answers for all necessary questions
@@ -407,36 +388,47 @@ final class CaseManager: CaseManaging, Logging {
             .filter { $0.relevantForCategories.contains(task.contact.category) }
             .map(answerForQuestion)
         
+        return QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: answers)
+    }
+    
+    func save(_ task: Task) throws {
+        guard hasCaseData else { throw CaseManagingError.noCaseData }
+        
+        let wasSynced = isSynced
+        let questionnaire = try self.questionnaire(for: task.taskType)
+        
+        func storeNewTask() -> Int {
+            tasks.append(task)
+            return tasks.count - 1
+        }
+        
+        let index = tasks.lastIndex { $0.uuid == task.uuid } ?? storeNewTask()
+        
         var updatedTask = tasks[index]
         
         // Update task results
-        updatedTask.questionnaireResult = QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: answers)
+        updatedTask.questionnaireResult = questionnaireResult(for: task, currentTask: tasks[index], questionnaire: questionnaire)
         
         // Update task type content
         switch updatedTask.taskType {
         case .contact:
             updatedTask.contact = task.contact
-            
-            // Fallback to .index for communication if currently .none
-            if let contact = updatedTask.contact, contact.communication == .none {
-                updatedTask.contact = Task.Contact(category: contact.category,
-                                                   communication: .index,
-                                                   informedByIndexAt: contact.informedByIndexAt,
-                                                   dateOfLastExposure: contact.dateOfLastExposure)
-            }
         }
         
         // Update deletion
-        if task.deletedByIndex {
-            updatedTask.deletedByIndex = true
+        updatedTask.deletedByIndex = updatedTask.deletedByIndex || task.deletedByIndex
+    
+        // Update task if needed and set sync state
+        if tasks[index] != updatedTask {
+            tasks[index] = updatedTask
+            tasks[index].isSyncedWithPortal = false
         }
         
-        // If the data was synced and the updatedTask is the same as the current task, data is still synced
-        isSynced = isSynced && tasks[index] == updatedTask
-        
-        tasks[index] = updatedTask
-        
         listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
+        
+        if wasSynced != isSynced {
+            listeners.forEach { $0.listener?.caseManagerDidUpdateSyncState(self) }
+        }
     }
     
     private static let valueDateFormatter: DateFormatter = {
@@ -452,13 +444,17 @@ final class CaseManager: CaseManaging, Logging {
     func addContactTask(name: String, category: Task.Contact.Category, contactIdentifier: String?, dateOfLastExposure: Date?) {
         var task = Task(type: .contact, label: name, source: .app)
         task.contact = Task.Contact(category: category,
-                                    communication: .none,
+                                    communication: .unknown,
                                     informedByIndexAt: nil,
                                     dateOfLastExposure: dateOfLastExposure.map(Self.valueDateFormatter.string),
                                     contactIdentifier: contactIdentifier)
         tasks.append(task)
         
         listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
+    }
+    
+    func setSymptoms(symptoms: [String]) {
+        self.symptoms = symptoms
     }
     
     func addListener(_ listener: CaseManagerListener) {
@@ -472,27 +468,118 @@ final class CaseManager: CaseManaging, Logging {
         }
     }
     
+    private func markAllTasksAsSynced() {
+        for index in 0 ..< tasks.count {
+            tasks[index].isSyncedWithPortal = true
+        }
+        
+        listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
+    }
+    
     func sync(completionHandler: ((Bool) -> Void)?) throws {
         guard hasCaseData else { throw CaseManagingError.noCaseData }
         guard !isWindowExpired else { throw CaseManagingError.windowExpired }
         
+        let identifier: String
+        
         do {
-            let value = Case(dateOfSymptomOnset: dateOfSymptomOnset, windowExpiresAt: windowExpiresAt, tasks: tasks)
-            let identifier = try Services.pairingManager.caseToken()
-            Services.networkManager.putCase(identifier: identifier, value: value) {
-                switch $0 {
-                case .success:
-                    self.isSynced = true
-                    completionHandler?(true)
-                case .failure(let error):
-                    self.logError("Could not sync case: \(error)")
-                    completionHandler?(false)
-                }
-            }
-        } catch {
+            identifier = try Services.pairingManager.caseToken()
+        } catch let error {
             completionHandler?(false)
-            return
+            throw error
+        }
+        
+        Services.networkManager.putCase(identifier: identifier, value: appData.asCase) {
+            switch $0 {
+            case .success:
+                self.markAllTasksAsSynced()
+                self.hasSynced = true
+                completionHandler?(true)
+            case .failure(let error):
+                self.logError("Could not sync case: \(error)")
+                completionHandler?(false)
+            }
         }
     }
     
+}
+
+// MARK: - Loading
+extension CaseManager {
+    private func loadTasksIfNeeded(userInitiated: Bool, completion: @escaping (Bool, CaseManagingError?) -> Void) {
+        guard shouldLoadTasks(userInitiated: userInitiated) else {
+            logDebug("No task loading needed. Skipping.")
+            return loadQuestionnairesIfNeeded(completion: completion)
+        }
+        
+        guard let identifier = try? Services.pairingManager.caseToken() else {
+            return completion(false, .noCaseData)
+        }
+        
+        let previousFetchDate = fetchDate
+        fetchDate = Date() // Set the fetchdate here to prevent multiple request
+        
+        Services.networkManager.getCase(identifier: identifier) {
+            switch $0 {
+            case .success(let result):
+                self.handleCaseResult(result, completion: completion)
+            case .failure(let error):
+                self.fetchDate = previousFetchDate // Reset the fetchdate since no data was fetched
+                
+                completion(false, .couldNotLoadTasks(error))
+            }
+        }
+    }
+    
+    private func handleCaseResult(_ result: Case, completion: @escaping (Bool, CaseManagingError?) -> Void) {
+        setTasks(result.tasks)
+        appData.update(with: result)
+        fetchDate = Date() // Set the fetchdate here again to the actual date
+
+        loadQuestionnairesIfNeeded(completion: completion)
+        
+        listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }
+    }
+    
+    private func loadQuestionnairesIfNeeded(completion: @escaping (Bool, CaseManagingError?) -> Void) {
+        guard shouldLoadQuestionnaires else {
+            logDebug("No questionnaire loading needed. Skipping.")
+            return completion(true, nil)
+        }
+        
+        Services.networkManager.getQuestionnaires {
+            switch $0 {
+            case .success(let questionnaires):
+                self.setQuestionnaires(questionnaires)
+                
+                completion(true, nil)
+            case .failure(let error):
+                completion(false, .couldNotLoadQuestionnaires(error))
+            }
+        }
+    }
+}
+
+private extension Question {
+    static var lastExposureDateQuestion: Question {
+        return Question(uuid: UUID(),
+                        group: .classification,
+                        questionType: .lastExposureDate,
+                        label: .contactInformationLastExposure,
+                        description: nil,
+                        relevantForCategories: [.category1, .category2a, .category2b, .category3a, .category3b, .other],
+                        answerOptions: nil,
+                        disabledForSources: [.portal])
+    }
+    
+    var disabledForPortal: Question {
+        return Question(uuid: uuid,
+                        group: group,
+                        questionType: questionType,
+                        label: label,
+                        description: description,
+                        relevantForCategories: relevantForCategories,
+                        answerOptions: answerOptions,
+                        disabledForSources: [.portal])
+    }
 }

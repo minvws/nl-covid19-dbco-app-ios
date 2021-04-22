@@ -34,6 +34,12 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         fatalError("init(coder:) has not been implemented")
     }
     
+    override var isEmphasized: Bool {
+        didSet {
+            label.font = isEmphasized ? Theme.fonts.bodyBold : Theme.fonts.subhead
+        }
+    }
+    
     private func setup() {
         delegate = self
         
@@ -63,9 +69,10 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         addTarget(self, action: #selector(handleEditingDidBegin), for: .editingDidBegin)
         
         label.text = object?[keyPath: path].label
-        label.font = object?[keyPath: path].labelFont
-        placeholder = object?[keyPath: path].placeholder
+        label.isAccessibilityElement = false
         
+        accessibilityLabel = label.text
+        placeholder = object?[keyPath: path].placeholder
         text = object?[keyPath: path].value
         
         configureInputType()
@@ -75,9 +82,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         inputAccessoryView = nil
         inputView = nil
         
-        guard let object = object else {
-            return
-        }
+        guard let object = object else { return }
 
         switch object[keyPath: path].inputType {
         case .text:
@@ -88,55 +93,66 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
             keyboardType = .numberPad
             inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
         case .date(let dateFormatter):
-            let datePicker = UIDatePicker()
-            
-            if let text = text, let date = dateFormatter.date(from: text) {
-                datePicker.date = date
-            } else {
-                datePicker.date = DateComponents(calendar: Calendar.current,
-                                                 timeZone: TimeZone.current,
-                                                 year: 1980,
-                                                 month: 1,
-                                                 day: 1).date ?? Date()
-            }
-            
-            datePicker.datePickerMode = .date
-            datePicker.tintColor = .black
-            datePicker.maximumDate = Date()
-            datePicker.minimumDate = Calendar.current.date(byAdding: .year, value: -120, to: Date())
-            datePicker.addTarget(self, action: #selector(handleDateValueChanged), for: .valueChanged)
-            
-            if #available(iOS 13.4, *) {
-                datePicker.preferredDatePickerStyle = .wheels
-            }
-            
-            self.datePicker = datePicker
-            
-            inputView = datePicker
-            inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
-            tintColor = .clear
+            setupAsDatePicker(with: dateFormatter)
         case .picker(let options):
-            pickerOptions = [("", "")] + options
-
-            let picker = UIPickerView()
-            picker.dataSource = self
-            picker.delegate = self
-            
-            let selectedIdentifier = object[keyPath: path].value
-
-            pickerOptions?
-                .firstIndex { $0.identifier == selectedIdentifier }
-                .map { picker.selectRow($0, inComponent: 0, animated: false) }
-            
-            text = pickerOptions?.first { $0.identifier == selectedIdentifier }?.value
-
-            inputView = picker
-            inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
-            tintColor = .clear
-            optionPicker = picker
-            
-            dropdownIconView.isHidden = false
+            setupAsPicker(with: options)
         }
+    }
+    
+    private func setupAsDatePicker(with dateFormatter: DateFormatter) {
+        let datePicker = UIDatePicker()
+        
+        if let text = text, let date = dateFormatter.date(from: text) {
+            datePicker.date = date
+        } else {
+            datePicker.date = DateComponents(calendar: Calendar.current,
+                                             timeZone: TimeZone.current,
+                                             year: 1980,
+                                             month: 1,
+                                             day: 1).date ?? Date()
+        }
+        
+        datePicker.datePickerMode = .date
+        datePicker.tintColor = .black
+        datePicker.maximumDate = Date()
+        datePicker.minimumDate = Calendar.current.date(byAdding: .year, value: -120, to: Date())
+        datePicker.addTarget(self, action: #selector(handleDateValueChanged), for: .valueChanged)
+        
+        if #available(iOS 13.4, *) {
+            datePicker.preferredDatePickerStyle = .wheels
+        }
+        
+        self.datePicker = datePicker
+        
+        inputView = datePicker
+        inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
+        tintColor = .clear
+    }
+    
+    private func setupAsPicker(with options: [InputType.PickerOption]) {
+        guard let object = object else { return }
+        
+        pickerOptions = [("", "")] + options
+
+        let picker = UIPickerView()
+        picker.dataSource = self
+        picker.delegate = self
+        
+        let selectedIdentifier = object[keyPath: path].value
+
+        pickerOptions?
+            .firstIndex { $0.identifier == selectedIdentifier }
+            .map { picker.selectRow($0, inComponent: 0, animated: false) }
+        
+        text = pickerOptions?.first { $0.identifier == selectedIdentifier }?.value
+
+        inputView = picker
+        inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
+        tintColor = .clear
+        optionPicker = picker
+        
+        dropdownIconView.isHidden = false
+        accessibilityTraits = [.button, .staticText]
     }
     
     override func layoutSubviews() {
@@ -172,6 +188,12 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         return self
     }
     
+    @discardableResult
+    func emphasized() -> Self {
+        isEmphasized = true
+        return self
+    }
+    
     // MARK: - Private
     
     @objc private func handleEditingDidEnd() {
@@ -189,6 +211,9 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     
     @objc private func handleEditingDidBegin() {
         iconContainerView.isHidden = true
+        hideWarning()
+        hideError()
+        currentValidationTask?.cancel()
     }
     
     @objc private func handleDateValueChanged(_ datePicker: UIDatePicker) {
@@ -209,16 +234,30 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     
     private func updateValidationStateIfNeeded() {
         guard let validator = object?[keyPath: path].validator else { return }
+        currentValidationTask?.cancel()
         
-        switch validator.validate(object?[keyPath: path].value) {
-        case .invalid:
-            iconContainerView.isHidden = false
-            validationIconView.isHighlighted = false
-        case .valid:
-            iconContainerView.isHidden = false
-            validationIconView.isHighlighted = true
-        case .unknown:
-            iconContainerView.isHidden = true
+        currentValidationTask = validator.validate(object?[keyPath: path].value) { [weak self] in
+            guard let self = self else { return }
+            
+            switch $0 {
+            case .invalid(let error) where error?.isEmpty == false:
+                self.showError(error!)
+                self.iconContainerView.isHidden = true
+            case .invalid:
+                self.iconContainerView.isHidden = false
+                self.validationIconView.isHighlighted = false
+            case .warning(let warning) where warning?.isEmpty == false:
+                self.showWarning(warning!)
+                self.iconContainerView.isHidden = true
+            case .warning:
+                self.iconContainerView.isHidden = false
+                self.validationIconView.isHighlighted = false
+            case .valid:
+                self.iconContainerView.isHidden = false
+                self.validationIconView.isHighlighted = true
+            case .unknown:
+                self.iconContainerView.isHidden = true
+            }
         }
     }
     
@@ -230,6 +269,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     private var dropdownIconView = UIImageView()
     private lazy var iconContainerView = UIStackView()
     
+    private var currentValidationTask: ValidationTask?
+    
     // MARK: - Delegate implementations
     
     private var overrideOptionPrompt: Bool = false
@@ -239,6 +280,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         
         switch editable.inputType {
         case .date, .picker:
+            UIAccessibility.post(notification: .screenChanged, argument: inputView)
             return true
         default:
             break
@@ -247,17 +289,16 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         guard let delegate = inputFieldDelegate else { return true }
         
         if let options = editable.valueOptions, options.count > 1, text?.isEmpty == true, !overrideOptionPrompt {
-            delegate.promptOptionsForInputField(options) {
-                if $0 == nil {
+            delegate.promptOptionsForInputField(options) { option in
+                if let option = option {
+                    self.text = option
+                    self.handleEditingDidEnd()
+                } else {
                     self.overrideOptionPrompt = true
                     self.becomeFirstResponder()
                     self.overrideOptionPrompt = false
-                } else {
-                    self.text = $0
-                    self.handleEditingDidEnd()
                 }
             }
-            
             return false
         } else {
             return true
@@ -265,10 +306,18 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let newText: String
         if let text = text {
             let replacementString = string.replacingOccurrences(of: "\n", with: "") // ignoring newlines like the textfield itself does
-            textWidthLabel.text = (text as NSString).replacingCharacters(in: range, with: replacementString) as String
+            newText = (text as NSString).replacingCharacters(in: range, with: replacementString)
+        } else {
+            newText = string
         }
+        
+        // Enforce max length
+        guard newText.count <= Constants.maxLength else { return false }
+        
+        textWidthLabel.text = newText
         
         guard let object = object else { return true }
         
@@ -296,4 +345,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         text = pickerOptions?[row].value
     }
     
+}
+
+private struct Constants {
+    static let maxLength = 255
 }

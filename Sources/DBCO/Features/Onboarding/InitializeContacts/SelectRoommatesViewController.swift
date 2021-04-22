@@ -35,8 +35,19 @@ class SelectRoommatesViewModel {
         return contacts
     }()
     
+    @Bindable private(set) var continueButtonTitle: String = .next
+    
+    func setNumberOfEnteredContacts(_ value: Int) {
+        if value > 0 {
+            continueButtonTitle = .next
+        } else {
+            continueButtonTitle = .determineRoommatesNoContactsButtonTitle
+        }
+    }
+    
 }
 
+/// - Tag: SelectRoommatesViewController
 class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdjusting {
     private let viewModel: SelectRoommatesViewModel
     private let navigationBackgroundView = UIView()
@@ -57,6 +68,10 @@ class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdju
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     override func viewDidLoad() {
@@ -81,13 +96,20 @@ class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdju
                                                contacts: contacts,
                                                delegate: self)
         
+        viewModel.setNumberOfEnteredContacts(contacts.count)
+        
+        let continueButton = Button(title: .next, style: .primary)
+            .touchUpInside(self, action: #selector(handleContinue))
+        
+        viewModel.$continueButtonTitle.binding = { continueButton.setTitle($0, for: .normal) }
+        
         let stack =
             VStack(spacing: 24,
                    VStack(spacing: 16,
-                          Label(title2: .determineRoommatesTitle).multiline(),
-                          Label(body: .determineRoommatesMessage, textColor: Theme.colors.captionGray).multiline()),
+                          UILabel(title2: .determineRoommatesTitle).multiline(),
+                          UILabel(body: .determineRoommatesMessage, textColor: Theme.colors.captionGray).multiline()),
                    contactListView,
-                   Button(title: .next, style: .primary).touchUpInside(self, action: #selector(handleContinue)))
+                   continueButton)
                 .distribution(.fill)
                 .embed(in: scrollView.readableWidth, insets: margin)
         
@@ -96,6 +118,16 @@ class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdju
                                       constant: -(margin.top + margin.bottom)).isActive = true
         
         registerForKeyboardNotifications()
+        
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideSuggestions)))
+    }
+    
+    @objc private func hideSuggestions() {
+        contactListView.hideSuggestions()
+    }
+    
+    private var today: Date {
+        return Date().start
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -103,14 +135,14 @@ class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdju
         
         if isMovingFromParent {
             delegate?.selectRoommatesViewController(self, didCancelWith: contactListView.contacts.map {
-                Onboarding.Contact(date: nil, name: $0.name, contactIdentifier: $0.cnContactIdentifier, isRoommate: true)
+                Onboarding.Contact(date: today, name: $0.name, contactIdentifier: $0.cnContactIdentifier, isRoommate: true)
             })
         }
     }
     
     @objc private func handleContinue() {
         delegate?.selectRoommatesViewController(self, didFinishWith: contactListView.contacts.map {
-            Onboarding.Contact(date: nil, name: $0.name, contactIdentifier: $0.cnContactIdentifier, isRoommate: true)
+            Onboarding.Contact(date: today, name: $0.name, contactIdentifier: $0.cnContactIdentifier, isRoommate: true)
         })
     }
     
@@ -164,7 +196,9 @@ extension SelectRoommatesViewController: ContactListInputViewDelegate {
             let maxOffset = minOffset - visibleHeight + convertedBounds.height + extraMargin.bottom
             let currentOffset = scrollView.contentOffset.y
             
-            if currentOffset > minOffset {
+            if traitCollection.verticalSizeClass == .compact {
+                scrollView.setContentOffset(CGPoint(x: 0, y: minOffset), animated: true)
+            } else if currentOffset > minOffset {
                 scrollView.setContentOffset(CGPoint(x: 0, y: minOffset), animated: true)
             } else if currentOffset < maxOffset {
                 scrollView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
@@ -173,6 +207,10 @@ extension SelectRoommatesViewController: ContactListInputViewDelegate {
         
         // Next runcycle so keyboard size is properly incorporated
         DispatchQueue.main.async(execute: scrollVisible)
+    }
+    
+    func contactListInputView(_ view: ContactListInputView, didEndEditingIn textField: UITextField) {
+        viewModel.setNumberOfEnteredContacts(view.contacts.count)
     }
     
     func viewForPresentingSuggestionsFromContactListInputView(_ view: ContactListInputView) -> UIView {

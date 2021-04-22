@@ -44,19 +44,16 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
         
         statusView.status = task.status
         
-        if let result = task.questionnaireResult,
-           task.contact.communication != .none,
-           result.hasAllEssentialAnswers {
-    
+        if let result = task.questionnaireResult, result.hasAllEssentialAnswers {
             switch task.contact.communication {
             case .staff:
                 subtitleLabel.text = .contactTaskStatusStaffWillInform
-            case .index where task.contact.informedByIndexAt != nil:
+            case .index where task.contact.informedByIndexAt != nil,
+                 .unknown where task.contact.informedByIndexAt != nil:
                 subtitleLabel.text = .contactTaskStatusIndexDidInform
-            case .index:
+            case .index, .unknown:
                 subtitleLabel.text = .contactTaskStatusIndexWillInform
-            default:
-                break
+                subtitleLabel.textColor = Theme.colors.orange
             }
         } else {
             subtitleLabel.text = .contactTaskStatusMissingDetails
@@ -69,7 +66,7 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
         HStack(spacing: 16,
                statusView,
                VStack(spacing: 4, titleLabel, subtitleLabel),
-               ImageView(imageName: "Chevron").asIcon())
+               UIImageView(imageName: "Chevron").asIcon())
             .alignment(.center)
             .embed(in: containerView)
         

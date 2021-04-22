@@ -55,8 +55,7 @@ final class SelectContactCoordinator: Coordinator, Logging {
             if let contactIdentifier = task?.contact.contactIdentifier {
                 let editViewModel = ContactQuestionnaireViewModel(task: task,
                                                                   questionnaire: questionnaire,
-                                                                  contact: findContact(with: contactIdentifier),
-                                                                  showCancelButton: true)
+                                                                  contact: findContact(with: contactIdentifier))
                 let editController = ContactQuestionnaireViewController(viewModel: editViewModel)
                 editController.delegate = self
                 
@@ -105,33 +104,16 @@ final class SelectContactCoordinator: Coordinator, Logging {
     }
     
     private func requestContactsAuthorization() {
-        let viewModel: OnboardingStepViewModel
-        
-        if let name = task?.contactName {
-            viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding4")!,
-                                                title: .selectContactAuthorizationTitle(name: name),
-                                                message: .selectContactAuthorizationMessage,
-                                                primaryButtonTitle: .selectContactAuthorizationAllowButton,
-                                                secondaryButtonTitle: .selectContactAuthorizationManualButton,
-                                                showSecondaryButtonOnTop: true)
-        } else {
-            viewModel = OnboardingStepViewModel(image: UIImage(named: "Onboarding4")!,
-                                                title: .determineContactsAuthorizationTitle,
-                                                message: .determineContactsAuthorizationMessage,
-                                                primaryButtonTitle: .determineContactsAuthorizationAllowButton,
-                                                secondaryButtonTitle: .determineContactsAuthorizationAddManuallyButton,
-                                                showSecondaryButtonOnTop: true)
-        }
-        
-        let stepController = OnboardingStepViewController(viewModel: viewModel)
-        stepController.delegate = self
-        stepController.onDismissed = { [weak self] _ in
+        let viewModel = ContactsAuthorizationViewModel(contactName: task?.contactFirstName, style: .selectContact)
+        let controller = ContactsAuthorizationViewController(viewModel: viewModel)
+        controller.delegate = self
+        controller.onDismissed = { [weak self] _ in
             guard let self = self else { return }
             
             self.callDelegate()
         }
         
-        presenter?.present(stepController, animated: true)
+        presenter?.present(controller, animated: true)
     }
     
     private func continueWithoutAuthorization() {
@@ -163,7 +145,7 @@ final class SelectContactCoordinator: Coordinator, Logging {
     }
     
     private func continueManually() {
-        let editViewModel = ContactQuestionnaireViewModel(task: task, questionnaire: questionnaire, showCancelButton: true)
+        let editViewModel = ContactQuestionnaireViewModel(task: task, questionnaire: questionnaire)
         let editController = ContactQuestionnaireViewController(viewModel: editViewModel)
         editController.delegate = self
         
@@ -185,9 +167,9 @@ final class SelectContactCoordinator: Coordinator, Logging {
     }
 }
 
-extension SelectContactCoordinator: OnboardingStepViewControllerDelegate {
+extension SelectContactCoordinator: ContactsAuthorizationViewControllerDelegate {
     
-    func onboardingStepViewControllerDidSelectPrimaryButton(_ controller: OnboardingStepViewController) {
+    func contactsAuthorizationViewControllerDidSelectAllow(_ controller: ContactsAuthorizationViewController) {
         CNContactStore().requestAccess(for: .contacts) { authorized, error in
             DispatchQueue.main.async {
                 controller.onDismissed = nil
@@ -202,7 +184,7 @@ extension SelectContactCoordinator: OnboardingStepViewControllerDelegate {
         }
     }
     
-    func onboardingStepViewControllerDidSelectSecondaryButton(_ controller: OnboardingStepViewController) {
+    func contactsAuthorizationViewControllerDidSelectManual(_ controller: ContactsAuthorizationViewController) {
         controller.onDismissed = nil
         didSelectManualEntry = true
         controller.dismiss(animated: true) {
@@ -262,7 +244,7 @@ extension SelectContactCoordinator: CNContactPickerDelegate {
     
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
         picker.dismiss(animated: true) {
-            let viewModel = ContactQuestionnaireViewModel(task: self.task, questionnaire: self.questionnaire, contact: contact, showCancelButton: true)
+            let viewModel = ContactQuestionnaireViewModel(task: self.task, questionnaire: self.questionnaire, contact: contact)
             let editController = ContactQuestionnaireViewController(viewModel: viewModel)
             editController.delegate = self
             

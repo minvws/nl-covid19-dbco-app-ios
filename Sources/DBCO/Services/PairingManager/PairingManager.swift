@@ -25,11 +25,17 @@ protocol PairingManagerListener: class {
     func pairingManagerDidFinishPairing(_ pairingManager: PairingManaging)
 }
 
+/// Handles pairing (exchanging keys via libSodium) with the api.
+///
+/// # See also
+/// [Sealed](x-source-tag://Sealed): Used for encrypting and decrypting data after pairing
+///
 /// - Tag: PairingManaging
 protocol PairingManaging {
     init()
     
     var isPaired: Bool { get }
+    var isPollingForPairing: Bool { get }
     
     /// Returns the token used to construct the URL for sending and fetching case data
     /// Throws an `notPaired` error when called befored paired.
@@ -43,14 +49,21 @@ protocol PairingManaging {
     func startPollingForPairing()
     func stopPollingForPairing()
     
+    var canResumePolling: Bool { get }
+    var lastPairingCode: String? { get }
+    var lastPollingError: PairingManagingError? { get }
+    
     /// Adds a listener
-    /// - parameter listener: The object conforming to [PairingManagerrListener](x-source-tag://PairingManagerListener) that will receive updates. Will be stored with a weak reference
+    /// - parameter listener: The object conforming to [PairingManagerListener](x-source-tag://PairingManagerListener) that will receive updates. Will be stored with a weak reference
     func addListener(_ listener: PairingManagerListener)
     
     func seal<T: Encodable>(_ value: T) throws -> (ciperText: String, nonce: String)
     func open<T: Decodable>(cipherText: String, nonce: String) throws -> T
 }
 
+/// # See
+/// [PairingManaging](x-source-tag://PairingManaging)
+/// - Tag: PairingManager
 class PairingManager: PairingManaging, Logging {
     let loggingCategory = "PairingManager"
     
@@ -63,10 +76,6 @@ class PairingManager: PairingManaging, Logging {
     }
     
     private var listeners = [ListenerWrapper]()
-    
-    private var shouldStopPollingForPairing: Bool = false
-    private var isBusyReversePairing: Bool = false
-    private var reversePairingInfo: ReversePairingInfo?
     
     private let sodium = Sodium()
     
@@ -88,10 +97,22 @@ class PairingManager: PairingManaging, Logging {
     private var pairing: Pairing = .empty
     // swiftlint:disable:previous let_var_whitespace
     
-    required init() {}
+    required init() {
+        _ = NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
+            self?.resumePollingIfNeeded()
+        }
+        
+        if let info = self.reversePairingInfo {
+            resumePolling(with: info)
+        }
+    }
     
     var isPaired: Bool {
         return $pairing.exists
+    }
+    
+    var isPollingForPairing: Bool {
+        return isBusyReversePairing
     }
     
     func caseToken() throws -> String {
@@ -130,31 +151,36 @@ class PairingManager: PairingManaging, Logging {
         Services.networkManager.pair(code: pairingCode, sealedClientPublicKey: Data(sealedClientPublicKey)) {
             switch $0 {
             case .success(let pairingResponse):
-                let sealedCaseHAPublicKey = Bytes(pairingResponse.sealedHealthAuthorityPublicKey)
-                
-                guard let caseHAPublicKey = self.sodium.box.open(anonymousCipherText: sealedCaseHAPublicKey,
-                                                                 recipientPublicKey: clientKeyPair.publicKey,
-                                                                 recipientSecretKey: clientKeyPair.secretKey) else {
-                    self.logError("Could not open sealed health authority public key for case")
-                    return completion(false, .couldNotPair(.invalidResponse))
-                }
-            
-                guard let sessionKeyPair = self.sodium.keyExchange.sessionKeyPair(publicKey: clientKeyPair.publicKey, secretKey: clientKeyPair.secretKey, otherPublicKey: caseHAPublicKey, side: .CLIENT) else {
-                    self.logError("Could not create session key pair")
-                    return completion(false, .couldNotPair(.invalidResponse))
-                }
-                
-                self.pairing = Pairing(publicKey: clientKeyPair.publicKey,
-                                       secretKey: clientKeyPair.secretKey,
-                                       rx: sessionKeyPair.rx,
-                                       tx: sessionKeyPair.tx)
-                self.$pairing.clearCache()
-                
-                completion(true, nil)
+                let (succes, error) = self.handlePairResponse(pairingResponse, clientKeyPair: clientKeyPair)
+                completion(succes, error)
             case .failure(let error):
                 completion(false, .couldNotPair(error))
             }
         }
+    }
+    
+    private func handlePairResponse(_ response: PairResponse, clientKeyPair: KeyExchange.KeyPair) -> (Bool, PairingManagingError?) {
+        let sealedCaseHAPublicKey = Bytes(response.sealedHealthAuthorityPublicKey)
+        
+        guard let caseHAPublicKey = sodium.box.open(anonymousCipherText: sealedCaseHAPublicKey,
+                                                    recipientPublicKey: clientKeyPair.publicKey,
+                                                    recipientSecretKey: clientKeyPair.secretKey) else {
+            logError("Could not open sealed health authority public key for case")
+            return (false, .couldNotPair(.invalidResponse))
+        }
+    
+        guard let sessionKeyPair = sodium.keyExchange.sessionKeyPair(publicKey: clientKeyPair.publicKey, secretKey: clientKeyPair.secretKey, otherPublicKey: caseHAPublicKey, side: .CLIENT) else {
+            logError("Could not create session key pair")
+            return (false, .couldNotPair(.invalidResponse))
+        }
+        
+        pairing = Pairing(publicKey: clientKeyPair.publicKey,
+                          secretKey: clientKeyPair.secretKey,
+                          rx: sessionKeyPair.rx,
+                          tx: sessionKeyPair.tx)
+        $pairing.clearCache()
+        
+        return (true, nil)
     }
     
     func unpair() {
@@ -165,84 +191,6 @@ class PairingManager: PairingManaging, Logging {
         guard !$pairing.exists else {
             return logError("Polling requested when already paired")
         }
-        
-        func poll(with info: ReversePairingStatusInfo, token: String, errorCount: Int) {
-            guard !shouldStopPollingForPairing else {
-                logDebug("Cancelling next polling")
-                return fail(with: .pairingCancelled)
-            }
-            
-            guard case .pending = info.status else { return finish(with: info.pairingCode) }
-            
-            let delay = Double(info.refreshDelay)
-            
-            guard info.expiresAt.timeIntervalSinceNow > delay else {
-                logDebug("Polling token has expired")
-                return fail(with: .pairingCodeExpired)
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                Services.networkManager.getPairingRequestStatus(token: token) { result in
-                    switch result {
-                    case .success(let reversePairingInfo):
-                        poll(with: reversePairingInfo, token: token, errorCount: 0)
-                    case .failure(let error):
-                        if errorCount > 3 {
-                            self.logDebug("Received too many errors while polling")
-                            fail(with: .couldNotPair(error))
-                        } else {
-                            poll(with: info, token: token, errorCount: errorCount + 1)
-                        }
-                    }
-                }
-            }
-        }
-        
-        func createRequest() {
-            isBusyReversePairing = true
-            
-            logDebug("Getting code and polling token")
-            Services.networkManager.postPairingRequest { result in
-                switch result {
-                case .success(let reversePairingInfo):
-                    self.reversePairingInfo = reversePairingInfo
-                    self.listeners.forEach { $0.listener?.pairingManager(self, didReceiveReversePairingCode: reversePairingInfo.code) }
-                    poll(with: reversePairingInfo.statusInfo, token: reversePairingInfo.token, errorCount: 0)
-                case .failure(let error):
-                    fail(with: .couldNotPair(error))
-                }
-            }
-        }
-        
-        func fail(with error: PairingManagingError) {
-            isBusyReversePairing = false
-            reversePairingInfo = nil
-            
-            switch error {
-            case .pairingCancelled:
-                listeners.forEach { $0.listener?.pairingManagerDidCancelPollingForPairing(self) }
-            default:
-                listeners.forEach { $0.listener?.pairingManager(self, didFailWith: error) }
-            }
-        }
-        
-        func finish(with pairingCode: String?) {
-            guard let pairingCode = pairingCode else {
-                logError("Invalid pairing code")
-                fail(with: .couldNotPair(.invalidResponse))
-                return
-            }
-            
-            pair(pairingCode: pairingCode) { success, error in
-                self.isBusyReversePairing = false
-                
-                if success {
-                    self.listeners.forEach { $0.listener?.pairingManagerDidFinishPairing(self) }
-                } else {
-                    self.listeners.forEach { $0.listener?.pairingManager(self, didFailWith: error ?? .notPaired) }
-                }
-            }
-        }
 
         guard !isBusyReversePairing else {
             reversePairingInfo.map { info in
@@ -252,20 +200,33 @@ class PairingManager: PairingManaging, Logging {
             return
         }
         
-        shouldStopPollingForPairing = false
         listeners.forEach { $0.listener?.pairingManagerDidStartPollingForPairing(self) }
-        createRequest()
+        startPollingRequest()
     }
     
     func stopPollingForPairing() {
         isBusyReversePairing = false
-        shouldStopPollingForPairing = true
+        reversePairingInfo = nil
+        
+        pollingTask?.cancel()
+        pollingTimer?.invalidate()
+        pollingResumeBlock = nil
         
         listeners.forEach { $0.listener?.pairingManagerDidCancelPollingForPairing(self) }
+        
+        endBackgroundTaskIfNeeded()
     }
     
     func addListener(_ listener: PairingManagerListener) {
         listeners.append(ListenerWrapper(listener: listener))
+        
+        reversePairingInfo.map {
+            listener.pairingManager(self, didReceiveReversePairingCode: $0.code)
+        }
+        
+        lastPollingError.map {
+            listener.pairingManager(self, didFailWith: $0)
+        }
     }
     
     func seal<T: Encodable>(_ value: T) throws -> (ciperText: String, nonce: String) {
@@ -338,4 +299,172 @@ class PairingManager: PairingManaging, Logging {
         decoder.source = .api
         return decoder
     }()
+    
+    // MARK: - Polling
+    private var isBusyReversePairing: Bool = false
+    
+    @UserDefaults(key: "reversePairingInfo", defaultValue: nil)
+    private var reversePairingInfo: ReversePairingInfo? // swiftlint:disable:this let_var_whitespace
+    
+    private(set) var lastPollingError: PairingManagingError?
+    
+    var lastPairingCode: String? {
+        return reversePairingInfo?.code
+    }
+    
+    var canResumePolling: Bool {
+        return (reversePairingInfo?.expiresAt.timeIntervalSinceNow ?? 0) > 0
+    }
+    
+    private var backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+    private var pollingTask: URLSessionTask?
+    private var pollingTimer: Timer?
+    private var pollingResumeBlock: (() -> Void)?
+    
+    private func startBackgroundTask() {
+        backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(withName: "pairing") {
+            self.logDebug("Polling background task did expire")
+            self.suspendPollingForPairing()
+        }
+    }
+    
+    private func endBackgroundTaskIfNeeded() {
+        if backgroundTaskIdentifier != .invalid {
+            UIApplication.shared.endBackgroundTask(backgroundTaskIdentifier)
+            backgroundTaskIdentifier = .invalid
+        }
+    }
+    
+    private func suspendPollingForPairing() {
+        pollingTask?.cancel()
+        pollingTimer?.invalidate()
+        
+        endBackgroundTaskIfNeeded()
+        
+        if let info = reversePairingInfo {
+            pollingResumeBlock = { self.resumePolling(with: info) }
+        }
+    }
+    
+    private func resumePollingIfNeeded() {
+        pollingResumeBlock?()
+    }
+    
+    private func processPolling(_ info: ReversePairingStatusInfo, token: String, errorCount: Int) {
+        guard case .pending = info.status else { return finishPolling(with: info.pairingCode) }
+        
+        poll(with: info, token: token, errorCount: errorCount)
+    }
+    
+    private func poll(with info: ReversePairingStatusInfo, token: String, errorCount: Int) {
+        let delay = Double(info.refreshDelay)
+        
+        guard info.expiresAt.timeIntervalSinceNow > delay else {
+            logDebug("Polling token has expired")
+            return failPolling(with: .pairingCodeExpired)
+        }
+        
+        pollingTimer?.invalidate()
+        logDebug("Scheduling pairing status request")
+        
+        if UIApplication.shared.backgroundTimeRemaining != .greatestFiniteMagnitude {
+            logDebug("Background time remaining: \(UIApplication.shared.backgroundTimeRemaining)")
+        }
+        
+        pollingTimer = Timer(fire: Date(timeIntervalSinceNow: delay), interval: 0, repeats: false) { _ in
+            self.pollingTask = Services.networkManager.getPairingRequestStatus(token: token) { result in
+                switch result {
+                case .success(let reversePairingInfo):
+                    self.processPolling(reversePairingInfo, token: token, errorCount: 0)
+                case .failure(let error):
+                    if errorCount > 3 {
+                        self.logDebug("Received too many errors while polling")
+                        self.failPolling(with: .couldNotPair(error))
+                    } else {
+                        self.processPolling(info, token: token, errorCount: errorCount + 1)
+                    }
+                }
+            }
+        }
+        RunLoop.current.add(pollingTimer!, forMode: .common)
+    }
+    
+    private func startPollingRequest() {
+        startBackgroundTask()
+        isBusyReversePairing = true
+        lastPollingError = nil
+        
+        logDebug("Getting code and polling token")
+        if let pairingInfo = reversePairingInfo, pairingInfo.expiresAt.timeIntervalSinceNow > 0 {
+            logDebug("Still has valid pairing token. Resuming polling.")
+            
+            listeners.forEach { $0.listener?.pairingManager(self, didReceiveReversePairingCode: pairingInfo.code) }
+            processPolling(pairingInfo.statusInfo,
+                        token: pairingInfo.token,
+                        errorCount: 0)
+        } else {
+            logDebug("Making new polling token request")
+            Services.networkManager.postPairingRequest { result in
+                switch result {
+                case .success(let reversePairingInfo):
+                    self.reversePairingInfo = reversePairingInfo
+                    self.listeners.forEach { $0.listener?.pairingManager(self, didReceiveReversePairingCode: reversePairingInfo.code) }
+                    self.processPolling(reversePairingInfo.statusInfo,
+                                token: reversePairingInfo.token,
+                                errorCount: 0)
+                case .failure(let error):
+                    self.failPolling(with: .couldNotPair(error))
+                }
+            }
+        }
+    }
+    
+    private func resumePolling(with info: ReversePairingInfo) {
+        startBackgroundTask()
+        isBusyReversePairing = true
+        
+        logDebug("Resuming polling")
+        self.processPolling(info.statusInfo,
+                    token: info.token,
+                    errorCount: 0)
+    }
+    
+    private func failPolling(with error: PairingManagingError) {
+        isBusyReversePairing = false
+        pollingResumeBlock = nil
+        lastPollingError = error
+        
+        switch error {
+        case .pairingCancelled:
+            listeners.forEach { $0.listener?.pairingManagerDidCancelPollingForPairing(self) }
+        default:
+            listeners.forEach { $0.listener?.pairingManager(self, didFailWith: error) }
+        }
+        
+        endBackgroundTaskIfNeeded()
+    }
+    
+    private func finishPolling(with pairingCode: String?) {
+        guard let pairingCode = pairingCode else {
+            logError("Invalid pairing code")
+            failPolling(with: .couldNotPair(.invalidResponse))
+            return
+        }
+        
+        pollingResumeBlock = nil
+        lastPollingError = nil
+        reversePairingInfo = nil // Should pairing fail at this point, the info won't be valid anymore
+        
+        pair(pairingCode: pairingCode) { success, error in
+            self.isBusyReversePairing = false
+            
+            if success {
+                self.listeners.forEach { $0.listener?.pairingManagerDidFinishPairing(self) }
+            } else {
+                self.listeners.forEach { $0.listener?.pairingManager(self, didFailWith: error ?? .notPaired) }
+            }
+            
+            self.endBackgroundTaskIfNeeded()
+        }
+    }
 }

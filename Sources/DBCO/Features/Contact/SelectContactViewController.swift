@@ -149,12 +149,12 @@ class SelectContactViewController: PromptableViewController {
     
     init(viewModel: SelectContactViewModel) {
         self.viewModel = viewModel
-        self.searchResultsController = SearchResultsViewController(viewModel: viewModel)
-        self.searchController = UISearchController(searchResultsController: self.searchResultsController)
+        searchResultsController = SearchResultsViewController(viewModel: viewModel)
+        searchController = UISearchController(searchResultsController: self.searchResultsController)
         
         super.init(nibName: nil, bundle: nil)
         
-        self.searchResultsController.delegate = self
+        searchResultsController.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -168,6 +168,8 @@ class SelectContactViewController: PromptableViewController {
         title = .selectContactTitle
         view.backgroundColor = .white
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+        
+        definesPresentationContext = true
         
         setupTableView()
         setupSearchController()
@@ -192,7 +194,7 @@ class SelectContactViewController: PromptableViewController {
         viewModel.setupContactsTableView(
             tableView,
             sectionHeaderViewBuilder: {
-                Label(caption1: $0.uppercased(), textColor: Theme.colors.primary)
+                UILabel(caption1: $0.uppercased(), textColor: Theme.colors.primary)
                     .wrappedInReadableContentGuide(insets: .top(10) + .bottom(5))
             },
             selectedContactHandler: { [weak self] contact, _ in

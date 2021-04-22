@@ -7,11 +7,11 @@
 
 import UIKit
 
-/// Styled UILabel subclass providing convenience initialization for each text style support in the [Theme](x-source-tag://Theme)
-class Label: UILabel {
+/// Styled UILabel convenience initializers for each text style supported in the [Theme](x-source-tag://Theme)
+extension UILabel {
     
-    init(_ text: String?, font: UIFont = Theme.fonts.body, textColor: UIColor = .darkText, isHeader: Bool = false) {
-        super.init(frame: .zero)
+    convenience init(_ text: String?, font: UIFont = Theme.fonts.body, textColor: UIColor = .darkText, isHeader: Bool = false) {
+        self.init()
         
         self.text = text
         self.font = font
@@ -22,15 +22,6 @@ class Label: UILabel {
         } else {
             accessibilityTraits.remove(.header)
         }
-    }
-    
-    init(_ text: NSAttributedString) {
-        super.init(frame: .zero)
-        self.attributedText = text
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
     }
     
     convenience init(largeTitle: String?, textColor: UIColor = .darkText) {
@@ -81,15 +72,9 @@ class Label: UILabel {
         self.init(caption1, font: Theme.fonts.caption1, textColor: textColor)
     }
     
-    @discardableResult
-    func multiline() -> Self {
-        numberOfLines = 0
-        return self
+    convenience init(attributedString: NSAttributedString?, textColor: UIColor = .darkText) {
+        self.init(nil, font: Theme.fonts.body, textColor: textColor)
+        self.attributedText = attributedString
     }
     
-    @discardableResult
-    func hideIfEmpty() -> Self {
-        isHidden = text?.isEmpty == true
-        return self
-    }
 }

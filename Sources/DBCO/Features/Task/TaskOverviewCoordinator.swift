@@ -7,6 +7,7 @@
 
 import UIKit
 import Contacts
+import SafariServices
 
 protocol TaskOverviewCoordinatorDelegate: class {
     func taskOverviewCoordinatorDidRequestReset(_ coordinator: TaskOverviewCoordinator)
@@ -25,10 +26,12 @@ final class TaskOverviewCoordinator: Coordinator, Logging {
     private let window: UIWindow
     private let overviewController: TaskOverviewViewController
     private let navigationController: NavigationController
+    private let useFlipTransition: Bool
     
-    init(window: UIWindow, delegate: TaskOverviewCoordinatorDelegate) {
+    init(window: UIWindow, delegate: TaskOverviewCoordinatorDelegate, useFlipTransition: Bool = false) {
         self.window = window
         self.delegate = delegate
+        self.useFlipTransition = useFlipTransition
         
         let viewModel = TaskOverviewViewModel()
         
@@ -42,19 +45,8 @@ final class TaskOverviewCoordinator: Coordinator, Logging {
     }
     
     override func start() {
-        if window.rootViewController == nil {
-            window.rootViewController = navigationController
-            window.makeKeyAndVisible()
-        } else {
-            let snapshotView = window.snapshotView(afterScreenUpdates: true)!
-            
-            window.rootViewController = navigationController
-            navigationController.view.addSubview(snapshotView)
-            
-            UIView.transition(with: window, duration: 0.5, options: [.transitionFlipFromRight]) {
-                snapshotView.removeFromSuperview()
-            }
-        }
+        window.transition(to: navigationController,
+                          with: useFlipTransition ? [.transitionFlipFromRight] : [.transitionCrossDissolve])
         
         loadCaseData(userInitiated: false)
     }
@@ -174,6 +166,9 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
     func taskOverviewViewController(_ controller: TaskOverviewViewController, didSelect task: Task) {
         switch task.taskType {
         case .contact:
+            // If the window is expired show the edit flow, to show the disabled questionnaire
+            guard !Services.caseManager.isWindowExpired else { return editContact(for: task) }
+            
             if task.questionnaireResult != nil {
                 // edit flow
                 editContact(for: task)
@@ -255,6 +250,12 @@ extension TaskOverviewCoordinator: TaskOverviewViewControllerDelegate {
         alert.addAction(UIAlertAction(title: .deleteDataPromptOptionCancel, style: .cancel, handler: nil))
         
         controller.present(alert, animated: true)
+    }
+    
+    func taskOverviewViewController(_ controller: TaskOverviewViewController, wantsToOpen url: URL) {
+        let safariController = SFSafariViewController(url: url)
+        safariController.preferredControlTintColor = Theme.colors.primary
+        navigationController.present(safariController, animated: true)
     }
     
 }

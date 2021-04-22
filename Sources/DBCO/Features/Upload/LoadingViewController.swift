@@ -15,11 +15,11 @@ class LoadingViewController: UIViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
         
-        let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
+        let activityIndicator = ActivityIndicatorView(style: .whiteLarge)
         activityIndicator.color = .black
         activityIndicator.startAnimating()
         
-        let stack = VStack(spacing: 8, activityIndicator, Label(body: .uploadInProgressMessage)).alignment(.center)
+        let stack = VStack(spacing: 8, activityIndicator, UILabel(body: .uploadInProgressMessage)).alignment(.center)
         
         stack.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(stack)

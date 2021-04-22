@@ -35,9 +35,3 @@ struct Certificate {
         return data.sha256.base64EncodedString()
     }
 }
-
-extension Certificate {
-    struct SSL {
-        static let apiSignature: Certificate.Signature = "TSSRQUz+lWdG7Ezvps9vcuKKEylDL52KkHrEy12twVo="
-    }
-}

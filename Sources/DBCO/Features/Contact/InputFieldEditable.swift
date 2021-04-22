@@ -21,12 +21,10 @@ protocol Editable {
     var value: String? { get set }
     
     var label: String? { get }
-    var labelFont: UIFont? { get }
     var placeholder: String? { get }
 }
 
 extension Editable {
-    var labelFont: UIFont? { Theme.fonts.subhead }
     var placeholder: String? { return nil }
 }
 
@@ -52,12 +50,14 @@ extension InputFieldEditable {
 // MARK: - ContactValue Extensions
 extension FirstName: InputFieldEditable {
     var label: String? { .contactInformationFirstName }
+    var validator: Validator.Type? { NameValidator.self }
     var autocapitalizationType: UITextAutocapitalizationType { .words }
     var textContentType: UITextContentType? { .givenName }
 }
 
 extension LastName: InputFieldEditable {
     var label: String? { .contactInformationLastName }
+    var validator: Validator.Type? { NameValidator.self }
     var autocapitalizationType: UITextAutocapitalizationType { .words }
     var textContentType: UITextContentType? { .familyName }
 }
@@ -83,7 +83,6 @@ extension BirthDate: InputFieldEditable {
 
 extension GeneralDate: InputFieldEditable {
     var placeholder: String? { .selectDate }
-    var labelFont: UIFont? { Theme.fonts.bodyBold }
     var inputType: InputType { .date(formatter: GeneralDate.displayDateFormatter) }
 }
 

@@ -11,7 +11,7 @@ import Contacts
 struct Onboarding {
     enum ContagiousPeriodState {
         case undetermined
-        case finishedWithSymptoms([String], onset: Date)
+        case finishedWithSymptoms([Symptom], onset: Date)
         case finishedWithTestDate(Date)
         
         var symptomOnsetDate: Date? {
@@ -48,10 +48,14 @@ struct Onboarding {
     }
 }
 
+/// Manages data needed during onboarding and facilitates basic state restoration for the onboarding screens.
+///
 /// - Tag: OnboardingManaging
 protocol OnboardingManaging {
     
     init()
+    
+    var dataModificationDate: Date? { get }
     
     var needsOnboarding: Bool { get }
     var needsPairingOption: Bool { get }
@@ -60,13 +64,16 @@ protocol OnboardingManaging {
     var roommates: [Onboarding.Contact]? { get }
     var contacts: [Onboarding.Contact]? { get }
     
-    func registerSymptoms(_ symptoms: [String], dateOfOnset: Date)
+    func registerSymptoms(_ symptoms: [Symptom], dateOfOnset: Date)
     func registerTestDate(_ date: Date)
     
     func registerRoommates(_ roommates: [Onboarding.Contact])
     func registerContacts(_ contacts: [Onboarding.Contact])
     
-    func finishOnboarding(createTasks: Bool)
+    /// Finish the onboarding and handover the data to the [CaseManager](x-source-tag://CaseManaging).
+    /// Contacts and roommates will be merged and any duplicates will be removed.
+    /// After finishing, data will be reset and the `needsOnboardingFlag` will be set to `false`
+    func finishOnboarding()
     
     func reset()
     

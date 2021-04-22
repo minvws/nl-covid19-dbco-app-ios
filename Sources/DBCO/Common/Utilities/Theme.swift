@@ -85,6 +85,10 @@ final class Colors {
     var warning: UIColor {
         return color(for: "WarningColor")
     }
+    
+    var footer: UIColor {
+        return color(for: "Footer")
+    }
 
     var gray: UIColor {
         return color(for: "GrayColor")
@@ -96,10 +100,6 @@ final class Colors {
 
     var notified: UIColor {
         return color(for: "NotifiedRed")
-    }
-
-    var inactive: UIColor {
-        return color(for: "InactiveOrange")
     }
 
     var statusGradientActive: UIColor {
@@ -126,8 +126,8 @@ final class Colors {
         return color(for: "HeaderBackgroundRed")
     }
 
-    var lightOrange: UIColor {
-        return color(for: "LightOrange")
+    var orange: UIColor {
+        return color(for: "Orange")
     }
 
     var captionGray: UIColor {

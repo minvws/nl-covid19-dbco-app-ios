@@ -12,16 +12,11 @@ extension Answer {
     /// An array of booleans indicating the progress of completing (elements of) the answer
     var progressElements: [Bool] {
         switch value {
-        case .classificationDetails(let sameHouseholdRisk, let distanceRisk, let physicalContactRisk, let sameRoomRisk):
-            let classificationResult = ClassificationHelper.classificationResult(for: sameHouseholdRisk,
-                                                                                 distanceRisk: distanceRisk,
-                                                                                 physicalContactRisk: physicalContactRisk,
-                                                                                 sameRoomRisk: sameRoomRisk)
-            
-            switch classificationResult {
-            case .success:
+        case .classificationDetails(let category):
+            switch category {
+            case .some:
                 return [true]
-            case .needsAssessmentFor:
+            case .none:
                 return [false]
             }
         case .contactDetails(let firstName, let lastName, let email, let phoneNumber):
@@ -43,6 +38,8 @@ extension Answer {
         }
     }
     
+    /// A boolean indicating whether or not the asnwer is essential for a complete and usable questionnaire result.
+    /// - Tag: Answer.isEssential
     var isEssential: Bool {
         switch value {
         case .classificationDetails,
@@ -57,6 +54,10 @@ extension Answer {
         }
     }
     
+    var isCompleted: Bool {
+        return progressElements.allSatisfy { $0 }
+    }
+    
 }
 
 extension QuestionnaireResult {
@@ -67,6 +68,11 @@ extension QuestionnaireResult {
         return answers.flatMap(\.progressElements)
     }
     
+    /// A boolean indicating whether or not all the essential answers are completed
+    /// Used for calculating the [task's status](x-source-tag://Task.status)
+    ///
+    /// # See also:
+    /// [Answer.isEssential](x-source-tag://Answer.isEssential)
     var hasAllEssentialAnswers: Bool {
         return answers.filter(\.isEssential).allSatisfy {
             $0.progressElements.allSatisfy { $0 }

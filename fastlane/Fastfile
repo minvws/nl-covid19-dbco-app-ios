@@ -22,7 +22,7 @@ platform :ios do
 
     run_tests(
       app_name: "DBCO",
-      device: "iPhone 11 Pro",
+      device: "iPhone 12 Pro",
       workspace: "DBCO.xcworkspace",
       scheme: "DBCO",
       reinstall_app: true,
@@ -69,7 +69,7 @@ platform :ios do
   end
 
   private_lane :prepare do
-    xcversion(version: "12.2")
+    xcversion(version: "12.4")
   end
 
   private_lane :determine_build_number do |options|

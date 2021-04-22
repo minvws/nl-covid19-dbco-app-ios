@@ -7,84 +7,118 @@
 
 import Foundation
 
+/// Used for the required update dialog
+///
+/// # See also:
+/// [AppCoordinator.showRequiredUpdate](x-source-tag://AppCoordinator.showRequiredUpdate)
+///
+/// - Tag: AppVersionInformation
 protocol AppVersionInformation {
     var minimumVersion: String { get }
     var minimumVersionMessage: String? { get }
     var appStoreURL: URL? { get }
 }
 
-protocol FeatureFlags {
-    var enableContactCalling: Bool { get }
-    var enablePerspectiveSharing: Bool { get }
-    var enablePerspectiveCopy: Bool { get }
+/// Used to enable or disable parts of the app.
+/// - enableContactCalling: Enables the "call [name]" button in the [ContactQuestionnaireViewController's](x-source-tag://ContactQuestionnaireViewController) inform section
+/// - enablePerspectiveCopy: Enables the "copy guidelines" button in the [ContactQuestionnaireViewController's](x-source-tag://ContactQuestionnaireViewController) inform section
+/// - enableSelfBCO: Enables the self bco flow, allowing users to gather contacts and determining the contagious period without first pairing with the GGD.
+///
+/// - Tag: FeatureFlags
+struct FeatureFlags: Codable {
+    /// Enables the "call [name]" button in the [ContactQuestionnaireViewController's](x-source-tag://ContactQuestionnaireViewController) inform section
+    let enableContactCalling: Bool
+    
+    /// Enables the "copy guidelines" button in the [ContactQuestionnaireViewController's](x-source-tag://ContactQuestionnaireViewController) inform section
+    let enablePerspectiveCopy: Bool
+    
+    /// Enables the self bco flow, allowing users to gather contacts and determining the contagious period without first pairing with the GGD.
+    let enableSelfBCO: Bool
+    
+    static var empty: FeatureFlags {
+        return FeatureFlags(enableContactCalling: false, enablePerspectiveCopy: false, enableSelfBCO: false)
+    }
 }
 
-struct AppConfiguration: AppVersionInformation, Decodable {
-    struct Flags: FeatureFlags, Decodable {
-        let enableContactCalling: Bool
-        let enablePerspectiveSharing: Bool
-        let enablePerspectiveCopy: Bool
-        
-        enum CodingKeys: String, CodingKey {
-            case enableContactCalling
-            case enablePerspectiveSharing
-            case enablePerspectiveCopy
-        }
-        
-        init(from decoder: Decoder) throws {
-            let container = try decoder.container(keyedBy: CodingKeys.self)
-            
-            enableContactCalling = (try? container.decode(Bool?.self, forKey: .enableContactCalling)) ?? false
-            enablePerspectiveSharing = (try? container.decode(Bool?.self, forKey: .enablePerspectiveSharing)) ?? false
-            enablePerspectiveCopy = (try? container.decode(Bool?.self, forKey: .enablePerspectiveCopy)) ?? false
-        }
-        
-        init(enableContactCalling: Bool, enablePerspectiveSharing: Bool, enablePerspectiveCopy: Bool) {
-            self.enableContactCalling = enableContactCalling
-            self.enablePerspectiveSharing = enablePerspectiveSharing
-            self.enablePerspectiveCopy = enablePerspectiveCopy
-        }
-    }
+/// Used for the list of selectable symptoms in [SelectSymptomsViewController](x-source-tag://SelectSymptomsViewController)
+///
+/// - Tag: Symptom
+struct Symptom: Codable, Equatable {
+    let label: String
+    let value: String
     
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.value == rhs.value
+    }
+}
+
+struct AppConfiguration: AppVersionInformation, Codable {
     let minimumVersion: String
     let minimumVersionMessage: String?
     let appStoreURL: URL?
     let featureFlags: FeatureFlags
+    let symptoms: [Symptom]
+    let supportedZipCodeRanges: [ZipRange]
+    let fetchDate: Date
     
     enum CodingKeys: String, CodingKey {
         case minimumVersion = "iosMinimumVersion"
         case minimumVersionMessage = "iosMinimumVersionMessage"
         case appStoreURL = "iosAppStoreURL"
         case featureFlags
+        case symptoms
+        case supportedZipCodeRanges
+        case fetchDate
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         minimumVersion = try container.decode(String.self, forKey: .minimumVersion)
-        minimumVersionMessage = try? container.decode(String?.self, forKey: .minimumVersionMessage)
+        minimumVersionMessage = try container.decodeIfPresent(String.self, forKey: .minimumVersionMessage)
         
-        if let appStoreURLString = try? container.decode(String?.self, forKey: .appStoreURL) {
+        if let appStoreURLString = try container.decodeIfPresent(String.self, forKey: .appStoreURL) {
             appStoreURL = URL(string: appStoreURLString)
         } else {
             appStoreURL = nil
         }
         
-        featureFlags = (try? container.decode(Flags.self, forKey: .featureFlags)) ?? Flags(enableContactCalling: false, enablePerspectiveSharing: false, enablePerspectiveCopy: false)
+        featureFlags = try container.decode(FeatureFlags.self, forKey: .featureFlags)
+        symptoms = try container.decode([Symptom].self, forKey: .symptoms)
+        supportedZipCodeRanges = try container.decode([ZipRange].self, forKey: .supportedZipCodeRanges)
+        
+        fetchDate = (try container.decodeIfPresent(Date.self, forKey: .fetchDate)) ?? Date()
     }
 }
 
-enum UpdateState {
+enum ConfigUpdateResult {
     case updateRequired(AppVersionInformation)
+    case updateFailed
     case noActionNeeded
 }
 
+/// Manages fetching the configuration and keeping it up to date.
+///
+/// # See also:
+/// [AppConfiguration](x-source-tag://AppConfiguration),
+/// [FeatureFlags](x-source-tag://FeatureFlags),
+/// [ConfigManager](x-source-tag://ConfigManager)
+///
 /// - Tag: ConfigManaging
 protocol ConfigManaging {
     init()
     
+    /// The current version as a semantic version string
     var appVersion: String { get }
+    
+    /// The most recent fetched [FeatureFlags](x-source-tag://FeatureFlags)
     var featureFlags: FeatureFlags { get }
     
-    func update(completion: @escaping (UpdateState, FeatureFlags) -> Void)
+    /// The most recent fetched [Symptoms](x-source-tag://Symptom)
+    var symptoms: [Symptom] { get }
+    
+    /// The most recent fetched [ZipRanges](x-source-tag://ZipRange) that are part of GGD regions using GGD Contact.
+    var supportedZipCodeRanges: [ZipRange] { get }
+    
+    func update(completion: @escaping (ConfigUpdateResult) -> Void)
 }
