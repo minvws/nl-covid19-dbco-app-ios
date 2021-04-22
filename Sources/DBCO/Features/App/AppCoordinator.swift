@@ -68,6 +68,7 @@ final class AppCoordinator: Coordinator {
         if resetAppDataIfNeeded() {
             children.forEach(removeChildCoordinator)
             start()
+            showResetAlert()
         } else {
             updateConfiguration()
             refreshCaseDataIfNeeded()
@@ -76,6 +77,27 @@ final class AppCoordinator: Coordinator {
     
     func appDidHide() {
         hideContent()
+    }
+    
+    private func showResetAlert() {
+        var resetWindow: UIWindow? = createWindow()
+        
+        let viewModel = StepViewModel(
+            image: UIImage(named: "Onboarding1"),
+            title: .launchResetAlertTitle,
+            message: .launchResetAlertMessage,
+            actions: [
+                .init(type: .primary, title: .launchResetAlertButton) {
+                    resetWindow?.isHidden = true
+                    resetWindow?.removeFromSuperview()
+                    resetWindow = nil
+                }
+            ])
+        
+        let stepController = StepViewController(viewModel: viewModel)
+        
+        resetWindow?.rootViewController = NavigationController(rootViewController: stepController)
+        resetWindow?.makeKeyAndVisible()
     }
     
     private func updateConfiguration(completionHandler: (() -> Void)? = nil) {
@@ -102,8 +124,8 @@ final class AppCoordinator: Coordinator {
     }
     
     private var privacyProtectionWindow: UIWindow?
-
-    private func hideContent() {
+    
+    private func createWindow(level: UIWindow.Level = .alert + 1) -> UIWindow {
         var sceneWindow: UIWindow?
         
         if #available(iOS 13.0, *) {
@@ -112,9 +134,15 @@ final class AppCoordinator: Coordinator {
             }
         }
         
-        privacyProtectionWindow = sceneWindow ?? UIWindow(frame: UIScreen.main.bounds)
+        let window = sceneWindow ?? UIWindow(frame: UIScreen.main.bounds)
+        window.windowLevel = level
+        
+        return window
+    }
+
+    private func hideContent() {
+        privacyProtectionWindow = createWindow()
         privacyProtectionWindow?.rootViewController = LaunchViewController(viewModel: .init())
-        privacyProtectionWindow?.windowLevel = .alert + 1
         privacyProtectionWindow?.makeKeyAndVisible()
     }
     
