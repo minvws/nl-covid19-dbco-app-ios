@@ -25,36 +25,6 @@ final class OnboardingCoordinator: Coordinator {
         super.init()
     }
     
-    private func setupNavigationController() -> NavigationController {
-        let primaryButtonTitle: String
-        let secondaryButtonTitle: String?
-        
-        if Services.configManager.featureFlags.enableSelfBCO {
-            primaryButtonTitle = .onboardingStartHasCodeButton
-            secondaryButtonTitle = .onboardingStartNoCodeButton
-        } else {
-            primaryButtonTitle = .next
-            secondaryButtonTitle = nil
-        }
-        
-        let viewModel = StepViewModel(
-            image: UIImage(named: "Onboarding1"),
-            title: .onboardingStartTitle,
-            message: .onboardingStartMessage,
-            actions: [
-                .init(type: .primary, title: primaryButtonTitle, target: self, action: #selector(continueToPairing)),
-                .init(type: .secondary, title: secondaryButtonTitle, target: self, action: #selector(continueToSelfBCO))
-            ])
-        
-        let stepController = StepViewController(viewModel: viewModel)
-        let navigationController = NavigationController(rootViewController: stepController)
-
-        navigationController.navigationBar.shadowImage = UIImage()
-        navigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        
-        return navigationController
-    }
-    
     override func start() {
         let needsPairingOption = Services.onboardingManager.needsPairingOption
         if needsPairingOption == false {
@@ -65,17 +35,59 @@ final class OnboardingCoordinator: Coordinator {
         
         window.transition(to: navigationController, with: [.transitionCrossDissolve])
     }
+    
+    private func createFirstViewController() -> UIViewController {
+        let viewModel = StepViewModel(
+            image: UIImage(named: "Onboarding1"),
+            title: .onboardingStartTitle,
+            message: .onboardingStartMessage,
+            actions: [
+                .init(type: .primary, title: .next, target: self, action: #selector(continueFromFirstViewController))
+            ])
+        
+        return StepViewController(viewModel: viewModel)
+    }
+    
+    @objc private func continueFromFirstViewController() {
+        if Services.configManager.featureFlags.enableSelfBCO {
+            continueToDetermineFlow()
+        } else {
+            continueToPairing()
+        }
+    }
+    
+    private func setupNavigationController() -> NavigationController {
+        let navigationController = NavigationController(rootViewController: createFirstViewController())
+
+        navigationController.navigationBar.shadowImage = UIImage()
+        navigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        
+        return navigationController
+    }
 }
 
 extension OnboardingCoordinator {
     
-    @objc func continueToPairing() {
+    @objc private func continueToDetermineFlow() {
+        let viewModel = StepViewModel(
+            image: UIImage(named: "Onboarding1"),
+            title: .onboardingDetermineFlowTitle,
+            message: .onboardingDetermineFlowMessage,
+            actions: [
+                .init(type: .primary, title: .onboardingHasCodeButton, target: self, action: #selector(continueToPairing)),
+                .init(type: .primary, title: .onboardingNoCodeButton, target: self, action: #selector(continueToSelfBCO))
+            ])
+        
+        navigationController.pushViewController(StepViewController(viewModel: viewModel), animated: true)
+    }
+    
+    @objc private func continueToPairing() {
         let pairingCoordinator = OnboardingPairingCoordinator(navigationController: navigationController)
         pairingCoordinator.delegate = self
         startChildCoordinator(pairingCoordinator)
     }
     
-    @objc func continueToSelfBCO() {
+    @objc private func continueToSelfBCO() {
         let initializeContactsCoordinator = InitializeContactsCoordinator(navigationController: navigationController, skipIntro: false)
         initializeContactsCoordinator.delegate = self
         startChildCoordinator(initializeContactsCoordinator)
