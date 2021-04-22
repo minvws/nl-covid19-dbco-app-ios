@@ -29,6 +29,24 @@ class InputTextView<Object: AnyObject, Field: Editable>: UIView {
         }
     }
     
+    override var accessibilityLabel: String? {
+        set {
+            textView.accessibilityLabel = newValue
+        }
+        get {
+            textView.accessibilityLabel
+        }
+    }
+    
+    override var accessibilityHint: String? {
+        set {
+            textView.accessibilityHint = newValue
+        }
+        get {
+            textView.accessibilityHint
+        }
+    }
+    
     init(for object: Object, path: WritableKeyPath<Object, Field>) {
         self.object = object
         
@@ -36,12 +54,11 @@ class InputTextView<Object: AnyObject, Field: Editable>: UIView {
         
         super.init(frame: .zero)
         
-        if let labelText = object[keyPath: path].label {
-            label.text = labelText
-        } else {
-            label.isHidden = true
-        }
+        label.isAccessibilityElement = false
+        label.text = object[keyPath: path].label
+        label.isHidden = (label.text == nil)
         
+        textView.accessibilityLabel = label.text
         textView.isEditable = true
         textView.textContainerInset = .topBottom(13) + .leftRight(12)
         textView.backgroundColor = Theme.colors.tertiary
@@ -51,9 +68,6 @@ class InputTextView<Object: AnyObject, Field: Editable>: UIView {
         
         VStack(spacing: 8, label, textView)
             .embed(in: self)
-        
-        accessibilityLabel = object[keyPath: path].label
-        accessibilityElements = [textView]
         
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
         
