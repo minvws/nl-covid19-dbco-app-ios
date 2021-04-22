@@ -92,7 +92,6 @@ extension String {
     static var launchConfigAlertTitle: String { return Localization.string(for: "launchConfigAlert.title") }
     static var launchConfigAlertMessage: String { return Localization.string(for: "launchConfigAlert.message") }
     
-    
     static var launchResetAlertTitle: String { return Localization.string(for: "launchResetAlert.title") }
     static var launchResetAlertMessage: String { return Localization.string(for: "launchResetAlert.message") }
     static var launchResetAlertButton: String { return Localization.string(for: "launchResetAlert.button") }
