@@ -111,7 +111,7 @@
 "verifyOnsetDateTwoWeeksAgo.no" = "Nee, volgende";
 
 "determineNegativeTestDate.title" = "Wanneer was je laatste negatieve coronatest?";
-"determineNegativeTestDate.subtitle" = "Dit is een test waaruit bleek dat je <b>geen</b> corona had.";
+"determineNegativeTestDate.subtitle" = "Dit is een coronatest van de GGD waaruit bleek dat je <b>geen</b> corona had. Let op: een zelftest telt niet mee.";
 
 "verifySymptomsGettingWorse.title" = "Was er een moment na %@ dat je klachten erger werden?";
 
