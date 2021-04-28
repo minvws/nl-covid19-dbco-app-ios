@@ -11,14 +11,20 @@ protocol InputFieldDelegate: class {
     func promptOptionsForInputField(_ options: [String], selectOption: @escaping (String?) -> Void)
 }
 
-/// A styled UITextField subclass that binds to an object's field conforming to [InputFieldEditable](x-source-tag://InputFieldEditable) and automatically updates its value.
+/// A styled wrapper for [TextField](x-source-tag://TextField) that binds to an object's field conforming to [InputFieldEditable](x-source-tag://InputFieldEditable) and automatically updates its value.
 /// InputField adjusts its input method based on the properties of the supplied [InputFieldEditable](x-source-tag://InputFieldEditable) field.
 ///
 /// Currently supports the different system keyboards, a date picker (.wheels style) and a general picker wheel.
 /// - Tag: InputField
-class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledInputView, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     private weak var object: Object?
     private let path: WritableKeyPath<Object, Field>
+    let label = UILabel(subhead: nil)
+    private(set) var textField = TextField()
+    
+    private var textObserver: Any?
+    private var fontObserver: Any?
+    private var attributedTextObserver: Any?
     
     weak var inputFieldDelegate: InputFieldDelegate?
     
@@ -26,7 +32,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         self.object = object
         self.path = path
         
-        super.init()
+        super.init(frame: .zero)
         setup()
     }
     
@@ -34,64 +40,97 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         fatalError("init(coder:) has not been implemented")
     }
     
-    override var isEmphasized: Bool {
+    var isEmphasized: Bool = false {
         didSet {
             label.font = isEmphasized ? Theme.fonts.bodyBold : Theme.fonts.subhead
         }
     }
     
     private func setup() {
-        delegate = self
+        VStack(spacing: 8,
+               label.multiline(),
+               VStack(spacing: 2,
+                      warningContainer,
+                      textField,
+                      errorContainer))
+            .embed(in: self)
         
-        dropdownIconView.image = UIImage(named: "DropdownIndicator")
-        dropdownIconView.contentMode = .right
-        dropdownIconView.isUserInteractionEnabled = false
-        dropdownIconView.isHidden = true
-
-        validationIconView.image = UIImage(named: "Validation/Invalid")
-        validationIconView.highlightedImage = UIImage(named: "Validation/Valid")
-        validationIconView.contentMode = .center
-        validationIconView.setContentCompressionResistancePriority(.required, for: .horizontal)
+        warningContainer.isHidden = true
+        errorContainer.isHidden = true
+        
+        setupIcons()
+        setupGestureRecognizer()
+        setupTextField()
+        setupLabels()
+        
+        configureInputType()
+    }
+    
+    private func setupTextField() {
+        textField.delegate = self
+        
+        textObserver = textField.observe(\.text) { [unowned self] field, _ in self.text = field.text }
+        fontObserver = textField.observe(\.font) { [unowned self] field, _ in self.font = field.font }
+        
+        textField.addTarget(self, action: #selector(handleEditingDidEnd), for: .editingDidEndOnExit)
+        textField.addTarget(self, action: #selector(handleEditingDidEnd), for: .editingDidEnd)
+        textField.addTarget(self, action: #selector(handleEditingDidBegin), for: .editingDidBegin)
+        
+        textField.placeholder = object?[keyPath: path].placeholder
+    }
+    
+    private func setupLabels() {
+        textWidthLabel.font = textField.font
         textWidthLabel.alpha = 0
-        
-        iconContainerView.addArrangedSubview(HStack(spacing: 5, textWidthLabel, validationIconView).alignment(.center))
-        iconContainerView.axis = .vertical
-        iconContainerView.alignment = .leading
-        iconContainerView.isUserInteractionEnabled = false
-        iconContainerView.isHidden = true
-        iconContainerView.frame.size.width = 100 // To prevent some constraint errors before layout
-        
-        addSubview(iconContainerView)
-        addSubview(dropdownIconView)
-        
-        addTarget(self, action: #selector(handleEditingDidEnd), for: .editingDidEndOnExit)
-        addTarget(self, action: #selector(handleEditingDidEnd), for: .editingDidEnd)
-        addTarget(self, action: #selector(handleEditingDidBegin), for: .editingDidBegin)
         
         label.text = object?[keyPath: path].label
         label.isAccessibilityElement = false
         
         accessibilityLabel = label.text
-        placeholder = object?[keyPath: path].placeholder
         text = object?[keyPath: path].value
+    }
+    
+    private func setupGestureRecognizer() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func handleTap(_ sender: Any) {
+        textField.becomeFirstResponder()
+    }
+    
+    private func setupIcons() {
+        iconContainerView.addArrangedSubview(HStack(spacing: 5, textWidthLabel, validationIconView).alignment(.center))
         
-        configureInputType()
+        let iconOverlayView = UIView()
+        iconOverlayView.isUserInteractionEnabled = false
+        iconOverlayView.translatesAutoresizingMaskIntoConstraints = false
+        
+        iconContainerView.embed(in: iconOverlayView)
+        dropdownIconView.embed(in: iconOverlayView)
+        
+        addSubview(iconOverlayView)
+        
+        iconOverlayView.leadingAnchor.constraint(equalTo: textField.leadingAnchor, constant: 12).isActive = true
+        iconOverlayView.trailingAnchor.constraint(equalTo: textField.trailingAnchor, constant: -12).isActive = true
+        iconOverlayView.topAnchor.constraint(equalTo: textField.topAnchor).isActive = true
+        iconOverlayView.bottomAnchor.constraint(equalTo: textField.bottomAnchor).isActive = true
     }
     
     private func configureInputType() {
-        inputAccessoryView = nil
-        inputView = nil
+        textField.inputAccessoryView = nil
+        textField.inputView = nil
         
         guard let object = object else { return }
 
         switch object[keyPath: path].inputType {
         case .text:
-            keyboardType = object[keyPath: path].keyboardType
-            autocapitalizationType = object[keyPath: path].autocapitalizationType
-            textContentType = object[keyPath: path].textContentType
+            textField.keyboardType = object[keyPath: path].keyboardType
+            textField.autocapitalizationType = object[keyPath: path].autocapitalizationType
+            textField.textContentType = object[keyPath: path].textContentType
         case .number:
-            keyboardType = .numberPad
-            inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
+            textField.keyboardType = .numberPad
+            textField.inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
         case .date(let dateFormatter):
             setupAsDatePicker(with: dateFormatter)
         case .picker(let options):
@@ -124,8 +163,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         
         self.datePicker = datePicker
         
-        inputView = datePicker
-        inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
+        textField.inputView = datePicker
+        textField.inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
         tintColor = .clear
     }
     
@@ -146,8 +185,8 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         
         text = pickerOptions?.first { $0.identifier == selectedIdentifier }?.value
 
-        inputView = picker
-        inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
+        textField.inputView = picker
+        textField.inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
         tintColor = .clear
         optionPicker = picker
         
@@ -155,30 +194,19 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         accessibilityTraits = [.button, .staticText]
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        iconContainerView.frame = backgroundView.frame.inset(by: .leftRight(12))
-        dropdownIconView.frame = backgroundView.frame.inset(by: .leftRight(12))
-    }
-    
-    override var text: String? {
-        didSet {
+    private var text: String? {
+        get { textField.text }
+        set {
+            guard textField.text != newValue else { return }
+            textField.text = newValue
             textWidthLabel.text = text
             updateValidationStateIfNeeded()
         }
     }
     
-    override var font: UIFont? {
+    private var font: UIFont? {
         didSet {
             textWidthLabel.font = font
-        }
-    }
-    
-    override var attributedText: NSAttributedString? {
-        didSet {
-            textWidthLabel.attributedText = attributedText
-            updateValidationStateIfNeeded()
         }
     }
     
@@ -221,7 +249,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     }
     
     @objc private func done() {
-        resignFirstResponder()
+        textField.resignFirstResponder()
         setDateValueIfNeeded()
     }
     
@@ -265,11 +293,60 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
     private var optionPicker: UIPickerView?
     private var pickerOptions: [InputType.PickerOption]?
     private var textWidthLabel = UILabel()
-    private var validationIconView = UIImageView()
-    private var dropdownIconView = UIImageView()
-    private lazy var iconContainerView = UIStackView()
+    
+    private lazy var validationIconView: UIImageView = {
+        let iconView = UIImageView(imageName: "Validation/Invalid", highlightedImageName: "Validation/Valid")
+        iconView.contentMode = .center
+        iconView.setContentCompressionResistancePriority(.required, for: .horizontal)
+        return iconView
+    }()
+    
+    private lazy var dropdownIconView: UIImageView = {
+        let iconView = UIImageView(imageName: "DropdownIndicator")
+        iconView.contentMode = .right
+        iconView.isHidden = true
+        return iconView
+    }()
+    
+    private lazy var iconContainerView: UIStackView = {
+        let stackView = VStack()
+        stackView.alignment = .leading
+        stackView.isHidden = true
+        return stackView
+    }()
     
     private var currentValidationTask: ValidationTask?
+    
+    // MARK: - Errors and warnings
+    func showWarning(_ warning: String) {
+        warningContainer.isHidden = false
+        warningLabel.text = warning
+    }
+    
+    func hideWarning() {
+        warningContainer.isHidden = true
+    }
+    
+    func showError(_ error: String) {
+        errorContainer.isHidden = false
+        errorLabel.text = error
+        
+        textField.setBorder(width: 1, color: Theme.colors.warning)
+    }
+    
+    func hideError() {
+        errorContainer.isHidden = true
+        
+        textField.setBorder(width: 0)
+    }
+    
+    private lazy var warningLabel = UILabel(subhead: nil, textColor: Theme.colors.primary).multiline()
+    private lazy var warningIcon = UIImageView(imageName: "Validation/Warning").asIcon(color: Theme.colors.primary)
+    private lazy var warningContainer = HStack(spacing: 4, warningIcon, warningLabel).alignment(.top)
+    
+    private lazy var errorLabel = UILabel(subhead: nil, textColor: Theme.colors.warning).multiline()
+    private lazy var errorIcon = UIImageView(imageName: "Validation/Invalid").asIcon(color: Theme.colors.warning)
+    private lazy var errorContainer = HStack(spacing: 4, errorIcon, errorLabel).alignment(.top)
     
     // MARK: - Delegate implementations
     
@@ -295,7 +372,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
                     self.handleEditingDidEnd()
                 } else {
                     self.overrideOptionPrompt = true
-                    self.becomeFirstResponder()
+                    self.textField.becomeFirstResponder()
                     self.overrideOptionPrompt = false
                 }
             }
@@ -345,6 +422,10 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: TextField, UITex
         text = pickerOptions?[row].value
     }
     
+    var isEnabled: Bool {
+        get { textField.isEnabled }
+        set { textField.isEnabled = newValue }
+    }
 }
 
 private struct Constants {
