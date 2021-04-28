@@ -247,6 +247,7 @@ final class CaseManager: CaseManaging, Logging {
     
     func removeCaseData() throws {
         $appData.clearData()
+        hasSynced = false
     }
     
     /// Set the questionnaires from the api call result
