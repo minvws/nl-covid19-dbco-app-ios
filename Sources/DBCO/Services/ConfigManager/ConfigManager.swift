@@ -23,6 +23,9 @@ class ConfigManager: ConfigManaging, Logging {
     var featureFlags: FeatureFlags = .empty
     var symptoms: [Symptom] = []
     var supportedZipCodeRanges: [ZipRange] = []
+    private var fetchedGuidelines: Guidelines!
+    
+    var guidelines: Guidelines { return fetchedGuidelines }
     
     func update(completion: @escaping (ConfigUpdateResult) -> Void) {
         Services.networkManager.getAppConfiguration { result in
@@ -52,11 +55,10 @@ class ConfigManager: ConfigManaging, Logging {
         let requiredVersion = fullVersionString(for: configuration.minimumVersion)
         let currentVersion = fullVersionString(for: appVersion)
         
-        logDebug("Updated feature flags: \(configuration.featureFlags)")
         featureFlags = configuration.featureFlags
         symptoms = configuration.symptoms
-        
         supportedZipCodeRanges = configuration.supportedZipCodeRanges
+        fetchedGuidelines = configuration.guidelines
         
         cachedConfig = configuration
         
