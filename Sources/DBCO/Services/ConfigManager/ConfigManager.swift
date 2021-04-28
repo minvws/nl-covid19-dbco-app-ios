@@ -20,12 +20,13 @@ class ConfigManager: ConfigManaging, Logging {
     @UserDefaults(key: "ConfigManager.cachedConfig", defaultValue: nil)
     private var cachedConfig: AppConfiguration? // swiftlint:disable:this let_var_whitespace
     
-    var featureFlags: FeatureFlags = .empty
-    var symptoms: [Symptom] = []
-    var supportedZipCodeRanges: [ZipRange] = []
-    private var fetchedGuidelines: Guidelines!
+    private var fetchedConfig: AppConfiguration!
     
-    var guidelines: Guidelines { return fetchedGuidelines }
+    var hasValidConfiguration: Bool { fetchedConfig != nil }
+    var featureFlags: FeatureFlags { fetchedConfig.featureFlags }
+    var symptoms: [Symptom] { fetchedConfig.symptoms }
+    var supportedZipCodeRanges: [ZipRange] { fetchedConfig.supportedZipCodeRanges }
+    var guidelines: Guidelines { fetchedConfig.guidelines }
     
     func update(completion: @escaping (ConfigUpdateResult) -> Void) {
         Services.networkManager.getAppConfiguration { result in
@@ -55,11 +56,7 @@ class ConfigManager: ConfigManaging, Logging {
         let requiredVersion = fullVersionString(for: configuration.minimumVersion)
         let currentVersion = fullVersionString(for: appVersion)
         
-        featureFlags = configuration.featureFlags
-        symptoms = configuration.symptoms
-        supportedZipCodeRanges = configuration.supportedZipCodeRanges
-        fetchedGuidelines = configuration.guidelines
-        
+        fetchedConfig = configuration
         cachedConfig = configuration
         
         if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending {

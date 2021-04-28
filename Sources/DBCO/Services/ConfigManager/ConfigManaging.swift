@@ -34,10 +34,6 @@ struct FeatureFlags: Codable {
     
     /// Enables the self bco flow, allowing users to gather contacts and determining the contagious period without first pairing with the GGD.
     let enableSelfBCO: Bool
-    
-    static var empty: FeatureFlags {
-        return FeatureFlags(enableContactCalling: false, enablePerspectiveCopy: false, enableSelfBCO: false)
-    }
 }
 
 /// Used for the list of selectable symptoms in [SelectSymptomsViewController](x-source-tag://SelectSymptomsViewController)
@@ -130,6 +126,7 @@ enum ConfigUpdateResult {
 }
 
 /// Manages fetching the configuration and keeping it up to date.
+/// Accessing the different properties before `hasValidConfiguration` is `true` is invalid.
 ///
 /// # See also:
 /// [AppConfiguration](x-source-tag://AppConfiguration),
@@ -139,6 +136,8 @@ enum ConfigUpdateResult {
 /// - Tag: ConfigManaging
 protocol ConfigManaging {
     init()
+    
+    var hasValidConfiguration: Bool { get }
     
     /// The current version as a semantic version string
     var appVersion: String { get }
