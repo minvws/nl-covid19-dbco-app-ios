@@ -32,7 +32,6 @@ extension LabeledInputView {
     }
 }
 
-extension TextField: LabeledInputView {}
 extension InputTextView: LabeledInputView {}
 extension ToggleGroup: LabeledInputView {}
 
