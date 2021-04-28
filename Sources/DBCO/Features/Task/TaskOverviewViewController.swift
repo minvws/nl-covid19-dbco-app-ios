@@ -51,11 +51,14 @@ class TaskOverviewViewModel {
         
         sections = []
         
+        // There is a weird issue with the html parsing functionality in NSAttributedString.
+        // It seems to trigger a layout update in some cases, leaving the tableview in a weird state with out of date data.
+        // Guarding the indices into the sections arrays to be in bounds, is needed to prevent crashes in this state.
         tableViewManager.numberOfSections = { [unowned self] in return self.sections.count }
-        tableViewManager.numberOfRowsInSection = { [unowned self] in return self.sections[$0].tasks.count }
+        tableViewManager.numberOfRowsInSection = { [unowned self] in return self.sections[safe: $0]?.tasks.count ?? 0 }
         tableViewManager.itemForCellAtIndexPath = { [unowned self] in return self.sections[$0.section].tasks[$0.row] }
-        tableViewManager.viewForHeaderInSection = { [unowned self] in return self.sections[$0].header }
-        tableViewManager.viewForFooterInSection = { [unowned self] in return self.sections[$0].footer }
+        tableViewManager.viewForHeaderInSection = { [unowned self] in return self.sections[safe: $0]?.header }
+        tableViewManager.viewForFooterInSection = { [unowned self] in return self.sections[safe: $0]?.footer }
         
         Services.caseManager.addListener(self)
         Services.pairingManager.addListener(self)
