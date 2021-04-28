@@ -28,7 +28,9 @@ final class AppCoordinator: Coordinator {
         
         window.tintColor = Theme.colors.primary
         
-        _ = resetAppDataIfNeeded()
+        if resetAppDataIfNeeded() {
+            showResetAlert()
+        }
         
         let launchCoordinator = LaunchCoordinator(window: window)
         launchCoordinator.delegate = self
