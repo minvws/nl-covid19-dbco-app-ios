@@ -121,9 +121,8 @@ class PromptableViewController: ViewController {
     func showPrompt(animated: Bool = true) {
         guard let view = view as? PromptView else { return }
         
-        guard animated else {
+        guard animated, view.window != nil else {
             promptView?.isHidden = false
-            view.layoutIfNeeded()
             return
         }
         
