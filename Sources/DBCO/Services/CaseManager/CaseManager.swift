@@ -321,6 +321,9 @@ final class CaseManager: CaseManaging, Logging {
                                                                         informedByIndexAt: existingContact.informedByIndexAt,
                                                                         dateOfLastExposure: existingContact.dateOfLastExposure)
                     }
+                    
+                    tasks[existingTaskIndex].label = task.label
+                    tasks[existingTaskIndex].taskContext = task.taskContext
                 }
             } else {
                 tasks.append(task)
