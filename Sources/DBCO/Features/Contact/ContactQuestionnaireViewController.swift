@@ -159,6 +159,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         viewModel.$informLink.binding = { informLinkView.html($0, textColor: Theme.colors.captionGray) }
         viewModel.$informFooter.binding = { informFooterLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
         viewModel.$copyButtonHidden.binding = { copyButton.isHidden = $0 }
+        viewModel.$copyButtonType.binding = { copyButton.style = $0 }
         viewModel.$informButtonTitle.binding = { informButton.title = $0 }
         viewModel.$informButtonHidden.binding = { informButton.isHidden = $0 }
         viewModel.$informButtonType.binding = { informButton.style = $0 }
