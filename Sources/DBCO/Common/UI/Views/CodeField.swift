@@ -62,6 +62,8 @@ class CodeField: UITextField {
         autocorrectionType = .no
         
         delegate = self
+        
+        updateKerning()
     }
     
     override var intrinsicContentSize: CGSize {
@@ -121,10 +123,10 @@ class CodeField: UITextField {
         defaultTextAttributes = attributes
     }
     
-    override func layoutSubviews() {
-        updateKerning()
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
         
-        super.layoutSubviews()
+        updateKerning()
     }
 }
 
