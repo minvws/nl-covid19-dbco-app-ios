@@ -131,6 +131,9 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         case .number:
             textField.keyboardType = .numberPad
             textField.inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
+        case .phoneNumber:
+            textField.keyboardType = .phonePad
+            textField.inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
         case .date(let dateFormatter):
             setupAsDatePicker(with: dateFormatter)
         case .picker(let options):
