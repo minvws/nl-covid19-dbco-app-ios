@@ -81,10 +81,17 @@ class ContactListInputView: UIView {
     }
     
     private func listContacts() -> [Contact] {
+        func trimName(_ name: String) -> String {
+            return name
+                .components(separatedBy: .whitespacesAndNewlines)
+                .filter { !$0.isEmpty } 
+                .joined(separator: " ")
+        }
+ 
         return textFieldStack.arrangedSubviews
             .compactMap { $0 as? ContactTextField }
             .filter { $0.text?.isEmpty == false }
-            .map { Contact(name: $0.text!.trimmingCharacters(in: .whitespacesAndNewlines), cnContactIdentifier: $0.acceptedSuggestedContactIdentifier) }
+            .map { Contact(name: trimName($0.text!), cnContactIdentifier: $0.acceptedSuggestedContactIdentifier) }
     }
     
     private func addContactField(for contact: Contact? = nil) {

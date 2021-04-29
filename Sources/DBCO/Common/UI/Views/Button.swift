@@ -138,6 +138,7 @@ class Button: UIButton {
         case .info:
             backgroundColor = .clear
             setTitleColor(Theme.colors.primary, for: .normal)
+            layer.cornerRadius = 0
         }
         
         contentEdgeInsets = .topBottom(13.5) + .leftRight(20)
