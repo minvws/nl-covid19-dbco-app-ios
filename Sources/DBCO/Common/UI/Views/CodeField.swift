@@ -47,11 +47,6 @@ class CodeField: UITextField {
     }
     
     private func setup() {
-        let attributes: [NSAttributedString.Key: Any] = [
-            .kern: kerning,
-            .font: UIFont.monospacedDigitSystemFont(ofSize: 22, weight: .regular)
-        ]
-        
         accessibilityLabel = codeDescription.accessibilityLabel
         accessibilityHint = codeDescription.accessibilityHint
         
@@ -61,9 +56,6 @@ class CodeField: UITextField {
         
         font = UIFont.monospacedDigitSystemFont(ofSize: 22, weight: .regular)
         tintColor = Theme.colors.primary
-        
-        typingAttributes = attributes
-        defaultTextAttributes = attributes
         
         textContentType = .oneTimeCode
         keyboardType = .numberPad
@@ -112,11 +104,27 @@ class CodeField: UITextField {
     }
     
     private var kerning: CGFloat {
-        if codeDescription.adjustKerningForWidth && UIScreen.main.bounds.width < 330 {
+        if codeDescription.adjustKerningForWidth && UIScreen.main.bounds.width < 380 {
             return Constants.minKerning
         } else {
             return Constants.preferredKerning
         }
+    }
+    
+    private func updateKerning() {
+        let attributes: [NSAttributedString.Key: Any] = [
+            .kern: kerning,
+            .font: UIFont.monospacedDigitSystemFont(ofSize: 22, weight: .regular)
+        ]
+        
+        typingAttributes = attributes
+        defaultTextAttributes = attributes
+    }
+    
+    override func layoutSubviews() {
+        updateKerning()
+        
+        super.layoutSubviews()
     }
 }
 
