@@ -87,6 +87,7 @@ class ContactQuestionnaireViewModel {
     @Bindable private(set) var informButtonHidden: Bool = true
     @Bindable private(set) var copyButtonHidden: Bool = true
     @Bindable private(set) var informButtonType: Button.ButtonType = .secondary
+    @Bindable private(set) var copyButtonType: Button.ButtonType = .secondary
     @Bindable private(set) var promptButtonType: Button.ButtonType = .primary
     @Bindable private(set) var promptButtonTitle: String = .save
     
@@ -293,6 +294,8 @@ class ContactQuestionnaireViewModel {
         } else {
             informButtonHidden = true
         }
+    
+        updateButtonTypes()
     }
     
     struct ExposureDates {
@@ -327,15 +330,10 @@ class ContactQuestionnaireViewModel {
         
         copyButtonHidden = !Services.configManager.featureFlags.enablePerspectiveCopy
         
-        informButtonType = .secondary
-        promptButtonType = .primary
-        
         switch updatedContact.communication {
         case .index:
             informTitle = .informContactTitle(firstName: firstName)
             informFooter = .informContactFooterIndex(firstName: firstName)
-            informButtonType = .primary
-            promptButtonType = .secondary
         case .staff:
             informTitle = .informContactTitle(firstName: firstName)
             informFooter = .informContactFooterStaff(firstName: firstName)
@@ -346,14 +344,37 @@ class ContactQuestionnaireViewModel {
         
         setInformButtonTitle(firstName: firstName)
         
-        if isDisabled {
+        setInformContent()
+        updateButtonTypes()
+    }
+    
+    private func updateButtonTypes() {
+        guard !isDisabled else {
             promptButtonTitle = .close
             promptButtonType = .secondary
-        } else {
-            promptButtonTitle = .save
+            return
         }
         
-        setInformContent()
+        promptButtonTitle = .save
+        
+        guard updatedContact.communication == .index else {
+            informButtonType = .secondary
+            copyButtonType = .secondary
+            promptButtonType = .primary
+            return
+        }
+        
+        switch (informButtonHidden, copyButtonHidden) {
+        case (false, _):
+            informButtonType = .primary
+            copyButtonType = .secondary
+            promptButtonType = .secondary
+        case (true, false):
+            copyButtonType = .primary
+            promptButtonType = .secondary
+        case (true, true):
+            promptButtonType = .primary
+        }
     }
     
     private func setInformContent() {
