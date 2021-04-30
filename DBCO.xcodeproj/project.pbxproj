@@ -59,6 +59,8 @@
 		CD4DBE7025F635E10037B144 /* OnsetHelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4DBE6F25F635E10037B144 /* OnsetHelpViewController.swift */; };
 		CD4DBE7425F64C690037B144 /* TimelineHelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4DBE7325F64C690037B144 /* TimelineHelpViewController.swift */; };
 		CD4DBE7C25F65E060037B144 /* ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4DBE7B25F65E060037B144 /* ListItem.swift */; };
+		CD5B7DCF26395A6400FCBBBE /* Array+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5B7DCE26395A6400FCBBBE /* Array+Safe.swift */; };
+		CD5B7DD92639ADCA00FCBBBE /* GuidelinesHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5B7DD82639ADCA00FCBBBE /* GuidelinesHelper.swift */; };
 		CD5DA75E255162EE003660CC /* ConfigManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5DA75D255162EE003660CC /* ConfigManaging.swift */; };
 		CD5DA76425516301003660CC /* ConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5DA76325516301003660CC /* ConfigManager.swift */; };
 		CD5DA76F2551859C003660CC /* AppUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5DA76E2551859C003660CC /* AppUpdateViewController.swift */; };
@@ -223,6 +225,8 @@
 		CD4DBE6F25F635E10037B144 /* OnsetHelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnsetHelpViewController.swift; sourceTree = "<group>"; };
 		CD4DBE7325F64C690037B144 /* TimelineHelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineHelpViewController.swift; sourceTree = "<group>"; };
 		CD4DBE7B25F65E060037B144 /* ListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItem.swift; sourceTree = "<group>"; };
+		CD5B7DCE26395A6400FCBBBE /* Array+Safe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Safe.swift"; sourceTree = "<group>"; };
+		CD5B7DD82639ADCA00FCBBBE /* GuidelinesHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidelinesHelper.swift; sourceTree = "<group>"; };
 		CD5DA75D255162EE003660CC /* ConfigManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigManaging.swift; sourceTree = "<group>"; };
 		CD5DA76325516301003660CC /* ConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigManager.swift; sourceTree = "<group>"; };
 		CD5DA76E2551859C003660CC /* AppUpdateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdateViewController.swift; sourceTree = "<group>"; };
@@ -433,6 +437,7 @@
 				CD2F7CB0255949F300F2F73A /* ContactSuggestionHelper.swift */,
 				CD2F7CAA255943E400F2F73A /* ISO8601DateFormat.swift */,
 				CDA07ECB256C0FD900DEF3FF /* Validator.swift */,
+				CD5B7DD82639ADCA00FCBBBE /* GuidelinesHelper.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -769,6 +774,7 @@
 				CD3EFC5A25C40F6100EB2087 /* UIImageView+Convenience.swift */,
 				CDADF7ED2535B6A500424492 /* UILabel+Styling.swift */,
 				CDE7C71926147E3E00941386 /* Date+Convenience.swift */,
+				CD5B7DCE26395A6400FCBBBE /* Array+Safe.swift */,
 				CD6C6A22263C03DD00187930 /* NSObject+Accesibility.swift */,
 			);
 			path = Extensions;
@@ -1059,6 +1065,7 @@
 				CD7282C6250F9D2400D68911 /* TaskOverviewCoordinator.swift in Sources */,
 				CDC7C8A225387E4400FE7E05 /* CaseManager.swift in Sources */,
 				CDA0F6852539AA66009FD2A9 /* Task+ContactName.swift in Sources */,
+				CD5B7DD92639ADCA00FCBBBE /* GuidelinesHelper.swift in Sources */,
 				CDE25F8F254C21B900E9AE49 /* String+SHA256.swift in Sources */,
 				CDE7C6F32611DA8A00941386 /* UILabel+Convenience.swift in Sources */,
 				CDC7C8872538498700FE7E05 /* JSONDecoder+Decoding.swift in Sources */,
@@ -1082,6 +1089,7 @@
 				CDE25F65254B316F00E9AE49 /* NetworkManaging.swift in Sources */,
 				CD756C70252DC629005FEDA0 /* SeparatorView.swift in Sources */,
 				CDC6726A2566824300222DCC /* Codable+UserInfo.swift in Sources */,
+				CD5B7DCF26395A6400FCBBBE /* Array+Safe.swift in Sources */,
 				CD10F09825B08B03000295B9 /* SelectRoommatesViewController.swift in Sources */,
 				CD5DA76F2551859C003660CC /* AppUpdateViewController.swift in Sources */,
 				CD9C7F52254AC25300A78EEF /* Task+Informed.swift in Sources */,

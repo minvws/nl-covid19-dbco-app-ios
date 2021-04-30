@@ -50,9 +50,9 @@
 
 /* MARK: - Onboarding */
 "onboarding.start.title" = "Wat moeten de mensen doen bij wie jij in de buurt bent geweest?";
-"onboarding.start.message" = "Het advies verschilt per persoon. Dit hangt af van de afstand tussen jullie en hoe lang de ontmoeting duurde. De app geeft aan of iemand thuis moet blijven en tot wanneer. Deze informatie kan jij daarna makkelijk delen.";
+"onboarding.start.message" = "Het advies verschilt per persoon. Dit hangt af van of jullie afstand hielden en hoe lang de ontmoeting duurde. De app geeft aan of iemand thuis moet blijven en tot wanneer. Deze informatie kan jij daarna makkelijk delen.";
 "onboarding.determineFlow.title" = "Heb je aan de telefoon een code van de GGD gekregen?";
-"onboarding.determineFlow.message" = "Let op: dit is niet de GGD-sleutel die je in de CoronaMelder-app vindt";
+"onboarding.determineFlow.message" = "Let op: dit is niet de GGD-sleutel die je in de CoronaMelder-app vindt.";
 "onboarding.hasCodeButton" = "Ja, ik heb een code";
 "onboarding.noCodeButton" = "Nee, geen code";
 "onboarding.pairing.title" = "Vul de code in die je hebt gekregen van de GGD-medewerker";
@@ -111,7 +111,7 @@
 "verifyOnsetDateTwoWeeksAgo.no" = "Nee, volgende";
 
 "determineNegativeTestDate.title" = "Wanneer was je laatste negatieve coronatest?";
-"determineNegativeTestDate.subtitle" = "Dit is een test waaruit bleek dat je <b>geen</b> corona had.";
+"determineNegativeTestDate.subtitle" = "Dit is een coronatest van de GGD waaruit bleek dat je <b>geen</b> corona had. Let op: een zelftest telt niet mee.";
 
 "verifySymptomsGettingWorse.title" = "Was er een moment na %@ dat je klachten erger werden?";
 
@@ -303,151 +303,7 @@
 "informContactFooter.staff" = "Je hebt met de GGD afgesproken dat zij %@ informeren. Je kunt natuurlijk wel zelf alvast de leefregels delen.";
 "informContactFooter.unknown" = "De GGD raadt aan om %@ alvast te informeren en deze leefregels te delen.";
 
-"informContactGuidelines.dateFormat" = "EEEE d MMMM";
-"informContactGuidelines.reference" = "<li>Blijkt uit de test dat je corona hebt? Geef dan dit casenummer door aan de GGD: <b>%@</b></li>";
-"informContactGuidelines.category1" = "<ul>
-
-<li>Blijf thuis, vermijd contact met je besmette huisgenoot en ontvang geen bezoek.</li>
-
-<li>Doe zo snel mogelijk een coronatest. Als je besmet blijkt, kun je samen met de GGD meteen maatregelen nemen.</li>
-
-<li>Doe <b>5 dagen</b> na het laatste contact met je besmette huisgenoot nog een coronatest. Ook als je geen klachten hebt gekregen. Blijkt uit die test dat je geen corona hebt? Dan mag je weer naar buiten.</li>
-
-<li>De afspraak voor een coronatest maak je via 0800-2035.</li>
-
-<li>Doe je geen coronatest? Dan blijf je thuis tot en met <b>10 dagen</b> na het laatste contact. Je mag op z’n vroegst weer naar buiten op %@.</li>
-
-<li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt.</li>
-
-<li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog.</li>
-
-%@
-
-</ul>";
-
-"informContactGuidelines.category1.intro" = "Je bent een huisgenoot van iemand die corona heeft. Je bent hierdoor misschien besmet geraakt of kan dat nog worden.<br/><br/>Als je inderdaad besmet bent, kun je het virus aan anderen doorgeven. Ook als je je nu niet ziek voelt. Daarom vraagt de GGD je om je aan deze leefregels te houden:";
-
-"informContactGuidelines.category2.within4Days" = "<ul>
-
-<li>Blijf thuis en ontvang geen bezoek.</li>
-
-<li>Doe zo snel mogelijk een coronatest. Als je besmet blijkt, kun je samen met de GGD meteen maatregelen nemen.</li>
-
-<li>De afspraak voor een coronatest maak je via 0800-2035.</li>
-
-<li>Maak ook meteen een afspraak om je op of na <b>%@</b> nog een keer te laten testen. Het kan soms namelijk een aantal dagen duren voordat een test kan meten dat je bent besmet.</li>
-
-<li>Blijf dus thuis tot uit de test op of na <b>%@</b> blijkt dat je geen corona hebt.</li>
-
-<li>Doe je geen coronatest? Dan blijf je thuis tot en met <b>%@</b></li>
-
-<li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt.</li>
-
-<li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li>
-
-%@
-
-</ul>";
-
-"informContactGuidelines.category2.after4Days" = "<ul>
-
-<li>Blijf thuis en ontvang geen bezoek.</li>
-
-<li>Maak een afspraak voor een coronatest  op of na <b>%@</b>. Blijkt uit de test dat je geen corona hebt? Dan mag je weer naar buiten.</li>
-
-<li>De afspraak voor een coronatest maak je via 0800-2035.</li>
-
-<li>Doe je geen coronatest? Dan blijf je thuis tot en met <b>%@</b></li>
-
-<li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt.</li>
-
-<li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li>
-
-%@
-
-</ul>";
-
-"informContactGuidelines.category2.intro" = "Je bent (op %@) in nauw contact geweest met iemand die corona heeft. Je bent hierdoor misschien besmet geraakt.<br/><br/>Als je inderdaad besmet bent, kun je het virus aan anderen doorgeven. Ook als je je nu niet ziek voelt. Daarom vraagt de GGD je om je aan deze leefregels te houden:";
-
-"informContactGuidelines.category3" = "<ul>
-
-<li>Doe een coronatest op of na <b>%@</b>. Ook als je geen klachten hebt.</li>
-
-<li>De afspraak voor een coronatest maak je via 0800-2035.</li>
-
-<li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt.</li>
-
-<li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li>
-
-%@
-
-</ul>";
-
-"informContactGuidelines.category3.intro" = "Je bent (op %@) in de buurt geweest van iemand die corona heeft. De kans dat je hierdoor misschien besmet geraakt is klein.<br/><br/>Als je wel besmet bent, kun je het virus aan anderen doorgeven. Ook als je je nu niet ziek voelt.";
-
-"informContactGuidelines.generic.category1" = "<ul>
-
-<li>Blijf thuis, vermijd contact met je besmette huisgenoot en ontvang geen bezoek.</li>
-
-<li>Doe zo snel mogelijk een coronatest. Als je besmet blijkt, kun je samen met de GGD meteen maatregelen nemen.</li>
-
-<li>Doe <b>5 dagen</b> na het laatste contact met je besmette huisgenoot nog een coronatest. Ook als je geen klachten hebt gekregen.
-Blijkt uit die test dat je geen corona hebt? Dan mag je weer naar buiten.</li>
-
-<li>De afspraak voor een coronatest maak je via 0800-2035.</li>
-
-<li>Doe je geen coronatest? Dan blijf je thuis tot en met <b>10 dagen</b> na het laatste contact.</li>
-
-<li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt</li>
-
-<li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li>
-
-%@
-
-</ul>";
-
-"informContactGuidelines.generic.category1.intro" = "Je bent een huisgenoot van iemand die corona heeft. Je bent hierdoor misschien besmet geraakt of kan dat nog worden.<br/><br/>Als je inderdaad besmet bent, kun je het virus aan anderen doorgeven. Ook als je je nu niet ziek voelt. Daarom vraagt de GGD je om je aan deze leefregels te houden:";
-
-"informContactGuidelines.generic.category2" = "<ul>
-
-<li>Blijf thuis en ontvang geen bezoek.</li>
-
-<li>Doe zo snel mogelijk een coronatest. En ook <b>5 dagen</b> na het laatste contact. Als uit beide tests blijkt dat je niet besmet bent, mag je weer naar buiten.</li>
-
-<li>De afspraak voor een coronatest maak je via 0800-2035.</li>
-
-<li>Doe je geen coronatest? Dan blijf je thuis tot en met <b>10 dagen</b> na het laatste contact.</li>
-
-<li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt</li>
-
-<li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li>
-
-%@
-
-</ul>";
-
-"informContactGuidelines.generic.category2.intro" = "Je bent in nauw contact geweest met iemand die corona heeft. Je bent hierdoor misschien besmet geraakt.<br/><br/>Als je inderdaad besmet bent, kun je het virus aan anderen doorgeven. Ook als je je nu niet ziek voelt. Daarom vraagt de GGD je om je aan deze leefregels te houden:";
-
-"informContactGuidelines.generic.category3" = "<ul>
-
-<li>Doe een coronatest <b>5 dagen</b> na het laatste contact. Ook als je geen klachten hebt.</li>
-
-<li>De afspraak voor een coronatest maak je via 0800-2035.</li>
-
-<li>Let op gezondheidsklachten die passen bij COVID-19 en laat je direct testen als je klachten krijgt</li>
-
-<li>Was regelmatig je handen met water en zeep, hoest en nies in je elleboog</li>
-
-%@
-
-</ul>";
-
-"informContactGuidelines.generic.category3.intro" = "Je bent in de buurt geweest van iemand die corona heeft. De kans dat je hierdoor misschien besmet geraakt is klein.<br/><br/>Als je wel besmet bent, kun je het virus aan anderen doorgeven. Ook als je je nu niet ziek voelt.";
-
-"informContactLink.category1" = "Meer informatie over omgaan met een besmette huisgenoot en algemene regels als je met iemand woont die corona heeft, lees je op: <a href=\"https://lci.rivm.nl/covid-19-huisgenoten\">lci.rivm.nl/covid-19-huisgenoten</a>";
-"informContactLink.category2a" = "Alle leefregels staan op <a href=\"https://lci.rivm.nl/covid-19-nauwe-contacten\">lci.rivm.nl/covid-19-nauwe-contacten</a>";
-"informContactLink.category2b" = "Alle leefregels staan op <a href=\"https://lci.rivm.nl/covid-19-nauwe-contacten\">lci.rivm.nl/covid-19-nauwe-contacten</a>";
-"informContactLink.category3" = "Alle leefregels staan op <a href=\"https://lci.rivm.nl/covid-19-overige-contacten\">lci.rivm.nl/covid-19-overige-contacten</a>";
+"informContactGuidelinesDateFormat" = "EEEE d MMMM";
 
 "informContactCopyGuidelines" = "Kopieer leefregels";
 "informContactCopyGuidelinesAction" = "Gekopieerd!";

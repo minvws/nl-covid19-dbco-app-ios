@@ -247,6 +247,7 @@ final class CaseManager: CaseManaging, Logging {
     
     func removeCaseData() throws {
         $appData.clearData()
+        hasSynced = false
     }
     
     /// Set the questionnaires from the api call result
@@ -320,6 +321,9 @@ final class CaseManager: CaseManaging, Logging {
                                                                         informedByIndexAt: existingContact.informedByIndexAt,
                                                                         dateOfLastExposure: existingContact.dateOfLastExposure)
                     }
+                    
+                    tasks[existingTaskIndex].label = task.label
+                    tasks[existingTaskIndex].taskContext = task.taskContext
                 }
             } else {
                 tasks.append(task)
