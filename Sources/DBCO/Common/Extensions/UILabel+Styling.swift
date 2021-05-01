@@ -22,6 +22,12 @@ extension UILabel {
         } else {
             accessibilityTraits.remove(.header)
         }
+        
+        numberOfLines = 0
+        lineBreakMode = .byWordWrapping
+        
+        setContentCompressionResistancePriority(.required, for: .vertical)
+        setContentCompressionResistancePriority(.required, for: .horizontal)
     }
     
     convenience init(largeTitle: String?, textColor: UIColor = .darkText) {
