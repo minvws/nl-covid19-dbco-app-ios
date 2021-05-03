@@ -49,15 +49,21 @@ extension LabeledInputView {
         let descriptionFont = isEmphasized ? Theme.fonts.body : Theme.fonts.subhead
         let spacing: CGFloat = isEmphasized ? 16 : 0
         
+        accessibilityLabel = labelText
+        accessibilityHint = description
+        
         return VStack(spacing: max(spacing, 6),
                       VStack(spacing: spacing,
                              UILabel(labelText)
                                 .applyFont(labelFont)
                                 .multiline()
-                                .hideIfEmpty(),
+                                .hideIfEmpty()
+                                .isAccessibilityElement(false),
                              TextView(htmlText: description,
                                       font: descriptionFont,
-                                      textColor: Theme.colors.captionGray)),
+                                      textColor: Theme.colors.captionGray)
+                                .isAccessibilityElement(false)),
                       self)
+            .setAccessibilityElements([self])
     }
 }
