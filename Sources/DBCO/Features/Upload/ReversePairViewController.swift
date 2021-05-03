@@ -228,6 +228,10 @@ class ReversePairViewController: PromptableViewController {
             successView.isHidden = $0 != .finished
             waitingView.isHidden = $0 != .waiting
             errorView.isHidden = $0 != .error
+            
+            if let visibleView = [successView, waitingView, errorView].filter({ !$0.isHidden }).first {
+                UIAccessibility.post(notification: .layoutChanged, argument: visibleView)
+            }
         }
         
         return statusContainerView

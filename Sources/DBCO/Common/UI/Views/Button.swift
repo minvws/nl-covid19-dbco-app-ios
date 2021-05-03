@@ -53,8 +53,6 @@ class Button: UIButton {
         self.title = title
         
         self.titleLabel?.font = Theme.fonts.headline
-        self.titleLabel?.numberOfLines = 0
-        self.titleLabel?.lineBreakMode = .byWordWrapping
         
         self.layer.cornerRadius = 10
         self.clipsToBounds = true
@@ -70,6 +68,8 @@ class Button: UIButton {
         
         // Bold font can cause the button to be marked as heading, this should never be the case.
         accessibilityTraits.remove(.header)
+        
+        setupTitleLabelConstraints()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -100,21 +100,23 @@ class Button: UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
         updateRoundedCorners()
-        titleLabel?.preferredMaxLayoutWidth = titleLabel?.frame.size.width ?? 0
-    }
-    
-    // Takes the intrinsic size of the title label into account for larger font sizes
-    override var intrinsicContentSize: CGSize {
-        let size = titleLabel?.intrinsicContentSize ?? CGSize.zero
-        let insets = contentEdgeInsets
-        
-        return CGSize(
-            width: size.width + insets.left + insets.right,
-            height: size.height + insets.top + insets.bottom
-        )
     }
 
     // MARK: - Private
+    
+    func setupTitleLabelConstraints() {
+        guard let titleLabel = titleLabel else { return }
+        
+        titleLabel.numberOfLines = 0
+        titleLabel.lineBreakMode = .byWordWrapping
+        titleLabel.setContentHuggingPriority(.required, for: .vertical)
+        titleLabel.setContentHuggingPriority(.required, for: .horizontal)
+        
+        titleLabel.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: contentEdgeInsets.top).isActive = true
+        titleLabel.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: contentEdgeInsets.bottom).isActive = true
+        titleLabel.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: contentEdgeInsets.left).isActive = true
+        titleLabel.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: contentEdgeInsets.right).isActive = true
+    }
 
     private func updateButtonType() {
         switch style {
