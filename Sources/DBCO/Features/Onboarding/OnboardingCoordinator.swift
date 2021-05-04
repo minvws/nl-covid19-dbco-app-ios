@@ -70,7 +70,7 @@ extension OnboardingCoordinator {
     
     @objc private func continueToDetermineFlow() {
         let viewModel = StepViewModel(
-            image: UIImage(named: "Onboarding1"),
+            image: UIImage(named: "Onboarding5"),
             title: .onboardingDetermineFlowTitle,
             message: .onboardingDetermineFlowMessage,
             actions: [

@@ -85,7 +85,7 @@ final class AppCoordinator: Coordinator {
         var resetWindow: UIWindow? = createWindow()
         
         let viewModel = StepViewModel(
-            image: UIImage(named: "Onboarding1"),
+            image: UIImage(named: "Onboarding2"),
             title: .launchResetAlertTitle,
             message: .launchResetAlertMessage,
             actions: [
