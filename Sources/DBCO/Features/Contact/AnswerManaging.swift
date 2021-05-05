@@ -204,6 +204,7 @@ class ContactDetailsAnswerManager: AnswerManaging, InputFieldDelegate {
     // swiftlint:enable opening_brace
     
     private var baseAnswer: Answer
+    private var didHaveValidPhoneOrEmail: Bool = false
     
     var updateHandler: ((AnswerManaging) -> Void)?
     
@@ -233,6 +234,8 @@ class ContactDetailsAnswerManager: AnswerManaging, InputFieldDelegate {
         default:
             fatalError()
         }
+        
+        didHaveValidPhoneOrEmail = (email.value ?? phoneNumber.value) != nil
     }
     
     let question: Question
@@ -272,11 +275,35 @@ class ContactDetailsAnswerManager: AnswerManaging, InputFieldDelegate {
         return answer.progressElements.contains(true)
     }
     
-    weak var inputFieldDelegate: InputFieldDelegate?
+    weak var inputFieldDelegate: InputFieldDelegate? {
+        didSet {
+            firstNameField.updateValidationStateIfNeeded()
+            lastNameField.updateValidationStateIfNeeded()
+            phoneNumberField.updateValidationStateIfNeeded()
+            emailField.updateValidationStateIfNeeded()
+        }
+    }
     
     func promptOptionsForInputField(_ options: [String], selectOption: @escaping (String?) -> Void) {
         inputFieldDelegate?.promptOptionsForInputField(options, selectOption: selectOption)
     }
+    
+    func shouldShowValidationResult(_ result: ValidationResult, for sender: AnyObject) -> Bool {
+        guard inputFieldDelegate?.shouldShowValidationResult(result, for: sender) == true else { return false }
+        
+        switch result {
+        case .empty:
+            if sender === phoneNumberField || sender === emailField {
+                // Only allow the empty warning for these if we did not have a value for either one of them
+                return !didHaveValidPhoneOrEmail
+            } else {
+                return true
+            }
+        default:
+            return true
+        }
+    }
+    
 }
 
 /// AnswerManager for the .date question.

@@ -25,6 +25,7 @@ extension UIImageView {
     func asIcon(color: UIColor = Theme.colors.primary) -> Self {
         contentMode = .center
         setContentHuggingPriority(.required, for: .horizontal)
+        setContentCompressionResistancePriority(.required, for: .horizontal)
         tintColor = color
         return self
     }

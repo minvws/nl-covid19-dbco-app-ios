@@ -9,6 +9,7 @@ import UIKit
 
 protocol InputFieldDelegate: class {
     func promptOptionsForInputField(_ options: [String], selectOption: @escaping (String?) -> Void)
+    func shouldShowValidationResult(_ result: ValidationResult, for sender: AnyObject) -> Bool
 }
 
 /// A styled wrapper for [TextField](x-source-tag://TextField) that binds to an object's field conforming to [InputFieldEditable](x-source-tag://InputFieldEditable) and automatically updates its value.
@@ -263,12 +264,13 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         text = formatter.string(from: datePicker.date)
     }
     
-    private func updateValidationStateIfNeeded() {
+    func updateValidationStateIfNeeded() {
         guard let validator = object?[keyPath: path].validator else { return }
         currentValidationTask?.cancel()
         
         currentValidationTask = validator.validate(object?[keyPath: path].value) { [weak self] in
             guard let self = self else { return }
+            guard self.inputFieldDelegate?.shouldShowValidationResult($0, for: self) == true else { return }
             
             switch $0 {
             case .invalid(let error) where error?.isEmpty == false:
@@ -279,6 +281,9 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
                 self.validationIconView.isHighlighted = false
             case .warning(let warning) where warning?.isEmpty == false:
                 self.showWarning(warning!)
+                self.iconContainerView.isHidden = true
+            case .empty:
+                self.showWarning("Vul dit in")
                 self.iconContainerView.isHidden = true
             case .warning:
                 self.iconContainerView.isHidden = false
