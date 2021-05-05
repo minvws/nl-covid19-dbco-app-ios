@@ -44,9 +44,9 @@
 "launchConfigAlert.title" = "De app kan niet geopend worden";
 "launchConfigAlert.message" = "Dit komt waarschijnlijk doordat de app geen verbinding met internet kan maken. Controleer je verbinding en probeer het opnieuw.";
 
-"launchResetAlert.title" = "Alle gegevens zijn automatisch verwijderd";
-"launchResetAlert.message" = "Je hebt de app al een tijd niet gebruikt. Om de gegevens van je contacten te beschermen, zijn deze uit de app verwijderd.";
-"launchResetAlert.button" = "Ga door";
+"launchResetAlert.title" = "Alle ingevulde gegevens zijn verwijderd";
+"launchResetAlert.message" = "Je hebt de app al een tijd niet gebruikt. Om de gegevens van je contacten te beschermen, zijn deze verwijderd.";
+"launchResetAlert.button" = "OK";
 
 /* MARK: - Onboarding */
 "onboarding.start.title" = "Wat moeten de mensen doen bij wie jij in de buurt bent geweest?";
