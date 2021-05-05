@@ -246,7 +246,7 @@ extension DetermineContagiousPeriodCoordinator {
         let dateString = dateFormatter.string(from: onset)
         
         let viewModel = StepViewModel(
-            image: nil,
+            image: UIImage(named: "Onboarding3"),
             title: .verifySymptomsGettingWorseTitle(date: dateString),
             message: nil,
             actions: [
