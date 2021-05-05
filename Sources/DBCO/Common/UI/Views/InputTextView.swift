@@ -30,21 +30,13 @@ class InputTextView<Object: AnyObject, Field: Editable>: UIView {
     }
     
     override var accessibilityLabel: String? {
-        set {
-            textView.accessibilityLabel = newValue
-        }
-        get {
-            textView.accessibilityLabel
-        }
+        get { textView.accessibilityLabel }
+        set { textView.accessibilityLabel = newValue }
     }
     
     override var accessibilityHint: String? {
-        set {
-            textView.accessibilityHint = newValue
-        }
-        get {
-            textView.accessibilityHint
-        }
+        get { textView.accessibilityHint }
+        set { textView.accessibilityHint = newValue }
     }
     
     init(for object: Object, path: WritableKeyPath<Object, Field>) {

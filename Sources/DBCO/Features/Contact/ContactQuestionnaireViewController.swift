@@ -373,4 +373,14 @@ extension ContactQuestionnaireViewController: InputFieldDelegate {
         present(alert, animated: true)
     }
     
+    func shouldShowValidationResult(_ result: ValidationResult, for sender: AnyObject) -> Bool {
+        guard viewModel.isDisabled == false else { return false }
+        switch result {
+        case .empty:
+            return !viewModel.didCreateNewTask
+        default:
+            return true
+        }
+    }
+    
 }
