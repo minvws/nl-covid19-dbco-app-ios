@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol OnsetHelpViewControllerDelegate: class {
+protocol OnsetHelpViewControllerDelegate: AnyObject {
     func onsetHelpViewControllerDidSelectClose(_ controller: OnsetHelpViewController)
 }
 

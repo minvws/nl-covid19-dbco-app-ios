@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol InputFieldDelegate: class {
+protocol InputFieldDelegate: AnyObject {
     func promptOptionsForInputField(_ options: [String], selectOption: @escaping (String?) -> Void)
     func shouldShowValidationResult(_ result: ValidationResult, for sender: AnyObject) -> Bool
 }
