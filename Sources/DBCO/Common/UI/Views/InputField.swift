@@ -283,7 +283,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
                 self.showWarning(warning!)
                 self.iconContainerView.isHidden = true
             case .empty:
-                self.showWarning("Vul dit in")
+                self.showWarning(.contactInformationMissingWarning)
                 self.iconContainerView.isHidden = true
             case .warning:
                 self.iconContainerView.isHidden = false
