@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol OverviewTipsViewControllerDelegate: class {
+protocol OverviewTipsViewControllerDelegate: AnyObject {
     func overviewTipsViewControllerWantsClose(_ controller: OverviewTipsViewController)
 }
 

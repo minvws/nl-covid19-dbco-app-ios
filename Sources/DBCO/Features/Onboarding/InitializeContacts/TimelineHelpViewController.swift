@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol TimelineHelpViewControllerDelegate: class {
+protocol TimelineHelpViewControllerDelegate: AnyObject {
     func timelineHelpViewControllerDidSelectClose(_ controller: TimelineHelpViewController)
 }
 

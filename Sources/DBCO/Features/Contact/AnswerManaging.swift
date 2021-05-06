@@ -14,7 +14,7 @@ extension AnswerOption {
 }
 
 /// - Tag: AnswerManaging
-protocol AnswerManaging: class {
+protocol AnswerManaging: AnyObject {
     var question: Question { get }
     var answer: Answer { get }
     var view: UIView { get }

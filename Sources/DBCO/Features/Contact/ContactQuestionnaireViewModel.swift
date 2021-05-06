@@ -242,6 +242,9 @@ class ContactQuestionnaireViewModel {
             $0.view.isHidden = !$0.question.isRelevant(in: taskCategory) || !$0.isEnabled
         }
         
+        let lastExposureManager = classificationManagers.first { $0.question.questionType == .lastExposureDate }
+        lastExposureManager?.isEnabled = taskCategory != .other
+        
         updateInformSectionContent()
     }
     
@@ -250,6 +253,9 @@ class ContactQuestionnaireViewModel {
                                       communication: updatedContact.communication,
                                       informedByIndexAt: updatedContact.informedByIndexAt,
                                       dateOfLastExposure: value)
+        
+        let classificationDetailsManager = classificationManagers.first { $0.question.questionType == .classificationDetails }
+        classificationDetailsManager?.view.isHidden = value == AnswerOption.lastExposureDateEarlierOption.value
         
         updateInformSectionContent()
     }
@@ -328,8 +334,6 @@ class ContactQuestionnaireViewModel {
         } else {
             informButtonHidden = true
         }
-    
-        updateButtonTypes()
     }
     
     private func updateInformSectionContent() {
@@ -350,8 +354,8 @@ class ContactQuestionnaireViewModel {
         }
         
         setInformButtonTitle(firstName: firstName)
-        
         setInformContent()
+        
         updateButtonTypes()
     }
     
@@ -359,6 +363,12 @@ class ContactQuestionnaireViewModel {
         guard !isDisabled else {
             promptButtonTitle = .close
             promptButtonType = .secondary
+            return
+        }
+        
+        guard !updatedContact.shouldBeDeleted else {
+            promptButtonType = .secondary
+            promptButtonTitle = didCreateNewTask ? .cancel : .close
             return
         }
         

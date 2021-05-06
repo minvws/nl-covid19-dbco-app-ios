@@ -19,7 +19,7 @@ class AppUpdateViewModel {
     }
 }
 
-protocol AppUpdateViewControllerDelegate: class {
+protocol AppUpdateViewControllerDelegate: AnyObject {
     func appUpdateViewController(_ controller: AppUpdateViewController, wantsToOpen url: URL)
 }
 
