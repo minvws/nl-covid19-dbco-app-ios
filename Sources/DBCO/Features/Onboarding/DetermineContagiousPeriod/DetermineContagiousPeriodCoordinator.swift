@@ -50,6 +50,16 @@ final class DetermineContagiousPeriodCoordinator: Coordinator, Logging {
         
         navigationController.pushViewController(symptomController, animated: true)
     }
+    
+    private let dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = .current
+        dateFormatter.timeZone = .current
+        dateFormatter.locale = .display
+        dateFormatter.dateFormat = .contagiousPeriodOnsetDateVerifyDateFormat
+        
+        return dateFormatter
+    }()
 }
 
 extension DetermineContagiousPeriodCoordinator: SelectSymptomsViewControllerDelegate {
@@ -169,12 +179,6 @@ extension DetermineContagiousPeriodCoordinator {
     private func verifySelectedOnsetDate(_ date: Date) {
         symptomOnsetDate = date
         let verifyDate = date.dateByAddingDays(-1)
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.calendar = .current
-        dateFormatter.timeZone = .current
-        dateFormatter.dateFormat = .contagiousPeriodOnsetDateVerifyDateFormat
-        
         let dateString = dateFormatter.string(from: verifyDate)
         
         let viewModel = StepViewModel(
@@ -238,11 +242,6 @@ extension DetermineContagiousPeriodCoordinator {
     }
     
     private func verifySymptomsGettingWorse(onset: Date) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.calendar = .current
-        dateFormatter.timeZone = .current
-        dateFormatter.dateFormat = .contagiousPeriodOnsetDateVerifyDateFormat
-        
         let dateString = dateFormatter.string(from: onset)
         
         let viewModel = StepViewModel(
@@ -259,11 +258,6 @@ extension DetermineContagiousPeriodCoordinator {
     }
     
     private func determineSymptomsIncreasingDate(_ currentOnset: Date) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.calendar = .current
-        dateFormatter.timeZone = .current
-        dateFormatter.dateFormat = .contagiousPeriodOnsetDateVerifyDateFormat
-        
         let dateString = dateFormatter.string(from: currentOnset)
         
         let viewModel = OnboardingDateViewModel(

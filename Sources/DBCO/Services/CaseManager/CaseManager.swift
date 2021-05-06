@@ -438,7 +438,6 @@ final class CaseManager: CaseManaging, Logging {
     private static let valueDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.calendar = Calendar.current
-        formatter.locale = Locale.current
         formatter.timeZone = TimeZone.current
         formatter.dateFormat = "yyyy-MM-dd"
         

@@ -42,6 +42,7 @@ class ContactsTimelineViewModel {
         let formatter = DateFormatter()
         formatter.calendar = .current
         formatter.timeZone = .current
+        formatter.locale = .display
         formatter.dateFormat = .contactsTimelineDateFormat
         
         return formatter
@@ -51,6 +52,7 @@ class ContactsTimelineViewModel {
         let formatter = DateFormatter()
         formatter.calendar = .current
         formatter.timeZone = .current
+        formatter.locale = .display
         formatter.dateFormat = .contactsTimelineShortDateFormat
         
         return formatter
