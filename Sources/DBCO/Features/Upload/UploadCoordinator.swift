@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol UploadCoordinatorDelegate: class {
+protocol UploadCoordinatorDelegate: AnyObject {
     func uploadCoordinatorDidFinish(_ coordinator: UploadCoordinator)
 }
 

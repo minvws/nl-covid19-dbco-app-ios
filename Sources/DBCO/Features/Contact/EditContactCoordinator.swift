@@ -8,7 +8,7 @@
 import UIKit
 import Contacts
 
-protocol EditContactCoordinatorDelegate: class {
+protocol EditContactCoordinatorDelegate: AnyObject {
     func editContactCoordinator(_ coordinator: EditContactCoordinator, didFinishContactTask task: Task)
     func editContactCoordinatorDidCancel(_ coordinator: EditContactCoordinator)
 }

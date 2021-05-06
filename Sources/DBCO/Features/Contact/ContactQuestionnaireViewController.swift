@@ -8,7 +8,7 @@
 import UIKit
 import Contacts
 
-protocol ContactQuestionnaireViewControllerDelegate: class {
+protocol ContactQuestionnaireViewControllerDelegate: AnyObject {
     func contactQuestionnaireViewControllerDidCancel(_ controller: ContactQuestionnaireViewController)
     func contactQuestionnaireViewController(_ controller: ContactQuestionnaireViewController, didSave contactTask: Task)
     func contactQuestionnaireViewController(_ controller: ContactQuestionnaireViewController, wantsToOpen url: URL)
