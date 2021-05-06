@@ -187,7 +187,7 @@ class ContactListInputView: UIView {
         // Next runcycle so keyboard size is properly incorporated
         DispatchQueue.main.async {
             let convertedBounds = scrollView.convert(textField.bounds, from: textField)
-            let extraMargin = UIEdgeInsets(top: 32, left: 0, bottom: 150, right: 0)
+            let extraMargin = UIEdgeInsets(top: 32, left: 0, bottom: 200, right: 0)
             let visibleHeight =
                 scrollView.bounds.height -
                 scrollView.safeAreaInsets.top -
