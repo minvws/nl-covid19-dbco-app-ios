@@ -510,3 +510,7 @@ extension String {
     static var uploadErrorMessage: String { return Localization.string(for: "uploadErrorMessage") }
     
 }
+
+extension Locale {
+    static var display = Locale(identifier: "nl-NL")
+}

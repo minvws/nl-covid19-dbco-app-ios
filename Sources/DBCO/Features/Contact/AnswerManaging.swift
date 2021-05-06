@@ -467,7 +467,7 @@ class LastExposureDateAnswerManager: AnswerManaging {
         formatter.dateStyle = .full
         formatter.timeStyle = .none
         formatter.calendar = Calendar.current
-        formatter.locale = Locale.current
+        formatter.locale = .display
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         
         return formatter
@@ -476,7 +476,6 @@ class LastExposureDateAnswerManager: AnswerManaging {
     static let valueDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.calendar = Calendar.current
-        formatter.locale = Locale.current
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         formatter.dateFormat = "yyyy-MM-dd"
         
