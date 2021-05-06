@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol OnboardingCoordinatorDelegate: class {
+protocol OnboardingCoordinatorDelegate: AnyObject {
     func onboardingCoordinatorDidFinish(_ coordinator: OnboardingCoordinator)
 }
 

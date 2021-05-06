@@ -9,7 +9,7 @@ import UIKit
 import Contacts
 import SafariServices
 
-protocol TaskOverviewCoordinatorDelegate: class {
+protocol TaskOverviewCoordinatorDelegate: AnyObject {
     func taskOverviewCoordinatorDidRequestReset(_ coordinator: TaskOverviewCoordinator)
 }
 

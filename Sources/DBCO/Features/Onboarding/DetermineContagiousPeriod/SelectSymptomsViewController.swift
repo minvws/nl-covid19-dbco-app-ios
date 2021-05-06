@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol SelectSymptomsViewControllerDelegate: class {
+protocol SelectSymptomsViewControllerDelegate: AnyObject {
     func selectSymptomsViewController(_ controller: SelectSymptomsViewController, didSelect symptoms: [Symptom])
 }
 

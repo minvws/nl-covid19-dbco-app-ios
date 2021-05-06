@@ -426,6 +426,8 @@ extension String {
     static var contactInformationLastName: String { return Localization.string(for: "contactInformationLastName") }
     static var contactInformationNameWarning: String { return Localization.string(for: "contactInformationNameWarning") }
     
+    static var contactInformationMissingWarning: String { return Localization.string(for: "contactInformationMissingWarning") }
+    
     static var contactInformationPhoneNumber: String { return Localization.string(for: "contactInformationPhoneNumber") }
     static var contactInformationPhoneNumberPlaceholder: String { return Localization.string(for: "contactInformationPhoneNumberPlaceholder") }
     static var contactInformationPhoneNumberGeneralError: String { return Localization.string(for: "contactInformationPhoneNumberGeneralError") }

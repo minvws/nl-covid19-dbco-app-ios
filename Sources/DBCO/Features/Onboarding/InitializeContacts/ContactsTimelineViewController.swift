@@ -8,7 +8,7 @@
 import UIKit
 import Contacts
 
-protocol ContactsTimelineViewControllerDelegate: class {
+protocol ContactsTimelineViewControllerDelegate: AnyObject {
     func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [Onboarding.Contact], dateOfSymptomOnset: Date)
     func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [Onboarding.Contact], testDate: Date)
     func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didCancelWith contacts: [Onboarding.Contact])

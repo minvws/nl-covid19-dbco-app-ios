@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol ContactsExplanationViewControllerDelegate: class {
+protocol ContactsExplanationViewControllerDelegate: AnyObject {
     func contactsExplanationViewControllerWantsToContinue(_ controller: ContactsExplanationViewController)
 }
 

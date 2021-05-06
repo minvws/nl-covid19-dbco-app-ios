@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol ContactsAuthorizationViewControllerDelegate: class {
+protocol ContactsAuthorizationViewControllerDelegate: AnyObject {
     func contactsAuthorizationViewControllerDidSelectAllow(_ controller: ContactsAuthorizationViewController)
     func contactsAuthorizationViewControllerDidSelectManual(_ controller: ContactsAuthorizationViewController)
 }
