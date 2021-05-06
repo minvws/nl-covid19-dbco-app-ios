@@ -132,7 +132,7 @@ class SelectContactViewModel {
     
 }
 
-protocol SelectContactViewControllerDelegate: class {
+protocol SelectContactViewControllerDelegate: AnyObject {
     func selectContactViewController(_ controller: SelectContactViewController, didSelect contact: CNContact)
     func selectContactViewControllerDidRequestManualInput(_ controller: SelectContactViewController)
     func selectContactViewControllerDidCancel(_ controller: SelectContactViewController)
@@ -239,7 +239,7 @@ extension SelectContactViewController: SearchResultsViewControllerDelegate {
 }
 
 // MARK: - Search Results
-private protocol SearchResultsViewControllerDelegate: class {
+private protocol SearchResultsViewControllerDelegate: AnyObject {
     
     func searchResultsViewController(_ controller: SearchResultsViewController, didSelect contact: CNContact)
     

@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol UnfinishedTasksViewControllerDelegate: class {
+protocol UnfinishedTasksViewControllerDelegate: AnyObject {
     func unfinishedTasksViewController(_ controller: UnfinishedTasksViewController, didSelect task: Task)
     func unfinishedTasksViewControllerDidRequestUpload(_ controller: UnfinishedTasksViewController)
     func unfinishedTasksViewControllerDidCancel(_ controller: UnfinishedTasksViewController)

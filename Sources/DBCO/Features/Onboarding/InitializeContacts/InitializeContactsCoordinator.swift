@@ -9,7 +9,7 @@ import UIKit
 import Contacts
 import SafariServices
 
-protocol InitializeContactsCoordinatorDelegate: class {
+protocol InitializeContactsCoordinatorDelegate: AnyObject {
     func initializeContactsCoordinatorDidFinish(_ coordinator: InitializeContactsCoordinator)
     func initializeContactsCoordinatorDidCancel(_ coordinator: InitializeContactsCoordinator)
 }

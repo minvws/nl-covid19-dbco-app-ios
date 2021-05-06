@@ -15,7 +15,7 @@ enum ValidationResult {
     case unknown
 }
 
-protocol ValidationTask: class {
+protocol ValidationTask: AnyObject {
     func cancel()
 }
 

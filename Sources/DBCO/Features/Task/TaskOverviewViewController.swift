@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol TaskOverviewViewControllerDelegate: class {
+protocol TaskOverviewViewControllerDelegate: AnyObject {
     func taskOverviewViewControllerDidRequestAddContact(_ controller: TaskOverviewViewController)
     func taskOverviewViewController(_ controller: TaskOverviewViewController, didSelect task: Task)
     func taskOverviewViewControllerDidRequestTips(_ controller: TaskOverviewViewController)

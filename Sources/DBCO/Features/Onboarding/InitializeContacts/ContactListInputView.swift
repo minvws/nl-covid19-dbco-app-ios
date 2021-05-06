@@ -8,7 +8,7 @@
 import UIKit
 import Contacts
 
-protocol ContactListInputViewDelegate: class {
+protocol ContactListInputViewDelegate: AnyObject {
     func contactListInputView(_ view: ContactListInputView, didBeginEditingIn textField: UITextField)
     func contactListInputView(_ view: ContactListInputView, didEndEditingIn textField: UITextField)
     func viewForPresentingSuggestionsFromContactListInputView(_ view: ContactListInputView) -> UIView
