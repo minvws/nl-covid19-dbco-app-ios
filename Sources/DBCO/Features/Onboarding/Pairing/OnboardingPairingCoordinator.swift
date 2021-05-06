@@ -8,7 +8,7 @@
 import UIKit
 import SafariServices
 
-protocol OnboardingPairingCoordinatorDelegate: class {
+protocol OnboardingPairingCoordinatorDelegate: AnyObject {
     func onboardingPairingCoordinatorDidFinish(_ coordinator: OnboardingPairingCoordinator)
     func onboardingPairingCoordinatorDidCancel(_ coordinator: OnboardingPairingCoordinator)
 }

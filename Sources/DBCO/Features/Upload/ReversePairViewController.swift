@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol ReversePairViewControllerDelegate: class {
+protocol ReversePairViewControllerDelegate: AnyObject {
     func reversePairViewControllerWantsToResumePairing(_ controller: ReversePairViewController)
     func reversePairViewControllerWantsToContinue(_ controller: ReversePairViewController)
     func reversePairViewControllerWantsToClose(_ controller: ReversePairViewController)

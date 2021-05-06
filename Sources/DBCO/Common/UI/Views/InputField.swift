@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol InputFieldDelegate: class {
+protocol InputFieldDelegate: AnyObject {
     func promptOptionsForInputField(_ options: [String], selectOption: @escaping (String?) -> Void)
     func shouldShowValidationResult(_ result: ValidationResult, for sender: AnyObject) -> Bool
 }
@@ -283,7 +283,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
                 self.showWarning(warning!)
                 self.iconContainerView.isHidden = true
             case .empty:
-                self.showWarning("Vul dit in")
+                self.showWarning(.contactInformationMissingWarning)
                 self.iconContainerView.isHidden = true
             case .warning:
                 self.iconContainerView.isHidden = false

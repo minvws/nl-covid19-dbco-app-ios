@@ -89,7 +89,7 @@ protocol CaseManaging {
 }
 
 /// - Tag: CaseManagerListener
-protocol CaseManagerListener: class {
+protocol CaseManagerListener: AnyObject {
     /// Called after updates are made to the managed tasks
     func caseManagerDidUpdateTasks(_ caseManager: CaseManaging)
     
@@ -438,7 +438,6 @@ final class CaseManager: CaseManaging, Logging {
     private static let valueDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.calendar = Calendar.current
-        formatter.locale = Locale.current
         formatter.timeZone = TimeZone.current
         formatter.dateFormat = "yyyy-MM-dd"
         

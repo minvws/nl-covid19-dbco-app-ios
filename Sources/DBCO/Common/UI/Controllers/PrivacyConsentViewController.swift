@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol PrivacyConsentViewControllerDelegate: class {
+protocol PrivacyConsentViewControllerDelegate: AnyObject {
     func privacyConsentViewControllerWantsToContinue(_ controller: PrivacyConsentViewController)
     func privacyConsentViewController(_ controller: PrivacyConsentViewController, wantsToOpen url: URL)
 }

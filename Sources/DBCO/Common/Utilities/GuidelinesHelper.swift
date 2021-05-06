@@ -15,7 +15,7 @@ class GuidelinesHelper {
         let formatter = DateFormatter()
         formatter.dateFormat = .informContactGuidelinesDateFormat
         formatter.calendar = Calendar.current
-        formatter.locale = Locale.current
+        formatter.locale = .display
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         
         return formatter

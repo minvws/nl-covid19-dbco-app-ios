@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol OverviewTipsViewControllerDelegate: class {
+protocol OverviewTipsViewControllerDelegate: AnyObject {
     func overviewTipsViewControllerWantsClose(_ controller: OverviewTipsViewController)
 }
 
@@ -22,7 +22,7 @@ class OverviewTipsViewModel {
         
         let formatter = DateFormatter()
         formatter.calendar = Calendar.current
-        formatter.locale = Locale.current
+        formatter.locale = .display
         formatter.dateFormat = .overviewTipsTitleDateFormat
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
     

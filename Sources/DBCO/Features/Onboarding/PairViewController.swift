@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol PairViewControllerDelegate: class {
+protocol PairViewControllerDelegate: AnyObject {
     func pairViewController(_ controller: PairViewController, wantsToPairWith code: String)
 }
 
