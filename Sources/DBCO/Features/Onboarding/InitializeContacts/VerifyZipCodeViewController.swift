@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol VerifyZipCodeViewControllerDelegate: class {
+protocol VerifyZipCodeViewControllerDelegate: AnyObject {
     func verifyZipCodeViewController(_ controller: VerifyZipCodeViewController, didFinishWithActiveZipCode: Bool)
 }
 

@@ -17,7 +17,7 @@ enum PairingManagingError: Error {
     case pairingCancelled
 }
 
-protocol PairingManagerListener: class {
+protocol PairingManagerListener: AnyObject {
     func pairingManagerDidStartPollingForPairing(_ pairingManager: PairingManaging)
     func pairingManager(_ pairingManager: PairingManaging, didFailWith error: PairingManagingError)
     func pairingManagerDidCancelPollingForPairing(_ pairingManager: PairingManaging)

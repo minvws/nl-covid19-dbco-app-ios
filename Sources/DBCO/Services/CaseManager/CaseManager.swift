@@ -89,7 +89,7 @@ protocol CaseManaging {
 }
 
 /// - Tag: CaseManagerListener
-protocol CaseManagerListener: class {
+protocol CaseManagerListener: AnyObject {
     /// Called after updates are made to the managed tasks
     func caseManagerDidUpdateTasks(_ caseManager: CaseManaging)
     

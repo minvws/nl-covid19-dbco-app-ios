@@ -337,6 +337,8 @@
 "contactInformationLastName" = "Achternaam";
 "contactInformationNameWarning" = "Klopt deze naam?";
 
+"contactInformationMissingWarning" = "Vul dit in";
+
 "contactInformationPhoneNumber" = "Telefoonnummer";
 "contactInformationPhoneNumberPlaceholder" = "Selecteer telefoonnummer";
 "contactInformationPhoneNumberGeneralError" = "Dit telefoonnummer lijkt niet geldig, weet je zeker dat dit klopt?";

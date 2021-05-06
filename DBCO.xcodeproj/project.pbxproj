@@ -68,6 +68,7 @@
 		CD65CD8525360F5C00BB761A /* UnfinishedTasksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD65CD8425360F5C00BB761A /* UnfinishedTasksViewController.swift */; };
 		CD6860CA253B31190061C318 /* ClassificationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6860C9253B31190061C318 /* ClassificationHelper.swift */; };
 		CD6C6A23263C03DD00187930 /* NSObject+Accesibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6C6A22263C03DD00187930 /* NSObject+Accesibility.swift */; };
+		CD6C6A2D264295FD00187930 /* ClassificationHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6C6A2C264295FD00187930 /* ClassificationHelperTests.swift */; };
 		CD7282BF250F740000D68911 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282BE250F740000D68911 /* AppCoordinator.swift */; };
 		CD7282C3250F9AFE00D68911 /* TaskOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C2250F9AFE00D68911 /* TaskOverviewViewController.swift */; };
 		CD7282C6250F9D2400D68911 /* TaskOverviewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C5250F9D2400D68911 /* TaskOverviewCoordinator.swift */; };
@@ -234,6 +235,7 @@
 		CD65CD8425360F5C00BB761A /* UnfinishedTasksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfinishedTasksViewController.swift; sourceTree = "<group>"; };
 		CD6860C9253B31190061C318 /* ClassificationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassificationHelper.swift; sourceTree = "<group>"; };
 		CD6C6A22263C03DD00187930 /* NSObject+Accesibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Accesibility.swift"; sourceTree = "<group>"; };
+		CD6C6A2C264295FD00187930 /* ClassificationHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassificationHelperTests.swift; sourceTree = "<group>"; };
 		CD7282BE250F740000D68911 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		CD7282C2250F9AFE00D68911 /* TaskOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskOverviewViewController.swift; sourceTree = "<group>"; };
 		CD7282C5250F9D2400D68911 /* TaskOverviewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskOverviewCoordinator.swift; sourceTree = "<group>"; };
@@ -565,8 +567,9 @@
 		CD756C33252B3D36005FEDA0 /* DBCOTests */ = {
 			isa = PBXGroup;
 			children = (
-				CD2F7CB425594BDA00F2F73A /* ContactSuggestionTests.swift */,
+				CD6C6A2C264295FD00187930 /* ClassificationHelperTests.swift */,
 				CD010B97257A409B00CEA4F5 /* ContactQuestionnaireCommunicationTests.swift */,
+				CD2F7CB425594BDA00F2F73A /* ContactSuggestionTests.swift */,
 				CD756C36252B3D37005FEDA0 /* Info.plist */,
 			);
 			path = DBCOTests;
@@ -1020,6 +1023,7 @@
 			files = (
 				CD010B98257A409B00CEA4F5 /* ContactQuestionnaireCommunicationTests.swift in Sources */,
 				CD2F7CB525594BDA00F2F73A /* ContactSuggestionTests.swift in Sources */,
+				CD6C6A2D264295FD00187930 /* ClassificationHelperTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

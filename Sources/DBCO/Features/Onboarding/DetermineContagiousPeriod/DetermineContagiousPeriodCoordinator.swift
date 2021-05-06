@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol DetermineContagiousPeriodCoordinatorDelegate: class {
+protocol DetermineContagiousPeriodCoordinatorDelegate: AnyObject {
     func determineContagiousPeriodCoordinator(_ coordinator: DetermineContagiousPeriodCoordinator, didFinishWith testDate: Date)
     func determineContagiousPeriodCoordinator(_ coordinator: DetermineContagiousPeriodCoordinator, didFinishWith symptoms: [Symptom], dateOfSymptomOnset: Date)
     func determineContagiousPeriodCoordinatorDidCancel(_ coordinator: DetermineContagiousPeriodCoordinator)
