@@ -9,7 +9,7 @@ import UIKit
 import Contacts
 import ContactsUI
 
-protocol SelectContactCoordinatorDelegate: class {
+protocol SelectContactCoordinatorDelegate: AnyObject {
     func selectContactCoordinator(_ coordinator: SelectContactCoordinator, didFinishWith task: Task)
     func selectContactCoordinatorDidCancel(_ coordinator: SelectContactCoordinator)
 }

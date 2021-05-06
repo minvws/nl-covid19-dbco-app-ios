@@ -58,13 +58,20 @@ class PromptableViewController: ViewController {
             separator
                 .snap(to: .top, of: promptContainerView)
             
-            let stackView = UIStackView(vertical: [contentView, promptContainerView])
-            stackView.embed(in: self)
+            VStack(contentView,
+                   promptContainerView)
+                .embed(in: self)
         }
         
         required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
+    }
+    
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        
+        view.layoutIfNeeded()
     }
     
     var contentView: UIView {

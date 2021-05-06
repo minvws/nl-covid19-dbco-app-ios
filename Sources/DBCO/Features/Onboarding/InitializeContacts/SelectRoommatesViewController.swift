@@ -8,7 +8,7 @@
 import UIKit
 import Contacts
 
-protocol SelectRoommatesViewControllerDelegate: class {
+protocol SelectRoommatesViewControllerDelegate: AnyObject {
     func selectRoommatesViewController(_ controller: SelectRoommatesViewController, didFinishWith roommates: [Onboarding.Contact])
     func selectRoommatesViewController(_ controller: SelectRoommatesViewController, didCancelWith roommates: [Onboarding.Contact])
 }
