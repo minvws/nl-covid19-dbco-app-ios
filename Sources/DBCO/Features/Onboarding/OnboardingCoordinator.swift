@@ -16,7 +16,6 @@ protocol OnboardingCoordinatorDelegate: AnyObject {
 final class OnboardingCoordinator: Coordinator {
     private let window: UIWindow
     private lazy var navigationController: NavigationController = setupNavigationController()
-    private var didPair: Bool = false
     
     weak var delegate: OnboardingCoordinatorDelegate?
     
