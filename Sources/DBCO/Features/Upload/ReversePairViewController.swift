@@ -129,20 +129,20 @@ class ReversePairViewController: PromptableViewController {
         
         VStack(spacing: 24,
                VStack(spacing: 16,
-                      UILabel(title2: .reversePairingStep1Title).multiline(),
-                      UILabel(body: .reversePairingStep1Message, textColor: Theme.colors.captionGray).multiline()),
+                      UILabel(title2: .reversePairingStep1Title),
+                      UILabel(body: .reversePairingStep1Message, textColor: Theme.colors.captionGray)),
                VStack(spacing: 16,
                       HStack(spacing: 16,
                              UIImageView(imageName: "Step1").asIcon().assign(to: &step1IconView),
-                             UILabel(title3: .reversePairingStep1Code).multiline())
+                             UILabel(title3: .reversePairingStep1Code))
                         .alignment(.top),
                       createCodeContainerView().withInsets(.left(40))),
                VStack(spacing: 16,
                       HStack(spacing: 16,
                              UIImageView(imageName: "Step2").asIcon().assign(to: &step2IconView),
                              VStack(spacing: 4,
-                                    UILabel(title3: .reversePairingStep2Title).multiline(),
-                                    UILabel(body: .reversePairingStep2Message, textColor: Theme.colors.captionGray).multiline()))
+                                    UILabel(title3: .reversePairingStep2Title),
+                                    UILabel(body: .reversePairingStep2Message, textColor: Theme.colors.captionGray)))
                         .alignment(.top),
                       createStatusContainerView().withInsets(.left(40))))
             .embed(in: scrollView.readableWidth, insets: .top(32) + .bottom(16))
@@ -211,7 +211,7 @@ class ReversePairViewController: PromptableViewController {
         
         let waitingView = HStack(spacing: 8,
                                  activityIndicator,
-                                 UILabel(body: .reversePairingWaiting, textColor: Theme.colors.captionGray).multiline())
+                                 UILabel(body: .reversePairingWaiting, textColor: Theme.colors.captionGray))
             .withInsets(.left(24))
         
         let successView = VStack(HStack(spacing: 8,
@@ -239,8 +239,7 @@ class ReversePairViewController: PromptableViewController {
     
     private func createErrorView(label: String, button: String) -> UIView {
         return VStack(UILabel(body: label, textColor: Theme.colors.captionGray)
-                        .textAlignment(.center)
-                        .multiline(),
+                        .textAlignment(.center),
                       Button(title: button, style: .info)
                         .touchUpInside(self, action: #selector(resumePairing)))
             .withInsets(.top(16) + .leftRight(16))

@@ -278,8 +278,7 @@ class TaskOverviewViewController: PromptableViewController {
         let windowExpiredMessage =
             HStack(spacing: 8,
                    UIImageView(imageName: "Warning").asIcon().withInsets(.top(2)),
-                   UILabel(subhead: .windowExpiredMessage,
-                         textColor: Theme.colors.primary).multiline())
+                   UILabel(subhead: .windowExpiredMessage, textColor: Theme.colors.primary))
             .alignment(.top)
         
         let doneButton = Button(title: .taskOverviewDoneButtonTitle)
@@ -318,7 +317,7 @@ class TaskOverviewViewController: PromptableViewController {
         let pairingView = VStack(spacing: 16,
                                  HStack(spacing: 6,
                                         pairingActivityView,
-                                        UILabel(subhead: .taskOverviewWaitingForPairing, textColor: Theme.colors.primary).multiline()),
+                                        UILabel(subhead: .taskOverviewWaitingForPairing, textColor: Theme.colors.primary)),
                                  Button(title: .taskOverviewPairingTryAgain, style: .secondary)
                                     .touchUpInside(self, action: #selector(upload)))
         
@@ -326,7 +325,7 @@ class TaskOverviewViewController: PromptableViewController {
     }
     
     private func createPairingErrorView() -> UIView {
-        let label = UILabel(subhead: "", textColor: Theme.colors.warning).multiline()
+        let label = UILabel(subhead: "", textColor: Theme.colors.warning)
         
         viewModel.$pairingErrorText.binding = { label.text = $0 }
         
@@ -418,8 +417,8 @@ private extension TaskOverviewViewController {
         tipButton.touchUpInside(self, action: #selector(requestTips))
         
         VStack(VStack(spacing: 4,
-                      UILabel(bodyBold: .taskOverviewTipsTitle).multiline(),
-                      UILabel(attributedString: viewModel.tipMessageText).multiline()),
+                      UILabel(bodyBold: .taskOverviewTipsTitle),
+                      UILabel(attributedString: viewModel.tipMessageText)),
                tipButton)
             .embed(in: tipContainerView, insets: .right(92) + .left(16) + .top(16) + .bottom(11))
         
@@ -440,8 +439,8 @@ private extension TaskOverviewViewController {
     
     func sectionHeaderBuilder(title: String, subtitle: String?) -> UIView {
         return VStack(spacing: 4,
-                      UILabel(bodyBold: title).asHeader().multiline(),
-                      UILabel(subhead: subtitle, textColor: Theme.colors.captionGray).multiline().hideIfEmpty())
+                      UILabel(bodyBold: title).asHeader(),
+                      UILabel(subhead: subtitle, textColor: Theme.colors.captionGray).hideIfEmpty())
                    .wrappedInReadableWidth(insets: .top(20) + .bottom(0))
     }
     

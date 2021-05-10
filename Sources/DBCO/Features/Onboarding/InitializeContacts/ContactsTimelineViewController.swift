@@ -269,13 +269,13 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
         addExtraDayButton.imageEdgeInsets = .right(5)
         
         addExtraDaySectionView = VStack(spacing: 24,
-                                        addExtraDayTitleLabel.multiline(),
+                                        addExtraDayTitleLabel,
                                         addExtraDayButton)
 
         let stack =
             VStack(spacing: 40,
                    VStack(spacing: 16,
-                          titleLabel.multiline(),
+                          titleLabel,
                           TextView(htmlText: .contactsTimelineMessage, font: Theme.fonts.body, textColor: Theme.colors.captionGray, boldTextColor: Theme.colors.primary)
                             .linkTouched { [weak self] _ in self?.openHelp() }),
                    sectionStackView,
@@ -494,7 +494,7 @@ private class TimelineSectionView: UIView {
         
         return HStack(spacing: 12,
                       icon,
-                      UILabel(body: text, textColor: Theme.colors.tipItemColor).multiline())
+                      UILabel(body: text, textColor: Theme.colors.tipItemColor))
     }
 }
 
@@ -512,8 +512,8 @@ private class DaySectionView: TimelineSectionView {
         
         VStack(spacing: 8,
                VStack(spacing: 4,
-                      titleLabel.asHeader().multiline(),
-                      subtitleLabel.multiline().hideIfEmpty()),
+                      titleLabel.asHeader(),
+                      subtitleLabel.hideIfEmpty()),
                contactList)
             .embed(in: self)
     }
@@ -548,7 +548,7 @@ private class ReviewTipsSectionView: TimelineSectionView {
         VStack(spacing: 16,
                VStack(spacing: 6,
                       createTipHeaderLabel(),
-                      UILabel(bodyBold: .contactsTimelineReviewTipTitle).multiline()),
+                      UILabel(bodyBold: .contactsTimelineReviewTipTitle)),
                HStack(spacing: 24,
                       VStack(spacing: 16,
                              createTipItem(icon: "Photos", text: .contactsTimelineReviewTipPhotos),
@@ -574,7 +574,7 @@ private class ActivityTipsSectionView: TimelineSectionView {
         VStack(spacing: 16,
                VStack(spacing: 6,
                       createTipHeaderLabel(),
-                      UILabel(bodyBold: .contactsTimelineActivityTipTitle).multiline()),
+                      UILabel(bodyBold: .contactsTimelineActivityTipTitle)),
                VStack(spacing: 16,
                       createTipItem(icon: "Car", text: .contactsTimelineActivityTipCar),
                       createTipItem(icon: "Meetings", text: .contactsTimelineActivityTipMeetings),

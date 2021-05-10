@@ -49,7 +49,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
     
     private func setup() {
         VStack(spacing: 8,
-               label.multiline(),
+               label,
                VStack(spacing: 2,
                       warningContainer,
                       textField,
@@ -348,11 +348,11 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         textField.setBorder(width: 0)
     }
     
-    private lazy var warningLabel = UILabel(subhead: nil, textColor: Theme.colors.primary).multiline()
+    private lazy var warningLabel = UILabel(subhead: nil, textColor: Theme.colors.primary)
     private lazy var warningIcon = UIImageView(imageName: "Validation/Warning").asIcon(color: Theme.colors.primary)
     private lazy var warningContainer = HStack(spacing: 4, warningIcon, warningLabel).alignment(.top)
     
-    private lazy var errorLabel = UILabel(subhead: nil, textColor: Theme.colors.warning).multiline()
+    private lazy var errorLabel = UILabel(subhead: nil, textColor: Theme.colors.warning)
     private lazy var errorIcon = UIImageView(imageName: "Validation/Invalid").asIcon(color: Theme.colors.warning)
     private lazy var errorContainer = HStack(spacing: 4, errorIcon, errorLabel).alignment(.top)
     

@@ -128,14 +128,14 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         sectionView.showBottomSeparator = false
         sectionView.collapse(animated: false)
         
-        let informTitleLabel = UILabel(bodyBold: "").multiline()
+        let informTitleLabel = UILabel(bodyBold: "")
         let informTextView = TextView().linkTouched { [unowned self] in
             delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0)
         }
         let informLinkView = TextView().linkTouched { [unowned self] in
             delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0)
         }
-        let informFooterLabel = UILabel(bodyBold: "").multiline()
+        let informFooterLabel = UILabel(bodyBold: "")
         
         let informButton = Button(title: "", style: .primary)
             .touchUpInside(self, action: #selector(informContact))
