@@ -440,7 +440,7 @@ private extension TaskOverviewViewController {
     
     func sectionHeaderBuilder(title: String, subtitle: String?) -> UIView {
         return VStack(spacing: 4,
-                      UILabel(bodyBold: title).multiline(),
+                      UILabel(bodyBold: title).asHeader().multiline(),
                       UILabel(subhead: subtitle, textColor: Theme.colors.captionGray).multiline().hideIfEmpty())
                    .wrappedInReadableWidth(insets: .top(20) + .bottom(0))
     }
