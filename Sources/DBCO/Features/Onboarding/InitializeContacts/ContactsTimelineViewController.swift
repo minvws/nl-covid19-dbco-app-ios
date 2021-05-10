@@ -172,20 +172,16 @@ class ContactsTimelineViewModel {
         let dates = sections
             .compactMap { section -> String? in
                 if case .day(let date, _, _) = section {
-                    return dateFormatter.string(from: date)
+                    return dateFormatter
+                        .string(from: date)
+                        .capitalizingFirstLetter()
                 } else {
                     return nil
                 }
             }
             .reversed()
         
-        let combinedDates: String
-        
-        if dates.count > 2 {
-            combinedDates = dates.dropLast().joined(separator: .contactsTimelineEmptyDaysSeparator) + .contactsTimelineEmptyDaysFinalSeparator + dates.last!
-        } else {
-            combinedDates = dates.joined(separator: .contactsTimelineEmptyDaysFinalSeparator)
-        }
+        let combinedDates = dates.joined(separator: "\n")
         
         return .contactsTimelineEmptyDaysMessage(days: combinedDates)
     }
