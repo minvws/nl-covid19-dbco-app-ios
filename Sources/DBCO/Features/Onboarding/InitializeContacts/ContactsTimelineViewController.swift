@@ -512,7 +512,7 @@ private class DaySectionView: TimelineSectionView {
         
         VStack(spacing: 8,
                VStack(spacing: 4,
-                      titleLabel.multiline(),
+                      titleLabel.asHeader().multiline(),
                       subtitleLabel.multiline().hideIfEmpty()),
                contactList)
             .embed(in: self)
