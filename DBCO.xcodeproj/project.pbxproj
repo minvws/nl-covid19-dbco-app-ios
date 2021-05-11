@@ -101,6 +101,7 @@
 		CDA5C11125123DC9009440D1 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C11025123DC9009440D1 /* AppVersion.swift */; };
 		CDA5C11825135A46009440D1 /* SelectContactCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C11725135A46009440D1 /* SelectContactCoordinator.swift */; };
 		CDA5C11C25139D36009440D1 /* UIStackView+Axis.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C11B25139D36009440D1 /* UIStackView+Axis.swift */; };
+		CDA7BCCD264A80D60034AC92 /* ContactQuestionnaireViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA7BCCC264A80D50034AC92 /* ContactQuestionnaireViewModelTests.swift */; };
 		CDADF7DE2534773800424492 /* UIToolbar+Done.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDADF7DD2534773800424492 /* UIToolbar+Done.swift */; };
 		CDADF7EE2535B6A500424492 /* UILabel+Styling.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDADF7ED2535B6A500424492 /* UILabel+Styling.swift */; };
 		CDADF7F32535E34400424492 /* UploadCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDADF7F22535E34400424492 /* UploadCoordinator.swift */; };
@@ -270,6 +271,7 @@
 		CDA5C11025123DC9009440D1 /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		CDA5C11725135A46009440D1 /* SelectContactCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectContactCoordinator.swift; sourceTree = "<group>"; };
 		CDA5C11B25139D36009440D1 /* UIStackView+Axis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Axis.swift"; sourceTree = "<group>"; };
+		CDA7BCCC264A80D50034AC92 /* ContactQuestionnaireViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactQuestionnaireViewModelTests.swift; sourceTree = "<group>"; };
 		CDADF7DD2534773800424492 /* UIToolbar+Done.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIToolbar+Done.swift"; sourceTree = "<group>"; };
 		CDADF7ED2535B6A500424492 /* UILabel+Styling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Styling.swift"; sourceTree = "<group>"; };
 		CDADF7F22535E34400424492 /* UploadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadCoordinator.swift; sourceTree = "<group>"; };
@@ -571,6 +573,7 @@
 				CD010B97257A409B00CEA4F5 /* ContactQuestionnaireCommunicationTests.swift */,
 				CD2F7CB425594BDA00F2F73A /* ContactSuggestionTests.swift */,
 				CD756C36252B3D37005FEDA0 /* Info.plist */,
+				CDA7BCCC264A80D50034AC92 /* ContactQuestionnaireViewModelTests.swift */,
 			);
 			path = DBCOTests;
 			sourceTree = "<group>";
@@ -1022,6 +1025,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD010B98257A409B00CEA4F5 /* ContactQuestionnaireCommunicationTests.swift in Sources */,
+				CDA7BCCD264A80D60034AC92 /* ContactQuestionnaireViewModelTests.swift in Sources */,
 				CD2F7CB525594BDA00F2F73A /* ContactSuggestionTests.swift in Sources */,
 				CD6C6A2D264295FD00187930 /* ClassificationHelperTests.swift in Sources */,
 			);

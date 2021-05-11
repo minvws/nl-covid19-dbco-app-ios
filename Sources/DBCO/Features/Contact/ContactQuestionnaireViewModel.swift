@@ -75,6 +75,18 @@ class ContactQuestionnaireViewModel {
         return updatedTask.contact.shouldBeDeleted
     }
     
+    struct Input {
+        let caseReference: String?
+        let guidelines: Guidelines
+        let featureFlags: FeatureFlags
+        let isCaseWindowExpired: Bool
+        let task: Task?
+        let questionnaire: Questionnaire
+        let contact: CNContact?
+    }
+    
+    private let input: Input
+    
     var updatedTask: Task {
         let updatedCategory = updatedClassification.category ?? task.contact.category
         
@@ -125,11 +137,12 @@ class ContactQuestionnaireViewModel {
     @Bindable private(set) var promptButtonType: Button.ButtonType = .primary
     @Bindable private(set) var promptButtonTitle: String = .save
     
-    init(task: Task?, questionnaire: Questionnaire, contact: CNContact? = nil) {
-        self.didCreateNewTask = task == nil
+    init(_ input: Input) {
+        self.input = input
+        self.didCreateNewTask = input.task == nil
         
-        let initialCategory = task?.contact.category
-        let task = task ?? Task.emptyContactTask
+        let initialCategory = input.task?.contact.category
+        let task = input.task ?? Task.emptyContactTask
         self.task = task
         self.updatedContact = task.contact
         self.title = task.contactName ?? .contactFallbackTitle
@@ -137,20 +150,20 @@ class ContactQuestionnaireViewModel {
         let questionsAndAnswers: [(question: Question, answer: Answer)] = {
             let currentAnswers = task.questionnaireResult?.answers ?? []
             
-            return questionnaire.questions.map { question in
+            return input.questionnaire.questions.map { question in
                 (question, currentAnswers.first { $0.questionUuid == question.uuid } ?? question.emptyAnswer)
             }
         }()
         
-        self.baseResult = QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: questionsAndAnswers.map(\.answer))
+        self.baseResult = QuestionnaireResult(questionnaireUuid: input.questionnaire.uuid, answers: questionsAndAnswers.map(\.answer))
         
         self.answerManagers = Self.createAnswerManagers(for: questionsAndAnswers,
-                                                        contact: contact,
+                                                        contact: input.contact,
                                                         category: initialCategory,
                                                         dateOfLastExposure: updatedContact.dateOfLastExposure,
                                                         source: task.source)
         self.updatedClassification = .success(task.contact.category)
-        self.isDisabled = Services.caseManager.isWindowExpired
+        self.isDisabled = input.isCaseWindowExpired
         
         setupUpdateHandlers()
         setupInitialState()
@@ -328,7 +341,7 @@ class ContactQuestionnaireViewModel {
     
     // MARK: - Inform Section Content
     private func setInformButtonTitle(firstName: String?) {
-        if updatedTask.contactPhoneNumber != nil && Services.configManager.featureFlags.enableContactCalling {
+        if updatedTask.contactPhoneNumber != nil && input.featureFlags.enableContactCalling {
             informButtonTitle = .informContactCall(firstName: firstName)
             informButtonHidden = false
         } else {
@@ -339,7 +352,7 @@ class ContactQuestionnaireViewModel {
     private func updateInformSectionContent() {
         let firstName = updatedTask.contactFirstName
         
-        copyButtonHidden = !Services.configManager.featureFlags.enablePerspectiveCopy
+        copyButtonHidden = !input.featureFlags.enablePerspectiveCopy
         
         switch updatedContact.communication {
         case .index:
@@ -395,8 +408,8 @@ class ContactQuestionnaireViewModel {
     }
     
     private func setInformContent() {
-        let referenceNumber = Services.caseManager.reference
-        let guidelines = Services.configManager.guidelines
+        let referenceNumber = input.caseReference
+        let guidelines = input.guidelines
 
         var exposureDate: Date?
         
