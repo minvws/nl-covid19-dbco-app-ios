@@ -211,8 +211,6 @@ class ContactQuestionnaireViewModelTests: XCTestCase {
             .sendActions(for: .touchUpInside)
         
         XCTAssertEqual(viewModel.updatedTask.contact.category, .category3a)
-        
-        print(toggleButtons)
     }
     
     func testOtherCategoryState() {
