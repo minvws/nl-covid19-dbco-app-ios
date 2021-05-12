@@ -327,6 +327,74 @@ class ContactQuestionnaireViewModelTests: XCTestCase {
         
         XCTAssertTrue(viewModel.informButtonHidden)
     }
+    
+    func testUnknownInformButtonState() {
+        let input = ContactQuestionnaireViewModel.Input(
+            caseReference: nil,
+            guidelines: guidelines,
+            featureFlags: FeatureFlags(enableContactCalling: false, enablePerspectiveCopy: true, enableSelfBCO: true),
+            isCaseWindowExpired: false,
+            task: createContactTask(category: .category1, source: .app, communication: .unknown, dateOfLastExposure: .now),
+            questionnaire: simpleQuestionnaire,
+            contact: fullContact)
+        
+        let viewModel = ContactQuestionnaireViewModel(input)
+        
+        XCTAssertEqual(viewModel.informButtonType, .secondary)
+        XCTAssertEqual(viewModel.copyButtonType, .secondary)
+        XCTAssertEqual(viewModel.promptButtonType, .primary)
+    }
+    
+    func testStaffInformButtonState() {
+        let input = ContactQuestionnaireViewModel.Input(
+            caseReference: nil,
+            guidelines: guidelines,
+            featureFlags: FeatureFlags(enableContactCalling: false, enablePerspectiveCopy: true, enableSelfBCO: true),
+            isCaseWindowExpired: false,
+            task: createContactTask(category: .category1, source: .app, communication: .staff, dateOfLastExposure: .now),
+            questionnaire: simpleQuestionnaire,
+            contact: fullContact)
+        
+        let viewModel = ContactQuestionnaireViewModel(input)
+        
+        XCTAssertEqual(viewModel.informButtonType, .secondary)
+        XCTAssertEqual(viewModel.copyButtonType, .secondary)
+        XCTAssertEqual(viewModel.promptButtonType, .primary)
+    }
+    
+    func testIndexInformButtonStateWithPhoneNumber() {
+        let input = ContactQuestionnaireViewModel.Input(
+            caseReference: nil,
+            guidelines: guidelines,
+            featureFlags: FeatureFlags(enableContactCalling: true, enablePerspectiveCopy: true, enableSelfBCO: true),
+            isCaseWindowExpired: false,
+            task: createContactTask(category: .category1, source: .app, communication: .index, dateOfLastExposure: .now),
+            questionnaire: simpleQuestionnaire,
+            contact: fullContact)
+        
+        let viewModel = ContactQuestionnaireViewModel(input)
+        
+        XCTAssertEqual(viewModel.informButtonType, .primary)
+        XCTAssertEqual(viewModel.copyButtonType, .secondary)
+        XCTAssertEqual(viewModel.promptButtonType, .secondary)
+    }
+    
+    func testIndexInformButtonStateNoPhoneNumber() {
+        let input = ContactQuestionnaireViewModel.Input(
+            caseReference: nil,
+            guidelines: guidelines,
+            featureFlags: FeatureFlags(enableContactCalling: true, enablePerspectiveCopy: true, enableSelfBCO: true),
+            isCaseWindowExpired: false,
+            task: createContactTask(category: .category1, source: .app, communication: .index, dateOfLastExposure: .now),
+            questionnaire: simpleQuestionnaire,
+            contact: contactMissingNumber)
+        
+        let viewModel = ContactQuestionnaireViewModel(input)
+        
+        XCTAssertEqual(viewModel.informButtonType, .secondary)
+        XCTAssertEqual(viewModel.copyButtonType, .primary)
+        XCTAssertEqual(viewModel.promptButtonType, .secondary)
+    }
 
 }
 
@@ -349,10 +417,10 @@ private func createSectionView(with views: [UIView]) -> SectionView {
     return sectionView
 }
 
-private func createContactTask(category: Task.Contact.Category, source: Task.Source, dateOfLastExposure: Date? = .now) -> Task {
+private func createContactTask(category: Task.Contact.Category, source: Task.Source, communication: Task.Contact.Communication = .unknown, dateOfLastExposure: Date? = .now) -> Task {
     let exposureDateString = dateOfLastExposure.map(lastExposureDateFormatter.string)
     var task = Task(type: .contact, label: nil, source: source)
-    task.contact = .init(category: category, communication: .unknown, informedByIndexAt: nil, dateOfLastExposure: exposureDateString)
+    task.contact = .init(category: category, communication: communication, informedByIndexAt: nil, dateOfLastExposure: exposureDateString)
     return task
 }
 
