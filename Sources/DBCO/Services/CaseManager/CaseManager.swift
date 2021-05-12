@@ -260,41 +260,7 @@ final class CaseManager: CaseManaging, Logging {
     ///
     /// - Tag: CaseManager.setQuestionnaires
     private func setQuestionnaires(_ questionnaires: [Questionnaire]) {
-        func injectingLastExposureDateIfNeeded(_ questionnaire: Questionnaire) -> Questionnaire {
-            switch questionnaire.taskType {
-            case .contact:
-                var questions = questionnaire.questions
-                
-                // Modify the classification questions to be disabled when the task source is .portal
-                func shouldBeDisabledForPortalTasks(_ offset: Int, _ question: Question) -> Bool {
-                    return question.questionType == .classificationDetails
-                }
-                
-                let classificationIndices = questionnaire.questions
-                    .enumerated()
-                    .filter(shouldBeDisabledForPortalTasks)
-                    .map { $0.offset }
-                
-                for index in classificationIndices {
-                    questions[index] = questions[index].disabledForPortal
-                }
-                
-                // Insert a .lastExposureDate question
-                let lastExposureQuestion = Question.lastExposureDateQuestion
-                
-                if questions.isEmpty { // Just to be safe
-                    questions.append(lastExposureQuestion)
-                } else {
-                    questions.insert(lastExposureQuestion, at: 0)
-                }
-                
-                return Questionnaire(uuid: questionnaire.uuid,
-                                     taskType: questionnaire.taskType,
-                                     questions: questions)
-            }
-        }
-        
-        self.questionnaires = questionnaires.map(injectingLastExposureDateIfNeeded)
+        self.questionnaires = questionnaires.map(Self.prepareQuestionnaire)
     }
     
     /// Set the tasks from the api call result
@@ -505,6 +471,42 @@ final class CaseManager: CaseManaging, Logging {
         }
     }
     
+}
+
+extension CaseManager {
+    static func prepareQuestionnaire(_ questionnaire: Questionnaire) -> Questionnaire {
+        switch questionnaire.taskType {
+        case .contact:
+            var questions = questionnaire.questions
+            
+            // Modify the classification questions to be disabled when the task source is .portal
+            func shouldBeDisabledForPortalTasks(_ offset: Int, _ question: Question) -> Bool {
+                return question.questionType == .classificationDetails
+            }
+            
+            let classificationIndices = questionnaire.questions
+                .enumerated()
+                .filter(shouldBeDisabledForPortalTasks)
+                .map { $0.offset }
+            
+            for index in classificationIndices {
+                questions[index] = questions[index].disabledForPortal
+            }
+            
+            // Insert a .lastExposureDate question
+            let lastExposureQuestion = Question.lastExposureDateQuestion
+            
+            if questions.isEmpty { // Just to be safe
+                questions.append(lastExposureQuestion)
+            } else {
+                questions.insert(lastExposureQuestion, at: 0)
+            }
+            
+            return Questionnaire(uuid: questionnaire.uuid,
+                                 taskType: questionnaire.taskType,
+                                 questions: questions)
+        }
+    }
 }
 
 // MARK: - Loading

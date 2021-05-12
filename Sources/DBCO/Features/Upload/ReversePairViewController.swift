@@ -170,7 +170,10 @@ class ReversePairViewController: PromptableViewController {
         codeActivityIndicator.startAnimating()
         codeActivityIndicator.contentMode = .center
         
-        let codeLabel = UILabel(nil, font: .monospacedDigitSystemFont(ofSize: 22, weight: .semibold))
+        let scaledFont = UIFontMetrics(forTextStyle: .title2)
+            .scaledFont(for: UIFont.monospacedDigitSystemFont(ofSize: 22, weight: .semibold))
+        
+        let codeLabel = UILabel(nil, font: scaledFont)
         codeLabel.textAlignment = .center
         
         let codeExpiredView = createErrorView(label: .reversePairingExpired, button: .reversePairingNewCode)

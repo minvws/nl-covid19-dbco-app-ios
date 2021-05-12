@@ -64,7 +64,7 @@ final class InitializeContactsCoordinator: Coordinator, Logging {
         let currentStatus = CNContactStore.authorizationStatus(for: .contacts)
         
         switch currentStatus {
-        case .authorized:
+        case .authorized, .denied, .restricted:
             continueToRoommates()
         default:
             requestContactsAuthorization()

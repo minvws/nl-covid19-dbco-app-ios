@@ -172,9 +172,7 @@
 "contactsTimelineAddExtraDay.button" = "Ik had al eerder klachten";
 
 "contactsTimelineEmptyDays.title" = "Je hebt niet aan iedere dag contacten toegevoegd";
-"contactsTimelineEmptyDays.message" = "Klopt het dat je op %@ niemand hebt ontmoet?";
-"contactsTimelineEmptyDays.separator" = ", ";
-"contactsTimelineEmptyDays.finalSeparator" = " en ";
+"contactsTimelineEmptyDays.message" = "Klopt het dat je deze dag(en) niemand hebt ontmoet?\n\n%@";
 "contactsTimelineEmptyDays.backButton" = "Terug";
 "contactsTimelineEmptyDays.continueButton" = "Ga verder";
 
