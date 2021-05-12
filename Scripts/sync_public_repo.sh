@@ -36,20 +36,29 @@ if ! git config remote.private-repo.url > /dev/null; then
     echo -e "${GREEN}Private-repo remote added${ENDCOL}"
 fi
 
-# Create a branch where we sync everything from current private main
-echo -e "${GREEN}Ensuring we are in sync with the private repo${ENDCOL}"
-git fetch private-repo 
+# Create a branch where we sync everything from current private branches
+echo -e "${GREEN}Ensuring we are in sync with the private and public repo${ENDCOL}"
+git fetch --multiple private-repo public-repo
 
-echo -e "${GREEN}Creating a new sync branch based on private/main${ENDCOL}"
-git branch sync/$TIMESTAMP private-repo/main
+for BRANCH in main develop
+do
+  echo -e "${GREEN}Checking if there are changes between the public and private ${BRANCH} branch ${ENDCOL}"
+  if [ -z "$(git diff private-repo/${BRANCH}..public-repo/${BRANCH})" ]; then 
+    # No PR needed for branch
+    echo "No PR needed for ${BRANCH}"
+  else 
+    # PR needed for branch
+    echo -e "${GREEN}Creating a new sync-${BRANCH} branch based on private/${BRANCH}${ENDCOL}"
+    git branch sync-${BRANCH}/$TIMESTAMP private-repo/${BRANCH}
 
-# Todo: this could be optimized to only push if there actually are changes between the two branches (if not, this currently creates an empty PR)
-echo -e "${GREEN}Pushing the sync branch to public repo${ENDCOL}"
-git push public-repo sync/$TIMESTAMP
+    echo -e "${GREEN}Pushing the sync-${BRANCH} branch to public repo${ENDCOL}"
+    git push public-repo sync-${BRANCH}/$TIMESTAMP
 
-echo -e "${GREEN}Constructing a PR request and opening it in the browser${ENDCOL}"
-PR_URL="https://github.com/minvws/$BASE_REPONAME/compare/sync/$TIMESTAMP?quick_pull=1&title=${PR_TITLE}&body=${PR_BODY}"
+    echo -e "${GREEN}Constructing a PR request and opening it in the browser${ENDCOL}"
+    PR_URL="https://github.com/minvws/$BASE_REPONAME/compare/${BRANCH}...sync-${BRANCH}/$TIMESTAMP?quick_pull=1&title=${PR_TITLE}&body=${PR_BODY}"
 
-open $PR_URL
+    open $PR_URL
+  fi
+done
 
 echo -e "${GREEN}Done.${ENDCOL}"
