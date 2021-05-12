@@ -51,7 +51,7 @@ class PairViewController: ViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
 
-        let titleLabel = UILabel(title2: .onboardingPairingTitle).multiline()
+        let titleLabel = UILabel(title2: .onboardingPairingTitle)
         
         let keyboardSpacerView = UIView()
         keyboardSpacerHeightConstraint = keyboardSpacerView.heightAnchor.constraint(equalToConstant: 0)

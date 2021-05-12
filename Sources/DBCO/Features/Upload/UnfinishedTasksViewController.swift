@@ -109,7 +109,6 @@ class UnfinishedTasksViewController: PromptableViewController {
         
         let tableHeaderBuilder = {
             UILabel(title2: .unfinishedTasksOverviewMessage)
-                .multiline()
                 .wrappedInReadableWidth(insets: .top(60))
         }
         

@@ -48,8 +48,7 @@ class TimelineHelpViewController: ViewController {
         
         VStack(spacing: 16,
                UILabel(body: .contactsTimelineHelpMessage,
-                       textColor: Theme.colors.captionGray)
-                .multiline(),
+                       textColor: Theme.colors.captionGray),
                listItem(.contactsTimelineHelpItem1),
                listItem(.contactsTimelineHelpItem2),
                listItem(.contactsTimelineHelpItem3))

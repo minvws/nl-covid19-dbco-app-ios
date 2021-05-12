@@ -56,7 +56,6 @@ extension LabeledInputView {
                       VStack(spacing: spacing,
                              UILabel(labelText)
                                 .applyFont(labelFont)
-                                .multiline()
                                 .hideIfEmpty()
                                 .isAccessibilityElement(false),
                              TextView(htmlText: description,

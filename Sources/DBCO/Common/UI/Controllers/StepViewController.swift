@@ -107,9 +107,8 @@ class StepViewController: ViewController, ScrollViewNavivationbarAdjusting {
     
     private func createLabels() -> UIView {
         return VStack(spacing: 16,
-                      UILabel(title2: viewModel.title).multiline(),
+                      UILabel(title2: viewModel.title),
                       UILabel(body: viewModel.message, textColor: Theme.colors.captionGray)
-                          .multiline()
                           .hideIfEmpty())
     }
     

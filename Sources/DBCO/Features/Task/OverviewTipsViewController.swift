@@ -80,17 +80,17 @@ class OverviewTipsViewController: ViewController {
         VStack(spacing: 40,
                createHeaderView(),
                VStack(spacing: 16,
-                      UILabel(title2: viewModel.titleText).multiline(),
-                      UILabel(body: .overviewTipsMessage, textColor: Theme.colors.tipItemColor).multiline()),
+                      UILabel(title2: viewModel.titleText),
+                      UILabel(body: .overviewTipsMessage, textColor: Theme.colors.tipItemColor)),
                VStack(spacing: 16,
                       createSectionHeader(icon: "EditContact/Section1", title: .overviewTipsSection1Title),
-                      UILabel(body: .overviewTipsSection1Intro, textColor: Theme.colors.tipItemColor).multiline(),
+                      UILabel(body: .overviewTipsSection1Intro, textColor: Theme.colors.tipItemColor),
                       VStack(spacing: 12,
                              createTipItem(icon: "MemoryTips/Photos", text: .overviewTipsSection1Photos),
                              createTipItem(icon: "MemoryTips/Calendar", text: .overviewTipsSection1Calendar),
                              createTipItem(icon: "MemoryTips/SocialMedia", text: .overviewTipsSection1SocialMedia),
                              createTipItem(icon: "MemoryTips/Transactions", text: .overviewTipsSection1Transactions)),
-                      UILabel(bodyBold: .overviewTipsSection1ActivitiesIntro).multiline(),
+                      UILabel(bodyBold: .overviewTipsSection1ActivitiesIntro),
                       VStack(spacing: 12,
                              createTipItem(icon: "MemoryTips/Car", text: .overviewTipsSection1Car),
                              createTipItem(icon: "MemoryTips/Meetings", text: .overviewTipsSection1Meetings),
@@ -98,7 +98,7 @@ class OverviewTipsViewController: ViewController {
                VStack(spacing: 16,
                       createSectionHeader(icon: "EditContact/Section2", title: .overviewTipsSection2Title),
                       VStack(spacing: 12,
-                             UILabel(body: .overviewTipsSection2Intro, textColor: Theme.colors.tipItemColor).multiline(),
+                             UILabel(body: .overviewTipsSection2Intro, textColor: Theme.colors.tipItemColor),
                              VStack(spacing: 16,
                                     createTipItem(icon: "ListItem/Checkmark", text: .overviewTipsSection2Item1),
                                     createTipItem(icon: "ListItem/Checkmark", text: .overviewTipsSection2Item2),
@@ -113,7 +113,7 @@ class OverviewTipsViewController: ViewController {
         
         return HStack(spacing: 16,
                       icon,
-                      UILabel(body: text, textColor: Theme.colors.tipItemColor).multiline())
+                      UILabel(body: text, textColor: Theme.colors.tipItemColor))
     }
     
     private func createSectionHeader(icon: String, title: String) -> UIView {

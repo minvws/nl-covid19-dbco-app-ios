@@ -14,6 +14,6 @@ func listItem(_ text: String, imageName: String = "PrivacyItem") -> UIView {
                                                          boldTextColor: .black)
     return HStack(spacing: 16,
                   UIImageView(imageName: imageName).asIcon(),
-                  UILabel(attributedString: attributedString, textColor: Theme.colors.captionGray).multiline())
+                  UILabel(attributedString: attributedString, textColor: Theme.colors.captionGray))
         .alignment(.top)
 }
