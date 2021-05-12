@@ -44,15 +44,21 @@
 "launchConfigAlert.title" = "De app kan niet geopend worden";
 "launchConfigAlert.message" = "Dit komt waarschijnlijk doordat de app geen verbinding met internet kan maken. Controleer je verbinding en probeer het opnieuw.";
 
+"launchResetAlert.title" = "Alle gegevens zijn automatisch verwijderd";
+"launchResetAlert.message" = "Je hebt de app al een tijd niet gebruikt. Om de gegevens van je contacten te beschermen, zijn deze uit de app verwijderd.";
+"launchResetAlert.button" = "Ga door";
+
 /* MARK: - Onboarding */
-"onboarding.start.title" = "Waarschuw de mensen die je misschien hebt besmet";
-"onboarding.start.message" = "Je kunt via deze app bepalen wie van je contacten een grote kans op besmetting heeft gelopen. Ook kun je contactgegevens met de GGD delen voor het contactonderzoek.";
-"onboarding.start.hasCodeButton" = "Ik heb al een code";
-"onboarding.start.noCodeButton" = "Ik heb nog geen code";
+"onboarding.start.title" = "Wat moeten de mensen doen bij wie jij in de buurt bent geweest?";
+"onboarding.start.message" = "Het advies verschilt per persoon. Dit hangt af van de afstand tussen jullie en hoe lang de ontmoeting duurde. De app geeft aan of iemand thuis moet blijven en tot wanneer. Deze informatie kan jij daarna makkelijk delen.";
+"onboarding.determineFlow.title" = "Heb je aan de telefoon een code van de GGD gekregen?";
+"onboarding.determineFlow.message" = "Let op: dit is niet de GGD-sleutel die je in de CoronaMelder-app vindt";
+"onboarding.hasCodeButton" = "Ja, ik heb een code";
+"onboarding.noCodeButton" = "Nee, geen code";
 "onboarding.pairing.title" = "Vul de code in die je hebt gekregen van de GGD-medewerker";
 "onboarding.pairing.codeHint" = "De code bestaat uit 12 cijfers";
-"onboarding.pairingIntro.title" = "Deel de gegevens van contacten met de GGD";
-"onboarding.pairingIntro.message" = "Zo kunnen we mensen die misschien zijn besmet zo snel mogelijk informeren. Goed om te weten: niet iedereen hoeft direct in quarantaine.";
+"onboarding.pairingIntro.title" = "Deel de gegevens van de mensen die misschien besmet zijn";
+"onboarding.pairingIntro.message" = "Zo kunnen we deze contacten zo snel mogelijk informeren. Goed om te weten: niet iedereen hoeft direct in quarantaine.";
 
 /* MARK: - Privacy */
 "onboarding.consent.shortTitle" = "Privacy";
@@ -105,7 +111,7 @@
 "verifyOnsetDateTwoWeeksAgo.no" = "Nee, volgende";
 
 "determineNegativeTestDate.title" = "Wanneer was je laatste negatieve coronatest?";
-"determineNegativeTestDate.subtitle" = "Dit is een test waaruit bleek dat je <b>geen</b> corona had.";
+"determineNegativeTestDate.subtitle" = "Dit is een coronatest van de GGD waaruit bleek dat je <b>geen</b> corona had. Let op: een zelftest telt niet mee.";
 
 "verifySymptomsGettingWorse.title" = "Was er een moment na %@ dat je klachten erger werden?";
 
@@ -120,9 +126,9 @@
 "onboardingVerifyZipCodeMessage" = "Zo kunnen we bepalen in welke GGD-regio je woont. Wat je precies in de app kunt doen, verschilt per regio.";
 "onboardingVerifyZipCodeAccessibilityHint" = "De 4 cijfers van je postcode";
 
-"onboardingDetermineContactsIntro.title" = "Bepaal wie van je contacten misschien zijn besmet en informeer hen";
-"onboardingDetermineContactsIntro.message.supported" = "We gaan een overzicht maken van mensen die je hebt ontmoet. Goed om te weten: niet iedereen hoeft direct in quarantaine.\n\nOok kun je in jouw GGD-regio contactgegevens met de GGD delen voor het contactonderzoek.";
-"onboardingDetermineContactsIntro.message.unsupported" = "De GGD in jouw regio kan nog geen gegevens uit de app ontvangen. Je kunt via de app wel zelf bepalen wie van je contacten misschien besmet zijn en daarna de juiste leefregels met hen delen.";
+"onboardingDetermineContactsIntro.title" = "Bepaal wie misschien zijn besmet en informeer hen";
+"onboardingDetermineContactsIntro.message.supported" = "We gaan een overzicht maken van contacten die je misschien hebt besmet. Goed om te weten: niet iedereen hoeft direct in quarantaine.\n\nOok kun je in jouw GGD-regio contactgegevens met de GGD delen voor het contactonderzoek.";
+"onboardingDetermineContactsIntro.message.unsupported" = "Je kunt in jouw regio nog geen gegevens delen met de GGD. Je kunt via de app wel zelf bepalen wie van je contacten misschien besmet zijn en daarna de juiste leefregels met hen delen.";
 "onboardingDetermineContactsIntro.button.supported" = "Volgende";
 "onboardingDetermineContactsIntro.button.unsupported" = "Ik snap het";
 
@@ -230,7 +236,7 @@
 "taskOverviewPairingExpired" = "Koppelen mislukt. De code is verlopen. Geef een nieuwe code door aan de GGD.";
 "taskOverviewPairingFailed" = "Koppelen mislukt. Controleer of de GGD de juiste code heeft en of je internetverbinding werkt.";
 
-"taskOverviewPrivacyFooter" = "Help bij het bron- en contactonderzoek. Gegevens worden op jouw telefoon bewaard totdat je ze deelt met de GGD. Lees meer in de <a href=\"https://ggdcontact.nl/nl/privacy-in-app\">privacyverklaring</a>.";
+"taskOverviewPrivacyFooter" = "Help bij het bron- en contactonderzoek. Gegevens worden op jouw telefoon bewaard totdat je ze deelt met de GGD. Lees meer in de <a href=\"https://ggdcontact.nl/nl/privacy-in-app\">privacyverklaring</a>.<br/><a href=\"https://www.toegankelijkheidsverklaring.nl/register/4379\">Digitale toegankelijkheidsverklaring</a>";
 
 /* MARK: - Overview Tips */
 "overviewTipsShortTitle" = "Tips";

@@ -92,11 +92,17 @@ extension String {
     static var launchConfigAlertTitle: String { return Localization.string(for: "launchConfigAlert.title") }
     static var launchConfigAlertMessage: String { return Localization.string(for: "launchConfigAlert.message") }
     
+    static var launchResetAlertTitle: String { return Localization.string(for: "launchResetAlert.title") }
+    static var launchResetAlertMessage: String { return Localization.string(for: "launchResetAlert.message") }
+    static var launchResetAlertButton: String { return Localization.string(for: "launchResetAlert.button") }
+    
     /* MARK: - Onboarding */
     static var onboardingStartTitle: String { return Localization.string(for: "onboarding.start.title") }
     static var onboardingStartMessage: String { return Localization.string(for: "onboarding.start.message") }
-    static var onboardingStartHasCodeButton: String { return Localization.string(for: "onboarding.start.hasCodeButton") }
-    static var onboardingStartNoCodeButton: String { return Localization.string(for: "onboarding.start.noCodeButton") }
+    static var onboardingDetermineFlowTitle: String { return Localization.string(for: "onboarding.determineFlow.title") }
+    static var onboardingDetermineFlowMessage: String { return Localization.string(for: "onboarding.determineFlow.message") }
+    static var onboardingHasCodeButton: String { return Localization.string(for: "onboarding.hasCodeButton") }
+    static var onboardingNoCodeButton: String { return Localization.string(for: "onboarding.noCodeButton") }
     static var onboardingPairingIntroTitle: String { return Localization.string(for: "onboarding.pairingIntro.title") }
     static var onboardingPairingIntroMessage: String { return Localization.string(for: "onboarding.pairingIntro.message") }
     static var onboardingPairingTitle: String { return Localization.string(for: "onboarding.pairing.title") }
