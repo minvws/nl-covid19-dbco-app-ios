@@ -53,9 +53,9 @@ final class SelectContactCoordinator: Coordinator, Logging {
         switch currentStatus {
         case .authorized:
             if let contactIdentifier = task?.contact.contactIdentifier {
-                let editViewModel = ContactQuestionnaireViewModel(task: task,
-                                                                  questionnaire: questionnaire,
-                                                                  contact: findContact(with: contactIdentifier))
+                let contact = findContact(with: contactIdentifier)
+                let input = questionnaireInput(with: contact)
+                let editViewModel = ContactQuestionnaireViewModel(input)
                 let editController = ContactQuestionnaireViewController(viewModel: editViewModel)
                 editController.delegate = self
                 
@@ -145,7 +145,7 @@ final class SelectContactCoordinator: Coordinator, Logging {
     }
     
     private func continueManually() {
-        let editViewModel = ContactQuestionnaireViewModel(task: task, questionnaire: questionnaire)
+        let editViewModel = ContactQuestionnaireViewModel(questionnaireInput())
         let editController = ContactQuestionnaireViewController(viewModel: editViewModel)
         editController.delegate = self
         
@@ -164,6 +164,17 @@ final class SelectContactCoordinator: Coordinator, Logging {
         ]
         
         return try? CNContactStore().unifiedContact(withIdentifier: identifier, keysToFetch: keys)
+    }
+    
+    private func questionnaireInput(with contact: CNContact? = nil) -> ContactQuestionnaireViewModel.Input {
+        return ContactQuestionnaireViewModel.Input(
+            caseReference: Services.caseManager.reference,
+            guidelines: Services.configManager.guidelines,
+            featureFlags: Services.configManager.featureFlags,
+            isCaseWindowExpired: Services.caseManager.isWindowExpired,
+            task: task,
+            questionnaire: questionnaire,
+            contact: contact)
     }
 }
 
@@ -196,7 +207,7 @@ extension SelectContactCoordinator: ContactsAuthorizationViewControllerDelegate 
 extension SelectContactCoordinator: SelectContactViewControllerDelegate {
     
     func selectContactViewController(_ controller: SelectContactViewController, didSelect contact: CNContact) {
-        let viewModel = ContactQuestionnaireViewModel(task: task, questionnaire: questionnaire, contact: contact)
+        let viewModel = ContactQuestionnaireViewModel(questionnaireInput(with: contact))
         let detailsController = ContactQuestionnaireViewController(viewModel: viewModel)
         detailsController.delegate = self
         
@@ -204,7 +215,7 @@ extension SelectContactCoordinator: SelectContactViewControllerDelegate {
     }
     
     func selectContactViewControllerDidRequestManualInput(_ controller: SelectContactViewController) {
-        let viewModel = ContactQuestionnaireViewModel(task: task, questionnaire: questionnaire)
+        let viewModel = ContactQuestionnaireViewModel(questionnaireInput())
         let detailsController = ContactQuestionnaireViewController(viewModel: viewModel)
         detailsController.delegate = self
         
@@ -244,7 +255,7 @@ extension SelectContactCoordinator: CNContactPickerDelegate {
     
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
         picker.dismiss(animated: true) {
-            let viewModel = ContactQuestionnaireViewModel(task: self.task, questionnaire: self.questionnaire, contact: contact)
+            let viewModel = ContactQuestionnaireViewModel(self.questionnaireInput(with: contact))
             let editController = ContactQuestionnaireViewController(viewModel: viewModel)
             editController.delegate = self
             

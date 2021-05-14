@@ -21,4 +21,10 @@ extension NSObject {
         return self
     }
     
+    @discardableResult
+    func asHeader() -> Self {
+        accessibilityTraits = .header
+        return self
+    }
+    
 }

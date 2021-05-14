@@ -46,6 +46,9 @@ class CodeField: UITextField {
         return self
     }
     
+    private let scaledFont = UIFontMetrics(forTextStyle: .title2)
+        .scaledFont(for: UIFont.monospacedDigitSystemFont(ofSize: 22, weight: .regular))
+    
     private func setup() {
         accessibilityLabel = codeDescription.accessibilityLabel
         accessibilityHint = codeDescription.accessibilityHint
@@ -54,7 +57,7 @@ class CodeField: UITextField {
         sendSubviewToBack(placeholderLabel)
         updatePlaceholder()
         
-        font = UIFont.monospacedDigitSystemFont(ofSize: 22, weight: .regular)
+        font = scaledFont
         tintColor = Theme.colors.primary
         
         textContentType = .oneTimeCode
@@ -84,7 +87,7 @@ class CodeField: UITextField {
     private func updatePlaceholder(textLength: Int = 0) {
         let text = NSMutableAttributedString(string: fullPlaceholder, attributes: [
             .kern: kerning,
-            .font: UIFont.monospacedDigitSystemFont(ofSize: 22, weight: .regular)
+            .font: scaledFont
         ])
         
         let clearColor = UIColor.clear
@@ -116,7 +119,7 @@ class CodeField: UITextField {
     private func updateKerning() {
         let attributes: [NSAttributedString.Key: Any] = [
             .kern: kerning,
-            .font: UIFont.monospacedDigitSystemFont(ofSize: 22, weight: .regular)
+            .font: scaledFont
         ]
         
         typingAttributes = attributes

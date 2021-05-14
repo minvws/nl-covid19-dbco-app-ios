@@ -175,8 +175,8 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         containerView.layer.cornerRadius = 8
         
         VStack(spacing: 16,
-               UILabel(bodyBold: .otherCategoryTitle).multiline(),
-               UILabel(body: .otherCategoryMessage, textColor: Theme.colors.captionGray).multiline())
+               UILabel(bodyBold: .otherCategoryTitle),
+               UILabel(body: .otherCategoryMessage, textColor: Theme.colors.captionGray))
             .embed(in: containerView, insets: .leftRight(16) + .topBottom(24))
         
         return containerView
@@ -416,8 +416,8 @@ class LastExposureDateAnswerManager: AnswerManaging {
         containerView.isHidden = true
         
         VStack(spacing: 16,
-               UILabel(bodyBold: .earlierExposureDateTitle).multiline(),
-               UILabel(body: .earlierExposureDateMessage, textColor: Theme.colors.captionGray).multiline())
+               UILabel(bodyBold: .earlierExposureDateTitle),
+               UILabel(body: .earlierExposureDateMessage, textColor: Theme.colors.captionGray))
             .embed(in: containerView, insets: .leftRight(16) + .topBottom(24))
         
         return containerView

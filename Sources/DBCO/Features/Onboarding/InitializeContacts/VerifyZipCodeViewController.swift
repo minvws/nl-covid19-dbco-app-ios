@@ -54,9 +54,9 @@ class VerifyZipCodeViewController: ViewController, ScrollViewNavivationbarAdjust
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
 
-        let titleLabel = UILabel(title2: .onboardingVerifyZipCodeTitle).multiline()
+        let titleLabel = UILabel(title2: .onboardingVerifyZipCodeTitle)
         
-        let subtitleLabel = UILabel(body: .onboardingVerifyZipCodeMessage, textColor: Theme.colors.captionGray).multiline()
+        let subtitleLabel = UILabel(body: .onboardingVerifyZipCodeMessage, textColor: Theme.colors.captionGray)
         
         let keyboardSpacerView = UIView()
         keyboardSpacerHeightConstraint = keyboardSpacerView.heightAnchor.constraint(equalToConstant: 0)
