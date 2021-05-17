@@ -25,7 +25,7 @@ platform :ios do
       device: "iPhone 12 Pro",
       workspace: "DBCO.xcworkspace",
       scheme: "DBCO",
-      reinstall_app: true,
+      force_quit_simulator: true,
       app_identifier: "nl.rijksoverheid.dbco",
       skip_slack: true
     )
