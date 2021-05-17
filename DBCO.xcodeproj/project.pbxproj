@@ -107,6 +107,8 @@
 		CDADF7F32535E34400424492 /* UploadCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDADF7F22535E34400424492 /* UploadCoordinator.swift */; };
 		CDB66B98265265D4005B6597 /* PairingManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB66B97265265D4005B6597 /* PairingManaging.swift */; };
 		CDB66B9A26526609005B6597 /* CaseManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB66B9926526609005B6597 /* CaseManaging.swift */; };
+		CDB66B9C26526693005B6597 /* TaskSortingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB66B9B26526693005B6597 /* TaskSortingTests.swift */; };
+		CDB66B9E26527188005B6597 /* GuidelinesHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB66B9D26527188005B6597 /* GuidelinesHelperTests.swift */; };
 		CDC4A8E8250B87E5001BABC6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC4A8E7250B87E5001BABC6 /* AppDelegate.swift */; };
 		CDC4A8EA250B87E5001BABC6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC4A8E9250B87E5001BABC6 /* SceneDelegate.swift */; };
 		CDC4A8F1250B87E6001BABC6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CDC4A8F0250B87E6001BABC6 /* Assets.xcassets */; };
@@ -279,6 +281,8 @@
 		CDADF7F22535E34400424492 /* UploadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadCoordinator.swift; sourceTree = "<group>"; };
 		CDB66B97265265D4005B6597 /* PairingManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingManaging.swift; sourceTree = "<group>"; };
 		CDB66B9926526609005B6597 /* CaseManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseManaging.swift; sourceTree = "<group>"; };
+		CDB66B9B26526693005B6597 /* TaskSortingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskSortingTests.swift; sourceTree = "<group>"; };
+		CDB66B9D26527188005B6597 /* GuidelinesHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidelinesHelperTests.swift; sourceTree = "<group>"; };
 		CDC4A8E4250B87E5001BABC6 /* GGD Contact.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GGD Contact.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDC4A8E7250B87E5001BABC6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CDC4A8E9250B87E5001BABC6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -576,9 +580,11 @@
 			children = (
 				CD6C6A2C264295FD00187930 /* ClassificationHelperTests.swift */,
 				CD010B97257A409B00CEA4F5 /* ContactQuestionnaireCommunicationTests.swift */,
-				CD2F7CB425594BDA00F2F73A /* ContactSuggestionTests.swift */,
-				CD756C36252B3D37005FEDA0 /* Info.plist */,
 				CDA7BCCC264A80D50034AC92 /* ContactQuestionnaireViewModelTests.swift */,
+				CD2F7CB425594BDA00F2F73A /* ContactSuggestionTests.swift */,
+				CDB66B9D26527188005B6597 /* GuidelinesHelperTests.swift */,
+				CDB66B9B26526693005B6597 /* TaskSortingTests.swift */,
+				CD756C36252B3D37005FEDA0 /* Info.plist */,
 			);
 			path = DBCOTests;
 			sourceTree = "<group>";
@@ -1030,9 +1036,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDB66B9E26527188005B6597 /* GuidelinesHelperTests.swift in Sources */,
 				CD010B98257A409B00CEA4F5 /* ContactQuestionnaireCommunicationTests.swift in Sources */,
 				CDA7BCCD264A80D60034AC92 /* ContactQuestionnaireViewModelTests.swift in Sources */,
 				CD2F7CB525594BDA00F2F73A /* ContactSuggestionTests.swift in Sources */,
+				CDB66B9C26526693005B6597 /* TaskSortingTests.swift in Sources */,
 				CD6C6A2D264295FD00187930 /* ClassificationHelperTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
