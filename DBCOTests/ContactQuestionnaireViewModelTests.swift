@@ -406,9 +406,9 @@ class ContactQuestionnaireViewModelTests: XCTestCase { // swiftlint:disable:this
             contact: fullContact)
         
         let viewModel = ContactQuestionnaireViewModel(input)
-        let guidelines = GuidelinesHelper.parseGuidelines(guidelines.guidelinesExposureDateUnknown.category1, exposureDate: nil, referenceNumber: "", referenceNumberItem: "")
+        let parsedGuidelines = GuidelinesHelper.parseGuidelines(guidelines.guidelinesExposureDateUnknown.category1, exposureDate: nil, referenceNumber: "", referenceNumberItem: "")
         
-        XCTAssertEqual(viewModel.informContent, guidelines)
+        XCTAssertEqual(viewModel.informContent, parsedGuidelines)
     }
     
     func testExposureDateUnknownGuidelinesCat2() {
@@ -422,9 +422,9 @@ class ContactQuestionnaireViewModelTests: XCTestCase { // swiftlint:disable:this
             contact: fullContact)
         
         let viewModel = ContactQuestionnaireViewModel(input)
-        let guidelines = GuidelinesHelper.parseGuidelines(guidelines.guidelinesExposureDateUnknown.category2, exposureDate: nil, referenceNumber: "", referenceNumberItem: "")
+        let parsedGuidelines = GuidelinesHelper.parseGuidelines(guidelines.guidelinesExposureDateUnknown.category2, exposureDate: nil, referenceNumber: "", referenceNumberItem: "")
         
-        XCTAssertEqual(viewModel.informContent, guidelines)
+        XCTAssertEqual(viewModel.informContent, parsedGuidelines)
     }
     
     func testExposureDateUnknownGuidelinesCat3() {

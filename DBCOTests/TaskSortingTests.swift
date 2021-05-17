@@ -72,7 +72,7 @@ class TaskSortingTests: XCTestCase {
             createContactTask(category: .category1, label: "Hank Zakroff"),
             createContactTask(category: .category2a, label: "John Appleseed"),
             createContactTask(category: .category1, label: "John Appleseed"),
-            createContactTask(category: .category2a, label: "Kate Bell", dateOfLastExposure: .now.dateByAddingDays(-3)),
+            createContactTask(category: .category2a, label: "Kate Bell", dateOfLastExposure: Date.now.dateByAddingDays(-3)),
             createContactTask(category: .category2a, label: "Ivo Bell", dateOfLastExposure: Date.now.dateByAddingDays(-5)),
             createContactTask(category: .category1, label: "Kate Bell"),
             createContactTask(category: .category2a, label: "David Taylor"),
