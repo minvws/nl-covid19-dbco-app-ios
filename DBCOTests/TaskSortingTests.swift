@@ -29,13 +29,13 @@ class TaskSortingTests: XCTestCase {
     
     func testSortedByLastExposure() {
         let tasks = [
-            createContactTask(category: .category2a, label: "AA", dateOfLastExposure: .now.dateByAddingDays(-3)),
-            createContactTask(category: .category2a, label: "BB", dateOfLastExposure: .now.dateByAddingDays(-6)),
-            createContactTask(category: .category2a, label: "CC", dateOfLastExposure: .now.dateByAddingDays(-1)),
-            createContactTask(category: .category2a, label: "DD", dateOfLastExposure: .now.dateByAddingDays(-7)),
+            createContactTask(category: .category2a, label: "AA", dateOfLastExposure: Date.now.dateByAddingDays(-3)),
+            createContactTask(category: .category2a, label: "BB", dateOfLastExposure: Date.now.dateByAddingDays(-6)),
+            createContactTask(category: .category2a, label: "CC", dateOfLastExposure: Date.now.dateByAddingDays(-1)),
+            createContactTask(category: .category2a, label: "DD", dateOfLastExposure: Date.now.dateByAddingDays(-7)),
             createContactTask(category: .category2a, label: "EE"),
-            createContactTask(category: .category2a, label: "FF", dateOfLastExposure: .now.dateByAddingDays(-4)),
-            createContactTask(category: .category2a, label: "GG", dateOfLastExposure: .now.dateByAddingDays(-5))
+            createContactTask(category: .category2a, label: "FF", dateOfLastExposure: Date.now.dateByAddingDays(-4)),
+            createContactTask(category: .category2a, label: "GG", dateOfLastExposure: Date.now.dateByAddingDays(-5))
         ]
         
         let sortedTasks = tasks.sorted()
@@ -67,13 +67,13 @@ class TaskSortingTests: XCTestCase {
             createContactTask(category: .category2a, label: "Daniel Higgins"),
             createContactTask(category: .category1, label: "Daniel Higgins"),
             createContactTask(category: .category2a, label: "Anna Haro"),
-            createContactTask(category: .category1, label: "Anna Haro", dateOfLastExposure: .now.dateByAddingDays(-5)),
+            createContactTask(category: .category1, label: "Anna Haro", dateOfLastExposure: Date.now.dateByAddingDays(-5)),
             createContactTask(category: .category2a, label: "Hank Zakroff"),
             createContactTask(category: .category1, label: "Hank Zakroff"),
             createContactTask(category: .category2a, label: "John Appleseed"),
             createContactTask(category: .category1, label: "John Appleseed"),
             createContactTask(category: .category2a, label: "Kate Bell", dateOfLastExposure: .now.dateByAddingDays(-3)),
-            createContactTask(category: .category2a, label: "Ivo Bell", dateOfLastExposure: .now.dateByAddingDays(-5)),
+            createContactTask(category: .category2a, label: "Ivo Bell", dateOfLastExposure: Date.now.dateByAddingDays(-5)),
             createContactTask(category: .category1, label: "Kate Bell"),
             createContactTask(category: .category2a, label: "David Taylor"),
             createContactTask(category: .category1, label: "David Taylor"),

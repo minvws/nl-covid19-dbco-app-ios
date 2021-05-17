@@ -438,9 +438,9 @@ class ContactQuestionnaireViewModelTests: XCTestCase { // swiftlint:disable:this
             contact: fullContact)
         
         let viewModel = ContactQuestionnaireViewModel(input)
-        let guidelines = GuidelinesHelper.parseGuidelines(guidelines.guidelinesExposureDateUnknown.category3, exposureDate: nil, referenceNumber: "", referenceNumberItem: "")
+        let parsedGuidelines = GuidelinesHelper.parseGuidelines(guidelines.guidelinesExposureDateUnknown.category3, exposureDate: nil, referenceNumber: "", referenceNumberItem: "")
         
-        XCTAssertEqual(viewModel.informContent, guidelines)
+        XCTAssertEqual(viewModel.informContent, parsedGuidelines)
     }
     
     func testExposureDateWithinRangeGuidelinesCat2() {
@@ -455,9 +455,9 @@ class ContactQuestionnaireViewModelTests: XCTestCase { // swiftlint:disable:this
             contact: fullContact)
         
         let viewModel = ContactQuestionnaireViewModel(input)
-        let guidelines = GuidelinesHelper.parseGuidelines(guidelines.guidelinesExposureDateKnown.category2.withinRange, exposureDate: exposureDate, referenceNumber: "", referenceNumberItem: "")
+        let parsedGuidelines = GuidelinesHelper.parseGuidelines(guidelines.guidelinesExposureDateKnown.category2.withinRange, exposureDate: exposureDate, referenceNumber: "", referenceNumberItem: "")
         
-        XCTAssertEqual(viewModel.informContent, guidelines)
+        XCTAssertEqual(viewModel.informContent, parsedGuidelines)
     }
     
     func testExposureDateOutsideRangeGuidelinesCat2() {
@@ -472,9 +472,9 @@ class ContactQuestionnaireViewModelTests: XCTestCase { // swiftlint:disable:this
             contact: fullContact)
         
         let viewModel = ContactQuestionnaireViewModel(input)
-        let guidelines = GuidelinesHelper.parseGuidelines(guidelines.guidelinesExposureDateKnown.category2.outsideRange, exposureDate: exposureDate, referenceNumber: "", referenceNumberItem: "")
+        let parsedGuidelines = GuidelinesHelper.parseGuidelines(guidelines.guidelinesExposureDateKnown.category2.outsideRange, exposureDate: exposureDate, referenceNumber: "", referenceNumberItem: "")
         
-        XCTAssertEqual(viewModel.informContent, guidelines)
+        XCTAssertEqual(viewModel.informContent, parsedGuidelines)
     }
 
 }
