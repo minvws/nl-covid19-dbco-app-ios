@@ -33,7 +33,8 @@ final class TaskOverviewCoordinator: Coordinator, Logging {
         self.delegate = delegate
         self.useFlipTransition = useFlipTransition
         
-        let viewModel = TaskOverviewViewModel()
+        let input = TaskOverviewViewModel.Input(pairing: Services.pairingManager, case: Services.caseManager)
+        let viewModel = TaskOverviewViewModel(input)
         
         overviewController = TaskOverviewViewController(viewModel: viewModel)
         navigationController = NavigationController(rootViewController: overviewController)

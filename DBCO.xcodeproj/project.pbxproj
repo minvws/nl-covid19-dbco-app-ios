@@ -105,6 +105,7 @@
 		CDADF7DE2534773800424492 /* UIToolbar+Done.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDADF7DD2534773800424492 /* UIToolbar+Done.swift */; };
 		CDADF7EE2535B6A500424492 /* UILabel+Styling.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDADF7ED2535B6A500424492 /* UILabel+Styling.swift */; };
 		CDADF7F32535E34400424492 /* UploadCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDADF7F22535E34400424492 /* UploadCoordinator.swift */; };
+		CDB1F9652653E73D00D75777 /* TaskOverviewViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB1F9642653E73D00D75777 /* TaskOverviewViewModelTests.swift */; };
 		CDB66B98265265D4005B6597 /* PairingManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB66B97265265D4005B6597 /* PairingManaging.swift */; };
 		CDB66B9A26526609005B6597 /* CaseManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB66B9926526609005B6597 /* CaseManaging.swift */; };
 		CDB66B9C26526693005B6597 /* TaskSortingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB66B9B26526693005B6597 /* TaskSortingTests.swift */; };
@@ -279,6 +280,7 @@
 		CDADF7DD2534773800424492 /* UIToolbar+Done.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIToolbar+Done.swift"; sourceTree = "<group>"; };
 		CDADF7ED2535B6A500424492 /* UILabel+Styling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Styling.swift"; sourceTree = "<group>"; };
 		CDADF7F22535E34400424492 /* UploadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadCoordinator.swift; sourceTree = "<group>"; };
+		CDB1F9642653E73D00D75777 /* TaskOverviewViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskOverviewViewModelTests.swift; sourceTree = "<group>"; };
 		CDB66B97265265D4005B6597 /* PairingManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingManaging.swift; sourceTree = "<group>"; };
 		CDB66B9926526609005B6597 /* CaseManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseManaging.swift; sourceTree = "<group>"; };
 		CDB66B9B26526693005B6597 /* TaskSortingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskSortingTests.swift; sourceTree = "<group>"; };
@@ -583,6 +585,7 @@
 				CDA7BCCC264A80D50034AC92 /* ContactQuestionnaireViewModelTests.swift */,
 				CD2F7CB425594BDA00F2F73A /* ContactSuggestionTests.swift */,
 				CDB66B9D26527188005B6597 /* GuidelinesHelperTests.swift */,
+				CDB1F9642653E73D00D75777 /* TaskOverviewViewModelTests.swift */,
 				CDB66B9B26526693005B6597 /* TaskSortingTests.swift */,
 				CD756C36252B3D37005FEDA0 /* Info.plist */,
 			);
@@ -1039,6 +1042,7 @@
 				CDB66B9E26527188005B6597 /* GuidelinesHelperTests.swift in Sources */,
 				CD010B98257A409B00CEA4F5 /* ContactQuestionnaireCommunicationTests.swift in Sources */,
 				CDA7BCCD264A80D60034AC92 /* ContactQuestionnaireViewModelTests.swift in Sources */,
+				CDB1F9652653E73D00D75777 /* TaskOverviewViewModelTests.swift in Sources */,
 				CD2F7CB525594BDA00F2F73A /* ContactSuggestionTests.swift in Sources */,
 				CDB66B9C26526693005B6597 /* TaskSortingTests.swift in Sources */,
 				CD6C6A2D264295FD00187930 /* ClassificationHelperTests.swift in Sources */,

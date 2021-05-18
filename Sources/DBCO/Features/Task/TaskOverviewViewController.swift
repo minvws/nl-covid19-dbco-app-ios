@@ -23,6 +23,13 @@ class TaskOverviewViewModel {
     typealias SectionHeaderContent = (title: String, subtitle: String?)
     typealias PromptFunction = (_ animated: Bool) -> Void
     
+    struct Input {
+        let pairing: PairingManaging
+        let `case`: CaseManaging
+    }
+    
+    private let input: Input
+    
     private let tableViewManager: TableViewManager<TaskTableViewCell>
     private var tableHeaderBuilder: (() -> UIView?)?
     private var sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?
@@ -46,7 +53,8 @@ class TaskOverviewViewModel {
     @Bindable private(set) var isPairingErrorViewHidden: Bool = true
     @Bindable private(set) var pairingErrorText: String = ""
     
-    init() {
+    init(_ input: Input) {
+        self.input = input
         tableViewManager = .init()
         
         sections = []
@@ -60,8 +68,8 @@ class TaskOverviewViewModel {
         tableViewManager.viewForHeaderInSection = { [unowned self] in return self.sections[safe: $0]?.header }
         tableViewManager.viewForFooterInSection = { [unowned self] in return self.sections[safe: $0]?.footer }
         
-        Services.caseManager.addListener(self)
-        Services.pairingManager.addListener(self)
+        input.case.addListener(self)
+        input.pairing.addListener(self)
     }
     
     func setupTableView(_ tableView: UITableView,
@@ -90,7 +98,7 @@ class TaskOverviewViewModel {
         formatter.dateFormat = .taskOverviewTipsDateFormat
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         
-        let date = Services.caseManager.startOfContagiousPeriod ?? Date()
+        let date = input.case.startOfContagiousPeriod ?? Date()
         
         let dateString = formatter.string(from: date)
         
@@ -111,7 +119,7 @@ class TaskOverviewViewModel {
     func setHidePrompt(_ hidePrompt: @escaping PromptFunction) {
         self.hidePrompt = hidePrompt
         
-        if Services.caseManager.isSynced && !Services.caseManager.isWindowExpired {
+        if input.case.isSynced && !input.case.isWindowExpired {
             hidePrompt(false)
         }
     }
@@ -119,7 +127,7 @@ class TaskOverviewViewModel {
     func setShowPrompt(_ showPrompt: @escaping PromptFunction) {
         self.showPrompt = showPrompt
         
-        if !Services.caseManager.isSynced || Services.caseManager.isWindowExpired {
+        if !input.case.isSynced || input.case.isWindowExpired {
             showPrompt(false)
         }
     }
@@ -128,7 +136,7 @@ class TaskOverviewViewModel {
         sections = []
         sections.append((tableHeaderBuilder?(), [], nil))
         
-        if Services.caseManager.hasSynced {
+        if input.case.hasSynced {
             buildSections(split: \.isSyncedWithPortal,
                           failingSectionTitle: .taskOverviewUnsyncedContactsHeader,
                           passingSectionTitle: .taskOverviewSyncedContactsHeader)
@@ -140,7 +148,7 @@ class TaskOverviewViewModel {
     }
     
     private func buildSections(split: KeyPath<Task, Bool>, failingSectionTitle: String, passingSectionTitle: String) {
-        let tasks = Services.caseManager.tasks
+        let tasks = input.case.tasks
             .filter { !$0.deletedByIndex }
             .sorted(by: <)
         
@@ -164,7 +172,7 @@ class TaskOverviewViewModel {
         
         sections.append((tableFooterBuilder?(), [], nil))
         
-        let windowExpired = Services.caseManager.isWindowExpired
+        let windowExpired = input.case.isWindowExpired
         
         isHeaderAddContactButtonHidden = !failingContacts.isEmpty || windowExpired
         isAddContactButtonHidden = failingContacts.isEmpty || windowExpired
@@ -201,7 +209,7 @@ extension TaskOverviewViewModel: CaseManagerListener {
 extension TaskOverviewViewModel: PairingManagerListener {
     
     func showPairingViewIfNeeded() {
-        guard !Services.pairingManager.isPaired else { return }
+        guard !input.pairing.isPaired else { return }
         
         pairingTimeoutTimer?.invalidate()
         pairingTimeoutTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [unowned self] _ in
@@ -218,7 +226,7 @@ extension TaskOverviewViewModel: PairingManagerListener {
     func pairingManager(_ pairingManager: PairingManaging, didFailWith error: PairingManagingError) {
         pairingTimeoutTimer?.invalidate()
         
-        pairingErrorText = Services.pairingManager.canResumePolling ?
+        pairingErrorText = input.pairing.canResumePolling ?
             .taskOverviewPairingFailed :
             .taskOverviewPairingExpired
         
