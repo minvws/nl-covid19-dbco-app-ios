@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol UnfinishedTasksViewControllerDelegate: class {
+protocol UnfinishedTasksViewControllerDelegate: AnyObject {
     func unfinishedTasksViewController(_ controller: UnfinishedTasksViewController, didSelect task: Task)
     func unfinishedTasksViewControllerDidRequestUpload(_ controller: UnfinishedTasksViewController)
     func unfinishedTasksViewControllerDidCancel(_ controller: UnfinishedTasksViewController)
@@ -109,7 +109,6 @@ class UnfinishedTasksViewController: PromptableViewController {
         
         let tableHeaderBuilder = {
             UILabel(title2: .unfinishedTasksOverviewMessage)
-                .multiline()
                 .wrappedInReadableWidth(insets: .top(60))
         }
         

@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol VerifyZipCodeViewControllerDelegate: class {
+protocol VerifyZipCodeViewControllerDelegate: AnyObject {
     func verifyZipCodeViewController(_ controller: VerifyZipCodeViewController, didFinishWithActiveZipCode: Bool)
 }
 
@@ -54,9 +54,9 @@ class VerifyZipCodeViewController: ViewController, ScrollViewNavivationbarAdjust
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
 
-        let titleLabel = UILabel(title2: .onboardingVerifyZipCodeTitle).multiline()
+        let titleLabel = UILabel(title2: .onboardingVerifyZipCodeTitle)
         
-        let subtitleLabel = UILabel(body: .onboardingVerifyZipCodeMessage, textColor: Theme.colors.captionGray).multiline()
+        let subtitleLabel = UILabel(body: .onboardingVerifyZipCodeMessage, textColor: Theme.colors.captionGray)
         
         let keyboardSpacerView = UIView()
         keyboardSpacerHeightConstraint = keyboardSpacerView.heightAnchor.constraint(equalToConstant: 0)
@@ -80,11 +80,10 @@ class VerifyZipCodeViewController: ViewController, ScrollViewNavivationbarAdjust
                           nextButton,
                           keyboardSpacerView))
             .distribution(.equalSpacing)
-            .wrappedInReadableWidth(insets: .top(topMargin))
         
-        containerView.embed(in: scrollView.readableWidth)
+        containerView.embed(in: scrollView.readableWidth, insets: .top(topMargin))
         
-        containerView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.safeAreaLayoutGuide.heightAnchor, multiplier: 1, constant: 0).isActive = true
+        containerView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.safeAreaLayoutGuide.heightAnchor, multiplier: 1, constant: -topMargin).isActive = true
         
         scrollView.embed(in: view)
         scrollView.delegate = self

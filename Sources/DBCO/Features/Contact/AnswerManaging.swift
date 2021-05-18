@@ -14,7 +14,7 @@ extension AnswerOption {
 }
 
 /// - Tag: AnswerManaging
-protocol AnswerManaging: class {
+protocol AnswerManaging: AnyObject {
     var question: Question { get }
     var answer: Answer { get }
     var view: UIView { get }
@@ -175,8 +175,8 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
         containerView.layer.cornerRadius = 8
         
         VStack(spacing: 16,
-               UILabel(bodyBold: .otherCategoryTitle).multiline(),
-               UILabel(body: .otherCategoryMessage, textColor: Theme.colors.captionGray).multiline())
+               UILabel(bodyBold: .otherCategoryTitle),
+               UILabel(body: .otherCategoryMessage, textColor: Theme.colors.captionGray))
             .embed(in: containerView, insets: .leftRight(16) + .topBottom(24))
         
         return containerView
@@ -204,6 +204,7 @@ class ContactDetailsAnswerManager: AnswerManaging, InputFieldDelegate {
     // swiftlint:enable opening_brace
     
     private var baseAnswer: Answer
+    private var didHaveValidPhoneOrEmail: Bool = false
     
     var updateHandler: ((AnswerManaging) -> Void)?
     
@@ -233,6 +234,8 @@ class ContactDetailsAnswerManager: AnswerManaging, InputFieldDelegate {
         default:
             fatalError()
         }
+        
+        didHaveValidPhoneOrEmail = (email.value ?? phoneNumber.value) != nil
     }
     
     let question: Question
@@ -272,11 +275,35 @@ class ContactDetailsAnswerManager: AnswerManaging, InputFieldDelegate {
         return answer.progressElements.contains(true)
     }
     
-    weak var inputFieldDelegate: InputFieldDelegate?
+    weak var inputFieldDelegate: InputFieldDelegate? {
+        didSet {
+            firstNameField.updateValidationStateIfNeeded()
+            lastNameField.updateValidationStateIfNeeded()
+            phoneNumberField.updateValidationStateIfNeeded()
+            emailField.updateValidationStateIfNeeded()
+        }
+    }
     
     func promptOptionsForInputField(_ options: [String], selectOption: @escaping (String?) -> Void) {
         inputFieldDelegate?.promptOptionsForInputField(options, selectOption: selectOption)
     }
+    
+    func shouldShowValidationResult(_ result: ValidationResult, for sender: AnyObject) -> Bool {
+        guard inputFieldDelegate?.shouldShowValidationResult(result, for: sender) == true else { return false }
+        
+        switch result {
+        case .empty:
+            if sender === phoneNumberField || sender === emailField {
+                // Only allow the empty warning for these if we did not have a value for either one of them
+                return !didHaveValidPhoneOrEmail
+            } else {
+                return true
+            }
+        default:
+            return true
+        }
+    }
+    
 }
 
 /// AnswerManager for the .date question.
@@ -389,8 +416,8 @@ class LastExposureDateAnswerManager: AnswerManaging {
         containerView.isHidden = true
         
         VStack(spacing: 16,
-               UILabel(bodyBold: .earlierExposureDateTitle).multiline(),
-               UILabel(body: .earlierExposureDateMessage, textColor: Theme.colors.captionGray).multiline())
+               UILabel(bodyBold: .earlierExposureDateTitle),
+               UILabel(body: .earlierExposureDateMessage, textColor: Theme.colors.captionGray))
             .embed(in: containerView, insets: .leftRight(16) + .topBottom(24))
         
         return containerView
@@ -440,7 +467,7 @@ class LastExposureDateAnswerManager: AnswerManaging {
         formatter.dateStyle = .full
         formatter.timeStyle = .none
         formatter.calendar = Calendar.current
-        formatter.locale = Locale.current
+        formatter.locale = .display
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         
         return formatter
@@ -449,7 +476,6 @@ class LastExposureDateAnswerManager: AnswerManaging {
     static let valueDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.calendar = Calendar.current
-        formatter.locale = Locale.current
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         formatter.dateFormat = "yyyy-MM-dd"
         

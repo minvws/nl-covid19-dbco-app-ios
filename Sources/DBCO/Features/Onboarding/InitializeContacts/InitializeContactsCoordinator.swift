@@ -9,7 +9,7 @@ import UIKit
 import Contacts
 import SafariServices
 
-protocol InitializeContactsCoordinatorDelegate: class {
+protocol InitializeContactsCoordinatorDelegate: AnyObject {
     func initializeContactsCoordinatorDidFinish(_ coordinator: InitializeContactsCoordinator)
     func initializeContactsCoordinatorDidCancel(_ coordinator: InitializeContactsCoordinator)
 }
@@ -64,7 +64,7 @@ final class InitializeContactsCoordinator: Coordinator, Logging {
         let currentStatus = CNContactStore.authorizationStatus(for: .contacts)
         
         switch currentStatus {
-        case .authorized:
+        case .authorized, .denied, .restricted:
             continueToRoommates()
         default:
             requestContactsAuthorization()

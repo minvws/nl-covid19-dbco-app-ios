@@ -10,6 +10,7 @@ import UIKit
 class OnsetDatePicker: UIPickerView, UIPickerViewDataSource, UIPickerViewDelegate, DatePicking {
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
+        formatter.locale = .display
         formatter.dateFormat = "EEEE d MMMM"
         return formatter
     }()

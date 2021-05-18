@@ -21,6 +21,40 @@ private extension Task.Contact {
     }
 }
 
+private extension Guidelines.Categories {
+    func text(for category: Task.Contact.Category) -> String {
+        switch category {
+        case .category1:
+            return category1
+        case .category2a, .category2b:
+            return category2
+        case .category3a, .category3b:
+            return category3
+        case .other:
+            return ""
+        }
+    }
+}
+
+private extension Guidelines.RangedCategories {
+    func text(for category: Task.Contact.Category, withinRange: Bool) -> String {
+        switch category {
+        case .category1:
+            return category1
+        case .category2a, .category2b:
+            if withinRange {
+                return category2.withinRange
+            } else {
+                return category2.outsideRange
+            }
+        case .category3a, .category3b:
+            return category3
+        case .other:
+            return ""
+        }
+    }
+}
+
 /// The ViewModel required for [ContactQuestionnaireViewController](x-source-tag://ContactQuestionnaireViewController).
 /// Can be used to update a task or to create a new task.
 ///
@@ -40,6 +74,18 @@ class ContactQuestionnaireViewModel {
     var contactShouldBeDeleted: Bool {
         return updatedTask.contact.shouldBeDeleted
     }
+    
+    struct Input {
+        let caseReference: String?
+        let guidelines: Guidelines
+        let featureFlags: FeatureFlags
+        let isCaseWindowExpired: Bool
+        let task: Task?
+        let questionnaire: Questionnaire
+        let contact: CNContact?
+    }
+    
+    private let input: Input
     
     var updatedTask: Task {
         let updatedCategory = updatedClassification.category ?? task.contact.category
@@ -87,14 +133,16 @@ class ContactQuestionnaireViewModel {
     @Bindable private(set) var informButtonHidden: Bool = true
     @Bindable private(set) var copyButtonHidden: Bool = true
     @Bindable private(set) var informButtonType: Button.ButtonType = .secondary
+    @Bindable private(set) var copyButtonType: Button.ButtonType = .secondary
     @Bindable private(set) var promptButtonType: Button.ButtonType = .primary
     @Bindable private(set) var promptButtonTitle: String = .save
     
-    init(task: Task?, questionnaire: Questionnaire, contact: CNContact? = nil) {
-        self.didCreateNewTask = task == nil
+    init(_ input: Input) {
+        self.input = input
+        self.didCreateNewTask = input.task == nil
         
-        let initialCategory = task?.contact.category
-        let task = task ?? Task.emptyContactTask
+        let initialCategory = input.task?.contact.category
+        let task = input.task ?? Task.emptyContactTask
         self.task = task
         self.updatedContact = task.contact
         self.title = task.contactName ?? .contactFallbackTitle
@@ -102,20 +150,20 @@ class ContactQuestionnaireViewModel {
         let questionsAndAnswers: [(question: Question, answer: Answer)] = {
             let currentAnswers = task.questionnaireResult?.answers ?? []
             
-            return questionnaire.questions.map { question in
+            return input.questionnaire.questions.map { question in
                 (question, currentAnswers.first { $0.questionUuid == question.uuid } ?? question.emptyAnswer)
             }
         }()
         
-        self.baseResult = QuestionnaireResult(questionnaireUuid: questionnaire.uuid, answers: questionsAndAnswers.map(\.answer))
+        self.baseResult = QuestionnaireResult(questionnaireUuid: input.questionnaire.uuid, answers: questionsAndAnswers.map(\.answer))
         
         self.answerManagers = Self.createAnswerManagers(for: questionsAndAnswers,
-                                                        contact: contact,
+                                                        contact: input.contact,
                                                         category: initialCategory,
                                                         dateOfLastExposure: updatedContact.dateOfLastExposure,
                                                         source: task.source)
         self.updatedClassification = .success(task.contact.category)
-        self.isDisabled = Services.caseManager.isWindowExpired
+        self.isDisabled = input.isCaseWindowExpired
         
         setupUpdateHandlers()
         setupInitialState()
@@ -207,6 +255,9 @@ class ContactQuestionnaireViewModel {
             $0.view.isHidden = !$0.question.isRelevant(in: taskCategory) || !$0.isEnabled
         }
         
+        let lastExposureManager = classificationManagers.first { $0.question.questionType == .lastExposureDate }
+        lastExposureManager?.isEnabled = taskCategory != .other
+        
         updateInformSectionContent()
     }
     
@@ -215,6 +266,9 @@ class ContactQuestionnaireViewModel {
                                       communication: updatedContact.communication,
                                       informedByIndexAt: updatedContact.informedByIndexAt,
                                       dateOfLastExposure: value)
+        
+        let classificationDetailsManager = classificationManagers.first { $0.question.questionType == .classificationDetails }
+        classificationDetailsManager?.view.isHidden = value == AnswerOption.lastExposureDateEarlierOption.value
         
         updateInformSectionContent()
     }
@@ -287,7 +341,7 @@ class ContactQuestionnaireViewModel {
     
     // MARK: - Inform Section Content
     private func setInformButtonTitle(firstName: String?) {
-        if updatedTask.contactPhoneNumber != nil && Services.configManager.featureFlags.enableContactCalling {
+        if updatedTask.contactPhoneNumber != nil && input.featureFlags.enableContactCalling {
             informButtonTitle = .informContactCall(firstName: firstName)
             informButtonHidden = false
         } else {
@@ -295,47 +349,15 @@ class ContactQuestionnaireViewModel {
         }
     }
     
-    struct ExposureDates {
-        let exposureDate: String
-        let exposureDatePlus5: String
-        let exposureDatePlus10: String
-        let exposureDatePlus11: String
-        let exposureDatePlus14: String
-        
-        init(exposureDate: Date) {
-            let exposureDatePlus5 = exposureDate.dateByAddingDays(5)
-            let exposureDatePlus10 = exposureDate.dateByAddingDays(10)
-            let exposureDatePlus11 = exposureDate.dateByAddingDays(11)
-            let exposureDatePlus14 = exposureDate.dateByAddingDays(14)
-            
-            let formatter = DateFormatter()
-            formatter.dateFormat = .informContactGuidelinesDateFormat
-            formatter.calendar = Calendar.current
-            formatter.locale = Locale.current
-            formatter.timeZone = TimeZone(secondsFromGMT: 0)
-            
-            self.exposureDate = formatter.string(from: exposureDate)
-            self.exposureDatePlus5 = formatter.string(from: exposureDatePlus5)
-            self.exposureDatePlus10 = formatter.string(from: exposureDatePlus10)
-            self.exposureDatePlus11 = formatter.string(from: exposureDatePlus11)
-            self.exposureDatePlus14 = formatter.string(from: exposureDatePlus14)
-        }
-    }
-    
     private func updateInformSectionContent() {
         let firstName = updatedTask.contactFirstName
         
-        copyButtonHidden = !Services.configManager.featureFlags.enablePerspectiveCopy
-        
-        informButtonType = .secondary
-        promptButtonType = .primary
+        copyButtonHidden = !input.featureFlags.enablePerspectiveCopy
         
         switch updatedContact.communication {
         case .index:
             informTitle = .informContactTitle(firstName: firstName)
             informFooter = .informContactFooterIndex(firstName: firstName)
-            informButtonType = .primary
-            promptButtonType = .secondary
         case .staff:
             informTitle = .informContactTitle(firstName: firstName)
             informFooter = .informContactFooterStaff(firstName: firstName)
@@ -345,47 +367,79 @@ class ContactQuestionnaireViewModel {
         }
         
         setInformButtonTitle(firstName: firstName)
+        setInformContent()
         
-        if isDisabled {
+        updateButtonTypes()
+    }
+    
+    private func updateButtonTypes() {
+        guard !isDisabled else {
             promptButtonTitle = .close
             promptButtonType = .secondary
-        } else {
-            promptButtonTitle = .save
+            return
         }
         
-        setInformContent()
+        guard !updatedContact.shouldBeDeleted else {
+            promptButtonType = .secondary
+            promptButtonTitle = didCreateNewTask ? .cancel : .close
+            return
+        }
+        
+        promptButtonTitle = .save
+        
+        guard updatedContact.communication == .index else {
+            informButtonType = .secondary
+            copyButtonType = .secondary
+            promptButtonType = .primary
+            return
+        }
+        
+        switch (informButtonHidden, copyButtonHidden) {
+        case (false, _):
+            informButtonType = .primary
+            copyButtonType = .secondary
+            promptButtonType = .secondary
+        case (true, false):
+            copyButtonType = .primary
+            promptButtonType = .secondary
+        case (true, true):
+            promptButtonType = .primary
+        }
     }
     
     private func setInformContent() {
-        let reference = Services.caseManager.reference
+        let referenceNumber = input.caseReference
+        let guidelines = input.guidelines
+
+        var exposureDate: Date?
         
-        if let dateValue = updatedContact.dateOfLastExposure,
-           let exposureDate = LastExposureDateAnswerManager.valueDateFormatter.date(from: dateValue) {
+        let introText: String
+        let guidelinesText: String
+        
+        if let dateValue = updatedContact.dateOfLastExposure, let date = LastExposureDateAnswerManager.valueDateFormatter.date(from: dateValue) {
+            exposureDate = date
+            let isWithin4Days = Date.today.numberOfDaysSince(date) < 4
             
-            let dates = ExposureDates(exposureDate: exposureDate)
-            let isWithin4Days = Date.today.numberOfDaysSince(exposureDate) < 4
-            
-            informContent = .informContactGuidelines(category: updatedContact.category,
-                                                     exposureDatePlus5: dates.exposureDatePlus5,
-                                                     exposureDatePlus10: dates.exposureDatePlus10,
-                                                     exposureDatePlus11: dates.exposureDatePlus11,
-                                                     exposureDatePlus14: dates.exposureDatePlus14,
-                                                     within4Days: isWithin4Days,
-                                                     reference: reference)
-            informIntro = .informContactGuidelinesIntro(category: updatedContact.category,
-                                                        exposureDate: dates.exposureDate)
+            introText = guidelines.introExposureDateKnown.text(for: updatedContact.category)
+            guidelinesText = guidelines.guidelinesExposureDateKnown.text(for: updatedContact.category, withinRange: isWithin4Days)
         } else {
-            informContent = .informContactGuidelinesGeneric(category: updatedContact.category,
-                                                            reference: reference)
-            informIntro = .informContactGuidelinesIntroGeneric(category: updatedContact.category)
+            introText = guidelines.introExposureDateUnknown.text(for: updatedContact.category)
+            guidelinesText = guidelines.guidelinesExposureDateUnknown.text(for: updatedContact.category)
         }
+        
+        let outroText = guidelines.outro.text(for: updatedContact.category)
+        
+        var referenceNumberItem = referenceNumber != nil ? guidelines.referenceNumberItem : ""
+        referenceNumberItem = GuidelinesHelper.parseGuidelines(referenceNumberItem, exposureDate: exposureDate, referenceNumber: referenceNumber, referenceNumberItem: nil)
+        
+        informContent = GuidelinesHelper.parseGuidelines(guidelinesText, exposureDate: exposureDate, referenceNumber: referenceNumber, referenceNumberItem: referenceNumberItem)
+        informIntro = GuidelinesHelper.parseGuidelines(introText, exposureDate: exposureDate, referenceNumber: referenceNumber, referenceNumberItem: referenceNumberItem)
+        informLink = GuidelinesHelper.parseGuidelines(outroText, exposureDate: exposureDate, referenceNumber: referenceNumber, referenceNumberItem: referenceNumberItem)
         
         if updatedContact.shouldBeDeleted {
             promptButtonType = .secondary
             promptButtonTitle = didCreateNewTask ? .cancel : .close
         }
-        
-        informLink = .informContactLink(category: updatedTask.contact.category)
     }
     
     var copyableGuidelines: String {
@@ -432,4 +486,5 @@ class ContactQuestionnaireViewModel {
     func setInputFieldDelegate(_ delegate: InputFieldDelegate) {
         answerManagers.forEach { $0.inputFieldDelegate = delegate }
     }
+    
 }

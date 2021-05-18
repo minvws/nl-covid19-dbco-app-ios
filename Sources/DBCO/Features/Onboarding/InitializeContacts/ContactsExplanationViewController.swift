@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol ContactsExplanationViewControllerDelegate: class {
+protocol ContactsExplanationViewControllerDelegate: AnyObject {
     func contactsExplanationViewControllerWantsToContinue(_ controller: ContactsExplanationViewController)
 }
 
@@ -18,7 +18,7 @@ class ContactsExplanationViewModel {
 /// A viewcontroller showing a list of items explaining the benefits of giving permission to access contacts, and what that acces entails.
 ///
 /// - Tag: ContactsExplanationViewController
-class ContactsExplanationViewController: PromptableViewController, ScrollViewNavivationbarAdjusting {
+class ContactsExplanationViewController: ViewController, ScrollViewNavivationbarAdjusting {
     private let viewModel: ContactsExplanationViewModel
     private let scrollView = UIScrollView(frame: .zero)
     
@@ -46,45 +46,35 @@ class ContactsExplanationViewController: PromptableViewController, ScrollViewNav
         
         view.backgroundColor = .white
         
-        scrollView.embed(in: contentView)
+        scrollView.embed(in: view)
         scrollView.delegate = self
         scrollView.delaysContentTouches = false
         
         let widthProviderView = UIView()
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
-        widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
+        widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
-        let margin: UIEdgeInsets = .top(32) + .bottom(18) + .right(16)
+        let margin: UIEdgeInsets = .top(32) + .bottom(16) + .right(16)
         
         let stack =
             VStack(spacing: 24,
                    VStack(spacing: 24,
                        VStack(spacing: 16,
-                              UILabel(title2: .determineContactsExplanationTitle).multiline(),
-                              UILabel(body: .determineContactsExplanationMessage, textColor: Theme.colors.captionGray).multiline()),
+                              UILabel(title2: .determineContactsExplanationTitle),
+                              UILabel(body: .determineContactsExplanationMessage, textColor: Theme.colors.captionGray)),
                        VStack(spacing: 16,
                               listItem(.determineContactsExplanationItem1, imageName: "ListItem/Checkmark"),
                               listItem(.determineContactsExplanationItem2, imageName: "ListItem/Checkmark"),
                               listItem(.determineContactsExplanationItem3, imageName: "ListItem/Questionmark"),
                               listItem(.determineContactsExplanationItem4, imageName: "ListItem/Stop"))),
-                   UIView()) // Empty view for spacing
+                   Button(title: .next, style: .primary)
+                       .touchUpInside(self, action: #selector(handleContinue)))
                 .distribution(.equalSpacing)
                 .embed(in: scrollView.readableWidth, insets: margin)
         
-        stack.heightAnchor.constraint(greaterThanOrEqualTo: contentView.safeAreaLayoutGuide.heightAnchor,
+        stack.heightAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.heightAnchor,
                                       multiplier: 1,
                                       constant: -(margin.top + margin.bottom)).isActive = true
-        
-        promptView = Button(title: .next, style: .primary)
-            .touchUpInside(self, action: #selector(handleContinue))
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        let scrollingHeight = scrollView.contentSize.height + scrollView.safeAreaInsets.top + scrollView.safeAreaInsets.bottom
-        let canScroll = scrollingHeight > scrollView.frame.height
-        showPromptViewSeparator = canScroll
     }
     
     @objc private func handleContinue() {
