@@ -22,7 +22,6 @@
 		CD10F08125AF0886000295B9 /* InitializeContactsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F08025AF0886000295B9 /* InitializeContactsCoordinator.swift */; };
 		CD10F08625AF2E52000295B9 /* DetermineContagiousPeriodCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F08525AF2E52000295B9 /* DetermineContagiousPeriodCoordinator.swift */; };
 		CD10F08C25AF30A7000295B9 /* SelectSymptomsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F08B25AF30A7000295B9 /* SelectSymptomsViewController.swift */; };
-		CD10F09025AF42F8000295B9 /* SymptomToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F08F25AF42F8000295B9 /* SymptomToggleButton.swift */; };
 		CD10F09425AF48B4000295B9 /* OnboardingDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F09325AF48B4000295B9 /* OnboardingDateViewController.swift */; };
 		CD10F09825B08B03000295B9 /* SelectRoommatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD10F09725B08B02000295B9 /* SelectRoommatesViewController.swift */; };
 		CD1824EE2524B3E4006EB272 /* InputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1824ED2524B3E4006EB272 /* InputField.swift */; };
@@ -126,6 +125,7 @@
 		CDC7C89425385AD600FE7E05 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C89325385AD600FE7E05 /* Task.swift */; };
 		CDC7C89E25387E2000FE7E05 /* Questionnaire.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C89D25387E2000FE7E05 /* Questionnaire.swift */; };
 		CDC7C8A225387E4400FE7E05 /* CaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C8A125387E4400FE7E05 /* CaseManager.swift */; };
+		CDCCFE6D265541C600D07617 /* SelectableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCCFE6C265541C600D07617 /* SelectableButton.swift */; };
 		CDD68BA6254D511D00E96E9C /* KeychainItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD68BA5254D511D00E96E9C /* KeychainItem.swift */; };
 		CDD68BAA254D60BC00E96E9C /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD68BA9254D60BC00E96E9C /* UserDefaults.swift */; };
 		CDDC05642543120D0079C2F4 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDDC05632543120D0079C2F4 /* Coordinator.swift */; };
@@ -193,7 +193,6 @@
 		CD10F08025AF0886000295B9 /* InitializeContactsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializeContactsCoordinator.swift; sourceTree = "<group>"; };
 		CD10F08525AF2E52000295B9 /* DetermineContagiousPeriodCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetermineContagiousPeriodCoordinator.swift; sourceTree = "<group>"; };
 		CD10F08B25AF30A7000295B9 /* SelectSymptomsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSymptomsViewController.swift; sourceTree = "<group>"; };
-		CD10F08F25AF42F8000295B9 /* SymptomToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomToggleButton.swift; sourceTree = "<group>"; };
 		CD10F09325AF48B4000295B9 /* OnboardingDateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDateViewController.swift; sourceTree = "<group>"; };
 		CD10F09725B08B02000295B9 /* SelectRoommatesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRoommatesViewController.swift; sourceTree = "<group>"; };
 		CD1824ED2524B3E4006EB272 /* InputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputField.swift; sourceTree = "<group>"; };
@@ -302,6 +301,7 @@
 		CDC7C89325385AD600FE7E05 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		CDC7C89D25387E2000FE7E05 /* Questionnaire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Questionnaire.swift; sourceTree = "<group>"; };
 		CDC7C8A125387E4400FE7E05 /* CaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseManager.swift; sourceTree = "<group>"; };
+		CDCCFE6C265541C600D07617 /* SelectableButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableButton.swift; sourceTree = "<group>"; };
 		CDD68BA5254D511D00E96E9C /* KeychainItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainItem.swift; sourceTree = "<group>"; };
 		CDD68BA9254D60BC00E96E9C /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		CDDC05632543120D0079C2F4 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
@@ -400,7 +400,6 @@
 			children = (
 				CD10F08525AF2E52000295B9 /* DetermineContagiousPeriodCoordinator.swift */,
 				CD10F08B25AF30A7000295B9 /* SelectSymptomsViewController.swift */,
-				CD10F08F25AF42F8000295B9 /* SymptomToggleButton.swift */,
 				CD10F09325AF48B4000295B9 /* OnboardingDateViewController.swift */,
 				CD4DBE6F25F635E10037B144 /* OnsetHelpViewController.swift */,
 			);
@@ -504,6 +503,7 @@
 				CD47A4032549766C005B8801 /* SectionedScrollView.swift */,
 				CDF0AE8225C95BAA0054AF87 /* OnsetDatePicker.swift */,
 				CD4DBE7B25F65E060037B144 /* ListItem.swift */,
+				CDCCFE6C265541C600D07617 /* SelectableButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1106,12 +1106,12 @@
 				CD2AC08A25308B6500E8AF78 /* StatusView.swift in Sources */,
 				CD0E968725E58709006E70BD /* RequestContactsAuthorizationViewController.swift in Sources */,
 				CDFCF9152510EBC40062269A /* NSAttributedString+Extension.swift in Sources */,
-				CD10F09025AF42F8000295B9 /* SymptomToggleButton.swift in Sources */,
 				CDC4A8E8250B87E5001BABC6 /* AppDelegate.swift in Sources */,
 				CDE25F65254B316F00E9AE49 /* NetworkManaging.swift in Sources */,
 				CD756C70252DC629005FEDA0 /* SeparatorView.swift in Sources */,
 				CDC6726A2566824300222DCC /* Codable+UserInfo.swift in Sources */,
 				CD5B7DCF26395A6400FCBBBE /* Array+Safe.swift in Sources */,
+				CDCCFE6D265541C600D07617 /* SelectableButton.swift in Sources */,
 				CD10F09825B08B03000295B9 /* SelectRoommatesViewController.swift in Sources */,
 				CD5DA76F2551859C003660CC /* AppUpdateViewController.swift in Sources */,
 				CD9C7F52254AC25300A78EEF /* Task+Informed.swift in Sources */,

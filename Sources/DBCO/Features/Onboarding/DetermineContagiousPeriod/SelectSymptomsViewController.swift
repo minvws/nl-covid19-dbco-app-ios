@@ -166,3 +166,19 @@ extension SelectSymptomsViewController: UIScrollViewDelegate {
     }
     
 }
+
+private class SymptomToggleButton: SelectableButton {
+    
+    required init(title: String = "", selected: Bool = false, iconAlignment: ContentMode = .center) {
+        super.init(title: title, selected: selected, iconAlignment: iconAlignment)
+
+        contentEdgeInsets = .topBottom(13.5) + .left(52) + .right(20)
+        clipsToBounds = false
+        layer.cornerRadius = 0
+        setTitleColor(.black, for: .normal)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}

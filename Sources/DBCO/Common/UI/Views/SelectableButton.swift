@@ -1,13 +1,14 @@
-/*
- * Copyright (c) 2020 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
- *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
- *
- *  SPDX-License-Identifier: EUPL-1.2
- */
+//
+//  SelectableButton.swift
+//  DBCO
+//
+//  Created by Thom Hoekstra on 19/05/2021.
+//  Copyright © 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport. All rights reserved.
+//
 
 import UIKit
 
-class SymptomToggleButton: UIButton {
+class SelectableButton: UIButton {
     
     override var isSelected: Bool {
         didSet { applyState() }
@@ -17,9 +18,19 @@ class SymptomToggleButton: UIButton {
         didSet { applyState() }
     }
     
+    override var accessibilityTraits: UIAccessibilityTraits {
+        get { return UISwitch().accessibilityTraits }
+        set { super.accessibilityTraits = newValue }
+    }
+    
+    override var accessibilityValue: String? {
+        get { return isSelected ? "1" : "0" }
+        set { super.accessibilityValue = newValue }
+    }
+    
     var useHapticFeedback = true
     
-    required init(title: String = "", selected: Bool = false) {
+    required init(title: String = "", selected: Bool = false, iconAlignment: ContentMode = .top) {
         icon = UIImageView(image: UIImage(named: "Toggle/Normal"),
                            highlightedImage: UIImage(named: "Toggle/Selected"))
         
@@ -34,8 +45,9 @@ class SymptomToggleButton: UIButton {
         addTarget(self, action: #selector(touchDownAnimation), for: .touchDown)
         
         icon.tintColor = Theme.colors.primary
-        icon.contentMode = .center
-        icon.snap(to: .left, of: self, insets: .left(16))
+        icon.contentMode = iconAlignment
+        let insets: UIEdgeInsets = iconAlignment == .center ? .left(16) : .left(16) + .topBottom(16)
+        icon.snap(to: .left, of: self, insets: insets)
         
         isSelected = selected
         
@@ -48,8 +60,11 @@ class SymptomToggleButton: UIButton {
     
     // MARK: - Private
     
-    fileprivate func setup() {
-        contentEdgeInsets = .topBottom(13.5) + .left(52) + .right(20)
+    private func setup() {
+        clipsToBounds = true
+        contentEdgeInsets = .topBottom(17) + .left(52) + .right(16)
+        
+        layer.cornerRadius = 8
         
         titleLabel?.font = Theme.fonts.body
         titleLabel?.lineBreakMode = .byWordWrapping
@@ -57,7 +72,7 @@ class SymptomToggleButton: UIButton {
         
         tintColor = .white
         backgroundColor = Theme.colors.tertiary
-        setTitleColor(.black, for: .normal)
+        setTitleColor(UIColor(white: 0.235, alpha: 0.85), for: .normal)
         contentHorizontalAlignment = .left
         
         applyState()
@@ -74,6 +89,12 @@ class SymptomToggleButton: UIButton {
         base.height += contentEdgeInsets.top + contentEdgeInsets.bottom
         base.width += contentEdgeInsets.left + contentEdgeInsets.right
         return base
+    }
+    
+    @discardableResult
+    func valueChanged(_ target: Any?, action: Selector) -> Self {
+        super.addTarget(target, action: action, for: .valueChanged)
+        return self
     }
     
     private func applyState() {
