@@ -63,9 +63,11 @@ class PrivacyConsentViewController: ViewController, ScrollViewNavivationbarAdjus
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
         widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
-        let continueButton = Button(title: viewModel.buttonTitle, style: .primary)
-            .touchUpInside(self, action: #selector(handleContinue))
-
+        setupView()
+    }
+    
+    private func setupView() {
+        let continueButton = Button(title: viewModel.buttonTitle, style: .primary).touchUpInside(self, action: #selector(handleContinue))
         viewModel.$isContinueButtonEnabled.binding = { continueButton.isEnabled = $0 }
         
         let margin: UIEdgeInsets = .top(32) + .bottom(16)

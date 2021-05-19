@@ -253,10 +253,12 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
         scrollView.keyboardDismissMode = .onDrag
         scrollView.delegate = self
         
-        let margin: UIEdgeInsets = .top(32) + .bottom(16)
-        
-        sectionStackView = VStack(spacing: 40)
-        
+        setupView()
+        configureSections()
+        registerForKeyboardNotifications()
+    }
+    
+    private func setupAddExtraDaySectionView() {
         let addExtraDayButton = Button(title: .contactsTimelineAddExtraDayButton, style: .secondary)
             .touchUpInside(self, action: #selector(addExtraDay))
         
@@ -267,6 +269,13 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
         addExtraDaySectionView = VStack(spacing: 24,
                                         addExtraDayTitleLabel,
                                         addExtraDayButton)
+    }
+    
+    private func setupView() {
+        let margin: UIEdgeInsets = .top(32) + .bottom(16)
+        
+        sectionStackView = VStack(spacing: 40)
+        setupAddExtraDaySectionView()
 
         let stack =
             VStack(spacing: 40,
@@ -282,12 +291,8 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
                 .embed(in: scrollView.readableWidth, insets: margin)
         
         stack.heightAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.heightAnchor,
-                                          multiplier: 1,
-                                          constant: -(margin.top + margin.bottom)).isActive = true
-        
-        configureSections()
-        
-        registerForKeyboardNotifications()
+                                      multiplier: 1,
+                                      constant: -(margin.top + margin.bottom)).isActive = true
         
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideSuggestions)))
     }
@@ -310,39 +315,40 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
         titleLabel.text = viewModel.title
         
         let existingSectionViews = sectionStackView.arrangedSubviews.compactMap { $0 as? TimelineSectionView }
-        
         let storedContacts = Services.onboardingManager.contacts ?? []
-        
-        func view(for section: ContactsTimelineViewModel.Section) -> TimelineSectionView {
-            if let sectionView = existingSectionViews.first(where: { $0.isConfigured(for: section) }) {
-                return sectionView
-            } else {
-                switch section {
-                case .day(let date, _, _):
-                    let sectionView = DaySectionView()
-                    sectionView.contactListDelegate = self
-                    sectionView.contactList.contacts = storedContacts
-                        .filter { $0.date == date }
-                        .map { ContactListInputView.Contact(name: $0.name, cnContactIdentifier: $0.contactIdentifier) }
-                    return sectionView
-                case .reviewTips:
-                    return ReviewTipsSectionView()
-                case .activityTips:
-                    return ActivityTipsSectionView()
-                }
-            }
-        }
         
         sectionStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
         viewModel.sections.forEach { section in
-            let sectionView = view(for: section)
+            let sectionView = createOrReuseView(for: section,
+                                                existingSectionViews: existingSectionViews,
+                                                contacts: storedContacts)
             sectionView.section = section
             self.sectionStackView.addArrangedSubview(sectionView)
         }
         
         addExtraDaySectionView.isHidden = viewModel.hideExtraDaySection
         addExtraDayTitleLabel.text = viewModel.addExtraDayTitle
+    }
+    
+    private func createOrReuseView(for section: ContactsTimelineViewModel.Section, existingSectionViews: [TimelineSectionView], contacts: [Onboarding.Contact]) -> TimelineSectionView {
+        if let sectionView = existingSectionViews.first(where: { $0.isConfigured(for: section) }) {
+            return sectionView
+        } else {
+            switch section {
+            case .day(let date, _, _):
+                let sectionView = DaySectionView()
+                sectionView.contactListDelegate = self
+                sectionView.contactList.contacts = contacts
+                    .filter { $0.date == date }
+                    .map { ContactListInputView.Contact(name: $0.name, cnContactIdentifier: $0.contactIdentifier) }
+                return sectionView
+            case .reviewTips:
+                return ReviewTipsSectionView()
+            case .activityTips:
+                return ActivityTipsSectionView()
+            }
+        }
     }
     
     private func listAllContacts() -> [Onboarding.Contact] {

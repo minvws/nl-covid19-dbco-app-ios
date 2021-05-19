@@ -274,7 +274,12 @@ class TaskOverviewViewController: PromptableViewController {
         title = .taskOverviewTitle
         
         setupTableView()
+        setupPromptView()
         
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+    }
+    
+    private func setupPromptView() {
         let windowExpiredMessage =
             HStack(spacing: 8,
                    UIImageView(imageName: "Warning").asIcon().withInsets(.top(2)),
@@ -306,8 +311,6 @@ class TaskOverviewViewController: PromptableViewController {
         
         viewModel.setHidePrompt { [unowned self] in self.hidePrompt(animated: $0) }
         viewModel.setShowPrompt { [unowned self] in self.showPrompt(animated: $0) }
-        
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
     
     private func createPairingView() -> UIView {
@@ -396,7 +399,7 @@ class TaskOverviewViewController: PromptableViewController {
 
 private extension TaskOverviewViewController {
     
-    func tableHeaderBuilder() -> UIView {
+    private func createTipContainerView() -> UIView {
         let tipContainerView = UIView()
         tipContainerView.backgroundColor = Theme.colors.graySeparator
         tipContainerView.layer.cornerRadius = 8
@@ -422,6 +425,10 @@ private extension TaskOverviewViewController {
                tipButton)
             .embed(in: tipContainerView, insets: .right(92) + .left(16) + .top(16) + .bottom(11))
         
+        return tipContainerView
+    }
+    
+    func tableHeaderBuilder() -> UIView {
         let addContactButton = Button(title: .taskOverviewAddContactButtonTitle, style: .info)
             .touchUpInside(self, action: #selector(requestContact))
         
@@ -432,7 +439,7 @@ private extension TaskOverviewViewController {
         self.viewModel.$isHeaderAddContactButtonHidden.binding = { addContactButton.isHidden = $0 }
         
         return VStack(spacing: 12,
-                      tipContainerView,
+                      createTipContainerView(),
                       addContactButton)
             .wrappedInReadableWidth(insets: .top(32))
     }

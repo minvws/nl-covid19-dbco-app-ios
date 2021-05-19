@@ -14,7 +14,7 @@ protocol ReversePairViewControllerDelegate: AnyObject {
 }
 
 class ReversePairViewModel {
-    enum PairingCodeStatus {
+    enum PairingCodeStatus: Equatable {
         case waiting
         case done(code: NSAttributedString)
         case expired
@@ -112,17 +112,23 @@ class ReversePairViewController: PromptableViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: .close, style: .plain, target: self, action: #selector(close))
         title = .reversePairingTitle
         
-        view.backgroundColor = .white
-        
         scrollView.embed(in: contentView)
         scrollView.delaysContentTouches = false
         
+        setupContinueButton()
+        setupView()
+    }
+    
+    private func setupContinueButton() {
         let continueButton = Button(title: viewModel.continueButtonTitle, style: .primary)
             .touchUpInside(self, action: #selector(handleContinue))
         
         viewModel.$isContinueButtonEnabled.binding = { continueButton.isEnabled = $0 }
-        
         promptView = continueButton
+    }
+    
+    private func setupView() {
+        view.backgroundColor = .white
         
         var step1IconView: UIView!
         var step2IconView: UIView!
@@ -147,6 +153,10 @@ class ReversePairViewController: PromptableViewController {
                       createStatusContainerView().withInsets(.left(40))))
             .embed(in: scrollView.readableWidth, insets: .top(32) + .bottom(16))
         
+        createLineBetweenSteps(step1View: step1IconView, step2View: step2IconView)
+    }
+    
+    private func createLineBetweenSteps(step1View: UIView, step2View: UIView) {
         let lineView = UIView()
         lineView.translatesAutoresizingMaskIntoConstraints = false
         lineView.backgroundColor = Theme.colors.graySeparator
@@ -154,9 +164,9 @@ class ReversePairViewController: PromptableViewController {
         
         scrollView.addSubview(lineView)
         
-        lineView.topAnchor.constraint(equalTo: step1IconView.bottomAnchor, constant: 2).isActive = true
-        lineView.bottomAnchor.constraint(equalTo: step2IconView.topAnchor, constant: -2).isActive = true
-        lineView.centerXAnchor.constraint(equalTo: step1IconView.centerXAnchor).isActive = true
+        lineView.topAnchor.constraint(equalTo: step1View.bottomAnchor, constant: 2).isActive = true
+        lineView.bottomAnchor.constraint(equalTo: step2View.topAnchor, constant: -2).isActive = true
+        lineView.centerXAnchor.constraint(equalTo: step1View.centerXAnchor).isActive = true
         lineView.widthAnchor.constraint(equalToConstant: 4).isActive = true
     }
     
@@ -182,20 +192,13 @@ class ReversePairViewController: PromptableViewController {
             .embed(in: codeContainerView)
         
         viewModel.$pairingCodeStatus.binding = {
-            switch $0 {
-            case .done(let code):
+            codeActivityIndicator.isHidden = $0 != .waiting
+            codeLabel.isHidden = true
+            codeExpiredView.isHidden = $0 != .expired
+            
+            if case .done(let code) = $0 {
                 codeLabel.attributedText = code
-                codeActivityIndicator.isHidden = true
                 codeLabel.isHidden = false
-                codeExpiredView.isHidden = true
-            case .waiting:
-                codeActivityIndicator.isHidden = false
-                codeLabel.isHidden = true
-                codeExpiredView.isHidden = true
-            case .expired:
-                codeActivityIndicator.isHidden = true
-                codeLabel.isHidden = true
-                codeExpiredView.isHidden = false
             }
         }
         
