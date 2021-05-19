@@ -88,20 +88,16 @@ class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdju
         scrollView.keyboardDismissMode = .onDrag
         scrollView.delegate = self
         
+        setupView()
+        registerForKeyboardNotifications()
+    }
+    
+    private func setupView() {
         let margin: UIEdgeInsets = .top(32) + .bottom(16)
-        
         let contacts = Services.onboardingManager.roommates?.map { ContactListInputView.Contact(name: $0.name, cnContactIdentifier: $0.contactIdentifier) } ?? []
 
-        contactListView = ContactListInputView(placeholder: .determineRoommatesAddContact,
-                                               contacts: contacts,
-                                               delegate: self)
-        
-        viewModel.setNumberOfEnteredContacts(contacts.count)
-        
-        let continueButton = Button(title: .next, style: .primary)
-            .touchUpInside(self, action: #selector(handleContinue))
-        
-        viewModel.$continueButtonTitle.binding = { continueButton.setTitle($0, for: .normal) }
+        contactListView = ContactListInputView(placeholder: .determineRoommatesAddContact, contacts: contacts, delegate: self)
+        let continueButton = Button(title: .next, style: .primary).touchUpInside(self, action: #selector(handleContinue))
         
         let stack =
             VStack(spacing: 24,
@@ -117,7 +113,8 @@ class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdju
                                       multiplier: 1,
                                       constant: -(margin.top + margin.bottom)).isActive = true
         
-        registerForKeyboardNotifications()
+        viewModel.$continueButtonTitle.binding = { continueButton.setTitle($0, for: .normal) }
+        viewModel.setNumberOfEnteredContacts(contacts.count)
         
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideSuggestions)))
     }

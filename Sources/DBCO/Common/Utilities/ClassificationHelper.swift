@@ -122,36 +122,32 @@ struct ClassificationHelper {
     ///
     /// - parameter risks: Risks
     static func setRisks(for category: Task.Contact.Category, risks: inout Risks) {
+        risks.sameHousehold = nil
+        risks.distance = nil
+        risks.physicalContact = nil
+        risks.sameRoom = nil
+        
         switch category {
         case .category1:
             risks.sameHousehold = true
-            risks.distance = nil
-            risks.physicalContact = nil
-            risks.sameRoom = nil
         case .category2a:
             risks.sameHousehold = false
             risks.distance = .yesMoreThan15min
-            risks.physicalContact = nil
-            risks.sameRoom = nil
         case .category2b:
             risks.sameHousehold = false
             risks.distance = .yesLessThan15min
             risks.physicalContact = true
-            risks.sameRoom = nil
         case .category3a:
             risks.sameHousehold = false
             risks.distance = .yesLessThan15min
             risks.physicalContact = false
-            risks.sameRoom = nil
         case .category3b:
             risks.sameHousehold = false
             risks.distance = .no
-            risks.physicalContact = nil
             risks.sameRoom = true
         case .other:
             risks.sameHousehold = false
             risks.distance = .no
-            risks.physicalContact = nil
             risks.sameRoom = false
         }
     }

@@ -26,8 +26,8 @@ force_cast: warning
 force_try:
   severity: warning
 function_body_length:
+  - 30
   - 100
-  - 200
 type_body_length:
   - 300
   - 400

@@ -26,6 +26,23 @@ class SelectContactViewModel {
     private let searchTableViewManager: TableViewManager<ContactTableViewCell>
     
     init(suggestedName: String? = nil) {
+        contacts = Self.fetchContactsFromStoreIfPossible(contactStore: contactStore)
+        
+        if let name = suggestedName {
+            suggestedContacts = ContactSuggestionHelper.suggestions(for: name, in: contacts)
+        } else {
+            suggestedContacts = []
+        }
+        
+        searchResults = []
+        
+        contactTableViewManager = .init()
+        searchTableViewManager = .init()
+        
+        setupTableViewManagers()
+    }
+    
+    private static func fetchContactsFromStoreIfPossible(contactStore: CNContactStore) -> [CNContact] {
         let keys = [
             CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
             CNContactTypeKey as CNKeyDescriptor
@@ -41,22 +58,13 @@ class SelectContactViewModel {
                     contacts.append(contact)
                 }
             }
-            self.contacts = contacts
+            return contacts
         } catch {
-            contacts = []
+            return []
         }
-        
-        if let name = suggestedName {
-            suggestedContacts = ContactSuggestionHelper.suggestions(for: name, in: contacts)
-        } else {
-            suggestedContacts = []
-        }
-        
-        searchResults = []
-        
-        contactTableViewManager = .init()
-        searchTableViewManager = .init()
-        
+    }
+    
+    private func setupTableViewManagers() {
         var sections = [(title: String, contacts: [CNContact])]()
         
         if !suggestedContacts.isEmpty {
@@ -72,7 +80,6 @@ class SelectContactViewModel {
         
         searchTableViewManager.numberOfRowsInSection = { [unowned self] _ in self.searchResults.count }
         searchTableViewManager.itemForCellAtIndexPath = { [unowned self] in self.searchResults[$0.row] }
-        
     }
     
     private var numberOfSections: Int {

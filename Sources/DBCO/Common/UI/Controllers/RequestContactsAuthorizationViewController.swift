@@ -78,6 +78,10 @@ class ContactsAuthorizationViewController: ViewController, ScrollViewNavivationb
         scrollView.delegate = self
         scrollView.delaysContentTouches = false
         
+        setupView()
+    }
+    
+    private func setupView() {
         let widthProviderView = UIView()
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
         widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true

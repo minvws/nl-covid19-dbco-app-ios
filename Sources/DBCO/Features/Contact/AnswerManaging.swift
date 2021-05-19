@@ -368,20 +368,7 @@ class LastExposureDateAnswerManager: AnswerManaging {
         self.baseAnswer = answer
         self.question = question
         
-        let endDate = Date()
-        let startDate = Services.caseManager.startOfContagiousPeriod ?? endDate
-        
-        let numberOfDays = Calendar.current.dateComponents([.day], from: startDate, to: endDate).day ?? 0
-        
-        let dateOptions = (0...numberOfDays)
-            .compactMap { Calendar.current.date(byAdding: .day, value: $0, to: startDate) }
-            .map { AnswerOption(label: Self.displayDateFormatter.string(from: $0),
-                                value: Self.valueDateFormatter.string(from: $0)) }
-        
-        let everyDayOption = AnswerOption(label: .contactInformationLastExposureEveryDay,
-                                          value: Self.valueDateFormatter.string(from: endDate))
-        
-        var answerOptions = [.lastExposureDateEarlierOption] + dateOptions + [everyDayOption]
+        var answerOptions = Self.createAnswerOptions()
         
         if let lastExposureDate = lastExposureDate {
             if let option = answerOptions.first(where: { $0.value == lastExposureDate }) {
@@ -395,15 +382,28 @@ class LastExposureDateAnswerManager: AnswerManaging {
             }
         }
         
-        guard case .lastExposureDate(let option) = baseAnswer.value else {
-            fatalError()
-        }
+        guard case .lastExposureDate(let option) = baseAnswer.value else { fatalError() }
         
         self.answerOptions = answerOptions
-        self.options = Options(label: question.label,
-                                value: option?.value,
-                                options: answerOptions.map { ($0.value, $0.label) })
+        self.options = Options(label: question.label, value: option?.value, options: answerOptions.map { ($0.value, $0.label) })
         self.options.labelFont = Theme.fonts.bodyBold
+    }
+    
+    private static func createAnswerOptions() -> [AnswerOption] {
+        let endDate = Date()
+        let startDate = Services.caseManager.startOfContagiousPeriod ?? endDate
+        
+        let numberOfDays = Calendar.current.dateComponents([.day], from: startDate, to: endDate).day ?? 0
+        
+        let dateOptions = (0...numberOfDays)
+            .compactMap { Calendar.current.date(byAdding: .day, value: $0, to: startDate) }
+            .map { AnswerOption(label: displayDateFormatter.string(from: $0),
+                                value: valueDateFormatter.string(from: $0)) }
+        
+        let everyDayOption = AnswerOption(label: .contactInformationLastExposureEveryDay,
+                                          value: valueDateFormatter.string(from: endDate))
+        
+        return [.lastExposureDateEarlierOption] + dateOptions + [everyDayOption]
     }
     
     let question: Question

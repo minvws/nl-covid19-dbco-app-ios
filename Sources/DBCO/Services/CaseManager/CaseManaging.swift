@@ -41,7 +41,7 @@ protocol CaseManaging {
     /// Indicates that an upload occured at least once
     var hasSynced: Bool { get }
     
-    /// Indicates that tasks can no longer be uploaded to the backedn
+    /// Indicates that tasks can no longer be uploaded to the backend
     var isWindowExpired: Bool { get }
     
     var dateOfSymptomOnset: Date? { get }

@@ -54,6 +54,10 @@ class ContactsExplanationViewController: ViewController, ScrollViewNavivationbar
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
         widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
+        setupView()
+    }
+    
+    private func setupView() {
         let margin: UIEdgeInsets = .top(32) + .bottom(16) + .right(16)
         
         let stack =
