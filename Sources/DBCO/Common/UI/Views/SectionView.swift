@@ -84,6 +84,9 @@ class SectionView: UIView {
         
         outerStack.bringSubviewToFront(headerContainerView)
         
+        self.title = title
+        self.caption = caption
+        
         setupHeaderView()
         setupContentView()
         
@@ -108,9 +111,6 @@ class SectionView: UIView {
         
         icon.image = UIImage(named: "EditContact/Section\(index)")
         icon.highlightedImage = UIImage(named: "EditContact/SectionCompleted")
-        
-        titleLabel.text = title
-        captionLabel.text = caption
         
         HStack(spacing: 16, icon, VStack(spacing: 2, titleLabel, captionLabel), collapseIndicator)
             .distribution(.fill)
