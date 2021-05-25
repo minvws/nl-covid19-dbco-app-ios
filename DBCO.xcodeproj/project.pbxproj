@@ -86,6 +86,7 @@
 		CD94E10C2625A6AE0018F7B2 /* VerifyZipCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD94E10B2625A6AE0018F7B2 /* VerifyZipCodeViewController.swift */; };
 		CD94E1132625CBBA0018F7B2 /* ZipRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD94E1122625CBBA0018F7B2 /* ZipRange.swift */; };
 		CD995B60256FDA63007A8B2C /* PrivacyConsentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD995B5F256FDA63007A8B2C /* PrivacyConsentViewController.swift */; };
+		CD9A9153265CEADE00F767FE /* Sealing.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9A9152265CEADE00F767FE /* Sealing.swift */; };
 		CD9C7F3F2549B2B600A78EEF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CD9C7F412549B2B600A78EEF /* InfoPlist.strings */; };
 		CD9C7F52254AC25300A78EEF /* Task+Informed.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9C7F51254AC25300A78EEF /* Task+Informed.swift */; };
 		CDA07ECC256C0FD900DEF3FF /* Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA07ECB256C0FD900DEF3FF /* Validator.swift */; };
@@ -261,6 +262,7 @@
 		CD94E10B2625A6AE0018F7B2 /* VerifyZipCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyZipCodeViewController.swift; sourceTree = "<group>"; };
 		CD94E1122625CBBA0018F7B2 /* ZipRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipRange.swift; sourceTree = "<group>"; };
 		CD995B5F256FDA63007A8B2C /* PrivacyConsentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyConsentViewController.swift; sourceTree = "<group>"; };
+		CD9A9152265CEADE00F767FE /* Sealing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sealing.swift; sourceTree = "<group>"; };
 		CD9C7F442549B2B900A78EEF /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CD9C7F51254AC25300A78EEF /* Task+Informed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Informed.swift"; sourceTree = "<group>"; };
 		CDA07ECB256C0FD900DEF3FF /* Validator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validator.swift; sourceTree = "<group>"; };
@@ -473,6 +475,7 @@
 				CD4036A6255D4F2D0037BCF1 /* Sealed.swift */,
 				CDB66B97265265D4005B6597 /* PairingManaging.swift */,
 				CD4036A0255D42F70037BCF1 /* PairingManager.swift */,
+				CD9A9152265CEADE00F767FE /* Sealing.swift */,
 			);
 			path = PairingManager;
 			sourceTree = "<group>";
@@ -1092,6 +1095,7 @@
 				CDC7C8A225387E4400FE7E05 /* CaseManager.swift in Sources */,
 				CDA0F6852539AA66009FD2A9 /* Task+ContactName.swift in Sources */,
 				CD5B7DD92639ADCA00FCBBBE /* GuidelinesHelper.swift in Sources */,
+				CD9A9153265CEADE00F767FE /* Sealing.swift in Sources */,
 				CDE25F8F254C21B900E9AE49 /* String+SHA256.swift in Sources */,
 				CDE7C6F32611DA8A00941386 /* UILabel+Convenience.swift in Sources */,
 				CDC7C8872538498700FE7E05 /* JSONDecoder+Decoding.swift in Sources */,

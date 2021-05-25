@@ -67,6 +67,6 @@ final class Services {
     }()
     static private(set) var caseManager: CaseManaging = caseManagingType.init()
     static private(set) var configManager: ConfigManaging = configManagingType.init()
-    static private(set) var pairingManager: PairingManaging = pairingManagingType.init()
+    static private(set) var pairingManager: PairingManaging = pairingManagingType.init(networkManager: networkManager)
     static private(set) var onboardingManager: OnboardingManaging = onboardingManagingType.init()
 }
