@@ -8,6 +8,12 @@
 import Foundation
 import Sodium
 
+/// Used for encrypting and decrypting data after pairing
+///
+/// # See
+/// [PairingManaging](x-source-tag://PairingManaging)
+///
+/// - Tag: Sealing
 class Sealing: Logging {
     private let sodium: Sodium
     
