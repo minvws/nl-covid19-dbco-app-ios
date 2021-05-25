@@ -138,6 +138,13 @@ extension Task.Contact: Codable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
+        var category: Category? = self.category
+        
+        if encoder.target == .api, category == .other {
+            // Send category other as "null" to API
+            category = nil
+        }
+        
         try container.encode(category, forKey: .category)
         try container.encode(communication, forKey: .communication)
         try container.encode(dateOfLastExposure, forKey: .dateOfLastExposure)
