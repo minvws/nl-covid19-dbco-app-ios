@@ -139,10 +139,18 @@ extension Task.Contact: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
         var category: Category? = self.category
+        var communication: Communication? = self.communication
         
-        if encoder.target == .api, category == .other {
-            // Send category other as "null" to API
-            category = nil
+        if encoder.target == .api {
+            // Send category "other" as "null" to API
+            if category == .other {
+                category = nil
+            }
+            
+            // Send communication "unknown" as "null" to API
+            if communication == .unknown {
+                communication = nil
+            }
         }
         
         try container.encode(category, forKey: .category)
