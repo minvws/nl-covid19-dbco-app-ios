@@ -10,22 +10,24 @@ import Sodium
 @testable import GGD_Contact
 
 class PairingManagerTests: XCTestCase {
-    
-    let pairingManager = PairingManager(networkManager: MockNetworkManager(configuration: .unitTest))
     private let healthAuthority = MockHealthAuthority()
     
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    func createPairingManager() -> PairingManaging {
+        let pairingManager = PairingManager(networkManager: MockNetworkManager(configuration: .unitTest))
+        pairingManager.unpair() // Clear any stored data
         
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-        pairingManager.unpair()
+        return pairingManager
     }
     
     func testClearedPairingManager() {
+        let pairingManager = createPairingManager()
+        
         XCTAssertFalse(pairingManager.isPaired)
     }
     
     func testPairing() {
+        let pairingManager = createPairingManager()
+        
         XCTAssertFalse(pairingManager.isPaired)
         
         let expectation = XCTestExpectation(description: "Pairing completes")
@@ -39,6 +41,8 @@ class PairingManagerTests: XCTestCase {
     }
     
     func testPairingAndUnpairing() {
+        let pairingManager = createPairingManager()
+        
         XCTAssertFalse(pairingManager.isPaired)
         
         let expectation = XCTestExpectation(description: "Pairing completes")
@@ -57,6 +61,8 @@ class PairingManagerTests: XCTestCase {
     }
     
     func testRepeatedPairingAndUnpairing() {
+        let pairingManager = createPairingManager()
+        
         XCTAssertFalse(pairingManager.isPaired)
         
         for _ in 0..<3 {
@@ -77,6 +83,8 @@ class PairingManagerTests: XCTestCase {
     }
     
     func testSealingData() {
+        let pairingManager = createPairingManager()
+        
         let expectation = XCTestExpectation(description: "Pairing completes")
         pairingManager.pair(pairingCode: "1111-1111-1111") { _, _ in expectation.fulfill() }
     
@@ -100,6 +108,8 @@ class PairingManagerTests: XCTestCase {
     }
     
     func testOpeningData() {
+        let pairingManager = createPairingManager()
+        
         let expectation = XCTestExpectation(description: "Pairing completes")
         pairingManager.pair(pairingCode: "1111-1111-1111") { _, _ in expectation.fulfill() }
     
