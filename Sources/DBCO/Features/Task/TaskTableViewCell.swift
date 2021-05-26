@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
+final class TaskTableViewCell: UITableViewCell, CellManagable {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)

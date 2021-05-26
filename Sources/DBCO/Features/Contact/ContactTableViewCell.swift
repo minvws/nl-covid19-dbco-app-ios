@@ -8,7 +8,7 @@
 import UIKit
 import Contacts
 
-final class ContactTableViewCell: UITableViewCell, Configurable, Reusable {
+final class ContactTableViewCell: UITableViewCell, CellManagable {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
