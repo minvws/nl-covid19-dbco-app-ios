@@ -8,7 +8,7 @@
 import UIKit
 import Contacts
 
-protocol ContactListInputViewDelegate: class {
+protocol ContactListInputViewDelegate: AnyObject {
     func contactListInputView(_ view: ContactListInputView, didBeginEditingIn textField: UITextField)
     func contactListInputView(_ view: ContactListInputView, didEndEditingIn textField: UITextField)
     func viewForPresentingSuggestionsFromContactListInputView(_ view: ContactListInputView) -> UIView
@@ -81,10 +81,17 @@ class ContactListInputView: UIView {
     }
     
     private func listContacts() -> [Contact] {
+        func trimName(_ name: String) -> String {
+            return name
+                .components(separatedBy: .whitespacesAndNewlines)
+                .filter { !$0.isEmpty } 
+                .joined(separator: " ")
+        }
+ 
         return textFieldStack.arrangedSubviews
             .compactMap { $0 as? ContactTextField }
             .filter { $0.text?.isEmpty == false }
-            .map { Contact(name: $0.text!.trimmingCharacters(in: .whitespacesAndNewlines), cnContactIdentifier: $0.acceptedSuggestedContactIdentifier) }
+            .map { Contact(name: trimName($0.text!), cnContactIdentifier: $0.acceptedSuggestedContactIdentifier) }
     }
     
     private func addContactField(for contact: Contact? = nil) {
@@ -176,6 +183,31 @@ class ContactListInputView: UIView {
         suggestionContainerView.removeFromSuperview()
     }
     
+    func scrollTextFieldToVisible(_ textField: UITextField, in scrollView: UIScrollView) {
+        // Next runcycle so keyboard size is properly incorporated
+        DispatchQueue.main.async {
+            let convertedBounds = scrollView.convert(textField.bounds, from: textField)
+            let extraMargin = UIEdgeInsets(top: 32, left: 0, bottom: 200, right: 0)
+            let visibleHeight =
+                scrollView.bounds.height -
+                scrollView.safeAreaInsets.top -
+                scrollView.safeAreaInsets.bottom -
+                scrollView.contentInset.bottom
+        
+            let minOffset = convertedBounds.minY - (scrollView.safeAreaInsets.top + extraMargin.top)
+            let maxOffset = minOffset - visibleHeight + convertedBounds.height + extraMargin.bottom
+            let currentOffset = scrollView.contentOffset.y
+            
+            if self.traitCollection.verticalSizeClass == .compact {
+                scrollView.setContentOffset(CGPoint(x: 0, y: minOffset), animated: true)
+            } else if currentOffset > minOffset {
+                scrollView.setContentOffset(CGPoint(x: 0, y: minOffset), animated: true)
+            } else if currentOffset < maxOffset {
+                scrollView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
+            }
+        }
+    }
+    
     private class SuggestionButton: UIButton {
         let contact: CNContact
         
@@ -249,6 +281,7 @@ private class ContactTextField: UITextField {
         
         textContentType = .name
         autocapitalizationType = .words
+        autocorrectionType = .no
         enablesReturnKeyAutomatically = true
     }
     

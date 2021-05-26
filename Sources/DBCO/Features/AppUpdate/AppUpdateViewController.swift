@@ -19,7 +19,7 @@ class AppUpdateViewModel {
     }
 }
 
-protocol AppUpdateViewControllerDelegate: class {
+protocol AppUpdateViewControllerDelegate: AnyObject {
     func appUpdateViewController(_ controller: AppUpdateViewController, wantsToOpen url: URL)
 }
 
@@ -58,8 +58,8 @@ class AppUpdateViewController: ViewController {
         let textContainerView =
             VStack(spacing: 32,
                    VStack(spacing: 16,
-                          UILabel(title2: .updateAppTitle).multiline(),
-                          UILabel(body: viewModel.message, textColor: Theme.colors.captionGray).multiline()),
+                          UILabel(title2: .updateAppTitle),
+                          UILabel(body: viewModel.message, textColor: Theme.colors.captionGray)),
                    Button(title: .updateAppButton, style: .primary)
                        .touchUpInside(self, action: #selector(update)))
         

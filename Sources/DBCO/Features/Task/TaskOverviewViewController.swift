@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol TaskOverviewViewControllerDelegate: class {
+protocol TaskOverviewViewControllerDelegate: AnyObject {
     func taskOverviewViewControllerDidRequestAddContact(_ controller: TaskOverviewViewController)
     func taskOverviewViewController(_ controller: TaskOverviewViewController, didSelect task: Task)
     func taskOverviewViewControllerDidRequestTips(_ controller: TaskOverviewViewController)
@@ -51,11 +51,14 @@ class TaskOverviewViewModel {
         
         sections = []
         
+        // There is a weird issue with the html parsing functionality in NSAttributedString.
+        // It seems to trigger a layout update in some cases, leaving the tableview in a weird state with out of date data.
+        // Guarding the indices into the sections arrays to be in bounds, is needed to prevent crashes in this state.
         tableViewManager.numberOfSections = { [unowned self] in return self.sections.count }
-        tableViewManager.numberOfRowsInSection = { [unowned self] in return self.sections[$0].tasks.count }
+        tableViewManager.numberOfRowsInSection = { [unowned self] in return self.sections[safe: $0]?.tasks.count ?? 0 }
         tableViewManager.itemForCellAtIndexPath = { [unowned self] in return self.sections[$0.section].tasks[$0.row] }
-        tableViewManager.viewForHeaderInSection = { [unowned self] in return self.sections[$0].header }
-        tableViewManager.viewForFooterInSection = { [unowned self] in return self.sections[$0].footer }
+        tableViewManager.viewForHeaderInSection = { [unowned self] in return self.sections[safe: $0]?.header }
+        tableViewManager.viewForFooterInSection = { [unowned self] in return self.sections[safe: $0]?.footer }
         
         Services.caseManager.addListener(self)
         Services.pairingManager.addListener(self)
@@ -83,7 +86,7 @@ class TaskOverviewViewModel {
     var tipMessageText: NSAttributedString {
         let formatter = DateFormatter()
         formatter.calendar = Calendar.current
-        formatter.locale = Locale.current
+        formatter.locale = .display
         formatter.dateFormat = .taskOverviewTipsDateFormat
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         
@@ -275,8 +278,7 @@ class TaskOverviewViewController: PromptableViewController {
         let windowExpiredMessage =
             HStack(spacing: 8,
                    UIImageView(imageName: "Warning").asIcon().withInsets(.top(2)),
-                   UILabel(subhead: .windowExpiredMessage,
-                         textColor: Theme.colors.primary).multiline())
+                   UILabel(subhead: .windowExpiredMessage, textColor: Theme.colors.primary))
             .alignment(.top)
         
         let doneButton = Button(title: .taskOverviewDoneButtonTitle)
@@ -315,7 +317,7 @@ class TaskOverviewViewController: PromptableViewController {
         let pairingView = VStack(spacing: 16,
                                  HStack(spacing: 6,
                                         pairingActivityView,
-                                        UILabel(subhead: .taskOverviewWaitingForPairing, textColor: Theme.colors.primary).multiline()),
+                                        UILabel(subhead: .taskOverviewWaitingForPairing, textColor: Theme.colors.primary)),
                                  Button(title: .taskOverviewPairingTryAgain, style: .secondary)
                                     .touchUpInside(self, action: #selector(upload)))
         
@@ -323,7 +325,7 @@ class TaskOverviewViewController: PromptableViewController {
     }
     
     private func createPairingErrorView() -> UIView {
-        let label = UILabel(subhead: "", textColor: Theme.colors.warning).multiline()
+        let label = UILabel(subhead: "", textColor: Theme.colors.warning)
         
         viewModel.$pairingErrorText.binding = { label.text = $0 }
         
@@ -415,8 +417,8 @@ private extension TaskOverviewViewController {
         tipButton.touchUpInside(self, action: #selector(requestTips))
         
         VStack(VStack(spacing: 4,
-                      UILabel(bodyBold: .taskOverviewTipsTitle).multiline(),
-                      UILabel(attributedString: viewModel.tipMessageText).multiline()),
+                      UILabel(bodyBold: .taskOverviewTipsTitle),
+                      UILabel(attributedString: viewModel.tipMessageText)),
                tipButton)
             .embed(in: tipContainerView, insets: .right(92) + .left(16) + .top(16) + .bottom(11))
         
@@ -437,8 +439,8 @@ private extension TaskOverviewViewController {
     
     func sectionHeaderBuilder(title: String, subtitle: String?) -> UIView {
         return VStack(spacing: 4,
-                      UILabel(bodyBold: title).multiline(),
-                      UILabel(subhead: subtitle, textColor: Theme.colors.captionGray).multiline().hideIfEmpty())
+                      UILabel(bodyBold: title).asHeader(),
+                      UILabel(subhead: subtitle, textColor: Theme.colors.captionGray).hideIfEmpty())
                    .wrappedInReadableWidth(insets: .top(20) + .bottom(0))
     }
     

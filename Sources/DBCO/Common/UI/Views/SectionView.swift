@@ -101,11 +101,6 @@ class SectionView: UIView {
 
         icon.image = UIImage(named: "EditContact/Section\(index)")
         icon.highlightedImage = UIImage(named: "EditContact/SectionCompleted")
-        icon.setContentHuggingPriority(.required, for: .horizontal)
-        icon.tintColor = Theme.colors.primary
-        
-        collapseIndicator.image = UIImage(named: "EditContact/SectionCollapse")
-        collapseIndicator.setContentHuggingPriority(.required, for: .horizontal)
         
         titleLabel.text = title
         captionLabel.text = caption
@@ -234,8 +229,8 @@ class SectionView: UIView {
     
     private let contentContainerView = UIView()
     private let headerContainerView = UIView()
-    private let icon = UIImageView()
-    private let collapseIndicator = UIImageView()
+    private let icon = UIImageView().asIcon()
+    private let collapseIndicator = UIImageView(imageName: "EditContact/SectionCollapse").asIcon()
     private let titleLabel = UILabel(bodyBold: "")
     private let captionLabel = UILabel(subhead: "", textColor: Theme.colors.captionGray)
     private let bottomSeparator = SeparatorView()

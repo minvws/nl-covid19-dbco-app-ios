@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol PairViewControllerDelegate: class {
+protocol PairViewControllerDelegate: AnyObject {
     func pairViewController(_ controller: PairViewController, wantsToPairWith code: String)
 }
 
@@ -51,7 +51,7 @@ class PairViewController: ViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
 
-        let titleLabel = UILabel(title2: .onboardingPairingTitle).multiline()
+        let titleLabel = UILabel(title2: .onboardingPairingTitle)
         
         let keyboardSpacerView = UIView()
         keyboardSpacerHeightConstraint = keyboardSpacerView.heightAnchor.constraint(equalToConstant: 0)
@@ -63,7 +63,7 @@ class PairViewController: ViewController {
         nextButton.isEnabled = false
         codeField.didUpdatePairingCode { nextButton.isEnabled = $0 != nil }
         
-        let topMargin: CGFloat = UIScreen.main.bounds.height < 600 ? 0 : 66
+        let topMargin: CGFloat = UIScreen.main.bounds.height < 600 ? 16 : 66
         
         let containerView =
             VStack(spacing: 32,
@@ -74,11 +74,10 @@ class PairViewController: ViewController {
                           nextButton,
                           keyboardSpacerView))
             .distribution(.equalSpacing)
-            .wrappedInReadableWidth(insets: .top(topMargin))
         
-        containerView.embed(in: scrollView.readableWidth)
+        containerView.embed(in: scrollView.readableWidth, insets: .top(topMargin))
         
-        containerView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.safeAreaLayoutGuide.heightAnchor, multiplier: 1, constant: 0).isActive = true
+        containerView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.safeAreaLayoutGuide.heightAnchor, multiplier: 1, constant: -topMargin).isActive = true
         
         scrollView.embed(in: view)
         scrollView.delegate = self

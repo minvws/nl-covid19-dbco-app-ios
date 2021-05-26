@@ -89,7 +89,7 @@ protocol CaseManaging {
 }
 
 /// - Tag: CaseManagerListener
-protocol CaseManagerListener: class {
+protocol CaseManagerListener: AnyObject {
     /// Called after updates are made to the managed tasks
     func caseManagerDidUpdateTasks(_ caseManager: CaseManaging)
     
@@ -247,6 +247,7 @@ final class CaseManager: CaseManaging, Logging {
     
     func removeCaseData() throws {
         $appData.clearData()
+        hasSynced = false
     }
     
     /// Set the questionnaires from the api call result
@@ -259,41 +260,7 @@ final class CaseManager: CaseManaging, Logging {
     ///
     /// - Tag: CaseManager.setQuestionnaires
     private func setQuestionnaires(_ questionnaires: [Questionnaire]) {
-        func injectingLastExposureDateIfNeeded(_ questionnaire: Questionnaire) -> Questionnaire {
-            switch questionnaire.taskType {
-            case .contact:
-                var questions = questionnaire.questions
-                
-                // Modify the classification questions to be disabled when the task source is .portal
-                func shouldBeDisabledForPortalTasks(_ offset: Int, _ question: Question) -> Bool {
-                    return question.questionType == .classificationDetails
-                }
-                
-                let classificationIndices = questionnaire.questions
-                    .enumerated()
-                    .filter(shouldBeDisabledForPortalTasks)
-                    .map { $0.offset }
-                
-                for index in classificationIndices {
-                    questions[index] = questions[index].disabledForPortal
-                }
-                
-                // Insert a .lastExposureDate question
-                let lastExposureQuestion = Question.lastExposureDateQuestion
-                
-                if questions.isEmpty { // Just to be safe
-                    questions.append(lastExposureQuestion)
-                } else {
-                    questions.insert(lastExposureQuestion, at: 0)
-                }
-                
-                return Questionnaire(uuid: questionnaire.uuid,
-                                     taskType: questionnaire.taskType,
-                                     questions: questions)
-            }
-        }
-        
-        self.questionnaires = questionnaires.map(injectingLastExposureDateIfNeeded)
+        self.questionnaires = questionnaires.map(Self.prepareQuestionnaire)
     }
     
     /// Set the tasks from the api call result
@@ -320,6 +287,9 @@ final class CaseManager: CaseManaging, Logging {
                                                                         informedByIndexAt: existingContact.informedByIndexAt,
                                                                         dateOfLastExposure: existingContact.dateOfLastExposure)
                     }
+                    
+                    tasks[existingTaskIndex].label = task.label
+                    tasks[existingTaskIndex].taskContext = task.taskContext
                 }
             } else {
                 tasks.append(task)
@@ -434,7 +404,6 @@ final class CaseManager: CaseManaging, Logging {
     private static let valueDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.calendar = Calendar.current
-        formatter.locale = Locale.current
         formatter.timeZone = TimeZone.current
         formatter.dateFormat = "yyyy-MM-dd"
         
@@ -502,6 +471,42 @@ final class CaseManager: CaseManaging, Logging {
         }
     }
     
+}
+
+extension CaseManager {
+    static func prepareQuestionnaire(_ questionnaire: Questionnaire) -> Questionnaire {
+        switch questionnaire.taskType {
+        case .contact:
+            var questions = questionnaire.questions
+            
+            // Modify the classification questions to be disabled when the task source is .portal
+            func shouldBeDisabledForPortalTasks(_ offset: Int, _ question: Question) -> Bool {
+                return question.questionType == .classificationDetails
+            }
+            
+            let classificationIndices = questionnaire.questions
+                .enumerated()
+                .filter(shouldBeDisabledForPortalTasks)
+                .map { $0.offset }
+            
+            for index in classificationIndices {
+                questions[index] = questions[index].disabledForPortal
+            }
+            
+            // Insert a .lastExposureDate question
+            let lastExposureQuestion = Question.lastExposureDateQuestion
+            
+            if questions.isEmpty { // Just to be safe
+                questions.append(lastExposureQuestion)
+            } else {
+                questions.insert(lastExposureQuestion, at: 0)
+            }
+            
+            return Questionnaire(uuid: questionnaire.uuid,
+                                 taskType: questionnaire.taskType,
+                                 questions: questions)
+        }
+    }
 }
 
 // MARK: - Loading

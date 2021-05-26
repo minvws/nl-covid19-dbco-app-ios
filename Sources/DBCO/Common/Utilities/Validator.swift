@@ -11,10 +11,11 @@ enum ValidationResult {
     case valid
     case invalid(String?)
     case warning(String?)
+    case empty
     case unknown
 }
 
-protocol ValidationTask: class {
+protocol ValidationTask: AnyObject {
     func cancel()
 }
 
@@ -68,6 +69,7 @@ struct PhoneNumberValidator: Validator {
     static func validate(_ value: String?, completionHandler: @escaping (ValidationResult) -> Void) -> ValidationTask {
         let task = SimpleTask(completionHandler)
         
+        guard value?.isEmpty == false else { return task.applying(.empty) }
         guard let value = value else { return task.applying(.unknown) }
     
         let strippedValue = value.components(separatedBy: validCharacters.inverted).joined()
@@ -104,6 +106,7 @@ struct EmailAddressValidator: Validator {
     static func validate(_ value: String?, completionHandler: @escaping (ValidationResult) -> Void) -> ValidationTask {
         let task = SimpleTask(completionHandler)
         
+        guard value?.isEmpty == false else { return task.applying(.empty) }
         guard let value = value else { return task.applying(.unknown) }
         
         let emailFormat = "[A-Z0-9a-z.!#$%&'*+-/=?^_`{|}~]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
@@ -123,8 +126,8 @@ struct NameValidator: Validator {
     static func validate(_ value: String?, completionHandler: @escaping (ValidationResult) -> Void) -> ValidationTask {
         let task = SimpleTask(completionHandler)
         
+        guard value?.isEmpty == false else { return task.applying(.empty) }
         guard let value = value else { return task.applying(.unknown) }
-        guard !value.isEmpty else { return task.applying(.unknown) }
         
         DispatchQueue.global(qos: .utility).async {
             let failingConditions = [

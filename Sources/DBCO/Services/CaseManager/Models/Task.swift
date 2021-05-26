@@ -72,8 +72,8 @@ struct Task: Equatable {
     let uuid: UUID
     let taskType: TaskType
     let source: Source
-    let label: String?
-    let taskContext: String?
+    var label: String?
+    var taskContext: String?
     
     var contact: Contact!
     

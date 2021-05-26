@@ -121,7 +121,7 @@ class OnboardingDateViewController: ViewController, ScrollViewNavivationbarAdjus
         
         let stack =
             VStack(VStack(spacing: 16,
-                          UILabel(title2: viewModel.title).multiline(),
+                          UILabel(title2: viewModel.title),
                           TextView(htmlText: viewModel.subtitle)),
                    datePicker,
                    createButtons())
