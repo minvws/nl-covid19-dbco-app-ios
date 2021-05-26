@@ -7,21 +7,11 @@
 
 import UIKit
 
-protocol Reusable {
-    static var reuseIdentifier: String { get }
-}
-
-protocol Configurable {
-    associatedtype Item
-    
-    func configure(_ input: Item)
-}
-
 /// Helper class that proxies UITableViewDataSource and UITableViewDelegate to optional closures, configuring the cells in a typeSafe manner.
-/// Requires that cells conform to Reusable and Configurable.
+/// Requires that cells conform to CellManagable.
 ///
 /// For example usages see: [TaskOverviewViewModel](x-source-tag://TaskOverviewViewModel) or [SelectContactViewModel](x-source-tag://SelectContactViewModel)
-class TableViewManager<Cell: UITableViewCell & Reusable & Configurable>: NSObject, UITableViewDataSource, UITableViewDelegate {
+class TableViewManager<Cell: CellManagable>: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     var numberOfSections: (() -> Int)?
     var numberOfRowsInSection: ((_ section: Int) -> Int)?
@@ -85,7 +75,15 @@ class TableViewManager<Cell: UITableViewCell & Reusable & Configurable>: NSObjec
     
 }
 
-extension Reusable where Self: UITableViewCell {
+protocol CellManagable: UITableViewCell {
+    associatedtype Item
+    
+    static var reuseIdentifier: String { get }
+    
+    func configure(_ input: Item)
+}
+
+extension CellManagable {
     
     static var reuseIdentifier: String {
         return String(describing: Self.self)
