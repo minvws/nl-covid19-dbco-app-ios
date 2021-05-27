@@ -29,13 +29,13 @@
 		171456BCA1B8F4D07AF3EC228F5B0423 /* crypto_scalarmult.h in Headers */ = {isa = PBXBuildFile; fileRef = 0CB219037F8959ACE2ED0CB0FF06732D /* crypto_scalarmult.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		17D49A12B1B455853D04698A7DA599A6 /* ScenarioDSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D0FEB7FAB73679F8725B5FCA0E0901 /* ScenarioDSL.swift */; };
 		193618147B0966B94015D0C3658C38E5 /* XCTestHooks.h in Headers */ = {isa = PBXBuildFile; fileRef = 539EFB5493DD5FC9B7A1EC75C8D53ADF /* XCTestHooks.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		19525D800596D239AEF2E96FE5279D8F /* DDAssert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B381B49326332DC3AF692FA588CF9F6 /* DDAssert.swift */; };
 		19ABB096CB6FED3D4A1919526884AC02 /* SecretStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E960029731CAA91B4F5030F9000B06 /* SecretStream.swift */; };
 		1A1A559D2174ADEA09B3ADA6756918A7 /* crypto_stream_xchacha20.h in Headers */ = {isa = PBXBuildFile; fileRef = A13F9B741D8876B3445324BB07B9820B /* crypto_stream_xchacha20.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		1BCC7F1E545F982B3AB0840159BD19FC /* DebuggerChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469BCDD1E8E0F0E803A87A3FB8D0576A /* DebuggerChecker.swift */; };
 		1C3FB55E248F931954A922A542A329A6 /* TestObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588C78740EF25B997436EFB4AF893A81 /* TestObservation.swift */; };
 		1D356E0F1E332069AC1D85C19E7C819F /* DDLoggerNames.h in Headers */ = {isa = PBXBuildFile; fileRef = 47A054998DEDB46209B471A44C74F788 /* DDLoggerNames.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1EA959F23FA0CD3470411F2487FA033A /* EmulatorChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160E0B910E2643D9E22BC216453E81F9 /* EmulatorChecker.swift */; };
-		1EBD0525138A0187A760610B5BFA634C /* CLIColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 96074F0B62C62464E85ACE1564A02E20 /* CLIColor.m */; };
 		2032C046EAC5C7FE999134717C002321 /* IOSSecuritySuite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1475522371438AE676430230C5F693F7 /* IOSSecuritySuite.swift */; };
 		205324DE226BC1074A35A953C35E68C7 /* crypto_pwhash_scryptsalsa208sha256.h in Headers */ = {isa = PBXBuildFile; fileRef = 040D8455DBCD5F6B187812CBE45288E8 /* crypto_pwhash_scryptsalsa208sha256.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		21119267ECEC03A9E79D3D1610B029A5 /* StepImplementation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7FD3F912CAE2519143A656268920FD /* StepImplementation.swift */; };
@@ -52,7 +52,6 @@
 		2DD2C9495065F8643112057EBB7AD057 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54808C6C88411583D225CB43662CF2A8 /* Foundation.framework */; };
 		2E9B245CD1637D8EE987558A8CA12DBD /* crypto_auth_hmacsha512256.h in Headers */ = {isa = PBXBuildFile; fileRef = 502257F032FB71EED9F3793F40A49139 /* crypto_auth_hmacsha512256.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		2FE839BE784E8869AEAB0EC973D5A227 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00CC6E48BECAB5E45FBB6A02ADB160A /* Globals.swift */; };
-		30B40673611DEA6353331F460D204DDA /* DDASLLogCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BD90ADF49467724022CB936FF497CE7 /* DDASLLogCapture.m */; };
 		30C929BE0C3438656815BE3951348BCD /* crypto_verify_16.h in Headers */ = {isa = PBXBuildFile; fileRef = CF274B3F829A4CD49D47B3EBF7B1101B /* crypto_verify_16.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		31992FD157F05E2325F156F4BE79CABE /* MSHookFunctionChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2231EAC98243A49B17D5B74FC6E52F8F /* MSHookFunctionChecker.swift */; };
 		32FC48A7F7325C3DF27185159303BFAF /* RuleDSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00021D94C5941481FA871187ECA61836 /* RuleDSL.swift */; };
@@ -60,17 +59,18 @@
 		3542CC121BFE5CAF07C51979BA93BF4D /* DDAbstractDatabaseLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = F7E027226F2DF87F374A7EC8D75B93BE /* DDAbstractDatabaseLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		35AEB3868FA683159C910A74763DE68A /* ScenarioOutlineParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E7EC0BA0B98E6DE9DCA9A54AB10743 /* ScenarioOutlineParser.swift */; };
 		363D061B696AA61744D9D772C0C380B8 /* Pods-DBCO-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 371ACCE11D1C7358E34CE477DBD22978 /* Pods-DBCO-dummy.m */; };
-		36F3F1C7FB43B1FBA6A86A1B18A43FE5 /* DDLoggerNames.m in Sources */ = {isa = PBXBuildFile; fileRef = E63549EFFCE79D52E88CC6C74342F8A2 /* DDLoggerNames.m */; };
 		37D2BD40DB8D9421ACC11DEBE915DF2A /* Aead.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B15D1A5DF15D5CB0AF69AEF1D036FA /* Aead.swift */; };
 		39449E0032B748BAA9750727717BA43A /* crypto_aead_aes256gcm.h in Headers */ = {isa = PBXBuildFile; fileRef = B4C16E68ACB59442B3376D773EFB5009 /* crypto_aead_aes256gcm.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		398F2549D09E6092A3C1DFE1ADBB22C2 /* KeyPairProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BBB3B4B9AB10F24F8BFBC590E8EC55 /* KeyPairProtocol.swift */; };
 		3B0A5741168628EEECA5946C99255DC6 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8694193D114C7C9DD22A8BACA44A74 /* Position.swift */; };
 		3B65D7404BBF9F5AF39F0442553FBBCE /* crypto_kdf_blake2b.h in Headers */ = {isa = PBXBuildFile; fileRef = F3AA015131CD450AD8B7238CF42819F2 /* crypto_kdf_blake2b.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		3B681B658F8F10EE65BA0625E4EE8684 /* ExitCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675A0F431B3DD0E869EA8499D861BDBC /* ExitCode.swift */; };
+		3BEC8D5A90F8BA664495AC505354A4E7 /* DDASLLogCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BD90ADF49467724022CB936FF497CE7 /* DDASLLogCapture.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		3C04D16A0FF897C5E0D7DB87AC3E990B /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303E736BBA228DB79197EFF9AAE056C3 /* Box.swift */; };
 		3C293CFF9E2ABB4407735483A476EE8E /* Sodium-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FDF99915C9A94BEF4DA8E9B40572EE /* Sodium-dummy.m */; };
-		3E054AE329B7F1DFF0338F52BBCDBF7B /* CocoaLumberjack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4E25CE6D39178FC605472C02381A26 /* CocoaLumberjack.swift */; };
+		3DF911A2601D466F869DD81F7E5EA14E /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 6707D161F462C08ACA872D925677C55F /* DDFileLogger.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		3E6697E2D32D1644106132807E3E764D /* Gherkin.ideplugin in Resources */ = {isa = PBXBuildFile; fileRef = 558852C1CA3FFABCCBC39A0882B28F98 /* Gherkin.ideplugin */; };
+		3EE15CD4571F80E9135AF497126E6F7A /* DDLoggerNames.m in Sources */ = {isa = PBXBuildFile; fileRef = E63549EFFCE79D52E88CC6C74342F8A2 /* DDLoggerNames.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		41AD8272A1BAFEA47D8BE9BB116B75A2 /* DSLScenarioOutline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0EAA03B3299D5299C31F9F0E37D189 /* DSLScenarioOutline.swift */; };
 		431369F34F0459E21B5DF77ABDEC62B4 /* crypto_box_curve25519xsalsa20poly1305.h in Headers */ = {isa = PBXBuildFile; fileRef = AFFD81BF094577204C32690A11849180 /* crypto_box_curve25519xsalsa20poly1305.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		468BA5B3D411CAFA34CC8615996372AD /* crypto_onetimeauth_poly1305.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F6BAE093FB265057D1FD88687680CCF /* crypto_onetimeauth_poly1305.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -80,60 +80,62 @@
 		4C52667ECCD02B2DEF31C90BA7BF865B /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE438E25F67548080875B1E9D861E554 /* XCTest.framework */; };
 		4CFEDFB81F9164E5986CE1D6FD706EC3 /* Sodium-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 7EA56A102EC4465C0EC612248C69AA28 /* Sodium-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4DFC0AB8B6BB5A7C7A62330A807242DC /* Nodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AC0CA73C06C0975CE95349AB604E5D /* Nodes.swift */; };
+		516AF5B60B45D88CE3E1AF95A19BB159 /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 75D49CFD844CB59E34328727B039A6B4 /* DDLog.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		538CAA6A72939BFD91AAE82BA5D61E78 /* StepDSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5904278D54FD88156AC343527FF8BDB /* StepDSL.swift */; };
 		54A35E46F2053A79C4334922DE0BD363 /* DDFileLogger+Buffering.h in Headers */ = {isa = PBXBuildFile; fileRef = DD5DE06A16AC4137C86917D1331D0715 /* DDFileLogger+Buffering.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		56404564B27B9F09C256A39F74883007 /* PWHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A28B18269878B127D963814E314A7B /* PWHash.swift */; };
+		5881935320B91964E3F349CA7AD47C98 /* CocoaLumberjack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4E25CE6D39178FC605472C02381A26 /* CocoaLumberjack.swift */; };
 		5A327DEC17FB087D28C40CE52C496C8D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03D9F470BE7939CC23898F0F41EF0B5E /* UIKit.framework */; };
 		5AF810133C1A74DFBFD79C5DB940F6CD /* crypto_hash_sha256.h in Headers */ = {isa = PBXBuildFile; fileRef = A43EC57628EE05C496364AB382ABF425 /* crypto_hash_sha256.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		5B69C42F976BCFF0D69635450F57E603 /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = FB238B7241FE2FF62E2E8F7F666B0E4B /* DDTTYLogger.m */; };
 		5E1E5866F624B48DB67958AD4D46EE33 /* gherkin-languages.json in Resources */ = {isa = PBXBuildFile; fileRef = 2AF46C226A9D8F56361F4AC8F8AE173B /* gherkin-languages.json */; };
 		5E26CD890BB3BA47CAAF65F2CDC872FB /* crypto_secretstream_xchacha20poly1305.h in Headers */ = {isa = PBXBuildFile; fileRef = EA36245D4FF50FCCDCA901ABAEEAC25B /* crypto_secretstream_xchacha20poly1305.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		5ED01455172DA3EEFCC2857ABE870F6C /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C136B48000438367EE03CBED712B87 /* Utils.swift */; };
 		5F7115610A4D8AA334FAF91C9E3899D0 /* copy_snippets.sh in Resources */ = {isa = PBXBuildFile; fileRef = F27F17B495663D20285F5A57271BA863 /* copy_snippets.sh */; };
 		62745812DD7EB3F15632CF4B885F9F9C /* crypto_scalarmult_ed25519.h in Headers */ = {isa = PBXBuildFile; fileRef = A4E5B932E4FBE6450D60937CCFCE84F3 /* crypto_scalarmult_ed25519.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		62FBFAA5FEED7AC5531864186E0EB6C1 /* CocoaLumberjack-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D8F03F09BFAEAC9968F3C5234BEE1D /* CocoaLumberjack-dummy.m */; };
 		636A3E398770D18C682A8A814BA76948 /* Gherkin.xclangspec in Resources */ = {isa = PBXBuildFile; fileRef = F0E173E996275D837853123CEB135749 /* Gherkin.xclangspec */; };
 		6400706A92A562792536DBA0CC512DD9 /* DataTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80454C596FA15AE935432458ABE7697D /* DataTable.swift */; };
 		657B1F51F7C7B5A5A624EB087C36D27F /* crypto_stream_xsalsa20.h in Headers */ = {isa = PBXBuildFile; fileRef = 390787DD7042FE2722F342B2B266A427 /* crypto_stream_xsalsa20.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		670F872264089145E6E4EA0B68DAF0D5 /* BackgroundDSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0124FEF1332DDD2B12FFE58516B4304F /* BackgroundDSL.swift */; };
 		6759020046091C95B8F16C9E8265D786 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54808C6C88411583D225CB43662CF2A8 /* Foundation.framework */; };
-		6825D40E69E2E537792BCD34AE41D6FA /* DDMultiFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D66AECA0EF54B6E041C9E30445140DF /* DDMultiFormatter.m */; };
 		683FABAA671C46B9EDD4EE1A9A5CD846 /* TestCaseGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB65F59D43507263977E0E7DA0021C72 /* TestCaseGenerator.swift */; };
 		689F3C1A4630C9B9C4C4F37EDC5AD60C /* KeyExchange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77502E1CC2400E73C6573EC3F011A1E4 /* KeyExchange.swift */; };
+		69D3E70E10C8B4A33DCC007C0B6F6CF9 /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 47AB5353E3BBDCB9109D38B90F466533 /* DDASLLogger.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		6BB23B3B7096D6F2780DF78B1C49992D /* DDTTYLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 741C1378FE2CFDEADF13EC83496078A9 /* DDTTYLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6DDAE575FFC869CBBFE062EB7ACE64ED /* crypto_box_curve25519xchacha20poly1305.h in Headers */ = {isa = PBXBuildFile; fileRef = FCC2D004ABB0A81A962EDE6EF3FDB02B /* crypto_box_curve25519xchacha20poly1305.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		6E8816309311A1547B97D3AE71F56492 /* ASTRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D4C296A5BA0BAE7AEFA8CA5C645F8E /* ASTRule.swift */; };
 		6FC64107E41DA8803656AA186D4B78C6 /* Cucumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE59E78C19CC45A4CBDAADC2CA4AD2FF /* Cucumber.swift */; };
 		705242E078A1A52EA4E2CC0B1F9493F0 /* Pods-DBCOTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB88D54E4BB2F6D59F6847D6E2C6DEA /* Pods-DBCOTests-dummy.m */; };
 		7090B2604D48873858B55CCA87758C2D /* crypto_scalarmult_curve25519.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F49AFF8195C19B28871CEE5A61EFD2B /* crypto_scalarmult_curve25519.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		7129ACF9A83EF6AAD6808B23D7C0E2DD /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 75D49CFD844CB59E34328727B039A6B4 /* DDLog.m */; };
 		73113B5815F5CE49D7E55A438E1BCB4A /* crypto_sign_ed25519.h in Headers */ = {isa = PBXBuildFile; fileRef = 14758683CC2C715E9D84946D6B44445F /* crypto_sign_ed25519.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		735FFF35378A57C8573963543C7A9139 /* ProxyChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 016E4E6B4DEF93594F22BD4DDABB338D /* ProxyChecker.swift */; };
+		737C282153632DC51FB0C89B14036533 /* DDLog+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965BEA51518613F92CA6704A46DB8FDD /* DDLog+Combine.swift */; };
 		7383772D3BA4B320FBD1BAE9DEF60A06 /* GherkinDSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD8A49D7051F7C2375AE97648A4E57B /* GherkinDSL.swift */; };
 		73ACCDC0EF2B8207B7A99822D8434538 /* DDFileLogger+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 94A8D4F44D40504952769AEC7CEFEB9E /* DDFileLogger+Internal.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		73CFFDD50385C823858F2E952A1F4335 /* Sodium.h in Headers */ = {isa = PBXBuildFile; fileRef = F5A1FE6AB662C07E6CF8C8D5C94797E6 /* Sodium.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7408864835CCB737AC9989D00831DD15 /* DDOSLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = F6E943B990AEE877CF03833EFEA3CE32 /* DDOSLogger.m */; };
 		7416079C272D3BC3E26CD50CBD247593 /* crypto_secretbox_xchacha20poly1305.h in Headers */ = {isa = PBXBuildFile; fileRef = DE53D5265B12C249178F2CA082AD0C1F /* crypto_secretbox_xchacha20poly1305.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		7484326936352D1C809EC2C272A9FF85 /* CLIColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 294D8F66919D02CACD3A07671F22E352 /* CLIColor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		778B4E82A3C4CA7BEEE858AE5708D75B /* DocString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F702CD22C0A363528E6DC1782D28BA5 /* DocString.swift */; };
 		7A26DE7E7D1FDBAECA14C5DCEE7C0017 /* IOSSecuritySuite-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 33E93297B7F26D399C6D2F9B46BDAD87 /* IOSSecuritySuite-dummy.m */; };
 		7BEB7FB893A02A679EC4EF3DE6383CE0 /* DDContextFilterLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = D8435A03B5D11DE4AF9198B689451BD1 /* DDContextFilterLogFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7C11F81DECE07BE6FA3B23C1BCB6FB63 /* I18n.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18CE6ED5F4057BEB1C4D39D7D2E46DD /* I18n.swift */; };
+		7CC9DB7F9004C789891AB6C7CDC88517 /* DDOSLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = F6E943B990AEE877CF03833EFEA3CE32 /* DDOSLogger.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		7CD528FD81648DEF413DA8D34915B0F1 /* IOSSecuritySuite-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 9958CCB7A5450C45585DFB1ED51EF01A /* IOSSecuritySuite-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7FC4DBCE26AE58C3C55D56FCD1FC1408 /* SecretKeyGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACB0C0D85806A96083B7FF4252F5723 /* SecretKeyGenerator.swift */; };
 		804F69F4C7DCB6024C3F76210ED28E42 /* export.h in Headers */ = {isa = PBXBuildFile; fileRef = CA7B5DA13C8B693B7BFCC1FC83606E69 /* export.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		81762B951333D128EFC62D63DE3D5098 /* DDDispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 50ACDF208E2E7B9E3F8C1C4BEC2AEE59 /* DDDispatchQueueLogFormatter.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		81FC24EFD439040E522F1DE93B0B707A /* Scenario.codesnippet in Resources */ = {isa = PBXBuildFile; fileRef = 6AAEBA8F94F5EA0450FD6A1E63728E2A /* Scenario.codesnippet */; };
 		84688F2DDBF1F465733974ED19474571 /* randombytes_sysrandom.h in Headers */ = {isa = PBXBuildFile; fileRef = 163A3C1EECC9251FD33D946381836726 /* randombytes_sysrandom.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		846A69E71246775F15FF86F75B519279 /* Pods-DBCO-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = FCF7ABF00D4D47901202DE7BFBFB2E2D /* Pods-DBCO-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		84D9C54361292E98A53C44EEEDE37DED /* RuntimeHookChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EC2F839CD6654C3F42252C0755043B /* RuntimeHookChecker.swift */; };
 		85CE54A5B924EB375A24CF8ABEE8BD78 /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A0025A8AAF331DF8BD19ED4DBBC46F /* Scope.swift */; };
 		890155AFF645A443D5F240304373E9CF /* DDLog+LOGV.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B6FADE70D82E80EA539A3F1073C2B61 /* DDLog+LOGV.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		891521948680B251238756EDB58836B4 /* DDFileLogger+Buffering.m in Sources */ = {isa = PBXBuildFile; fileRef = 15D75CB0344B5F5A285FEA08944B3F83 /* DDFileLogger+Buffering.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		8946BCF49CC56BE73543776B6E93A7C4 /* Scenario_Outline.codesnippet in Resources */ = {isa = PBXBuildFile; fileRef = D48AE345422CCB89F472B74401460ED4 /* Scenario_Outline.codesnippet */; };
 		8949C16976B12A6C89918B6994BBDA19 /* ShortHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E3BCCB1940134E54AF648487D0436 /* ShortHash.swift */; };
 		8B657EC07A7F6B3E4BE46BC535474B40 /* crypto_stream.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D1C616E1A91FF46328073B4567A2E1C /* crypto_stream.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		8B6C390AE9C25C0175A5DA362E326FC8 /* crypto_onetimeauth.h in Headers */ = {isa = PBXBuildFile; fileRef = 13ADBFB6D119A1ACB27FFB074EBF578A /* crypto_onetimeauth.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		8B7C8C53BA7A44904BD347A414EA200C /* CocoaLumberjack-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D8F03F09BFAEAC9968F3C5234BEE1D /* CocoaLumberjack-dummy.m */; };
 		8C2B9BFBF623FB0E83051704FF4C9035 /* TestingExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF13A4E4BE1A522570DC5D52A4E0812 /* TestingExtensions.swift */; };
-		8E476F274163B1E5E0E4D9407E1A5CE7 /* DDFileLogger+Buffering.m in Sources */ = {isa = PBXBuildFile; fileRef = 15D75CB0344B5F5A285FEA08944B3F83 /* DDFileLogger+Buffering.m */; };
 		8EE827E96071A160355A96752C6A8069 /* Step.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0047DE2B4D5D7521C1A03021F988DB /* Step.swift */; };
 		903A7BC1BB1FC1B0E76F221A5FBD05FE /* JailbreakChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B2BFC2A9431FA97E9343FEE67A8D5B /* JailbreakChecker.swift */; };
 		90DAAEDCD8C27AF1AE38927E9B0AE47D /* CocoaLumberjack-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 77ED58A403938A556B6A5DA6C8B52EC0 /* CocoaLumberjack-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -142,11 +144,10 @@
 		9277E9488F1F973AC34DA0AFD3E37F95 /* ReverseEngineeringToolsChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD50574B46C40F024CA28973C9583286 /* ReverseEngineeringToolsChecker.swift */; };
 		92DCE5BA575DFBC51EAF54488D2FCC08 /* NonceGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE5D62839B749201D4F517EF0BC57D3 /* NonceGenerator.swift */; };
 		930F7B976FFCC9413B9CB58C8A2DFC52 /* IntegrityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98C345948B5E70D394E9E03CFF71390 /* IntegrityChecker.swift */; };
+		961960FDC44BF931B19CE06E0D60113F /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 4486362D03D69D391DBEE32C67CCA7C4 /* DDAbstractDatabaseLogger.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		991E4143286B64734ABCD424B225A12F /* StepBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2B1C2AA008D0E5411BDC0B0A9BC842 /* StepBuilder.swift */; };
 		9925B2360313A9C9511804F8690AA755 /* NSObjectLoadable.h in Headers */ = {isa = PBXBuildFile; fileRef = CFAFC8027B385E2752A636DB91DC381C /* NSObjectLoadable.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9BAA4E626FD6B9E8BA1AA439A5552361 /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 6707D161F462C08ACA872D925677C55F /* DDFileLogger.m */; };
 		9BB9B16446589358C5F87AE0F75B2D14 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54808C6C88411583D225CB43662CF2A8 /* Foundation.framework */; };
-		9F8D61EB9480C245393491B9DA60AB83 /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 4486362D03D69D391DBEE32C67CCA7C4 /* DDAbstractDatabaseLogger.m */; };
 		A113024A1C83529C788A62F9B32444E4 /* FeatureDSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E367F5DF9CFF0D582570A184DD674CA /* FeatureDSL.swift */; };
 		A3EC2C284968F095C6E6213108B811C9 /* ScenarioHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D20AAF1C4EE9A170A5A12B41AEC906B /* ScenarioHook.swift */; };
 		A5E28BDF3CEBFF093B21EFD091590D3E /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79571AD878BC897B233C40064378955B /* Bytes.swift */; };
@@ -166,18 +167,18 @@
 		B3BF34E10322C8ED4219EF2D61CC1E00 /* CocoaLumberjack.h in Headers */ = {isa = PBXBuildFile; fileRef = EEF7FF2694F727DA0F618721902592A1 /* CocoaLumberjack.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B45788FF00498A11CFF61BF08033C059 /* version.h in Headers */ = {isa = PBXBuildFile; fileRef = C363277AE96086BBCBD830C4F354DFC1 /* version.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		B5C653E2DC4917E557B57E35756C1989 /* DDMultiFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EC886F96C11014E77FADA2823BCDBCA /* DDMultiFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B774E786DBA0D949B1C4C672933E4C62 /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 47AB5353E3BBDCB9109D38B90F466533 /* DDASLLogger.m */; };
 		B865EF109753FFC42FC224C46E03EABD /* DDDispatchQueueLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = FD04625CBED7BA2954F50E87E3030151 /* DDDispatchQueueLogFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BDEABCD82E72302B160351CFC4241F70 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54808C6C88411583D225CB43662CF2A8 /* Foundation.framework */; };
+		BFE9DAE8A2F925F8C2A172ACA3774647 /* DDMultiFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D66AECA0EF54B6E041C9E30445140DF /* DDMultiFormatter.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		C00B4DE70E2CB485250C518AB8F5AA77 /* crypto_core_hsalsa20.h in Headers */ = {isa = PBXBuildFile; fileRef = 44813FC7667B92759C82444F5D27B73A /* crypto_core_hsalsa20.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		C0D55BB89B792903A8FAFAA0F31F60B3 /* crypto_kx.h in Headers */ = {isa = PBXBuildFile; fileRef = 046EFAF574BC70011CA6A44ACFA32AF8 /* crypto_kx.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		C238E5BB1E1C3C0E8B831A8923F4CF49 /* crypto_sign.h in Headers */ = {isa = PBXBuildFile; fileRef = 00CEF408EEB6D37C19460F8AE227644A /* crypto_sign.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		C24C33753C550F48936789D3619B7A25 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54808C6C88411583D225CB43662CF2A8 /* Foundation.framework */; };
 		C2527E28C1444629C8696394CC6DC594 /* CucumberSwift-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = D374D871F4DF62BD0EEA52242E1C5603 /* CucumberSwift-dummy.m */; };
 		C297AB60FF76C5B12C530EFA59FF2CF8 /* crypto_auth_hmacsha512.h in Headers */ = {isa = PBXBuildFile; fileRef = EDE3BEB9578952FDCE28EFD214841BBB /* crypto_auth_hmacsha512.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		C2DB7D3C2A414C4A8533759375B8274F /* DDContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 02E86C7AC4969AE785DE2E9AC16C209B /* DDContextFilterLogFormatter.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		C3646B20CE7691E4C45EB061C3DDEB78 /* runtime.h in Headers */ = {isa = PBXBuildFile; fileRef = E0BFCFF1EAE2A9E52AF3A89018AAFD3D /* runtime.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		C3A6181DD979BAD71567D0C123626992 /* sodium_lib.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FD88ACEBDB2A75D393F626DB4D28323 /* sodium_lib.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		C5EE57B696F5F040B5A5A09BD2A5DC41 /* DDAssert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B381B49326332DC3AF692FA588CF9F6 /* DDAssert.swift */; };
 		C790EED04B2C0A67E8430E62B378C898 /* gherkin_colors_xcode.sh in Resources */ = {isa = PBXBuildFile; fileRef = 9AED539E4286FD5E91EBA896E08B04A5 /* gherkin_colors_xcode.sh */; };
 		C9108A0CE5B4394699F3A25989952E4B /* Pods-DBCOTests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 532FAFC271F4E780EC2845795B690811 /* Pods-DBCOTests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9432CC9BFB4AB1BA05C9A09C02E7EF6 /* SequenceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DA3952C3F889DDF3134EA9C0B04326 /* SequenceExtensions.swift */; };
@@ -188,7 +189,6 @@
 		CAB102892308B211DEDD7B01F468E2DB /* crypto_core_salsa208.h in Headers */ = {isa = PBXBuildFile; fileRef = 9115464EB039F96D6866E453E870B310 /* crypto_core_salsa208.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		CAD13AB564A00403A0825326BFCF2CF9 /* DDAssertMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = AC4006B649A34CBA7DFB27E69930A66D /* DDAssertMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CB2713B176DBA703581F664462C58D65 /* DDLegacyMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = F714CDCAF0F71FF2BC28B0F6552BE9AB /* DDLegacyMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		CDF1D810F03063AEB792577677053DC1 /* DDContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 02E86C7AC4969AE785DE2E9AC16C209B /* DDContextFilterLogFormatter.m */; };
 		D1627A9E3F02F026F04213361982AB6C /* CucumberTestObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFD17EEA00DE62E6CCB9B411EB62C69 /* CucumberTestObservable.swift */; };
 		D1CEEA58969C14AA7289CA90D803BFCF /* crypto_auth_hmacsha256.h in Headers */ = {isa = PBXBuildFile; fileRef = 98158517A81C3D64169D66A433379050 /* crypto_auth_hmacsha256.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		D24B6CC847AEC13447B1B89CBE0C11E8 /* crypto_pwhash_argon2id.h in Headers */ = {isa = PBXBuildFile; fileRef = C74FB2144F68B546D9A74EC6D212D1BA /* crypto_pwhash_argon2id.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -208,21 +208,21 @@
 		DF0E4A6C68039EC5B8D82FB1C33A45C8 /* randombytes.h in Headers */ = {isa = PBXBuildFile; fileRef = 66C9D9E5642721EA3657F4B09FDC75BF /* randombytes.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		DFD04857106A536420CBB9F98F2E3BC1 /* Sign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F32DCFABF8F202238DE1FEDE6ED6FC6 /* Sign.swift */; };
 		E00C0E6D2A1EC6B0DC40C7667C02E321 /* crypto_sign_edwards25519sha512batch.h in Headers */ = {isa = PBXBuildFile; fileRef = 6A1C2C94EDA1B85A399B713D5B6FFEB7 /* crypto_sign_edwards25519sha512batch.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		E113F62FFB6B45CA902279E175389824 /* DDLog+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965BEA51518613F92CA6704A46DB8FDD /* DDLog+Combine.swift */; };
 		E282DBD0897697684856F9ADA48A7A69 /* CharacterExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 982CC66BEB2C32E5F485918F5A00E628 /* CharacterExtensions.swift */; };
 		E43CA412114E82C6CB4454BFC9B74A5C /* crypto_hash.h in Headers */ = {isa = PBXBuildFile; fileRef = EE2ED4E44B8692611327F2BA7BE27882 /* crypto_hash.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		E49D1FA7BB9E8C8039470D0C04D093C3 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2733F5F1E442FABA8373E78FE13EFD2E /* Auth.swift */; };
 		E773A754EF182DCF9192344C9118BA80 /* utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 1614EF783AADB3CAC79E6CE781A6EAD5 /* utils.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EB9231BCE8EEBE1577867E3AC0A438F9 /* crypto_stream_salsa20.h in Headers */ = {isa = PBXBuildFile; fileRef = DC29073CC1CD37EC6AD81377261BEACC /* crypto_stream_salsa20.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		ED273E35C3799678BB44B8C322FC1C08 /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = FB238B7241FE2FF62E2E8F7F666B0E4B /* DDTTYLogger.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		ED641AB1E0BBD7615EFA7549815B11E8 /* RandomBytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA682B705070461E38CBB13B10DB766F /* RandomBytes.swift */; };
 		EE9F3DE0C459532A4A5EC502DF6E499C /* crypto_kdf.h in Headers */ = {isa = PBXBuildFile; fileRef = CFAC6040F00F7DF40BE21A4B869DE543 /* crypto_kdf.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		F064077DCD6107C466EA156CE0DB5CCF /* DDDispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 50ACDF208E2E7B9E3F8C1C4BEC2AEE59 /* DDDispatchQueueLogFormatter.m */; };
 		F2541EBC1D36FF4EE0D0239ABC049E2A /* FeatureHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = C051C32DA9618BC7E566FD34EA49EB75 /* FeatureHook.swift */; };
 		F316D7D770295938EE2200E60304927E /* Feature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5DE83968138233348C3FC56C424D17 /* Feature.swift */; };
 		F31CBB87B460F04D3BA8CD2DBF1D5DC1 /* Sodium.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6FE58CBB8FBAFC03B980E339FC560A /* Sodium.swift */; };
 		F3CFB3B60A85F3E48E36D32BAFA05095 /* randombytes_salsa20_random.h in Headers */ = {isa = PBXBuildFile; fileRef = FA4788E8484F1F369F41D2EF210BE46E /* randombytes_salsa20_random.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F405F5129CD1BBB0F85D904E5060A1E0 /* crypto_shorthash_siphash24.h in Headers */ = {isa = PBXBuildFile; fileRef = E1AFC1DBF3F55B4DE6888220194DE93F /* crypto_shorthash_siphash24.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F560514E013BC1E7C9809AD10CC9FE59 /* KeyPairGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116E404E1D6409567B2F50DD47BCEA9A /* KeyPairGenerator.swift */; };
+		F851DD7766AE1A0CF7F5E5096EE43FA1 /* CLIColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 96074F0B62C62464E85ACE1564A02E20 /* CLIColor.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		F9B2BAA9DC07A729A1E7F99D7480E205 /* XCTestHooks.m in Sources */ = {isa = PBXBuildFile; fileRef = 8952817913720ECAD4C45B256DE0D3FD /* XCTestHooks.m */; };
 		FB26ABD940DA8073C33002116C683150 /* Reporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97105007F3B6736CD850CAE6CFC9F3D9 /* Reporter.swift */; };
 		FB632194A84153933C452C6BAA72F5D2 /* Stream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E6D5D69757AAEAA819EE94739C5B1A /* Stream.swift */; };
@@ -309,21 +309,21 @@
 		293B54471B0FCFAF06E8C30A130C175A /* CocoaLumberjack.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = CocoaLumberjack.debug.xcconfig; sourceTree = "<group>"; };
 		294D8F66919D02CACD3A07671F22E352 /* CLIColor.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CLIColor.h; path = Sources/CocoaLumberjack/include/CocoaLumberjack/CLIColor.h; sourceTree = "<group>"; };
 		2951175D867ECB0ADC35DEE5DF8BFBCB /* NSObjectLoadable.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = NSObjectLoadable.m; path = "Sources/Obj-C BS/NSObjectLoadable.m"; sourceTree = "<group>"; };
-		2AF46C226A9D8F56361F4AC8F8AE173B /* gherkin-languages.json */ = {isa = PBXFileReference; includeInIndex = 1; name = "gherkin-languages.json"; path = "Sources/CucumberSwift/Gherkin/gherkin-languages.json"; sourceTree = "<group>"; };
+		2AF46C226A9D8F56361F4AC8F8AE173B /* gherkin-languages.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; name = "gherkin-languages.json"; path = "Sources/CucumberSwift/Gherkin/gherkin-languages.json"; sourceTree = "<group>"; };
 		2B0047DE2B4D5D7521C1A03021F988DB /* Step.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Step.swift; path = Sources/CucumberSwift/Gherkin/Parser/Step.swift; sourceTree = "<group>"; };
 		2BE790AA87440B32E949FFD3C53E2B27 /* Pods-DBCOTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-DBCOTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2C2600421E8668C233682485FFD6A79D /* CocoaLumberjack-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CocoaLumberjack-prefix.pch"; sourceTree = "<group>"; };
 		2EE5D62839B749201D4F517EF0BC57D3 /* NonceGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NonceGenerator.swift; path = Sodium/Generators/NonceGenerator.swift; sourceTree = "<group>"; };
 		2F6BAE093FB265057D1FD88687680CCF /* crypto_onetimeauth_poly1305.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_onetimeauth_poly1305.h; path = Sodium/libsodium/crypto_onetimeauth_poly1305.h; sourceTree = "<group>"; };
 		303E736BBA228DB79197EFF9AAE056C3 /* Box.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Box.swift; path = Sodium/Box.swift; sourceTree = "<group>"; };
-		32497A3ACEA14D32D7F8C65D5357128A /* Sodium.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Sodium.framework; path = Sodium.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		32497A3ACEA14D32D7F8C65D5357128A /* Sodium.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Sodium.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		325E93C0A07E09DFD8F29E0856AFCE06 /* CucumberTest.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CucumberTest.swift; path = Sources/CucumberSwift/Runner/CucumberTest.swift; sourceTree = "<group>"; };
 		33B2BFC2A9431FA97E9343FEE67A8D5B /* JailbreakChecker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JailbreakChecker.swift; path = IOSSecuritySuite/JailbreakChecker.swift; sourceTree = "<group>"; };
 		33E93297B7F26D399C6D2F9B46BDAD87 /* IOSSecuritySuite-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "IOSSecuritySuite-dummy.m"; sourceTree = "<group>"; };
 		36F2ADE4AFDA3185B40FEF20C9BBB4C6 /* DDOSLogger.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DDOSLogger.h; path = Sources/CocoaLumberjack/include/CocoaLumberjack/DDOSLogger.h; sourceTree = "<group>"; };
 		371ACCE11D1C7358E34CE477DBD22978 /* Pods-DBCO-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-DBCO-dummy.m"; sourceTree = "<group>"; };
 		390787DD7042FE2722F342B2B266A427 /* crypto_stream_xsalsa20.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_stream_xsalsa20.h; path = Sodium/libsodium/crypto_stream_xsalsa20.h; sourceTree = "<group>"; };
-		3B43A6969A0A3E8CCD33EECB39735E10 /* Feature.codesnippet */ = {isa = PBXFileReference; includeInIndex = 1; name = Feature.codesnippet; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/Snippets/Feature.codesnippet"; sourceTree = "<group>"; };
+		3B43A6969A0A3E8CCD33EECB39735E10 /* Feature.codesnippet */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = Feature.codesnippet; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/Snippets/Feature.codesnippet"; sourceTree = "<group>"; };
 		3BD90ADF49467724022CB936FF497CE7 /* DDASLLogCapture.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DDASLLogCapture.m; path = Sources/CocoaLumberjack/DDASLLogCapture.m; sourceTree = "<group>"; };
 		3C2B1C2AA008D0E5411BDC0B0A9BC842 /* StepBuilder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StepBuilder.swift; path = Sources/CucumberSwift/DSL/StepBuilder.swift; sourceTree = "<group>"; };
 		3CBB6A486B3FF147E7DDEF5E9A2A0E9F /* Sodium.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Sodium.release.xcconfig; sourceTree = "<group>"; };
@@ -361,7 +361,7 @@
 		532FAFC271F4E780EC2845795B690811 /* Pods-DBCOTests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-DBCOTests-umbrella.h"; sourceTree = "<group>"; };
 		539EFB5493DD5FC9B7A1EC75C8D53ADF /* XCTestHooks.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = XCTestHooks.h; path = "Sources/Obj-C BS/Include/XCTestHooks.h"; sourceTree = "<group>"; };
 		54808C6C88411583D225CB43662CF2A8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		558852C1CA3FFABCCBC39A0882B28F98 /* Gherkin.ideplugin */ = {isa = PBXFileReference; includeInIndex = 1; name = Gherkin.ideplugin; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/Gherkin.ideplugin"; sourceTree = "<group>"; };
+		558852C1CA3FFABCCBC39A0882B28F98 /* Gherkin.ideplugin */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper; name = Gherkin.ideplugin; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/Gherkin.ideplugin"; sourceTree = "<group>"; };
 		5671FC5AE7A854205F86F0A932503933 /* crypto_verify_64.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_verify_64.h; path = Sodium/libsodium/crypto_verify_64.h; sourceTree = "<group>"; };
 		57D4C296A5BA0BAE7AEFA8CA5C645F8E /* ASTRule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ASTRule.swift; path = Sources/CucumberSwift/Gherkin/AST/ASTRule.swift; sourceTree = "<group>"; };
 		57E89612A1982F8C6DB1952CF7B4A3E3 /* crypto_stream_salsa208.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_stream_salsa208.h; path = Sodium/libsodium/crypto_stream_salsa208.h; sourceTree = "<group>"; };
@@ -383,7 +383,7 @@
 		675A0F431B3DD0E869EA8499D861BDBC /* ExitCode.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExitCode.swift; path = Sodium/ExitCode.swift; sourceTree = "<group>"; };
 		68D8F03F09BFAEAC9968F3C5234BEE1D /* CocoaLumberjack-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CocoaLumberjack-dummy.m"; sourceTree = "<group>"; };
 		6A1C2C94EDA1B85A399B713D5B6FFEB7 /* crypto_sign_edwards25519sha512batch.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_sign_edwards25519sha512batch.h; path = Sodium/libsodium/crypto_sign_edwards25519sha512batch.h; sourceTree = "<group>"; };
-		6AAEBA8F94F5EA0450FD6A1E63728E2A /* Scenario.codesnippet */ = {isa = PBXFileReference; includeInIndex = 1; name = Scenario.codesnippet; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/Snippets/Scenario.codesnippet"; sourceTree = "<group>"; };
+		6AAEBA8F94F5EA0450FD6A1E63728E2A /* Scenario.codesnippet */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = Scenario.codesnippet; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/Snippets/Scenario.codesnippet"; sourceTree = "<group>"; };
 		6D2E6D442F83C3C5FB856809E936A8D4 /* Sodium.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Sodium.debug.xcconfig; sourceTree = "<group>"; };
 		6D81158C30D4C1653643F5D02F64871B /* Pods-DBCOTests.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-DBCOTests.app store.xcconfig"; sourceTree = "<group>"; };
 		706BEA5FA66A27EF129C7EFC26D19FDB /* MightEqualOperator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MightEqualOperator.swift; path = "Sources/CucumberSwift/Custom Operators/MightEqualOperator.swift"; sourceTree = "<group>"; };
@@ -419,7 +419,7 @@
 		82C6423EA976991B8FA31A367C144FA4 /* crypto_verify_32.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_verify_32.h; path = Sodium/libsodium/crypto_verify_32.h; sourceTree = "<group>"; };
 		84ED5B63BA980B4B081B6DDFDBCEF0C7 /* Pods-DBCOTests.ad hoc acc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-DBCOTests.ad hoc acc.xcconfig"; sourceTree = "<group>"; };
 		875203ADE95EAF1943174B8A48094FC5 /* KeyDerivation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeyDerivation.swift; path = Sodium/KeyDerivation.swift; sourceTree = "<group>"; };
-		87FE5CD69B310A98EF0F3341E8A880CC /* Pods_DBCOTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_DBCOTests.framework; path = "Pods-DBCOTests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		87FE5CD69B310A98EF0F3341E8A880CC /* Pods_DBCOTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DBCOTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		88A7438F9D303B1FCB41E3C15C954FFA /* Matcher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Matcher.swift; path = Sources/CucumberSwift/DSL/Matcher.swift; sourceTree = "<group>"; };
 		8952817913720ECAD4C45B256DE0D3FD /* XCTestHooks.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = XCTestHooks.m; path = "Sources/Obj-C BS/XCTestHooks.m"; sourceTree = "<group>"; };
 		8B8694193D114C7C9DD22A8BACA44A74 /* Position.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Position.swift; path = Sources/CucumberSwift/Gherkin/Lexer/Position.swift; sourceTree = "<group>"; };
@@ -441,9 +441,9 @@
 		9958CCB7A5450C45585DFB1ED51EF01A /* IOSSecuritySuite-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "IOSSecuritySuite-umbrella.h"; sourceTree = "<group>"; };
 		99642AEA49FDA09B565710F6BBF7CDE2 /* Language.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Language.swift; path = Sources/CucumberSwift/Gherkin/Language.swift; sourceTree = "<group>"; };
 		9AED539E4286FD5E91EBA896E08B04A5 /* gherkin_colors_xcode.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; name = gherkin_colors_xcode.sh; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/gherkin_colors_xcode.sh"; sourceTree = "<group>"; };
-		9C263099E67D20389FE71727718389BB /* IOSSecuritySuite.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = IOSSecuritySuite.framework; path = IOSSecuritySuite.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9C263099E67D20389FE71727718389BB /* IOSSecuritySuite.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = IOSSecuritySuite.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CEC43B4F04BC17EBAE67DC8A8BA760D /* core.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = core.h; path = Sodium/libsodium/core.h; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9F49AFF8195C19B28871CEE5A61EFD2B /* crypto_scalarmult_curve25519.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_scalarmult_curve25519.h; path = Sodium/libsodium/crypto_scalarmult_curve25519.h; sourceTree = "<group>"; };
 		A13F9B741D8876B3445324BB07B9820B /* crypto_stream_xchacha20.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_stream_xchacha20.h; path = Sodium/libsodium/crypto_stream_xchacha20.h; sourceTree = "<group>"; };
 		A17E3BCCB1940134E54AF648487D0436 /* ShortHash.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ShortHash.swift; path = Sodium/ShortHash.swift; sourceTree = "<group>"; };
@@ -451,7 +451,7 @@
 		A44D977943057D8B350737933642E186 /* Pods-DBCO-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-DBCO-acknowledgements.plist"; sourceTree = "<group>"; };
 		A4E5B932E4FBE6450D60937CCFCE84F3 /* crypto_scalarmult_ed25519.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_scalarmult_ed25519.h; path = Sodium/libsodium/crypto_scalarmult_ed25519.h; sourceTree = "<group>"; };
 		A8CEA153549187E9561F81DF3D858460 /* GenericHash.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GenericHash.swift; path = Sodium/GenericHash.swift; sourceTree = "<group>"; };
-		AA46A6FB8E05E8A5077717A55B516346 /* CucumberSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = CucumberSwift.framework; path = CucumberSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA46A6FB8E05E8A5077717A55B516346 /* CucumberSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CucumberSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB65F59D43507263977E0E7DA0021C72 /* TestCaseGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TestCaseGenerator.swift; path = Sources/CucumberSwift/XCTestCaseGenerator/TestCaseGenerator.swift; sourceTree = "<group>"; };
 		AC4006B649A34CBA7DFB27E69930A66D /* DDAssertMacros.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DDAssertMacros.h; path = Sources/CocoaLumberjack/include/CocoaLumberjack/DDAssertMacros.h; sourceTree = "<group>"; };
 		AD15B661A0EF5E787A6A3E4775C2D463 /* IOSSecuritySuite-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "IOSSecuritySuite-prefix.pch"; sourceTree = "<group>"; };
@@ -474,7 +474,7 @@
 		BEC68894B852600A92DA0269B5477421 /* Pods-DBCOUITests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-DBCOUITests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		C051C32DA9618BC7E566FD34EA49EB75 /* FeatureHook.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FeatureHook.swift; path = Sources/CucumberSwift/Runner/Hooks/FeatureHook.swift; sourceTree = "<group>"; };
 		C0A5B4036E9D18B4F41FF20E482C3F93 /* CocoaLumberjack.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = CocoaLumberjack.modulemap; sourceTree = "<group>"; };
-		C261436D14052AE3C35F240BCD155CAC /* CocoaLumberjack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = CocoaLumberjack.framework; path = CocoaLumberjack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C261436D14052AE3C35F240BCD155CAC /* CocoaLumberjack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CocoaLumberjack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C363277AE96086BBCBD830C4F354DFC1 /* version.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = version.h; path = Sodium/libsodium/version.h; sourceTree = "<group>"; };
 		C6A91C10012698B38CECC8A64A0F4CE3 /* SecretBox.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SecretBox.swift; path = Sodium/SecretBox.swift; sourceTree = "<group>"; };
 		C6BBF64F9F5E24075173A3F4C3BD3C3E /* Pods-DBCO-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-DBCO-Info.plist"; sourceTree = "<group>"; };
@@ -483,7 +483,7 @@
 		C8BBB3B4B9AB10F24F8BFBC590E8EC55 /* KeyPairProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeyPairProtocol.swift; path = Sodium/Generators/KeyPairProtocol.swift; sourceTree = "<group>"; };
 		C8EA2B8AC62C5377DCEFADAF468ED713 /* Pods-DBCOTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-DBCOTests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		C9E7EC0BA0B98E6DE9DCA9A54AB10743 /* ScenarioOutlineParser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ScenarioOutlineParser.swift; path = Sources/CucumberSwift/Gherkin/Parser/ScenarioOutlineParser.swift; sourceTree = "<group>"; };
-		CA04ABF0B3CD699588FEC314BBA914A6 /* Pods_DBCOUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_DBCOUITests.framework; path = "Pods-DBCOUITests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA04ABF0B3CD699588FEC314BBA914A6 /* Pods_DBCOUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DBCOUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA682B705070461E38CBB13B10DB766F /* RandomBytes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RandomBytes.swift; path = Sodium/RandomBytes.swift; sourceTree = "<group>"; };
 		CA7B5DA13C8B693B7BFCC1FC83606E69 /* export.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = export.h; path = Sodium/libsodium/export.h; sourceTree = "<group>"; };
 		CAFD17EEA00DE62E6CCB9B411EB62C69 /* CucumberTestObservable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CucumberTestObservable.swift; path = Sources/CucumberSwift/Protocols/CucumberTestObservable.swift; sourceTree = "<group>"; };
@@ -497,7 +497,7 @@
 		D2288B1321FF36DC4B1A6E4188101567 /* IOSSecuritySuite.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = IOSSecuritySuite.modulemap; sourceTree = "<group>"; };
 		D374D871F4DF62BD0EEA52242E1C5603 /* CucumberSwift-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CucumberSwift-dummy.m"; sourceTree = "<group>"; };
 		D3C136B48000438367EE03CBED712B87 /* Utils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = Sodium/Utils.swift; sourceTree = "<group>"; };
-		D48AE345422CCB89F472B74401460ED4 /* Scenario_Outline.codesnippet */ = {isa = PBXFileReference; includeInIndex = 1; name = Scenario_Outline.codesnippet; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/Snippets/Scenario_Outline.codesnippet"; sourceTree = "<group>"; };
+		D48AE345422CCB89F472B74401460ED4 /* Scenario_Outline.codesnippet */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = Scenario_Outline.codesnippet; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/Snippets/Scenario_Outline.codesnippet"; sourceTree = "<group>"; };
 		D720898611B9E40595E55C2D233C836C /* crypto_core_salsa20.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_core_salsa20.h; path = Sodium/libsodium/crypto_core_salsa20.h; sourceTree = "<group>"; };
 		D731831E72E205299B017FE5C7513395 /* StringExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StringExtensions.swift; path = Sources/CucumberSwift/Extensions/StringExtensions.swift; sourceTree = "<group>"; };
 		D74F0F7CDB640DE2B3A33341DF89A9E3 /* Pods-DBCO-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-DBCO-acknowledgements.markdown"; sourceTree = "<group>"; };
@@ -524,9 +524,9 @@
 		EE2ED4E44B8692611327F2BA7BE27882 /* crypto_hash.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_hash.h; path = Sodium/libsodium/crypto_hash.h; sourceTree = "<group>"; };
 		EE778297501E415DA20F95670F96D002 /* crypto_box.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_box.h; path = Sodium/libsodium/crypto_box.h; sourceTree = "<group>"; };
 		EEF7FF2694F727DA0F618721902592A1 /* CocoaLumberjack.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CocoaLumberjack.h; path = "Sources/CocoaLumberjack/Supporting Files/CocoaLumberjack.h"; sourceTree = "<group>"; };
-		EFF2A454F13B2409BC2F79851AED336A /* Pods_DBCO.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_DBCO.framework; path = "Pods-DBCO.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EFF2A454F13B2409BC2F79851AED336A /* Pods_DBCO.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DBCO.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0D0FEB7FAB73679F8725B5FCA0E0901 /* ScenarioDSL.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ScenarioDSL.swift; path = Sources/CucumberSwift/DSL/ScenarioDSL.swift; sourceTree = "<group>"; };
-		F0E173E996275D837853123CEB135749 /* Gherkin.xclangspec */ = {isa = PBXFileReference; includeInIndex = 1; name = Gherkin.xclangspec; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/Gherkin.xclangspec"; sourceTree = "<group>"; };
+		F0E173E996275D837853123CEB135749 /* Gherkin.xclangspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xclangspec; name = Gherkin.xclangspec; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/Gherkin.xclangspec"; sourceTree = "<group>"; };
 		F27F17B495663D20285F5A57271BA863 /* copy_snippets.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; name = copy_snippets.sh; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/copy_snippets.sh"; sourceTree = "<group>"; };
 		F29A81EFF7F75328FBCF1B5F80C60574 /* Pods-DBCO.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-DBCO.app store.xcconfig"; sourceTree = "<group>"; };
 		F3AA015131CD450AD8B7238CF42819F2 /* crypto_kdf_blake2b.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_kdf_blake2b.h; path = Sodium/libsodium/crypto_kdf_blake2b.h; sourceTree = "<group>"; };
@@ -836,7 +836,6 @@
 				40EC2F839CD6654C3F42252C0755043B /* RuntimeHookChecker.swift */,
 				507A09A125A3B46DED4D5C8069A87CB4 /* Support Files */,
 			);
-			name = IOSSecuritySuite;
 			path = IOSSecuritySuite;
 			sourceTree = "<group>";
 		};
@@ -847,7 +846,6 @@
 				6263943DC4FCEEBC113727AE105A8EF3 /* Support Files */,
 				2C76C2A4CAD5AE9B3375277FB3C45D69 /* Swift */,
 			);
-			name = CocoaLumberjack;
 			path = CocoaLumberjack;
 			sourceTree = "<group>";
 		};
@@ -919,7 +917,6 @@
 				602EAEEEC38504990E4FC267CA37A9EB /* Support Files */,
 				7B6B83849560318B93ECF4150AB05BA4 /* syntax */,
 			);
-			name = CucumberSwift;
 			path = CucumberSwift;
 			sourceTree = "<group>";
 		};
@@ -1013,7 +1010,6 @@
 				6E8DC9A11D60AC32887591BC5A2FFB51 /* Frameworks */,
 				15CA10D31C8F1F11121B19FB007C389F /* Support Files */,
 			);
-			name = Sodium;
 			path = Sodium;
 			sourceTree = "<group>";
 		};
@@ -1360,7 +1356,7 @@
 			buildConfigurationList = 56DC6AC073E46B27690FA22866F57B34 /* Build configuration list for PBXNativeTarget "CocoaLumberjack" */;
 			buildPhases = (
 				26E41F0B0F189469B7E5A6D3F72E7959 /* Headers */,
-				7419420F14427079598C447B6B7C4524 /* Sources */,
+				032A4DB0DE33D0BDDC5F74E820B20752 /* Sources */,
 				0B13AC42CAA69DC42B376F1DED80C37F /* Frameworks */,
 				E5A6FDD818052172F6EEEBC3FD00FDA4 /* Resources */,
 			);
@@ -1380,7 +1376,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastUpgradeCheck = 1250;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 10.0";
@@ -1467,6 +1463,30 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		032A4DB0DE33D0BDDC5F74E820B20752 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F851DD7766AE1A0CF7F5E5096EE43FA1 /* CLIColor.m in Sources */,
+				8B7C8C53BA7A44904BD347A414EA200C /* CocoaLumberjack-dummy.m in Sources */,
+				5881935320B91964E3F349CA7AD47C98 /* CocoaLumberjack.swift in Sources */,
+				961960FDC44BF931B19CE06E0D60113F /* DDAbstractDatabaseLogger.m in Sources */,
+				3BEC8D5A90F8BA664495AC505354A4E7 /* DDASLLogCapture.m in Sources */,
+				69D3E70E10C8B4A33DCC007C0B6F6CF9 /* DDASLLogger.m in Sources */,
+				19525D800596D239AEF2E96FE5279D8F /* DDAssert.swift in Sources */,
+				C2DB7D3C2A414C4A8533759375B8274F /* DDContextFilterLogFormatter.m in Sources */,
+				81762B951333D128EFC62D63DE3D5098 /* DDDispatchQueueLogFormatter.m in Sources */,
+				891521948680B251238756EDB58836B4 /* DDFileLogger+Buffering.m in Sources */,
+				3DF911A2601D466F869DD81F7E5EA14E /* DDFileLogger.m in Sources */,
+				737C282153632DC51FB0C89B14036533 /* DDLog+Combine.swift in Sources */,
+				516AF5B60B45D88CE3E1AF95A19BB159 /* DDLog.m in Sources */,
+				3EE15CD4571F80E9135AF497126E6F7A /* DDLoggerNames.m in Sources */,
+				BFE9DAE8A2F925F8C2A172ACA3774647 /* DDMultiFormatter.m in Sources */,
+				7CC9DB7F9004C789891AB6C7CDC88517 /* DDOSLogger.m in Sources */,
+				ED273E35C3799678BB44B8C322FC1C08 /* DDTTYLogger.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1677C1EB7CB4BB3B658E76807CFAD2CA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1498,30 +1518,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C955A1055BF1CAE82EC6A96B4BC8634C /* Pods-DBCOUITests-dummy.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7419420F14427079598C447B6B7C4524 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				1EBD0525138A0187A760610B5BFA634C /* CLIColor.m in Sources */,
-				62FBFAA5FEED7AC5531864186E0EB6C1 /* CocoaLumberjack-dummy.m in Sources */,
-				3E054AE329B7F1DFF0338F52BBCDBF7B /* CocoaLumberjack.swift in Sources */,
-				9F8D61EB9480C245393491B9DA60AB83 /* DDAbstractDatabaseLogger.m in Sources */,
-				30B40673611DEA6353331F460D204DDA /* DDASLLogCapture.m in Sources */,
-				B774E786DBA0D949B1C4C672933E4C62 /* DDASLLogger.m in Sources */,
-				C5EE57B696F5F040B5A5A09BD2A5DC41 /* DDAssert.swift in Sources */,
-				CDF1D810F03063AEB792577677053DC1 /* DDContextFilterLogFormatter.m in Sources */,
-				F064077DCD6107C466EA156CE0DB5CCF /* DDDispatchQueueLogFormatter.m in Sources */,
-				8E476F274163B1E5E0E4D9407E1A5CE7 /* DDFileLogger+Buffering.m in Sources */,
-				9BAA4E626FD6B9E8BA1AA439A5552361 /* DDFileLogger.m in Sources */,
-				E113F62FFB6B45CA902279E175389824 /* DDLog+Combine.swift in Sources */,
-				7129ACF9A83EF6AAD6808B23D7C0E2DD /* DDLog.m in Sources */,
-				36F3F1C7FB43B1FBA6A86A1B18A43FE5 /* DDLoggerNames.m in Sources */,
-				6825D40E69E2E537792BCD34AE41D6FA /* DDMultiFormatter.m in Sources */,
-				7408864835CCB737AC9989D00831DD15 /* DDOSLogger.m in Sources */,
-				5B69C42F976BCFF0D69635450F57E603 /* DDTTYLogger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1740,7 +1736,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/Sodium/Sodium-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Sodium/Sodium-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1775,7 +1771,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1923,7 +1919,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/Sodium/Sodium-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Sodium/Sodium-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1959,7 +1955,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1994,7 +1990,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CucumberSwift/CucumberSwift-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CucumberSwift/CucumberSwift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2167,7 +2163,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2203,7 +2199,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2238,7 +2234,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CucumberSwift/CucumberSwift-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CucumberSwift/CucumberSwift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2425,7 +2421,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CucumberSwift/CucumberSwift-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CucumberSwift/CucumberSwift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2461,7 +2457,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2533,7 +2529,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CucumberSwift/CucumberSwift-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CucumberSwift/CucumberSwift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2606,7 +2602,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2640,7 +2636,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2776,7 +2772,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CucumberSwift/CucumberSwift-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CucumberSwift/CucumberSwift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2811,7 +2807,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/Sodium/Sodium-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Sodium/Sodium-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2846,7 +2842,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CucumberSwift/CucumberSwift-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CucumberSwift/CucumberSwift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2882,7 +2878,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2917,7 +2913,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3229,7 +3225,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3302,7 +3298,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/Sodium/Sodium-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Sodium/Sodium-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3338,7 +3334,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3372,7 +3368,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/Sodium/Sodium-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Sodium/Sodium-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3469,7 +3465,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3542,7 +3538,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/Sodium/Sodium-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Sodium/Sodium-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
