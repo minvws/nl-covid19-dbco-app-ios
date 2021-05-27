@@ -16,3 +16,12 @@ target 'DBCO' do
   end
 
 end
+
+
+target 'DBCOUITests' do
+  inherit! :search_paths
+  use_frameworks!
+  
+  # Pods for ui testing
+  pod 'CucumberSwift', '~> 3.2.2'
+end

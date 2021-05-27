@@ -30,12 +30,22 @@
       codeCoverageEnabled = "YES">
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "CD756C31252B3D36005FEDA0"
                BuildableName = "DBCOTests.xctest"
                BlueprintName = "DBCOTests"
+               ReferencedContainer = "container:DBCO.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "CDE1CD54265FCE9300961F87"
+               BuildableName = "DBCOUITests.xctest"
+               BlueprintName = "DBCOUITests"
                ReferencedContainer = "container:DBCO.xcodeproj">
             </BuildableReference>
          </TestableReference>
