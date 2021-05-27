@@ -65,26 +65,6 @@ class Sealing: Logging {
         }
     }
     
-    private lazy var dateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.calendar = .current
-        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
-        return dateFormatter
-    }()
-    
-    private lazy var jsonEncoder: JSONEncoder = {
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .formatted(dateFormatter)
-        encoder.target = .api
-        return encoder
-    }()
-    
-    private lazy var jsonDecoder: JSONDecoder = {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .formatted(dateFormatter)
-        decoder.source = .api
-        return decoder
-    }()
+    private lazy var jsonEncoder = JSONEncoder.apiEncoder
+    private lazy var jsonDecoder = JSONDecoder.apiDecoder
 }

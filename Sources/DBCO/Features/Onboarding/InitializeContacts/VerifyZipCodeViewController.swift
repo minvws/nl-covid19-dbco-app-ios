@@ -21,7 +21,7 @@ class VerifyZipCodeViewModel {
 /// [ZipRange](x-source-tag://ZipRange)
 /// 
 /// - Tag: VerifyZipCodeViewController
-class VerifyZipCodeViewController: ViewController, ScrollViewNavivationbarAdjusting {
+class VerifyZipCodeViewController: ViewController, ScrollViewNavivationbarAdjusting, KeyboardActionable {
     let shortTitle: String = ""
     
     private let viewModel: VerifyZipCodeViewModel
@@ -87,8 +87,6 @@ class VerifyZipCodeViewController: ViewController, ScrollViewNavivationbarAdjust
         
         scrollView.embed(in: view)
         scrollView.delegate = self
-        
-        registerForKeyboardNotifications()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -107,23 +105,12 @@ class VerifyZipCodeViewController: ViewController, ScrollViewNavivationbarAdjust
     }
     
     // MARK: - Keyboard handling
-    
-    private func registerForKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIWindow.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIWindow.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(notification: NSNotification) {
-        guard let userInfo = notification.userInfo else { return }
-        let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? .zero
-        let convertedFrame = view.window?.convert(endFrame, to: view)
-        
-        let inset = view.frame.maxY - (convertedFrame?.minY ?? 0) - view.safeAreaInsets.bottom
-        
+    func keyboardWillShow(with convertedFrame: CGRect, notification: NSNotification) {
+        let inset = view.frame.maxY - convertedFrame.minY - view.safeAreaInsets.bottom
         keyboardSpacerHeightConstraint.constant = inset
     }
 
-    @objc private func keyboardWillHide(notification: NSNotification) {
+    func keyboardWillHide(notification: NSNotification) {
         keyboardSpacerHeightConstraint.constant = 0
     }
 }

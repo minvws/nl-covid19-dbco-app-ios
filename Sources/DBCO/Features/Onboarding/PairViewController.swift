@@ -14,7 +14,7 @@ protocol PairViewControllerDelegate: AnyObject {
 class PairViewModel {}
 
 /// - Tag: PairViewController
-class PairViewController: ViewController {
+class PairViewController: ViewController, KeyboardActionable {
     private let viewModel: PairViewModel
     
     private let scrollView = UIScrollView()
@@ -56,8 +56,6 @@ class PairViewController: ViewController {
         scrollView.delegate = self
         
         setupView()
-        
-        registerForKeyboardNotifications()
     }
     
     private func setupView() {
@@ -141,22 +139,12 @@ class PairViewController: ViewController {
     
     // MARK: - Keyboard handling
     
-    private func registerForKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIWindow.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIWindow.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(notification: NSNotification) {
-        guard let userInfo = notification.userInfo else { return }
-        let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? .zero
-        let convertedFrame = view.window?.convert(endFrame, to: view)
-        
-        let inset = view.frame.maxY - (convertedFrame?.minY ?? 0) - view.safeAreaInsets.bottom
-        
+    func keyboardWillShow(with convertedFrame: CGRect, notification: NSNotification) {
+        let inset = view.frame.maxY - convertedFrame.minY - view.safeAreaInsets.bottom
         keyboardSpacerHeightConstraint.constant = inset
     }
 
-    @objc private func keyboardWillHide(notification: NSNotification) {
+    func keyboardWillHide(notification: NSNotification) {
         keyboardSpacerHeightConstraint.constant = 0
     }
 }

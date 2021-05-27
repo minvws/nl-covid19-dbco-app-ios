@@ -54,11 +54,9 @@ class OverviewTipsViewController: ViewController {
         
         view.backgroundColor = .white
         
-        let scrollView = UIScrollView(frame: .zero).embed(in: view)
-        
-        let widthProviderView = UIView()
-        widthProviderView.snap(to: .top, of: scrollView, height: 0)
-        widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        let scrollView = UIScrollView(frame: .zero)
+            .embed(in: view)
+            .contentWidth(equalTo: view)
         
         setupContent(with: scrollView)
     }

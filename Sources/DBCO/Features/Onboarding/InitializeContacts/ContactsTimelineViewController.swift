@@ -210,7 +210,7 @@ class ContactsTimelineViewModel {
 /// [ViewController](x-source-tag://ViewController) showing a [ContactListInputView](x-source-tag://ContactListInputView) for each day of the contagious period along with some tips for the user.
 ///
 /// - Tag: ContactsTimelineViewController
-class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdjusting {
+class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdjusting, KeyboardActionable {
     private let viewModel: ContactsTimelineViewModel
     private let navigationBackgroundView = UIView()
     private let separatorView = SeparatorView()
@@ -255,7 +255,6 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
         
         setupView()
         configureSections()
-        registerForKeyboardNotifications()
     }
     
     private func setupAddExtraDaySectionView() {
@@ -403,25 +402,14 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
     }
     
     // MARK: - Keyboard handling
-    
-    private func registerForKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIWindow.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIWindow.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(notification: NSNotification) {
-        guard let userInfo = notification.userInfo else { return }
-        let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? .zero
-        
-        let convertedFrame = view.window?.convert(endFrame, to: view)
-        
-        let inset = view.frame.maxY - (convertedFrame?.minY ?? 0)
+    func keyboardWillShow(with convertedFrame: CGRect, notification: NSNotification) {
+        let inset = view.frame.maxY - convertedFrame.minY
         
         scrollView.contentInset.bottom = inset
         scrollView.verticalScrollIndicatorInsets.bottom = inset
     }
 
-    @objc private func keyboardWillHide(notification: NSNotification) {
+   func keyboardWillHide(notification: NSNotification) {
         scrollView.contentInset = .zero
         scrollView.verticalScrollIndicatorInsets.bottom = .zero
     }
