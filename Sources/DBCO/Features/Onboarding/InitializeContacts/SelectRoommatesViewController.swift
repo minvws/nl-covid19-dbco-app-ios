@@ -48,7 +48,7 @@ class SelectRoommatesViewModel {
 }
 
 /// - Tag: SelectRoommatesViewController
-class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdjusting {
+class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdjusting, KeyboardActionable {
     private let viewModel: SelectRoommatesViewModel
     private let navigationBackgroundView = UIView()
     private let separatorView = SeparatorView()
@@ -89,7 +89,6 @@ class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdju
         scrollView.delegate = self
         
         setupView()
-        registerForKeyboardNotifications()
     }
     
     private func setupView() {
@@ -145,24 +144,14 @@ class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdju
     
     // MARK: - Keyboard handling
     
-    private func registerForKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIWindow.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIWindow.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(notification: NSNotification) {
-        guard let userInfo = notification.userInfo else { return }
-        let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? .zero
-        
-        let convertedFrame = view.window?.convert(endFrame, to: view)
-        
-        let inset = view.frame.maxY - (convertedFrame?.minY ?? 0)
+    func keyboardWillShow(with convertedFrame: CGRect, notification: NSNotification) {
+        let inset = view.frame.maxY - convertedFrame.minY
         
         scrollView.contentInset.bottom = inset
         scrollView.verticalScrollIndicatorInsets.bottom = inset
     }
 
-    @objc private func keyboardWillHide(notification: NSNotification) {
+    func keyboardWillHide(notification: NSNotification) {
         scrollView.contentInset = .zero
         scrollView.verticalScrollIndicatorInsets.bottom = .zero
     }

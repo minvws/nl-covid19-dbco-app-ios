@@ -20,7 +20,7 @@ protocol ContactQuestionnaireViewControllerDelegate: AnyObject {
 /// [ContactQuestionnaireViewModel](x-source-tag://ContactQuestionnaireViewModel)
 ///
 /// - Tag: ContactQuestionnaireViewController
-final class ContactQuestionnaireViewController: PromptableViewController {
+final class ContactQuestionnaireViewController: PromptableViewController, KeyboardActionable {
     private let viewModel: ContactQuestionnaireViewModel
     private var scrollView: UIScrollView!
     
@@ -57,8 +57,6 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         }
         
         setupView()
-        
-        registerForKeyboardNotifications()
     }
     
     private func setupView() {
@@ -84,11 +82,8 @@ final class ContactQuestionnaireViewController: PromptableViewController {
                                          contactDetailsSection,
                                          informContactSection)
         scrollView.embed(in: contentView)
+        scrollView.contentWidth(equalTo: contentView)
         scrollView.keyboardDismissMode = .onDrag
-        
-        let widthProviderView = UIView()
-        widthProviderView.snap(to: .top, of: scrollView, height: 0)
-        widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -335,24 +330,14 @@ final class ContactQuestionnaireViewController: PromptableViewController {
     
     // MARK: - Keyboard handling
     
-    private func registerForKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIWindow.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIWindow.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(notification: NSNotification) {
-        guard let userInfo = notification.userInfo else { return }
-        let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? .zero
-        
-        let convertedFrame = view.window?.convert(endFrame, to: contentView)
-        
-        let inset = contentView.frame.maxY - (convertedFrame?.minY ?? 0)
+    func keyboardWillShow(with convertedFrame: CGRect, notification: NSNotification) {
+        let inset = contentView.frame.maxY - convertedFrame.minY
         
         scrollView.contentInset.bottom = inset
         scrollView.verticalScrollIndicatorInsets.bottom = inset
     }
 
-    @objc private func keyboardWillHide(notification: NSNotification) {
+    func keyboardWillHide(notification: NSNotification) {
         scrollView.contentInset = .zero
         scrollView.verticalScrollIndicatorInsets.bottom = .zero
     }

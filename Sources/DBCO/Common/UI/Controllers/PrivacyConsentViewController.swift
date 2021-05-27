@@ -56,12 +56,9 @@ class PrivacyConsentViewController: ViewController, ScrollViewNavivationbarAdjus
         view.backgroundColor = .white
         
         scrollView.embed(in: view)
+        scrollView.contentWidth(equalTo: view)
         scrollView.delegate = self
         scrollView.delaysContentTouches = false
-        
-        let widthProviderView = UIView()
-        widthProviderView.snap(to: .top, of: scrollView, height: 0)
-        widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
         setupView()
     }

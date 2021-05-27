@@ -82,9 +82,7 @@ class ContactsAuthorizationViewController: ViewController, ScrollViewNavivationb
     }
     
     private func setupView() {
-        let widthProviderView = UIView()
-        widthProviderView.snap(to: .top, of: scrollView, height: 0)
-        widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        scrollView.contentWidth(equalTo: view)
         
         let margin: UIEdgeInsets = .top(viewModel.topMargin) + .bottom(16)
         
