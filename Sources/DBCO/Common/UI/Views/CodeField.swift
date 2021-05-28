@@ -65,6 +65,7 @@ class CodeField: UITextField {
         autocorrectionType = .no
         
         delegate = self
+        attributedPlaceholder = NSAttributedString(string: fullPlaceholder, attributes: [.foregroundColor: UIColor.clear])
         
         updateKerning()
     }
