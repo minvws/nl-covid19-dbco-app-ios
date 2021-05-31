@@ -11,13 +11,13 @@ import CucumberSwift
 
 private var app: XCUIApplication!
 
-func wait(forCondition condition: @escaping () -> Bool, timeout: TimeInterval = 10) {
+//func wait(forCondition condition: @escaping () -> Bool, timeout: TimeInterval = 10) {
 //    XCTAssertTrue(WaitForConditionWithTimeout(timeout, condition))
-}
+//}
 
 extension XCUIElement {
     var visible: Bool {
-        return (exists || waitForExistence(timeout: 1)) && isHittable
+        return (exists && isHittable) || (waitForExistence(timeout: 1) && isHittable)
     }
 }
 
@@ -58,7 +58,7 @@ extension Cucumber: StepImplementation {
             XCTAssertTrue(button.visible)
         }
         
-        ThenAnd("I see a swich with '(.*)'") { matches, _ in
+        ThenAnd("I see a switch with '(.*)'") { matches, _ in
             let text = matches[1]
             let button = app.switches[text].firstMatch
             XCTAssertTrue(button.visible)
@@ -80,6 +80,13 @@ extension Cucumber: StepImplementation {
             XCTAssertFalse(button.isEnabled)
         }
         
+        ThenAnd("I see an enabled button with '(.*)'") { matches, _ in
+            let text = matches[1]
+            let button = app.buttons[text].firstMatch
+            XCTAssertTrue(button.visible)
+            XCTAssertTrue(button.isEnabled)
+        }
+        
         ThenAnd("the '(.*)' button becomes enabled$") { matches, _ in
             let text = matches[1]
             let button = app.buttons[text].firstMatch
@@ -93,9 +100,15 @@ extension Cucumber: StepImplementation {
             XCTAssertTrue(label.visible)
         }
         
+        ThenAnd("I see a label starting with '(.*)'") { matches, _ in
+            let text = matches[1]
+            let label = app.staticTexts.matching(.init(format: "label BEGINSWITH[cd] %@", text)).firstMatch
+            XCTAssertTrue(label.visible)
+        }
+        
         ThenAnd("I see a text field with '(.*)'") { matches, _ in
             let text = matches[1]
-            let textField = app.textFields.matching(.init(format: "placeholderValue == %@", text)).firstMatch
+            let textField = app.textFields.matching(.init(format: "placeholderValue == %@ && value == \"\"", text)).firstMatch
             XCTAssertTrue(textField.visible)
         }
         
@@ -127,7 +140,7 @@ extension Cucumber: StepImplementation {
         WhenAnd("I type '(.*)' into the '(.*)' text field$") { matches, _ in
             let text = matches[1]
             let name = matches[2]
-            let textField = app.textFields.matching(.init(format: "placeholderValue == %@", name)).firstMatch
+            let textField = app.textFields.matching(.init(format: "placeholderValue == %@ && value == \"\"", name)).firstMatch
             
             textField.tap()
             textField.typeText(text)

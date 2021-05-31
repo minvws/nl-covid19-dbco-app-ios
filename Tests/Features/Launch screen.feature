@@ -28,3 +28,16 @@ Feature: Launch screen
         And I tap the 'Neusverkoudheid' switch
         And I swipe up
         Then I see a button with 'Volgende'
+        When I tap the 'Volgende' button
+        Then I see a label with 'Sinds wanneer heb je deze klachten?'
+        And I see a button with 'Volgende'
+        When I tap the 'Volgende' button
+        Then I see a label starting with 'Weet je zeker dat je geen klachten had op'
+        And I see a button with 'Geen klachten'
+        When I tap the 'Geen klachten' button
+        Then I see a text field with 'Voeg huisgenoot toe'
+        And I see a button with 'Ik woon alleen'
+        When I type 'Anna Haro' into the 'Voeg huisgenoot toe' text field
+        And I type 'Daniel Higgins' into the 'Voeg huisgenoot toe' text field
+        And I swipe up
+        Then I see a button with 'Volgende'
