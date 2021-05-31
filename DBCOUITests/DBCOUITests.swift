@@ -11,10 +11,6 @@ import CucumberSwift
 
 private var app: XCUIApplication!
 
-//func wait(forCondition condition: @escaping () -> Bool, timeout: TimeInterval = 10) {
-//    XCTAssertTrue(WaitForConditionWithTimeout(timeout, condition))
-//}
-
 extension XCUIElement {
     var visible: Bool {
         return (exists && isHittable) || (waitForExistence(timeout: 1) && isHittable)
