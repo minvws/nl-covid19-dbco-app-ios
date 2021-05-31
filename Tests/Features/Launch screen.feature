@@ -21,9 +21,9 @@ Feature: Launch screen
         Then the 'Volgende' button becomes enabled
         When I tap the 'Volgende' button
         Then I see a label with 'Welke klachten heb je die bij COVID-19 passen?'
-        When I swipe up
-        Then I see a button with 'Ik heb geen klachten'
-        When I swipe down
+        # When I swipe up
+        # Then I see a button with 'Ik heb geen klachten'
+        # When I swipe down
         And I tap the 'Keelpijn' switch
         And I tap the 'Neusverkoudheid' switch
         And I swipe up
@@ -35,6 +35,10 @@ Feature: Launch screen
         Then I see a label starting with 'Weet je zeker dat je geen klachten had op'
         And I see a button with 'Geen klachten'
         When I tap the 'Geen klachten' button
+        Then I see a label with 'Wil je je contactenlijst gebruiken om contactgegevens in te vullen?'
+        And I see a button with 'Toegang geven'
+        When I tap the 'Toegang geven' button
+        And I allow access to contacts
         Then I see a text field with 'Voeg huisgenoot toe'
         And I see a button with 'Ik woon alleen'
         When I type 'Anna Haro' into the 'Voeg huisgenoot toe' text field

@@ -106,6 +106,12 @@ extension Cucumber: StepImplementation {
             XCTAssertTrue(label.visible)
         }
         
+        WhenAnd("I allow access to contacts") { _, step in
+            let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+            let allowBtn = springboard.buttons["OK"].firstMatch
+            allowBtn.tap()
+        }
+        
         ThenAnd("I see a text field with '(.*)'") { matches, _ in
             let text = matches[1]
             let textField = app.textFields.matching(.init(format: "placeholderValue == %@ && value == \"\"", text)).firstMatch
