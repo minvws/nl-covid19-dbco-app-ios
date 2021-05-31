@@ -39,6 +39,11 @@ class Button: UIButton {
     override var isEnabled: Bool {
         didSet {
             updateButtonType()
+            if isEnabled {
+                accessibilityTraits.remove(.notEnabled)
+            } else {
+                accessibilityTraits.insert(.notEnabled)
+            }
         }
     }
 
