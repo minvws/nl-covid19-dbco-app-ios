@@ -249,14 +249,14 @@ class ContactQuestionnaireViewModel {
                                           communication: updatedContact.communication,
                                           informedByIndexAt: updatedContact.informedByIndexAt,
                                           dateOfLastExposure: updatedContact.dateOfLastExposure)
+            
+            let lastExposureManager = classificationManagers.first { $0.question.questionType == .lastExposureDate }
+            lastExposureManager?.isEnabled = taskCategory != .other
         }
         
         answerManagers.forEach {
             $0.view.isHidden = !$0.question.isRelevant(in: taskCategory) || !$0.isEnabled
         }
-        
-        let lastExposureManager = classificationManagers.first { $0.question.questionType == .lastExposureDate }
-        lastExposureManager?.isEnabled = taskCategory != .other
         
         updateInformSectionContent()
     }
