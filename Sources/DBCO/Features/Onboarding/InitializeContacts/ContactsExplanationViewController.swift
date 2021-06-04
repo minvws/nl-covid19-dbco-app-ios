@@ -65,8 +65,9 @@ class ContactsExplanationViewController: ViewController, ScrollViewNavivationbar
                        VStack(spacing: 16,
                               listItem(.determineContactsExplanationItem1, imageName: "ListItem/Checkmark"),
                               listItem(.determineContactsExplanationItem2, imageName: "ListItem/Checkmark"),
-                              listItem(.determineContactsExplanationItem3, imageName: "ListItem/Questionmark"),
-                              listItem(.determineContactsExplanationItem4, imageName: "ListItem/Stop"))),
+                              listItem(.determineContactsExplanationItem3, imageName: "ListItem/Stop"),
+                              listItem(.determineContactsExplanationItem4, imageName: "ListItem/Stop"),
+                              listItem(.determineContactsExplanationItem5, imageName: "ListItem/Questionmark"))),
                    Button(title: .next, style: .primary)
                        .touchUpInside(self, action: #selector(handleContinue)))
                 .distribution(.equalSpacing)
