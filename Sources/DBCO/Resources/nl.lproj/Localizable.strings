@@ -147,8 +147,9 @@
 "determineContactsExplanation.message" = "Niet iedereen die je hebt ontmoet heeft risico op besmetting gelopen. We zijn op zoek naar mensen met wie je:";
 "determineContactsExplanation.item.1" = "Bij wie je in de buurt en/of een tijdje in dezelfde ruimte bent geweest";
 "determineContactsExplanation.item.2" = "Intens contact hebt gehad door zoenen of seksueel contact";
-"determineContactsExplanation.item.3" = "Twijfel je? Voeg de persoon dan toch toe";
-"determineContactsExplanation.item.4" = "Je hoeft je huisgenoten <b>hierna</b> niet nog een keer toe te voegen";
+"determineContactsExplanation.item.3" = "Je hoeft <b>geen</b> mensen toe te voegen die je heel kort hebt ontmoet (zoals de kassamedewerker in een winkel)";
+"determineContactsExplanation.item.4" = "Je hoeft je huisgenoten <b>niet</b> nog een keer toe te voegen";
+"determineContactsExplanation.item.5" = "Twijfel je? Voeg de persoon dan toch toe";
 
 /* MARK: - Onboarding Contacts Timeline */
 "contactsTimeline.dateFormat" = "EEEE d MMMM";

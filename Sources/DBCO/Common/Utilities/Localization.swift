@@ -202,6 +202,7 @@ extension String {
     static var determineContactsExplanationItem2: String { return Localization.string(for: "determineContactsExplanation.item.2") }
     static var determineContactsExplanationItem3: String { return Localization.string(for: "determineContactsExplanation.item.3") }
     static var determineContactsExplanationItem4: String { return Localization.string(for: "determineContactsExplanation.item.4") }
+    static var determineContactsExplanationItem5: String { return Localization.string(for: "determineContactsExplanation.item.5") }
     
     /* MARK: - Onboarding Contacts Timeline */
     static var contactsTimelineDateFormat: String { return Localization.string(for: "contactsTimeline.dateFormat") }
