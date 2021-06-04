@@ -202,7 +202,7 @@ extension DetermineContagiousPeriodCoordinator {
         let viewModel = StepViewModel(
             image: UIImage(named: "Onboarding3"),
             title: .verifyOnsetDateTwoWeeksAgoTitle,
-            message: nil,
+            message: .verifyOnsetDateTwoWeeksAgoMessage(date: dateFormatter.string(from: date)),
             actions: [
                 .init(type: .secondary, title: .verifyOnsetDateTwoWeeksAgoTestedNegative) { self.determineNegativeTestDate(onset: date, alwaysHasSymptoms: false) },
                 .init(type: .secondary, title: .verifyOnsetDateTwoWeeksAgoAlwaysHaveSymptoms) { self.verifySymptomsGettingWorse(onset: date) },
@@ -217,7 +217,7 @@ extension DetermineContagiousPeriodCoordinator {
     private func determineNegativeTestDate(onset: Date, alwaysHasSymptoms: Bool) {
         let viewModel = OnboardingDateViewModel(
             title: .determineNegativeTestDateTitle,
-            subtitle: .determineNegativeTestDateSubtitle,
+            subtitle: .determineNegativeTestDateSubtitle(date: dateFormatter.string(from: onset)),
             date: nil,
             actions: [
                 .init(type: .primary, title: .next) { [weak self] in
