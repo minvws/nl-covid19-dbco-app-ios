@@ -105,13 +105,14 @@
 "contagiousPeriodOnsetDateVerify.cancelButton" = "Ik had ook die dag klachten";
 
 "verifyOnsetDateTwoWeeksAgo.title" = "Is een van deze zaken van toepassing?";
+"verifyOnsetDateTwoWeeksAgo.message" = "Ben je tussen %@ en je positieve test een keer negatief getest (geen corona)? Of heb je deze klachten altijd?";
 "verifyOnsetDateTwoWeeksAgo.testedNegative" = "Ik ben eerder getest (geen corona)";
 "verifyOnsetDateTwoWeeksAgo.alwaysHaveSymptoms" = "Ik heb deze klachten altijd";
 "verifyOnsetDateTwoWeeksAgo.both" = "Beide";
 "verifyOnsetDateTwoWeeksAgo.no" = "Nee, volgende";
 
-"determineNegativeTestDate.title" = "Wanneer was je laatste negatieve coronatest?";
-"determineNegativeTestDate.subtitle" = "Dit is een coronatest van de GGD waaruit bleek dat je <b>geen</b> corona had. Let op: een zelftest telt niet mee.";
+"determineNegativeTestDate.title" = "Wanneer was de laatste negatieve coronatest voordat je ontdekte dat je corona hebt?";
+"determineNegativeTestDate.subtitle" = "Dit is een coronatest van de GGD waaruit bleek dat je <b>geen</b> corona had. Je hebt deze test gedaan tussen %@ en je positieve test. Let op: een zelftest telt niet mee.";
 
 "verifySymptomsGettingWorse.title" = "Was er een moment na %@ dat je klachten erger werden?";
 
