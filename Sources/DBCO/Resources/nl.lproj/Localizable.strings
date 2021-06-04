@@ -105,13 +105,14 @@
 "contagiousPeriodOnsetDateVerify.cancelButton" = "Ik had ook die dag klachten";
 
 "verifyOnsetDateTwoWeeksAgo.title" = "Is een van deze zaken van toepassing?";
+"verifyOnsetDateTwoWeeksAgo.message" = "Ben je tussen %@ en je positieve test een keer negatief getest (geen corona)? Of heb je deze klachten altijd?";
 "verifyOnsetDateTwoWeeksAgo.testedNegative" = "Ik ben eerder getest (geen corona)";
 "verifyOnsetDateTwoWeeksAgo.alwaysHaveSymptoms" = "Ik heb deze klachten altijd";
 "verifyOnsetDateTwoWeeksAgo.both" = "Beide";
 "verifyOnsetDateTwoWeeksAgo.no" = "Nee, volgende";
 
-"determineNegativeTestDate.title" = "Wanneer was je laatste negatieve coronatest?";
-"determineNegativeTestDate.subtitle" = "Dit is een coronatest van de GGD waaruit bleek dat je <b>geen</b> corona had. Let op: een zelftest telt niet mee.";
+"determineNegativeTestDate.title" = "Wanneer was de laatste negatieve coronatest voordat je ontdekte dat je corona hebt?";
+"determineNegativeTestDate.subtitle" = "Dit is een coronatest van de GGD waaruit bleek dat je <b>geen</b> corona had. Je hebt deze test gedaan tussen %@ en je positieve test. Let op: een zelftest telt niet mee.";
 
 "verifySymptomsGettingWorse.title" = "Was er een moment na %@ dat je klachten erger werden?";
 
@@ -147,8 +148,9 @@
 "determineContactsExplanation.message" = "Niet iedereen die je hebt ontmoet heeft risico op besmetting gelopen. We zijn op zoek naar mensen met wie je:";
 "determineContactsExplanation.item.1" = "Bij wie je in de buurt en/of een tijdje in dezelfde ruimte bent geweest";
 "determineContactsExplanation.item.2" = "Intens contact hebt gehad door zoenen of seksueel contact";
-"determineContactsExplanation.item.3" = "Twijfel je? Voeg de persoon dan toch toe";
-"determineContactsExplanation.item.4" = "Je hoeft je huisgenoten <b>hierna</b> niet nog een keer toe te voegen";
+"determineContactsExplanation.item.3" = "Je hoeft <b>geen</b> mensen toe te voegen die je heel kort hebt ontmoet (zoals de kassamedewerker in een winkel)";
+"determineContactsExplanation.item.4" = "Je hoeft je huisgenoten <b>niet</b> nog een keer toe te voegen";
+"determineContactsExplanation.item.5" = "Twijfel je? Voeg de persoon dan toch toe";
 
 /* MARK: - Onboarding Contacts Timeline */
 "contactsTimeline.dateFormat" = "EEEE d MMMM";

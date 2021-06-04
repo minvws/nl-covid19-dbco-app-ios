@@ -156,13 +156,17 @@ extension String {
     static var contagiousPeriodOnsetDateVerifyCancelButton: String { return Localization.string(for: "contagiousPeriodOnsetDateVerify.cancelButton") }
     
     static var verifyOnsetDateTwoWeeksAgoTitle: String { return Localization.string(for: "verifyOnsetDateTwoWeeksAgo.title") }
+    
+    static func verifyOnsetDateTwoWeeksAgoMessage(date: String) -> String { return Localization.string(for: "verifyOnsetDateTwoWeeksAgo.message", [date]) }
+    
     static var verifyOnsetDateTwoWeeksAgoTestedNegative: String { return Localization.string(for: "verifyOnsetDateTwoWeeksAgo.testedNegative") }
     static var verifyOnsetDateTwoWeeksAgoAlwaysHaveSymptoms: String { return Localization.string(for: "verifyOnsetDateTwoWeeksAgo.alwaysHaveSymptoms") }
     static var verifyOnsetDateTwoWeeksAgoBoth: String { return Localization.string(for: "verifyOnsetDateTwoWeeksAgo.both") }
     static var verifyOnsetDateTwoWeeksAgoNo: String { return Localization.string(for: "verifyOnsetDateTwoWeeksAgo.no") }
     
     static var determineNegativeTestDateTitle: String { return Localization.string(for: "determineNegativeTestDate.title") }
-    static var determineNegativeTestDateSubtitle: String { return Localization.string(for: "determineNegativeTestDate.subtitle") }
+    
+    static func determineNegativeTestDateSubtitle(date: String) -> String { return Localization.string(for: "determineNegativeTestDate.subtitle", [date]) }
     
     static func verifySymptomsGettingWorseTitle(date: String) -> String { return Localization.string(for: "verifySymptomsGettingWorse.title", [date]) }
     
@@ -202,6 +206,7 @@ extension String {
     static var determineContactsExplanationItem2: String { return Localization.string(for: "determineContactsExplanation.item.2") }
     static var determineContactsExplanationItem3: String { return Localization.string(for: "determineContactsExplanation.item.3") }
     static var determineContactsExplanationItem4: String { return Localization.string(for: "determineContactsExplanation.item.4") }
+    static var determineContactsExplanationItem5: String { return Localization.string(for: "determineContactsExplanation.item.5") }
     
     /* MARK: - Onboarding Contacts Timeline */
     static var contactsTimelineDateFormat: String { return Localization.string(for: "contactsTimeline.dateFormat") }
