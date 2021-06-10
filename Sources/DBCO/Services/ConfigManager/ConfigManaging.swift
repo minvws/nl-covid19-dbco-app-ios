@@ -83,7 +83,6 @@ struct AppConfiguration: AppVersionInformation, Codable {
     let appStoreURL: URL?
     let featureFlags: FeatureFlags
     let symptoms: [Symptom]
-    let supportedZipCodeRanges: [ZipRange]
     let guidelines: Guidelines
     let fetchDate: Date
     
@@ -93,7 +92,6 @@ struct AppConfiguration: AppVersionInformation, Codable {
         case appStoreURL = "iosAppStoreURL"
         case featureFlags
         case symptoms
-        case supportedZipCodeRanges
         case guidelines
         case fetchDate
     }
@@ -112,7 +110,6 @@ struct AppConfiguration: AppVersionInformation, Codable {
         
         featureFlags = try container.decode(FeatureFlags.self, forKey: .featureFlags)
         symptoms = try container.decode([Symptom].self, forKey: .symptoms)
-        supportedZipCodeRanges = try container.decode([ZipRange].self, forKey: .supportedZipCodeRanges)
         guidelines = try container.decode(Guidelines.self, forKey: .guidelines)
         
         fetchDate = (try container.decodeIfPresent(Date.self, forKey: .fetchDate)) ?? Date()
@@ -147,9 +144,6 @@ protocol ConfigManaging {
     
     /// The most recent fetched [Symptoms](x-source-tag://Symptom)
     var symptoms: [Symptom] { get }
-    
-    /// The most recent fetched [ZipRanges](x-source-tag://ZipRange) that are part of GGD regions using GGD Contact.
-    var supportedZipCodeRanges: [ZipRange] { get }
     
     /// The most recent fetched [Guidelines](x-source-tag://Guidelines).
     var guidelines: Guidelines { get }
