@@ -35,17 +35,26 @@ final class InitializeContactsCoordinator: Coordinator, Logging {
         if skipIntro {
             navigationController.setViewControllers([privacyConsentViewController()], animated: true)
         } else {
-            setupFirstStep()
+            let viewModel = StepViewModel(
+                image: UIImage(named: "Onboarding1"),
+                title: .onboardingSelfBCOIntroTitle,
+                message: .onboardingSelfBCOIntroMessage,
+                actions: [
+                    .init(type: .primary, title: .next, target: self, action: #selector(continueToContactsIntro))
+                ])
+            
+            let stepController = StepViewController(viewModel: viewModel)
+            navigationController.pushViewController(stepController, animated: true)
         }
     }
     
-    private func setupFirstStep() {
+    @objc private func continueToContactsIntro() {
         let viewModel = StepViewModel(
             image: UIImage(named: "Onboarding2"),
             title: .onboardingDetermineContactsIntroTitle,
             message: .onboardingDetermineContactsIntroMessage,
             actions: [
-                .init(type: .primary, title: .onboardingDetermineContactsIntroButton, target: self, action: #selector(requestPrivacyConsent))
+                .init(type: .primary, title: .next, target: self, action: #selector(requestPrivacyConsent))
             ])
         
         let stepController = StepViewController(viewModel: viewModel)

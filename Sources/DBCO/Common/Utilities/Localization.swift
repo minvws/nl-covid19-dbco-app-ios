@@ -178,9 +178,11 @@ extension String {
     static var determinePositiveTestDateSubtitle: String { return Localization.string(for: "determinePositiveTestDate.subtitle") }
     
     /* MARK: - Determine contacts */
+    static var onboardingSelfBCOIntroTitle: String { return Localization.string(for: "onboardingSelfBCOIntro.title") }
+    static var onboardingSelfBCOIntroMessage: String { return Localization.string(for: "onboardingSelfBCOIntro.message") }
+    
     static var onboardingDetermineContactsIntroTitle: String { return Localization.string(for: "onboardingDetermineContactsIntro.title") }
     static var onboardingDetermineContactsIntroMessage: String { return Localization.string(for: "onboardingDetermineContactsIntro.message") }
-    static var onboardingDetermineContactsIntroButton: String { return Localization.string(for: "onboardingDetermineContactsIntro.button") }
     
     static var determineContactsAuthorizationTitle: String { return Localization.string(for: "determineContactsAuthorization.title") }
     static var determineContactsAuthorizationAllowButton: String { return Localization.string(for: "determineContactsAuthorization.allowButton") }
