@@ -269,10 +269,7 @@
 
 "selectContactAuthorizationTitle" = "‘%@’ opzoeken in je contactenlijst?";
 "selectContactAuthorizationFallbackTitle" = "Dit nieuwe contact opzoeken in je contactenlijst?";
-"selectContactAuthorizationMessage" = "Gebruik je contactenlijst om makkelijk contacten te vinden en contactgegevens in te vullen. Bijvoorbeeld een achternaam of een telefoonnummer.";
-"selectContactAuthorization.item1" = "Gegevens worden pas met de GGD gedeeld als jij laat weten dat je klaar bent en je GGD de app ondersteunt";
-"selectContactAuthorization.item2" = "Alleen gegevens die jij invult worden gedeeld";
-"selectContactAuthorization.item3" = "De GGD heeft <b>geen</b> toegang tot je hele contactenlijst";
+"selectContactAuthorizationMessage" = "Geef toegang tot je contactenlijst om makkelijk contacten te vinden en contactgegevens in te vullen.\n\nAlleen de contactgegevens die jij kiest worden gebruikt in de app. Bijvoorbeeld een achternaam of een telefoonnummer.\n\nJe verzamelt deze gegevens om ze aan de GGD door te geven tijdens het bron- en contactonderzoek. Zo kan de GGD deze mensen waarschuwen en persoonlijk advies geven.";
 "selectContactAuthorizationAllowButton" = "Ja, opzoekhulp gebruiken";
 "selectContactAuthorizationManualButton" = "Nee, zelf invullen";
 

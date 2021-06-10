@@ -337,9 +337,6 @@ extension String {
     static var selectContactAuthorizationFallbackTitle: String { return Localization.string(for: "selectContactAuthorizationFallbackTitle") }
     
     static var selectContactAuthorizationMessage: String { return Localization.string(for: "selectContactAuthorizationMessage") }
-    static var selectContactAuthorizationItem1: String { return Localization.string(for: "selectContactAuthorization.item1") }
-    static var selectContactAuthorizationItem2: String { return Localization.string(for: "selectContactAuthorization.item2") }
-    static var selectContactAuthorizationItem3: String { return Localization.string(for: "selectContactAuthorization.item3") }
     static var selectContactAuthorizationAllowButton: String { return Localization.string(for: "selectContactAuthorizationAllowButton") }
     static var selectContactAuthorizationManualButton: String { return Localization.string(for: "selectContactAuthorizationManualButton") }
     
