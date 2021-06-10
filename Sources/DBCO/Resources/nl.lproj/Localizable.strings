@@ -380,7 +380,7 @@
 "reversePairingFinished" = "Gekoppeld met GGD";
 
 "reversePairingStep1.title" = "Koppel de app met de GGD om je gegevens te delen";
-"reversePairingStep1.message" = "Heb je de app nog niet gekoppeld? Dan belt de GGD je om dit samen te doen. Daarna kun je via de app contactgegevens en locaties delen.";
+"reversePairingStep1.message" = "Heb je de app nog niet gekoppeld? Dan belt de GGD je om dit samen te doen. Daarna kun je via de app contactgegevens delen.";
 "reversePairingStep1.code" = "Geef deze code door aan de GGD-medewerker:";
 
 "reversePairingStep2.title" = "Wacht tot de GGD-medewerker de code heeft ingevoerd";
