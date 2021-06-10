@@ -154,7 +154,7 @@
 
 "contactsTimeline.shortTitle" = "Contacten";
 "contactsTimeline.title" = "Wie heb je ontmoet tussen %@ en vandaag?";
-"contactsTimeline.message" = "Weet je niet hoe iemand heet? Zet het contact er dan toch in. Bijvoorbeeld als trainer, kapper of buurvrouw. Je hoeft hier geen huisgenoten toe te voegen.<br/><b><a href=\"/\">Wat deel ik precies met de GGD?</a></b>";
+"contactsTimeline.message" = "Weet je niet hoe iemand heet? Zet het contact er dan toch in. Bijvoorbeeld als trainer, kapper of buurvrouw. Je hoeft hier geen huisgenoten toe te voegen.";
 
 "contactsTimelineAddContact" = "Contact toevoegen";
 
