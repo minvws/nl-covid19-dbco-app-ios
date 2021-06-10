@@ -64,10 +64,10 @@
 "onboarding.consent.shortTitle" = "Privacy";
 "onboarding.consent.title" = "Zo gaat GGD Contact om met je gegevens";
 "onboarding.consent.message" = "In de  <a href=\"https://ggdcontact.nl/nl/privacy-in-app\">privacyverklaring</a> staat hoe GGD Contact jouw gegevens gebruikt. Dit zijn de belangrijkste punten:";
-"onboarding.consent.item1" = "Gegevens worden pas met de GGD gedeeld als jij laat weten dat je klaar bent en je GGD de app ondersteunt";
-"onboarding.consent.item2" = "Gegevens worden versleuteld en via een veilige verbinding gedeeld";
-"onboarding.consent.item3" = "Alleen gegevens die jij invult worden gedeeld";
-"onboarding.consent.item4" = "Het gebruik van de app en delen van gegevens is vrijwillig";
+"onboarding.consent.item1" = "De gegevens die je invult worden alleen in de app opgeslagen";
+"onboarding.consent.item2" = "De app heeft geen toegang tot andere gegevens op je telefoon";
+"onboarding.consent.item3" = "Het gebruik van de app is vrijwillig";
+"onboarding.consent.item4" = "Met een aantal GGD’en kun je veilig gegevens uit de app delen. Gegevens worden alleen gedeeld als jij laat weten dat je dat wilt";
 "onboarding.consent.buttonTitle" = "Ik heb de privacyverklaring gelezen en begrijp hoe GGD Contact mijn gegevens gebruikt";
 
 /* MARK: - Onboarding Error */
