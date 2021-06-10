@@ -469,6 +469,10 @@ extension String {
     
     /* MARK: - Reverse Pairing */
     static var reversePairingTitle: String { return Localization.string(for: "reversePairingTitle") }
+    
+    static var reversePairingConfirmTitle: String { return Localization.string(for: "reversePairingConfirm.title") }
+    static var reversePairingConfirmMessage: String { return Localization.string(for: "reversePairingConfirm.message") }
+    
     static var reversePairingWaiting: String { return Localization.string(for: "reversePairingWaiting") }
     static var reversePairingFinished: String { return Localization.string(for: "reversePairingFinished") }
     

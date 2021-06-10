@@ -373,6 +373,10 @@
 
 /* MARK: - Reverse Pairing */
 "reversePairingTitle" = "Koppelen";
+
+"reversePairingConfirm.title" = "Heeft de GGD je verteld dat je gegevens kunt delen?";
+"reversePairingConfirm.message" = "De GGD belt je voor het bron- en contactonderzoek. Tijdens dit gesprek hoor je of het in jouw GGD-regio mogelijk is om via de app contactgegevens te delen.";
+
 "reversePairingWaiting" = "Wachten op GGD-medewerker";
 "reversePairingFinished" = "Gekoppeld met GGD";
 
