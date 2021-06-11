@@ -178,16 +178,11 @@ extension String {
     static var determinePositiveTestDateSubtitle: String { return Localization.string(for: "determinePositiveTestDate.subtitle") }
     
     /* MARK: - Determine contacts */
-    static var onboardingVerifyZipCodeTitle: String { return Localization.string(for: "onboardingVerifyZipCodeTitle") }
-    static var onboardingVerifyZipCodeMessage: String { return Localization.string(for: "onboardingVerifyZipCodeMessage") }
-    static var onboardingVerifyZipCodeAccessibilityHint: String { return Localization.string(for: "onboardingVerifyZipCodeAccessibilityHint") }
+    static var onboardingSelfBCOIntroTitle: String { return Localization.string(for: "onboardingSelfBCOIntro.title") }
+    static var onboardingSelfBCOIntroMessage: String { return Localization.string(for: "onboardingSelfBCOIntro.message") }
     
     static var onboardingDetermineContactsIntroTitle: String { return Localization.string(for: "onboardingDetermineContactsIntro.title") }
-    static var onboardingDetermineContactsIntroMessageSupported: String { return Localization.string(for: "onboardingDetermineContactsIntro.message.supported") }
-    static var onboardingDetermineContactsIntroMessageUnsupported: String { return Localization.string(for: "onboardingDetermineContactsIntro.message.unsupported") }
-    
-    static var onboardingDetermineContactsIntroButtonSupported: String { return Localization.string(for: "onboardingDetermineContactsIntro.button.supported") }
-    static var onboardingDetermineContactsIntroButtonUnsupported: String { return Localization.string(for: "onboardingDetermineContactsIntro.button.unsupported") }
+    static var onboardingDetermineContactsIntroMessage: String { return Localization.string(for: "onboardingDetermineContactsIntro.message") }
     
     static var determineContactsAuthorizationTitle: String { return Localization.string(for: "determineContactsAuthorization.title") }
     static var determineContactsAuthorizationAllowButton: String { return Localization.string(for: "determineContactsAuthorization.allowButton") }
@@ -342,9 +337,6 @@ extension String {
     static var selectContactAuthorizationFallbackTitle: String { return Localization.string(for: "selectContactAuthorizationFallbackTitle") }
     
     static var selectContactAuthorizationMessage: String { return Localization.string(for: "selectContactAuthorizationMessage") }
-    static var selectContactAuthorizationItem1: String { return Localization.string(for: "selectContactAuthorization.item1") }
-    static var selectContactAuthorizationItem2: String { return Localization.string(for: "selectContactAuthorization.item2") }
-    static var selectContactAuthorizationItem3: String { return Localization.string(for: "selectContactAuthorization.item3") }
     static var selectContactAuthorizationAllowButton: String { return Localization.string(for: "selectContactAuthorizationAllowButton") }
     static var selectContactAuthorizationManualButton: String { return Localization.string(for: "selectContactAuthorizationManualButton") }
     
@@ -477,6 +469,10 @@ extension String {
     
     /* MARK: - Reverse Pairing */
     static var reversePairingTitle: String { return Localization.string(for: "reversePairingTitle") }
+    
+    static var reversePairingConfirmTitle: String { return Localization.string(for: "reversePairingConfirm.title") }
+    static var reversePairingConfirmMessage: String { return Localization.string(for: "reversePairingConfirm.message") }
+    
     static var reversePairingWaiting: String { return Localization.string(for: "reversePairingWaiting") }
     static var reversePairingFinished: String { return Localization.string(for: "reversePairingFinished") }
     

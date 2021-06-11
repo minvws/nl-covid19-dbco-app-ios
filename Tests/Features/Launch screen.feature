@@ -6,14 +6,11 @@ Feature: Launch screen
         Then I see a button with 'Ja, ik heb een code'
         And I see a button with 'Nee, geen code'
         When I tap the 'Nee, geen code' button
-        Then I see a label with 'Wat zijn de eerste vier cijfers van je postcode?'
-        And I see a text field with '0000'
-        And I see a disabled button with 'Volgende'
-        When I type '8888' into the '0000' text field
-        Then the 'Volgende' button becomes enabled
+        Then I see a label with 'Wat moeten de mensen doen bij wie jij in de buurt bent geweest?'
         When I tap the 'Volgende' button
-        Then I see a button with 'Ik snap het' or 'Volgende'
-        When I tap the 'Ik snap het' or 'Volgende' button
+        Then I see a label with 'Maak een overzicht van contacten die misschien zijn besmet'
+        Then I see a button with 'Volgende'
+        When I tap the 'Volgende' button
         Then I see a label with 'Zo gaat GGD Contact om met je gegevens'
         And I see a switch with 'Ik heb de privacyverklaring gelezen en begrijp hoe GGD Contact mijn gegevens gebruikt'
         And I see a disabled button with 'Volgende'
@@ -21,9 +18,9 @@ Feature: Launch screen
         Then the 'Volgende' button becomes enabled
         When I tap the 'Volgende' button
         Then I see a label with 'Welke klachten heb je die bij COVID-19 passen?'
-        # When I swipe up
-        # Then I see a button with 'Ik heb geen klachten'
-        # When I swipe down
+        When I swipe up
+        Then I see a button with 'Ik heb geen klachten'
+        When I swipe down
         And I tap the 'Keelpijn' switch
         And I tap the 'Neusverkoudheid' switch
         And I swipe up

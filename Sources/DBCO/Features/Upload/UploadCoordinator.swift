@@ -63,7 +63,7 @@ final class UploadCoordinator: Coordinator, Logging {
         if Services.pairingManager.isPaired {
             continueToUnfinishedTasksOrSync(animated: false)
         } else {
-            pair()
+            confirmReadyToPair()
         }
         
         presenter?.present(navigationController, animated: true)
@@ -91,12 +91,55 @@ final class UploadCoordinator: Coordinator, Logging {
         presenter?.present(alert, animated: true)
     }
     
-    private func pair() {
+    private var shouldSkipConfirm: Bool {
+        Services.pairingManager.isPollingForPairing ||
+        Services.pairingManager.lastPollingError != nil
+    }
+    
+    private func createConfirmViewController() -> UIViewController {
+        let viewModel = StepViewModel(
+            image: nil,
+            title: .reversePairingConfirmTitle,
+            message: .reversePairingConfirmMessage,
+            actions: [
+                .init(type: .primary, title: .yes, target: self, action: #selector(continueToPairing)),
+                .init(type: .primary, title: .no, target: self, action: #selector(cancelPairing))
+            ],
+            hidesNavigationWhenFirst: false)
+        
+        let stepController = StepViewController(viewModel: viewModel)
+        
+        if #available(iOS 13.0, *) {
+            stepController.isModalInPresentation = true
+        }
+        
+        stepController.navigationItem.leftBarButtonItem = UIBarButtonItem(title: .close, style: .plain, target: self, action: #selector(cancelPairing))
+        stepController.title = .reversePairingTitle
+        
+        return stepController
+    }
+    
+    private func confirmReadyToPair() {
+        guard !shouldSkipConfirm else { return pair(animated: false) }
+        
+        navigationController.setViewControllers([createConfirmViewController()], animated: false)
+    }
+    
+    @objc private func continueToPairing() {
+        pair(animated: true)
+    }
+    
+    @objc private func cancelPairing() {
+        Services.pairingManager.stopPollingForPairing()
+        navigationController.dismiss(animated: true)
+    }
+    
+    private func pair(animated: Bool) {
         let viewModel = ReversePairViewModel(hasUnfinishedTasks: hasUnfinishedTasks)
         let pairingController = ReversePairViewController(viewModel: viewModel)
         pairingController.delegate = self
         
-        navigationController.setViewControllers([pairingController], animated: false)
+        navigationController.setViewControllers([pairingController], animated: animated)
         
         if let error = Services.pairingManager.lastPollingError {
             Services.pairingManager.lastPairingCode.map { pairingController.applyPairingCode($0) }

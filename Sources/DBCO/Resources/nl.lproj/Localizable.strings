@@ -49,10 +49,10 @@
 "launchResetAlert.button" = "OK";
 
 /* MARK: - Onboarding */
-"onboarding.start.title" = "Wat moeten de mensen doen bij wie jij in de buurt bent geweest?";
-"onboarding.start.message" = "Het advies verschilt per persoon. Dit hangt af van of jullie afstand hielden en hoe lang de ontmoeting duurde. De app geeft aan of iemand thuis moet blijven en tot wanneer. Deze informatie kan jij daarna makkelijk delen.";
+"onboarding.start.title" = "Help de verspreiding van corona te voorkomen";
+"onboarding.start.message" = "Heb je corona? Dan helpt deze app de mensen die misschien ook besmet zijn zo snel mogelijk te waarschuwen.\n\nZo zorg je dat het bron- en contactonderzoek van de GGD sneller gaat.";
 "onboarding.determineFlow.title" = "Heb je aan de telefoon een code van de GGD gekregen?";
-"onboarding.determineFlow.message" = "Let op: dit is niet de GGD-sleutel die je in de CoronaMelder-app vindt.";
+"onboarding.determineFlow.message" = "Een GGD Contact-koppelcode bestaat uit 12 cijfers, bijvoorbeeld 9999-9999-9999.";
 "onboarding.hasCodeButton" = "Ja, ik heb een code";
 "onboarding.noCodeButton" = "Nee, geen code";
 "onboarding.pairing.title" = "Vul de code in die je hebt gekregen van de GGD-medewerker";
@@ -64,10 +64,10 @@
 "onboarding.consent.shortTitle" = "Privacy";
 "onboarding.consent.title" = "Zo gaat GGD Contact om met je gegevens";
 "onboarding.consent.message" = "In de  <a href=\"https://ggdcontact.nl/nl/privacy-in-app\">privacyverklaring</a> staat hoe GGD Contact jouw gegevens gebruikt. Dit zijn de belangrijkste punten:";
-"onboarding.consent.item1" = "Gegevens worden pas met de GGD gedeeld als jij laat weten dat je klaar bent en je GGD de app ondersteunt";
-"onboarding.consent.item2" = "Gegevens worden versleuteld en via een veilige verbinding gedeeld";
-"onboarding.consent.item3" = "Alleen gegevens die jij invult worden gedeeld";
-"onboarding.consent.item4" = "Het gebruik van de app en delen van gegevens is vrijwillig";
+"onboarding.consent.item1" = "De gegevens die je invult worden alleen in de app opgeslagen";
+"onboarding.consent.item2" = "De app heeft geen toegang tot andere gegevens op je telefoon";
+"onboarding.consent.item3" = "Het gebruik van de app is vrijwillig";
+"onboarding.consent.item4" = "Met een aantal GGD’en kun je veilig gegevens uit de app delen. Gegevens worden alleen gedeeld als jij laat weten dat je dat wilt";
 "onboarding.consent.buttonTitle" = "Ik heb de privacyverklaring gelezen en begrijp hoe GGD Contact mijn gegevens gebruikt";
 
 /* MARK: - Onboarding Error */
@@ -123,15 +123,11 @@
 "determinePositiveTestDate.subtitle" = "Kies de datum waarop je de (laatste)  coronatest hebt gedaan.";
 
 /* MARK: - Determine contacts */
-"onboardingVerifyZipCodeTitle" = "Wat zijn de eerste vier cijfers van je postcode?";
-"onboardingVerifyZipCodeMessage" = "Zo kunnen we bepalen in welke GGD-regio je woont. Wat je precies in de app kunt doen, verschilt per regio.";
-"onboardingVerifyZipCodeAccessibilityHint" = "De 4 cijfers van je postcode";
+"onboardingSelfBCOIntro.title" = "Wat moeten de mensen doen bij wie jij in de buurt bent geweest?";
+"onboardingSelfBCOIntro.message" = "Het advies verschilt per persoon. Dit hangt af van of jullie afstand hielden en hoe lang de ontmoeting duurde. De app geeft aan of iemand thuis moet blijven en tot wanneer.";
 
-"onboardingDetermineContactsIntro.title" = "Bepaal wie misschien zijn besmet en informeer hen";
-"onboardingDetermineContactsIntro.message.supported" = "We gaan een overzicht maken van contacten die je misschien hebt besmet. Goed om te weten: niet iedereen hoeft direct in quarantaine.\n\nOok kun je in jouw GGD-regio contactgegevens met de GGD delen voor het contactonderzoek.";
-"onboardingDetermineContactsIntro.message.unsupported" = "Je kunt in jouw regio nog geen gegevens delen met de GGD. Je kunt via de app wel zelf bepalen wie van je contacten misschien besmet zijn en daarna de juiste leefregels met hen delen.";
-"onboardingDetermineContactsIntro.button.supported" = "Volgende";
-"onboardingDetermineContactsIntro.button.unsupported" = "Ik snap het";
+"onboardingDetermineContactsIntro.title" = "Maak een overzicht van contacten die misschien zijn besmet";
+"onboardingDetermineContactsIntro.message" = "Zo weet je wie gewaarschuwd moet worden. En ben je ook alvast voorbereid op het bron- en contactonderzoek van de GGD.";
 
 "determineContactsAuthorization.title" = "Wil je je contactenlijst gebruiken om contactgegevens in te vullen?";
 "determineContactsAuthorization.allowButton" = "Toegang geven";
@@ -158,7 +154,7 @@
 
 "contactsTimeline.shortTitle" = "Contacten";
 "contactsTimeline.title" = "Wie heb je ontmoet tussen %@ en vandaag?";
-"contactsTimeline.message" = "Weet je niet hoe iemand heet? Zet het contact er dan toch in. Bijvoorbeeld als trainer, kapper of buurvrouw. Je hoeft hier geen huisgenoten toe te voegen.<br/><b><a href=\"/\">Wat deel ik precies met de GGD?</a></b>";
+"contactsTimeline.message" = "Weet je niet hoe iemand heet? Zet het contact er dan toch in. Bijvoorbeeld als trainer, kapper of buurvrouw. Je hoeft hier geen huisgenoten toe te voegen.";
 
 "contactsTimelineAddContact" = "Contact toevoegen";
 
@@ -273,10 +269,7 @@
 
 "selectContactAuthorizationTitle" = "‘%@’ opzoeken in je contactenlijst?";
 "selectContactAuthorizationFallbackTitle" = "Dit nieuwe contact opzoeken in je contactenlijst?";
-"selectContactAuthorizationMessage" = "Gebruik je contactenlijst om makkelijk contacten te vinden en contactgegevens in te vullen. Bijvoorbeeld een achternaam of een telefoonnummer.";
-"selectContactAuthorization.item1" = "Gegevens worden pas met de GGD gedeeld als jij laat weten dat je klaar bent en je GGD de app ondersteunt";
-"selectContactAuthorization.item2" = "Alleen gegevens die jij invult worden gedeeld";
-"selectContactAuthorization.item3" = "De GGD heeft <b>geen</b> toegang tot je hele contactenlijst";
+"selectContactAuthorizationMessage" = "Geef toegang tot je contactenlijst om makkelijk contacten te vinden en contactgegevens in te vullen.\n\nAlleen de contactgegevens die jij kiest worden gebruikt in de app. Bijvoorbeeld een achternaam of een telefoonnummer.\n\nJe verzamelt deze gegevens om ze aan de GGD door te geven tijdens het bron- en contactonderzoek. Zo kan de GGD deze mensen waarschuwen en persoonlijk advies geven.";
 "selectContactAuthorizationAllowButton" = "Ja, opzoekhulp gebruiken";
 "selectContactAuthorizationManualButton" = "Nee, zelf invullen";
 
@@ -380,11 +373,15 @@
 
 /* MARK: - Reverse Pairing */
 "reversePairingTitle" = "Koppelen";
+
+"reversePairingConfirm.title" = "Heeft de GGD je verteld dat je gegevens kunt delen?";
+"reversePairingConfirm.message" = "De GGD belt je voor het bron- en contactonderzoek. Tijdens dit gesprek hoor je of het in jouw GGD-regio mogelijk is om via de app contactgegevens te delen.";
+
 "reversePairingWaiting" = "Wachten op GGD-medewerker";
 "reversePairingFinished" = "Gekoppeld met GGD";
 
 "reversePairingStep1.title" = "Koppel de app met de GGD om je gegevens te delen";
-"reversePairingStep1.message" = "Heb je de app nog niet gekoppeld? Dan belt de GGD je om dit samen te doen. Daarna kun je via de app contactgegevens en locaties delen.";
+"reversePairingStep1.message" = "Heb je de app nog niet gekoppeld? Dan belt de GGD je om dit samen te doen. Daarna kun je via de app contactgegevens delen.";
 "reversePairingStep1.code" = "Geef deze code door aan de GGD-medewerker:";
 
 "reversePairingStep2.title" = "Wacht tot de GGD-medewerker de code heeft ingevoerd";
