@@ -15,6 +15,7 @@ import UIKit
 protocol ScrollViewNavivationbarAdjusting {
     var view: UIView! { get }
     var navigationItem: UINavigationItem { get }
+    var title: String? { get }
     var shortTitle: String { get }
     
     func adjustNavigationBar(for scrollView: UIScrollView)
@@ -48,7 +49,7 @@ extension ScrollViewNavivationbarAdjusting {
                 } else {
                     separatorView.alpha = 0
                     backgroundView.isHidden = true
-                    self.navigationItem.title = nil
+                    self.navigationItem.title = title
                 }
             }
         }
