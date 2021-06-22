@@ -37,7 +37,7 @@ final class OnboardingCoordinator: Coordinator {
     
     private func createFirstViewController() -> UIViewController {
         let viewModel = StepViewModel(
-            image: UIImage(named: "Onboarding1"),
+            image: UIImage(named: "Onboarding0"),
             title: .onboardingStartTitle,
             message: .onboardingStartMessage,
             actions: [
