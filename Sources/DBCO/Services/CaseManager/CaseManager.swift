@@ -291,9 +291,8 @@ final class CaseManager: CaseManaging, Logging {
         case .contact:
             updatedTask.contact = task.contact
             
-            // If label is empty but there is a firstName + lastName
-            let emptyLabel = updatedTask.label == nil || updatedTask.label?.isEmpty == true
-            if emptyLabel, let contactName = task.contactName {
+            // If it is a task created in the app, update the label with the name
+            if tasks[index].source == .app, let contactName = task.contactNameAnswer {
                 updatedTask.label = contactName
             }
         }
