@@ -292,7 +292,8 @@ final class CaseManager: CaseManaging, Logging {
             updatedTask.contact = task.contact
             
             // If it is a task created in the app, update the label with the name
-            if tasks[index].source == .app, let contactName = task.contactNameAnswer {
+            if tasks[index].source == .app {
+                let contactName = task.contactNameAnswer ?? .taskContactUnknownName
                 updatedTask.label = contactName
             }
         }
