@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol PrivacyConsentViewControllerDelegate: class {
+protocol PrivacyConsentViewControllerDelegate: AnyObject {
     func privacyConsentViewControllerWantsToContinue(_ controller: PrivacyConsentViewController)
     func privacyConsentViewController(_ controller: PrivacyConsentViewController, wantsToOpen url: URL)
 }
@@ -27,7 +27,7 @@ class PrivacyConsentViewModel {
 }
 
 /// - Tag: PrivacyConsentViewController
-class PrivacyConsentViewController: PromptableViewController, ScrollViewNavivationbarAdjusting {
+class PrivacyConsentViewController: ViewController, ScrollViewNavivationbarAdjusting {
     private let viewModel: PrivacyConsentViewModel
     private let scrollView = UIScrollView(frame: .zero)
     
@@ -55,21 +55,26 @@ class PrivacyConsentViewController: PromptableViewController, ScrollViewNavivati
         
         view.backgroundColor = .white
         
-        scrollView.embed(in: contentView)
+        scrollView.embed(in: view)
         scrollView.delegate = self
         scrollView.delaysContentTouches = false
         
         let widthProviderView = UIView()
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
-        widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
+        widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
-        let margin: UIEdgeInsets = .top(32) + .bottom(18)
+        let continueButton = Button(title: viewModel.buttonTitle, style: .primary)
+            .touchUpInside(self, action: #selector(handleContinue))
+
+        viewModel.$isContinueButtonEnabled.binding = { continueButton.isEnabled = $0 }
+        
+        let margin: UIEdgeInsets = .top(32) + .bottom(16)
         
         let stack =
             VStack(spacing: 24,
                    VStack(spacing: 24,
                        VStack(spacing: 16,
-                              UILabel(title2: .onboardingConsentTitle).multiline(),
+                              UILabel(title2: .onboardingConsentTitle),
                               TextView(htmlText: .onboardingConsentMessage, textColor: Theme.colors.captionGray)
                                 .linkTouched { [unowned self] in self.open($0) }),
                        VStack(spacing: 16,
@@ -77,28 +82,15 @@ class PrivacyConsentViewController: PromptableViewController, ScrollViewNavivati
                               listItem(.onboardingConsentItem2),
                               listItem(.onboardingConsentItem3),
                               listItem(.onboardingConsentItem4))),
-                   ConsentButton(title: .onboardingConsentButtonTitle, selected: false).valueChanged(self, action: #selector(consentValueChanged)))
+                   VStack(spacing: 24,
+                          ConsentButton(title: .onboardingConsentButtonTitle, selected: false).valueChanged(self, action: #selector(consentValueChanged)),
+                          continueButton))
                 .distribution(.equalSpacing)
                 .embed(in: scrollView.readableWidth, insets: margin)
         
-        stack.heightAnchor.constraint(greaterThanOrEqualTo: contentView.safeAreaLayoutGuide.heightAnchor,
+        stack.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.safeAreaLayoutGuide.heightAnchor,
                                       multiplier: 1,
                                       constant: -(margin.top + margin.bottom)).isActive = true
-        
-        let continueButton = Button(title: viewModel.buttonTitle, style: .primary)
-            .touchUpInside(self, action: #selector(handleContinue))
-        
-        viewModel.$isContinueButtonEnabled.binding = { continueButton.isEnabled = $0 }
-        
-        promptView = continueButton
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        let scrollingHeight = scrollView.contentSize.height + scrollView.safeAreaInsets.top + scrollView.safeAreaInsets.bottom
-        let canScroll = scrollingHeight > scrollView.frame.height
-        showPromptViewSeparator = canScroll
     }
     
     @objc private func handleContinue() {

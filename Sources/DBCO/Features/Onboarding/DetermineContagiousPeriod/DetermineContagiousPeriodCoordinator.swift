@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol DetermineContagiousPeriodCoordinatorDelegate: class {
+protocol DetermineContagiousPeriodCoordinatorDelegate: AnyObject {
     func determineContagiousPeriodCoordinator(_ coordinator: DetermineContagiousPeriodCoordinator, didFinishWith testDate: Date)
     func determineContagiousPeriodCoordinator(_ coordinator: DetermineContagiousPeriodCoordinator, didFinishWith symptoms: [Symptom], dateOfSymptomOnset: Date)
     func determineContagiousPeriodCoordinatorDidCancel(_ coordinator: DetermineContagiousPeriodCoordinator)
@@ -50,6 +50,16 @@ final class DetermineContagiousPeriodCoordinator: Coordinator, Logging {
         
         navigationController.pushViewController(symptomController, animated: true)
     }
+    
+    private let dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = .current
+        dateFormatter.timeZone = .current
+        dateFormatter.locale = .display
+        dateFormatter.dateFormat = .contagiousPeriodOnsetDateVerifyDateFormat
+        
+        return dateFormatter
+    }()
 }
 
 extension DetermineContagiousPeriodCoordinator: SelectSymptomsViewControllerDelegate {
@@ -169,12 +179,6 @@ extension DetermineContagiousPeriodCoordinator {
     private func verifySelectedOnsetDate(_ date: Date) {
         symptomOnsetDate = date
         let verifyDate = date.dateByAddingDays(-1)
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.calendar = .current
-        dateFormatter.timeZone = .current
-        dateFormatter.dateFormat = .contagiousPeriodOnsetDateVerifyDateFormat
-        
         let dateString = dateFormatter.string(from: verifyDate)
         
         let viewModel = StepViewModel(
@@ -198,7 +202,7 @@ extension DetermineContagiousPeriodCoordinator {
         let viewModel = StepViewModel(
             image: UIImage(named: "Onboarding3"),
             title: .verifyOnsetDateTwoWeeksAgoTitle,
-            message: nil,
+            message: .verifyOnsetDateTwoWeeksAgoMessage(date: dateFormatter.string(from: date)),
             actions: [
                 .init(type: .secondary, title: .verifyOnsetDateTwoWeeksAgoTestedNegative) { self.determineNegativeTestDate(onset: date, alwaysHasSymptoms: false) },
                 .init(type: .secondary, title: .verifyOnsetDateTwoWeeksAgoAlwaysHaveSymptoms) { self.verifySymptomsGettingWorse(onset: date) },
@@ -213,7 +217,7 @@ extension DetermineContagiousPeriodCoordinator {
     private func determineNegativeTestDate(onset: Date, alwaysHasSymptoms: Bool) {
         let viewModel = OnboardingDateViewModel(
             title: .determineNegativeTestDateTitle,
-            subtitle: .determineNegativeTestDateSubtitle,
+            subtitle: .determineNegativeTestDateSubtitle(date: dateFormatter.string(from: onset)),
             date: nil,
             actions: [
                 .init(type: .primary, title: .next) { [weak self] in
@@ -238,15 +242,10 @@ extension DetermineContagiousPeriodCoordinator {
     }
     
     private func verifySymptomsGettingWorse(onset: Date) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.calendar = .current
-        dateFormatter.timeZone = .current
-        dateFormatter.dateFormat = .contagiousPeriodOnsetDateVerifyDateFormat
-        
         let dateString = dateFormatter.string(from: onset)
         
         let viewModel = StepViewModel(
-            image: nil,
+            image: UIImage(named: "Onboarding3"),
             title: .verifySymptomsGettingWorseTitle(date: dateString),
             message: nil,
             actions: [
@@ -259,11 +258,6 @@ extension DetermineContagiousPeriodCoordinator {
     }
     
     private func determineSymptomsIncreasingDate(_ currentOnset: Date) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.calendar = .current
-        dateFormatter.timeZone = .current
-        dateFormatter.dateFormat = .contagiousPeriodOnsetDateVerifyDateFormat
-        
         let dateString = dateFormatter.string(from: currentOnset)
         
         let viewModel = OnboardingDateViewModel(

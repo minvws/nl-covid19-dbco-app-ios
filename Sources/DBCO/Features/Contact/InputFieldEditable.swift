@@ -12,6 +12,7 @@ enum InputType {
     
     case text
     case number
+    case phoneNumber
     case picker(options: [PickerOption])
     case date(formatter: DateFormatter)
 }
@@ -65,7 +66,7 @@ extension LastName: InputFieldEditable {
 extension PhoneNumber: InputFieldEditable {
     var label: String? { .contactInformationPhoneNumber }
     var validator: Validator.Type? { PhoneNumberValidator.self }
-    var inputType: InputType { .number }
+    var inputType: InputType { .phoneNumber }
 }
 
 extension EmailAddress: InputFieldEditable {

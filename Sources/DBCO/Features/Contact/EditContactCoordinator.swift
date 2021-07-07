@@ -8,7 +8,7 @@
 import UIKit
 import Contacts
 
-protocol EditContactCoordinatorDelegate: class {
+protocol EditContactCoordinatorDelegate: AnyObject {
     func editContactCoordinator(_ coordinator: EditContactCoordinator, didFinishContactTask task: Task)
     func editContactCoordinatorDidCancel(_ coordinator: EditContactCoordinator)
 }
@@ -39,7 +39,15 @@ final class EditContactCoordinator: Coordinator, Logging {
             return
         }
         
-        let viewModel = ContactQuestionnaireViewModel(task: task, questionnaire: questionnaire)
+        let input = ContactQuestionnaireViewModel.Input(
+            caseReference: Services.caseManager.reference,
+            guidelines: Services.configManager.guidelines,
+            featureFlags: Services.configManager.featureFlags,
+            isCaseWindowExpired: Services.caseManager.isWindowExpired,
+            task: task,
+            questionnaire: questionnaire,
+            contact: nil)
+        let viewModel = ContactQuestionnaireViewModel(input)
         let editController = ContactQuestionnaireViewController(viewModel: viewModel)
         editController.delegate = self
 

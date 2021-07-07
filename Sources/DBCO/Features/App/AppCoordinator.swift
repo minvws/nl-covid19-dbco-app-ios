@@ -28,7 +28,9 @@ final class AppCoordinator: Coordinator {
         
         window.tintColor = Theme.colors.primary
         
-        _ = resetAppDataIfNeeded()
+        if resetAppDataIfNeeded() {
+            showResetAlert()
+        }
         
         let launchCoordinator = LaunchCoordinator(window: window)
         launchCoordinator.delegate = self
@@ -83,7 +85,7 @@ final class AppCoordinator: Coordinator {
         var resetWindow: UIWindow? = createWindow()
         
         let viewModel = StepViewModel(
-            image: UIImage(named: "Onboarding1"),
+            image: UIImage(named: "Onboarding2"),
             title: .launchResetAlertTitle,
             message: .launchResetAlertMessage,
             actions: [

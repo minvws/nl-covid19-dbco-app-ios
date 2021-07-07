@@ -32,7 +32,7 @@ struct ClassificationHelper {
         case sameRoom
     }
     
-    enum Result {
+    enum Result: Equatable {
         case success(Task.Contact.Category)
         case needsAssessmentFor(Risk)
         
@@ -47,7 +47,7 @@ struct ClassificationHelper {
     }
     
     private typealias ResultRiskPair = (result: Result, visibleRisks: [Risk])
-    struct Risks {
+    struct Risks: Equatable {
         var sameHousehold: Bool?
         var distance: Answer.Value.Distance?
         var physicalContact: Bool?
@@ -146,12 +146,12 @@ struct ClassificationHelper {
         case .category3b:
             risks.sameHousehold = false
             risks.distance = .no
-            risks.physicalContact = false
+            risks.physicalContact = nil
             risks.sameRoom = true
         case .other:
             risks.sameHousehold = false
             risks.distance = .no
-            risks.physicalContact = false
+            risks.physicalContact = nil
             risks.sameRoom = false
         }
     }
