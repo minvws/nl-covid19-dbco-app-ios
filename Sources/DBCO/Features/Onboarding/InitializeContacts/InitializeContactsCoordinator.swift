@@ -9,7 +9,7 @@ import UIKit
 import Contacts
 import SafariServices
 
-protocol InitializeContactsCoordinatorDelegate: class {
+protocol InitializeContactsCoordinatorDelegate: AnyObject {
     func initializeContactsCoordinatorDidFinish(_ coordinator: InitializeContactsCoordinator)
     func initializeContactsCoordinatorDidCancel(_ coordinator: InitializeContactsCoordinator)
 }
@@ -35,17 +35,30 @@ final class InitializeContactsCoordinator: Coordinator, Logging {
         if skipIntro {
             navigationController.setViewControllers([privacyConsentViewController()], animated: true)
         } else {
-            let viewModel = VerifyZipCodeViewModel()
-            let verifyController = VerifyZipCodeViewController(viewModel: viewModel)
-            verifyController.delegate = self
+            let viewModel = StepViewModel(
+                image: UIImage(named: "Onboarding1"),
+                title: .onboardingSelfBCOIntroTitle,
+                message: .onboardingSelfBCOIntroMessage,
+                actions: [
+                    .init(type: .primary, title: .next, target: self, action: #selector(continueToContactsIntro))
+                ])
             
-            verifyController.onPopped = { [weak self] _ in
-                guard let self = self else { return }
-                self.delegate?.initializeContactsCoordinatorDidCancel(self)
-            }
-            
-            navigationController.pushViewController(verifyController, animated: true)
+            let stepController = StepViewController(viewModel: viewModel)
+            navigationController.pushViewController(stepController, animated: true)
         }
+    }
+    
+    @objc private func continueToContactsIntro() {
+        let viewModel = StepViewModel(
+            image: UIImage(named: "Onboarding2"),
+            title: .onboardingDetermineContactsIntroTitle,
+            message: .onboardingDetermineContactsIntroMessage,
+            actions: [
+                .init(type: .primary, title: .next, target: self, action: #selector(requestPrivacyConsent))
+            ])
+        
+        let stepController = StepViewController(viewModel: viewModel)
+        navigationController.pushViewController(stepController, animated: true)
     }
     
     @objc private func requestPrivacyConsent() {
@@ -64,7 +77,7 @@ final class InitializeContactsCoordinator: Coordinator, Logging {
         let currentStatus = CNContactStore.authorizationStatus(for: .contacts)
         
         switch currentStatus {
-        case .authorized:
+        case .authorized, .denied, .restricted:
             continueToRoommates()
         default:
             requestContactsAuthorization()
@@ -86,34 +99,6 @@ final class InitializeContactsCoordinator: Coordinator, Logging {
         roommatesController.delegate = self
         
         navigationController.pushViewController(roommatesController, animated: true)
-    }
-    
-}
-
-extension InitializeContactsCoordinator: VerifyZipCodeViewControllerDelegate {
-    
-    func verifyZipCodeViewController(_ controller: VerifyZipCodeViewController, didFinishWithActiveZipCode: Bool) {
-        let message: String
-        let buttonText: String
-        
-        if didFinishWithActiveZipCode {
-            message = .onboardingDetermineContactsIntroMessageSupported
-            buttonText = .onboardingDetermineContactsIntroButtonSupported
-        } else {
-            message = .onboardingDetermineContactsIntroMessageUnsupported
-            buttonText = .onboardingDetermineContactsIntroButtonUnsupported
-        }
-        
-        let viewModel = StepViewModel(
-            image: UIImage(named: "Onboarding2"),
-            title: .onboardingDetermineContactsIntroTitle,
-            message: message,
-            actions: [
-                .init(type: .primary, title: buttonText, target: self, action: #selector(requestPrivacyConsent))
-            ])
-        
-        let stepController = StepViewController(viewModel: viewModel)
-        navigationController.pushViewController(stepController, animated: true)
     }
     
 }

@@ -34,10 +34,6 @@ struct FeatureFlags: Codable {
     
     /// Enables the self bco flow, allowing users to gather contacts and determining the contagious period without first pairing with the GGD.
     let enableSelfBCO: Bool
-    
-    static var empty: FeatureFlags {
-        return FeatureFlags(enableContactCalling: false, enablePerspectiveCopy: false, enableSelfBCO: false)
-    }
 }
 
 /// Used for the list of selectable symptoms in [SelectSymptomsViewController](x-source-tag://SelectSymptomsViewController)
@@ -52,13 +48,42 @@ struct Symptom: Codable, Equatable {
     }
 }
 
+/// The guidelines that need to be displayed for contact tasks.
+///
+/// - Tag: Guidelines
+struct Guidelines: Codable {
+    struct Categories: Codable {
+        let category1: String
+        let category2: String
+        let category3: String
+    }
+    
+    struct RangedCategories: Codable {
+        struct Category2: Codable {
+            let withinRange: String
+            let outsideRange: String
+        }
+
+        let category1: String
+        let category2: Category2
+        let category3: String
+    }
+    
+    let introExposureDateKnown: Categories
+    let introExposureDateUnknown: Categories
+    let guidelinesExposureDateKnown: RangedCategories
+    let guidelinesExposureDateUnknown: Categories
+    let referenceNumberItem: String
+    let outro: Categories
+}
+
 struct AppConfiguration: AppVersionInformation, Codable {
     let minimumVersion: String
     let minimumVersionMessage: String?
     let appStoreURL: URL?
     let featureFlags: FeatureFlags
     let symptoms: [Symptom]
-    let supportedZipCodeRanges: [ZipRange]
+    let guidelines: Guidelines
     let fetchDate: Date
     
     enum CodingKeys: String, CodingKey {
@@ -67,7 +92,7 @@ struct AppConfiguration: AppVersionInformation, Codable {
         case appStoreURL = "iosAppStoreURL"
         case featureFlags
         case symptoms
-        case supportedZipCodeRanges
+        case guidelines
         case fetchDate
     }
     
@@ -85,7 +110,7 @@ struct AppConfiguration: AppVersionInformation, Codable {
         
         featureFlags = try container.decode(FeatureFlags.self, forKey: .featureFlags)
         symptoms = try container.decode([Symptom].self, forKey: .symptoms)
-        supportedZipCodeRanges = try container.decode([ZipRange].self, forKey: .supportedZipCodeRanges)
+        guidelines = try container.decode(Guidelines.self, forKey: .guidelines)
         
         fetchDate = (try container.decodeIfPresent(Date.self, forKey: .fetchDate)) ?? Date()
     }
@@ -98,6 +123,7 @@ enum ConfigUpdateResult {
 }
 
 /// Manages fetching the configuration and keeping it up to date.
+/// Accessing the different properties before `hasValidConfiguration` is `true` is invalid.
 ///
 /// # See also:
 /// [AppConfiguration](x-source-tag://AppConfiguration),
@@ -108,6 +134,8 @@ enum ConfigUpdateResult {
 protocol ConfigManaging {
     init()
     
+    var hasValidConfiguration: Bool { get }
+    
     /// The current version as a semantic version string
     var appVersion: String { get }
     
@@ -117,8 +145,8 @@ protocol ConfigManaging {
     /// The most recent fetched [Symptoms](x-source-tag://Symptom)
     var symptoms: [Symptom] { get }
     
-    /// The most recent fetched [ZipRanges](x-source-tag://ZipRange) that are part of GGD regions using GGD Contact.
-    var supportedZipCodeRanges: [ZipRange] { get }
+    /// The most recent fetched [Guidelines](x-source-tag://Guidelines).
+    var guidelines: Guidelines { get }
     
     func update(completion: @escaping (ConfigUpdateResult) -> Void)
 }

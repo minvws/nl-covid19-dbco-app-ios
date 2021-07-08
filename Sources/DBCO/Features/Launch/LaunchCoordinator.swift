@@ -9,7 +9,7 @@ import UIKit
 import IOSSecuritySuite
 import LocalAuthentication
 
-protocol LaunchCoordinatorDelegate: class {
+protocol LaunchCoordinatorDelegate: AnyObject {
     func launchCoordinator(_ coordinator: LaunchCoordinator, needsConfigurationUpdate completion: @escaping () -> Void)
     func launchCoordinatorDidFinish(_ coordinator: LaunchCoordinator)
 }

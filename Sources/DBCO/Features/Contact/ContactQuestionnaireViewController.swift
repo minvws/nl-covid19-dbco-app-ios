@@ -8,7 +8,7 @@
 import UIKit
 import Contacts
 
-protocol ContactQuestionnaireViewControllerDelegate: class {
+protocol ContactQuestionnaireViewControllerDelegate: AnyObject {
     func contactQuestionnaireViewControllerDidCancel(_ controller: ContactQuestionnaireViewController)
     func contactQuestionnaireViewController(_ controller: ContactQuestionnaireViewController, didSave contactTask: Task)
     func contactQuestionnaireViewController(_ controller: ContactQuestionnaireViewController, wantsToOpen url: URL)
@@ -128,14 +128,14 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         sectionView.showBottomSeparator = false
         sectionView.collapse(animated: false)
         
-        let informTitleLabel = UILabel(bodyBold: "").multiline()
+        let informTitleLabel = UILabel(bodyBold: "")
         let informTextView = TextView().linkTouched { [unowned self] in
             delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0)
         }
         let informLinkView = TextView().linkTouched { [unowned self] in
             delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0)
         }
-        let informFooterLabel = UILabel(bodyBold: "").multiline()
+        let informFooterLabel = UILabel(bodyBold: "")
         
         let informButton = Button(title: "", style: .primary)
             .touchUpInside(self, action: #selector(informContact))
@@ -159,6 +159,7 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         viewModel.$informLink.binding = { informLinkView.html($0, textColor: Theme.colors.captionGray) }
         viewModel.$informFooter.binding = { informFooterLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
         viewModel.$copyButtonHidden.binding = { copyButton.isHidden = $0 }
+        viewModel.$copyButtonType.binding = { copyButton.style = $0 }
         viewModel.$informButtonTitle.binding = { informButton.title = $0 }
         viewModel.$informButtonHidden.binding = { informButton.isHidden = $0 }
         viewModel.$informButtonType.binding = { informButton.style = $0 }
@@ -370,6 +371,16 @@ extension ContactQuestionnaireViewController: InputFieldDelegate {
         alert.addAction(UIAlertAction(title: .cancel, style: .cancel, handler: nil))
         
         present(alert, animated: true)
+    }
+    
+    func shouldShowValidationResult(_ result: ValidationResult, for sender: AnyObject) -> Bool {
+        guard viewModel.isDisabled == false else { return false }
+        switch result {
+        case .empty:
+            return !viewModel.didCreateNewTask
+        default:
+            return true
+        }
     }
     
 }

@@ -59,12 +59,16 @@
 		CD4DBE7025F635E10037B144 /* OnsetHelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4DBE6F25F635E10037B144 /* OnsetHelpViewController.swift */; };
 		CD4DBE7425F64C690037B144 /* TimelineHelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4DBE7325F64C690037B144 /* TimelineHelpViewController.swift */; };
 		CD4DBE7C25F65E060037B144 /* ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4DBE7B25F65E060037B144 /* ListItem.swift */; };
+		CD5B7DCF26395A6400FCBBBE /* Array+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5B7DCE26395A6400FCBBBE /* Array+Safe.swift */; };
+		CD5B7DD92639ADCA00FCBBBE /* GuidelinesHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5B7DD82639ADCA00FCBBBE /* GuidelinesHelper.swift */; };
 		CD5DA75E255162EE003660CC /* ConfigManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5DA75D255162EE003660CC /* ConfigManaging.swift */; };
 		CD5DA76425516301003660CC /* ConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5DA76325516301003660CC /* ConfigManager.swift */; };
 		CD5DA76F2551859C003660CC /* AppUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5DA76E2551859C003660CC /* AppUpdateViewController.swift */; };
 		CD65CD812535F77400BB761A /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD65CD802535F77400BB761A /* LoadingViewController.swift */; };
 		CD65CD8525360F5C00BB761A /* UnfinishedTasksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD65CD8425360F5C00BB761A /* UnfinishedTasksViewController.swift */; };
 		CD6860CA253B31190061C318 /* ClassificationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6860C9253B31190061C318 /* ClassificationHelper.swift */; };
+		CD6C6A23263C03DD00187930 /* NSObject+Accesibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6C6A22263C03DD00187930 /* NSObject+Accesibility.swift */; };
+		CD6C6A2D264295FD00187930 /* ClassificationHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6C6A2C264295FD00187930 /* ClassificationHelperTests.swift */; };
 		CD7282BF250F740000D68911 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282BE250F740000D68911 /* AppCoordinator.swift */; };
 		CD7282C3250F9AFE00D68911 /* TaskOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C2250F9AFE00D68911 /* TaskOverviewViewController.swift */; };
 		CD7282C6250F9D2400D68911 /* TaskOverviewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7282C5250F9D2400D68911 /* TaskOverviewCoordinator.swift */; };
@@ -80,8 +84,6 @@
 		CD926AEC25B59AEA0076113C /* ContactListInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD926AEB25B59AEA0076113C /* ContactListInputView.swift */; };
 		CD926AF025B5B92E0076113C /* ContactsExplanationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD926AEF25B5B92E0076113C /* ContactsExplanationViewController.swift */; };
 		CD926AF425B5C3E40076113C /* ContactsTimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD926AF325B5C3E40076113C /* ContactsTimelineViewController.swift */; };
-		CD94E10C2625A6AE0018F7B2 /* VerifyZipCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD94E10B2625A6AE0018F7B2 /* VerifyZipCodeViewController.swift */; };
-		CD94E1132625CBBA0018F7B2 /* ZipRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD94E1122625CBBA0018F7B2 /* ZipRange.swift */; };
 		CD995B60256FDA63007A8B2C /* PrivacyConsentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD995B5F256FDA63007A8B2C /* PrivacyConsentViewController.swift */; };
 		CD9C7F3F2549B2B600A78EEF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CD9C7F412549B2B600A78EEF /* InfoPlist.strings */; };
 		CD9C7F52254AC25300A78EEF /* Task+Informed.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9C7F51254AC25300A78EEF /* Task+Informed.swift */; };
@@ -97,9 +99,14 @@
 		CDA5C11125123DC9009440D1 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C11025123DC9009440D1 /* AppVersion.swift */; };
 		CDA5C11825135A46009440D1 /* SelectContactCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C11725135A46009440D1 /* SelectContactCoordinator.swift */; };
 		CDA5C11C25139D36009440D1 /* UIStackView+Axis.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA5C11B25139D36009440D1 /* UIStackView+Axis.swift */; };
+		CDA7BCCD264A80D60034AC92 /* ContactQuestionnaireViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA7BCCC264A80D50034AC92 /* ContactQuestionnaireViewModelTests.swift */; };
 		CDADF7DE2534773800424492 /* UIToolbar+Done.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDADF7DD2534773800424492 /* UIToolbar+Done.swift */; };
 		CDADF7EE2535B6A500424492 /* UILabel+Styling.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDADF7ED2535B6A500424492 /* UILabel+Styling.swift */; };
 		CDADF7F32535E34400424492 /* UploadCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDADF7F22535E34400424492 /* UploadCoordinator.swift */; };
+		CDB66B98265265D4005B6597 /* PairingManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB66B97265265D4005B6597 /* PairingManaging.swift */; };
+		CDB66B9A26526609005B6597 /* CaseManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB66B9926526609005B6597 /* CaseManaging.swift */; };
+		CDB66B9C26526693005B6597 /* TaskSortingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB66B9B26526693005B6597 /* TaskSortingTests.swift */; };
+		CDB66B9E26527188005B6597 /* GuidelinesHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB66B9D26527188005B6597 /* GuidelinesHelperTests.swift */; };
 		CDC4A8E8250B87E5001BABC6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC4A8E7250B87E5001BABC6 /* AppDelegate.swift */; };
 		CDC4A8EA250B87E5001BABC6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC4A8E9250B87E5001BABC6 /* SceneDelegate.swift */; };
 		CDC4A8F1250B87E6001BABC6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CDC4A8F0250B87E6001BABC6 /* Assets.xcassets */; };
@@ -222,12 +229,16 @@
 		CD4DBE6F25F635E10037B144 /* OnsetHelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnsetHelpViewController.swift; sourceTree = "<group>"; };
 		CD4DBE7325F64C690037B144 /* TimelineHelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineHelpViewController.swift; sourceTree = "<group>"; };
 		CD4DBE7B25F65E060037B144 /* ListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItem.swift; sourceTree = "<group>"; };
+		CD5B7DCE26395A6400FCBBBE /* Array+Safe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Safe.swift"; sourceTree = "<group>"; };
+		CD5B7DD82639ADCA00FCBBBE /* GuidelinesHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidelinesHelper.swift; sourceTree = "<group>"; };
 		CD5DA75D255162EE003660CC /* ConfigManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigManaging.swift; sourceTree = "<group>"; };
 		CD5DA76325516301003660CC /* ConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigManager.swift; sourceTree = "<group>"; };
 		CD5DA76E2551859C003660CC /* AppUpdateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdateViewController.swift; sourceTree = "<group>"; };
 		CD65CD802535F77400BB761A /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		CD65CD8425360F5C00BB761A /* UnfinishedTasksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfinishedTasksViewController.swift; sourceTree = "<group>"; };
 		CD6860C9253B31190061C318 /* ClassificationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassificationHelper.swift; sourceTree = "<group>"; };
+		CD6C6A22263C03DD00187930 /* NSObject+Accesibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Accesibility.swift"; sourceTree = "<group>"; };
+		CD6C6A2C264295FD00187930 /* ClassificationHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassificationHelperTests.swift; sourceTree = "<group>"; };
 		CD7282BE250F740000D68911 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		CD7282C2250F9AFE00D68911 /* TaskOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskOverviewViewController.swift; sourceTree = "<group>"; };
 		CD7282C5250F9D2400D68911 /* TaskOverviewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskOverviewCoordinator.swift; sourceTree = "<group>"; };
@@ -245,8 +256,6 @@
 		CD926AEB25B59AEA0076113C /* ContactListInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListInputView.swift; sourceTree = "<group>"; };
 		CD926AEF25B5B92E0076113C /* ContactsExplanationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsExplanationViewController.swift; sourceTree = "<group>"; };
 		CD926AF325B5C3E40076113C /* ContactsTimelineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsTimelineViewController.swift; sourceTree = "<group>"; };
-		CD94E10B2625A6AE0018F7B2 /* VerifyZipCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyZipCodeViewController.swift; sourceTree = "<group>"; };
-		CD94E1122625CBBA0018F7B2 /* ZipRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipRange.swift; sourceTree = "<group>"; };
 		CD995B5F256FDA63007A8B2C /* PrivacyConsentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyConsentViewController.swift; sourceTree = "<group>"; };
 		CD9C7F442549B2B900A78EEF /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CD9C7F51254AC25300A78EEF /* Task+Informed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Informed.swift"; sourceTree = "<group>"; };
@@ -262,9 +271,14 @@
 		CDA5C11025123DC9009440D1 /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		CDA5C11725135A46009440D1 /* SelectContactCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectContactCoordinator.swift; sourceTree = "<group>"; };
 		CDA5C11B25139D36009440D1 /* UIStackView+Axis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Axis.swift"; sourceTree = "<group>"; };
+		CDA7BCCC264A80D50034AC92 /* ContactQuestionnaireViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactQuestionnaireViewModelTests.swift; sourceTree = "<group>"; };
 		CDADF7DD2534773800424492 /* UIToolbar+Done.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIToolbar+Done.swift"; sourceTree = "<group>"; };
 		CDADF7ED2535B6A500424492 /* UILabel+Styling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Styling.swift"; sourceTree = "<group>"; };
 		CDADF7F22535E34400424492 /* UploadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadCoordinator.swift; sourceTree = "<group>"; };
+		CDB66B97265265D4005B6597 /* PairingManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingManaging.swift; sourceTree = "<group>"; };
+		CDB66B9926526609005B6597 /* CaseManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseManaging.swift; sourceTree = "<group>"; };
+		CDB66B9B26526693005B6597 /* TaskSortingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskSortingTests.swift; sourceTree = "<group>"; };
+		CDB66B9D26527188005B6597 /* GuidelinesHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidelinesHelperTests.swift; sourceTree = "<group>"; };
 		CDC4A8E4250B87E5001BABC6 /* GGD Contact.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GGD Contact.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDC4A8E7250B87E5001BABC6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CDC4A8E9250B87E5001BABC6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -372,7 +386,6 @@
 				CD10F08025AF0886000295B9 /* InitializeContactsCoordinator.swift */,
 				CD10F09725B08B02000295B9 /* SelectRoommatesViewController.swift */,
 				CD4DBE7325F64C690037B144 /* TimelineHelpViewController.swift */,
-				CD94E10B2625A6AE0018F7B2 /* VerifyZipCodeViewController.swift */,
 			);
 			path = InitializeContacts;
 			sourceTree = "<group>";
@@ -431,6 +444,7 @@
 				CD2F7CB0255949F300F2F73A /* ContactSuggestionHelper.swift */,
 				CD2F7CAA255943E400F2F73A /* ISO8601DateFormat.swift */,
 				CDA07ECB256C0FD900DEF3FF /* Validator.swift */,
+				CD5B7DD82639ADCA00FCBBBE /* GuidelinesHelper.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -450,8 +464,9 @@
 			isa = PBXGroup;
 			children = (
 				CD4036AC255EC1ED0037BCF1 /* Models */,
-				CD4036A0255D42F70037BCF1 /* PairingManager.swift */,
 				CD4036A6255D4F2D0037BCF1 /* Sealed.swift */,
+				CDB66B97265265D4005B6597 /* PairingManaging.swift */,
+				CD4036A0255D42F70037BCF1 /* PairingManager.swift */,
 			);
 			path = PairingManager;
 			sourceTree = "<group>";
@@ -505,7 +520,6 @@
 		CD5DA75C255162D8003660CC /* ConfigManager */ = {
 			isa = PBXGroup;
 			children = (
-				CD94E1112625CBAF0018F7B2 /* Models */,
 				CD5DA75D255162EE003660CC /* ConfigManaging.swift */,
 				CD5DA76325516301003660CC /* ConfigManager.swift */,
 			);
@@ -558,8 +572,12 @@
 		CD756C33252B3D36005FEDA0 /* DBCOTests */ = {
 			isa = PBXGroup;
 			children = (
-				CD2F7CB425594BDA00F2F73A /* ContactSuggestionTests.swift */,
+				CD6C6A2C264295FD00187930 /* ClassificationHelperTests.swift */,
 				CD010B97257A409B00CEA4F5 /* ContactQuestionnaireCommunicationTests.swift */,
+				CDA7BCCC264A80D50034AC92 /* ContactQuestionnaireViewModelTests.swift */,
+				CD2F7CB425594BDA00F2F73A /* ContactSuggestionTests.swift */,
+				CDB66B9D26527188005B6597 /* GuidelinesHelperTests.swift */,
+				CDB66B9B26526693005B6597 /* TaskSortingTests.swift */,
 				CD756C36252B3D37005FEDA0 /* Info.plist */,
 			);
 			path = DBCOTests;
@@ -577,20 +595,13 @@
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
-		CD94E1112625CBAF0018F7B2 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				CD94E1122625CBBA0018F7B2 /* ZipRange.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
 		CDA0F67625398C8B009FD2A9 /* CaseManager */ = {
 			isa = PBXGroup;
 			children = (
 				CD3DA93E255554C000F738EE /* Models */,
 				CDA0F67F2539AA2A009FD2A9 /* Extensions */,
 				CDC7C8A125387E4400FE7E05 /* CaseManager.swift */,
+				CDB66B9926526609005B6597 /* CaseManaging.swift */,
 			);
 			path = CaseManager;
 			sourceTree = "<group>";
@@ -767,6 +778,8 @@
 				CD3EFC5A25C40F6100EB2087 /* UIImageView+Convenience.swift */,
 				CDADF7ED2535B6A500424492 /* UILabel+Styling.swift */,
 				CDE7C71926147E3E00941386 /* Date+Convenience.swift */,
+				CD5B7DCE26395A6400FCBBBE /* Array+Safe.swift */,
+				CD6C6A22263C03DD00187930 /* NSObject+Accesibility.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1009,8 +1022,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDB66B9E26527188005B6597 /* GuidelinesHelperTests.swift in Sources */,
 				CD010B98257A409B00CEA4F5 /* ContactQuestionnaireCommunicationTests.swift in Sources */,
+				CDA7BCCD264A80D60034AC92 /* ContactQuestionnaireViewModelTests.swift in Sources */,
 				CD2F7CB525594BDA00F2F73A /* ContactSuggestionTests.swift in Sources */,
+				CDB66B9C26526693005B6597 /* TaskSortingTests.swift in Sources */,
+				CD6C6A2D264295FD00187930 /* ClassificationHelperTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1029,7 +1046,6 @@
 				CD10F08625AF2E52000295B9 /* DetermineContagiousPeriodCoordinator.swift in Sources */,
 				CD35F65826020EB800D29DDF /* UIView+Assign.swift in Sources */,
 				CDDC05642543120D0079C2F4 /* Coordinator.swift in Sources */,
-				CD94E10C2625A6AE0018F7B2 /* VerifyZipCodeViewController.swift in Sources */,
 				CD29634C2518CE8E008443AF /* TableViewManager.swift in Sources */,
 				CDC7C87E2538487B00FE7E05 /* HTTPMethod.swift in Sources */,
 				CD35F662260389E200D29DDF /* String+Capitalize.swift in Sources */,
@@ -1056,6 +1072,7 @@
 				CD7282C6250F9D2400D68911 /* TaskOverviewCoordinator.swift in Sources */,
 				CDC7C8A225387E4400FE7E05 /* CaseManager.swift in Sources */,
 				CDA0F6852539AA66009FD2A9 /* Task+ContactName.swift in Sources */,
+				CD5B7DD92639ADCA00FCBBBE /* GuidelinesHelper.swift in Sources */,
 				CDE25F8F254C21B900E9AE49 /* String+SHA256.swift in Sources */,
 				CDE7C6F32611DA8A00941386 /* UILabel+Convenience.swift in Sources */,
 				CDC7C8872538498700FE7E05 /* JSONDecoder+Decoding.swift in Sources */,
@@ -1079,6 +1096,7 @@
 				CDE25F65254B316F00E9AE49 /* NetworkManaging.swift in Sources */,
 				CD756C70252DC629005FEDA0 /* SeparatorView.swift in Sources */,
 				CDC6726A2566824300222DCC /* Codable+UserInfo.swift in Sources */,
+				CD5B7DCF26395A6400FCBBBE /* Array+Safe.swift in Sources */,
 				CD10F09825B08B03000295B9 /* SelectRoommatesViewController.swift in Sources */,
 				CD5DA76F2551859C003660CC /* AppUpdateViewController.swift in Sources */,
 				CD9C7F52254AC25300A78EEF /* Task+Informed.swift in Sources */,
@@ -1088,9 +1106,9 @@
 				CDE30E8725232FE200862A40 /* InputFieldEditable.swift in Sources */,
 				CD4036A7255D4F2D0037BCF1 /* Sealed.swift in Sources */,
 				CDA5C11825135A46009440D1 /* SelectContactCoordinator.swift in Sources */,
+				CD6C6A23263C03DD00187930 /* NSObject+Accesibility.swift in Sources */,
 				CD49BAEB2525CE7C0079D018 /* PromptableViewController.swift in Sources */,
 				CDFCF90C2510C47E0062269A /* Localization.swift in Sources */,
-				CD94E1132625CBBA0018F7B2 /* ZipRange.swift in Sources */,
 				CDC4A8EA250B87E5001BABC6 /* SceneDelegate.swift in Sources */,
 				2859E72A25DE693F00359BA1 /* UIAccessibility+Management.swift in Sources */,
 				CD4DBE7C25F65E060037B144 /* ListItem.swift in Sources */,
@@ -1106,7 +1124,9 @@
 				CDC7C89425385AD600FE7E05 /* Task.swift in Sources */,
 				CDC7C88C2538507100FE7E05 /* Logging.swift in Sources */,
 				CD995B60256FDA63007A8B2C /* PrivacyConsentViewController.swift in Sources */,
+				CDB66B9A26526609005B6597 /* CaseManaging.swift in Sources */,
 				CD24CBF825C0305100A2F634 /* ScrollViewNavivationbarAdjusting.swift in Sources */,
+				CDB66B98265265D4005B6597 /* PairingManaging.swift in Sources */,
 				CD47A4042549766C005B8801 /* SectionedScrollView.swift in Sources */,
 				CD10F08C25AF30A7000295B9 /* SelectSymptomsViewController.swift in Sources */,
 				CDA0F6892539AAB8009FD2A9 /* Answer+Progress.swift in Sources */,
@@ -1253,7 +1273,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 144;
+				CURRENT_PROJECT_VERSION = 178;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1380,7 +1400,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 144;
+				CURRENT_PROJECT_VERSION = 178;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1486,7 +1506,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 144;
+				CURRENT_PROJECT_VERSION = 178;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1597,7 +1617,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 144;
+				CURRENT_PROJECT_VERSION = 178;
 				DEVELOPMENT_TEAM = 5598UZ23ZV;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1684,7 +1704,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 144;
+				CURRENT_PROJECT_VERSION = 178;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1790,7 +1810,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 144;
+				CURRENT_PROJECT_VERSION = 178;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

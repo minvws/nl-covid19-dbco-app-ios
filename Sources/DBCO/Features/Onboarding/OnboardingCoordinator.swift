@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol OnboardingCoordinatorDelegate: class {
+protocol OnboardingCoordinatorDelegate: AnyObject {
     func onboardingCoordinatorDidFinish(_ coordinator: OnboardingCoordinator)
 }
 
@@ -16,7 +16,6 @@ protocol OnboardingCoordinatorDelegate: class {
 final class OnboardingCoordinator: Coordinator {
     private let window: UIWindow
     private lazy var navigationController: NavigationController = setupNavigationController()
-    private var didPair: Bool = false
     
     weak var delegate: OnboardingCoordinatorDelegate?
     
@@ -38,7 +37,7 @@ final class OnboardingCoordinator: Coordinator {
     
     private func createFirstViewController() -> UIViewController {
         let viewModel = StepViewModel(
-            image: UIImage(named: "Onboarding1"),
+            image: UIImage(named: "Onboarding0"),
             title: .onboardingStartTitle,
             message: .onboardingStartMessage,
             actions: [
@@ -70,7 +69,7 @@ extension OnboardingCoordinator {
     
     @objc private func continueToDetermineFlow() {
         let viewModel = StepViewModel(
-            image: UIImage(named: "Onboarding1"),
+            image: UIImage(named: "Onboarding5"),
             title: .onboardingDetermineFlowTitle,
             message: .onboardingDetermineFlowMessage,
             actions: [

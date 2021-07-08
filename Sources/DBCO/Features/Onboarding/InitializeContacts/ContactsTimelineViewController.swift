@@ -8,7 +8,7 @@
 import UIKit
 import Contacts
 
-protocol ContactsTimelineViewControllerDelegate: class {
+protocol ContactsTimelineViewControllerDelegate: AnyObject {
     func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [Onboarding.Contact], dateOfSymptomOnset: Date)
     func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didFinishWith contacts: [Onboarding.Contact], testDate: Date)
     func contactsTimelineViewController(_ controller: ContactsTimelineViewController, didCancelWith contacts: [Onboarding.Contact])
@@ -42,6 +42,7 @@ class ContactsTimelineViewModel {
         let formatter = DateFormatter()
         formatter.calendar = .current
         formatter.timeZone = .current
+        formatter.locale = .display
         formatter.dateFormat = .contactsTimelineDateFormat
         
         return formatter
@@ -51,6 +52,7 @@ class ContactsTimelineViewModel {
         let formatter = DateFormatter()
         formatter.calendar = .current
         formatter.timeZone = .current
+        formatter.locale = .display
         formatter.dateFormat = .contactsTimelineShortDateFormat
         
         return formatter
@@ -170,20 +172,16 @@ class ContactsTimelineViewModel {
         let dates = sections
             .compactMap { section -> String? in
                 if case .day(let date, _, _) = section {
-                    return dateFormatter.string(from: date)
+                    return dateFormatter
+                        .string(from: date)
+                        .capitalizingFirstLetter()
                 } else {
                     return nil
                 }
             }
             .reversed()
         
-        let combinedDates: String
-        
-        if dates.count > 2 {
-            combinedDates = dates.dropLast().joined(separator: .contactsTimelineEmptyDaysSeparator) + .contactsTimelineEmptyDaysFinalSeparator + dates.last!
-        } else {
-            combinedDates = dates.joined(separator: .contactsTimelineEmptyDaysFinalSeparator)
-        }
+        let combinedDates = dates.joined(separator: "\n")
         
         return .contactsTimelineEmptyDaysMessage(days: combinedDates)
     }
@@ -267,13 +265,13 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
         addExtraDayButton.imageEdgeInsets = .right(5)
         
         addExtraDaySectionView = VStack(spacing: 24,
-                                        addExtraDayTitleLabel.multiline(),
+                                        addExtraDayTitleLabel,
                                         addExtraDayButton)
 
         let stack =
             VStack(spacing: 40,
                    VStack(spacing: 16,
-                          titleLabel.multiline(),
+                          titleLabel,
                           TextView(htmlText: .contactsTimelineMessage, font: Theme.fonts.body, textColor: Theme.colors.captionGray, boldTextColor: Theme.colors.primary)
                             .linkTouched { [weak self] _ in self?.openHelp() }),
                    sectionStackView,
@@ -435,30 +433,7 @@ extension ContactsTimelineViewController: UIScrollViewDelegate {
 extension ContactsTimelineViewController: ContactListInputViewDelegate {
     
     func contactListInputView(_ view: ContactListInputView, didBeginEditingIn textField: UITextField) {
-        func scrollVisible() {
-            let convertedBounds = scrollView.convert(textField.bounds, from: textField)
-            let extraMargin = UIEdgeInsets(top: 32, left: 0, bottom: 100, right: 0)
-            let visibleHeight =
-                scrollView.bounds.height -
-                scrollView.safeAreaInsets.top -
-                scrollView.safeAreaInsets.bottom -
-                scrollView.contentInset.bottom
-        
-            let minOffset = convertedBounds.minY - (scrollView.safeAreaInsets.top + extraMargin.top)
-            let maxOffset = minOffset - visibleHeight + convertedBounds.height + extraMargin.bottom
-            let currentOffset = scrollView.contentOffset.y
-            
-            if traitCollection.verticalSizeClass == .compact {
-                scrollView.setContentOffset(CGPoint(x: 0, y: minOffset), animated: true)
-            } else if currentOffset > minOffset {
-                scrollView.setContentOffset(CGPoint(x: 0, y: minOffset), animated: true)
-            } else if currentOffset < maxOffset {
-                scrollView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
-            }
-        }
-        
-        // Next runcycle so keyboard size is properly incorporated
-        DispatchQueue.main.async(execute: scrollVisible)
+        view.scrollTextFieldToVisible(textField, in: scrollView)
     }
     
     func contactListInputView(_ view: ContactListInputView, didEndEditingIn textField: UITextField) {}
@@ -515,7 +490,7 @@ private class TimelineSectionView: UIView {
         
         return HStack(spacing: 12,
                       icon,
-                      UILabel(body: text, textColor: Theme.colors.tipItemColor).multiline())
+                      UILabel(body: text, textColor: Theme.colors.tipItemColor))
     }
 }
 
@@ -533,8 +508,8 @@ private class DaySectionView: TimelineSectionView {
         
         VStack(spacing: 8,
                VStack(spacing: 4,
-                      titleLabel.multiline(),
-                      subtitleLabel.multiline().hideIfEmpty()),
+                      titleLabel.asHeader(),
+                      subtitleLabel.hideIfEmpty()),
                contactList)
             .embed(in: self)
     }
@@ -569,7 +544,7 @@ private class ReviewTipsSectionView: TimelineSectionView {
         VStack(spacing: 16,
                VStack(spacing: 6,
                       createTipHeaderLabel(),
-                      UILabel(bodyBold: .contactsTimelineReviewTipTitle).multiline()),
+                      UILabel(bodyBold: .contactsTimelineReviewTipTitle)),
                HStack(spacing: 24,
                       VStack(spacing: 16,
                              createTipItem(icon: "Photos", text: .contactsTimelineReviewTipPhotos),
@@ -595,7 +570,7 @@ private class ActivityTipsSectionView: TimelineSectionView {
         VStack(spacing: 16,
                VStack(spacing: 6,
                       createTipHeaderLabel(),
-                      UILabel(bodyBold: .contactsTimelineActivityTipTitle).multiline()),
+                      UILabel(bodyBold: .contactsTimelineActivityTipTitle)),
                VStack(spacing: 16,
                       createTipItem(icon: "Car", text: .contactsTimelineActivityTipCar),
                       createTipItem(icon: "Meetings", text: .contactsTimelineActivityTipMeetings),

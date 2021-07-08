@@ -13,12 +13,14 @@ class StepViewModel {
     let title: String
     let message: String?
     let actions: [StepViewController.Action]
+    let hidesNavigationWhenFirst: Bool
     
-    init(image: UIImage?, title: String, message: String?, actions: [StepViewController.Action]) {
+    init(image: UIImage?, title: String, message: String?, actions: [StepViewController.Action], hidesNavigationWhenFirst: Bool = true) {
         self.image = image
         self.title = title
         self.message = message
         self.actions = actions
+        self.hidesNavigationWhenFirst = hidesNavigationWhenFirst
     }
 }
 
@@ -81,21 +83,35 @@ class StepViewController: ViewController, ScrollViewNavivationbarAdjusting {
         setupStackView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if viewModel.hidesNavigationWhenFirst, navigationController?.viewControllers.count == 1 {
+            navigationController?.setNavigationBarHidden(true, animated: animated)
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
     private func createImage() -> UIView {
         let imageView = UIImageView(image: viewModel.image)
         imageView.contentMode = .scaleAspectFit
         imageView.setContentHuggingPriority(.required, for: .vertical)
         imageView.setContentCompressionResistancePriority(UILayoutPriority(100), for: .vertical)
-        imageView.heightAnchor.constraint(greaterThanOrEqualToConstant: 80).isActive = true
+        imageView.heightAnchor.constraint(greaterThanOrEqualToConstant: 160).isActive = true
+        imageView.isHidden = viewModel.image == nil
         
         return imageView
     }
     
     private func createLabels() -> UIView {
         return VStack(spacing: 16,
-                      UILabel(title2: viewModel.title).multiline(),
+                      UILabel(title2: viewModel.title),
                       UILabel(body: viewModel.message, textColor: Theme.colors.captionGray)
-                          .multiline()
                           .hideIfEmpty())
     }
     
@@ -113,7 +129,8 @@ class StepViewController: ViewController, ScrollViewNavivationbarAdjusting {
     }
     
     private func setupStackView() {
-        let margin: UIEdgeInsets = .top(32) + .bottom(16)
+        let isSmallScreen = UIScreen.main.bounds.height < 600
+        let margin: UIEdgeInsets = .top(isSmallScreen ? 16 : 32) + .bottom(16)
         let stack =
             VStack(spacing: 32,
                    createImage(),

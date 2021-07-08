@@ -11,6 +11,11 @@ extension Task {
     /// Searches for a .contactDetails answer in the results and returns the firstName and lastName combined.
     /// Falls back to the value of `label` if no answer could be found
     var contactName: String? {
+        contactNameAnswer ?? label
+    }
+    
+    /// Searches for a .contactDetails answer in the results and returns the firstName and lastName combined. Without a fallback.
+    var contactNameAnswer: String? {
         questionnaireResult?.answers
             .compactMap {
                 switch $0.value {
@@ -24,7 +29,7 @@ extension Task {
                     return nil
                 }
             }
-            .first ?? label
+            .first
     }
     
     /// Searches for a .contactDetails answer in the results and returns the firstName.

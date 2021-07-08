@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol ContactsAuthorizationViewControllerDelegate: class {
+protocol ContactsAuthorizationViewControllerDelegate: AnyObject {
     func contactsAuthorizationViewControllerDidSelectAllow(_ controller: ContactsAuthorizationViewController)
     func contactsAuthorizationViewControllerDidSelectManual(_ controller: ContactsAuthorizationViewController)
 }
@@ -46,13 +46,13 @@ class ContactsAuthorizationViewModel {
     }
 }
 
-class ContactsAuthorizationViewController: PromptableViewController, ScrollViewNavivationbarAdjusting {
+class ContactsAuthorizationViewController: ViewController, ScrollViewNavivationbarAdjusting {
     private let viewModel: ContactsAuthorizationViewModel
     private let scrollView = UIScrollView(frame: .zero)
     
     weak var delegate: ContactsAuthorizationViewControllerDelegate?
     
-    let shortTitle: String = .onboardingConsentShortTitle
+    let shortTitle: String = ""
     
     init(viewModel: ContactsAuthorizationViewModel) {
         self.viewModel = viewModel
@@ -74,47 +74,32 @@ class ContactsAuthorizationViewController: PromptableViewController, ScrollViewN
         
         view.backgroundColor = .white
         
-        scrollView.embed(in: contentView)
+        scrollView.embed(in: view)
         scrollView.delegate = self
         scrollView.delaysContentTouches = false
         
         let widthProviderView = UIView()
         widthProviderView.snap(to: .top, of: scrollView, height: 0)
-        widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
+        widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
-        let margin: UIEdgeInsets = .top(viewModel.topMargin) + .bottom(18)
+        let margin: UIEdgeInsets = .top(viewModel.topMargin) + .bottom(16)
         
         let stack =
             VStack(spacing: 24,
-                   VStack(spacing: 24,
-                       VStack(spacing: 16,
-                              UILabel(title2: viewModel.title).multiline(),
-                              UILabel(body: .selectContactAuthorizationMessage, textColor: Theme.colors.captionGray).multiline()),
-                       VStack(spacing: 16,
-                              listItem(.selectContactAuthorizationItem1),
-                              listItem(.selectContactAuthorizationItem2),
-                              listItem(.selectContactAuthorizationItem3))),
-                   UIView())
+                   VStack(spacing: 16,
+                          UILabel(title2: viewModel.title),
+                          UILabel(body: .selectContactAuthorizationMessage, textColor: Theme.colors.captionGray)),
+                   VStack(spacing: 16,
+                          Button(title: viewModel.manualButtonTitle, style: .secondary)
+                            .touchUpInside(self, action: #selector(manual)),
+                          Button(title: viewModel.allowButtonTitle, style: .primary)
+                            .touchUpInside(self, action: #selector(allow))))
                 .distribution(.equalSpacing)
                 .embed(in: scrollView.readableWidth, insets: margin)
         
-        stack.heightAnchor.constraint(greaterThanOrEqualTo: contentView.safeAreaLayoutGuide.heightAnchor,
+        stack.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.safeAreaLayoutGuide.heightAnchor,
                                       multiplier: 1,
                                       constant: -(margin.top + margin.bottom)).isActive = true
-        
-        promptView = VStack(spacing: 16,
-                            Button(title: viewModel.manualButtonTitle, style: .secondary)
-                                .touchUpInside(self, action: #selector(manual)),
-                            Button(title: viewModel.allowButtonTitle, style: .primary)
-                                .touchUpInside(self, action: #selector(allow)))
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        let scrollingHeight = scrollView.contentSize.height + scrollView.safeAreaInsets.top + scrollView.safeAreaInsets.bottom
-        let canScroll = scrollingHeight > scrollView.frame.height
-        showPromptViewSeparator = canScroll
     }
     
     @objc private func allow() {

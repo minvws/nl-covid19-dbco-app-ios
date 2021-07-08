@@ -3,7 +3,9 @@ name: test
 on:
   pull_request:
     branches:
-      - main
+      - 'main'
+      - 'develop'
+      - 'release/**'
 
 jobs:
   swiftlint:

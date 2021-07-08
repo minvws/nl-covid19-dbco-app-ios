@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol TimelineHelpViewControllerDelegate: class {
+protocol TimelineHelpViewControllerDelegate: AnyObject {
     func timelineHelpViewControllerDidSelectClose(_ controller: TimelineHelpViewController)
 }
 
@@ -48,8 +48,7 @@ class TimelineHelpViewController: ViewController {
         
         VStack(spacing: 16,
                UILabel(body: .contactsTimelineHelpMessage,
-                       textColor: Theme.colors.captionGray)
-                .multiline(),
+                       textColor: Theme.colors.captionGray),
                listItem(.contactsTimelineHelpItem1),
                listItem(.contactsTimelineHelpItem2),
                listItem(.contactsTimelineHelpItem3))

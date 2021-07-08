@@ -50,7 +50,7 @@ struct BirthDate: ContactValue {
         formatter.dateStyle = .long
         formatter.timeStyle = .none
         formatter.calendar = Calendar.current
-        formatter.locale = Locale.current
+        formatter.locale = .display
         
         return formatter
     }()
@@ -97,7 +97,7 @@ struct GeneralDate: ContactValue {
         formatter.dateStyle = .long
         formatter.timeStyle = .none
         formatter.calendar = Calendar.current
-        formatter.locale = Locale.current
+        formatter.locale = .display
         formatter.timeZone = TimeZone.current
         
         return formatter
@@ -108,7 +108,7 @@ struct GeneralDate: ContactValue {
         formatter.dateStyle = .long
         formatter.timeStyle = .none
         formatter.calendar = Calendar.current
-        formatter.locale = Locale.current
+        formatter.locale = .display
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         
         return formatter
