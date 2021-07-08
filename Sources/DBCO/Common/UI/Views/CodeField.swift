@@ -65,6 +65,7 @@ class CodeField: UITextField {
         autocorrectionType = .no
         
         delegate = self
+        attributedPlaceholder = NSAttributedString(string: fullPlaceholder, attributes: [.foregroundColor: UIColor.clear])
         
         updateKerning()
     }
@@ -135,29 +136,41 @@ class CodeField: UITextField {
 
 extension CodeField: UITextFieldDelegate {
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        guard !isIgnoringInput else { return false }
-        
-        let maxLength = codeDescription.digitGroupSize * codeDescription.numberOfGroups
-
-        let text = (self.text ?? "") as NSString
-        
+    private var maxLength: Int {
+        return codeDescription.digitGroupSize * codeDescription.numberOfGroups
+    }
+    
+    private func trim(_ text: String) -> String {
         let allowedCharacters = CharacterSet(charactersIn: "0123456789")
         
-        let trimmedCode = text
-            .replacingCharacters(in: range, with: string)
+        let trimmed = text
             .components(separatedBy: allowedCharacters.inverted)
             .joined()
             .prefix(maxLength)
         
-        var codeWithSeparators = String()
-        String(trimmedCode).enumerated().forEach { index, character in
+        return String(trimmed)
+    }
+    
+    private func addSeparators(to text: String) -> String {
+        var separated = String()
+        
+        text.enumerated().forEach { index, character in
             if index % codeDescription.digitGroupSize == 0, index > 0 {
-                codeWithSeparators.append("-")
+                separated.append("-")
             }
-            codeWithSeparators.append(character)
+            separated.append(character)
         }
         
+        return separated
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard !isIgnoringInput else { return false }
+
+        let text = (self.text ?? "") as NSString
+        let trimmedCode = trim(text.replacingCharacters(in: range, with: string))
+        
+        let codeWithSeparators = addSeparators(to: trimmedCode)
         self.text = codeWithSeparators
         
         if #available(iOS 13.0, *) {
@@ -170,7 +183,7 @@ extension CodeField: UITextFieldDelegate {
         updatePlaceholder(textLength: codeWithSeparators.count)
         
         if trimmedCode.count == maxLength {
-            code = String(trimmedCode)
+            code = trimmedCode
             resignFirstResponder() // Hide keyboard to show submit button
         } else {
             code = nil

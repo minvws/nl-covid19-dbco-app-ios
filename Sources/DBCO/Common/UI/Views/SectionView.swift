@@ -82,7 +82,19 @@ class SectionView: UIView {
         let outerStack = VStack(headerContainerView, contentContainerView)
             .embed(in: self)
         
-        // Header
+        outerStack.bringSubviewToFront(headerContainerView)
+        
+        self.title = title
+        self.caption = caption
+        
+        setupHeaderView()
+        setupContentView()
+        
+        // Set default state to expanded
+        expand(animated: false)
+    }
+    
+    private func setupHeaderView() {
         headerContainerView.isAccessibilityElement = true
         headerContainerView.shouldGroupAccessibilityChildren = true
         headerContainerView.accessibilityTraits = [.header, .button]
@@ -97,13 +109,8 @@ class SectionView: UIView {
         // This helps obscure the content when animating from a scrolled state.
         headerBackgroundView.embed(in: headerContainerView, insets: .top(-100))
         
-        outerStack.bringSubviewToFront(headerContainerView) // header should overlay content
-
         icon.image = UIImage(named: "EditContact/Section\(index)")
         icon.highlightedImage = UIImage(named: "EditContact/SectionCompleted")
-        
-        titleLabel.text = title
-        captionLabel.text = caption
         
         HStack(spacing: 16, icon, VStack(spacing: 2, titleLabel, captionLabel), collapseIndicator)
             .distribution(.fill)
@@ -112,8 +119,9 @@ class SectionView: UIView {
         
         SeparatorView()
             .snap(to: .bottom, of: headerContainerView.readableIdentation)
-        
-        // Content
+    }
+    
+    private func setupContentView() {
         contentContainerView.clipsToBounds = true
         contentView
             .snap(to: .bottom, of: contentContainerView, insets: .bottom(24))
@@ -125,9 +133,6 @@ class SectionView: UIView {
         let contentTopConstraint = contentView.topAnchor.constraint(equalTo: contentContainerView.topAnchor, constant: 24)
         contentTopConstraint.priority = UILayoutPriority(rawValue: 100)
         contentTopConstraint.isActive = true
-        
-        // Set default state to expanded
-        expand(animated: false)
     }
 
     @objc private func handleToggleButton() {

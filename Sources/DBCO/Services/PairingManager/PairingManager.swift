@@ -8,59 +8,6 @@
 import Foundation
 import Sodium
 
-enum PairingManagingError: Error {
-    case alreadyPaired
-    case notPaired
-    case encryptionError
-    case couldNotPair(NetworkError)
-    case pairingCodeExpired
-    case pairingCancelled
-}
-
-protocol PairingManagerListener: AnyObject {
-    func pairingManagerDidStartPollingForPairing(_ pairingManager: PairingManaging)
-    func pairingManager(_ pairingManager: PairingManaging, didFailWith error: PairingManagingError)
-    func pairingManagerDidCancelPollingForPairing(_ pairingManager: PairingManaging)
-    func pairingManager(_ pairingManager: PairingManaging, didReceiveReversePairingCode code: String)
-    func pairingManagerDidFinishPairing(_ pairingManager: PairingManaging)
-}
-
-/// Handles pairing (exchanging keys via libSodium) with the api.
-///
-/// # See also
-/// [Sealed](x-source-tag://Sealed): Used for encrypting and decrypting data after pairing
-///
-/// - Tag: PairingManaging
-protocol PairingManaging {
-    init()
-    
-    var isPaired: Bool { get }
-    var isPollingForPairing: Bool { get }
-    
-    /// Returns the token used to construct the URL for sending and fetching case data
-    /// Throws an `notPaired` error when called befored paired.
-    func caseToken() throws -> String
-    
-    func pair(pairingCode: String, completion: @escaping (_ success: Bool, _ error: PairingManagingError?) -> Void)
-    
-    /// Clears all stored data. Using any method or property except for `isPaired` on PairingManager before pairing again is an invalid operation.
-    func unpair()
-    
-    func startPollingForPairing()
-    func stopPollingForPairing()
-    
-    var canResumePolling: Bool { get }
-    var lastPairingCode: String? { get }
-    var lastPollingError: PairingManagingError? { get }
-    
-    /// Adds a listener
-    /// - parameter listener: The object conforming to [PairingManagerListener](x-source-tag://PairingManagerListener) that will receive updates. Will be stored with a weak reference
-    func addListener(_ listener: PairingManagerListener)
-    
-    func seal<T: Encodable>(_ value: T) throws -> (ciperText: String, nonce: String)
-    func open<T: Decodable>(cipherText: String, nonce: String) throws -> T
-}
-
 /// # See
 /// [PairingManaging](x-source-tag://PairingManaging)
 /// - Tag: PairingManager
@@ -77,7 +24,9 @@ class PairingManager: PairingManaging, Logging {
     
     private var listeners = [ListenerWrapper]()
     
-    private let sodium = Sodium()
+    private let sodium: Sodium
+    private let sealing: Sealing
+    private let networkManager: NetworkManaging
     
     struct Pairing: Codable {
         var publicKey: Bytes
@@ -97,7 +46,11 @@ class PairingManager: PairingManaging, Logging {
     private var pairing: Pairing = .empty
     // swiftlint:disable:previous let_var_whitespace
     
-    required init() {
+    required init(networkManager: NetworkManaging) {
+        self.networkManager = networkManager
+        self.sodium = Sodium()
+        self.sealing = Sealing(sodium: self.sodium)
+        
         _ = NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
             self?.resumePollingIfNeeded()
         }
@@ -119,9 +72,6 @@ class PairingManager: PairingManaging, Logging {
         guard $pairing.exists else { throw PairingManagingError.notPaired }
         
         let concatenated = pairing.rx + pairing.tx
-        
-        $pairing.clearCache()
-        
         let hash = sodium.genericHash.hash(message: concatenated)!
         
         return hash.map { String(format: "%02x", $0) }.joined()
@@ -130,7 +80,7 @@ class PairingManager: PairingManaging, Logging {
     func pair(pairingCode: String, completion: @escaping (_ success: Bool, _ error: PairingManagingError?) -> Void) {
         guard !$pairing.exists else { return completion(false, .alreadyPaired) }
         
-        let haPublicKeyInformation = Services.networkManager.configuration.haPublicKey
+        let haPublicKeyInformation = networkManager.configuration.haPublicKey
         
         guard let haPublicKeyData = Data(base64Encoded: haPublicKeyInformation.encodedPublicKey) else {
             fatalError("Invalid stored health authority public key")
@@ -148,7 +98,7 @@ class PairingManager: PairingManaging, Logging {
             return completion(false, PairingManagingError.encryptionError)
         }
         
-        Services.networkManager.pair(code: pairingCode, sealedClientPublicKey: Data(sealedClientPublicKey)) {
+        networkManager.pair(code: pairingCode, sealedClientPublicKey: Data(sealedClientPublicKey)) {
             switch $0 {
             case .success(let pairingResponse):
                 let (succes, error) = self.handlePairResponse(pairingResponse, clientKeyPair: clientKeyPair)
@@ -232,73 +182,14 @@ class PairingManager: PairingManaging, Logging {
     func seal<T: Encodable>(_ value: T) throws -> (ciperText: String, nonce: String) {
         guard isPaired else { throw PairingManagingError.notPaired }
         
-        logDebug("Sealing \(value)")
-        let encodedValue = try jsonEncoder.encode(value)
-        logDebug("Resulting JSON: \(String(data: encodedValue, encoding: .utf8) ?? "")")
-        guard let (cipherText, nonce) = sodium.secretBox.seal(message: Bytes(encodedValue), secretKey: pairing.tx) else {
-            logError("Could not seal \(value)")
-            throw PairingManagingError.encryptionError
-        }
-        
-        let encodedCipherText = Data(cipherText).base64EncodedString()
-        let encodedNonce = Data(nonce).base64EncodedString()
-        logDebug("Sealed! cipherText: \(encodedCipherText), nonce: \(encodedNonce)")
-        
-        return (encodedCipherText, encodedNonce)
+        return try sealing.seal(value, transmitKey: pairing.tx)
     }
     
     func open<T: Decodable>(cipherText: String, nonce: String) throws -> T {
         guard isPaired else { throw PairingManagingError.notPaired }
         
-        logDebug("Opening cipherText: \(cipherText), nonce: \(nonce)")
-        
-        guard let decodedCipherText = Data(base64Encoded: cipherText),
-              let decodedNonce = Data(base64Encoded: nonce) else {
-            throw PairingManagingError.encryptionError
-        }
-        
-        guard let decodedBytes = sodium.secretBox.open(authenticatedCipherText: Bytes(decodedCipherText),
-                                                       secretKey: pairing.rx,
-                                                       nonce: Bytes(decodedNonce)) else {
-            logError("Could not open value for \(T.self)")
-            throw PairingManagingError.encryptionError
-        }
-        
-        logDebug("Resulting JSON: \(String(data: Data(decodedBytes), encoding: .utf8) ?? "")")
-        
-        do {
-            let value = try jsonDecoder.decode(T.self, from: Data(decodedBytes))
-            logDebug("Opened value: \(value)")
-            
-            return value
-        } catch let error {
-            self.logError("Error Deserializing \(T.self): \(error)")
-            throw error
-        }
+        return try sealing.open(cipherText: cipherText, nonce: nonce, receiveKey: pairing.rx)
     }
-    
-    private lazy var dateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.calendar = .current
-        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
-        return dateFormatter
-    }()
-    
-    private lazy var jsonEncoder: JSONEncoder = {
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .formatted(dateFormatter)
-        encoder.target = .api
-        return encoder
-    }()
-    
-    private lazy var jsonDecoder: JSONDecoder = {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .formatted(dateFormatter)
-        decoder.source = .api
-        return decoder
-    }()
     
     // MARK: - Polling
     private var isBusyReversePairing: Bool = false
@@ -372,7 +263,7 @@ class PairingManager: PairingManaging, Logging {
         }
         
         pollingTimer = Timer(fire: Date(timeIntervalSinceNow: delay), interval: 0, repeats: false) { _ in
-            self.pollingTask = Services.networkManager.getPairingRequestStatus(token: token) { result in
+            self.pollingTask = self.networkManager.getPairingRequestStatus(token: token) { result in
                 switch result {
                 case .success(let reversePairingInfo):
                     self.processPolling(reversePairingInfo, token: token, errorCount: 0)
@@ -404,7 +295,7 @@ class PairingManager: PairingManaging, Logging {
                         errorCount: 0)
         } else {
             logDebug("Making new polling token request")
-            Services.networkManager.postPairingRequest { result in
+            networkManager.postPairingRequest { result in
                 switch result {
                 case .success(let reversePairingInfo):
                     self.reversePairingInfo = reversePairingInfo

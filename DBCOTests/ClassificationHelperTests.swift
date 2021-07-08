@@ -1,10 +1,9 @@
-//
-//  ClassificationHelperTests.swift
-//  DBCOTests
-//
-//  Created by Thom Hoekstra on 05/05/2021.
-//  Copyright © 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport. All rights reserved.
-//
+/*
+ * Copyright (c) 2020 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
 
 import XCTest
 @testable import GGD_Contact

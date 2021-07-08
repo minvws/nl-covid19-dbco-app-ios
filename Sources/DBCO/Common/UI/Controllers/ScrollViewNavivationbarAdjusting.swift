@@ -15,6 +15,7 @@ import UIKit
 protocol ScrollViewNavivationbarAdjusting {
     var view: UIView! { get }
     var navigationItem: UINavigationItem { get }
+    var title: String? { get }
     var shortTitle: String { get }
     
     func adjustNavigationBar(for scrollView: UIScrollView)
@@ -26,23 +27,6 @@ extension ScrollViewNavivationbarAdjusting {
     private var navigationBarSeparatorViewTag: Int { 9999992 }
     
     func adjustNavigationBar(for scrollView: UIScrollView) {
-        func setup() -> (backgroundView: UIView, separatorView: UIView) {
-            let navigationBackgroundView = UIView()
-            navigationBackgroundView.tag = navigationBarBackgroundViewTag
-            
-            let separatorView = SeparatorView()
-            separatorView.tag = navigationBarSeparatorViewTag
-            
-            navigationBackgroundView.backgroundColor = .white
-            navigationBackgroundView.snap(to: .top, of: view)
-            
-            navigationBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-            
-            separatorView.snap(to: .top, of: view.safeAreaLayoutGuide)
-            
-            return (navigationBackgroundView, separatorView)
-        }
-        
         let backgroundView: UIView
         let separatorView: UIView
         
@@ -65,10 +49,27 @@ extension ScrollViewNavivationbarAdjusting {
                 } else {
                     separatorView.alpha = 0
                     backgroundView.isHidden = true
-                    self.navigationItem.title = nil
+                    self.navigationItem.title = title
                 }
             }
         }
+    }
+    
+    private func setup() -> (backgroundView: UIView, separatorView: UIView) {
+        let navigationBackgroundView = UIView()
+        navigationBackgroundView.tag = navigationBarBackgroundViewTag
+        
+        let separatorView = SeparatorView()
+        separatorView.tag = navigationBarSeparatorViewTag
+        
+        navigationBackgroundView.backgroundColor = .white
+        navigationBackgroundView.snap(to: .top, of: view)
+        
+        navigationBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        
+        separatorView.snap(to: .top, of: view.safeAreaLayoutGuide)
+        
+        return (navigationBackgroundView, separatorView)
     }
     
 }

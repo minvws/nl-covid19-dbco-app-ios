@@ -163,3 +163,7 @@ class PromptableViewController: ViewController {
     }
     
 }
+
+extension KeyboardActionable where Self: PromptableViewController {
+    var keyboardFrameTargetView: UIView { contentView }
+}

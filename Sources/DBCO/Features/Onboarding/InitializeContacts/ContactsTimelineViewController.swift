@@ -210,7 +210,7 @@ class ContactsTimelineViewModel {
 /// [ViewController](x-source-tag://ViewController) showing a [ContactListInputView](x-source-tag://ContactListInputView) for each day of the contagious period along with some tips for the user.
 ///
 /// - Tag: ContactsTimelineViewController
-class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdjusting {
+class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdjusting, KeyboardActionable {
     private let viewModel: ContactsTimelineViewModel
     private let navigationBackgroundView = UIView()
     private let separatorView = SeparatorView()
@@ -253,10 +253,11 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
         scrollView.keyboardDismissMode = .onDrag
         scrollView.delegate = self
         
-        let margin: UIEdgeInsets = .top(32) + .bottom(16)
-        
-        sectionStackView = VStack(spacing: 40)
-        
+        setupView()
+        configureSections()
+    }
+    
+    private func setupAddExtraDaySectionView() {
         let addExtraDayButton = Button(title: .contactsTimelineAddExtraDayButton, style: .secondary)
             .touchUpInside(self, action: #selector(addExtraDay))
         
@@ -267,6 +268,13 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
         addExtraDaySectionView = VStack(spacing: 24,
                                         addExtraDayTitleLabel,
                                         addExtraDayButton)
+    }
+    
+    private func setupView() {
+        let margin: UIEdgeInsets = .top(32) + .bottom(16)
+        
+        sectionStackView = VStack(spacing: 40)
+        setupAddExtraDaySectionView()
 
         let stack =
             VStack(spacing: 40,
@@ -282,12 +290,8 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
                 .embed(in: scrollView.readableWidth, insets: margin)
         
         stack.heightAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.heightAnchor,
-                                          multiplier: 1,
-                                          constant: -(margin.top + margin.bottom)).isActive = true
-        
-        configureSections()
-        
-        registerForKeyboardNotifications()
+                                      multiplier: 1,
+                                      constant: -(margin.top + margin.bottom)).isActive = true
         
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideSuggestions)))
     }
@@ -310,39 +314,40 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
         titleLabel.text = viewModel.title
         
         let existingSectionViews = sectionStackView.arrangedSubviews.compactMap { $0 as? TimelineSectionView }
-        
         let storedContacts = Services.onboardingManager.contacts ?? []
-        
-        func view(for section: ContactsTimelineViewModel.Section) -> TimelineSectionView {
-            if let sectionView = existingSectionViews.first(where: { $0.isConfigured(for: section) }) {
-                return sectionView
-            } else {
-                switch section {
-                case .day(let date, _, _):
-                    let sectionView = DaySectionView()
-                    sectionView.contactListDelegate = self
-                    sectionView.contactList.contacts = storedContacts
-                        .filter { $0.date == date }
-                        .map { ContactListInputView.Contact(name: $0.name, cnContactIdentifier: $0.contactIdentifier) }
-                    return sectionView
-                case .reviewTips:
-                    return ReviewTipsSectionView()
-                case .activityTips:
-                    return ActivityTipsSectionView()
-                }
-            }
-        }
         
         sectionStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
         viewModel.sections.forEach { section in
-            let sectionView = view(for: section)
+            let sectionView = createOrReuseView(for: section,
+                                                existingSectionViews: existingSectionViews,
+                                                contacts: storedContacts)
             sectionView.section = section
             self.sectionStackView.addArrangedSubview(sectionView)
         }
         
         addExtraDaySectionView.isHidden = viewModel.hideExtraDaySection
         addExtraDayTitleLabel.text = viewModel.addExtraDayTitle
+    }
+    
+    private func createOrReuseView(for section: ContactsTimelineViewModel.Section, existingSectionViews: [TimelineSectionView], contacts: [Onboarding.Contact]) -> TimelineSectionView {
+        if let sectionView = existingSectionViews.first(where: { $0.isConfigured(for: section) }) {
+            return sectionView
+        } else {
+            switch section {
+            case .day(let date, _, _):
+                let sectionView = DaySectionView()
+                sectionView.contactListDelegate = self
+                sectionView.contactList.contacts = contacts
+                    .filter { $0.date == date }
+                    .map { ContactListInputView.Contact(name: $0.name, cnContactIdentifier: $0.contactIdentifier) }
+                return sectionView
+            case .reviewTips:
+                return ReviewTipsSectionView()
+            case .activityTips:
+                return ActivityTipsSectionView()
+            }
+        }
     }
     
     private func listAllContacts() -> [Onboarding.Contact] {
@@ -397,25 +402,14 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
     }
     
     // MARK: - Keyboard handling
-    
-    private func registerForKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIWindow.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIWindow.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(notification: NSNotification) {
-        guard let userInfo = notification.userInfo else { return }
-        let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? .zero
-        
-        let convertedFrame = view.window?.convert(endFrame, to: view)
-        
-        let inset = view.frame.maxY - (convertedFrame?.minY ?? 0)
+    func keyboardWillShow(with convertedFrame: CGRect, notification: NSNotification) {
+        let inset = view.frame.maxY - convertedFrame.minY
         
         scrollView.contentInset.bottom = inset
         scrollView.verticalScrollIndicatorInsets.bottom = inset
     }
 
-    @objc private func keyboardWillHide(notification: NSNotification) {
+   func keyboardWillHide(notification: NSNotification) {
         scrollView.contentInset = .zero
         scrollView.verticalScrollIndicatorInsets.bottom = .zero
     }

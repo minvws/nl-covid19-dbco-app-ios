@@ -14,7 +14,7 @@ protocol PairViewControllerDelegate: AnyObject {
 class PairViewModel {}
 
 /// - Tag: PairViewController
-class PairViewController: ViewController {
+class PairViewController: ViewController, KeyboardActionable {
     private let viewModel: PairViewModel
     
     private let scrollView = UIScrollView()
@@ -26,6 +26,7 @@ class PairViewController: ViewController {
                                         adjustKerningForWidth: true))
     
     private let loadingOverlay = UIView()
+    private let nextButton = Button(title: .next, style: .primary)
     private let loadingIndicator = ActivityIndicatorView(style: .white)
     private var keyboardSpacerHeightConstraint: NSLayoutConstraint!
     
@@ -50,18 +51,24 @@ class PairViewController: ViewController {
 
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
-
+        
+        scrollView.embed(in: view)
+        scrollView.delegate = self
+        
+        setupView()
+    }
+    
+    private func setupView() {
         let titleLabel = UILabel(title2: .onboardingPairingTitle)
         
         let keyboardSpacerView = UIView()
         keyboardSpacerHeightConstraint = keyboardSpacerView.heightAnchor.constraint(equalToConstant: 0)
         keyboardSpacerHeightConstraint.isActive = true
         
-        let nextButton = Button(title: .next, style: .primary)
-            .touchUpInside(self, action: #selector(pair))
-        
+        nextButton.touchUpInside(self, action: #selector(pair))
         nextButton.isEnabled = false
-        codeField.didUpdatePairingCode { nextButton.isEnabled = $0 != nil }
+        
+        codeField.didUpdatePairingCode { [unowned self] in nextButton.isEnabled = $0 != nil }
         
         let topMargin: CGFloat = UIScreen.main.bounds.height < 600 ? 16 : 66
         
@@ -76,12 +83,12 @@ class PairViewController: ViewController {
             .distribution(.equalSpacing)
         
         containerView.embed(in: scrollView.readableWidth, insets: .top(topMargin))
-        
         containerView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.safeAreaLayoutGuide.heightAnchor, multiplier: 1, constant: -topMargin).isActive = true
         
-        scrollView.embed(in: view)
-        scrollView.delegate = self
-        
+        setupLoadingIndicator()
+    }
+    
+    private func setupLoadingIndicator() {
         loadingOverlay.backgroundColor = UIColor(white: 0, alpha: 0.4)
         loadingOverlay.embed(in: view)
         loadingOverlay.isHidden = true
@@ -92,8 +99,6 @@ class PairViewController: ViewController {
         loadingIndicator.centerYAnchor.constraint(equalTo: nextButton.centerYAnchor).isActive = true
         loadingIndicator.trailingAnchor.constraint(equalTo: nextButton.trailingAnchor, constant: -16).isActive = true
         loadingIndicator.startAnimating()
-        
-        registerForKeyboardNotifications()
     }
     
     func startLoadingAnimation() {
@@ -134,22 +139,12 @@ class PairViewController: ViewController {
     
     // MARK: - Keyboard handling
     
-    private func registerForKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIWindow.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIWindow.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(notification: NSNotification) {
-        guard let userInfo = notification.userInfo else { return }
-        let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? .zero
-        let convertedFrame = view.window?.convert(endFrame, to: view)
-        
-        let inset = view.frame.maxY - (convertedFrame?.minY ?? 0) - view.safeAreaInsets.bottom
-        
+    func keyboardWillShow(with convertedFrame: CGRect, notification: NSNotification) {
+        let inset = view.frame.maxY - convertedFrame.minY - view.safeAreaInsets.bottom
         keyboardSpacerHeightConstraint.constant = inset
     }
 
-    @objc private func keyboardWillHide(notification: NSNotification) {
+    func keyboardWillHide(notification: NSNotification) {
         keyboardSpacerHeightConstraint.constant = 0
     }
 }

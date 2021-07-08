@@ -47,13 +47,14 @@ class ContactsExplanationViewController: ViewController, ScrollViewNavivationbar
         view.backgroundColor = .white
         
         scrollView.embed(in: view)
+        scrollView.contentWidth(equalTo: view)
         scrollView.delegate = self
         scrollView.delaysContentTouches = false
         
-        let widthProviderView = UIView()
-        widthProviderView.snap(to: .top, of: scrollView, height: 0)
-        widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        
+        setupView()
+    }
+    
+    private func setupView() {
         let margin: UIEdgeInsets = .top(32) + .bottom(16) + .right(16)
         
         let stack =
@@ -65,8 +66,9 @@ class ContactsExplanationViewController: ViewController, ScrollViewNavivationbar
                        VStack(spacing: 16,
                               listItem(.determineContactsExplanationItem1, imageName: "ListItem/Checkmark"),
                               listItem(.determineContactsExplanationItem2, imageName: "ListItem/Checkmark"),
-                              listItem(.determineContactsExplanationItem3, imageName: "ListItem/Questionmark"),
-                              listItem(.determineContactsExplanationItem4, imageName: "ListItem/Stop"))),
+                              listItem(.determineContactsExplanationItem3, imageName: "ListItem/Stop"),
+                              listItem(.determineContactsExplanationItem4, imageName: "ListItem/Stop"),
+                              listItem(.determineContactsExplanationItem5, imageName: "ListItem/Questionmark"))),
                    Button(title: .next, style: .primary)
                        .touchUpInside(self, action: #selector(handleContinue)))
                 .distribution(.equalSpacing)

@@ -48,3 +48,30 @@ extension JSONDecoder {
         set { userInfo[DecodingSource.infoKey] = newValue }
     }
 }
+
+private var apiDateFormatter: DateFormatter = {
+    let dateFormatter = DateFormatter()
+    dateFormatter.calendar = .current
+    dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+    dateFormatter.dateFormat = "yyyy-MM-dd"
+    
+    return dateFormatter
+}()
+
+extension JSONEncoder {
+    static var apiEncoder: JSONEncoder {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .formatted(apiDateFormatter)
+        encoder.target = .api
+        return encoder
+    }
+}
+
+extension JSONDecoder {
+    static var apiDecoder: JSONDecoder {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .formatted(apiDateFormatter)
+        decoder.source = .api
+        return decoder
+    }
+}

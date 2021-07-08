@@ -25,7 +25,6 @@ class ConfigManager: ConfigManaging, Logging {
     var hasValidConfiguration: Bool { fetchedConfig != nil }
     var featureFlags: FeatureFlags { fetchedConfig.featureFlags }
     var symptoms: [Symptom] { fetchedConfig.symptoms }
-    var supportedZipCodeRanges: [ZipRange] { fetchedConfig.supportedZipCodeRanges }
     var guidelines: Guidelines { fetchedConfig.guidelines }
     
     func update(completion: @escaping (ConfigUpdateResult) -> Void) {

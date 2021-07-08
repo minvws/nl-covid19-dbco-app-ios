@@ -68,39 +68,48 @@ class StatusView: UIView {
         
         context.clear(rect)
         
-        let progress: Double
+        guard let progress = calculateProgress() else { return }
+    
+        drawOuterCicle(context)
+        drawProgress(progress, context)
+        clearCenter(context)
+    }
+    
+    private func calculateProgress() -> CGFloat? {
+        var progress: Double
         switch status {
         case .inProgress(let value):
             progress = value
         case .completed:
             progress = 1
         case .missingEssentialInput, .indexShouldInform:
-            return
+            return nil
         }
         
-        let clampedProgress = min(max(CGFloat(progress), 0), 1)
+        return min(max(CGFloat(progress), 0), 1)
+    }
     
+    private func drawOuterCicle(_ context: CGContext) {
         context.addEllipse(in: bounds.inset(by: .all(1)))
         context.setLineWidth(2)
         
         Theme.colors.disabledBorder.setStroke()
-        Theme.colors.ok.setFill()
         context.drawPath(using: .stroke)
-        
+    }
+    
+    private func drawProgress(_ progress: CGFloat, _ context: CGContext) {
         let center = CGPoint(x: bounds.width / 2, y: bounds.height / 2)
         let startAngle: CGFloat = -.pi / 2
-        let endAngle: CGFloat = (.pi * 2) * clampedProgress + startAngle
+        let endAngle: CGFloat = (.pi * 2) * progress + startAngle
         
         context.move(to: center)
-        context.addArc(
-            center: center,
-            radius: bounds.width / 2,
-            startAngle: startAngle,
-            endAngle: endAngle,
-            clockwise: false)
+        context.addArc(center: center, radius: bounds.width / 2, startAngle: startAngle, endAngle: endAngle, clockwise: false)
         
+        Theme.colors.ok.setFill()
         context.fillPath()
+    }
     
+    private func clearCenter(_ context: CGContext) {
         context.addEllipse(in: bounds.inset(by: .all(2)))
         UIColor.clear.setFill()
         context.setBlendMode(.clear)

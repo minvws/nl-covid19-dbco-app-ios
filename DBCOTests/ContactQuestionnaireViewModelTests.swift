@@ -1,16 +1,15 @@
-//
-//  ContactQuestionnaireViewModelTests.swift
-//  DBCOTests
-//
-//  Created by Thom Hoekstra on 11/05/2021.
-//  Copyright © 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport. All rights reserved.
-//
+/*
+ * Copyright (c) 2020 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
 
 import XCTest
 @testable import GGD_Contact
 import Contacts
 
-class ContactQuestionnaireViewModelTests: XCTestCase {
+class ContactQuestionnaireViewModelTests: XCTestCase { // swiftlint:disable:this type_body_length
     
     let fullQuestionnaire: Questionnaire = {
         let decoder = JSONDecoder()
@@ -395,6 +394,88 @@ class ContactQuestionnaireViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.copyButtonType, .primary)
         XCTAssertEqual(viewModel.promptButtonType, .secondary)
     }
+    
+    func testExposureDateUnknownGuidelinesCat1() {
+        let input = ContactQuestionnaireViewModel.Input(
+            caseReference: nil,
+            guidelines: guidelines,
+            featureFlags: FeatureFlags(enableContactCalling: true, enablePerspectiveCopy: true, enableSelfBCO: true),
+            isCaseWindowExpired: false,
+            task: createContactTask(category: .category1, source: .app, communication: .index, dateOfLastExposure: nil),
+            questionnaire: simpleQuestionnaire,
+            contact: fullContact)
+        
+        let viewModel = ContactQuestionnaireViewModel(input)
+        let parsedGuidelines = GuidelinesHelper.parseGuidelines(guidelines.guidelinesExposureDateUnknown.category1, exposureDate: nil, referenceNumber: "", referenceNumberItem: "")
+        
+        XCTAssertEqual(viewModel.informContent, parsedGuidelines)
+    }
+    
+    func testExposureDateUnknownGuidelinesCat2() {
+        let input = ContactQuestionnaireViewModel.Input(
+            caseReference: nil,
+            guidelines: guidelines,
+            featureFlags: FeatureFlags(enableContactCalling: true, enablePerspectiveCopy: true, enableSelfBCO: true),
+            isCaseWindowExpired: false,
+            task: createContactTask(category: .category2a, source: .app, communication: .index, dateOfLastExposure: nil),
+            questionnaire: simpleQuestionnaire,
+            contact: fullContact)
+        
+        let viewModel = ContactQuestionnaireViewModel(input)
+        let parsedGuidelines = GuidelinesHelper.parseGuidelines(guidelines.guidelinesExposureDateUnknown.category2, exposureDate: nil, referenceNumber: "", referenceNumberItem: "")
+        
+        XCTAssertEqual(viewModel.informContent, parsedGuidelines)
+    }
+    
+    func testExposureDateUnknownGuidelinesCat3() {
+        let input = ContactQuestionnaireViewModel.Input(
+            caseReference: nil,
+            guidelines: guidelines,
+            featureFlags: FeatureFlags(enableContactCalling: true, enablePerspectiveCopy: true, enableSelfBCO: true),
+            isCaseWindowExpired: false,
+            task: createContactTask(category: .category3a, source: .app, communication: .index, dateOfLastExposure: nil),
+            questionnaire: simpleQuestionnaire,
+            contact: fullContact)
+        
+        let viewModel = ContactQuestionnaireViewModel(input)
+        let parsedGuidelines = GuidelinesHelper.parseGuidelines(guidelines.guidelinesExposureDateUnknown.category3, exposureDate: nil, referenceNumber: "", referenceNumberItem: "")
+        
+        XCTAssertEqual(viewModel.informContent, parsedGuidelines)
+    }
+    
+    func testExposureDateWithinRangeGuidelinesCat2() {
+        let exposureDate = Date.now.dateByAddingDays(-3)
+        let input = ContactQuestionnaireViewModel.Input(
+            caseReference: nil,
+            guidelines: guidelines,
+            featureFlags: FeatureFlags(enableContactCalling: true, enablePerspectiveCopy: true, enableSelfBCO: true),
+            isCaseWindowExpired: false,
+            task: createContactTask(category: .category2a, source: .app, communication: .index, dateOfLastExposure: exposureDate),
+            questionnaire: simpleQuestionnaire,
+            contact: fullContact)
+        
+        let viewModel = ContactQuestionnaireViewModel(input)
+        let parsedGuidelines = GuidelinesHelper.parseGuidelines(guidelines.guidelinesExposureDateKnown.category2.withinRange, exposureDate: exposureDate, referenceNumber: "", referenceNumberItem: "")
+        
+        XCTAssertEqual(viewModel.informContent, parsedGuidelines)
+    }
+    
+    func testExposureDateOutsideRangeGuidelinesCat2() {
+        let exposureDate = Date.now.dateByAddingDays(-4)
+        let input = ContactQuestionnaireViewModel.Input(
+            caseReference: nil,
+            guidelines: guidelines,
+            featureFlags: FeatureFlags(enableContactCalling: true, enablePerspectiveCopy: true, enableSelfBCO: true),
+            isCaseWindowExpired: false,
+            task: createContactTask(category: .category2a, source: .app, communication: .index, dateOfLastExposure: exposureDate),
+            questionnaire: simpleQuestionnaire,
+            contact: fullContact)
+        
+        let viewModel = ContactQuestionnaireViewModel(input)
+        let parsedGuidelines = GuidelinesHelper.parseGuidelines(guidelines.guidelinesExposureDateKnown.category2.outsideRange, exposureDate: exposureDate, referenceNumber: "", referenceNumberItem: "")
+        
+        XCTAssertEqual(viewModel.informContent, parsedGuidelines)
+    }
 
 }
 
@@ -762,4 +843,4 @@ private extension UIView {
         }
         return subviews
     }
-}
+} // swiftlint:disable:this file_length

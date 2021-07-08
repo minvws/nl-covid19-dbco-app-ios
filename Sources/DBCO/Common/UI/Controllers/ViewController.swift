@@ -23,6 +23,13 @@ protocol PopActionable {
     var onPopped: ((Item) -> Void)? { get set }
 }
 
+protocol KeyboardActionable {
+    func keyboardWillShow(with convertedFrame: CGRect, notification: NSNotification)
+    func keyboardWillHide(notification: NSNotification)
+    
+    var keyboardFrameTargetView: UIView { get }
+}
+
 /// A UIViewController subclass to be used as base for ViewController in the app.
 /// Conforms to [DismissActionable](x-source-tag://DismissActionable) and [PopActionable](x-source-tag://PopActionable)
 ///
@@ -49,6 +56,19 @@ class ViewController: UIViewController, DismissActionable, PopActionable {
     private var didBecomeActiveObserver: NSObjectProtocol?
     private var shouldAddDidBecomeActiveObserver = false
     private var needsFocus = true
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        if self is KeyboardActionable {
+            NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: UIWindow.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: UIWindow.keyboardWillHideNotification, object: nil)
+        }
+    }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -94,4 +114,23 @@ class ViewController: UIViewController, DismissActionable, PopActionable {
             didBecomeActiveObserver = nil
         }
     }
+    
+    @objc private func handleKeyboardWillShow(notification: NSNotification) {
+        guard let actionable = self as? KeyboardActionable else { return }
+        guard let userInfo = notification.userInfo else { return }
+        
+        let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? .zero
+        let convertedFrame = view.window?.convert(endFrame, to: actionable.keyboardFrameTargetView) ?? .zero
+        
+        actionable.keyboardWillShow(with: convertedFrame, notification: notification)
+    }
+
+    @objc private func handleKeyboardWillHide(notification: NSNotification) {
+        guard let actionable = self as? KeyboardActionable else { return }
+        actionable.keyboardWillHide(notification: notification)
+    }
+}
+
+extension KeyboardActionable where Self: ViewController {
+    var keyboardFrameTargetView: UIView { view }
 }

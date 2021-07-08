@@ -20,7 +20,7 @@ protocol ContactQuestionnaireViewControllerDelegate: AnyObject {
 /// [ContactQuestionnaireViewModel](x-source-tag://ContactQuestionnaireViewModel)
 ///
 /// - Tag: ContactQuestionnaireViewController
-final class ContactQuestionnaireViewController: PromptableViewController {
+final class ContactQuestionnaireViewController: PromptableViewController, KeyboardActionable {
     private let viewModel: ContactQuestionnaireViewModel
     private var scrollView: UIScrollView!
     
@@ -56,12 +56,10 @@ final class ContactQuestionnaireViewController: PromptableViewController {
             isModalInPresentation = true
         }
         
-        setupViews()
-        
-        registerForKeyboardNotifications()
+        setupView()
     }
     
-    private func setupViews() {
+    private func setupView() {
         let promptButton = Button(title: .save)
             .touchUpInside(self, action: #selector(save))
         
@@ -84,11 +82,8 @@ final class ContactQuestionnaireViewController: PromptableViewController {
                                          contactDetailsSection,
                                          informContactSection)
         scrollView.embed(in: contentView)
+        scrollView.contentWidth(equalTo: contentView)
         scrollView.keyboardDismissMode = .onDrag
-        
-        let widthProviderView = UIView()
-        widthProviderView.snap(to: .top, of: scrollView, height: 0)
-        widthProviderView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -123,46 +118,52 @@ final class ContactQuestionnaireViewController: PromptableViewController {
         return sectionView
     }
     
+    private struct InformSectionViews {
+        let titleLabel = UILabel(bodyBold: "")
+        let contentView = TextView()
+        let linkView = TextView()
+        let footerLabel = UILabel(bodyBold: "")
+        let informButton = Button(title: "", style: .primary)
+        let copyButton = Button(title: .informContactCopyGuidelines, style: .secondary)
+        
+        func setupBindings(with viewModel: ContactQuestionnaireViewModel) {
+            viewModel.$informTitle.binding = { titleLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
+            viewModel.$informContent.binding = { contentView.html($0, textColor: Theme.colors.captionGray) }
+            viewModel.$informLink.binding = { linkView.html($0, textColor: Theme.colors.captionGray) }
+            viewModel.$informFooter.binding = { footerLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
+            viewModel.$copyButtonHidden.binding = { copyButton.isHidden = $0 }
+            viewModel.$copyButtonType.binding = { copyButton.style = $0 }
+            viewModel.$informButtonTitle.binding = { informButton.title = $0 }
+            viewModel.$informButtonHidden.binding = { informButton.isHidden = $0 }
+            viewModel.$informButtonType.binding = { informButton.style = $0 }
+        }
+    }
+    
     private func createInformSectionView() -> SectionView {
         let sectionView = SectionView(title: .informContactSectionTitle, caption: .informContactSectionMessage, index: 3)
         sectionView.showBottomSeparator = false
         sectionView.collapse(animated: false)
         
-        let informTitleLabel = UILabel(bodyBold: "")
-        let informTextView = TextView().linkTouched { [unowned self] in
-            delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0)
-        }
-        let informLinkView = TextView().linkTouched { [unowned self] in
-            delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0)
-        }
-        let informFooterLabel = UILabel(bodyBold: "")
+        let views = InformSectionViews()
         
-        let informButton = Button(title: "", style: .primary)
-            .touchUpInside(self, action: #selector(informContact))
+        views.contentView.linkTouched { [unowned self] in delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0) }
+        views.linkView.linkTouched { [unowned self] in delegate?.contactQuestionnaireViewController(self, wantsToOpen: $0) }
         
-        let copyButton = Button(title: .informContactCopyGuidelines, style: .secondary)
-            .touchUpInside(self, action: #selector(copyGuidelines))
+        views.informButton.touchUpInside(self, action: #selector(informContact))
+        views.copyButton.touchUpInside(self, action: #selector(copyGuidelines))
         
         VStack(spacing: 24,
                VStack(spacing: 16,
-                      informTitleLabel,
-                      informTextView,
-                      informLinkView,
-                      informFooterLabel),
+                      views.titleLabel,
+                      views.contentView,
+                      views.linkView,
+                      views.footerLabel),
                VStack(spacing: 16,
-                      copyButton,
-                      informButton))
+                      views.copyButton,
+                      views.informButton))
             .embed(in: sectionView.contentView.readableWidth)
         
-        viewModel.$informTitle.binding = { informTitleLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
-        viewModel.$informContent.binding = { informTextView.html($0, textColor: Theme.colors.captionGray) }
-        viewModel.$informLink.binding = { informLinkView.html($0, textColor: Theme.colors.captionGray) }
-        viewModel.$informFooter.binding = { informFooterLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
-        viewModel.$copyButtonHidden.binding = { copyButton.isHidden = $0 }
-        viewModel.$copyButtonType.binding = { copyButton.style = $0 }
-        viewModel.$informButtonTitle.binding = { informButton.title = $0 }
-        viewModel.$informButtonHidden.binding = { informButton.isHidden = $0 }
-        viewModel.$informButtonType.binding = { informButton.style = $0 }
+        views.setupBindings(with: viewModel)
         
         return sectionView
     }
@@ -329,24 +330,14 @@ final class ContactQuestionnaireViewController: PromptableViewController {
     
     // MARK: - Keyboard handling
     
-    private func registerForKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIWindow.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIWindow.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(notification: NSNotification) {
-        guard let userInfo = notification.userInfo else { return }
-        let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? .zero
-        
-        let convertedFrame = view.window?.convert(endFrame, to: contentView)
-        
-        let inset = contentView.frame.maxY - (convertedFrame?.minY ?? 0)
+    func keyboardWillShow(with convertedFrame: CGRect, notification: NSNotification) {
+        let inset = contentView.frame.maxY - convertedFrame.minY
         
         scrollView.contentInset.bottom = inset
         scrollView.verticalScrollIndicatorInsets.bottom = inset
     }
 
-    @objc private func keyboardWillHide(notification: NSNotification) {
+    func keyboardWillHide(notification: NSNotification) {
         scrollView.contentInset = .zero
         scrollView.verticalScrollIndicatorInsets.bottom = .zero
     }

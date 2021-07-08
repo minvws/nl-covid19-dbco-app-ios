@@ -13,12 +13,14 @@ class StepViewModel {
     let title: String
     let message: String?
     let actions: [StepViewController.Action]
+    let hidesNavigationWhenFirst: Bool
     
-    init(image: UIImage?, title: String, message: String?, actions: [StepViewController.Action]) {
+    init(image: UIImage?, title: String, message: String?, actions: [StepViewController.Action], hidesNavigationWhenFirst: Bool = true) {
         self.image = image
         self.title = title
         self.message = message
         self.actions = actions
+        self.hidesNavigationWhenFirst = hidesNavigationWhenFirst
     }
 }
 
@@ -72,11 +74,8 @@ class StepViewController: ViewController, ScrollViewNavivationbarAdjusting {
         
         // ScrollView
         scrollView.embed(in: view)
+        scrollView.contentWidth(equalTo: view)
         scrollView.delegate = self
-        
-        let widthProviderView = UIView()
-        widthProviderView.snap(to: .top, of: scrollView, height: 0)
-        widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
         setupStackView()
     }
@@ -84,7 +83,7 @@ class StepViewController: ViewController, ScrollViewNavivationbarAdjusting {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if navigationController?.viewControllers.count == 1 {
+        if viewModel.hidesNavigationWhenFirst, navigationController?.viewControllers.count == 1 {
             navigationController?.setNavigationBarHidden(true, animated: animated)
         }
     }
@@ -101,6 +100,7 @@ class StepViewController: ViewController, ScrollViewNavivationbarAdjusting {
         imageView.setContentHuggingPriority(.required, for: .vertical)
         imageView.setContentCompressionResistancePriority(UILayoutPriority(100), for: .vertical)
         imageView.heightAnchor.constraint(greaterThanOrEqualToConstant: 160).isActive = true
+        imageView.isHidden = viewModel.image == nil
         
         return imageView
     }
