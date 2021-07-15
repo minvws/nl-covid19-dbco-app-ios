@@ -8,10 +8,7 @@
 import UIKit
 
 func listItem(_ text: String, imageName: String = "PrivacyItem") -> UIView {
-    let attributedString = NSAttributedString.makeFromHtml(text: text,
-                                                         font: Theme.fonts.body,
-                                                         textColor: Theme.colors.captionGray,
-                                                         boldTextColor: .black)
+    let attributedString = NSAttributedString.makeFromHtml(text: text, style: .bodyCaptionGray)
     return HStack(spacing: 16,
                   UIImageView(imageName: imageName).asIcon(),
                   UILabel(attributedString: attributedString, textColor: Theme.colors.captionGray))
