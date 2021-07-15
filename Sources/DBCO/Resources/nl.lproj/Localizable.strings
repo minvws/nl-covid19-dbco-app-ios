@@ -285,6 +285,8 @@
 "contactTypeSection.title" = "Over de ontmoeting";
 "contactTypeSection.message" = "Beantwoord een paar vragen";
 
+"disabledSection.message" = "Vul eerst stap 1 in";
+
 "contactDetailsSection.title" = "Contactgegevens";
 "contactDetailsSection.message" = "Vul zo veel mogelijk gegevens aan";
 

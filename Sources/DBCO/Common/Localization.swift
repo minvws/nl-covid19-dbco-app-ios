@@ -357,6 +357,8 @@ extension String {
     
     static var contactTypeSectionTitle: String { return Localization.string(for: "contactTypeSection.title") }
     static var contactTypeSectionMessage: String { return Localization.string(for: "contactTypeSection.message") }
+    
+    static var disabledSectionMessage: String { return Localization.string(for: "disabledSection.message") }
         
     static var contactDetailsSectionTitle: String { return Localization.string(for: "contactDetailsSection.title") }
     static var contactDetailsSectionMessage: String { return Localization.string(for: "contactDetailsSection.message") }

@@ -109,7 +109,7 @@ final class ContactQuestionnaireViewController: PromptableViewController, Keyboa
     }
     
     private func createDetailsSectionView() -> SectionView {
-        let sectionView = SectionView(title: .contactDetailsSectionTitle, caption: .contactDetailsSectionMessage, index: 2)
+        let sectionView = SectionView(title: .contactDetailsSectionTitle, caption: .contactDetailsSectionMessage, disabledCaption: .disabledSectionMessage, index: 2)
         sectionView.collapse(animated: false)
         
         let labelContainer = UIView()
@@ -145,7 +145,7 @@ final class ContactQuestionnaireViewController: PromptableViewController, Keyboa
     }
     
     private func createInformSectionView() -> SectionView {
-        let sectionView = SectionView(title: .informContactSectionTitle, caption: .informContactSectionMessage, index: 3)
+        let sectionView = SectionView(title: .informContactSectionTitle, caption: .informContactSectionMessage, disabledCaption: .disabledSectionMessage, index: 3)
         sectionView.showBottomSeparator = false
         sectionView.collapse(animated: false)
         
