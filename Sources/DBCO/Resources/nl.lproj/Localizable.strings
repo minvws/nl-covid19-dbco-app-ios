@@ -326,6 +326,8 @@
 
 "contactFallbackTitle" = "Contact toevoegen";
 
+"contactInformationExplanation" = "Het is belangrijk dat je de gegevens invult die je nu weet. Gegevens die je nog niet hebt kun je later toevoegen.";
+
 "contactInformationFirstName" = "Voornaam";
 "contactInformationLastName" = "Achternaam";
 "contactInformationNameWarning" = "Klopt deze naam?";

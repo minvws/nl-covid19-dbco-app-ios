@@ -419,6 +419,9 @@ extension String {
     static var otherCategoryMessage: String { return Localization.string(for: "otherCategoryMessage") }
     
     static var contactFallbackTitle: String { return Localization.string(for: "contactFallbackTitle") }
+    
+    static var contactInformationExplanation: String { return Localization.string(for: "contactInformationExplanation") }
+    
     static var contactInformationFirstName: String { return Localization.string(for: "contactInformationFirstName") }
     static var contactInformationLastName: String { return Localization.string(for: "contactInformationLastName") }
     static var contactInformationNameWarning: String { return Localization.string(for: "contactInformationNameWarning") }
