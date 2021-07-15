@@ -396,7 +396,9 @@
 
 /* MARK: - Uploading */
 "unfinishedTasksOverviewTitle" = "Bijna klaar";
-"unfinishedTasksOverviewMessage" = "Bijna klaar. Je gaat de gegevens delen met de GGD. Wil je dit nu doen?";
+"unfinishedTasksOverviewMessage" = "Bijna klaar. Controleer bij deze personen of je nog iets kunt doen:";
+"unfinishedTasksOverviewExplanation" = "Hoe meer gegevens je aanvult, hoe sneller het bron- en contactonderzoek gaat. Heb je alles gedaan wat je nu kunt doen? En alle gegevens aangevuld die je weet? Dan kun je de gegevens delen.";
+"unfinishedTaskOverviewDoneButtonTitle" = "Nu delen";
 
 "uploadConfirmAlert.title" = "Wil je nu de gegevens met de GGD delen?";
 "uploadConfirmAlert.message" = "Goed om te weten: je kunt hierna nog gegevens aanpassen en deze opnieuw delen.";

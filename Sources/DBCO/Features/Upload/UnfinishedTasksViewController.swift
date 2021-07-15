@@ -19,6 +19,7 @@ class UnfinishedTasksViewModel {
     
     private let tableViewManager: TableViewManager<TaskTableViewCell>
     private var tableHeaderBuilder: (() -> UIView?)?
+    private var tableFooterBuilder: (() -> UIView?)?
     
     private let relevantTaskIdentifiers: [UUID]
     
@@ -42,10 +43,11 @@ class UnfinishedTasksViewModel {
         Services.caseManager.addListener(self)
     }
     
-    func setupTableView(_ tableView: UITableView, tableHeaderBuilder: (() -> UIView?)?, selectedTaskHandler: @escaping (Task, IndexPath) -> Void) {
+    func setupTableView(_ tableView: UITableView, tableHeaderBuilder: (() -> UIView?)?, tableFooterBuilder: (() -> UIView?)?, selectedTaskHandler: @escaping (Task, IndexPath) -> Void) {
         tableViewManager.manage(tableView)
         tableViewManager.didSelectItem = selectedTaskHandler
         self.tableHeaderBuilder = tableHeaderBuilder
+        self.tableFooterBuilder = tableFooterBuilder
         
         buildSections()
     }
@@ -59,6 +61,7 @@ class UnfinishedTasksViewModel {
             .sorted(by: <)
         
         sections.append((nil, tasks))
+        sections.append((tableFooterBuilder?(), []))
     }
 }
 
@@ -99,7 +102,7 @@ class UnfinishedTasksViewController: PromptableViewController {
         
         setupTableView()
         
-        promptView = Button(title: .taskOverviewDoneButtonTitle)
+        promptView = Button(title: .unfinishedTaskOverviewDoneButtonTitle)
             .touchUpInside(self, action: #selector(upload))
     }
     
@@ -112,7 +115,12 @@ class UnfinishedTasksViewController: PromptableViewController {
                 .wrappedInReadableWidth(insets: .top(60))
         }
         
-        viewModel.setupTableView(tableView, tableHeaderBuilder: tableHeaderBuilder) { [weak self] task, indexPath in
+        let tableFooterBuilder = {
+            UILabel(body: .unfinishedTasksOverviewExplanation, textColor: Theme.colors.captionGray)
+                .wrappedInReadableWidth(insets: .top(32))
+        }
+        
+        viewModel.setupTableView(tableView, tableHeaderBuilder: tableHeaderBuilder, tableFooterBuilder: tableFooterBuilder) { [weak self] task, indexPath in
             guard let self = self else { return }
             
             self.delegate?.unfinishedTasksViewController(self, didSelect: task)
