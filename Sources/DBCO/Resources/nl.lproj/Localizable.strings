@@ -285,6 +285,8 @@
 "contactTypeSection.title" = "Over de ontmoeting";
 "contactTypeSection.message" = "Beantwoord een paar vragen";
 
+"disabledSection.message" = "Vul eerst stap 1 in";
+
 "contactDetailsSection.title" = "Contactgegevens";
 "contactDetailsSection.message" = "Vul zo veel mogelijk gegevens aan";
 
@@ -325,6 +327,8 @@
 "otherCategoryMessage" = "Je hoeft dus niet te laten weten dat je besmet bent.";
 
 "contactFallbackTitle" = "Contact toevoegen";
+
+"contactInformationExplanation" = "Het is belangrijk dat je de gegevens invult die je nu weet. Gegevens die je nog niet hebt kun je later toevoegen.";
 
 "contactInformationFirstName" = "Voornaam";
 "contactInformationLastName" = "Achternaam";
