@@ -498,6 +498,8 @@ extension String {
     /* MARK: - Uploading */
     static var unfinishedTasksOverviewTitle: String { return Localization.string(for: "unfinishedTasksOverviewTitle") }
     static var unfinishedTasksOverviewMessage: String { return Localization.string(for: "unfinishedTasksOverviewMessage") }
+    static var unfinishedTasksOverviewExplanation: String { return Localization.string(for: "unfinishedTasksOverviewExplanation") }
+    static var unfinishedTaskOverviewDoneButtonTitle: String { return Localization.string(for: "unfinishedTaskOverviewDoneButtonTitle") }
     
     static var uploadConfirmAlertTitle: String { return Localization.string(for: "uploadConfirmAlert.title") }
     static var uploadConfirmAlertMessage: String { return Localization.string(for: "uploadConfirmAlert.message") }
