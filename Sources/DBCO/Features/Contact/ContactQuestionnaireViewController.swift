@@ -112,12 +112,10 @@ final class ContactQuestionnaireViewController: PromptableViewController, Keyboa
         let sectionView = SectionView(title: .contactDetailsSectionTitle, caption: .contactDetailsSectionMessage, disabledCaption: .disabledSectionMessage, index: 2)
         sectionView.collapse(animated: false)
         
-        let labelContainer = UIView()
         let infoLabel = UILabel(subhead: .contactInformationExplanation)
             .withInsets(.bottom(22))
-        infoLabel.snap(to: .left, of: labelContainer, width: 275)
         
-        VStack(spacing: 16, [labelContainer] + viewModel.contactDetailViews)
+        VStack(spacing: 16, [infoLabel] + viewModel.contactDetailViews)
             .embed(in: sectionView.contentView.readableWidth)
         
         return sectionView
