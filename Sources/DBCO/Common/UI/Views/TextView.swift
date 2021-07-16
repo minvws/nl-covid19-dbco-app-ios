@@ -74,7 +74,7 @@ class TextView: UITextView, UITextViewDelegate {
     /// Sets the content to the supplied html string.
     @discardableResult
     func html(_ htmlText: String?, font: UIFont = Theme.fonts.body, textColor: UIColor = Theme.colors.captionGray, boldTextColor: UIColor = .black) -> Self {
-        attributedText = .makeFromHtml(text: htmlText, font: font, textColor: textColor, boldTextColor: boldTextColor)
+        attributedText = .makeFromHtml(text: htmlText, style: .init(font: font, textColor: textColor, boldTextColor: boldTextColor))
         return self
     }
     

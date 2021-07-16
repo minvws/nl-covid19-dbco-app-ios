@@ -112,12 +112,10 @@ final class ContactQuestionnaireViewController: PromptableViewController, Keyboa
         let sectionView = SectionView(title: .contactDetailsSectionTitle, caption: .contactDetailsSectionMessage, disabledCaption: .disabledSectionMessage, index: 2)
         sectionView.collapse(animated: false)
         
-        let labelContainer = UIView()
         let infoLabel = UILabel(subhead: .contactInformationExplanation)
             .withInsets(.bottom(22))
-        infoLabel.snap(to: .left, of: labelContainer, width: 275)
         
-        VStack(spacing: 16, [labelContainer] + viewModel.contactDetailViews)
+        VStack(spacing: 16, [infoLabel] + viewModel.contactDetailViews)
             .embed(in: sectionView.contentView.readableWidth)
         
         return sectionView
@@ -132,10 +130,10 @@ final class ContactQuestionnaireViewController: PromptableViewController, Keyboa
         let copyButton = Button(title: .informContactCopyGuidelines, style: .secondary)
         
         func setupBindings(with viewModel: ContactQuestionnaireViewModel) {
-            viewModel.$informTitle.binding = { titleLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
+            viewModel.$informTitle.binding = { titleLabel.attributedText = .makeFromHtml(text: $0, style: .init(font: Theme.fonts.bodyBold, textColor: .black)) }
             viewModel.$informContent.binding = { contentView.html($0, textColor: Theme.colors.captionGray) }
             viewModel.$informLink.binding = { linkView.html($0, textColor: Theme.colors.captionGray) }
-            viewModel.$informFooter.binding = { footerLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
+            viewModel.$informFooter.binding = { footerLabel.attributedText = .makeFromHtml(text: $0, style: .init(font: Theme.fonts.bodyBold, textColor: .black)) }
             viewModel.$copyButtonHidden.binding = { copyButton.isHidden = $0 }
             viewModel.$copyButtonType.binding = { copyButton.style = $0 }
             viewModel.$informButtonTitle.binding = { informButton.title = $0 }
