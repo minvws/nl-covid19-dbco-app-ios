@@ -7,46 +7,103 @@
 
 import UIKit
 
-public extension NSAttributedString {
+extension String {
+    func components<T>(separatedBy separators: [T]) -> [String] where T: StringProtocol {
+        var result = [self]
+        for separator in separators {
+            result = result
+                .map { $0.components(separatedBy: separator) }
+                .flatMap { $0 }
+                .filter { !$0.isEmpty }
+        }
+        return result
+    }
+}
 
-    static func makeFromHtml(text: String?, font: UIFont, textColor: UIColor, boldTextColor: UIColor? = nil, textAlignment: NSTextAlignment = .left) -> NSAttributedString {
+public extension NSAttributedString {
+    
+    struct HTMLStyle {
+        let font: UIFont
+        let textColor: UIColor
+        let boldTextColor: UIColor?
+        let textAlignment: NSTextAlignment
+        
+        init(font: UIFont, textColor: UIColor, boldTextColor: UIColor? = nil, textAlignment: NSTextAlignment = .left) {
+            self.font = font
+            self.textColor = textColor
+            self.boldTextColor = boldTextColor
+            self.textAlignment = textAlignment
+        }
+        
+        static var bodyBlack: HTMLStyle = .init(font: Theme.fonts.body, textColor: .black)
+        static var bodyCaptionGray: HTMLStyle = .init(font: Theme.fonts.body, textColor: Theme.colors.captionGray, boldTextColor: .black)
+    }
+
+    static func makeFromHtml(text: String?, style: HTMLStyle) -> NSAttributedString {
         let text = text ?? ""
+        let result = NSMutableAttributedString()
         
-        let attributes = createAttributes(textAlignment: textAlignment, textColor: textColor)
+        let segments = splitIntoSegments(text)
+        segments
+            .map { convertSegment($0, style: style) }
+            .forEach { result.append($0) }
         
-        let data: Data = text.data(using: .unicode) ?? Data(text.utf8)
+        removeTrailingNewlines(in: result)
+        
+        return result
+    }
+    
+    private static func splitIntoSegments(_ text: String) -> [String] {
+        // Split text for any list tags, so they can be styled separately and properly
+        func wrapInListIfNeeded(_ segment: String) -> String {
+            if segment.contains("<li>") {
+                return "<br/><ul>" + segment + "</ul>"
+            } else {
+                return segment
+            }
+        }
+        
+        let components = text
+            .components(separatedBy: ["<ul>", "</ul>"])
+            .map(wrapInListIfNeeded)
+        
+        return components
+    }
+    
+    private static func convertSegment(_ segment: String, style: HTMLStyle) -> NSAttributedString {
+        let attributes = createAttributes(style: style)
+        let data: Data = segment.data(using: .unicode) ?? Data(segment.utf8)
         
         guard let attributedText = try? NSMutableAttributedString(data: data,
                                                                    options: [.documentType: NSAttributedString.DocumentType.html],
                                                                    documentAttributes: nil) else {
-            return NSAttributedString(string: text)
+            return NSAttributedString(string: segment)
         }
 
         let fullRange = NSRange(location: 0, length: attributedText.length)
         attributedText.addAttributes(attributes, range: fullRange)
 
-        replaceFonts(in: attributedText, font: font, textColor: textColor, boldTextColor: boldTextColor)
-        replaceBullets(in: attributedText, font: font)
-        replaceListParagraphStyle(in: attributedText, textAlignment: textAlignment)
-        removeTrailingNewlines(in: attributedText)
+        replaceFonts(in: attributedText, style: style)
+        replaceBullets(in: attributedText, style: style)
+        replaceListParagraphStyle(in: attributedText, style: style)
 
         return attributedText
     }
     
-    private static func createAttributes(textAlignment: NSTextAlignment, textColor: UIColor) -> [Key: Any] {
+    private static func createAttributes(style: HTMLStyle) -> [Key: Any] {
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = textAlignment
+        paragraphStyle.alignment = style.textAlignment
         paragraphStyle.paragraphSpacing = 8
         
         let attributes: [Key: Any] = [
-            .foregroundColor: textColor,
+            .foregroundColor: style.textColor,
             .paragraphStyle: paragraphStyle
         ]
         
         return attributes
     }
     
-    private static func createListParagraphStyle(textAlignment: NSTextAlignment) -> NSParagraphStyle {
+    private static func createListParagraphStyle(style: HTMLStyle) -> NSParagraphStyle {
         let tabInterval: CGFloat = 20
         var tabStops = [NSTextTab]()
         tabStops.append(NSTextTab(textAlignment: .natural, location: 1))
@@ -55,7 +112,7 @@ public extension NSAttributedString {
         }
         
         let listParagraphStyle = NSMutableParagraphStyle()
-        listParagraphStyle.alignment = textAlignment
+        listParagraphStyle.alignment = style.textAlignment
         listParagraphStyle.paragraphSpacing = 8
         listParagraphStyle.tabStops = tabStops
         listParagraphStyle.headIndent = tabInterval
@@ -64,11 +121,11 @@ public extension NSAttributedString {
         return listParagraphStyle
     }
     
-    private static func replaceFonts(in text: NSMutableAttributedString, font: UIFont, textColor: UIColor, boldTextColor: UIColor?) {
+    private static func replaceFonts(in text: NSMutableAttributedString, style: HTMLStyle) {
         let fullRange = NSRange(location: 0, length: text.length)
         
-        let boldFontDescriptor = font.fontDescriptor.withSymbolicTraits(.traitBold)
-        let boldFont = boldFontDescriptor.map { UIFont(descriptor: $0, size: font.pointSize) }
+        let boldFontDescriptor = style.font.fontDescriptor.withSymbolicTraits(.traitBold)
+        let boldFont = boldFontDescriptor.map { UIFont(descriptor: $0, size: style.font.pointSize) }
         
         text.enumerateAttribute(.font, in: fullRange, options: []) { value, range, finished in
             guard let currentFont = value as? UIFont else { return }
@@ -78,10 +135,10 @@ public extension NSAttributedString {
 
             if let boldFont = boldFont, currentFont.fontDescriptor.symbolicTraits.contains(.traitBold) {
                 newFont = boldFont
-                newColor = boldTextColor ?? textColor
+                newColor = style.boldTextColor ?? style.textColor
             } else {
-                newFont = font
-                newColor = textColor
+                newFont = style.font
+                newColor = style.textColor
             }
 
             text.removeAttribute(.font, range: range)
@@ -94,12 +151,12 @@ public extension NSAttributedString {
     
     private static let listBulletCharacter = "\u{25CF}"
     
-    private static func replaceBullets(in text: NSMutableAttributedString, font: UIFont) {
-        let bulletFont = font.withSize(10)
+    private static func replaceBullets(in text: NSMutableAttributedString, style: HTMLStyle) {
+        let bulletFont = style.font.withSize(10)
         let bulletAttributes: [NSAttributedString.Key: Any] = [
             .font: bulletFont,
             .foregroundColor: Theme.colors.primary,
-            .baselineOffset: (font.xHeight - bulletFont.xHeight) / 2
+            .baselineOffset: (style.font.xHeight - bulletFont.xHeight) / 2
         ]
         
         let currentText = text.string
@@ -117,9 +174,9 @@ public extension NSAttributedString {
         }
     }
     
-    private static func replaceListParagraphStyle(in text: NSMutableAttributedString, textAlignment: NSTextAlignment) {
+    private static func replaceListParagraphStyle(in text: NSMutableAttributedString, style: HTMLStyle) {
         let fullRange = NSRange(location: 0, length: text.length)
-        let listParagraphStyle = createListParagraphStyle(textAlignment: textAlignment)
+        let listParagraphStyle = createListParagraphStyle(style: style)
         
         var previousParagraphIsListStart = false
         text.enumerateAttribute(.paragraphStyle, in: fullRange, options: []) { value, range, finished in

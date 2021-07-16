@@ -445,15 +445,15 @@ class ContactQuestionnaireViewModel {
     var copyableGuidelines: String {
         // Parse the html then return the plaintext string
         let intro = NSAttributedString
-            .makeFromHtml(text: informIntro, font: Theme.fonts.body, textColor: .black)
+            .makeFromHtml(text: informIntro, style: .bodyBlack)
             .string
         
         let content = NSAttributedString
-            .makeFromHtml(text: informContent, font: Theme.fonts.body, textColor: .black)
+            .makeFromHtml(text: informContent, style: .bodyBlack)
             .string
         
         let link = NSAttributedString
-            .makeFromHtml(text: informLink, font: Theme.fonts.body, textColor: .black)
+            .makeFromHtml(text: informLink, style: .bodyBlack)
             .string
         
         return [intro, content, link]
