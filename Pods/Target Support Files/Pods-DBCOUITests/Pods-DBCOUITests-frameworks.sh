@@ -174,10 +174,13 @@ code_sign_if_enabled() {
   fi
 }
 
-if [[ "$CONFIGURATION" == "Ad Hoc Acc" ]]; then
+if [[ "$CONFIGURATION" == "Ad Hoc Acceptance" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/CucumberSwift/CucumberSwift.framework"
 fi
-if [[ "$CONFIGURATION" == "Ad Hoc Prod" ]]; then
+if [[ "$CONFIGURATION" == "Ad Hoc Production" ]]; then
+  install_framework "${BUILT_PRODUCTS_DIR}/CucumberSwift/CucumberSwift.framework"
+fi
+if [[ "$CONFIGURATION" == "Ad Hoc Staging" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/CucumberSwift/CucumberSwift.framework"
 fi
 if [[ "$CONFIGURATION" == "Ad Hoc Test" ]]; then
