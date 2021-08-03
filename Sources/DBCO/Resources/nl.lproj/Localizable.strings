@@ -364,7 +364,7 @@
 /* MARK: - Informing contacts */
 "contactPromptNameFallback" = "deze persoon";
 
-"contactInformPromptTitle" = "Heb jij %@ geinformeerd en de leefregels gedeeld?";
+"contactInformPromptTitle" = "Heb jij %@ geïnformeerd?";
 "contactInformPromptMessage" = "Dit is niet verplicht, maar het is belangrijk dat deze persoon weet dat je besmet bent.";
 "contactInformOptionDone" = "Ja";
 "contactInformActionInformLater" = "Nee, doe ik later";
