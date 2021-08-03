@@ -188,15 +188,22 @@
 		2859E73725DE79C100359BA1 /* UIView+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Search.swift"; sourceTree = "<group>"; };
 		2859E74F25DE95AE00359BA1 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		338AE82F669A00159A255C14 /* Pods-DBCOTests.ad hoc p.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc p.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc p.xcconfig"; sourceTree = "<group>"; };
+		35D05725104895E020767404 /* Pods-DBCOTests.ad hoc production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc production.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc production.xcconfig"; sourceTree = "<group>"; };
+		37546379BBA6B26B7999B7B8 /* Pods-DBCOUITests.ad hoc acceptance.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOUITests.ad hoc acceptance.xcconfig"; path = "Target Support Files/Pods-DBCOUITests/Pods-DBCOUITests.ad hoc acceptance.xcconfig"; sourceTree = "<group>"; };
 		3C5D22DA740F30F804D7F95E /* Pods_DBCOTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DBCOTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F26983E3C652AB213ED4047 /* Pods-DBCO.ad hoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc.xcconfig"; sourceTree = "<group>"; };
 		6C5677B37F093FB9A2E4A66F /* Pods-DBCOUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOUITests.debug.xcconfig"; path = "Target Support Files/Pods-DBCOUITests/Pods-DBCOUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		71F9A37ED12ABA8A181A7BED /* Pods-DBCO.ad hoc production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc production.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc production.xcconfig"; sourceTree = "<group>"; };
+		85DC605B4E2CFABCF39C2A17 /* Pods-DBCO.ad hoc staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc staging.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc staging.xcconfig"; sourceTree = "<group>"; };
 		8C5B6FFF57DC03F9D4B6BA45 /* Pods-DBCO.ad hoc p.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc p.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc p.xcconfig"; sourceTree = "<group>"; };
+		8DC902818280EC4C07D99893 /* Pods-DBCOUITests.ad hoc staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOUITests.ad hoc staging.xcconfig"; path = "Target Support Files/Pods-DBCOUITests/Pods-DBCOUITests.ad hoc staging.xcconfig"; sourceTree = "<group>"; };
 		926126B7CC8EF910FA24AE60 /* Pods-DBCOTests.ad hoc t.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc t.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc t.xcconfig"; sourceTree = "<group>"; };
+		951458DEAFFE843C62959139 /* Pods-DBCOTests.ad hoc staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc staging.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc staging.xcconfig"; sourceTree = "<group>"; };
 		95E9699EAF5C5557EB9A0265 /* Pods-DBCO.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.app store.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.app store.xcconfig"; sourceTree = "<group>"; };
 		9C3C39BFCF985C619EF17EFA /* Pods-DBCOTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.debug.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.debug.xcconfig"; sourceTree = "<group>"; };
 		9CC161F1119555874A856AE2 /* Pods-DBCOTests.ad hoc acc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc acc.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc acc.xcconfig"; sourceTree = "<group>"; };
 		B672C724231CFA664F9FECA4 /* Pods-DBCOUITests.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOUITests.app store.xcconfig"; path = "Target Support Files/Pods-DBCOUITests/Pods-DBCOUITests.app store.xcconfig"; sourceTree = "<group>"; };
+		C1289A7C08F1FECA26FAD69E /* Pods-DBCOTests.ad hoc acceptance.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc acceptance.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc acceptance.xcconfig"; sourceTree = "<group>"; };
 		C18D9B6017862BD245973A0B /* Pods-DBCOUITests.ad hoc prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOUITests.ad hoc prod.xcconfig"; path = "Target Support Files/Pods-DBCOUITests/Pods-DBCOUITests.ad hoc prod.xcconfig"; sourceTree = "<group>"; };
 		C604B6AA2DE456A21DA9EE15 /* Pods-DBCOTests.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.app store.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.app store.xcconfig"; sourceTree = "<group>"; };
 		CBA78D02FA0FE384D189E4D2 /* Pods-DBCO.pentest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.pentest.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.pentest.xcconfig"; sourceTree = "<group>"; };
@@ -351,8 +358,10 @@
 		D2AD6924D68CE50CD7E415A6 /* Pods-DBCO.ad hoc prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc prod.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc prod.xcconfig"; sourceTree = "<group>"; };
 		D34E71FC855BE93CC1FC3C40 /* Pods-DBCO.ad hoc test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc test.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc test.xcconfig"; sourceTree = "<group>"; };
 		DE63011D372615A2F530B706 /* Pods-DBCOTests.ad hoc test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc test.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc test.xcconfig"; sourceTree = "<group>"; };
+		DEBA0E94A36D24DFC917B054 /* Pods-DBCOUITests.ad hoc production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOUITests.ad hoc production.xcconfig"; path = "Target Support Files/Pods-DBCOUITests/Pods-DBCOUITests.ad hoc production.xcconfig"; sourceTree = "<group>"; };
 		E2831572191C3F7F8B260963 /* Pods-DBCOUITests.ad hoc acc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOUITests.ad hoc acc.xcconfig"; path = "Target Support Files/Pods-DBCOUITests/Pods-DBCOUITests.ad hoc acc.xcconfig"; sourceTree = "<group>"; };
 		E83F120572B4CBA49A883E2D /* Pods-DBCO.ad hoc a.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc a.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc a.xcconfig"; sourceTree = "<group>"; };
+		E8FE206D547BB8002B18AA96 /* Pods-DBCO.ad hoc acceptance.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc acceptance.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc acceptance.xcconfig"; sourceTree = "<group>"; };
 		F20D8B2429FE08BE228E7DCD /* Pods-DBCOTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.release.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.release.xcconfig"; sourceTree = "<group>"; };
 		F25DD8B1E7114556272B64D6 /* Pods-DBCO.ad hoc t.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCO.ad hoc t.xcconfig"; path = "Target Support Files/Pods-DBCO/Pods-DBCO.ad hoc t.xcconfig"; sourceTree = "<group>"; };
 		F7A36007E7696A5D934BA199 /* Pods-DBCOTests.ad hoc prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBCOTests.ad hoc prod.xcconfig"; path = "Target Support Files/Pods-DBCOTests/Pods-DBCOTests.ad hoc prod.xcconfig"; sourceTree = "<group>"; };
@@ -882,6 +891,15 @@
 				264EC953EDE1DD34F76D21B8 /* Pods-DBCOUITests.ad hoc test.xcconfig */,
 				E2831572191C3F7F8B260963 /* Pods-DBCOUITests.ad hoc acc.xcconfig */,
 				C18D9B6017862BD245973A0B /* Pods-DBCOUITests.ad hoc prod.xcconfig */,
+				E8FE206D547BB8002B18AA96 /* Pods-DBCO.ad hoc acceptance.xcconfig */,
+				85DC605B4E2CFABCF39C2A17 /* Pods-DBCO.ad hoc staging.xcconfig */,
+				C1289A7C08F1FECA26FAD69E /* Pods-DBCOTests.ad hoc acceptance.xcconfig */,
+				951458DEAFFE843C62959139 /* Pods-DBCOTests.ad hoc staging.xcconfig */,
+				37546379BBA6B26B7999B7B8 /* Pods-DBCOUITests.ad hoc acceptance.xcconfig */,
+				8DC902818280EC4C07D99893 /* Pods-DBCOUITests.ad hoc staging.xcconfig */,
+				71F9A37ED12ABA8A181A7BED /* Pods-DBCO.ad hoc production.xcconfig */,
+				35D05725104895E020767404 /* Pods-DBCOTests.ad hoc production.xcconfig */,
+				DEBA0E94A36D24DFC917B054 /* Pods-DBCOUITests.ad hoc production.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -1366,6 +1384,134 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		CD0BB50526B938AF00E7C48E /* Ad Hoc Staging */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LOG_LEVEL = debug;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				NETWORK_CONFIGURATION = Staging;
+				RESET_ENABLED = YES;
+				SDKROOT = iphoneos;
+				SHARE_LOGS_ENABLED = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = "Ad Hoc Staging";
+		};
+		CD0BB50626B938AF00E7C48E /* Ad Hoc Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 85DC605B4E2CFABCF39C2A17 /* Pods-DBCO.ad hoc staging.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 178;
+				DEVELOPMENT_TEAM = C2H38GV99H;
+				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
+				PRODUCT_NAME = "GGD Contact (Prod)";
+				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO Ad Hoc";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Ad Hoc Staging";
+		};
+		CD0BB50726B938AF00E7C48E /* Ad Hoc Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 951458DEAFFE843C62959139 /* Pods-DBCOTests.ad hoc staging.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = DBCOTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.DBCOTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GGD Contact.app/GGD Contact";
+			};
+			name = "Ad Hoc Staging";
+		};
+		CD0BB50826B938AF00E7C48E /* Ad Hoc Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8DC902818280EC4C07D99893 /* Pods-DBCOUITests.ad hoc staging.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = C2H38GV99H;
+				INFOPLIST_FILE = DBCOUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.DBCOUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = DBCO;
+			};
+			name = "Ad Hoc Staging";
+		};
 		CD21D4C6258B77360079D085 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1886,9 +2032,9 @@
 			};
 			name = "Ad Hoc Test";
 		};
-		CDE1CD61265FCE9300961F87 /* Ad Hoc Acc */ = {
+		CDE1CD61265FCE9300961F87 /* Ad Hoc Acceptance */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E2831572191C3F7F8B260963 /* Pods-DBCOUITests.ad hoc acc.xcconfig */;
+			baseConfigurationReference = 37546379BBA6B26B7999B7B8 /* Pods-DBCOUITests.ad hoc acceptance.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -1906,11 +2052,11 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = DBCO;
 			};
-			name = "Ad Hoc Acc";
+			name = "Ad Hoc Acceptance";
 		};
-		CDE1CD62265FCE9300961F87 /* Ad Hoc Prod */ = {
+		CDE1CD62265FCE9300961F87 /* Ad Hoc Production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C18D9B6017862BD245973A0B /* Pods-DBCOUITests.ad hoc prod.xcconfig */;
+			baseConfigurationReference = DEBA0E94A36D24DFC917B054 /* Pods-DBCOUITests.ad hoc production.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -1928,9 +2074,9 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = DBCO;
 			};
-			name = "Ad Hoc Prod";
+			name = "Ad Hoc Production";
 		};
-		CDE70A8625836DCF00782BFB /* Ad Hoc Acc */ = {
+		CDE70A8625836DCF00782BFB /* Ad Hoc Acceptance */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1980,7 +2126,7 @@
 				LOG_LEVEL = debug;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				NETWORK_CONFIGURATION = ACC;
+				NETWORK_CONFIGURATION = Acceptance;
 				RESET_ENABLED = YES;
 				SDKROOT = iphoneos;
 				SHARE_LOGS_ENABLED = YES;
@@ -1990,11 +2136,11 @@
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
-			name = "Ad Hoc Acc";
+			name = "Ad Hoc Acceptance";
 		};
-		CDE70A8725836DCF00782BFB /* Ad Hoc Acc */ = {
+		CDE70A8725836DCF00782BFB /* Ad Hoc Acceptance */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 27736E44777314C870221718 /* Pods-DBCO.ad hoc acc.xcconfig */;
+			baseConfigurationReference = E8FE206D547BB8002B18AA96 /* Pods-DBCO.ad hoc acceptance.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -2013,11 +2159,11 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = "Ad Hoc Acc";
+			name = "Ad Hoc Acceptance";
 		};
-		CDE70A8825836DCF00782BFB /* Ad Hoc Acc */ = {
+		CDE70A8825836DCF00782BFB /* Ad Hoc Acceptance */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9CC161F1119555874A856AE2 /* Pods-DBCOTests.ad hoc acc.xcconfig */;
+			baseConfigurationReference = C1289A7C08F1FECA26FAD69E /* Pods-DBCOTests.ad hoc acceptance.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -2034,9 +2180,9 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GGD Contact.app/GGD Contact";
 			};
-			name = "Ad Hoc Acc";
+			name = "Ad Hoc Acceptance";
 		};
-		CDE70A8925836DD600782BFB /* Ad Hoc Prod */ = {
+		CDE70A8925836DD600782BFB /* Ad Hoc Production */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2096,11 +2242,11 @@
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
-			name = "Ad Hoc Prod";
+			name = "Ad Hoc Production";
 		};
-		CDE70A8A25836DD600782BFB /* Ad Hoc Prod */ = {
+		CDE70A8A25836DD600782BFB /* Ad Hoc Production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D2AD6924D68CE50CD7E415A6 /* Pods-DBCO.ad hoc prod.xcconfig */;
+			baseConfigurationReference = 71F9A37ED12ABA8A181A7BED /* Pods-DBCO.ad hoc production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -2119,11 +2265,11 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = "Ad Hoc Prod";
+			name = "Ad Hoc Production";
 		};
-		CDE70A8B25836DD600782BFB /* Ad Hoc Prod */ = {
+		CDE70A8B25836DD600782BFB /* Ad Hoc Production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F7A36007E7696A5D934BA199 /* Pods-DBCOTests.ad hoc prod.xcconfig */;
+			baseConfigurationReference = 35D05725104895E020767404 /* Pods-DBCOTests.ad hoc production.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -2140,7 +2286,7 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GGD Contact.app/GGD Contact";
 			};
-			name = "Ad Hoc Prod";
+			name = "Ad Hoc Production";
 		};
 /* End XCBuildConfiguration section */
 
@@ -2152,8 +2298,9 @@
 				CD756C45252B44E6005FEDA0 /* App Store */,
 				CD21D4C8258B77360079D085 /* Release */,
 				CD756C40252B4316005FEDA0 /* Ad Hoc Test */,
-				CDE70A8825836DCF00782BFB /* Ad Hoc Acc */,
-				CDE70A8B25836DD600782BFB /* Ad Hoc Prod */,
+				CDE70A8825836DCF00782BFB /* Ad Hoc Acceptance */,
+				CDE70A8B25836DD600782BFB /* Ad Hoc Production */,
+				CD0BB50726B938AF00E7C48E /* Ad Hoc Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -2165,8 +2312,9 @@
 				CD756C43252B44E6005FEDA0 /* App Store */,
 				CD21D4C6258B77360079D085 /* Release */,
 				CD756C3E252B4316005FEDA0 /* Ad Hoc Test */,
-				CDE70A8625836DCF00782BFB /* Ad Hoc Acc */,
-				CDE70A8925836DD600782BFB /* Ad Hoc Prod */,
+				CDE70A8625836DCF00782BFB /* Ad Hoc Acceptance */,
+				CDE70A8925836DD600782BFB /* Ad Hoc Production */,
+				CD0BB50526B938AF00E7C48E /* Ad Hoc Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -2178,8 +2326,9 @@
 				CD756C44252B44E6005FEDA0 /* App Store */,
 				CD21D4C7258B77360079D085 /* Release */,
 				CD756C3F252B4316005FEDA0 /* Ad Hoc Test */,
-				CDE70A8725836DCF00782BFB /* Ad Hoc Acc */,
-				CDE70A8A25836DD600782BFB /* Ad Hoc Prod */,
+				CDE70A8725836DCF00782BFB /* Ad Hoc Acceptance */,
+				CDE70A8A25836DD600782BFB /* Ad Hoc Production */,
+				CD0BB50626B938AF00E7C48E /* Ad Hoc Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -2191,8 +2340,9 @@
 				CDE1CD5E265FCE9300961F87 /* App Store */,
 				CDE1CD5F265FCE9300961F87 /* Release */,
 				CDE1CD60265FCE9300961F87 /* Ad Hoc Test */,
-				CDE1CD61265FCE9300961F87 /* Ad Hoc Acc */,
-				CDE1CD62265FCE9300961F87 /* Ad Hoc Prod */,
+				CDE1CD61265FCE9300961F87 /* Ad Hoc Acceptance */,
+				CDE1CD62265FCE9300961F87 /* Ad Hoc Production */,
+				CD0BB50826B938AF00E7C48E /* Ad Hoc Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

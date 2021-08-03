@@ -32,21 +32,6 @@ struct NetworkConfiguration {
         return nil
     }
 
-    static let development = NetworkConfiguration(
-        name: "Development",
-        api: .init(
-            scheme: "https",
-            host: "public.testing.dbco.egeniq.com",
-            port: nil,
-            path: ["v2"],
-            sslSignature: nil,
-            tokenParams: [:]
-        ),
-        haPublicKey: .init(
-            encodedPublicKey: "uuPJSp5VXqQElwGsywf9ESEm26Ie1BOlnxlr8V+7/Fg=",
-            keyVersion: "20201210")
-    )
-
     static let test = NetworkConfiguration(
         name: "Test",
         api: .init(
@@ -63,7 +48,7 @@ struct NetworkConfiguration {
     )
 
     static let acceptance = NetworkConfiguration(
-        name: "ACC",
+        name: "Acceptance",
         api: .init(
             scheme: "https",
             host: "api-acc.bco-portaal.nl",
@@ -75,6 +60,21 @@ struct NetworkConfiguration {
         haPublicKey: .init(
             encodedPublicKey: "X850Q6EDZT7N5IQEXVHphSerjDjHxuwEtDH0KnNrHRg=",
             keyVersion: "20201230")
+    )
+    
+    static let staging = NetworkConfiguration(
+        name: "Staging",
+        api: .init(
+            scheme: "https",
+            host: "api-staging.bco-portaal.nl",
+            port: nil,
+            path: ["v2"],
+            sslSignature: "TSSRQUz+lWdG7Ezvps9vcuKKEylDL52KkHrEy12twVo=",
+            tokenParams: [:]
+        ),
+        haPublicKey: .init(
+            encodedPublicKey: "6a1z2yfXhdfNvuMNBl4vkAhfA2dbw8SGX0Sdg5jFok4=",
+            keyVersion: "20210707")
     )
 
     static let production = NetworkConfiguration(
