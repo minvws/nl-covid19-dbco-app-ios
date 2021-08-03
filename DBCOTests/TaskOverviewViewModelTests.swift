@@ -11,7 +11,7 @@ import XCTest
 class TaskOverviewViewModelTests: XCTestCase {
     
     func testEmptyOverview() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         
         let input = TaskOverviewViewModel.Input(pairing: pairingManager, case: caseManager)
@@ -40,7 +40,7 @@ class TaskOverviewViewModelTests: XCTestCase {
     }
     
     func testUnsyncedTaskOverview() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         caseManager.isSynced = false
         
@@ -70,7 +70,7 @@ class TaskOverviewViewModelTests: XCTestCase {
     }
     
     func testExpiredTaskOverviewSynced() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         caseManager.isSynced = true
         caseManager.isWindowExpired = true
@@ -101,7 +101,7 @@ class TaskOverviewViewModelTests: XCTestCase {
     }
     
     func testExpiredTasksOverviewUnsynced() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         caseManager.isSynced = false
         caseManager.isWindowExpired = true
@@ -132,7 +132,7 @@ class TaskOverviewViewModelTests: XCTestCase {
     }
     
     func testTaskOverviewBecameExpired() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         caseManager.isWindowExpired = false
         
@@ -175,7 +175,7 @@ class TaskOverviewViewModelTests: XCTestCase {
     }
     
     func testAddContactButtonStateForUninformedContacts() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         caseManager.tasks = [createUninformedTask(label: "Anna Haro")]
         caseManager.hasSynced = false
@@ -195,7 +195,7 @@ class TaskOverviewViewModelTests: XCTestCase {
     }
     
     func testAddContactButtonStateForInformedContacts() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         caseManager.tasks = [createInformedTask(label: "Anna Haro")]
         caseManager.hasSynced = false
@@ -215,7 +215,7 @@ class TaskOverviewViewModelTests: XCTestCase {
     }
     
     func testAddContactButtonStateForInformedAndUninformedContacts() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         caseManager.tasks = [createInformedTask(label: "Anna Haro"), createUninformedTask(label: "Daniel Higgins")]
         caseManager.hasSynced = false
@@ -235,7 +235,7 @@ class TaskOverviewViewModelTests: XCTestCase {
     }
     
     func testAddContactButtonStateForUnsyncedContacts() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         caseManager.tasks = [createUnsyncedTask(label: "Anna Haro")]
         caseManager.hasSynced = true
@@ -255,7 +255,7 @@ class TaskOverviewViewModelTests: XCTestCase {
     }
     
     func testAddContactButtonStateForSyncedContacts() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         caseManager.tasks = [createSyncedTask(label: "Anna Haro")]
         caseManager.hasSynced = true
@@ -275,7 +275,7 @@ class TaskOverviewViewModelTests: XCTestCase {
     }
     
     func testAddContactButtonStateForSyncedAndUnsyncedContacts() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         caseManager.tasks = [createSyncedTask(label: "Anna Haro"), createUnsyncedTask(label: "Daniel Higgins")]
         caseManager.hasSynced = true

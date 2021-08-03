@@ -185,7 +185,7 @@ private class MockHealthAuthority {
 private extension NetworkConfiguration {
     static let unitTest = NetworkConfiguration(
         name: "UnitTest",
-        api: NetworkConfiguration.development.api,
+        api: NetworkConfiguration.test.api,
         haPublicKey: .init(
             encodedPublicKey: MockHealthAuthority.haPublicKey,
             keyVersion: "20212505"))

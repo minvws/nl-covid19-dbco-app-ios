@@ -20,8 +20,8 @@ opt_in_rules:
   - unneeded_parentheses_in_closure_argument
 excluded:
   - Pods
-  - TheAnyThingTests
-  - TheAnyThingUITests
+  - DBCOTests
+  - vendor
 force_cast: warning
 force_try:
   severity: warning

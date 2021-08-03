@@ -36,7 +36,7 @@ platform :ios do
   lane :deploy do
     prepare
 
-    version = get_version_number(xcodeproj: "DBCO.xcodeproj", target: "DBCO", configuration: "Ad Hoc Prod")
+    version = get_version_number(xcodeproj: "DBCO.xcodeproj", target: "DBCO", configuration: "Ad Hoc Production")
     build_number = determine_build_number()
 
     increment_build_number(build_number: build_number, xcodeproj: "DBCO.xcodeproj")
@@ -44,6 +44,8 @@ platform :ios do
     deploy_test
 
     deploy_acc
+
+    deploy_staging
 
     deploy_prod
 
@@ -98,7 +100,7 @@ platform :ios do
   private_lane :deploy_acc do
     build_ios_app(
       scheme: "DBCO",
-      configuration: "Ad Hoc Acc",
+      configuration: "Ad Hoc Acceptance",
       export_options: {
         method: "ad-hoc",
         provisioningProfiles: {
@@ -113,10 +115,28 @@ platform :ios do
     )
   end
 
+  private_lane :deploy_staging do
+    build_ios_app(
+      scheme: "DBCO",
+      configuration: "Ad Hoc Staging",
+      export_options: {
+        method: "ad-hoc",
+        provisioningProfiles: {
+          "nl.rijksoverheid.dbco" => "GGD DBCO Ad Hoc"
+        }
+      }
+    )
+
+    firebase_app_distribution(
+      app: "1:645386815351:ios:e19e5ef35d873a736c8372",
+      groups: "testers"
+    )
+  end
+
   private_lane :deploy_prod do
     build_ios_app(
       scheme: "DBCO",
-      configuration: "Ad Hoc Prod",
+      configuration: "Ad Hoc Production",
       export_options: {
         method: "ad-hoc",
         provisioningProfiles: {
