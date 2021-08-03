@@ -1462,7 +1462,7 @@
 				);
 				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
-				PRODUCT_NAME = "GGD Contact (Prod)";
+				PRODUCT_NAME = "GGD Contact (Staging)";
 				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO Ad Hoc";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
