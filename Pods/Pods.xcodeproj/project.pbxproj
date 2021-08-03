@@ -316,20 +316,20 @@
 		2951175D867ECB0ADC35DEE5DF8BFBCB /* NSObjectLoadable.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = NSObjectLoadable.m; path = "Sources/Obj-C BS/NSObjectLoadable.m"; sourceTree = "<group>"; };
 		2990AEE6792D2142B7AE20F4030A207C /* Pods-DBCOTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-DBCOTests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		2ADCF8876B5FEEA5DBC216B4F7AD4660 /* Pods-DBCOUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-DBCOUITests.release.xcconfig"; sourceTree = "<group>"; };
-		2AF46C226A9D8F56361F4AC8F8AE173B /* gherkin-languages.json */ = {isa = PBXFileReference; includeInIndex = 1; name = "gherkin-languages.json"; path = "Sources/CucumberSwift/Gherkin/gherkin-languages.json"; sourceTree = "<group>"; };
+		2AF46C226A9D8F56361F4AC8F8AE173B /* gherkin-languages.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; name = "gherkin-languages.json"; path = "Sources/CucumberSwift/Gherkin/gherkin-languages.json"; sourceTree = "<group>"; };
 		2B0047DE2B4D5D7521C1A03021F988DB /* Step.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Step.swift; path = Sources/CucumberSwift/Gherkin/Parser/Step.swift; sourceTree = "<group>"; };
 		2C2600421E8668C233682485FFD6A79D /* CocoaLumberjack-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CocoaLumberjack-prefix.pch"; sourceTree = "<group>"; };
 		2EE5D62839B749201D4F517EF0BC57D3 /* NonceGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NonceGenerator.swift; path = Sodium/Generators/NonceGenerator.swift; sourceTree = "<group>"; };
 		2F6BAE093FB265057D1FD88687680CCF /* crypto_onetimeauth_poly1305.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_onetimeauth_poly1305.h; path = Sodium/libsodium/crypto_onetimeauth_poly1305.h; sourceTree = "<group>"; };
 		303E736BBA228DB79197EFF9AAE056C3 /* Box.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Box.swift; path = Sodium/Box.swift; sourceTree = "<group>"; };
-		32497A3ACEA14D32D7F8C65D5357128A /* Sodium.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Sodium.framework; path = Sodium.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		32497A3ACEA14D32D7F8C65D5357128A /* Sodium.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Sodium.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		325E93C0A07E09DFD8F29E0856AFCE06 /* CucumberTest.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CucumberTest.swift; path = Sources/CucumberSwift/Runner/CucumberTest.swift; sourceTree = "<group>"; };
 		33B2BFC2A9431FA97E9343FEE67A8D5B /* JailbreakChecker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JailbreakChecker.swift; path = IOSSecuritySuite/JailbreakChecker.swift; sourceTree = "<group>"; };
 		33E93297B7F26D399C6D2F9B46BDAD87 /* IOSSecuritySuite-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "IOSSecuritySuite-dummy.m"; sourceTree = "<group>"; };
 		36F2ADE4AFDA3185B40FEF20C9BBB4C6 /* DDOSLogger.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DDOSLogger.h; path = Sources/CocoaLumberjack/include/CocoaLumberjack/DDOSLogger.h; sourceTree = "<group>"; };
 		390787DD7042FE2722F342B2B266A427 /* crypto_stream_xsalsa20.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_stream_xsalsa20.h; path = Sodium/libsodium/crypto_stream_xsalsa20.h; sourceTree = "<group>"; };
 		3A29DC9A90A425B3CF4681D3FF446D4D /* Pods-DBCO.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-DBCO.modulemap"; sourceTree = "<group>"; };
-		3B43A6969A0A3E8CCD33EECB39735E10 /* Feature.codesnippet */ = {isa = PBXFileReference; includeInIndex = 1; name = Feature.codesnippet; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/Snippets/Feature.codesnippet"; sourceTree = "<group>"; };
+		3B43A6969A0A3E8CCD33EECB39735E10 /* Feature.codesnippet */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = Feature.codesnippet; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/Snippets/Feature.codesnippet"; sourceTree = "<group>"; };
 		3BB21BF918FC56AF3D03BC4B68ABA24B /* Pods-DBCO.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-DBCO.debug.xcconfig"; sourceTree = "<group>"; };
 		3BD90ADF49467724022CB936FF497CE7 /* DDASLLogCapture.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DDASLLogCapture.m; path = Sources/CocoaLumberjack/DDASLLogCapture.m; sourceTree = "<group>"; };
 		3C2B1C2AA008D0E5411BDC0B0A9BC842 /* StepBuilder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StepBuilder.swift; path = Sources/CucumberSwift/DSL/StepBuilder.swift; sourceTree = "<group>"; };
@@ -363,7 +363,7 @@
 		52204010FE2AE51F86A454329F5C769C /* crypto_aead_chacha20poly1305.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_aead_chacha20poly1305.h; path = Sodium/libsodium/crypto_aead_chacha20poly1305.h; sourceTree = "<group>"; };
 		539EFB5493DD5FC9B7A1EC75C8D53ADF /* XCTestHooks.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = XCTestHooks.h; path = "Sources/Obj-C BS/Include/XCTestHooks.h"; sourceTree = "<group>"; };
 		54808C6C88411583D225CB43662CF2A8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		558852C1CA3FFABCCBC39A0882B28F98 /* Gherkin.ideplugin */ = {isa = PBXFileReference; includeInIndex = 1; name = Gherkin.ideplugin; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/Gherkin.ideplugin"; sourceTree = "<group>"; };
+		558852C1CA3FFABCCBC39A0882B28F98 /* Gherkin.ideplugin */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper; name = Gherkin.ideplugin; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/Gherkin.ideplugin"; sourceTree = "<group>"; };
 		5671FC5AE7A854205F86F0A932503933 /* crypto_verify_64.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_verify_64.h; path = Sodium/libsodium/crypto_verify_64.h; sourceTree = "<group>"; };
 		57D4C296A5BA0BAE7AEFA8CA5C645F8E /* ASTRule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ASTRule.swift; path = Sources/CucumberSwift/Gherkin/AST/ASTRule.swift; sourceTree = "<group>"; };
 		57E89612A1982F8C6DB1952CF7B4A3E3 /* crypto_stream_salsa208.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_stream_salsa208.h; path = Sodium/libsodium/crypto_stream_salsa208.h; sourceTree = "<group>"; };
@@ -386,7 +386,7 @@
 		69275860A324037673033E44F2A43ACF /* Pods-DBCOTests.ad hoc test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-DBCOTests.ad hoc test.xcconfig"; sourceTree = "<group>"; };
 		69DBDDA19B4393676531CB2283311676 /* Pods-DBCOTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-DBCOTests-dummy.m"; sourceTree = "<group>"; };
 		6A1C2C94EDA1B85A399B713D5B6FFEB7 /* crypto_sign_edwards25519sha512batch.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_sign_edwards25519sha512batch.h; path = Sodium/libsodium/crypto_sign_edwards25519sha512batch.h; sourceTree = "<group>"; };
-		6AAEBA8F94F5EA0450FD6A1E63728E2A /* Scenario.codesnippet */ = {isa = PBXFileReference; includeInIndex = 1; name = Scenario.codesnippet; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/Snippets/Scenario.codesnippet"; sourceTree = "<group>"; };
+		6AAEBA8F94F5EA0450FD6A1E63728E2A /* Scenario.codesnippet */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = Scenario.codesnippet; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/Snippets/Scenario.codesnippet"; sourceTree = "<group>"; };
 		6D2E6D442F83C3C5FB856809E936A8D4 /* Sodium.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Sodium.debug.xcconfig; sourceTree = "<group>"; };
 		706BEA5FA66A27EF129C7EFC26D19FDB /* MightEqualOperator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MightEqualOperator.swift; path = "Sources/CucumberSwift/Custom Operators/MightEqualOperator.swift"; sourceTree = "<group>"; };
 		70F54C2ACD9C35EE817E9CCD434402BB /* crypto_secretbox_xsalsa20poly1305.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_secretbox_xsalsa20poly1305.h; path = Sodium/libsodium/crypto_secretbox_xsalsa20poly1305.h; sourceTree = "<group>"; };
@@ -417,7 +417,7 @@
 		81F89F5B585D76E82DB42335C9BCDABF /* CucumberTestObserver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CucumberTestObserver.swift; path = Sources/CucumberSwift/Protocols/CucumberTestObserver.swift; sourceTree = "<group>"; };
 		82C6423EA976991B8FA31A367C144FA4 /* crypto_verify_32.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_verify_32.h; path = Sodium/libsodium/crypto_verify_32.h; sourceTree = "<group>"; };
 		875203ADE95EAF1943174B8A48094FC5 /* KeyDerivation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeyDerivation.swift; path = Sodium/KeyDerivation.swift; sourceTree = "<group>"; };
-		87FE5CD69B310A98EF0F3341E8A880CC /* Pods_DBCOTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_DBCOTests.framework; path = "Pods-DBCOTests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		87FE5CD69B310A98EF0F3341E8A880CC /* Pods_DBCOTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DBCOTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		88A7438F9D303B1FCB41E3C15C954FFA /* Matcher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Matcher.swift; path = Sources/CucumberSwift/DSL/Matcher.swift; sourceTree = "<group>"; };
 		8952817913720ECAD4C45B256DE0D3FD /* XCTestHooks.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = XCTestHooks.m; path = "Sources/Obj-C BS/XCTestHooks.m"; sourceTree = "<group>"; };
 		8B8694193D114C7C9DD22A8BACA44A74 /* Position.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Position.swift; path = Sources/CucumberSwift/Gherkin/Lexer/Position.swift; sourceTree = "<group>"; };
@@ -441,10 +441,10 @@
 		99642AEA49FDA09B565710F6BBF7CDE2 /* Language.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Language.swift; path = Sources/CucumberSwift/Gherkin/Language.swift; sourceTree = "<group>"; };
 		9ACD62A8C00558B006BC9BC2D73F5F1E /* Pods-DBCOTests.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-DBCOTests.app store.xcconfig"; sourceTree = "<group>"; };
 		9AED539E4286FD5E91EBA896E08B04A5 /* gherkin_colors_xcode.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; name = gherkin_colors_xcode.sh; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/gherkin_colors_xcode.sh"; sourceTree = "<group>"; };
-		9C263099E67D20389FE71727718389BB /* IOSSecuritySuite.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = IOSSecuritySuite.framework; path = IOSSecuritySuite.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9C263099E67D20389FE71727718389BB /* IOSSecuritySuite.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = IOSSecuritySuite.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CEC43B4F04BC17EBAE67DC8A8BA760D /* core.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = core.h; path = Sodium/libsodium/core.h; sourceTree = "<group>"; };
 		9D498404703C21B22B2D460A7C759E1C /* Pods-DBCO.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-DBCO.release.xcconfig"; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9F49AFF8195C19B28871CEE5A61EFD2B /* crypto_scalarmult_curve25519.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_scalarmult_curve25519.h; path = Sodium/libsodium/crypto_scalarmult_curve25519.h; sourceTree = "<group>"; };
 		A13F9B741D8876B3445324BB07B9820B /* crypto_stream_xchacha20.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_stream_xchacha20.h; path = Sodium/libsodium/crypto_stream_xchacha20.h; sourceTree = "<group>"; };
 		A17E3BCCB1940134E54AF648487D0436 /* ShortHash.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ShortHash.swift; path = Sodium/ShortHash.swift; sourceTree = "<group>"; };
@@ -454,7 +454,7 @@
 		A4E5B932E4FBE6450D60937CCFCE84F3 /* crypto_scalarmult_ed25519.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_scalarmult_ed25519.h; path = Sodium/libsodium/crypto_scalarmult_ed25519.h; sourceTree = "<group>"; };
 		A8CEA153549187E9561F81DF3D858460 /* GenericHash.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GenericHash.swift; path = Sodium/GenericHash.swift; sourceTree = "<group>"; };
 		A8F5AD68E3113F36DFA54CD547F41E7B /* Pods-DBCOTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-DBCOTests.debug.xcconfig"; sourceTree = "<group>"; };
-		AA46A6FB8E05E8A5077717A55B516346 /* CucumberSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = CucumberSwift.framework; path = CucumberSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA46A6FB8E05E8A5077717A55B516346 /* CucumberSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CucumberSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB65F59D43507263977E0E7DA0021C72 /* TestCaseGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TestCaseGenerator.swift; path = Sources/CucumberSwift/XCTestCaseGenerator/TestCaseGenerator.swift; sourceTree = "<group>"; };
 		AC4006B649A34CBA7DFB27E69930A66D /* DDAssertMacros.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DDAssertMacros.h; path = Sources/CocoaLumberjack/include/CocoaLumberjack/DDAssertMacros.h; sourceTree = "<group>"; };
 		AD15B661A0EF5E787A6A3E4775C2D463 /* IOSSecuritySuite-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "IOSSecuritySuite-prefix.pch"; sourceTree = "<group>"; };
@@ -478,7 +478,7 @@
 		C051C32DA9618BC7E566FD34EA49EB75 /* FeatureHook.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FeatureHook.swift; path = Sources/CucumberSwift/Runner/Hooks/FeatureHook.swift; sourceTree = "<group>"; };
 		C0A5B4036E9D18B4F41FF20E482C3F93 /* CocoaLumberjack.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = CocoaLumberjack.modulemap; sourceTree = "<group>"; };
 		C16FC08C50C9E56D6A0AF5D4FC17AA4D /* Pods-DBCOTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-DBCOTests.release.xcconfig"; sourceTree = "<group>"; };
-		C261436D14052AE3C35F240BCD155CAC /* CocoaLumberjack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = CocoaLumberjack.framework; path = CocoaLumberjack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C261436D14052AE3C35F240BCD155CAC /* CocoaLumberjack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CocoaLumberjack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2B0CA43DF52B3A952982F581095DE6A /* Pods-DBCO.ad hoc acceptance.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-DBCO.ad hoc acceptance.xcconfig"; sourceTree = "<group>"; };
 		C363277AE96086BBCBD830C4F354DFC1 /* version.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = version.h; path = Sodium/libsodium/version.h; sourceTree = "<group>"; };
 		C5F82A27A746B55FDE76A30520BCDB25 /* Pods-DBCO-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-DBCO-frameworks.sh"; sourceTree = "<group>"; };
@@ -489,7 +489,7 @@
 		C7F0406E5E6B363DEFD0D7BD30FF3E5D /* CocoaLumberjack-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "CocoaLumberjack-Info.plist"; sourceTree = "<group>"; };
 		C8BBB3B4B9AB10F24F8BFBC590E8EC55 /* KeyPairProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeyPairProtocol.swift; path = Sodium/Generators/KeyPairProtocol.swift; sourceTree = "<group>"; };
 		C9E7EC0BA0B98E6DE9DCA9A54AB10743 /* ScenarioOutlineParser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ScenarioOutlineParser.swift; path = Sources/CucumberSwift/Gherkin/Parser/ScenarioOutlineParser.swift; sourceTree = "<group>"; };
-		CA04ABF0B3CD699588FEC314BBA914A6 /* Pods_DBCOUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_DBCOUITests.framework; path = "Pods-DBCOUITests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA04ABF0B3CD699588FEC314BBA914A6 /* Pods_DBCOUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DBCOUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA682B705070461E38CBB13B10DB766F /* RandomBytes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RandomBytes.swift; path = Sodium/RandomBytes.swift; sourceTree = "<group>"; };
 		CA7B5DA13C8B693B7BFCC1FC83606E69 /* export.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = export.h; path = Sodium/libsodium/export.h; sourceTree = "<group>"; };
 		CAFD17EEA00DE62E6CCB9B411EB62C69 /* CucumberTestObservable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CucumberTestObservable.swift; path = Sources/CucumberSwift/Protocols/CucumberTestObservable.swift; sourceTree = "<group>"; };
@@ -502,7 +502,7 @@
 		D2288B1321FF36DC4B1A6E4188101567 /* IOSSecuritySuite.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = IOSSecuritySuite.modulemap; sourceTree = "<group>"; };
 		D374D871F4DF62BD0EEA52242E1C5603 /* CucumberSwift-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CucumberSwift-dummy.m"; sourceTree = "<group>"; };
 		D3C136B48000438367EE03CBED712B87 /* Utils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = Sodium/Utils.swift; sourceTree = "<group>"; };
-		D48AE345422CCB89F472B74401460ED4 /* Scenario_Outline.codesnippet */ = {isa = PBXFileReference; includeInIndex = 1; name = Scenario_Outline.codesnippet; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/Snippets/Scenario_Outline.codesnippet"; sourceTree = "<group>"; };
+		D48AE345422CCB89F472B74401460ED4 /* Scenario_Outline.codesnippet */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = Scenario_Outline.codesnippet; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/Snippets/Scenario_Outline.codesnippet"; sourceTree = "<group>"; };
 		D720898611B9E40595E55C2D233C836C /* crypto_core_salsa20.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_core_salsa20.h; path = Sodium/libsodium/crypto_core_salsa20.h; sourceTree = "<group>"; };
 		D731831E72E205299B017FE5C7513395 /* StringExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StringExtensions.swift; path = Sources/CucumberSwift/Extensions/StringExtensions.swift; sourceTree = "<group>"; };
 		D76E154A33F744E4B8C477EA97221EEC /* Pods-DBCOUITests.ad hoc test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-DBCOUITests.ad hoc test.xcconfig"; sourceTree = "<group>"; };
@@ -530,9 +530,9 @@
 		EE2ED4E44B8692611327F2BA7BE27882 /* crypto_hash.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_hash.h; path = Sodium/libsodium/crypto_hash.h; sourceTree = "<group>"; };
 		EE778297501E415DA20F95670F96D002 /* crypto_box.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_box.h; path = Sodium/libsodium/crypto_box.h; sourceTree = "<group>"; };
 		EEF7FF2694F727DA0F618721902592A1 /* CocoaLumberjack.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CocoaLumberjack.h; path = "Sources/CocoaLumberjack/Supporting Files/CocoaLumberjack.h"; sourceTree = "<group>"; };
-		EFF2A454F13B2409BC2F79851AED336A /* Pods_DBCO.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_DBCO.framework; path = "Pods-DBCO.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EFF2A454F13B2409BC2F79851AED336A /* Pods_DBCO.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DBCO.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0D0FEB7FAB73679F8725B5FCA0E0901 /* ScenarioDSL.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ScenarioDSL.swift; path = Sources/CucumberSwift/DSL/ScenarioDSL.swift; sourceTree = "<group>"; };
-		F0E173E996275D837853123CEB135749 /* Gherkin.xclangspec */ = {isa = PBXFileReference; includeInIndex = 1; name = Gherkin.xclangspec; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/Gherkin.xclangspec"; sourceTree = "<group>"; };
+		F0E173E996275D837853123CEB135749 /* Gherkin.xclangspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xclangspec; name = Gherkin.xclangspec; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/Gherkin.xclangspec"; sourceTree = "<group>"; };
 		F251386D47AC6B73ADB6C3CF13E317CA /* Pods-DBCO.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-DBCO.app store.xcconfig"; sourceTree = "<group>"; };
 		F27F17B495663D20285F5A57271BA863 /* copy_snippets.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; name = copy_snippets.sh; path = "Sources/CucumberSwift/Gherkin/XCode-Specific/copy_snippets.sh"; sourceTree = "<group>"; };
 		F3AA015131CD450AD8B7238CF42819F2 /* crypto_kdf_blake2b.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = crypto_kdf_blake2b.h; path = Sodium/libsodium/crypto_kdf_blake2b.h; sourceTree = "<group>"; };
@@ -862,7 +862,6 @@
 				40EC2F839CD6654C3F42252C0755043B /* RuntimeHookChecker.swift */,
 				507A09A125A3B46DED4D5C8069A87CB4 /* Support Files */,
 			);
-			name = IOSSecuritySuite;
 			path = IOSSecuritySuite;
 			sourceTree = "<group>";
 		};
@@ -894,7 +893,6 @@
 				6263943DC4FCEEBC113727AE105A8EF3 /* Support Files */,
 				2C76C2A4CAD5AE9B3375277FB3C45D69 /* Swift */,
 			);
-			name = CocoaLumberjack;
 			path = CocoaLumberjack;
 			sourceTree = "<group>";
 		};
@@ -966,7 +964,6 @@
 				602EAEEEC38504990E4FC267CA37A9EB /* Support Files */,
 				7B6B83849560318B93ECF4150AB05BA4 /* syntax */,
 			);
-			name = CucumberSwift;
 			path = CucumberSwift;
 			sourceTree = "<group>";
 		};
@@ -1060,7 +1057,6 @@
 				6E8DC9A11D60AC32887591BC5A2FFB51 /* Frameworks */,
 				15CA10D31C8F1F11121B19FB007C389F /* Support Files */,
 			);
-			name = Sodium;
 			path = Sodium;
 			sourceTree = "<group>";
 		};
@@ -1386,7 +1382,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastUpgradeCheck = 1250;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 10.0";
@@ -1784,7 +1780,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/Sodium/Sodium-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Sodium/Sodium-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1858,7 +1854,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1893,7 +1889,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CucumberSwift/CucumberSwift-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CucumberSwift/CucumberSwift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1928,7 +1924,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2000,7 +1996,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2036,7 +2032,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2170,7 +2166,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/Sodium/Sodium-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Sodium/Sodium-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2206,7 +2202,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CucumberSwift/CucumberSwift-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CucumberSwift/CucumberSwift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2241,7 +2237,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2313,7 +2309,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/Sodium/Sodium-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Sodium/Sodium-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2348,7 +2344,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CucumberSwift/CucumberSwift-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CucumberSwift/CucumberSwift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2383,7 +2379,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2457,7 +2453,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2491,7 +2487,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2663,7 +2659,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2864,7 +2860,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2900,7 +2896,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CucumberSwift/CucumberSwift-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CucumberSwift/CucumberSwift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2974,7 +2970,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CucumberSwift/CucumberSwift-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CucumberSwift/CucumberSwift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3048,7 +3044,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3157,7 +3153,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/Sodium/Sodium-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Sodium/Sodium-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3293,7 +3289,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CucumberSwift/CucumberSwift-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CucumberSwift/CucumberSwift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3329,7 +3325,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CucumberSwift/CucumberSwift-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CucumberSwift/CucumberSwift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3364,7 +3360,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/Sodium/Sodium-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Sodium/Sodium-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3438,7 +3434,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3646,7 +3642,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/Sodium/Sodium-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Sodium/Sodium-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3719,7 +3715,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/Sodium/Sodium-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Sodium/Sodium-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3755,7 +3751,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/IOSSecuritySuite/IOSSecuritySuite-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3865,7 +3861,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CocoaLumberjack/CocoaLumberjack-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
