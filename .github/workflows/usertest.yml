@@ -1,4 +1,4 @@
-name: appstore deploy
+name: usertest deploy testflight (acceptance)
 
 on: workflow_dispatch
 
@@ -40,18 +40,4 @@ jobs:
           APP_STORE_API_KEY_ISSUER: ${{ secrets.APP_STORE_API_KEY_ISSUER }}
         run: |
           bundle install
-          bundle exec fastlane ios deploy_to_appstore
-
-      - name: Archive app
-        uses: actions/upload-artifact@v2
-        with:
-          name: App
-          path: GGD Contact.ipa
-          retention-days: 30
-
-      - name: Archive app dSYMs
-        uses: actions/upload-artifact@v2
-        with:
-          name: App dSYMs
-          path: GGD Contact.app.dSYM.zip
-          retention-days: 30
+          bundle exec fastlane ios deploy_usertest_build_to_appstore
