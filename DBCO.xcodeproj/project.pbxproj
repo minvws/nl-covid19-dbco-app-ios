@@ -1466,7 +1466,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
 				PRODUCT_NAME = "GGD Contact (Staging)";
 				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO Ad Hoc";
@@ -1594,7 +1594,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
 				PRODUCT_NAME = "GGD Contact";
 				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO App Store";
@@ -1722,7 +1722,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco.debug;
 				PRODUCT_NAME = "GGD Contact";
 				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO App Store";
@@ -1849,7 +1849,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
 				PRODUCT_NAME = "GGD Contact (Test)";
 				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO Ad Hoc";
@@ -1955,7 +1955,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
 				PRODUCT_NAME = "GGD Contact";
 				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO App Store";
@@ -2066,7 +2066,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco.debug;
 				PRODUCT_NAME = "GGD Contact";
@@ -2286,7 +2286,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
 				PRODUCT_NAME = "GGD Contact (Acc)";
 				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO Ad Hoc";
@@ -2392,7 +2392,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
 				PRODUCT_NAME = "GGD Contact (Prod)";
 				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO Ad Hoc";
