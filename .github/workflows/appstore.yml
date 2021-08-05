@@ -39,6 +39,7 @@ jobs:
           APP_STORE_API_KEY_ID: ${{ secrets.APP_STORE_API_KEY_ID }}
           APP_STORE_API_KEY_ISSUER: ${{ secrets.APP_STORE_API_KEY_ISSUER }}
         run: |
+          bundle install
           bundle exec fastlane ios deploy_to_appstore
 
       - name: Archive app
