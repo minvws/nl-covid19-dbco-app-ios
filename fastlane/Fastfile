@@ -57,7 +57,7 @@ platform :ios do
 
     inform_slack(
       default_payloads: [:git_author],
-      message: "Successfully distributed beta build #{version} (#{build_number}) :rocket:",
+      message: "Successfully distributed iOS beta builds #{version} (#{build_number}) to Firebase :rocket:",
     )
   end
 
@@ -127,7 +127,7 @@ platform :ios do
 
     inform_slack(
       default_payloads: [:git_author],
-      message: "[TESTFLIGHT] :apple: Successfully distributed iOS app to TestFlight with configuration #{configuration}, build #{version} (#{build_number}) :rocket:",
+      message: "Successfully distributed iOS app #{version} (#{build_number}) to TestFlight with configuration `#{configuration}` :rocket:",
     )
 
   end 
