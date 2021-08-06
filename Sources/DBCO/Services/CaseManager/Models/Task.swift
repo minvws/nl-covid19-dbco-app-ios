@@ -60,6 +60,15 @@ struct Task: Equatable {
         let dateOfLastExposure: String?
         let contactIdentifier: String?
         
+        /// If the informedByIndexAt field is set to the value of this static field, it Indicates that the index chose not to inform the contact.
+        /// This is not communicated to the API, it is used internally only
+        ///
+        /// # See also
+        /// [Filter implementation](x-source-tag://Task.Contact.indexWontInformIndicator.filter)
+        ///
+        /// - Tag: Task.Contact.indexWontInformIndicator
+        static let indexWontInformIndicator: String = "index-wont-inform"
+        
         init(category: Category, communication: Communication, informedByIndexAt: String?, dateOfLastExposure: String?, contactIdentifier: String? = nil) {
             self.category = category
             self.communication = communication
@@ -156,10 +165,19 @@ extension Task.Contact: Codable {
         try container.encode(category, forKey: .category)
         try container.encode(communication, forKey: .communication)
         try container.encode(dateOfLastExposure, forKey: .dateOfLastExposure)
-        try container.encode(informedByIndexAt, forKey: .informedByIndexAt)
         
-        if encoder.target == .internalStorage {
+        switch encoder.target {
+        case .internalStorage:
             try container.encode(contactIdentifier, forKey: .contactIdentifier)
+            try container.encode(informedByIndexAt, forKey: .informedByIndexAt)
+        case .api:
+            /// Filter out informedByIndex if it is set to the indexWontInformIndicator
+            ///
+            /// - Tag: Task.Contact.indexWontInformIndicator.filter
+            let informedByIndexAtAPIValue = informedByIndexAt == Self.indexWontInformIndicator ? nil : informedByIndexAt
+            try container.encode(informedByIndexAtAPIValue, forKey: .informedByIndexAt)
+        case .unknown:
+            break
         }
     }
     

@@ -41,22 +41,27 @@ final class TaskTableViewCell: UITableViewCell, CellManagable {
         
         subtitleLabel.font = Theme.fonts.callout
         subtitleLabel.textColor = Theme.colors.captionGray
+        subtitleLabel.text = .contactTaskStatusMissingDetails
         
         statusView.status = task.status
         
         if let result = task.questionnaireResult, result.hasAllEssentialAnswers {
+            let informedByIndexAt = task.contact.informedByIndexAt
+            let hasInformedByIndexValue = task.contact.informedByIndexAt != nil
+            
             switch task.contact.communication {
             case .staff:
                 subtitleLabel.text = .contactTaskStatusStaffWillInform
-            case .index where task.contact.informedByIndexAt != nil,
-                 .unknown where task.contact.informedByIndexAt != nil:
-                subtitleLabel.text = .contactTaskStatusIndexDidInform
+            case .index where hasInformedByIndexValue, .unknown where hasInformedByIndexValue:
+                if informedByIndexAt == Task.Contact.indexWontInformIndicator {
+                    subtitleLabel.text = .contactTaskStatusIndexWontInform
+                } else {
+                    subtitleLabel.text = .contactTaskStatusIndexDidInform
+                }
             case .index, .unknown:
                 subtitleLabel.text = .contactTaskStatusIndexWillInform
                 subtitleLabel.textColor = Theme.colors.orange
             }
-        } else {
-            subtitleLabel.text = .contactTaskStatusMissingDetails
         }
     }
 

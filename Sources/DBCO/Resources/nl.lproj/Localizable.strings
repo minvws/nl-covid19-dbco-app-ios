@@ -224,6 +224,7 @@
 
 "contactTaskStatusStaffWillInform" = "GGD gaat informeren";
 "contactTaskStatusIndexDidInform" = "Jij hebt geïnformeerd";
+"contactTaskStatusIndexWontInform" = "Jij informeert niet";
 "contactTaskStatusIndexWillInform" = "Informeer dit contact";
 "contactTaskStatusMissingDetails" = "Vul gegevens aan";
 
@@ -368,7 +369,8 @@
 "contactInformPromptMessage" = "Dit is niet verplicht, maar het is belangrijk dat deze persoon weet dat je besmet bent.";
 "contactInformOptionDone" = "Ja";
 "contactInformActionInformLater" = "Nee, doe ik later";
-"contactInformActionInformNow" = "Nee, nu informeren";
+"contactInformActionInformNow" = "Nu doen";
+"contactInformActionWontInform" = "Ik informeer niet";
 
 "contactMissingDetailsPromptTitle" = "Heb je een telefoonnummer of e-mailadres van %@?";
 "contactMissingDetailsPromptMessage" = "De GGD kan alleen contact opnemen als ze een e-mailadres of telefoonnummer heeft.";

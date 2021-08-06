@@ -238,6 +238,13 @@ class ContactQuestionnaireViewModel {
                                       dateOfLastExposure: updatedContact.dateOfLastExposure)
     }
     
+    func registerWontInform() {
+        updatedContact = Task.Contact(category: updatedContact.category,
+                                      communication: updatedContact.communication,
+                                      informedByIndexAt: Task.Contact.indexWontInformIndicator,
+                                      dateOfLastExposure: updatedContact.dateOfLastExposure)
+    }
+    
     private func updateClassification(with result: ClassificationHelper.Result) {
         updatedClassification = result
         
