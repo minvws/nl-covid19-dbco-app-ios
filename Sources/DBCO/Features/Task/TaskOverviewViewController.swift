@@ -33,7 +33,6 @@ class TaskOverviewViewModel {
     private let tableViewManager: TableViewManager<TaskTableViewCell>
     private var tableHeaderBuilder: (() -> UIView?)?
     private var sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?
-    private var addContactFooterBuilder: (() -> UIView?)?
     private var tableFooterBuilder: (() -> UIView?)?
     
     private var sections: [(header: UIView?, tasks: [Task], footer: UIView?)]
@@ -46,7 +45,6 @@ class TaskOverviewViewModel {
     
     @Bindable private(set) var isDoneButtonHidden: Bool = false
     @Bindable private(set) var isResetButtonHidden: Bool = true
-    @Bindable private(set) var isHeaderAddContactButtonHidden: Bool = false
     @Bindable private(set) var isAddContactButtonHidden: Bool = false
     @Bindable private(set) var isWindowExpiredMessageHidden: Bool = true
     @Bindable private(set) var isPairingViewHidden: Bool = true
@@ -75,14 +73,12 @@ class TaskOverviewViewModel {
     func setupTableView(_ tableView: UITableView,
                         tableHeaderBuilder: (() -> UIView?)?,
                         sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?,
-                        addContactFooterBuilder: (() -> UIView?)?,
                         tableFooterBuilder: (() -> UIView?)?,
                         selectedTaskHandler: @escaping (Task, IndexPath) -> Void) {
         tableViewManager.manage(tableView)
         tableViewManager.didSelectItem = selectedTaskHandler
         self.tableHeaderBuilder = tableHeaderBuilder
         self.sectionHeaderBuilder = sectionHeaderBuilder
-        self.addContactFooterBuilder = addContactFooterBuilder
         self.tableFooterBuilder = tableFooterBuilder
         
         buildSections()
@@ -134,7 +130,8 @@ class TaskOverviewViewModel {
     
     private func buildSections() {
         sections = []
-        sections.append((tableHeaderBuilder?(), [], nil))
+        
+        tableHeaderBuilder.map { sections.append(($0(), [], nil)) }
         
         if input.case.hasSynced {
             buildSections(split: \.isSyncedWithPortal,
@@ -145,6 +142,11 @@ class TaskOverviewViewModel {
                           failingSectionTitle: .taskOverviewUninformedContactsHeader,
                           passingSectionTitle: .taskOverviewInformedContactsHeader)
         }
+        
+        tableFooterBuilder.map { sections.append(($0(), [], nil)) }
+        
+        let windowExpired = input.case.isWindowExpired
+        isAddContactButtonHidden = windowExpired
     }
     
     private func buildSections(split: KeyPath<Task, Bool>, failingSectionTitle: String, passingSectionTitle: String) {
@@ -161,7 +163,7 @@ class TaskOverviewViewModel {
         if !failingContacts.isEmpty {
             sections.append((header: sectionHeaderBuilder?(failingSectionHeader),
                              tasks: failingContacts,
-                             footer: addContactFooterBuilder?()))
+                             footer: nil))
         }
         
         if !passingContacts.isEmpty {
@@ -169,13 +171,6 @@ class TaskOverviewViewModel {
                              tasks: passingContacts,
                              footer: nil))
         }
-        
-        sections.append((tableFooterBuilder?(), [], nil))
-        
-        let windowExpired = input.case.isWindowExpired
-        
-        isHeaderAddContactButtonHidden = !failingContacts.isEmpty || windowExpired
-        isAddContactButtonHidden = failingContacts.isEmpty || windowExpired
     }
 }
 
@@ -199,7 +194,6 @@ extension TaskOverviewViewModel: CaseManagerListener {
         isDoneButtonHidden = true
         isResetButtonHidden = false
         isAddContactButtonHidden = true
-        isHeaderAddContactButtonHidden = true
         isWindowExpiredMessageHidden = false
         
         showPrompt?(true)
@@ -356,15 +350,12 @@ class TaskOverviewViewController: PromptableViewController {
         tableView.delaysContentTouches = false
         tableView.refreshControl = refreshControl
         
-        let tableHeaderBuilder = { [unowned self] in self.tableHeaderBuilder() }
         let sectionHeaderBuilder = { [unowned self] in self.sectionHeaderBuilder(title: $0, subtitle: $1) }
-        let addContactFooterBuilder = { [unowned self] in self.addContactFooterBuilder() }
         let tableFooterBuilder = { [unowned self] in self.tableFooterBuilder() }
         
         viewModel.setupTableView(tableView,
-                                 tableHeaderBuilder: tableHeaderBuilder,
+                                 tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: sectionHeaderBuilder,
-                                 addContactFooterBuilder: addContactFooterBuilder,
                                  tableFooterBuilder: tableFooterBuilder) { [weak self] task, indexPath in
             guard let self = self else { return }
             
@@ -409,8 +400,13 @@ private extension TaskOverviewViewController {
     
     private func createTipContainerView() -> UIView {
         let tipContainerView = UIView()
-        tipContainerView.backgroundColor = Theme.colors.graySeparator
-        tipContainerView.layer.cornerRadius = 8
+        
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = Theme.colors.graySeparator
+        backgroundView.layer.borderColor = Theme.colors.border.cgColor
+        backgroundView.layer.borderWidth = 1 / UIScreen.main.scale
+        backgroundView.layer.cornerRadius = 8
+        backgroundView.embed(in: tipContainerView)
         
         let thinkingImage = UIImage(named: "Thinking")!
         let thinkingImageView = UIImageView(image: thinkingImage)
@@ -428,38 +424,15 @@ private extension TaskOverviewViewController {
         tipButton.touchUpInside(self, action: #selector(requestTips))
         
         VStack(VStack(spacing: 4,
-                      UILabel(bodyBold: .taskOverviewTipsTitle),
+                      UILabel(body: .taskOverviewTipsTitle),
                       UILabel(attributedString: viewModel.tipMessageText)),
                tipButton)
-            .embed(in: tipContainerView, insets: .right(92) + .left(16) + .top(16) + .bottom(11))
+            .embed(in: tipContainerView, insets: .right(92) + .left(16) + .top(16) + .bottom(5))
         
         return tipContainerView
     }
     
-    func tableHeaderBuilder() -> UIView {
-        let addContactButton = Button(title: .taskOverviewAddContactButtonTitle, style: .info)
-            .touchUpInside(self, action: #selector(requestContact))
-        
-        addContactButton.setImage(UIImage(named: "Plus"), for: .normal)
-        addContactButton.titleEdgeInsets = .left(5)
-        addContactButton.imageEdgeInsets = .right(5)
-        
-        self.viewModel.$isHeaderAddContactButtonHidden.binding = { addContactButton.isHidden = $0 }
-        
-        return VStack(spacing: 12,
-                      createTipContainerView(),
-                      addContactButton)
-            .wrappedInReadableWidth(insets: .top(32))
-    }
-    
-    func sectionHeaderBuilder(title: String, subtitle: String?) -> UIView {
-        return VStack(spacing: 4,
-                      UILabel(bodyBold: title).asHeader(),
-                      UILabel(subhead: subtitle, textColor: Theme.colors.captionGray).hideIfEmpty())
-                   .wrappedInReadableWidth(insets: .top(20) + .bottom(0))
-    }
-    
-    func addContactFooterBuilder() -> UIView {
+    private func createTipSectionView() -> UIView {
         let addContactButton = Button(title: .taskOverviewAddContactButtonTitle, style: .info)
             .touchUpInside(self, action: #selector(requestContact))
         
@@ -469,8 +442,17 @@ private extension TaskOverviewViewController {
         
         self.viewModel.$isAddContactButtonHidden.binding = { addContactButton.isHidden = $0 }
         
-        return addContactButton
-            .wrappedInReadableWidth(insets: .top(2) + .bottom(16))
+        return VStack(spacing: 12,
+                      createTipContainerView(),
+                      addContactButton)
+            .withInsets(.top(20))
+    }
+    
+    func sectionHeaderBuilder(title: String, subtitle: String?) -> UIView {
+        return VStack(spacing: 4,
+                      UILabel(bodyBold: title).asHeader(),
+                      UILabel(subhead: subtitle, textColor: Theme.colors.captionGray).hideIfEmpty())
+                   .wrappedInReadableWidth(insets: .top(5) + .bottom(0))
     }
     
     private var privacyTextView: TextView {
@@ -499,17 +481,29 @@ private extension TaskOverviewViewController {
     }
     
     func tableFooterBuilder() -> UIView {
+        let containerView = UIView()
+        
+        let backgroundColorView = UIView()
+        backgroundColorView.backgroundColor = Theme.colors.overviewSecondaryBackground
+        backgroundColorView.snap(to: .top, of: containerView, height: 1000)
+        
+        SeparatorView().snap(to: .top, of: containerView)
+        
         let resetButton = Button(title: .taskOverviewDeleteDataButtonTitle, style: .info)
             .touchUpInside(self, action: #selector(reset))
         
         resetButton.setTitleColor(Theme.colors.warning, for: .normal)
         
-        return VStack(spacing: 12,
+        VStack(spacing: 12,
+                      createTipSectionView(),
                       privacyTextView,
                       versionLabel,
                       resetButton)
             .alignment(.center)
             .wrappedInReadableWidth()
+            .embed(in: containerView)
+        
+        return containerView
     }
     
 }

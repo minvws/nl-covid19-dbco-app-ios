@@ -199,7 +199,7 @@
 "taskOverviewTipsMessage" = "Maak een overzicht van wie je hebt ontmoet %@";
 "taskOverviewTipsButton" = "Lees de tips";
 
-"taskOverviewTitle" = "Mijn contacten";
+"taskOverviewTitle" = "Adviezen";
 "taskOverviewDoneButtonTitle" = "Deel gegevens met GGD";
 "taskOverviewDeleteDataButtonTitle" = "Verwijder gegevens";
 "taskOverviewAddContactButtonTitle" = "Contact toevoegen";
@@ -207,8 +207,8 @@
 "taskOverviewUnsyncedContactsHeader" = "Nog niet gedeeld met de GGD";
 "taskOverviewSyncedContactsHeader" = "Gedeeld met de GGD";
 
-"taskOverviewUninformedContactsHeader" = "Ga hiermee aan de slag";
-"taskOverviewInformedContactsHeader" = "Dit is al gedaan";
+"taskOverviewUninformedContactsHeader" = "Beantwoord de vragen en bekijk de leefregels voor al jouw contacten";
+"taskOverviewInformedContactsHeader" = "Dit is al gedaan door de GGD of door jou";
 
 "taskContactUnknownName" = "Geen naam bekend";
 
