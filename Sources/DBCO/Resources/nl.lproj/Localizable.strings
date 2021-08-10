@@ -59,6 +59,8 @@
 "onboarding.pairing.codeHint" = "De code bestaat uit 12 cijfers";
 "onboarding.pairingIntro.title" = "Deel de gegevens van de mensen die misschien besmet zijn";
 "onboarding.pairingIntro.message" = "Zo kunnen we deze contacten zo snel mogelijk informeren. Goed om te weten: niet iedereen hoeft direct in quarantaine.";
+"onboarding.explainTaskOverview.title" = "Beantwoord een aantal vragen over deze ontmoetingen";
+"onboarding.explainTaskOverview.message" = "Het is belangrijk dat elke persoon het juiste advies krijgt. Vul daarom zo snel mogelijk de vragenlijst in, zodat je de gegevens kunt delen als de GGD je belt.";
 
 /* MARK: - Privacy */
 "onboarding.consent.shortTitle" = "Privacy";

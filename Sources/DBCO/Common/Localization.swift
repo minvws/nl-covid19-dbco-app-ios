@@ -107,6 +107,8 @@ extension String {
     static var onboardingPairingIntroMessage: String { return Localization.string(for: "onboarding.pairingIntro.message") }
     static var onboardingPairingTitle: String { return Localization.string(for: "onboarding.pairing.title") }
     static var onboardingPairingCodeHint: String { return Localization.string(for: "onboarding.pairing.codeHint") }
+    static var onboardingExplainTaskOverviewTitle: String { return Localization.string(for: "onboarding.explainTaskOverview.title") }
+    static var onboardingExplainTaskOverviewMessage: String { return Localization.string(for: "onboarding.explainTaskOverview.message") }
     
     /* MARK: - Privacy */
     static var onboardingConsentShortTitle: String { return Localization.string(for: "onboarding.consent.shortTitle") }
