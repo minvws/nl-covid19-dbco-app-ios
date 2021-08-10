@@ -22,7 +22,6 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         viewModel.setHidePrompt { _ in isPromptVisible = false }
@@ -32,10 +31,9 @@ class TaskOverviewViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.isPairingErrorViewHidden)
         XCTAssertTrue(viewModel.isWindowExpiredMessageHidden)
         XCTAssertTrue(viewModel.isResetButtonHidden)
-        XCTAssertTrue(viewModel.isAddContactButtonHidden)
         
         XCTAssertFalse(viewModel.isDoneButtonHidden)
-        XCTAssertFalse(viewModel.isHeaderAddContactButtonHidden)
+        XCTAssertFalse(viewModel.isAddContactButtonHidden)
         XCTAssertFalse(isPromptVisible)
     }
     
@@ -52,7 +50,6 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         viewModel.setHidePrompt { _ in isPromptVisible = false }
@@ -62,11 +59,10 @@ class TaskOverviewViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.isPairingErrorViewHidden)
         XCTAssertTrue(viewModel.isWindowExpiredMessageHidden)
         XCTAssertTrue(viewModel.isResetButtonHidden)
-        XCTAssertTrue(viewModel.isAddContactButtonHidden)
         XCTAssertTrue(isPromptVisible)
         
         XCTAssertFalse(viewModel.isDoneButtonHidden)
-        XCTAssertFalse(viewModel.isHeaderAddContactButtonHidden)
+        XCTAssertFalse(viewModel.isAddContactButtonHidden)
     }
     
     func testExpiredTaskOverviewSynced() {
@@ -83,7 +79,6 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         viewModel.setHidePrompt { _ in isPromptVisible = false }
@@ -92,7 +87,7 @@ class TaskOverviewViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.isPairingViewHidden)
         XCTAssertTrue(viewModel.isPairingErrorViewHidden)
         XCTAssertTrue(viewModel.isAddContactButtonHidden)
-        XCTAssertTrue(viewModel.isHeaderAddContactButtonHidden)
+        XCTAssertTrue(viewModel.isAddContactButtonHidden)
         XCTAssertTrue(isPromptVisible)
         
         XCTAssertFalse(viewModel.isResetButtonHidden)
@@ -114,7 +109,6 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         viewModel.setHidePrompt { _ in isPromptVisible = false }
@@ -123,7 +117,7 @@ class TaskOverviewViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.isPairingViewHidden)
         XCTAssertTrue(viewModel.isPairingErrorViewHidden)
         XCTAssertTrue(viewModel.isAddContactButtonHidden)
-        XCTAssertTrue(viewModel.isHeaderAddContactButtonHidden)
+        XCTAssertTrue(viewModel.isAddContactButtonHidden)
         XCTAssertTrue(isPromptVisible)
         
         XCTAssertFalse(viewModel.isResetButtonHidden)
@@ -144,7 +138,6 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         viewModel.setHidePrompt { _ in isPromptVisible = false }
@@ -154,10 +147,9 @@ class TaskOverviewViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.isPairingErrorViewHidden)
         XCTAssertTrue(viewModel.isWindowExpiredMessageHidden)
         XCTAssertTrue(viewModel.isResetButtonHidden)
-        XCTAssertTrue(viewModel.isAddContactButtonHidden)
         
         XCTAssertFalse(viewModel.isDoneButtonHidden)
-        XCTAssertFalse(viewModel.isHeaderAddContactButtonHidden)
+        XCTAssertFalse(viewModel.isAddContactButtonHidden)
         XCTAssertFalse(isPromptVisible)
         
         caseManager.isWindowExpired = true
@@ -167,7 +159,7 @@ class TaskOverviewViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.isAddContactButtonHidden)
         
         XCTAssertTrue(viewModel.isDoneButtonHidden)
-        XCTAssertTrue(viewModel.isHeaderAddContactButtonHidden)
+        XCTAssertTrue(viewModel.isAddContactButtonHidden)
         XCTAssertTrue(isPromptVisible)
         
         XCTAssertFalse(viewModel.isWindowExpiredMessageHidden)
@@ -186,11 +178,9 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         
-        XCTAssertTrue(viewModel.isHeaderAddContactButtonHidden)
         XCTAssertFalse(viewModel.isAddContactButtonHidden)
     }
     
@@ -206,12 +196,10 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         
-        XCTAssertFalse(viewModel.isHeaderAddContactButtonHidden)
-        XCTAssertTrue(viewModel.isAddContactButtonHidden)
+        XCTAssertFalse(viewModel.isAddContactButtonHidden)
     }
     
     func testAddContactButtonStateForInformedAndUninformedContacts() {
@@ -226,11 +214,9 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         
-        XCTAssertTrue(viewModel.isHeaderAddContactButtonHidden)
         XCTAssertFalse(viewModel.isAddContactButtonHidden)
     }
     
@@ -246,11 +232,9 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         
-        XCTAssertTrue(viewModel.isHeaderAddContactButtonHidden)
         XCTAssertFalse(viewModel.isAddContactButtonHidden)
     }
     
@@ -266,12 +250,10 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         
-        XCTAssertFalse(viewModel.isHeaderAddContactButtonHidden)
-        XCTAssertTrue(viewModel.isAddContactButtonHidden)
+        XCTAssertFalse(viewModel.isAddContactButtonHidden)
     }
     
     func testAddContactButtonStateForSyncedAndUnsyncedContacts() {
@@ -286,11 +268,9 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         
-        XCTAssertTrue(viewModel.isHeaderAddContactButtonHidden)
         XCTAssertFalse(viewModel.isAddContactButtonHidden)
     }
 
