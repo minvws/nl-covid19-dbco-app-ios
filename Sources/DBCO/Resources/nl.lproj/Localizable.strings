@@ -310,7 +310,8 @@
 "sameHouseholdRiskQuestion.answer.positive" = "Ja";
 "sameHouseholdRiskQuestion.answer.negative" = "Nee";
 
-"distanceRiskQuestion" = "Zijn jullie die dag dicht bij elkaar geweest? (minder dan 1,5 meter)";
+"distanceRiskQuestion" = "Zijn jullie die dag(en) dicht bij elkaar geweest? (minder dan 1,5 meter)";
+"distanceRiskQuestion.description" = "Let op: de vraag gaat over een of meerdere dagen dat jullie elkaar ontmoet hebben. Zijn jullie toen dicht bij elkaar geweest (minder dan 1,5 meter)?";
 "distanceRiskQuestion.answer.moreThan15Min" = "Ja, in totaal langer dan een kwartier";
 "distanceRiskQuestion.answer.lessThan15Min" = "Ja, in totaal korter dan een kwartier";
 "distanceRiskQuestion.answer.negative" = "Nee, we hielden genoeg afstand";
