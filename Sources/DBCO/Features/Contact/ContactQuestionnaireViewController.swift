@@ -211,6 +211,11 @@ final class ContactQuestionnaireViewController: PromptableViewController, Keyboa
             self.scrollToInformSection()
         })
         
+        alert.addAction(UIAlertAction(title: .contactInformActionWontInform, style: .default) { _ in
+            self.viewModel.registerWontInform()
+            self.delegate?.contactQuestionnaireViewController(self, didSave: self.viewModel.updatedTask)
+        })
+        
         present(alert, animated: true)
     }
     
