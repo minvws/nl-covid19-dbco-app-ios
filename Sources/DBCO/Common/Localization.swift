@@ -289,6 +289,7 @@ extension String {
     
     static var contactTaskStatusStaffWillInform: String { return Localization.string(for: "contactTaskStatusStaffWillInform") }
     static var contactTaskStatusIndexDidInform: String { return Localization.string(for: "contactTaskStatusIndexDidInform") }
+    static var contactTaskStatusIndexWontInform: String { return Localization.string(for: "contactTaskStatusIndexWontInform") }
     static var contactTaskStatusIndexWillInform: String { return Localization.string(for: "contactTaskStatusIndexWillInform") }
     static var contactTaskStatusMissingDetails: String { return Localization.string(for: "contactTaskStatusMissingDetails") }
     
@@ -406,6 +407,7 @@ extension String {
     static var sameHouseholdRiskQuestionAnswerNegative: String { return Localization.string(for: "sameHouseholdRiskQuestion.answer.negative") }
     
     static var distanceRiskQuestion: String { return Localization.string(for: "distanceRiskQuestion") }
+    static var distanceRiskQuestionDescription: String { return Localization.string(for: "distanceRiskQuestion.description") }
     static var distanceRiskQuestionAnswerMoreThan15Min: String { return Localization.string(for: "distanceRiskQuestion.answer.moreThan15Min") }
     static var distanceRiskQuestionAnswerLessThan15Min: String { return Localization.string(for: "distanceRiskQuestion.answer.lessThan15Min") }
     static var distanceRiskQuestionAnswerNegative: String { return Localization.string(for: "distanceRiskQuestion.answer.negative") }
@@ -467,6 +469,7 @@ extension String {
     static var contactInformOptionDone: String { return Localization.string(for: "contactInformOptionDone") }
     static var contactInformActionInformLater: String { return Localization.string(for: "contactInformActionInformLater") }
     static var contactInformActionInformNow: String { return Localization.string(for: "contactInformActionInformNow") }
+    static var contactInformActionWontInform: String { return Localization.string(for: "contactInformActionWontInform") }
     
     static func contactMissingDetailsPromptTitle(firstName: String) -> String { return Localization.string(for: "contactMissingDetailsPromptTitle", [firstName]) }
     

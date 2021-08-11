@@ -116,7 +116,7 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
     var isEnabled: Bool = true {
         didSet {
             sameHouseholdRiskGroup.isEnabled = isEnabled
-            distanceRiskGroup.isEnabled = isEnabled
+            distanceRiskGroupUndecorated.isEnabled = isEnabled
             physicalContactRiskGroupUndecorated.isEnabled = isEnabled
             sameRoomRiskGroup.isEnabled = isEnabled
         }
@@ -137,7 +137,7 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
                     ToggleButton(title: .sameHouseholdRiskQuestionAnswerPositive, selected: risks.sameHousehold == true))
         .didSelect { [unowned self] in self.risks.sameHousehold = $0 == 1 }
     
-    private lazy var distanceRiskGroup =
+    private lazy var distanceRiskGroupUndecorated =
         ToggleGroup(label: .distanceRiskQuestion,
                     ToggleButton(title: .distanceRiskQuestionAnswerMoreThan15Min, selected: risks.distance == .yesMoreThan15min),
                     ToggleButton(title: .distanceRiskQuestionAnswerLessThan15Min, selected: risks.distance == .yesLessThan15min),
@@ -152,6 +152,10 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
                 self.risks.distance = .no
             }
         }
+    
+    private lazy var distanceRiskGroup =
+        distanceRiskGroupUndecorated
+            .decorateWithDescriptionIfNeeded(description: .distanceRiskQuestionDescription)
     
     private lazy var physicalContactRiskGroupUndecorated =
         ToggleGroup(label: .physicalContactRiskQuestion,

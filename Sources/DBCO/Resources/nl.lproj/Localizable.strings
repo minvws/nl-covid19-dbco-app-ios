@@ -226,6 +226,7 @@
 
 "contactTaskStatusStaffWillInform" = "GGD gaat informeren";
 "contactTaskStatusIndexDidInform" = "Jij hebt geïnformeerd";
+"contactTaskStatusIndexWontInform" = "Jij informeert niet";
 "contactTaskStatusIndexWillInform" = "Informeer dit contact";
 "contactTaskStatusMissingDetails" = "Vul gegevens aan";
 
@@ -311,7 +312,8 @@
 "sameHouseholdRiskQuestion.answer.positive" = "Ja";
 "sameHouseholdRiskQuestion.answer.negative" = "Nee";
 
-"distanceRiskQuestion" = "Zijn jullie die dag dicht bij elkaar geweest? (minder dan 1,5 meter)";
+"distanceRiskQuestion" = "Zijn jullie die dag(en) dicht bij elkaar geweest? (minder dan 1,5 meter)";
+"distanceRiskQuestion.description" = "Let op: de vraag gaat over een of meerdere dagen dat jullie elkaar ontmoet hebben. Zijn jullie toen dicht bij elkaar geweest (minder dan 1,5 meter)?";
 "distanceRiskQuestion.answer.moreThan15Min" = "Ja, in totaal langer dan een kwartier";
 "distanceRiskQuestion.answer.lessThan15Min" = "Ja, in totaal korter dan een kwartier";
 "distanceRiskQuestion.answer.negative" = "Nee, we hielden genoeg afstand";
@@ -370,7 +372,8 @@
 "contactInformPromptMessage" = "Dit is niet verplicht, maar het is belangrijk dat deze persoon weet dat je besmet bent.";
 "contactInformOptionDone" = "Ja";
 "contactInformActionInformLater" = "Nee, doe ik later";
-"contactInformActionInformNow" = "Nee, nu informeren";
+"contactInformActionInformNow" = "Nu doen";
+"contactInformActionWontInform" = "Ik informeer niet";
 
 "contactMissingDetailsPromptTitle" = "Heb je een telefoonnummer of e-mailadres van %@?";
 "contactMissingDetailsPromptMessage" = "De GGD kan alleen contact opnemen als ze een e-mailadres of telefoonnummer heeft.";
