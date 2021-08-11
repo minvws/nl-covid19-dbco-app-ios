@@ -115,12 +115,28 @@ extension OnboardingCoordinator: InitializeContactsCoordinatorDelegate {
     func initializeContactsCoordinatorDidFinish(_ coordinator: InitializeContactsCoordinator) {
         removeChildCoordinator(coordinator)
         
-        // go to task overview
-        Services.onboardingManager.finishOnboarding()
-        delegate?.onboardingCoordinatorDidFinish(self)
+        explainTaskOverview()
     }
     
     func initializeContactsCoordinatorDidCancel(_ coordinator: InitializeContactsCoordinator) {
         removeChildCoordinator(coordinator)
+    }
+    
+    private func explainTaskOverview() {
+        let viewModel = StepViewModel(
+            image: UIImage(named: "Onboarding2"),
+            title: .onboardingExplainTaskOverviewTitle,
+            message: .onboardingExplainTaskOverviewMessage,
+            actions: [
+                .init(type: .primary, title: .next, target: self, action: #selector(finishOnboarding))
+            ])
+        
+        navigationController.setViewControllers([StepViewController(viewModel: viewModel)], animated: true)
+    }
+    
+    @objc private func finishOnboarding() {
+        // go to task overview
+        Services.onboardingManager.finishOnboarding()
+        delegate?.onboardingCoordinatorDidFinish(self)
     }
 }
