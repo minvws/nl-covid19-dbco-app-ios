@@ -1459,14 +1459,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 178;
+				CURRENT_PROJECT_VERSION = 192;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
 				PRODUCT_NAME = "GGD Contact (Staging)";
 				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO Ad Hoc";
@@ -1587,14 +1587,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 178;
+				CURRENT_PROJECT_VERSION = 192;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
 				PRODUCT_NAME = "GGD Contact";
 				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO App Store";
@@ -1715,14 +1715,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 178;
+				CURRENT_PROJECT_VERSION = 192;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco.debug;
 				PRODUCT_NAME = "GGD Contact";
 				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO App Store";
@@ -1842,14 +1842,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 178;
+				CURRENT_PROJECT_VERSION = 192;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
 				PRODUCT_NAME = "GGD Contact (Test)";
 				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO Ad Hoc";
@@ -1948,14 +1948,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 178;
+				CURRENT_PROJECT_VERSION = 192;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
 				PRODUCT_NAME = "GGD Contact";
 				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO App Store";
@@ -2059,14 +2059,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 178;
+				CURRENT_PROJECT_VERSION = 192;
 				DEVELOPMENT_TEAM = 5598UZ23ZV;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.2.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco.debug;
 				PRODUCT_NAME = "GGD Contact";
@@ -2279,14 +2279,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 178;
+				CURRENT_PROJECT_VERSION = 192;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
 				PRODUCT_NAME = "GGD Contact (Acc)";
 				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO Ad Hoc";
@@ -2385,14 +2385,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 178;
+				CURRENT_PROJECT_VERSION = 192;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				INFOPLIST_FILE = Sources/DBCO/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.dbco;
 				PRODUCT_NAME = "GGD Contact (Prod)";
 				PROVISIONING_PROFILE_SPECIFIER = "GGD DBCO Ad Hoc";
