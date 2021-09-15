@@ -10,7 +10,7 @@ env:
 jobs:
   upload:
     if: github.event.repository.name == 'nl-covid19-dbco-app-ios-private'
-    runs-on: macOS-latest
+    runs-on: macOS-11
     
     steps:
       - name: Checkout
