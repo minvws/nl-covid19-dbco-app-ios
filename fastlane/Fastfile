@@ -135,7 +135,7 @@ platform :ios do
   # - Private lanes
 
   private_lane :prepare do
-    xcversion(version: "12.4")
+    xcversion(version: "12.5")
   end
 
   private_lane :determine_build_number do |options|
