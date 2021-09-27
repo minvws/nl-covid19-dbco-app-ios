@@ -37,10 +37,6 @@ final class TaskTableViewCell: UITableViewCell, CellManagable {
             titleLabel.text = .taskContactUnknownName
         }
         
-        titleLabel.font = Theme.fonts.bodyBold
-        
-        subtitleLabel.font = Theme.fonts.callout
-        subtitleLabel.textColor = Theme.colors.captionGray
         subtitleLabel.text = .contactTaskStatusMissingDetails
         
         statusView.status = task.status
@@ -67,6 +63,7 @@ final class TaskTableViewCell: UITableViewCell, CellManagable {
 
     private func build() {
         statusView.setContentHuggingPriority(.required, for: .horizontal)
+        statusView.setContentCompressionResistancePriority(.required, for: .horizontal)
         
         HStack(spacing: 16,
                statusView,
@@ -108,8 +105,8 @@ final class TaskTableViewCell: UITableViewCell, CellManagable {
 
     // MARK: - Private
 
-    private let titleLabel = UILabel()
-    private let subtitleLabel = UILabel()
+    private let titleLabel = UILabel(bodyBold: nil)
+    private let subtitleLabel = UILabel(callout: nil, textColor: Theme.colors.captionGray)
     private let containerView = UIView()
     private let statusView = StatusView()
 }
