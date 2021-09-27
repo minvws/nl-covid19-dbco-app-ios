@@ -88,6 +88,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         label.isAccessibilityElement = false
         
         accessibilityLabel = label.text
+        textField.accessibilityLabel = label.text
         text = object?[keyPath: path].value
     }
     
@@ -170,6 +171,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         textField.inputView = datePicker
         textField.inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
         tintColor = .clear
+        textField.accessibilityTraits = [.button, .staticText]
     }
     
     private func setupAsPicker(with options: [InputType.PickerOption]) {
@@ -195,7 +197,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         optionPicker = picker
         
         dropdownIconView.isHidden = false
-        accessibilityTraits = [.button, .staticText]
+        textField.accessibilityTraits = [.button, .staticText]
     }
     
     private var text: String? {
@@ -365,7 +367,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         
         switch editable.inputType {
         case .date, .picker:
-            UIAccessibility.post(notification: .screenChanged, argument: inputView)
+            UIAccessibility.post(notification: .screenChanged, argument: textField.inputView)
             return true
         default:
             break
