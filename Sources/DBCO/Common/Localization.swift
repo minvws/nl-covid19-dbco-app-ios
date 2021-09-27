@@ -70,6 +70,7 @@ extension String {
     static var completed: String { return Localization.string(for: "completed") }
     static var disabled: String { return Localization.string(for: "disabled") }
     static var loading: String { return Localization.string(for: "loading") }
+    static var backButtonTitle: String { return Localization.string(for: "backButtonTitle") }
     
     // MARK: - Update App
     static var updateAppErrorMessage: String { return Localization.string(for: "updateApp.error.message") }
