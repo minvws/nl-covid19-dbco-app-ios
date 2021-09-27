@@ -273,7 +273,7 @@ private class ContactTextField: UITextField {
         rightView = clearButton
         rightViewMode = .whileEditing
         
-        SeparatorView().snap(to: .bottom, of: self, insets: .left(Constants.inset) + .right(-Constants.inset))
+        SeparatorView().snap(to: .bottom, of: self, insets: .left(Constants.insets.left) + .right(-Constants.insets.left))
         
         addTarget(self, action: #selector(editingChanged), for: .editingChanged)
         
@@ -297,8 +297,8 @@ private class ContactTextField: UITextField {
     
     private func textContentsRect(forBounds bounds: CGRect) -> CGRect {
         var rect = bounds
-        rect.origin.x += Constants.inset
-        rect.size.width -= Constants.inset
+        rect.origin.x += Constants.insets.left
+        rect.size.width -= Constants.insets.left + Constants.insets.right
         return rect
     }
     
@@ -325,7 +325,7 @@ private class ContactTextField: UITextField {
     // MARK: - Private
     
     private struct Constants {
-        static let inset: CGFloat = 40
+        static let insets: UIEdgeInsets = .leftRight(40)
     }
     
     private var height: CGFloat {
