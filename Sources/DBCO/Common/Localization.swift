@@ -70,6 +70,7 @@ extension String {
     static var completed: String { return Localization.string(for: "completed") }
     static var disabled: String { return Localization.string(for: "disabled") }
     static var loading: String { return Localization.string(for: "loading") }
+    static var backButtonTitle: String { return Localization.string(for: "backButtonTitle") }
     
     // MARK: - Update App
     static var updateAppErrorMessage: String { return Localization.string(for: "updateApp.error.message") }
@@ -344,6 +345,8 @@ extension String {
     static var selectContactAuthorizationManualButton: String { return Localization.string(for: "selectContactAuthorizationManualButton") }
     
     // MARK: - Editing Contacts
+    static var deleteContactButtonTitle: String { return Localization.string(for: "deleteContactButtonTitle") }
+    
     static var informContactDeletePromptTitle: String { return Localization.string(for: "informContactDeletePrompt.title") }
     
     static var informContactCancelPromptTitle: String { return Localization.string(for: "informContactCancelPrompt.title") }
