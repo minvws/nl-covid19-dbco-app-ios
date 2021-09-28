@@ -22,6 +22,7 @@
 "completed" = "Afgerond";
 "disabled" = "Uitgeschakeld";
 "loading" = "Aan het laden";
+"backButtonTitle" = "Vorige";
 
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
