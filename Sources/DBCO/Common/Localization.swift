@@ -353,8 +353,14 @@ extension String {
     static var informContactCancelPromptMessage: String { return Localization.string(for: "informContactCancelPrompt.message") }
     
     static func contactSectionLabel(index: Int, title: String, caption: String, isCollapsed: Bool, isCompleted: Bool, isEnabled: Bool) -> String {
-        let status = !isEnabled ? disabled : isCompleted ? completed : isCollapsed ? collapsed : expanded
-        return Localization.string(for: "contactSection.label", [status, index, title, caption])
+        let status = !isEnabled ? disabled : isCompleted ? completed : nil
+        let collapsed = isCollapsed ? collapsed : expanded
+        
+        let prefix = [status, collapsed]
+            .compactMap { $0 }
+            .joined(separator: ", ")
+    
+        return Localization.string(for: "contactSection.label", [prefix, index, title, caption])
     }
     
     static func contactSectionCompleted(index: Int) -> String {
