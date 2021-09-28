@@ -242,6 +242,8 @@ private class ContactTextField: UITextField {
         super.init(frame: .zero)
         self.placeholder = placeholder
         self.text = text
+        
+        accessibilityLabel = placeholder
         setup()
         
     }
@@ -269,6 +271,7 @@ private class ContactTextField: UITextField {
         clearButton.backgroundColor = .white
         clearButton.addTarget(self, action: #selector(clear), for: .touchUpInside)
         clearButton.bounds = CGRect(origin: .zero, size: deleteIcon.size)
+        clearButton.accessibilityLabel = .delete
         
         rightView = clearButton
         rightViewMode = .whileEditing

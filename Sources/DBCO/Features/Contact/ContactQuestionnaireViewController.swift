@@ -50,6 +50,7 @@ final class ContactQuestionnaireViewController: PromptableViewController, Keyboa
         
         if viewModel.showDeleteButton {
             navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "DeleteContact"), style: .plain, target: self, action: #selector(deleteTask))
+            navigationItem.rightBarButtonItem?.accessibilityLabel = .deleteContactButtonTitle
         }
         
         if #available(iOS 13.0, *) {
