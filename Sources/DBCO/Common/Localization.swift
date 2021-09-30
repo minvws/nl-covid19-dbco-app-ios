@@ -293,6 +293,7 @@ extension String {
     static var contactTaskStatusIndexWontInform: String { return Localization.string(for: "contactTaskStatusIndexWontInform") }
     static var contactTaskStatusIndexWillInform: String { return Localization.string(for: "contactTaskStatusIndexWillInform") }
     static var contactTaskStatusMissingDetails: String { return Localization.string(for: "contactTaskStatusMissingDetails") }
+    static func contactTaskStatusProgress(progress: CGFloat) -> String { return Localization.string(for: "contactTaskStatusProgress", [progress * 100]) }
     
     static var taskOverviewWaitingForPairing: String { return Localization.string(for: "taskOverviewWaitingForPairing") }
     static var taskOverviewPairingTryAgain: String { return Localization.string(for: "taskOverviewPairingTryAgain") }
