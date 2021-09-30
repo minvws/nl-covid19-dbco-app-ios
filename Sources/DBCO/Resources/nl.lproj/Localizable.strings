@@ -246,6 +246,7 @@
 "overviewTipsMessage" = "Het is belangrijk dat we weten wie kans hebben gelopen besmet te zijn geraakt. Zo kunnen deze mensen op tijd worden geïnformeerd. Dit helpt om verdere verspreiding van het coronavirus te stoppen.";
 
 "overviewTipsSection1.title" = "Bedenk wat je hebt gedaan";
+"overviewTipsSection1.label" = "Tip 1: Bedenk wat je hebt gedaan";
 "overviewTipsSection1.intro" = "Deze dingen kunnen je geheugen opfrissen:";
 "overviewTipsSection1.photos" = "Foto’s van of met jou";
 "overviewTipsSection1.socialMedia" = "Berichten op social media";
@@ -257,6 +258,7 @@
 "overviewTipsSection1.conversations" = "Een onverwacht gesprek op werk";
 
 "overviewTipsSection2.title" = "Zet de contacten in de app";
+"overviewTipsSection2.label" = "Tip 2: Zet de contacten in de app";
 "overviewTipsSection2.intro" = "Niet iedereen die je hebt ontmoet heeft risico op besmetting gelopen. We zijn op zoek naar:";
 "overviewTipsSection2.item1" = "Mensen bij wie je in de buurt en/of een tijdje in dezelfde ruimte bent geweests";
 "overviewTipsSection2.item2" = "Mensen met wie je fysiek contact hebt gehad";
