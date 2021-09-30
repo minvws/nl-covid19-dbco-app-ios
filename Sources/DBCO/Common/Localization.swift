@@ -312,6 +312,7 @@ extension String {
     static var overviewTipsMessage: String { return Localization.string(for: "overviewTipsMessage") }
     
     static var overviewTipsSection1Title: String { return Localization.string(for: "overviewTipsSection1.title") }
+    static var overviewTipsSection1Label: String { return Localization.string(for: "overviewTipsSection1.label") }
     static var overviewTipsSection1Intro: String { return Localization.string(for: "overviewTipsSection1.intro") }
     static var overviewTipsSection1Photos: String { return Localization.string(for: "overviewTipsSection1.photos") }
     static var overviewTipsSection1SocialMedia: String { return Localization.string(for: "overviewTipsSection1.socialMedia") }
@@ -323,6 +324,7 @@ extension String {
     static var overviewTipsSection1Conversations: String { return Localization.string(for: "overviewTipsSection1.conversations") }
     
     static var overviewTipsSection2Title: String { return Localization.string(for: "overviewTipsSection2.title") }
+    static var overviewTipsSection2Label: String { return Localization.string(for: "overviewTipsSection2.label") }
     static var overviewTipsSection2Intro: String { return Localization.string(for: "overviewTipsSection2.intro") }
     static var overviewTipsSection2Item1: String { return Localization.string(for: "overviewTipsSection2.item1") }
     static var overviewTipsSection2Item2: String { return Localization.string(for: "overviewTipsSection2.item2") }
