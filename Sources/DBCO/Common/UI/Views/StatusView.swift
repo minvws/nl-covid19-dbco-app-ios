@@ -18,7 +18,19 @@ class StatusView: UIView {
             applyStatus()
         }
     }
-
+    
+    override var accessibilityLabel: String? {
+        get {
+            if let progress = calculateProgress() {
+                return .contactTaskStatusProgress(progress: progress)
+            }
+            return nil
+        }
+        set {
+            super.accessibilityLabel = newValue
+        }
+    }
+    
     private let imageView = UIImageView()
 
     init(status: Task.Status = .missingEssentialInput) {

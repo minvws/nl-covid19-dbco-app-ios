@@ -59,6 +59,13 @@ final class TaskTableViewCell: UITableViewCell, CellManagable {
                 subtitleLabel.textColor = Theme.colors.orange
             }
         }
+        
+        guard let title = titleLabel.text, let subtitle = subtitleLabel.text else { return }
+        if let status = statusView.accessibilityLabel {
+            accessibilityLabel = String(format: "%@: %@, %@", title, subtitle, status)
+        } else {
+            accessibilityLabel = String(format: "%@: %@", title, subtitle)
+        }
     }
 
     private func build() {
@@ -78,6 +85,8 @@ final class TaskTableViewCell: UITableViewCell, CellManagable {
         SeparatorView(style: .gray)
             .snap(to: .bottom, of: contentView.readableIdentation, insets: .left(40))
         
+        isAccessibilityElement = true
+        shouldGroupAccessibilityChildren = true
         accessibilityTraits = .button
     }
     
