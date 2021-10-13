@@ -92,14 +92,16 @@ class ViewController: UIViewController, DismissActionable, PopActionable {
             }
         }
         
-        // Move focus to the first header when the ViewControler appears for the first time.
+        // Move focus to the first element when the ViewController appears for the first time.
         if needsFocus {
             needsFocus = false
             
-            UIAccessibility.screenChanged(self)
-
-            if let header = view.find(traits: .header) {
+            if let navigationBar = navigationController?.navigationBar {
+                UIAccessibility.layoutChanged(navigationBar)
+            } else if let header = view.find(traits: .header) {
                 UIAccessibility.layoutChanged(header)
+            } else {
+                UIAccessibility.screenChanged(self)
             }
         }
     }
