@@ -230,6 +230,7 @@
 "contactTaskStatusIndexWontInform" = "Jij informeert niet";
 "contactTaskStatusIndexWillInform" = "Informeer dit contact";
 "contactTaskStatusMissingDetails" = "Vul gegevens aan";
+"contactTaskStatusProgress" = "Voortgang: %.1f procent";
 
 "taskOverviewWaitingForPairing" = "Wachten op koppeling met de GGD";
 "taskOverviewPairingTryAgain" = "Probeer opnieuw";
