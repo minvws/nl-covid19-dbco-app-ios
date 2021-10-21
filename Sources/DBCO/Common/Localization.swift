@@ -180,6 +180,14 @@ extension String {
     static var determinePositiveTestDateTitle: String { return Localization.string(for: "determinePositiveTestDate.title") }
     static var determinePositiveTestDateSubtitle: String { return Localization.string(for: "determinePositiveTestDate.subtitle") }
     
+    static var distantDateVerifyAlertDateFormat: String { return Localization.string(for: "distantDateVerifyAlert.dateFormat") }
+    static var distantDateVerifyAlertTitle: String { return Localization.string(for: "distantDateVerifyAlert.title") }
+
+    static func distantDateVerifyAlertMessage(date: String) -> String { return Localization.string(for: "distantDateVerifyAlert.message", [date]) }
+    
+    static var distantDateVerifyAlertYes: String { return Localization.string(for: "distantDateVerifyAlert.yes") }
+    static var distantDateVerifyAlertNo: String { return Localization.string(for: "distantDateVerifyAlert.no") }
+    
     /* MARK: - Determine contacts */
     static var onboardingSelfBCOIntroTitle: String { return Localization.string(for: "onboardingSelfBCOIntro.title") }
     static var onboardingSelfBCOIntroMessage: String { return Localization.string(for: "onboardingSelfBCOIntro.message") }
@@ -205,6 +213,7 @@ extension String {
     static var determineContactsExplanationItem3: String { return Localization.string(for: "determineContactsExplanation.item.3") }
     static var determineContactsExplanationItem4: String { return Localization.string(for: "determineContactsExplanation.item.4") }
     static var determineContactsExplanationItem5: String { return Localization.string(for: "determineContactsExplanation.item.5") }
+    static var determineContactsExplanationItem6: String { return Localization.string(for: "determineContactsExplanation.item.6") }
     
     /* MARK: - Onboarding Contacts Timeline */
     static var contactsTimelineDateFormat: String { return Localization.string(for: "contactsTimeline.dateFormat") }
@@ -293,6 +302,7 @@ extension String {
     static var contactTaskStatusIndexWontInform: String { return Localization.string(for: "contactTaskStatusIndexWontInform") }
     static var contactTaskStatusIndexWillInform: String { return Localization.string(for: "contactTaskStatusIndexWillInform") }
     static var contactTaskStatusMissingDetails: String { return Localization.string(for: "contactTaskStatusMissingDetails") }
+    
     static func contactTaskStatusProgress(progress: CGFloat) -> String { return Localization.string(for: "contactTaskStatusProgress", [progress * 100]) }
     
     static var taskOverviewWaitingForPairing: String { return Localization.string(for: "taskOverviewWaitingForPairing") }
