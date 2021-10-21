@@ -371,6 +371,8 @@
 "earlierExposureDateTitle" = "Je hoeft geen gegevens te delen van deze persoon";
 "earlierExposureDateMessage" = "Jullie waren namelijk bij elkaar in de buurt toen je nog niet besmettelijk was";
 
+"cappedExposureDatesInformation" = "We vragen alleen naar je contacten van de afgelopen 14 dagen. Daarom kun je geen datum van daarvoor kiezen.";
+
 "contactDeletePromptTitle" = "Dit contact heeft geen extra risico op besmetting gelopen";
 "contactDeletePromptMessage" = "Je hoeft deze persoon dus niet te laten weten dat je besmet bent. Ook heeft de GGD geen gegevens van deze persoon nodig.";
 

@@ -475,6 +475,8 @@ extension String {
     static var earlierExposureDateTitle: String { return Localization.string(for: "earlierExposureDateTitle") }
     static var earlierExposureDateMessage: String { return Localization.string(for: "earlierExposureDateMessage") }
     
+    static var cappedExposureDatesInformation: String { return Localization.string(for: "cappedExposureDatesInformation") }
+    
     static var contactDeletePromptTitle: String { return Localization.string(for: "contactDeletePromptTitle") }
     static var contactDeletePromptMessage: String { return Localization.string(for: "contactDeletePromptMessage") }
     

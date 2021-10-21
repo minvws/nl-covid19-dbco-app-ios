@@ -373,6 +373,7 @@ class LastExposureDateAnswerManager: AnswerManaging {
         self.question = question
         
         var answerOptions = Self.createAnswerOptions()
+        self.twoWeeksExplanationView.isHidden = answerOptions.count < 16
         
         if let lastExposureDate = lastExposureDate {
             if let option = answerOptions.first(where: { $0.value == lastExposureDate }) {
@@ -397,7 +398,7 @@ class LastExposureDateAnswerManager: AnswerManaging {
         let endDate = Date()
         let startDate = Services.caseManager.startOfContagiousPeriod ?? endDate
         
-        let numberOfDays = Calendar.current.dateComponents([.day], from: startDate, to: endDate).day ?? 0
+        let numberOfDays = Calendar.current.dateComponents([.day], from: startDate.start, to: endDate.start).day ?? 0
         
         let dateOptions = (0...numberOfDays)
             .compactMap { Calendar.current.date(byAdding: .day, value: $0, to: startDate) }
@@ -427,6 +428,13 @@ class LastExposureDateAnswerManager: AnswerManaging {
         return containerView
     }()
     
+    private let twoWeeksExplanationView: UIView = {
+        HStack(spacing: 8,
+               UIImageView(imageName: "Validation/Warning").asIcon(color: Theme.colors.primary),
+               UILabel(subhead: .cappedExposureDatesInformation, textColor: Theme.colors.captionGray))
+            .alignment(.top)
+    }()
+    
     private lazy var inputField = InputField(for: self, path: \.options)
     
     private(set) lazy var view: UIView = {
@@ -434,6 +442,7 @@ class LastExposureDateAnswerManager: AnswerManaging {
                inputField
                 .emphasized()
                 .decorateWithDescriptionIfNeeded(description: question.description),
+               twoWeeksExplanationView,
                earlierIndicatorView)
     }()
     
