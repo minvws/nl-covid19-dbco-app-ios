@@ -76,14 +76,15 @@ class ContactsTimelineViewModel {
     }
     
     var title: String {
+        let endDate = max(endDate, .today.dateByAddingDays(-13))
         return .contactsTimelineTitle(endDate: dateFormatter.string(from: endDate))
     }
     
-    var sections: [Section] {
-        let today = Date().start
+    private var numberOfDays: Int {
+        return Calendar.current.dateComponents([.day], from: endDate, to: .today).day! + 1
+    }
     
-        let numberOfDays = Calendar.current.dateComponents([.day], from: endDate, to: today).day! + 1
-        
+    private var daySections: [Section] {
         func title(for index: Int, date: Date) -> String {
             let titleFormats: [String] = [
                 .contactsTimelineSectionTitleTodayFormat,
@@ -123,8 +124,8 @@ class ContactsTimelineViewModel {
             }
         }
         
-        var sections = (0 ..< numberOfDays).map { index -> Section in
-            let date = Calendar.current.date(byAdding: .day, value: -index, to: today)!
+        return (0 ..< numberOfDays).map { index -> Section in
+            let date = Calendar.current.date(byAdding: .day, value: -index, to: .today)!
             
             let section = Section.day(date: date,
                                       title: title(for: index, date: date),
@@ -132,6 +133,10 @@ class ContactsTimelineViewModel {
             
             return section
         }
+    }
+    
+    var sections: [Section] {
+        var sections = Array(daySections.prefix(14)) // limited to 14 days
         
         sections.insert(.reviewTips, at: 0)
         
@@ -148,7 +153,7 @@ class ContactsTimelineViewModel {
     var hideExtraDaySection: Bool {
         switch configuration {
         case .dateOfSymptomOnset:
-            return false
+            return numberOfDays >= 14
         case .testDate:
             return true
         }

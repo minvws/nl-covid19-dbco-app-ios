@@ -62,14 +62,18 @@ final class CaseManager: CaseManaging, Logging {
     }
     
     var startOfContagiousPeriod: Date? {
-        switch (dateOfTest, dateOfSymptomOnset) {
-        case (_, .some(let dateOfSymptomOnset)):
-            return dateOfSymptomOnset.dateByAddingDays(-2)
-        case (.some(let dateOfTest), _):
-            return dateOfTest
-        default:
-            return nil
-        }
+        let date: Date? = {
+            switch (dateOfTest, dateOfSymptomOnset) {
+            case (_, .some(let dateOfSymptomOnset)):
+                return dateOfSymptomOnset.dateByAddingDays(-2)
+            case (.some(let dateOfTest), _):
+                return dateOfTest
+            default:
+                return nil
+            }
+        }()
+        
+        return date.map { max($0, Date().dateByAddingDays(-13)) }
     }
     
     private(set) var symptomsKnown: Bool {

@@ -39,6 +39,7 @@ Feature: Launch screen
         Then I see a text field with 'Voeg huisgenoot toe'
         And I see a button with 'Ik woon alleen'
         When I type 'Anna Haro' into the 'Voeg huisgenoot toe' text field
-        And I type 'Daniel Higgins' into the 'Voeg huisgenoot toe' text field
-        And I swipe up
+        And I type 'Daniel Higg' into the 'Voeg huisgenoot toe' text field
+        Then I see a button with 'Daniel Higgins Jr.'
+        When I tap the 'Daniel Higgins Jr.' button
         Then I see a button with 'Volgende'

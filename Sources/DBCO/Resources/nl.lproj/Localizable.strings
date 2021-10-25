@@ -125,6 +125,12 @@
 "determinePositiveTestDate.title" = "Wanneer was de test waaruit bleek dat je corona hebt?";
 "determinePositiveTestDate.subtitle" = "Kies de datum waarop je de (laatste)  coronatest hebt gedaan.";
 
+"distantDateVerifyAlert.dateFormat" = "EEEE d MMMM";
+"distantDateVerifyAlert.title" = "Weet je zeker dat de datum klopt?";
+"distantDateVerifyAlert.message" = "%@ is al een tijdje geleden.";
+"distantDateVerifyAlert.yes" = "Ja, verder";
+"distantDateVerifyAlert.no" = "Nee, terug";
+
 /* MARK: - Determine contacts */
 "onboardingSelfBCOIntro.title" = "Wat moeten de mensen doen bij wie jij in de buurt bent geweest?";
 "onboardingSelfBCOIntro.message" = "Het advies verschilt per persoon. Dit hangt af van of jullie afstand hielden en hoe lang de ontmoeting duurde. De app geeft aan of iemand thuis moet blijven en tot wanneer.";
@@ -147,9 +153,10 @@
 "determineContactsExplanation.message" = "Niet iedereen die je hebt ontmoet heeft risico op besmetting gelopen. We zijn op zoek naar:";
 "determineContactsExplanation.item.1" = "Mensen bij wie je in de buurt en/of een tijdje in dezelfde ruimte bent geweest";
 "determineContactsExplanation.item.2" = "Mensen met wie je fysiek contact hebt gehad";
-"determineContactsExplanation.item.3" = "Je hoeft <b>geen</b> mensen toe te voegen die je heel kort hebt ontmoet (zoals de kassamedewerker in een winkel)";
-"determineContactsExplanation.item.4" = "Je hoeft je huisgenoten <b>niet</b> nog een keer toe te voegen";
-"determineContactsExplanation.item.5" = "Twijfel je? Voeg de persoon dan toch toe";
+"determineContactsExplanation.item.3" = "Je kunt alleen mensen toevoegen die je in de afgelopen 14 dagen hebt ontmoet";
+"determineContactsExplanation.item.4" = "Je hoeft <b>geen</b> mensen toe te voegen die je heel kort hebt ontmoet (zoals de kassamedewerker in een winkel)";
+"determineContactsExplanation.item.5" = "Je hoeft je huisgenoten <b>niet</b> nog een keer toe te voegen";
+"determineContactsExplanation.item.6" = "Twijfel je? Voeg de persoon dan toch toe";
 
 /* MARK: - Onboarding Contacts Timeline */
 "contactsTimeline.dateFormat" = "EEEE d MMMM";
@@ -363,6 +370,8 @@
 
 "earlierExposureDateTitle" = "Je hoeft geen gegevens te delen van deze persoon";
 "earlierExposureDateMessage" = "Jullie waren namelijk bij elkaar in de buurt toen je nog niet besmettelijk was";
+
+"cappedExposureDatesInformation" = "We vragen alleen naar je contacten van de afgelopen 14 dagen. Daarom kun je geen datum van daarvoor kiezen.";
 
 "contactDeletePromptTitle" = "Dit contact heeft geen extra risico op besmetting gelopen";
 "contactDeletePromptMessage" = "Je hoeft deze persoon dus niet te laten weten dat je besmet bent. Ook heeft de GGD geen gegevens van deze persoon nodig.";

@@ -25,7 +25,7 @@ platform :ios do
 
     run_tests(
       app_name: "DBCO",
-      device: "iPhone 12 Pro",
+      device: "iPhone 13 Pro",
       workspace: "DBCO.xcworkspace",
       scheme: "DBCO",
       app_identifier: "nl.rijksoverheid.dbco",
@@ -135,7 +135,7 @@ platform :ios do
   # - Private lanes
 
   private_lane :prepare do
-    xcversion(version: "12.5")
+    xcversion(version: "13.0")
   end
 
   private_lane :determine_build_number do |options|
