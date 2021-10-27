@@ -422,6 +422,7 @@ private extension TaskOverviewViewController {
         tipButton.contentEdgeInsets = .zero
         tipButton.titleLabel?.font = Theme.fonts.subheadBold
         tipButton.touchUpInside(self, action: #selector(requestTips))
+        tipButton.setContentCompressionResistancePriority(.required, for: .vertical)
         
         VStack(VStack(spacing: 4,
                       UILabel(body: .taskOverviewTipsTitle),
