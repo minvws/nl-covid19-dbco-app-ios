@@ -240,6 +240,7 @@
 "contactTaskStatusProgress" = "Voortgang: %.1f procent";
 
 "taskOverviewWaitingForPairing" = "Wachten op koppeling met de GGD";
+"taskOverviewWaitingForPairingAccessible" = "Aan het wachten op koppeling met de GGD";
 "taskOverviewPairingTryAgain" = "Probeer opnieuw";
 "taskOverviewPairingExpired" = "Koppelen mislukt. De code is verlopen. Geef een nieuwe code door aan de GGD.";
 "taskOverviewPairingFailed" = "Koppelen mislukt. Controleer of de GGD de juiste code heeft en of je internetverbinding werkt.";
@@ -402,6 +403,7 @@
 "reversePairingConfirm.message" = "De GGD belt je voor het bron- en contactonderzoek. Tijdens dit gesprek hoor je of het in jouw GGD-regio mogelijk is om via de app contactgegevens te delen.";
 
 "reversePairingWaiting" = "Wachten op GGD-medewerker";
+"reversePairingWaitingAccessible" = "Aan het wachten op de GGD-medewerker";
 "reversePairingFinished" = "Gekoppeld met GGD";
 
 "reversePairingStep1.title" = "Koppel de app met de GGD om je gegevens te delen";

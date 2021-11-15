@@ -51,6 +51,8 @@ class TaskOverviewViewModel {
     @Bindable private(set) var isPairingErrorViewHidden: Bool = true
     @Bindable private(set) var pairingErrorText: String = ""
     
+    @Bindable private(set) var statusText: String?
+    
     init(_ input: Input) {
         self.input = input
         tableViewManager = .init()
@@ -207,9 +209,14 @@ extension TaskOverviewViewModel: PairingManagerListener {
         
         pairingTimeoutTimer?.invalidate()
         pairingTimeoutTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [unowned self] _ in
+            let wasPairingViewHidden = self.isPairingViewHidden
             self.isPairingViewHidden = false
             self.isPairingErrorViewHidden = true
             self.isDoneButtonHidden = true
+            
+            if wasPairingViewHidden {
+                statusText = .taskOverviewWaitingForPairingAccessible
+            }
         }
     }
     
@@ -227,6 +234,8 @@ extension TaskOverviewViewModel: PairingManagerListener {
         isPairingViewHidden = true
         isPairingErrorViewHidden = false
         isDoneButtonHidden = true
+        
+        statusText = pairingErrorText
     }
     
     func pairingManagerDidCancelPollingForPairing(_ pairingManager: PairingManaging) {
@@ -247,6 +256,8 @@ extension TaskOverviewViewModel: PairingManagerListener {
         isPairingViewHidden = true
         isPairingErrorViewHidden = true
         isDoneButtonHidden = false
+    
+        statusText = .reversePairingFinished
     }
     
 }
@@ -313,16 +324,26 @@ class TaskOverviewViewController: PromptableViewController {
         
         viewModel.setHidePrompt { [unowned self] in self.hidePrompt(animated: $0) }
         viewModel.setShowPrompt { [unowned self] in self.showPrompt(animated: $0) }
+        
+        viewModel.$statusText.binding = { [unowned self] statusText in
+            guard presentedViewController == nil else { return }
+            guard statusText?.isEmpty == false else { return }
+            
+            UIAccessibility.post(notification: .announcement, argument: statusText)
+        }
+        
     }
     
     private func createPairingView() -> UIView {
         let pairingActivityView = ActivityIndicatorView(style: .gray)
+        pairingActivityView.accessibilityLabel = .taskOverviewWaitingForPairingAccessible
         pairingActivityView.startAnimating()
         pairingActivityView.setContentHuggingPriority(.required, for: .horizontal)
         let pairingView = VStack(spacing: 16,
                                  HStack(spacing: 6,
                                         pairingActivityView,
-                                        UILabel(subhead: .taskOverviewWaitingForPairing, textColor: Theme.colors.primary)),
+                                        UILabel(subhead: .taskOverviewWaitingForPairing, textColor: Theme.colors.primary)
+                                            .accessibleText(text: .taskOverviewWaitingForPairingAccessible)),
                                  Button(title: .taskOverviewPairingTryAgain, style: .secondary)
                                     .touchUpInside(self, action: #selector(upload)))
         
