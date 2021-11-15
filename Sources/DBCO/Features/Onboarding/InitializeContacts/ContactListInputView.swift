@@ -248,6 +248,11 @@ private class ContactTextField: UITextField {
         
     }
     
+    override var accessibilityValue: String? {
+        get { return text }
+        set { super.accessibilityValue = newValue }
+    }
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setup()
