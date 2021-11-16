@@ -354,7 +354,7 @@
 
 "contactInformationMissingWarning" = "Vul dit in";
 
-"contactInformationPhoneNumber" = "Telefoonnummer";
+"contactInformationPhoneNumber" = "Telefoonnummer (bij voorkeur mobiel)";
 "contactInformationPhoneNumberPlaceholder" = "Selecteer telefoonnummer";
 "contactInformationPhoneNumberGeneralError" = "Dit telefoonnummer lijkt niet geldig, weet je zeker dat dit klopt?";
 "contactInformationPhoneNumberTooShortError" = "Dit telefoonnummer lijkt te weinig cijfers te bevatten, weet je zeker dat dit klopt?";
