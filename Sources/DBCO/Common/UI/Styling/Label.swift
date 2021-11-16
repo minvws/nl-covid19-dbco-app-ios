@@ -83,4 +83,9 @@ extension UILabel {
         self.attributedText = attributedString
     }
     
+    func accessibleText(text: String) -> Self {
+        accessibilityLabel = text
+        return self
+    }
+    
 }
