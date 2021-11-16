@@ -306,6 +306,7 @@ extension String {
     static func contactTaskStatusProgress(progress: CGFloat) -> String { return Localization.string(for: "contactTaskStatusProgress", [progress * 100]) }
     
     static var taskOverviewWaitingForPairing: String { return Localization.string(for: "taskOverviewWaitingForPairing") }
+    static var taskOverviewWaitingForPairingAccessible: String { return Localization.string(for: "taskOverviewWaitingForPairingAccessible") }
     static var taskOverviewPairingTryAgain: String { return Localization.string(for: "taskOverviewPairingTryAgain") }
     static var taskOverviewPairingFailed: String { return Localization.string(for: "taskOverviewPairingFailed") }
     static var taskOverviewPairingExpired: String { return Localization.string(for: "taskOverviewPairingExpired") }
@@ -508,6 +509,7 @@ extension String {
     static var reversePairingConfirmMessage: String { return Localization.string(for: "reversePairingConfirm.message") }
     
     static var reversePairingWaiting: String { return Localization.string(for: "reversePairingWaiting") }
+    static var reversePairingWaitingAccessible: String { return Localization.string(for: "reversePairingWaitingAccessible") }
     static var reversePairingFinished: String { return Localization.string(for: "reversePairingFinished") }
     
     static var reversePairingStep1Title: String { return Localization.string(for: "reversePairingStep1.title") }
