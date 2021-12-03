@@ -127,6 +127,7 @@
 		CDC7C89E25387E2000FE7E05 /* Questionnaire.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C89D25387E2000FE7E05 /* Questionnaire.swift */; };
 		CDC7C8A225387E4400FE7E05 /* CaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7C8A125387E4400FE7E05 /* CaseManager.swift */; };
 		CDCCFE6D265541C600D07617 /* SelectableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCCFE6C265541C600D07617 /* SelectableButton.swift */; };
+		CDD356EE2757823B006EC129 /* TextElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD356ED2757823B006EC129 /* TextElement.swift */; };
 		CDD68BA6254D511D00E96E9C /* KeychainItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD68BA5254D511D00E96E9C /* KeychainItem.swift */; };
 		CDD68BAA254D60BC00E96E9C /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD68BA9254D60BC00E96E9C /* UserDefaults.swift */; };
 		CDDC05642543120D0079C2F4 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDDC05632543120D0079C2F4 /* Coordinator.swift */; };
@@ -327,6 +328,7 @@
 		CDC7C89D25387E2000FE7E05 /* Questionnaire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Questionnaire.swift; sourceTree = "<group>"; };
 		CDC7C8A125387E4400FE7E05 /* CaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseManager.swift; sourceTree = "<group>"; };
 		CDCCFE6C265541C600D07617 /* SelectableButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableButton.swift; sourceTree = "<group>"; };
+		CDD356ED2757823B006EC129 /* TextElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextElement.swift; sourceTree = "<group>"; };
 		CDD68BA5254D511D00E96E9C /* KeychainItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainItem.swift; sourceTree = "<group>"; };
 		CDD68BA9254D60BC00E96E9C /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		CDDC05632543120D0079C2F4 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
@@ -538,6 +540,7 @@
 				CD2AC08925308B6500E8AF78 /* StatusView.swift */,
 				CDE30E63251BC02100862A40 /* TextField.swift */,
 				CD7FACA0251B3FCD00AB8142 /* TextView.swift */,
+				CDD356ED2757823B006EC129 /* TextElement.swift */,
 				CDA525FB252F0FAA004E923A /* ToggleButton.swift */,
 				CDA52600252F1752004E923A /* ToggleGroup.swift */,
 				CD47A4032549766C005B8801 /* SectionedScrollView.swift */,
@@ -1300,6 +1303,7 @@
 				CDB66B9A26526609005B6597 /* CaseManaging.swift in Sources */,
 				CD24CBF825C0305100A2F634 /* ScrollViewNavivationbarAdjusting.swift in Sources */,
 				CDB66B98265265D4005B6597 /* PairingManaging.swift in Sources */,
+				CDD356EE2757823B006EC129 /* TextElement.swift in Sources */,
 				CD47A4042549766C005B8801 /* SectionedScrollView.swift in Sources */,
 				CD10F08C25AF30A7000295B9 /* SelectSymptomsViewController.swift in Sources */,
 				CDA0F6892539AAB8009FD2A9 /* Answer+Progress.swift in Sources */,

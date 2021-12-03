@@ -38,7 +38,7 @@ import Foundation
     // Use a nested class to store the binding closure. This way a @Bindable property can be declared immutable and still have a mutable value for the closure.
     class Binder {
         private var valueProvider: () -> T
-        var binding: ((T) -> Void)? = nil { didSet { binding?(valueProvider()) } }
+        var binding: ((T) -> Void)? { didSet { binding?(valueProvider()) } }
         
         init(valueProvider: @escaping () -> T) {
             self.valueProvider = valueProvider
