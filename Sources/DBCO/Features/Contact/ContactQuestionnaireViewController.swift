@@ -123,7 +123,7 @@ final class ContactQuestionnaireViewController: PromptableViewController, Keyboa
     }
     
     private struct InformSectionViews {
-        let titleLabel = UILabel(bodyBold: "")
+        let titleLabel = UILabel(nil, isHeader: true)
         let contentView = TextView()
         let linkView = TextView()
         let footerLabel = UILabel(bodyBold: "")
