@@ -94,7 +94,8 @@ class ContactQuestionnaireViewModel {
         updatedTask.contact = Task.Contact(category: updatedCategory,
                                            communication: updatedContact.communication,
                                            informedByIndexAt: updatedContact.informedByIndexAt,
-                                           dateOfLastExposure: updatedContact.dateOfLastExposure)
+                                           dateOfLastExposure: updatedContact.dateOfLastExposure,
+                                           canShareIndexNameWithContact: updatedContact.canShareIndexNameWithContact)
         updatedTask.questionnaireResult = baseResult
         updatedTask.questionnaireResult?.answers = answerManagers
             .filter { $0.question.isRelevant(in: updatedCategory) }
@@ -212,7 +213,17 @@ class ContactQuestionnaireViewModel {
                     break
                 }
                 
+                setupTriggerHandlers(for: manager)
                 updateProgress()
+            }
+        }
+    }
+    
+    private func setupTriggerHandlers(for answerManager: AnswerManaging) {
+        if case .multipleChoice(let option) = answerManager.answer.value, let trigger = option?.trigger {
+            switch trigger {
+            case .setShareIndexNameToYes: setShareIndexNameToYes()
+            case .setShareIndexNameToNo: setShareIndexNameToNo()
             }
         }
     }
@@ -231,18 +242,36 @@ class ContactQuestionnaireViewModel {
         }
     }
     
+    private func setShareIndexNameToYes() {
+        updatedContact = Task.Contact(category: updatedContact.category,
+                                      communication: updatedContact.communication,
+                                      informedByIndexAt: updatedContact.informedByIndexAt,
+                                      dateOfLastExposure: updatedContact.dateOfLastExposure,
+                                      canShareIndexNameWithContact: true)
+    }
+
+    private func setShareIndexNameToNo() {
+        updatedContact = Task.Contact(category: updatedContact.category,
+                                      communication: updatedContact.communication,
+                                      informedByIndexAt: updatedContact.informedByIndexAt,
+                                      dateOfLastExposure: updatedContact.dateOfLastExposure,
+                                      canShareIndexNameWithContact: false)
+    }
+    
     func registerDidInform() {
         updatedContact = Task.Contact(category: updatedContact.category,
                                       communication: updatedContact.communication,
                                       informedByIndexAt: ISO8601DateFormatter().string(from: Date()),
-                                      dateOfLastExposure: updatedContact.dateOfLastExposure)
+                                      dateOfLastExposure: updatedContact.dateOfLastExposure,
+                                      canShareIndexNameWithContact: updatedContact.canShareIndexNameWithContact)
     }
     
     func registerWontInform() {
         updatedContact = Task.Contact(category: updatedContact.category,
                                       communication: updatedContact.communication,
                                       informedByIndexAt: Task.Contact.indexWontInformIndicator,
-                                      dateOfLastExposure: updatedContact.dateOfLastExposure)
+                                      dateOfLastExposure: updatedContact.dateOfLastExposure,
+                                      canShareIndexNameWithContact: updatedContact.canShareIndexNameWithContact)
     }
     
     private func updateClassification(with result: ClassificationHelper.Result) {
@@ -255,7 +284,8 @@ class ContactQuestionnaireViewModel {
             updatedContact = Task.Contact(category: taskCategory,
                                           communication: updatedContact.communication,
                                           informedByIndexAt: updatedContact.informedByIndexAt,
-                                          dateOfLastExposure: updatedContact.dateOfLastExposure)
+                                          dateOfLastExposure: updatedContact.dateOfLastExposure,
+                                          canShareIndexNameWithContact: updatedContact.canShareIndexNameWithContact)
             
             let lastExposureManager = classificationManagers.first { $0.question.questionType == .lastExposureDate }
             lastExposureManager?.isEnabled = taskCategory != .other
@@ -272,7 +302,8 @@ class ContactQuestionnaireViewModel {
         updatedContact = Task.Contact(category: updatedContact.category,
                                       communication: updatedContact.communication,
                                       informedByIndexAt: updatedContact.informedByIndexAt,
-                                      dateOfLastExposure: value)
+                                      dateOfLastExposure: value,
+                                      canShareIndexNameWithContact: updatedContact.canShareIndexNameWithContact)
         
         let classificationDetailsManager = classificationManagers.first { $0.question.questionType == .classificationDetails }
         classificationDetailsManager?.view.isHidden = value == AnswerOption.lastExposureDateEarlierOption.value
@@ -473,7 +504,13 @@ class ContactQuestionnaireViewModel {
         let view = manager.view
         let isRelevant = manager.question.isRelevant(in: task.contact.category)
         let disabledForSource = manager.question.disabledForSources.contains(task.source)
-        view.isHidden = !isRelevant || disabledForSource
+    
+        let disabledForAlreadyAnswered: Bool = {
+            let isShareIndexNameQuestion = manager.question.answerOptions?.contains { $0.trigger == .setShareIndexNameToYes } == true
+            return task.shareIndexNameAlreadyAnswered && isShareIndexNameQuestion
+        }()
+        
+        view.isHidden = !isRelevant || disabledForSource || disabledForAlreadyAnswered
         
         return view
     }

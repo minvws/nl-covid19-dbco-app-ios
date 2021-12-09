@@ -10,7 +10,8 @@ import Contacts
 
 extension AnswerOption {
     static let lastExposureDateEarlierOption = AnswerOption(label: .contactInformationLastExposureEarlier,
-                                                            value: "earlier")
+                                                            value: "earlier",
+                                                            trigger: nil)
 }
 
 /// - Tag: AnswerManaging
@@ -381,7 +382,8 @@ class LastExposureDateAnswerManager: AnswerManaging {
             } else if let date = Self.valueDateFormatter.date(from: lastExposureDate) {
                 // If we got a different valid date, create an option for it
                 let option = AnswerOption(label: Self.displayDateFormatter.string(from: date),
-                                          value: lastExposureDate)
+                                          value: lastExposureDate,
+                                          trigger: nil)
                 answerOptions.append(option)
                 baseAnswer.value = .lastExposureDate(option)
             }
@@ -403,10 +405,12 @@ class LastExposureDateAnswerManager: AnswerManaging {
         let dateOptions = (0...numberOfDays)
             .compactMap { Calendar.current.date(byAdding: .day, value: $0, to: startDate) }
             .map { AnswerOption(label: displayDateFormatter.string(from: $0),
-                                value: valueDateFormatter.string(from: $0)) }
+                                value: valueDateFormatter.string(from: $0),
+                                trigger: nil) }
         
         let everyDayOption = AnswerOption(label: .contactInformationLastExposureEveryDay,
-                                          value: valueDateFormatter.string(from: endDate))
+                                          value: valueDateFormatter.string(from: endDate),
+                                          trigger: nil)
         
         return [.lastExposureDateEarlierOption] + dateOptions + [everyDayOption]
     }
@@ -565,6 +569,7 @@ class MultipleChoiceAnswerManager: AnswerManaging {
             self.options = Options(label: question.label,
                                     value: option?.value,
                                     options: answerOptions.map { ($0.value, $0.label) })
+            self.inputField = InputField(for: self, path: \.options)
         } else {
             self.selectedButtonIndex = question.answerOptions?.firstIndex { $0.value == option?.value }
             
@@ -578,9 +583,9 @@ class MultipleChoiceAnswerManager: AnswerManaging {
     
     let question: Question
     
-    private(set) lazy var inputField = InputField(for: self, path: \.options)
+    private(set) var inputField: InputField<MultipleChoiceAnswerManager, Options>?
     private(set) lazy var view: UIView = {
-        if options != nil {
+        if options != nil, let inputField = inputField {
             return inputField.decorateWithDescriptionIfNeeded(description: question.description)
         } else {
             return buttons
@@ -608,7 +613,7 @@ class MultipleChoiceAnswerManager: AnswerManaging {
     
     var isEnabled: Bool = true {
         didSet {
-            inputField.isEnabled = isEnabled
+            inputField?.isEnabled = isEnabled
             buttons?.isEnabled = isEnabled
         }
     }
