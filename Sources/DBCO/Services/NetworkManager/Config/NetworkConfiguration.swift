@@ -38,7 +38,7 @@ struct NetworkConfiguration {
             scheme: "https",
             host: "api-test.bco-portaal.nl",
             port: nil,
-            path: ["v2"],
+            path: ["v3"],
             sslSignature: nil,
             tokenParams: [:]
         ),
@@ -53,7 +53,7 @@ struct NetworkConfiguration {
             scheme: "https",
             host: "api-acc.bco-portaal.nl",
             port: nil,
-            path: ["v2"],
+            path: ["v3"],
             sslSignature: "TSSRQUz+lWdG7Ezvps9vcuKKEylDL52KkHrEy12twVo=",
             tokenParams: [:]
         ),
@@ -68,7 +68,7 @@ struct NetworkConfiguration {
             scheme: "https",
             host: "api-staging.bco-portaal.nl",
             port: nil,
-            path: ["v2"],
+            path: ["v3"],
             sslSignature: "TSSRQUz+lWdG7Ezvps9vcuKKEylDL52KkHrEy12twVo=",
             tokenParams: [:]
         ),
@@ -83,7 +83,7 @@ struct NetworkConfiguration {
             scheme: "https",
             host: "api.bco-portaal.nl",
             port: nil,
-            path: ["v2"],
+            path: ["v3"],
             sslSignature: "TSSRQUz+lWdG7Ezvps9vcuKKEylDL52KkHrEy12twVo=",
             tokenParams: [:]
         ),

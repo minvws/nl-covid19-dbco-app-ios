@@ -7,9 +7,16 @@
 
 import Foundation
 
+/// - Tag: AnswerTrigger
+ enum AnswerTrigger: String, Codable {
+     case setShareIndexNameToYes
+     case setShareIndexNameToNo
+ }
+
 struct AnswerOption: Codable, Equatable {
     let label: String
     let value: String
+    let trigger: AnswerTrigger?
 }
 
 /// - Tag: Question

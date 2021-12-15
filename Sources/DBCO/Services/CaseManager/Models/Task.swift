@@ -58,6 +58,7 @@ struct Task: Equatable {
         let communication: Communication
         let informedByIndexAt: String?
         let dateOfLastExposure: String?
+        let canShareIndexNameWithContact: Bool?
         let contactIdentifier: String?
         
         /// If the informedByIndexAt field is set to the value of this static field, it Indicates that the index chose not to inform the contact.
@@ -69,11 +70,12 @@ struct Task: Equatable {
         /// - Tag: Task.Contact.indexWontInformIndicator
         static let indexWontInformIndicator: String = "index-wont-inform"
         
-        init(category: Category, communication: Communication, informedByIndexAt: String?, dateOfLastExposure: String?, contactIdentifier: String? = nil) {
+        init(category: Category, communication: Communication, informedByIndexAt: String?, dateOfLastExposure: String?, canShareIndexNameWithContact: Bool?, contactIdentifier: String? = nil) {
             self.category = category
             self.communication = communication
             self.informedByIndexAt = informedByIndexAt
             self.dateOfLastExposure = dateOfLastExposure
+            self.canShareIndexNameWithContact = canShareIndexNameWithContact
             self.contactIdentifier = contactIdentifier
         }
     }
@@ -91,6 +93,7 @@ struct Task: Equatable {
     var questionnaireResult: QuestionnaireResult?
     
     var isSyncedWithPortal: Bool
+    var shareIndexNameAlreadyAnswered: Bool
     
     /// - Tag: Task.status
     var status: Status {
@@ -123,10 +126,11 @@ struct Task: Equatable {
         self.taskContext = nil
         self.deletedByIndex = false
         self.isSyncedWithPortal = false
+        self.shareIndexNameAlreadyAnswered = false
         
         switch taskType {
         case .contact:
-            contact = Contact(category: .other, communication: .unknown, informedByIndexAt: nil, dateOfLastExposure: nil, contactIdentifier: nil)
+            contact = Contact(category: .other, communication: .unknown, informedByIndexAt: nil, dateOfLastExposure: nil, canShareIndexNameWithContact: nil, contactIdentifier: nil)
         }
     }
     
@@ -141,6 +145,7 @@ extension Task.Contact: Codable {
         communication = try container.decode(Communication.self, forKey: .communication)
         dateOfLastExposure = try container.decode(String?.self, forKey: .dateOfLastExposure)
         informedByIndexAt = try container.decodeIfPresent(String.self, forKey: .informedByIndexAt)
+        canShareIndexNameWithContact = try container.decodeIfPresent(Bool.self, forKey: .canShareIndexNameWithContact)
         contactIdentifier = try? container.decode(String?.self, forKey: .contactIdentifier)
     }
     
@@ -165,6 +170,7 @@ extension Task.Contact: Codable {
         try container.encode(category, forKey: .category)
         try container.encode(communication, forKey: .communication)
         try container.encode(dateOfLastExposure, forKey: .dateOfLastExposure)
+        try container.encode(canShareIndexNameWithContact, forKey: .canShareIndexNameWithContact)
         
         switch encoder.target {
         case .internalStorage:
@@ -186,6 +192,7 @@ extension Task.Contact: Codable {
         case communication
         case dateOfLastExposure
         case informedByIndexAt
+        case canShareIndexNameWithContact
         case contactIdentifier
     }
     
@@ -210,6 +217,7 @@ extension Task: Codable {
         
         deletedByIndex = (try? container.decode(Bool?.self, forKey: .deletedByIndex)) ?? false
         isSyncedWithPortal = (try container.decodeIfPresent(Bool.self, forKey: .isSyncedWithPortal)) ?? false
+        shareIndexNameAlreadyAnswered = (try container.decodeIfPresent(Bool.self, forKey: .shareIndexNameAlreadyAnswered)) ?? false
     }
     
     func encode(to encoder: Encoder) throws {
@@ -234,6 +242,7 @@ extension Task: Codable {
         
         if encoder.target == .internalStorage {
             try container.encode(isSyncedWithPortal, forKey: .isSyncedWithPortal)
+            try container.encode(shareIndexNameAlreadyAnswered, forKey: .shareIndexNameAlreadyAnswered)
         }
         
     }
@@ -251,6 +260,7 @@ extension Task: Codable {
         case questionnaireResult
         case deletedByIndex
         case isSyncedWithPortal
+        case shareIndexNameAlreadyAnswered
     }
 }
 
