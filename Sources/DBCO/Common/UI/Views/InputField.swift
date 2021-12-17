@@ -119,6 +119,11 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         iconOverlayView.bottomAnchor.constraint(equalTo: textField.bottomAnchor).isActive = true
     }
     
+    private var hasMultipleValueOptions: Bool {
+        guard let object = object else { return false }
+        return object[keyPath: path].valueOptions?.count ?? 0 > 1
+    }
+    
     private func configureInputType() {
         textField.inputAccessoryView = nil
         textField.inputView = nil
@@ -136,6 +141,12 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         case .phoneNumber:
             textField.keyboardType = .phonePad
             textField.inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
+            
+            if hasMultipleValueOptions {
+                dropdownIconView.isHidden = false
+                textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder ?? "", attributes: [.foregroundColor: UIColor.black])
+            }
+            
         case .date(let dateFormatter):
             setupAsDatePicker(with: dateFormatter)
         case .picker(let options):
@@ -411,6 +422,9 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         switch object[keyPath: path].inputType {
         case .date, .picker:
             return false
+        case .phoneNumber where hasMultipleValueOptions:
+            dropdownIconView.isHidden = !newText.isEmpty
+            return true
         default:
             return true
         }
