@@ -70,7 +70,7 @@
 "onboarding.consent.item1" = "De gegevens die je invult worden alleen in de app opgeslagen";
 "onboarding.consent.item2" = "De app heeft geen toegang tot andere gegevens op je telefoon";
 "onboarding.consent.item3" = "Het gebruik van de app is vrijwillig";
-"onboarding.consent.item4" = "Het kan zijn dat de GGD je vraagt  gegevens via de app te delen. Gegevens worden alleen gedeeld als jij laat weten dat je dat wilt";
+"onboarding.consent.item4" = "Het kan zijn dat de GGD je vraagt gegevens via de app te delen. Gegevens worden alleen gedeeld als jij laat weten dat je dat wilt";
 "onboarding.consent.buttonTitle" = "Ik heb de privacyverklaring gelezen en begrijp hoe GGD Contact mijn gegevens gebruikt";
 
 /* MARK: - Onboarding Error */
