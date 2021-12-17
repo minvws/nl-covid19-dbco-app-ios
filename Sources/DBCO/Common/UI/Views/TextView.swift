@@ -102,13 +102,6 @@ class TextView: UIStackView {
     }
     
     /// Initializes the TextView by parsing the given string to HTML
-    init(htmlText: String) {
-        
-        super.init(frame: .zero)
-        setup()
-        html(htmlText)
-    }
-    
     init(htmlText: String, font: UIFont = Theme.fonts.body, textColor: UIColor = Theme.colors.captionGray, boldTextColor: UIColor = .black) {
         super.init(frame: .zero)
         setup()
