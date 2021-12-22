@@ -90,7 +90,7 @@ class ContactsAuthorizationViewController: ViewController, ScrollViewNavivationb
             VStack(spacing: 24,
                    VStack(spacing: 16,
                           UILabel(title2: viewModel.title),
-                          UILabel(body: .selectContactAuthorizationMessage, textColor: Theme.colors.captionGray)),
+                          TextView(htmlText: .selectContactAuthorizationMessage)),
                    VStack(spacing: 16,
                           Button(title: viewModel.manualButtonTitle, style: .secondary)
                             .touchUpInside(self, action: #selector(manual)),
