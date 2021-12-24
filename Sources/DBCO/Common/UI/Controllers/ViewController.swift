@@ -84,8 +84,6 @@ class ViewController: UIViewController, DismissActionable, PopActionable {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
         if shouldAddDidBecomeActiveObserver {
             didBecomeActiveObserver = NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
                 self?.applicationDidBecomeActive()
@@ -96,7 +94,7 @@ class ViewController: UIViewController, DismissActionable, PopActionable {
         if needsFocus {
             needsFocus = false
             
-            if let navigationBar = navigationController?.navigationBar {
+            if let navigationBar = navigationController?.navigationBar, !navigationBar.isHidden, navigationItem.title != nil {
                 UIAccessibility.layoutChanged(navigationBar)
             } else if let header = view.find(traits: .header) {
                 UIAccessibility.layoutChanged(header)
@@ -104,6 +102,8 @@ class ViewController: UIViewController, DismissActionable, PopActionable {
                 UIAccessibility.screenChanged(self)
             }
         }
+        
+        super.viewDidAppear(animated)
     }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
