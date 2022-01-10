@@ -338,8 +338,6 @@ class ContactQuestionnaireViewModel {
         classificationSectionView?.isCompleted = classificationCompleted
         classificationSectionView?.isHidden = classificationIsHidden
         classificationSectionView?.index = 1
-        detailsSectionView?.isCompleted = detailsCompleted
-        informSectionView?.isCompleted = updatedTask.isOrCanBeInformed
         
         let startIndex = classificationIsHidden ? 1 : 2
         detailsSectionView?.index = startIndex
@@ -350,6 +348,9 @@ class ContactQuestionnaireViewModel {
         
         detailsSectionView?.isEnabled = sectionsAreEnabled
         informSectionView?.isEnabled = sectionsAreEnabled
+        
+        detailsSectionView?.isCompleted = detailsCompleted
+        informSectionView?.isCompleted = updatedTask.isOrCanBeInformed
         
         let detailsBecameEnabled = detailsSectionWasDisabled && sectionsAreEnabled
         
