@@ -312,7 +312,7 @@
 "informContactTitle" = "Dit zijn de leefregels voor %@:";
 "informContactFooter.index" = "Je hebt met de GGD afgesproken dat jij %@ informeert";
 "informContactFooter.staff" = "Je hebt met de GGD afgesproken dat zij %@ informeren. Je kunt natuurlijk wel zelf alvast de leefregels delen.";
-"informContactFooter.unknown" = "De GGD raadt aan om %@ alvast te informeren en deze leefregels te delen.";
+"informContactFooter.unknown" = "De GGD raadt aan om %@ te informeren en deze leefregels te delen.";
 
 "informContactGuidelinesDateFormat" = "EEEE d MMMM";
 
