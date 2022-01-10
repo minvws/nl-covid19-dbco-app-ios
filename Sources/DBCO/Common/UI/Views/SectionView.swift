@@ -29,14 +29,13 @@ class SectionView: UIView {
     /// Currently supports up to index 3. To support more sections, just ensure the required images are available in the asset catalog (`"EditContact/Section\(index)"`).
     var isCompleted: Bool = false {
         didSet {
-            icon.isHighlighted = isCompleted
+            let showCompleted = isCompleted && isEnabled
+            
+            icon.isHighlighted = showCompleted
             updateHeaderAccessibilityLabel()
             
-            if isCompleted {
-                UIAccessibility.post(
-                    notification: .announcement,
-                    argument: String.contactSectionCompleted(index: index)
-                )
+            if showCompleted && oldValue != isCompleted {
+                UIAccessibility.announce(.contactSectionCompleted(index: index))
             }
         }
     }
