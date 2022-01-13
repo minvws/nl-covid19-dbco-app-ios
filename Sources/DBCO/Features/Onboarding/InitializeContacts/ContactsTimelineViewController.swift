@@ -508,7 +508,7 @@ private class DaySectionView: TimelineSectionView {
         VStack(spacing: 8,
                VStack(spacing: 4,
                       titleLabel.asHeader(),
-                      subtitleLabel.hideIfEmpty()),
+                      subtitleLabel),
                contactList)
             .embed(in: self)
     }
@@ -520,6 +520,7 @@ private class DaySectionView: TimelineSectionView {
         
         titleLabel.text = title
         subtitleLabel.text = subtitle
+        subtitleLabel.hideIfEmpty()
     }
     
     override func isConfigured(for section: ContactsTimelineViewModel.Section) -> Bool {
