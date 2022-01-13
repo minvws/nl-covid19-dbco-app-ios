@@ -95,7 +95,7 @@ class ContactQuestionnaireViewModel {
                                            communication: updatedContact.communication,
                                            informedByIndexAt: updatedContact.informedByIndexAt,
                                            dateOfLastExposure: updatedContact.dateOfLastExposure,
-                                           canShareIndexNameWithContact: updatedContact.canShareIndexNameWithContact)
+                                           shareIndexNameWithContact: updatedContact.shareIndexNameWithContact)
         updatedTask.questionnaireResult = baseResult
         updatedTask.questionnaireResult?.answers = answerManagers
             .filter { $0.question.isRelevant(in: updatedCategory) }
@@ -247,7 +247,7 @@ class ContactQuestionnaireViewModel {
                                       communication: updatedContact.communication,
                                       informedByIndexAt: updatedContact.informedByIndexAt,
                                       dateOfLastExposure: updatedContact.dateOfLastExposure,
-                                      canShareIndexNameWithContact: true)
+                                      shareIndexNameWithContact: true)
     }
 
     private func setShareIndexNameToNo() {
@@ -255,7 +255,7 @@ class ContactQuestionnaireViewModel {
                                       communication: updatedContact.communication,
                                       informedByIndexAt: updatedContact.informedByIndexAt,
                                       dateOfLastExposure: updatedContact.dateOfLastExposure,
-                                      canShareIndexNameWithContact: false)
+                                      shareIndexNameWithContact: false)
     }
     
     func registerDidInform() {
@@ -263,7 +263,7 @@ class ContactQuestionnaireViewModel {
                                       communication: updatedContact.communication,
                                       informedByIndexAt: ISO8601DateFormatter().string(from: Date()),
                                       dateOfLastExposure: updatedContact.dateOfLastExposure,
-                                      canShareIndexNameWithContact: updatedContact.canShareIndexNameWithContact)
+                                      shareIndexNameWithContact: updatedContact.shareIndexNameWithContact)
     }
     
     func registerWontInform() {
@@ -271,7 +271,7 @@ class ContactQuestionnaireViewModel {
                                       communication: updatedContact.communication,
                                       informedByIndexAt: Task.Contact.indexWontInformIndicator,
                                       dateOfLastExposure: updatedContact.dateOfLastExposure,
-                                      canShareIndexNameWithContact: updatedContact.canShareIndexNameWithContact)
+                                      shareIndexNameWithContact: updatedContact.shareIndexNameWithContact)
     }
     
     private func updateClassification(with result: ClassificationHelper.Result) {
@@ -285,7 +285,7 @@ class ContactQuestionnaireViewModel {
                                           communication: updatedContact.communication,
                                           informedByIndexAt: updatedContact.informedByIndexAt,
                                           dateOfLastExposure: updatedContact.dateOfLastExposure,
-                                          canShareIndexNameWithContact: updatedContact.canShareIndexNameWithContact)
+                                          shareIndexNameWithContact: updatedContact.shareIndexNameWithContact)
             
             let lastExposureManager = classificationManagers.first { $0.question.questionType == .lastExposureDate }
             lastExposureManager?.isEnabled = taskCategory != .other
@@ -303,7 +303,7 @@ class ContactQuestionnaireViewModel {
                                       communication: updatedContact.communication,
                                       informedByIndexAt: updatedContact.informedByIndexAt,
                                       dateOfLastExposure: value,
-                                      canShareIndexNameWithContact: updatedContact.canShareIndexNameWithContact)
+                                      shareIndexNameWithContact: updatedContact.shareIndexNameWithContact)
         
         let classificationDetailsManager = classificationManagers.first { $0.question.questionType == .classificationDetails }
         classificationDetailsManager?.view.isHidden = value == AnswerOption.lastExposureDateEarlierOption.value

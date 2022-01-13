@@ -278,13 +278,13 @@ class TaskOverviewViewModelTests: XCTestCase {
 
 private func createInformedTask(label: String) -> Task {
     var task = Task(type: .contact, label: label, source: .app)
-    task.contact = .init(category: .category1, communication: .index, informedByIndexAt: ISO8601DateFormatter().string(from: Date()), dateOfLastExposure: nil, canShareIndexNameWithContact: nil)
+    task.contact = .init(category: .category1, communication: .index, informedByIndexAt: ISO8601DateFormatter().string(from: Date()), dateOfLastExposure: nil, shareIndexNameWithContact: nil)
     return task
 }
 
 private func createUninformedTask(label: String) -> Task {
     var task = Task(type: .contact, label: label, source: .app)
-    task.contact = .init(category: .category1, communication: .index, informedByIndexAt: nil, dateOfLastExposure: nil, canShareIndexNameWithContact: nil)
+    task.contact = .init(category: .category1, communication: .index, informedByIndexAt: nil, dateOfLastExposure: nil, shareIndexNameWithContact: nil)
     return task
 }
 
