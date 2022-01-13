@@ -159,6 +159,15 @@ class ContactsTimelineViewModel {
         }
     }
     
+    var hideTwoWeeksExplanation: Bool {
+        switch configuration {
+        case .dateOfSymptomOnset:
+            return !hideExtraDaySection
+        case .testDate:
+            return true
+        }
+    }
+    
     var addExtraDayTitle: String? {
         guard case .dateOfSymptomOnset(let date) = configuration else { return nil }
         
@@ -221,6 +230,7 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
     private let separatorView = SeparatorView()
     private let titleLabel = UILabel(title2: nil)
     private var addExtraDaySectionView: UIStackView!
+    private var twoWeeksExplanationView: UIStackView!
     private let addExtraDayTitleLabel = UILabel(bodyBold: nil)
     
     private let scrollView = UIScrollView(frame: .zero)
@@ -275,11 +285,20 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
                                         addExtraDayButton)
     }
     
+    private func setupTwoWeeksExplanationView() {
+        twoWeeksExplanationView =
+            HStack(spacing: 8,
+                   UIImageView(imageName: "Validation/Warning").asIcon(color: Theme.colors.primary),
+                   UILabel(subhead: .cappedExposureDatesInformation, textColor: Theme.colors.captionGray))
+                .alignment(.top)
+    }
+    
     private func setupView() {
         let margin: UIEdgeInsets = .top(32) + .bottom(16)
         
         sectionStackView = VStack(spacing: 40)
         setupAddExtraDaySectionView()
+        setupTwoWeeksExplanationView()
 
         let stack =
             VStack(spacing: 40,
@@ -290,6 +309,7 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
                    sectionStackView,
                    VStack(spacing: 16,
                           addExtraDaySectionView,
+                          twoWeeksExplanationView,
                           Button(title: .done, style: .primary).touchUpInside(self, action: #selector(handleContinue))))
                 .distribution(.fill)
                 .embed(in: scrollView.readableWidth, insets: margin)
@@ -333,6 +353,8 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
         
         addExtraDaySectionView.isHidden = viewModel.hideExtraDaySection
         addExtraDayTitleLabel.text = viewModel.addExtraDayTitle
+        
+        twoWeeksExplanationView.isHidden = viewModel.hideTwoWeeksExplanation
     }
     
     private func createOrReuseView(for section: ContactsTimelineViewModel.Section, existingSectionViews: [TimelineSectionView], contacts: [Onboarding.Contact]) -> TimelineSectionView {
@@ -508,7 +530,7 @@ private class DaySectionView: TimelineSectionView {
         VStack(spacing: 8,
                VStack(spacing: 4,
                       titleLabel.asHeader(),
-                      subtitleLabel.hideIfEmpty()),
+                      subtitleLabel),
                contactList)
             .embed(in: self)
     }
@@ -520,6 +542,7 @@ private class DaySectionView: TimelineSectionView {
         
         titleLabel.text = title
         subtitleLabel.text = subtitle
+        subtitleLabel.hideIfEmpty()
     }
     
     override func isConfigured(for section: ContactsTimelineViewModel.Section) -> Bool {

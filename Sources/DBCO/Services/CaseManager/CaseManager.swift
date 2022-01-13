@@ -183,7 +183,7 @@ final class CaseManager: CaseManaging, Logging {
             var task = fetchedTask
             switch task.taskType {
             case .contact:
-                task.shareIndexNameAlreadyAnswered = task.contact.canShareIndexNameWithContact != nil
+                task.shareIndexNameAlreadyAnswered = task.contact.shareIndexNameWithContact != nil
             }
             
             return task
@@ -202,13 +202,13 @@ final class CaseManager: CaseManaging, Logging {
                 } else {
                     switch tasks[existingTaskIndex].taskType {
                     case .contact:
-                        // Update only the communication type and canShareIndexNameWithContact
+                        // Update only the communication type and shareIndexNameWithContact
                         let existingContact = tasks[existingTaskIndex].contact!
                         tasks[existingTaskIndex].contact = Task.Contact(category: existingContact.category,
                                                                         communication: task.contact.communication,
                                                                         informedByIndexAt: existingContact.informedByIndexAt,
                                                                         dateOfLastExposure: existingContact.dateOfLastExposure,
-                                                                        canShareIndexNameWithContact: task.contact.canShareIndexNameWithContact)
+                                                                        shareIndexNameWithContact: task.contact.shareIndexNameWithContact)
                     }
                     
                     tasks[existingTaskIndex].label = task.label
@@ -346,7 +346,7 @@ final class CaseManager: CaseManaging, Logging {
                                     communication: .unknown,
                                     informedByIndexAt: nil,
                                     dateOfLastExposure: dateOfLastExposure.map(Self.valueDateFormatter.string),
-                                    canShareIndexNameWithContact: nil,
+                                    shareIndexNameWithContact: nil,
                                     contactIdentifier: contactIdentifier)
         tasks.append(task)
         
@@ -374,9 +374,9 @@ final class CaseManager: CaseManaging, Logging {
             
             switch tasks[index].taskType {
             case .contact:
-                // If `canShareIndexNameWithContact` was not yet set, but has a value now, mark `shareIndexNameAlreadyAnswered` as true
+                // If `shareIndexNameWithContact` was not yet set, but has a value now, mark `shareIndexNameAlreadyAnswered` as true
                 if tasks[index].shareIndexNameAlreadyAnswered == false,
-                   tasks[index].contact.canShareIndexNameWithContact != nil {
+                   tasks[index].contact.shareIndexNameWithContact != nil {
                     tasks[index].shareIndexNameAlreadyAnswered = true
                 }
             }
