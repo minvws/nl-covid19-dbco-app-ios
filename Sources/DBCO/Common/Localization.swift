@@ -196,6 +196,7 @@ extension String {
     static var onboardingDetermineContactsIntroMessage: String { return Localization.string(for: "onboardingDetermineContactsIntro.message") }
     
     static var determineContactsAuthorizationTitle: String { return Localization.string(for: "determineContactsAuthorization.title") }
+    static var determineContactsAuthorizationMessage: String { return Localization.string(for: "determineContactsAuthorization.message") }
     static var determineContactsAuthorizationAllowButton: String { return Localization.string(for: "determineContactsAuthorization.allowButton") }
     static var determineContactsAuthorizationAddManuallyButton: String { return Localization.string(for: "determineContactsAuthorization.addManuallyButton") }
     
@@ -354,6 +355,9 @@ extension String {
     static var selectContactAuthorizationFallbackTitle: String { return Localization.string(for: "selectContactAuthorizationFallbackTitle") }
     
     static var selectContactAuthorizationMessage: String { return Localization.string(for: "selectContactAuthorizationMessage") }
+    static var selectContactAuthorizationItem1: String { return Localization.string(for: "selectContactAuthorization.item1") }
+    static var selectContactAuthorizationItem2: String { return Localization.string(for: "selectContactAuthorization.item2") }
+    static var selectContactAuthorizationItem3: String { return Localization.string(for: "selectContactAuthorization.item3") }
     static var selectContactAuthorizationAllowButton: String { return Localization.string(for: "selectContactAuthorizationAllowButton") }
     static var selectContactAuthorizationManualButton: String { return Localization.string(for: "selectContactAuthorizationManualButton") }
     
