@@ -139,6 +139,7 @@
 "onboardingDetermineContactsIntro.message" = "Zo wordt snel duidelijk wie gewaarschuwd moet worden en welk advies dan geldt.";
 
 "determineContactsAuthorization.title" = "Wil je je contactenlijst gebruiken om contactgegevens in te vullen?";
+"determineContactsAuthorization.message" = "Geef toegang tot je contactenlijst om makkelijk contacten te vinden en contactgegevens in te vullen.<br><br>Alleen de contactgegevens die jij kiest worden gebruikt in de app. Bijvoorbeeld een achternaam of een telefoonnummer.<br><br><b>Waarom verzamel je contactgegevens?</b><br>De GGD belt je misschien voor het bron- en contactonderzoek. Dat hangt af van het aantal besmettingen in Nederland. Tijdens dit telefoongesprek vraagt de GGD je naar je contacten en hun contactgegevens.<br><br>Door alvast gegevens in de app te verzamelen, kun je deze later gemakkelijk delen met de GGD als dat nodig is. En dat bespaart zowel jou als de GGD veel tijd.";
 "determineContactsAuthorization.allowButton" = "Toegang geven";
 "determineContactsAuthorization.addManuallyButton" = "Handmatig toevoegen";
 
@@ -283,7 +284,10 @@
 
 "selectContactAuthorizationTitle" = "‘%@’ opzoeken in je contactenlijst?";
 "selectContactAuthorizationFallbackTitle" = "Dit nieuwe contact opzoeken in je contactenlijst?";
-"selectContactAuthorizationMessage" = "Geef toegang tot je contactenlijst om makkelijk contacten te vinden en contactgegevens in te vullen.<br><br>Alleen de contactgegevens die jij kiest worden gebruikt in de app. Bijvoorbeeld een achternaam of een telefoonnummer.<br><br><b>Waarom verzamel je contactgegevens?</b><br>De GGD belt je misschien voor het bron- en contactonderzoek. Dat hangt af van het aantal besmettingen in Nederland. Tijdens dit telefoongesprek vraagt de GGD je naar je contacten en hun contactgegevens.<br><br>Door alvast gegevens in de app te verzamelen, kun je deze later gemakkelijk delen met de GGD als dat nodig is. En dat bespaart zowel jou als de GGD veel tijd.";
+"selectContactAuthorizationMessage" = "Gebruik je contactenlijst om makkelijk contacten te vinden en contactgegevens in te vullen. Bijvoorbeeld een achternaam of een telefoonnummer. Dit scheelt je veel tijd.";
+"selectContactAuthorization.item1" = "Het kan zijn dat de GGD je vraagt  gegevens via de app te delen. Gegevens worden alleen gedeeld als jij laat weten dat je dat wilt";
+"selectContactAuthorization.item2" = "Alleen gegevens die jij invult worden gedeeld";
+"selectContactAuthorization.item3" = "De GGD heeft <b>geen</b> toegang tot je hele contactenlijst";
 "selectContactAuthorizationAllowButton" = "Ja, opzoekhulp gebruiken";
 "selectContactAuthorizationManualButton" = "Nee, zelf invullen";
 

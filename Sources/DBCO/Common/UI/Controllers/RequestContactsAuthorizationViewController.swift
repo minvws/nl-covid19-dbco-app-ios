@@ -17,6 +17,8 @@ class ContactsAuthorizationViewModel {
     let title: String
     let allowButtonTitle: String
     let manualButtonTitle: String
+    let message: String
+    let items: [String]
     
     enum Style {
         case onboarding
@@ -32,6 +34,8 @@ class ContactsAuthorizationViewModel {
             topMargin = 18
             allowButtonTitle = .determineContactsAuthorizationAllowButton
             manualButtonTitle = .determineContactsAuthorizationAddManuallyButton
+            message = .determineContactsAuthorizationMessage
+            items = []
         case .selectContact:
             if let contactName = contactName {
                 title = .selectContactAuthorizationTitle(name: contactName)
@@ -42,6 +46,12 @@ class ContactsAuthorizationViewModel {
             topMargin = 64
             allowButtonTitle = .selectContactAuthorizationAllowButton
             manualButtonTitle = .selectContactAuthorizationManualButton
+            message = .selectContactAuthorizationMessage
+            items = [
+                .selectContactAuthorizationItem1,
+                .selectContactAuthorizationItem2,
+                .selectContactAuthorizationItem3
+            ]
         }
     }
 }
@@ -88,9 +98,12 @@ class ContactsAuthorizationViewController: ViewController, ScrollViewNavivationb
         
         let stack =
             VStack(spacing: 24,
-                   VStack(spacing: 16,
-                          UILabel(title2: viewModel.title),
-                          TextView(htmlText: .selectContactAuthorizationMessage)),
+                   VStack(spacing: 24,
+                       VStack(spacing: 16,
+                              UILabel(title2: viewModel.title),
+                              TextView(htmlText: viewModel.message)),
+                       VStack(spacing: 16,
+                              viewModel.items.map({ listItem($0) }))),
                    VStack(spacing: 16,
                           Button(title: viewModel.manualButtonTitle, style: .secondary)
                             .touchUpInside(self, action: #selector(manual)),
