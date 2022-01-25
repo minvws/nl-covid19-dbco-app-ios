@@ -65,6 +65,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         setupLabels()
         
         configureInputType()
+        setupPlaceHolder()
     }
     
     private func setupTextField() {
@@ -76,8 +77,20 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         textField.addTarget(self, action: #selector(handleEditingDidEnd), for: .editingDidEndOnExit)
         textField.addTarget(self, action: #selector(handleEditingDidEnd), for: .editingDidEnd)
         textField.addTarget(self, action: #selector(handleEditingDidBegin), for: .editingDidBegin)
-        
+    }
+    
+    private func setupPlaceHolder() {
         textField.placeholder = object?[keyPath: path].placeholder
+        
+        guard let object = object else { return }
+
+        switch object[keyPath: path].inputType {
+        case .phoneNumber where hasMultipleValueOptions:
+            dropdownIconView.isHidden = false
+            textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder ?? "", attributes: [.foregroundColor: UIColor.black])
+        default:
+            break
+        }
     }
     
     private func setupLabels() {
@@ -141,12 +154,6 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         case .phoneNumber:
             textField.keyboardType = .phonePad
             textField.inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
-            
-            if hasMultipleValueOptions {
-                dropdownIconView.isHidden = false
-                textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder ?? "", attributes: [.foregroundColor: UIColor.black])
-            }
-            
         case .date(let dateFormatter):
             setupAsDatePicker(with: dateFormatter)
         case .picker(let options):
@@ -390,12 +397,16 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
             delegate.promptOptionsForInputField(options) { option in
                 if let option = option {
                     self.text = option
+                    self.dropdownIconView.isHidden = true
                     self.handleEditingDidEnd()
                 } else {
                     self.overrideOptionPrompt = true
                     self.textField.becomeFirstResponder()
                     self.overrideOptionPrompt = false
+                    self.dropdownIconView.isHidden = true
                 }
+                
+                self.textField.placeholder = nil
             }
             return false
         } else {
@@ -422,11 +433,22 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         switch object[keyPath: path].inputType {
         case .date, .picker:
             return false
-        case .phoneNumber where hasMultipleValueOptions:
-            dropdownIconView.isHidden = !newText.isEmpty
-            return true
         default:
             return true
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        guard let object = object else { return }
+        guard let text = text else { return }
+
+        switch object[keyPath: path].inputType {
+        case .phoneNumber where hasMultipleValueOptions && text.isEmpty:
+            dropdownIconView.isHidden = true
+            setupPlaceHolder()
+            
+        default:
+            break
         }
     }
     
