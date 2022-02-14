@@ -146,6 +146,8 @@ class TextElement: UITextView, UITextViewDelegate {
     
     /// Delegate method which is called when the user has changed selection
     func textViewDidChangeSelection(_ textView: UITextView) {
+        guard !isEditable else { return }
+        
         // Allows links to be tapped but disables text selection
         textView.selectedTextRange = nil
     }
