@@ -174,12 +174,17 @@ code_sign_if_enabled() {
   fi
 }
 
-if [[ "$CONFIGURATION" == "Ad Hoc Acc" ]]; then
+if [[ "$CONFIGURATION" == "Ad Hoc Acceptance" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/IOSSecuritySuite/IOSSecuritySuite.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Sodium/Sodium.framework"
 fi
-if [[ "$CONFIGURATION" == "Ad Hoc Prod" ]]; then
+if [[ "$CONFIGURATION" == "Ad Hoc Production" ]]; then
+  install_framework "${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/IOSSecuritySuite/IOSSecuritySuite.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/Sodium/Sodium.framework"
+fi
+if [[ "$CONFIGURATION" == "Ad Hoc Staging" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/IOSSecuritySuite/IOSSecuritySuite.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Sodium/Sodium.framework"
@@ -200,6 +205,11 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/Sodium/Sodium.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/IOSSecuritySuite/IOSSecuritySuite.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/Sodium/Sodium.framework"
+fi
+if [[ "$CONFIGURATION" == "Testflight Usertest" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/IOSSecuritySuite/IOSSecuritySuite.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Sodium/Sodium.framework"

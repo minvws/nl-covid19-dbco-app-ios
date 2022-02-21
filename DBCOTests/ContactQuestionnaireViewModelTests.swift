@@ -501,7 +501,7 @@ private func createSectionView(with views: [UIView]) -> SectionView {
 private func createContactTask(category: Task.Contact.Category, source: Task.Source, communication: Task.Contact.Communication = .unknown, dateOfLastExposure: Date? = .now) -> Task {
     let exposureDateString = dateOfLastExposure.map(lastExposureDateFormatter.string)
     var task = Task(type: .contact, label: nil, source: source)
-    task.contact = .init(category: category, communication: communication, informedByIndexAt: nil, dateOfLastExposure: exposureDateString)
+    task.contact = .init(category: category, communication: communication, informedByIndexAt: nil, dateOfLastExposure: exposureDateString, shareIndexNameWithContact: nil)
     return task
 }
 

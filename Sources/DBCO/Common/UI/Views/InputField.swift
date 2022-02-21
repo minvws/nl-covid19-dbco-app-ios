@@ -65,6 +65,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         setupLabels()
         
         configureInputType()
+        setupPlaceHolder()
     }
     
     private func setupTextField() {
@@ -76,8 +77,20 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         textField.addTarget(self, action: #selector(handleEditingDidEnd), for: .editingDidEndOnExit)
         textField.addTarget(self, action: #selector(handleEditingDidEnd), for: .editingDidEnd)
         textField.addTarget(self, action: #selector(handleEditingDidBegin), for: .editingDidBegin)
-        
+    }
+    
+    private func setupPlaceHolder() {
         textField.placeholder = object?[keyPath: path].placeholder
+        
+        guard let object = object else { return }
+
+        switch object[keyPath: path].inputType {
+        case .phoneNumber where hasMultipleValueOptions:
+            dropdownIconView.isHidden = false
+            textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder ?? "", attributes: [.foregroundColor: UIColor.black])
+        default:
+            break
+        }
     }
     
     private func setupLabels() {
@@ -88,6 +101,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         label.isAccessibilityElement = false
         
         accessibilityLabel = label.text
+        textField.accessibilityLabel = label.text
         text = object?[keyPath: path].value
     }
     
@@ -116,6 +130,11 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         iconOverlayView.trailingAnchor.constraint(equalTo: textField.trailingAnchor, constant: -12).isActive = true
         iconOverlayView.topAnchor.constraint(equalTo: textField.topAnchor).isActive = true
         iconOverlayView.bottomAnchor.constraint(equalTo: textField.bottomAnchor).isActive = true
+    }
+    
+    private var hasMultipleValueOptions: Bool {
+        guard let object = object else { return false }
+        return object[keyPath: path].valueOptions?.count ?? 0 > 1
     }
     
     private func configureInputType() {
@@ -170,6 +189,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         textField.inputView = datePicker
         textField.inputAccessoryView = UIToolbar.doneToolbar(for: self, selector: #selector(done))
         tintColor = .clear
+        textField.accessibilityTraits = [.button, .staticText]
     }
     
     private func setupAsPicker(with options: [InputType.PickerOption]) {
@@ -195,7 +215,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         optionPicker = picker
         
         dropdownIconView.isHidden = false
-        accessibilityTraits = [.button, .staticText]
+        textField.accessibilityTraits = [.button, .staticText]
     }
     
     private var text: String? {
@@ -365,7 +385,7 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
         
         switch editable.inputType {
         case .date, .picker:
-            UIAccessibility.post(notification: .screenChanged, argument: inputView)
+            UIAccessibility.post(notification: .screenChanged, argument: textField.inputView)
             return true
         default:
             break
@@ -377,12 +397,16 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
             delegate.promptOptionsForInputField(options) { option in
                 if let option = option {
                     self.text = option
+                    self.dropdownIconView.isHidden = true
                     self.handleEditingDidEnd()
                 } else {
                     self.overrideOptionPrompt = true
                     self.textField.becomeFirstResponder()
                     self.overrideOptionPrompt = false
+                    self.dropdownIconView.isHidden = true
                 }
+                
+                self.textField.placeholder = nil
             }
             return false
         } else {
@@ -411,6 +435,20 @@ class InputField<Object: AnyObject, Field: InputFieldEditable>: UIView, LabeledI
             return false
         default:
             return true
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        guard let object = object else { return }
+        guard let text = text else { return }
+
+        switch object[keyPath: path].inputType {
+        case .phoneNumber where hasMultipleValueOptions && text.isEmpty:
+            dropdownIconView.isHidden = true
+            setupPlaceHolder()
+            
+        default:
+            break
         }
     }
     

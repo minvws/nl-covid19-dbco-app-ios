@@ -58,13 +58,24 @@ struct Task: Equatable {
         let communication: Communication
         let informedByIndexAt: String?
         let dateOfLastExposure: String?
+        let shareIndexNameWithContact: Bool?
         let contactIdentifier: String?
         
-        init(category: Category, communication: Communication, informedByIndexAt: String?, dateOfLastExposure: String?, contactIdentifier: String? = nil) {
+        /// If the informedByIndexAt field is set to the value of this static field, it Indicates that the index chose not to inform the contact.
+        /// This is not communicated to the API, it is used internally only
+        ///
+        /// # See also
+        /// [Filter implementation](x-source-tag://Task.Contact.indexWontInformIndicator.filter)
+        ///
+        /// - Tag: Task.Contact.indexWontInformIndicator
+        static let indexWontInformIndicator: String = "index-wont-inform"
+        
+        init(category: Category, communication: Communication, informedByIndexAt: String?, dateOfLastExposure: String?, shareIndexNameWithContact: Bool?, contactIdentifier: String? = nil) {
             self.category = category
             self.communication = communication
             self.informedByIndexAt = informedByIndexAt
             self.dateOfLastExposure = dateOfLastExposure
+            self.shareIndexNameWithContact = shareIndexNameWithContact
             self.contactIdentifier = contactIdentifier
         }
     }
@@ -82,6 +93,7 @@ struct Task: Equatable {
     var questionnaireResult: QuestionnaireResult?
     
     var isSyncedWithPortal: Bool
+    var shareIndexNameAlreadyAnswered: Bool
     
     /// - Tag: Task.status
     var status: Status {
@@ -114,10 +126,11 @@ struct Task: Equatable {
         self.taskContext = nil
         self.deletedByIndex = false
         self.isSyncedWithPortal = false
+        self.shareIndexNameAlreadyAnswered = false
         
         switch taskType {
         case .contact:
-            contact = Contact(category: .other, communication: .unknown, informedByIndexAt: nil, dateOfLastExposure: nil, contactIdentifier: nil)
+            contact = Contact(category: .other, communication: .unknown, informedByIndexAt: nil, dateOfLastExposure: nil, shareIndexNameWithContact: nil, contactIdentifier: nil)
         }
     }
     
@@ -132,6 +145,7 @@ extension Task.Contact: Codable {
         communication = try container.decode(Communication.self, forKey: .communication)
         dateOfLastExposure = try container.decode(String?.self, forKey: .dateOfLastExposure)
         informedByIndexAt = try container.decodeIfPresent(String.self, forKey: .informedByIndexAt)
+        shareIndexNameWithContact = try container.decodeIfPresent(Bool.self, forKey: .shareIndexNameWithContact)
         contactIdentifier = try? container.decode(String?.self, forKey: .contactIdentifier)
     }
     
@@ -156,10 +170,20 @@ extension Task.Contact: Codable {
         try container.encode(category, forKey: .category)
         try container.encode(communication, forKey: .communication)
         try container.encode(dateOfLastExposure, forKey: .dateOfLastExposure)
-        try container.encode(informedByIndexAt, forKey: .informedByIndexAt)
+        try container.encode(shareIndexNameWithContact, forKey: .shareIndexNameWithContact)
         
-        if encoder.target == .internalStorage {
+        switch encoder.target {
+        case .internalStorage:
             try container.encode(contactIdentifier, forKey: .contactIdentifier)
+            try container.encode(informedByIndexAt, forKey: .informedByIndexAt)
+        case .api:
+            /// Filter out informedByIndex if it is set to the indexWontInformIndicator
+            ///
+            /// - Tag: Task.Contact.indexWontInformIndicator.filter
+            let informedByIndexAtAPIValue = informedByIndexAt == Self.indexWontInformIndicator ? nil : informedByIndexAt
+            try container.encode(informedByIndexAtAPIValue, forKey: .informedByIndexAt)
+        case .unknown:
+            break
         }
     }
     
@@ -168,6 +192,7 @@ extension Task.Contact: Codable {
         case communication
         case dateOfLastExposure
         case informedByIndexAt
+        case shareIndexNameWithContact
         case contactIdentifier
     }
     
@@ -192,6 +217,7 @@ extension Task: Codable {
         
         deletedByIndex = (try? container.decode(Bool?.self, forKey: .deletedByIndex)) ?? false
         isSyncedWithPortal = (try container.decodeIfPresent(Bool.self, forKey: .isSyncedWithPortal)) ?? false
+        shareIndexNameAlreadyAnswered = (try container.decodeIfPresent(Bool.self, forKey: .shareIndexNameAlreadyAnswered)) ?? false
     }
     
     func encode(to encoder: Encoder) throws {
@@ -216,6 +242,7 @@ extension Task: Codable {
         
         if encoder.target == .internalStorage {
             try container.encode(isSyncedWithPortal, forKey: .isSyncedWithPortal)
+            try container.encode(shareIndexNameAlreadyAnswered, forKey: .shareIndexNameAlreadyAnswered)
         }
         
     }
@@ -233,6 +260,7 @@ extension Task: Codable {
         case questionnaireResult
         case deletedByIndex
         case isSyncedWithPortal
+        case shareIndexNameAlreadyAnswered
     }
 }
 

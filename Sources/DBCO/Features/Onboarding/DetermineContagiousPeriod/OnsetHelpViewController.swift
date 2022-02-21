@@ -41,10 +41,7 @@ class OnsetHelpViewController: ViewController {
         
         let scrollView = UIScrollView(frame: .zero)
         scrollView.embed(in: view)
-        
-        let widthProviderView = UIView()
-        widthProviderView.snap(to: .top, of: scrollView, height: 0)
-        widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        scrollView.contentWidth(equalTo: view)
         
         TextView(htmlText: .contagiousPeriodOnsetDateHelpMessage,
                  font: Theme.fonts.body,

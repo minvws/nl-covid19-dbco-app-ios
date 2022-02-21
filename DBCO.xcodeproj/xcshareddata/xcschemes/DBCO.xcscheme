@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1240"
+   LastUpgradeVersion = "1250"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -36,6 +36,16 @@
                BlueprintIdentifier = "CD756C31252B3D36005FEDA0"
                BuildableName = "DBCOTests.xctest"
                BlueprintName = "DBCOTests"
+               ReferencedContainer = "container:DBCO.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "CDE1CD54265FCE9300961F87"
+               BuildableName = "DBCOUITests.xctest"
+               BlueprintName = "DBCOUITests"
                ReferencedContainer = "container:DBCO.xcodeproj">
             </BuildableReference>
          </TestableReference>

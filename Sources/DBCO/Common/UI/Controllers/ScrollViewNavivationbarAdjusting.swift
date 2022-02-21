@@ -27,23 +27,6 @@ extension ScrollViewNavivationbarAdjusting {
     private var navigationBarSeparatorViewTag: Int { 9999992 }
     
     func adjustNavigationBar(for scrollView: UIScrollView) {
-        func setup() -> (backgroundView: UIView, separatorView: UIView) {
-            let navigationBackgroundView = UIView()
-            navigationBackgroundView.tag = navigationBarBackgroundViewTag
-            
-            let separatorView = SeparatorView()
-            separatorView.tag = navigationBarSeparatorViewTag
-            
-            navigationBackgroundView.backgroundColor = .white
-            navigationBackgroundView.snap(to: .top, of: view)
-            
-            navigationBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-            
-            separatorView.snap(to: .top, of: view.safeAreaLayoutGuide)
-            
-            return (navigationBackgroundView, separatorView)
-        }
-        
         let backgroundView: UIView
         let separatorView: UIView
         
@@ -68,8 +51,27 @@ extension ScrollViewNavivationbarAdjusting {
                     backgroundView.isHidden = true
                     self.navigationItem.title = title
                 }
+                
+                self.navigationItem.backButtonTitle = .backButtonTitle
             }
         }
+    }
+    
+    private func setup() -> (backgroundView: UIView, separatorView: UIView) {
+        let navigationBackgroundView = UIView()
+        navigationBackgroundView.tag = navigationBarBackgroundViewTag
+        
+        let separatorView = SeparatorView()
+        separatorView.tag = navigationBarSeparatorViewTag
+        
+        navigationBackgroundView.backgroundColor = .white
+        navigationBackgroundView.snap(to: .top, of: view)
+        
+        navigationBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        
+        separatorView.snap(to: .top, of: view.safeAreaLayoutGuide)
+        
+        return (navigationBackgroundView, separatorView)
     }
     
 }

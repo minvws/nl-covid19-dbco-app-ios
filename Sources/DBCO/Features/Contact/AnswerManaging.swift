@@ -10,7 +10,8 @@ import Contacts
 
 extension AnswerOption {
     static let lastExposureDateEarlierOption = AnswerOption(label: .contactInformationLastExposureEarlier,
-                                                            value: "earlier")
+                                                            value: "earlier",
+                                                            trigger: nil)
 }
 
 /// - Tag: AnswerManaging
@@ -116,7 +117,7 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
     var isEnabled: Bool = true {
         didSet {
             sameHouseholdRiskGroup.isEnabled = isEnabled
-            distanceRiskGroup.isEnabled = isEnabled
+            distanceRiskGroupUndecorated.isEnabled = isEnabled
             physicalContactRiskGroupUndecorated.isEnabled = isEnabled
             sameRoomRiskGroup.isEnabled = isEnabled
         }
@@ -137,7 +138,7 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
                     ToggleButton(title: .sameHouseholdRiskQuestionAnswerPositive, selected: risks.sameHousehold == true))
         .didSelect { [unowned self] in self.risks.sameHousehold = $0 == 1 }
     
-    private lazy var distanceRiskGroup =
+    private lazy var distanceRiskGroupUndecorated =
         ToggleGroup(label: .distanceRiskQuestion,
                     ToggleButton(title: .distanceRiskQuestionAnswerMoreThan15Min, selected: risks.distance == .yesMoreThan15min),
                     ToggleButton(title: .distanceRiskQuestionAnswerLessThan15Min, selected: risks.distance == .yesLessThan15min),
@@ -152,6 +153,10 @@ class ClassificationDetailsAnswerManager: AnswerManaging {
                 self.risks.distance = .no
             }
         }
+    
+    private lazy var distanceRiskGroup =
+        distanceRiskGroupUndecorated
+            .decorateWithDescriptionIfNeeded(description: .distanceRiskQuestionDescription)
     
     private lazy var physicalContactRiskGroupUndecorated =
         ToggleGroup(label: .physicalContactRiskQuestion,
@@ -368,20 +373,8 @@ class LastExposureDateAnswerManager: AnswerManaging {
         self.baseAnswer = answer
         self.question = question
         
-        let endDate = Date()
-        let startDate = Services.caseManager.startOfContagiousPeriod ?? endDate
-        
-        let numberOfDays = Calendar.current.dateComponents([.day], from: startDate, to: endDate).day ?? 0
-        
-        let dateOptions = (0...numberOfDays)
-            .compactMap { Calendar.current.date(byAdding: .day, value: $0, to: startDate) }
-            .map { AnswerOption(label: Self.displayDateFormatter.string(from: $0),
-                                value: Self.valueDateFormatter.string(from: $0)) }
-        
-        let everyDayOption = AnswerOption(label: .contactInformationLastExposureEveryDay,
-                                          value: Self.valueDateFormatter.string(from: endDate))
-        
-        var answerOptions = [.lastExposureDateEarlierOption] + dateOptions + [everyDayOption]
+        var answerOptions = Self.createAnswerOptions()
+        self.twoWeeksExplanationView.isHidden = answerOptions.count < 16
         
         if let lastExposureDate = lastExposureDate {
             if let option = answerOptions.first(where: { $0.value == lastExposureDate }) {
@@ -389,21 +382,37 @@ class LastExposureDateAnswerManager: AnswerManaging {
             } else if let date = Self.valueDateFormatter.date(from: lastExposureDate) {
                 // If we got a different valid date, create an option for it
                 let option = AnswerOption(label: Self.displayDateFormatter.string(from: date),
-                                          value: lastExposureDate)
+                                          value: lastExposureDate,
+                                          trigger: nil)
                 answerOptions.append(option)
                 baseAnswer.value = .lastExposureDate(option)
             }
         }
         
-        guard case .lastExposureDate(let option) = baseAnswer.value else {
-            fatalError()
-        }
+        guard case .lastExposureDate(let option) = baseAnswer.value else { fatalError() }
         
         self.answerOptions = answerOptions
-        self.options = Options(label: question.label,
-                                value: option?.value,
-                                options: answerOptions.map { ($0.value, $0.label) })
+        self.options = Options(label: question.label, value: option?.value, options: answerOptions.map { ($0.value, $0.label) })
         self.options.labelFont = Theme.fonts.bodyBold
+    }
+    
+    private static func createAnswerOptions() -> [AnswerOption] {
+        let endDate = Date()
+        let startDate = Services.caseManager.startOfContagiousPeriod ?? endDate
+        
+        let numberOfDays = Calendar.current.dateComponents([.day], from: startDate.start, to: endDate.start).day ?? 0
+        
+        let dateOptions = (0...numberOfDays)
+            .compactMap { Calendar.current.date(byAdding: .day, value: $0, to: startDate) }
+            .map { AnswerOption(label: displayDateFormatter.string(from: $0),
+                                value: valueDateFormatter.string(from: $0),
+                                trigger: nil) }
+        
+        let everyDayOption = AnswerOption(label: .contactInformationLastExposureEveryDay,
+                                          value: valueDateFormatter.string(from: endDate),
+                                          trigger: nil)
+        
+        return [.lastExposureDateEarlierOption] + dateOptions + [everyDayOption]
     }
     
     let question: Question
@@ -423,6 +432,13 @@ class LastExposureDateAnswerManager: AnswerManaging {
         return containerView
     }()
     
+    private let twoWeeksExplanationView: UIView = {
+        HStack(spacing: 8,
+               UIImageView(imageName: "Validation/Warning").asIcon(color: Theme.colors.primary),
+               UILabel(subhead: .cappedExposureDatesInformation, textColor: Theme.colors.captionGray))
+            .alignment(.top)
+    }()
+    
     private lazy var inputField = InputField(for: self, path: \.options)
     
     private(set) lazy var view: UIView = {
@@ -430,6 +446,7 @@ class LastExposureDateAnswerManager: AnswerManaging {
                inputField
                 .emphasized()
                 .decorateWithDescriptionIfNeeded(description: question.description),
+               twoWeeksExplanationView,
                earlierIndicatorView)
     }()
     
@@ -552,6 +569,7 @@ class MultipleChoiceAnswerManager: AnswerManaging {
             self.options = Options(label: question.label,
                                     value: option?.value,
                                     options: answerOptions.map { ($0.value, $0.label) })
+            self.inputField = InputField(for: self, path: \.options)
         } else {
             self.selectedButtonIndex = question.answerOptions?.firstIndex { $0.value == option?.value }
             
@@ -565,9 +583,9 @@ class MultipleChoiceAnswerManager: AnswerManaging {
     
     let question: Question
     
-    private(set) lazy var inputField = InputField(for: self, path: \.options)
+    private(set) var inputField: InputField<MultipleChoiceAnswerManager, Options>?
     private(set) lazy var view: UIView = {
-        if options != nil {
+        if options != nil, let inputField = inputField {
             return inputField.decorateWithDescriptionIfNeeded(description: question.description)
         } else {
             return buttons
@@ -595,7 +613,7 @@ class MultipleChoiceAnswerManager: AnswerManaging {
     
     var isEnabled: Bool = true {
         didSet {
-            inputField.isEnabled = isEnabled
+            inputField?.isEnabled = isEnabled
             buttons?.isEnabled = isEnabled
         }
     }

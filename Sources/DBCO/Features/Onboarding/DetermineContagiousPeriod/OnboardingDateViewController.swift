@@ -23,12 +23,28 @@ class OnboardingDateViewModel {
     let subtitle: String
     let date: Date?
     let actions: [OnboardingDateViewController.Action]
+    let promptDate: Date?
     
-    init(title: String, subtitle: String, date: Date?, actions: [OnboardingDateViewController.Action]) {
+    init(title: String, subtitle: String, date: Date?, promptDate: Date? = .today.dateByAddingDays(-12), actions: [OnboardingDateViewController.Action]) {
         self.title = title
         self.subtitle = subtitle
         self.date = date
         self.actions = actions
+        self.promptDate = promptDate
+    }
+    
+    private let dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = .current
+        dateFormatter.timeZone = .current
+        dateFormatter.locale = .display
+        dateFormatter.dateFormat = .distantDateVerifyAlertDateFormat
+        
+        return dateFormatter
+    }()
+    
+    func verifyAlertMessage(for date: Date) -> String {
+        return .distantDateVerifyAlertMessage(date: dateFormatter.string(from: date))
     }
 }
 
@@ -93,11 +109,8 @@ class OnboardingDateViewController: ViewController, ScrollViewNavivationbarAdjus
         
         // ScrollView
         scrollView.embed(in: view)
+        scrollView.contentWidth(equalTo: view)
         scrollView.delegate = self
-        
-        let widthProviderView = UIView()
-        widthProviderView.snap(to: .top, of: scrollView, height: 0)
-        widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
         datePicker.maximumDate = Date()
         datePicker.minimumDate = Calendar.current.date(byAdding: .month, value: -3, to: Date())
@@ -144,7 +157,19 @@ class OnboardingDateViewController: ViewController, ScrollViewNavivationbarAdjus
     
     @objc private func handleButton(_ sender: Button) {
         let action = viewModel.actions.first { $0.title == sender.title }
-        action?.action(datePicker.date)
+        let date = datePicker.date
+        
+        if let promptDate = viewModel.promptDate, action?.type == .primary, date < promptDate {
+            let alert = UIAlertController(title: .distantDateVerifyAlertTitle, message: viewModel.verifyAlertMessage(for: date), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: .distantDateVerifyAlertNo, style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: .distantDateVerifyAlertYes, style: .default) { _ in
+                action?.action(date)
+            })
+
+            present(alert, animated: true)
+        } else {
+            action?.action(date)
+        }
     }
     
 }

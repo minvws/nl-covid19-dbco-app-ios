@@ -80,6 +80,7 @@ extension DetermineContagiousPeriodCoordinator: SelectSymptomsViewControllerDele
             title: .contagiousPeriodSelectTestDateTitle,
             subtitle: .contagiousPeriodSelectTestDateMessage,
             date: Services.onboardingManager.contagiousPeriod.testDate,
+            promptDate: .today.dateByAddingDays(-14),
             actions: [
                 .init(type: .primary, title: .next, target: self, action: #selector(handleTestDate))
             ])

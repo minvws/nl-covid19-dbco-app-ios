@@ -54,11 +54,9 @@ class OverviewTipsViewController: ViewController {
         
         view.backgroundColor = .white
         
-        let scrollView = UIScrollView(frame: .zero).embed(in: view)
-        
-        let widthProviderView = UIView()
-        widthProviderView.snap(to: .top, of: scrollView, height: 0)
-        widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        let scrollView = UIScrollView(frame: .zero)
+            .embed(in: view)
+            .contentWidth(equalTo: view)
         
         setupContent(with: scrollView)
     }
@@ -83,12 +81,12 @@ class OverviewTipsViewController: ViewController {
                       UILabel(title2: viewModel.titleText),
                       UILabel(body: .overviewTipsMessage, textColor: Theme.colors.tipItemColor)),
                VStack(spacing: 16,
-                      createSectionHeader(icon: "EditContact/Section1", title: .overviewTipsSection1Title),
+                      createSectionHeader(icon: "EditContact/Section1", title: .overviewTipsSection1Title, label: .overviewTipsSection1Label),
                       UILabel(body: .overviewTipsSection1Intro, textColor: Theme.colors.tipItemColor),
                       VStack(spacing: 12,
                              createTipItem(icon: "MemoryTips/Photos", text: .overviewTipsSection1Photos),
-                             createTipItem(icon: "MemoryTips/Calendar", text: .overviewTipsSection1Calendar),
                              createTipItem(icon: "MemoryTips/SocialMedia", text: .overviewTipsSection1SocialMedia),
+                             createTipItem(icon: "MemoryTips/Calendar", text: .overviewTipsSection1Calendar),
                              createTipItem(icon: "MemoryTips/Transactions", text: .overviewTipsSection1Transactions)),
                       UILabel(bodyBold: .overviewTipsSection1ActivitiesIntro),
                       VStack(spacing: 12,
@@ -96,7 +94,7 @@ class OverviewTipsViewController: ViewController {
                              createTipItem(icon: "MemoryTips/Meetings", text: .overviewTipsSection1Meetings),
                              createTipItem(icon: "MemoryTips/Conversations", text: .overviewTipsSection1Conversations))),
                VStack(spacing: 16,
-                      createSectionHeader(icon: "EditContact/Section2", title: .overviewTipsSection2Title),
+                      createSectionHeader(icon: "EditContact/Section2", title: .overviewTipsSection2Title, label: .overviewTipsSection2Label),
                       VStack(spacing: 12,
                              UILabel(body: .overviewTipsSection2Intro, textColor: Theme.colors.tipItemColor),
                              VStack(spacing: 16,
@@ -116,10 +114,15 @@ class OverviewTipsViewController: ViewController {
                       UILabel(body: text, textColor: Theme.colors.tipItemColor))
     }
     
-    private func createSectionHeader(icon: String, title: String) -> UIView {
-        return HStack(spacing: 8,
+    private func createSectionHeader(icon: String, title: String, label: String) -> UIView {
+        let stack = HStack(spacing: 8,
                       UIImageView(imageName: icon).asIcon(),
                       UILabel(title2: title))
+        stack.isAccessibilityElement = true
+        stack.shouldGroupAccessibilityChildren = true
+        stack.accessibilityLabel = label
+        stack.accessibilityTraits = .header
+        return stack
     }
     
     @objc private func close() {

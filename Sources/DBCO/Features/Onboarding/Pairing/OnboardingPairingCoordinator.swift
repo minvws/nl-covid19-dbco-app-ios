@@ -29,22 +29,15 @@ final class OnboardingPairingCoordinator: Coordinator {
     }
     
     override func start() {
-        let viewModel = StepViewModel(
-            image: UIImage(named: "Onboarding2"),
-            title: .onboardingPairingIntroTitle,
-            message: .onboardingPairingIntroMessage,
-            actions: [
-                .init(type: .primary, title: .next, target: self, action: #selector(continueToPairing))
-            ])
+        let pairingController = PairViewController(viewModel: PairViewModel())
+        pairingController.delegate = self
         
-        let stepController = StepViewController(viewModel: viewModel)
-        
-        stepController.onPopped = { [weak self] _ in
+        pairingController.onPopped = { [weak self] _ in
             guard let self = self else { return }
             self.delegate?.onboardingPairingCoordinatorDidCancel(self)
         }
         
-        navigationController.pushViewController(stepController, animated: true)
+        navigationController.pushViewController(pairingController, animated: true)
     }
     
     @objc private func continueToPairing() {
@@ -54,7 +47,7 @@ final class OnboardingPairingCoordinator: Coordinator {
         navigationController.pushViewController(pairingController, animated: true)
     }
     
-    private func finish() {
+    @objc private func finish() {
         delegate?.onboardingPairingCoordinatorDidFinish(self)
     }
 
@@ -112,10 +105,10 @@ extension OnboardingPairingCoordinator {
         
         Services.caseManager.loadCaseData(userInitiated: true) { [unowned self] success, error in
             if success {
-                finish(controller: controller)
+                finishPairing(controller: controller)
             } else if case .couldNotLoadQuestionnaires = error {
                 // If only the questionnaires could not be loaded:
-                finish(controller: controller)
+                finishPairing(controller: controller)
             } else {
                 caseErrorAlert(code: code, controller: controller)
             }
@@ -144,10 +137,20 @@ extension OnboardingPairingCoordinator {
         controller.present(alert, animated: true)
     }
     
-    private func finish(controller: PairViewController) {
+    private func finishPairing(controller: PairViewController) {
         controller.stopLoadingAnimation()
         navigationController.navigationBar.isUserInteractionEnabled = true
     
-        finish()
+        let viewModel = StepViewModel(
+            image: UIImage(named: "Onboarding2"),
+            title: .onboardingPairingIntroTitle,
+            message: .onboardingPairingIntroMessage,
+            actions: [
+                .init(type: .primary, title: .next, target: self, action: #selector(finish))
+            ])
+
+        let stepController = StepViewController(viewModel: viewModel)
+
+        navigationController.setViewControllers([stepController], animated: true)
     }
 }
