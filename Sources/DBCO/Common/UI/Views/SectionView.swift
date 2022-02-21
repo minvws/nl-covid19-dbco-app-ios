@@ -29,14 +29,13 @@ class SectionView: UIView {
     /// Currently supports up to index 3. To support more sections, just ensure the required images are available in the asset catalog (`"EditContact/Section\(index)"`).
     var isCompleted: Bool = false {
         didSet {
-            icon.isHighlighted = isCompleted
+            let showCompleted = isCompleted && isEnabled
+            
+            icon.isHighlighted = showCompleted
             updateHeaderAccessibilityLabel()
             
-            if isCompleted {
-                UIAccessibility.post(
-                    notification: .announcement,
-                    argument: String.contactSectionCompleted(index: index)
-                )
+            if showCompleted && oldValue != isCompleted {
+                UIAccessibility.announce(.contactSectionCompleted(index: index))
             }
         }
     }
@@ -49,6 +48,11 @@ class SectionView: UIView {
     var caption: String {
         get { captionLabel.text ?? "" }
         set { captionLabel.text = newValue }
+    }
+    
+    var disabledCaption: String? {
+        get { disabledCaptionLabel.text }
+        set { disabledCaptionLabel.text = newValue }
     }
     
     var offset: CGFloat = 0 {
@@ -72,7 +76,7 @@ class SectionView: UIView {
         }
     }
     
-    init(title: String, caption: String, index: Int) {
+    init(title: String, caption: String, disabledCaption: String? = nil, index: Int) {
         self.index = index
         
         super.init(frame: .zero)
@@ -82,7 +86,22 @@ class SectionView: UIView {
         let outerStack = VStack(headerContainerView, contentContainerView)
             .embed(in: self)
         
-        // Header
+        outerStack.bringSubviewToFront(headerContainerView)
+        
+        self.title = title
+        self.caption = caption
+        self.disabledCaption = disabledCaption
+        
+        disabledCaptionLabel.isHidden = true
+        
+        setupHeaderView()
+        setupContentView()
+        
+        // Set default state to expanded
+        expand(animated: false)
+    }
+    
+    private func setupHeaderView() {
         headerContainerView.isAccessibilityElement = true
         headerContainerView.shouldGroupAccessibilityChildren = true
         headerContainerView.accessibilityTraits = [.header, .button]
@@ -97,23 +116,19 @@ class SectionView: UIView {
         // This helps obscure the content when animating from a scrolled state.
         headerBackgroundView.embed(in: headerContainerView, insets: .top(-100))
         
-        outerStack.bringSubviewToFront(headerContainerView) // header should overlay content
-
         icon.image = UIImage(named: "EditContact/Section\(index)")
         icon.highlightedImage = UIImage(named: "EditContact/SectionCompleted")
         
-        titleLabel.text = title
-        captionLabel.text = caption
-        
-        HStack(spacing: 16, icon, VStack(spacing: 2, titleLabel, captionLabel), collapseIndicator)
+        HStack(spacing: 16, icon, VStack(spacing: 2, titleLabel, captionLabel, disabledCaptionLabel), collapseIndicator)
             .distribution(.fill)
             .alignment(.center)
             .embed(in: headerContainerView.readableWidth, insets: .topBottom(14))
         
         SeparatorView()
             .snap(to: .bottom, of: headerContainerView.readableIdentation)
-        
-        // Content
+    }
+    
+    private func setupContentView() {
         contentContainerView.clipsToBounds = true
         contentView
             .snap(to: .bottom, of: contentContainerView, insets: .bottom(24))
@@ -125,9 +140,6 @@ class SectionView: UIView {
         let contentTopConstraint = contentView.topAnchor.constraint(equalTo: contentContainerView.topAnchor, constant: 24)
         contentTopConstraint.priority = UILayoutPriority(rawValue: 100)
         contentTopConstraint.isActive = true
-        
-        // Set default state to expanded
-        expand(animated: false)
     }
 
     @objc private func handleToggleButton() {
@@ -207,20 +219,31 @@ class SectionView: UIView {
             icon.isHighlighted = isCompleted
             
             titleLabel.textColor = .black
+            captionLabel.isHidden = false
+            disabledCaptionLabel.isHidden = true
         } else {
             collapse(animated: false)
             icon.tintColor = Theme.colors.captionGray
             icon.isHighlighted = false
             
             titleLabel.textColor = Theme.colors.captionGray
+            captionLabel.isHidden = true
+            disabledCaptionLabel.isHidden = false
         }
+        
+        captionLabel.isHidden = shouldShowDisabledCaption
+        disabledCaptionLabel.isHidden = !shouldShowDisabledCaption
+    }
+    
+    private var shouldShowDisabledCaption: Bool {
+        return !isEnabled && !(disabledCaption?.isEmpty ?? true)
     }
     
     private func updateHeaderAccessibilityLabel() {
         headerContainerView.accessibilityLabel = .contactSectionLabel(
             index: index,
             title: title,
-            caption: caption,
+            caption: shouldShowDisabledCaption ? disabledCaption! : caption,
             isCollapsed: isCollapsed,
             isCompleted: isCompleted,
             isEnabled: isEnabled
@@ -233,5 +256,6 @@ class SectionView: UIView {
     private let collapseIndicator = UIImageView(imageName: "EditContact/SectionCollapse").asIcon()
     private let titleLabel = UILabel(bodyBold: "")
     private let captionLabel = UILabel(subhead: "", textColor: Theme.colors.captionGray)
+    private let disabledCaptionLabel = UILabel(subhead: "", textColor: Theme.colors.captionGray)
     private let bottomSeparator = SeparatorView()
 }

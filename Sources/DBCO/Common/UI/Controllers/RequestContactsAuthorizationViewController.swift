@@ -17,6 +17,8 @@ class ContactsAuthorizationViewModel {
     let title: String
     let allowButtonTitle: String
     let manualButtonTitle: String
+    let message: String
+    let items: [String]
     
     enum Style {
         case onboarding
@@ -32,6 +34,8 @@ class ContactsAuthorizationViewModel {
             topMargin = 18
             allowButtonTitle = .determineContactsAuthorizationAllowButton
             manualButtonTitle = .determineContactsAuthorizationAddManuallyButton
+            message = .determineContactsAuthorizationMessage
+            items = []
         case .selectContact:
             if let contactName = contactName {
                 title = .selectContactAuthorizationTitle(name: contactName)
@@ -42,6 +46,12 @@ class ContactsAuthorizationViewModel {
             topMargin = 64
             allowButtonTitle = .selectContactAuthorizationAllowButton
             manualButtonTitle = .selectContactAuthorizationManualButton
+            message = .selectContactAuthorizationMessage
+            items = [
+                .selectContactAuthorizationItem1,
+                .selectContactAuthorizationItem2,
+                .selectContactAuthorizationItem3
+            ]
         }
     }
 }
@@ -78,17 +88,22 @@ class ContactsAuthorizationViewController: ViewController, ScrollViewNavivationb
         scrollView.delegate = self
         scrollView.delaysContentTouches = false
         
-        let widthProviderView = UIView()
-        widthProviderView.snap(to: .top, of: scrollView, height: 0)
-        widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        setupView()
+    }
+    
+    private func setupView() {
+        scrollView.contentWidth(equalTo: view)
         
         let margin: UIEdgeInsets = .top(viewModel.topMargin) + .bottom(16)
         
         let stack =
             VStack(spacing: 24,
-                   VStack(spacing: 16,
-                          UILabel(title2: viewModel.title),
-                          UILabel(body: .selectContactAuthorizationMessage, textColor: Theme.colors.captionGray)),
+                   VStack(spacing: 24,
+                       VStack(spacing: 16,
+                              UILabel(title2: viewModel.title),
+                              TextView(htmlText: viewModel.message)),
+                       VStack(spacing: 16,
+                              viewModel.items.map({ listItem($0) }))),
                    VStack(spacing: 16,
                           Button(title: viewModel.manualButtonTitle, style: .secondary)
                             .touchUpInside(self, action: #selector(manual)),

@@ -31,7 +31,7 @@ protocol PairingManagerListener: AnyObject {
 ///
 /// - Tag: PairingManaging
 protocol PairingManaging {
-    init()
+    init(networkManager: NetworkManaging)
     
     var isPaired: Bool { get }
     var isPollingForPairing: Bool { get }

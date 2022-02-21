@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
+final class TaskTableViewCell: UITableViewCell, CellManagable {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
@@ -37,31 +37,40 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
             titleLabel.text = .taskContactUnknownName
         }
         
-        titleLabel.font = Theme.fonts.bodyBold
-        
-        subtitleLabel.font = Theme.fonts.callout
-        subtitleLabel.textColor = Theme.colors.captionGray
+        subtitleLabel.text = .contactTaskStatusMissingDetails
         
         statusView.status = task.status
         
         if let result = task.questionnaireResult, result.hasAllEssentialAnswers {
+            let informedByIndexAt = task.contact.informedByIndexAt
+            let hasInformedByIndexValue = task.contact.informedByIndexAt != nil
+            
             switch task.contact.communication {
             case .staff:
                 subtitleLabel.text = .contactTaskStatusStaffWillInform
-            case .index where task.contact.informedByIndexAt != nil,
-                 .unknown where task.contact.informedByIndexAt != nil:
-                subtitleLabel.text = .contactTaskStatusIndexDidInform
+            case .index where hasInformedByIndexValue, .unknown where hasInformedByIndexValue:
+                if informedByIndexAt == Task.Contact.indexWontInformIndicator {
+                    subtitleLabel.text = .contactTaskStatusIndexWontInform
+                } else {
+                    subtitleLabel.text = .contactTaskStatusIndexDidInform
+                }
             case .index, .unknown:
                 subtitleLabel.text = .contactTaskStatusIndexWillInform
                 subtitleLabel.textColor = Theme.colors.orange
             }
+        }
+        
+        guard let title = titleLabel.text, let subtitle = subtitleLabel.text else { return }
+        if let status = statusView.accessibilityLabel {
+            accessibilityLabel = String(format: "%@: %@, %@", title, subtitle, status)
         } else {
-            subtitleLabel.text = .contactTaskStatusMissingDetails
+            accessibilityLabel = String(format: "%@: %@", title, subtitle)
         }
     }
 
     private func build() {
         statusView.setContentHuggingPriority(.required, for: .horizontal)
+        statusView.setContentCompressionResistancePriority(.required, for: .horizontal)
         
         HStack(spacing: 16,
                statusView,
@@ -76,6 +85,8 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
         SeparatorView(style: .gray)
             .snap(to: .bottom, of: contentView.readableIdentation, insets: .left(40))
         
+        isAccessibilityElement = true
+        shouldGroupAccessibilityChildren = true
         accessibilityTraits = .button
     }
     
@@ -103,8 +114,8 @@ final class TaskTableViewCell: UITableViewCell, Configurable, Reusable {
 
     // MARK: - Private
 
-    private let titleLabel = UILabel()
-    private let subtitleLabel = UILabel()
+    private let titleLabel = UILabel(bodyBold: nil)
+    private let subtitleLabel = UILabel(callout: nil, textColor: Theme.colors.captionGray)
     private let containerView = UIView()
     private let statusView = StatusView()
 }

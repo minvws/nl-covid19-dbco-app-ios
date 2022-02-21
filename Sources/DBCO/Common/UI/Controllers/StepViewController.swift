@@ -74,11 +74,8 @@ class StepViewController: ViewController, ScrollViewNavivationbarAdjusting {
         
         // ScrollView
         scrollView.embed(in: view)
+        scrollView.contentWidth(equalTo: view)
         scrollView.delegate = self
-        
-        let widthProviderView = UIView()
-        widthProviderView.snap(to: .top, of: scrollView, height: 0)
-        widthProviderView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         
         setupStackView()
     }

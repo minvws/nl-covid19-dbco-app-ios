@@ -2,25 +2,33 @@ PODS:
   - CocoaLumberjack/Core (3.7.0)
   - CocoaLumberjack/Swift (3.7.0):
     - CocoaLumberjack/Core
+  - CucumberSwift (3.2.2):
+    - CucumberSwift/snippets (= 3.2.2)
+    - CucumberSwift/syntax (= 3.2.2)
+  - CucumberSwift/snippets (3.2.2)
+  - CucumberSwift/syntax (3.2.2)
   - IOSSecuritySuite (1.8.0)
   - Sodium (0.8.0)
 
 DEPENDENCIES:
   - CocoaLumberjack/Swift (~> 3.7.0)
+  - CucumberSwift (~> 3.2.2)
   - IOSSecuritySuite (~> 1.8.0)
   - Sodium (~> 0.8.0)
 
 SPEC REPOS:
   trunk:
     - CocoaLumberjack
+    - CucumberSwift
     - IOSSecuritySuite
     - Sodium
 
 SPEC CHECKSUMS:
   CocoaLumberjack: e8955b9d337ac307103b0a34fd141c32f27e53c5
+  CucumberSwift: 9c2097d10ca326b12feb1eb5e920e771d0cecba8
   IOSSecuritySuite: 988d52f4c5dfd38f6acebe9a85ee508f4c575ceb
   Sodium: 63c0ca312a932e6da481689537d4b35568841bdc
 
-PODFILE CHECKSUM: fa507addb909611a39246ff81326548fcc11943d
+PODFILE CHECKSUM: f7bd839fea2ed14c2dd6dc941da300acf8eba237
 
 COCOAPODS: 1.10.1

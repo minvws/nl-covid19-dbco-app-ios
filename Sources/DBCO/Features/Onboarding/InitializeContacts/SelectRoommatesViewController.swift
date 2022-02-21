@@ -48,7 +48,7 @@ class SelectRoommatesViewModel {
 }
 
 /// - Tag: SelectRoommatesViewController
-class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdjusting {
+class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdjusting, KeyboardActionable {
     private let viewModel: SelectRoommatesViewModel
     private let navigationBackgroundView = UIView()
     private let separatorView = SeparatorView()
@@ -88,20 +88,15 @@ class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdju
         scrollView.keyboardDismissMode = .onDrag
         scrollView.delegate = self
         
+        setupView()
+    }
+    
+    private func setupView() {
         let margin: UIEdgeInsets = .top(32) + .bottom(16)
-        
         let contacts = Services.onboardingManager.roommates?.map { ContactListInputView.Contact(name: $0.name, cnContactIdentifier: $0.contactIdentifier) } ?? []
 
-        contactListView = ContactListInputView(placeholder: .determineRoommatesAddContact,
-                                               contacts: contacts,
-                                               delegate: self)
-        
-        viewModel.setNumberOfEnteredContacts(contacts.count)
-        
-        let continueButton = Button(title: .next, style: .primary)
-            .touchUpInside(self, action: #selector(handleContinue))
-        
-        viewModel.$continueButtonTitle.binding = { continueButton.setTitle($0, for: .normal) }
+        contactListView = ContactListInputView(placeholder: .determineRoommatesAddContact, contacts: contacts, delegate: self)
+        let continueButton = Button(title: .next, style: .primary).touchUpInside(self, action: #selector(handleContinue))
         
         let stack =
             VStack(spacing: 24,
@@ -117,7 +112,8 @@ class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdju
                                       multiplier: 1,
                                       constant: -(margin.top + margin.bottom)).isActive = true
         
-        registerForKeyboardNotifications()
+        viewModel.$continueButtonTitle.binding = { continueButton.setTitle($0, for: .normal) }
+        viewModel.setNumberOfEnteredContacts(contacts.count)
         
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideSuggestions)))
     }
@@ -148,24 +144,14 @@ class SelectRoommatesViewController: ViewController, ScrollViewNavivationbarAdju
     
     // MARK: - Keyboard handling
     
-    private func registerForKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIWindow.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIWindow.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc private func keyboardWillShow(notification: NSNotification) {
-        guard let userInfo = notification.userInfo else { return }
-        let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? .zero
-        
-        let convertedFrame = view.window?.convert(endFrame, to: view)
-        
-        let inset = view.frame.maxY - (convertedFrame?.minY ?? 0)
+    func keyboardWillShow(with convertedFrame: CGRect, notification: NSNotification) {
+        let inset = view.frame.maxY - convertedFrame.minY
         
         scrollView.contentInset.bottom = inset
         scrollView.verticalScrollIndicatorInsets.bottom = inset
     }
 
-    @objc private func keyboardWillHide(notification: NSNotification) {
+    func keyboardWillHide(notification: NSNotification) {
         scrollView.contentInset = .zero
         scrollView.verticalScrollIndicatorInsets.bottom = .zero
     }

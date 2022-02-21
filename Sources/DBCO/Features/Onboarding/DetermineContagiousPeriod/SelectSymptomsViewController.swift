@@ -93,8 +93,10 @@ class SelectSymptomsViewController: ViewController, ScrollViewNavivationbarAdjus
         scrollView.embed(in: view)
         scrollView.delegate = self
         
-        let margin: UIEdgeInsets = .top(32) + .bottom(16)
-        
+        setupView()
+    }
+    
+    private func setupSymptomButtonStackView() {
         func button(for index: Int, symptom: Symptom) -> UIView {
             let button = SymptomToggleButton(title: symptom.label, selected: viewModel.selectedSymptoms.contains(symptom))
             button.tag = index
@@ -103,15 +105,19 @@ class SelectSymptomsViewController: ViewController, ScrollViewNavivationbarAdjus
             return button
         }
         
+        symptomButtonStackView =
+            VStack(spacing: 0.5,
+                   viewModel.selectableSymptoms.enumerated().map(button))
+    }
+    
+    private func setupView() {
         let buttonContainerView = UIView()
         buttonContainerView.layer.cornerRadius = 8
         buttonContainerView.clipsToBounds = true
         
-        symptomButtonStackView =
-            VStack(spacing: 0.5,
-                   viewModel.selectableSymptoms.enumerated().map(button))
-            .embed(in: buttonContainerView)
-        
+        setupSymptomButtonStackView()
+        symptomButtonStackView.embed(in: buttonContainerView)
+    
         let continueWithSymptomsButton = Button(title: viewModel.continueWithSymptomsButtonTitle, style: .primary)
             .touchUpInside(self, action: #selector(finish))
         let continueWithoutSymptomsButton = Button(title: viewModel.continueWithoutSymptomsButtonTitle, style: .secondary)
@@ -134,7 +140,7 @@ class SelectSymptomsViewController: ViewController, ScrollViewNavivationbarAdjus
                continueWithSymptomsButton,
                continueWithoutSymptomsButton)
             .distribution(.equalSpacing)
-            .embed(in: scrollView.readableWidth, insets: margin)
+            .embed(in: scrollView.readableWidth, insets: .top(32) + .bottom(16))
     }
     
     @objc private func showAllSymptoms(_ sender: UIButton) {
@@ -159,4 +165,20 @@ extension SelectSymptomsViewController: UIScrollViewDelegate {
         adjustNavigationBar(for: scrollView)
     }
     
+}
+
+private class SymptomToggleButton: SelectableButton {
+    
+    required init(title: String = "", selected: Bool = false, iconAlignment: ContentMode = .center) {
+        super.init(title: title, selected: selected, iconAlignment: iconAlignment)
+
+        contentEdgeInsets = .topBottom(13.5) + .left(52) + .right(20)
+        clipsToBounds = false
+        layer.cornerRadius = 0
+        setTitleColor(.black, for: .normal)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }

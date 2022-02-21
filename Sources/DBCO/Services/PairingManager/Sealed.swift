@@ -10,6 +10,8 @@ import Foundation
 /// Used for encrypting and decrypting data after pairing
 ///
 /// # See
+/// [Sealing](x-source-tag://Sealing)
+/// &
 /// [PairingManaging](x-source-tag://PairingManaging)
 ///
 /// - Tag: Sealed

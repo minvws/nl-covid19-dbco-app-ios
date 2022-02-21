@@ -23,10 +23,16 @@ class TaskOverviewViewModel {
     typealias SectionHeaderContent = (title: String, subtitle: String?)
     typealias PromptFunction = (_ animated: Bool) -> Void
     
+    struct Input {
+        let pairing: PairingManaging
+        let `case`: CaseManaging
+    }
+    
+    private let input: Input
+    
     private let tableViewManager: TableViewManager<TaskTableViewCell>
     private var tableHeaderBuilder: (() -> UIView?)?
     private var sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?
-    private var addContactFooterBuilder: (() -> UIView?)?
     private var tableFooterBuilder: (() -> UIView?)?
     
     private var sections: [(header: UIView?, tasks: [Task], footer: UIView?)]
@@ -39,14 +45,16 @@ class TaskOverviewViewModel {
     
     @Bindable private(set) var isDoneButtonHidden: Bool = false
     @Bindable private(set) var isResetButtonHidden: Bool = true
-    @Bindable private(set) var isHeaderAddContactButtonHidden: Bool = false
     @Bindable private(set) var isAddContactButtonHidden: Bool = false
     @Bindable private(set) var isWindowExpiredMessageHidden: Bool = true
     @Bindable private(set) var isPairingViewHidden: Bool = true
     @Bindable private(set) var isPairingErrorViewHidden: Bool = true
     @Bindable private(set) var pairingErrorText: String = ""
     
-    init() {
+    @Bindable private(set) var statusText: String?
+    
+    init(_ input: Input) {
+        self.input = input
         tableViewManager = .init()
         
         sections = []
@@ -60,21 +68,19 @@ class TaskOverviewViewModel {
         tableViewManager.viewForHeaderInSection = { [unowned self] in return self.sections[safe: $0]?.header }
         tableViewManager.viewForFooterInSection = { [unowned self] in return self.sections[safe: $0]?.footer }
         
-        Services.caseManager.addListener(self)
-        Services.pairingManager.addListener(self)
+        input.case.addListener(self)
+        input.pairing.addListener(self)
     }
     
     func setupTableView(_ tableView: UITableView,
                         tableHeaderBuilder: (() -> UIView?)?,
                         sectionHeaderBuilder: ((SectionHeaderContent) -> UIView?)?,
-                        addContactFooterBuilder: (() -> UIView?)?,
                         tableFooterBuilder: (() -> UIView?)?,
                         selectedTaskHandler: @escaping (Task, IndexPath) -> Void) {
         tableViewManager.manage(tableView)
         tableViewManager.didSelectItem = selectedTaskHandler
         self.tableHeaderBuilder = tableHeaderBuilder
         self.sectionHeaderBuilder = sectionHeaderBuilder
-        self.addContactFooterBuilder = addContactFooterBuilder
         self.tableFooterBuilder = tableFooterBuilder
         
         buildSections()
@@ -90,7 +96,7 @@ class TaskOverviewViewModel {
         formatter.dateFormat = .taskOverviewTipsDateFormat
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         
-        let date = Services.caseManager.startOfContagiousPeriod ?? Date()
+        let date = input.case.startOfContagiousPeriod ?? Date()
         
         let dateString = formatter.string(from: date)
         
@@ -111,7 +117,7 @@ class TaskOverviewViewModel {
     func setHidePrompt(_ hidePrompt: @escaping PromptFunction) {
         self.hidePrompt = hidePrompt
         
-        if Services.caseManager.isSynced && !Services.caseManager.isWindowExpired {
+        if input.case.isSynced && !input.case.isWindowExpired {
             hidePrompt(false)
         }
     }
@@ -119,16 +125,17 @@ class TaskOverviewViewModel {
     func setShowPrompt(_ showPrompt: @escaping PromptFunction) {
         self.showPrompt = showPrompt
         
-        if !Services.caseManager.isSynced || Services.caseManager.isWindowExpired {
+        if !input.case.isSynced || input.case.isWindowExpired {
             showPrompt(false)
         }
     }
     
     private func buildSections() {
         sections = []
-        sections.append((tableHeaderBuilder?(), [], nil))
         
-        if Services.caseManager.hasSynced {
+        tableHeaderBuilder.map { sections.append(($0(), [], nil)) }
+        
+        if input.case.hasSynced {
             buildSections(split: \.isSyncedWithPortal,
                           failingSectionTitle: .taskOverviewUnsyncedContactsHeader,
                           passingSectionTitle: .taskOverviewSyncedContactsHeader)
@@ -137,10 +144,15 @@ class TaskOverviewViewModel {
                           failingSectionTitle: .taskOverviewUninformedContactsHeader,
                           passingSectionTitle: .taskOverviewInformedContactsHeader)
         }
+        
+        tableFooterBuilder.map { sections.append(($0(), [], nil)) }
+        
+        let windowExpired = input.case.isWindowExpired
+        isAddContactButtonHidden = windowExpired
     }
     
     private func buildSections(split: KeyPath<Task, Bool>, failingSectionTitle: String, passingSectionTitle: String) {
-        let tasks = Services.caseManager.tasks
+        let tasks = input.case.tasks
             .filter { !$0.deletedByIndex }
             .sorted(by: <)
         
@@ -153,7 +165,7 @@ class TaskOverviewViewModel {
         if !failingContacts.isEmpty {
             sections.append((header: sectionHeaderBuilder?(failingSectionHeader),
                              tasks: failingContacts,
-                             footer: addContactFooterBuilder?()))
+                             footer: nil))
         }
         
         if !passingContacts.isEmpty {
@@ -161,13 +173,6 @@ class TaskOverviewViewModel {
                              tasks: passingContacts,
                              footer: nil))
         }
-        
-        sections.append((tableFooterBuilder?(), [], nil))
-        
-        let windowExpired = Services.caseManager.isWindowExpired
-        
-        isHeaderAddContactButtonHidden = !failingContacts.isEmpty || windowExpired
-        isAddContactButtonHidden = failingContacts.isEmpty || windowExpired
     }
 }
 
@@ -191,7 +196,6 @@ extension TaskOverviewViewModel: CaseManagerListener {
         isDoneButtonHidden = true
         isResetButtonHidden = false
         isAddContactButtonHidden = true
-        isHeaderAddContactButtonHidden = true
         isWindowExpiredMessageHidden = false
         
         showPrompt?(true)
@@ -201,13 +205,18 @@ extension TaskOverviewViewModel: CaseManagerListener {
 extension TaskOverviewViewModel: PairingManagerListener {
     
     func showPairingViewIfNeeded() {
-        guard !Services.pairingManager.isPaired else { return }
+        guard !input.pairing.isPaired else { return }
         
         pairingTimeoutTimer?.invalidate()
         pairingTimeoutTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [unowned self] _ in
+            let wasPairingViewHidden = self.isPairingViewHidden
             self.isPairingViewHidden = false
             self.isPairingErrorViewHidden = true
             self.isDoneButtonHidden = true
+            
+            if wasPairingViewHidden {
+                statusText = .taskOverviewWaitingForPairingAccessible
+            }
         }
     }
     
@@ -218,13 +227,15 @@ extension TaskOverviewViewModel: PairingManagerListener {
     func pairingManager(_ pairingManager: PairingManaging, didFailWith error: PairingManagingError) {
         pairingTimeoutTimer?.invalidate()
         
-        pairingErrorText = Services.pairingManager.canResumePolling ?
+        pairingErrorText = input.pairing.canResumePolling ?
             .taskOverviewPairingFailed :
             .taskOverviewPairingExpired
         
         isPairingViewHidden = true
         isPairingErrorViewHidden = false
         isDoneButtonHidden = true
+        
+        statusText = pairingErrorText
     }
     
     func pairingManagerDidCancelPollingForPairing(_ pairingManager: PairingManaging) {
@@ -245,6 +256,8 @@ extension TaskOverviewViewModel: PairingManagerListener {
         isPairingViewHidden = true
         isPairingErrorViewHidden = true
         isDoneButtonHidden = false
+    
+        statusText = .reversePairingFinished
     }
     
 }
@@ -274,7 +287,12 @@ class TaskOverviewViewController: PromptableViewController {
         title = .taskOverviewTitle
         
         setupTableView()
+        setupPromptView()
         
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+    }
+    
+    private func setupPromptView() {
         let windowExpiredMessage =
             HStack(spacing: 8,
                    UIImageView(imageName: "Warning").asIcon().withInsets(.top(2)),
@@ -307,17 +325,25 @@ class TaskOverviewViewController: PromptableViewController {
         viewModel.setHidePrompt { [unowned self] in self.hidePrompt(animated: $0) }
         viewModel.setShowPrompt { [unowned self] in self.showPrompt(animated: $0) }
         
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        viewModel.$statusText.binding = { [unowned self] statusText in
+            guard presentedViewController == nil else { return }
+            guard statusText?.isEmpty == false else { return }
+            
+            UIAccessibility.post(notification: .announcement, argument: statusText)
+        }
+        
     }
     
     private func createPairingView() -> UIView {
         let pairingActivityView = ActivityIndicatorView(style: .gray)
+        pairingActivityView.accessibilityLabel = .taskOverviewWaitingForPairingAccessible
         pairingActivityView.startAnimating()
         pairingActivityView.setContentHuggingPriority(.required, for: .horizontal)
         let pairingView = VStack(spacing: 16,
                                  HStack(spacing: 6,
                                         pairingActivityView,
-                                        UILabel(subhead: .taskOverviewWaitingForPairing, textColor: Theme.colors.primary)),
+                                        UILabel(subhead: .taskOverviewWaitingForPairing, textColor: Theme.colors.primary)
+                                            .accessibleText(text: .taskOverviewWaitingForPairingAccessible)),
                                  Button(title: .taskOverviewPairingTryAgain, style: .secondary)
                                     .touchUpInside(self, action: #selector(upload)))
         
@@ -345,15 +371,12 @@ class TaskOverviewViewController: PromptableViewController {
         tableView.delaysContentTouches = false
         tableView.refreshControl = refreshControl
         
-        let tableHeaderBuilder = { [unowned self] in self.tableHeaderBuilder() }
         let sectionHeaderBuilder = { [unowned self] in self.sectionHeaderBuilder(title: $0, subtitle: $1) }
-        let addContactFooterBuilder = { [unowned self] in self.addContactFooterBuilder() }
         let tableFooterBuilder = { [unowned self] in self.tableFooterBuilder() }
         
         viewModel.setupTableView(tableView,
-                                 tableHeaderBuilder: tableHeaderBuilder,
+                                 tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: sectionHeaderBuilder,
-                                 addContactFooterBuilder: addContactFooterBuilder,
                                  tableFooterBuilder: tableFooterBuilder) { [weak self] task, indexPath in
             guard let self = self else { return }
             
@@ -396,10 +419,15 @@ class TaskOverviewViewController: PromptableViewController {
 
 private extension TaskOverviewViewController {
     
-    func tableHeaderBuilder() -> UIView {
+    private func createTipContainerView() -> UIView {
         let tipContainerView = UIView()
-        tipContainerView.backgroundColor = Theme.colors.graySeparator
-        tipContainerView.layer.cornerRadius = 8
+        
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = Theme.colors.graySeparator
+        backgroundView.layer.borderColor = Theme.colors.border.cgColor
+        backgroundView.layer.borderWidth = 1 / UIScreen.main.scale
+        backgroundView.layer.cornerRadius = 8
+        backgroundView.embed(in: tipContainerView)
         
         let thinkingImage = UIImage(named: "Thinking")!
         let thinkingImageView = UIImageView(image: thinkingImage)
@@ -415,36 +443,18 @@ private extension TaskOverviewViewController {
         tipButton.contentEdgeInsets = .zero
         tipButton.titleLabel?.font = Theme.fonts.subheadBold
         tipButton.touchUpInside(self, action: #selector(requestTips))
+        tipButton.setContentCompressionResistancePriority(.required, for: .vertical)
         
         VStack(VStack(spacing: 4,
-                      UILabel(bodyBold: .taskOverviewTipsTitle),
+                      UILabel(body: .taskOverviewTipsTitle),
                       UILabel(attributedString: viewModel.tipMessageText)),
                tipButton)
-            .embed(in: tipContainerView, insets: .right(92) + .left(16) + .top(16) + .bottom(11))
+            .embed(in: tipContainerView, insets: .right(92) + .left(16) + .top(16) + .bottom(5))
         
-        let addContactButton = Button(title: .taskOverviewAddContactButtonTitle, style: .info)
-            .touchUpInside(self, action: #selector(requestContact))
-        
-        addContactButton.setImage(UIImage(named: "Plus"), for: .normal)
-        addContactButton.titleEdgeInsets = .left(5)
-        addContactButton.imageEdgeInsets = .right(5)
-        
-        self.viewModel.$isHeaderAddContactButtonHidden.binding = { addContactButton.isHidden = $0 }
-        
-        return VStack(spacing: 12,
-                      tipContainerView,
-                      addContactButton)
-            .wrappedInReadableWidth(insets: .top(32))
+        return tipContainerView
     }
     
-    func sectionHeaderBuilder(title: String, subtitle: String?) -> UIView {
-        return VStack(spacing: 4,
-                      UILabel(bodyBold: title).asHeader(),
-                      UILabel(subhead: subtitle, textColor: Theme.colors.captionGray).hideIfEmpty())
-                   .wrappedInReadableWidth(insets: .top(20) + .bottom(0))
-    }
-    
-    func addContactFooterBuilder() -> UIView {
+    private func createTipSectionView() -> UIView {
         let addContactButton = Button(title: .taskOverviewAddContactButtonTitle, style: .info)
             .touchUpInside(self, action: #selector(requestContact))
         
@@ -454,8 +464,17 @@ private extension TaskOverviewViewController {
         
         self.viewModel.$isAddContactButtonHidden.binding = { addContactButton.isHidden = $0 }
         
-        return addContactButton
-            .wrappedInReadableWidth(insets: .top(2) + .bottom(16))
+        return VStack(spacing: 12,
+                      createTipContainerView(),
+                      addContactButton)
+            .withInsets(.top(20))
+    }
+    
+    func sectionHeaderBuilder(title: String, subtitle: String?) -> UIView {
+        return VStack(spacing: 4,
+                      UILabel(bodyBold: title).asHeader(),
+                      UILabel(subhead: subtitle, textColor: Theme.colors.captionGray).hideIfEmpty())
+                   .wrappedInReadableWidth(insets: .top(5) + .bottom(0))
     }
     
     private var privacyTextView: TextView {
@@ -484,17 +503,29 @@ private extension TaskOverviewViewController {
     }
     
     func tableFooterBuilder() -> UIView {
+        let containerView = UIView()
+        
+        let backgroundColorView = UIView()
+        backgroundColorView.backgroundColor = Theme.colors.overviewSecondaryBackground
+        backgroundColorView.snap(to: .top, of: containerView, height: 1000)
+        
+        SeparatorView().snap(to: .top, of: containerView)
+        
         let resetButton = Button(title: .taskOverviewDeleteDataButtonTitle, style: .info)
             .touchUpInside(self, action: #selector(reset))
         
         resetButton.setTitleColor(Theme.colors.warning, for: .normal)
         
-        return VStack(spacing: 12,
+        VStack(spacing: 12,
+                      createTipSectionView(),
                       privacyTextView,
                       versionLabel,
                       resetButton)
             .alignment(.center)
             .wrappedInReadableWidth()
+            .embed(in: containerView)
+        
+        return containerView
     }
     
 }
