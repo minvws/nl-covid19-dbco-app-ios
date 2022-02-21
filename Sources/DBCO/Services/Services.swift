@@ -49,16 +49,16 @@ final class Services {
         let networkConfiguration: NetworkConfiguration
 
         let configurations: [String: NetworkConfiguration] = [
-            NetworkConfiguration.development.name: NetworkConfiguration.development,
-            NetworkConfiguration.test.name: NetworkConfiguration.test,
-            NetworkConfiguration.acceptance.name: NetworkConfiguration.acceptance,
-            NetworkConfiguration.production.name: NetworkConfiguration.production
+            NetworkConfiguration.test.name.lowercased(): NetworkConfiguration.test,
+            NetworkConfiguration.acceptance.name.lowercased(): NetworkConfiguration.acceptance,
+            NetworkConfiguration.staging.name.lowercased(): NetworkConfiguration.staging,
+            NetworkConfiguration.production.name.lowercased(): NetworkConfiguration.production
         ]
 
         let fallbackConfiguration = NetworkConfiguration.test
 
         if let networkConfigurationValue = Bundle.main.infoDictionary?["NETWORK_CONFIGURATION"] as? String {
-            networkConfiguration = configurations[networkConfigurationValue] ?? fallbackConfiguration
+            networkConfiguration = configurations[networkConfigurationValue.lowercased()] ?? fallbackConfiguration
         } else {
             networkConfiguration = fallbackConfiguration
         }

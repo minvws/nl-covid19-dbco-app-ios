@@ -12,7 +12,7 @@ import UIKit
 class InputTextView<Object: AnyObject, Field: Editable>: UIView {
     private weak var object: Object?
     
-    private let textView = TextView()
+    private let textView = TextElement()
     
     var isEnabled: Bool {
         get { textView.isEditable }

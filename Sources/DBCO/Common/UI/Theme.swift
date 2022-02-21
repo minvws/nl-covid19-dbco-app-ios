@@ -142,6 +142,10 @@ final class Colors {
         return color(for: "GraySeparator")
     }
     
+    var border: UIColor {
+        return color(for: "Border")
+    }
+    
     var disabledBorder: UIColor {
         return color(for: "DisabledBorder")
     }
@@ -164,6 +168,10 @@ final class Colors {
     
     var tipItemColor: UIColor {
         return color(for: "Tip/ItemColor")
+    }
+    
+    var overviewSecondaryBackground: UIColor {
+        return color(for: "OverviewSecondaryBackground")
     }
 
     // MARK: - Private

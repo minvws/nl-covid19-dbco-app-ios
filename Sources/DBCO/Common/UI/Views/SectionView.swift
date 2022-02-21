@@ -29,14 +29,13 @@ class SectionView: UIView {
     /// Currently supports up to index 3. To support more sections, just ensure the required images are available in the asset catalog (`"EditContact/Section\(index)"`).
     var isCompleted: Bool = false {
         didSet {
-            icon.isHighlighted = isCompleted
+            let showCompleted = isCompleted && isEnabled
+            
+            icon.isHighlighted = showCompleted
             updateHeaderAccessibilityLabel()
             
-            if isCompleted {
-                UIAccessibility.post(
-                    notification: .announcement,
-                    argument: String.contactSectionCompleted(index: index)
-                )
+            if showCompleted && oldValue != isCompleted {
+                UIAccessibility.announce(.contactSectionCompleted(index: index))
             }
         }
     }
@@ -49,6 +48,11 @@ class SectionView: UIView {
     var caption: String {
         get { captionLabel.text ?? "" }
         set { captionLabel.text = newValue }
+    }
+    
+    var disabledCaption: String? {
+        get { disabledCaptionLabel.text }
+        set { disabledCaptionLabel.text = newValue }
     }
     
     var offset: CGFloat = 0 {
@@ -72,7 +76,7 @@ class SectionView: UIView {
         }
     }
     
-    init(title: String, caption: String, index: Int) {
+    init(title: String, caption: String, disabledCaption: String? = nil, index: Int) {
         self.index = index
         
         super.init(frame: .zero)
@@ -86,6 +90,9 @@ class SectionView: UIView {
         
         self.title = title
         self.caption = caption
+        self.disabledCaption = disabledCaption
+        
+        disabledCaptionLabel.isHidden = true
         
         setupHeaderView()
         setupContentView()
@@ -112,7 +119,7 @@ class SectionView: UIView {
         icon.image = UIImage(named: "EditContact/Section\(index)")
         icon.highlightedImage = UIImage(named: "EditContact/SectionCompleted")
         
-        HStack(spacing: 16, icon, VStack(spacing: 2, titleLabel, captionLabel), collapseIndicator)
+        HStack(spacing: 16, icon, VStack(spacing: 2, titleLabel, captionLabel, disabledCaptionLabel), collapseIndicator)
             .distribution(.fill)
             .alignment(.center)
             .embed(in: headerContainerView.readableWidth, insets: .topBottom(14))
@@ -212,20 +219,31 @@ class SectionView: UIView {
             icon.isHighlighted = isCompleted
             
             titleLabel.textColor = .black
+            captionLabel.isHidden = false
+            disabledCaptionLabel.isHidden = true
         } else {
             collapse(animated: false)
             icon.tintColor = Theme.colors.captionGray
             icon.isHighlighted = false
             
             titleLabel.textColor = Theme.colors.captionGray
+            captionLabel.isHidden = true
+            disabledCaptionLabel.isHidden = false
         }
+        
+        captionLabel.isHidden = shouldShowDisabledCaption
+        disabledCaptionLabel.isHidden = !shouldShowDisabledCaption
+    }
+    
+    private var shouldShowDisabledCaption: Bool {
+        return !isEnabled && !(disabledCaption?.isEmpty ?? true)
     }
     
     private func updateHeaderAccessibilityLabel() {
         headerContainerView.accessibilityLabel = .contactSectionLabel(
             index: index,
             title: title,
-            caption: caption,
+            caption: shouldShowDisabledCaption ? disabledCaption! : caption,
             isCollapsed: isCollapsed,
             isCompleted: isCompleted,
             isEnabled: isEnabled
@@ -238,5 +256,6 @@ class SectionView: UIView {
     private let collapseIndicator = UIImageView(imageName: "EditContact/SectionCollapse").asIcon()
     private let titleLabel = UILabel(bodyBold: "")
     private let captionLabel = UILabel(subhead: "", textColor: Theme.colors.captionGray)
+    private let disabledCaptionLabel = UILabel(subhead: "", textColor: Theme.colors.captionGray)
     private let bottomSeparator = SeparatorView()
 }

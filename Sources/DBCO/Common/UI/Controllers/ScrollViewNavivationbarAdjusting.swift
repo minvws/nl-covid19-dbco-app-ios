@@ -51,6 +51,8 @@ extension ScrollViewNavivationbarAdjusting {
                     backgroundView.isHidden = true
                     self.navigationItem.title = title
                 }
+                
+                self.navigationItem.backButtonTitle = .backButtonTitle
             }
         }
     }

@@ -84,24 +84,26 @@ class ViewController: UIViewController, DismissActionable, PopActionable {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
         if shouldAddDidBecomeActiveObserver {
             didBecomeActiveObserver = NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
                 self?.applicationDidBecomeActive()
             }
         }
         
-        // Move focus to the first header when the ViewControler appears for the first time.
+        // Move focus to the first element when the ViewController appears for the first time.
         if needsFocus {
             needsFocus = false
             
-            UIAccessibility.screenChanged(self)
-
-            if let header = view.find(traits: .header) {
+            if let navigationBar = navigationController?.navigationBar, !navigationBar.isHidden, navigationItem.title != nil {
+                UIAccessibility.layoutChanged(navigationBar)
+            } else if let header = view.find(traits: .header) {
                 UIAccessibility.layoutChanged(header)
+            } else {
+                UIAccessibility.screenChanged(self)
             }
         }
+        
+        super.viewDidAppear(animated)
     }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {

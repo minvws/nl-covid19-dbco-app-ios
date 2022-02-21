@@ -214,10 +214,12 @@ class ReversePairViewController: PromptableViewController {
         let activityIndicator = ActivityIndicatorView(style: .gray)
         activityIndicator.startAnimating()
         activityIndicator.setContentHuggingPriority(.required, for: .horizontal)
+        activityIndicator.accessibilityLabel = .reversePairingWaitingAccessible
         
         let waitingView = HStack(spacing: 8,
                                  activityIndicator,
-                                 UILabel(body: .reversePairingWaiting, textColor: Theme.colors.captionGray))
+                                 UILabel(body: .reversePairingWaiting, textColor: Theme.colors.captionGray)
+                                    .accessibleText(text: .reversePairingWaitingAccessible))
             .withInsets(.left(24))
         
         let successView = VStack(HStack(spacing: 8,

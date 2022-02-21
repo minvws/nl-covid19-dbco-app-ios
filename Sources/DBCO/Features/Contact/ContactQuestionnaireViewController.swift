@@ -50,6 +50,7 @@ final class ContactQuestionnaireViewController: PromptableViewController, Keyboa
         
         if viewModel.showDeleteButton {
             navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "DeleteContact"), style: .plain, target: self, action: #selector(deleteTask))
+            navigationItem.rightBarButtonItem?.accessibilityLabel = .deleteContactButtonTitle
         }
         
         if #available(iOS 13.0, *) {
@@ -109,17 +110,20 @@ final class ContactQuestionnaireViewController: PromptableViewController, Keyboa
     }
     
     private func createDetailsSectionView() -> SectionView {
-        let sectionView = SectionView(title: .contactDetailsSectionTitle, caption: .contactDetailsSectionMessage, index: 2)
+        let sectionView = SectionView(title: .contactDetailsSectionTitle, caption: .contactDetailsSectionMessage, disabledCaption: .disabledSectionMessage, index: 2)
         sectionView.collapse(animated: false)
         
-        VStack(spacing: 16, viewModel.contactDetailViews)
+        let infoLabel = UILabel(subhead: .contactInformationExplanation)
+            .withInsets(.bottom(22))
+        
+        VStack(spacing: 16, [infoLabel] + viewModel.contactDetailViews)
             .embed(in: sectionView.contentView.readableWidth)
         
         return sectionView
     }
     
     private struct InformSectionViews {
-        let titleLabel = UILabel(bodyBold: "")
+        let titleLabel = UILabel(nil, isHeader: true)
         let contentView = TextView()
         let linkView = TextView()
         let footerLabel = UILabel(bodyBold: "")
@@ -127,10 +131,10 @@ final class ContactQuestionnaireViewController: PromptableViewController, Keyboa
         let copyButton = Button(title: .informContactCopyGuidelines, style: .secondary)
         
         func setupBindings(with viewModel: ContactQuestionnaireViewModel) {
-            viewModel.$informTitle.binding = { titleLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
+            viewModel.$informTitle.binding = { titleLabel.attributedText = .makeFromHtml(text: $0, style: .init(font: Theme.fonts.bodyBold, textColor: .black)) }
             viewModel.$informContent.binding = { contentView.html($0, textColor: Theme.colors.captionGray) }
             viewModel.$informLink.binding = { linkView.html($0, textColor: Theme.colors.captionGray) }
-            viewModel.$informFooter.binding = { footerLabel.attributedText = .makeFromHtml(text: $0, font: Theme.fonts.bodyBold, textColor: .black) }
+            viewModel.$informFooter.binding = { footerLabel.attributedText = .makeFromHtml(text: $0, style: .init(font: Theme.fonts.bodyBold, textColor: .black)) }
             viewModel.$copyButtonHidden.binding = { copyButton.isHidden = $0 }
             viewModel.$copyButtonType.binding = { copyButton.style = $0 }
             viewModel.$informButtonTitle.binding = { informButton.title = $0 }
@@ -140,7 +144,7 @@ final class ContactQuestionnaireViewController: PromptableViewController, Keyboa
     }
     
     private func createInformSectionView() -> SectionView {
-        let sectionView = SectionView(title: .informContactSectionTitle, caption: .informContactSectionMessage, index: 3)
+        let sectionView = SectionView(title: .informContactSectionTitle, caption: .informContactSectionMessage, disabledCaption: .disabledSectionMessage, index: 3)
         sectionView.showBottomSeparator = false
         sectionView.collapse(animated: false)
         
@@ -206,6 +210,11 @@ final class ContactQuestionnaireViewController: PromptableViewController, Keyboa
         
         alert.addAction(UIAlertAction(title: .contactInformActionInformNow, style: .default) { _ in
             self.scrollToInformSection()
+        })
+        
+        alert.addAction(UIAlertAction(title: .contactInformActionWontInform, style: .default) { _ in
+            self.viewModel.registerWontInform()
+            self.delegate?.contactQuestionnaireViewController(self, didSave: self.viewModel.updatedTask)
         })
         
         present(alert, animated: true)

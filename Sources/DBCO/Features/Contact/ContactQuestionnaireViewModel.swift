@@ -94,7 +94,8 @@ class ContactQuestionnaireViewModel {
         updatedTask.contact = Task.Contact(category: updatedCategory,
                                            communication: updatedContact.communication,
                                            informedByIndexAt: updatedContact.informedByIndexAt,
-                                           dateOfLastExposure: updatedContact.dateOfLastExposure)
+                                           dateOfLastExposure: updatedContact.dateOfLastExposure,
+                                           shareIndexNameWithContact: updatedContact.shareIndexNameWithContact)
         updatedTask.questionnaireResult = baseResult
         updatedTask.questionnaireResult?.answers = answerManagers
             .filter { $0.question.isRelevant(in: updatedCategory) }
@@ -212,7 +213,17 @@ class ContactQuestionnaireViewModel {
                     break
                 }
                 
+                setupTriggerHandlers(for: manager)
                 updateProgress()
+            }
+        }
+    }
+    
+    private func setupTriggerHandlers(for answerManager: AnswerManaging) {
+        if case .multipleChoice(let option) = answerManager.answer.value, let trigger = option?.trigger {
+            switch trigger {
+            case .setShareIndexNameToYes: setShareIndexNameToYes()
+            case .setShareIndexNameToNo: setShareIndexNameToNo()
             }
         }
     }
@@ -231,11 +242,36 @@ class ContactQuestionnaireViewModel {
         }
     }
     
+    private func setShareIndexNameToYes() {
+        updatedContact = Task.Contact(category: updatedContact.category,
+                                      communication: updatedContact.communication,
+                                      informedByIndexAt: updatedContact.informedByIndexAt,
+                                      dateOfLastExposure: updatedContact.dateOfLastExposure,
+                                      shareIndexNameWithContact: true)
+    }
+
+    private func setShareIndexNameToNo() {
+        updatedContact = Task.Contact(category: updatedContact.category,
+                                      communication: updatedContact.communication,
+                                      informedByIndexAt: updatedContact.informedByIndexAt,
+                                      dateOfLastExposure: updatedContact.dateOfLastExposure,
+                                      shareIndexNameWithContact: false)
+    }
+    
     func registerDidInform() {
         updatedContact = Task.Contact(category: updatedContact.category,
                                       communication: updatedContact.communication,
                                       informedByIndexAt: ISO8601DateFormatter().string(from: Date()),
-                                      dateOfLastExposure: updatedContact.dateOfLastExposure)
+                                      dateOfLastExposure: updatedContact.dateOfLastExposure,
+                                      shareIndexNameWithContact: updatedContact.shareIndexNameWithContact)
+    }
+    
+    func registerWontInform() {
+        updatedContact = Task.Contact(category: updatedContact.category,
+                                      communication: updatedContact.communication,
+                                      informedByIndexAt: Task.Contact.indexWontInformIndicator,
+                                      dateOfLastExposure: updatedContact.dateOfLastExposure,
+                                      shareIndexNameWithContact: updatedContact.shareIndexNameWithContact)
     }
     
     private func updateClassification(with result: ClassificationHelper.Result) {
@@ -248,7 +284,8 @@ class ContactQuestionnaireViewModel {
             updatedContact = Task.Contact(category: taskCategory,
                                           communication: updatedContact.communication,
                                           informedByIndexAt: updatedContact.informedByIndexAt,
-                                          dateOfLastExposure: updatedContact.dateOfLastExposure)
+                                          dateOfLastExposure: updatedContact.dateOfLastExposure,
+                                          shareIndexNameWithContact: updatedContact.shareIndexNameWithContact)
             
             let lastExposureManager = classificationManagers.first { $0.question.questionType == .lastExposureDate }
             lastExposureManager?.isEnabled = taskCategory != .other
@@ -265,7 +302,8 @@ class ContactQuestionnaireViewModel {
         updatedContact = Task.Contact(category: updatedContact.category,
                                       communication: updatedContact.communication,
                                       informedByIndexAt: updatedContact.informedByIndexAt,
-                                      dateOfLastExposure: value)
+                                      dateOfLastExposure: value,
+                                      shareIndexNameWithContact: updatedContact.shareIndexNameWithContact)
         
         let classificationDetailsManager = classificationManagers.first { $0.question.questionType == .classificationDetails }
         classificationDetailsManager?.view.isHidden = value == AnswerOption.lastExposureDateEarlierOption.value
@@ -300,8 +338,6 @@ class ContactQuestionnaireViewModel {
         classificationSectionView?.isCompleted = classificationCompleted
         classificationSectionView?.isHidden = classificationIsHidden
         classificationSectionView?.index = 1
-        detailsSectionView?.isCompleted = detailsCompleted
-        informSectionView?.isCompleted = updatedTask.isOrCanBeInformed
         
         let startIndex = classificationIsHidden ? 1 : 2
         detailsSectionView?.index = startIndex
@@ -312,6 +348,9 @@ class ContactQuestionnaireViewModel {
         
         detailsSectionView?.isEnabled = sectionsAreEnabled
         informSectionView?.isEnabled = sectionsAreEnabled
+        
+        detailsSectionView?.isCompleted = detailsCompleted
+        informSectionView?.isCompleted = updatedTask.isOrCanBeInformed
         
         let detailsBecameEnabled = detailsSectionWasDisabled && sectionsAreEnabled
         
@@ -445,15 +484,15 @@ class ContactQuestionnaireViewModel {
     var copyableGuidelines: String {
         // Parse the html then return the plaintext string
         let intro = NSAttributedString
-            .makeFromHtml(text: informIntro, font: Theme.fonts.body, textColor: .black)
+            .makeFromHtml(text: informIntro, style: .bodyBlack)
             .string
         
         let content = NSAttributedString
-            .makeFromHtml(text: informContent, font: Theme.fonts.body, textColor: .black)
+            .makeFromHtml(text: informContent, style: .bodyBlack)
             .string
         
         let link = NSAttributedString
-            .makeFromHtml(text: informLink, font: Theme.fonts.body, textColor: .black)
+            .makeFromHtml(text: informLink, style: .bodyBlack)
             .string
         
         return [intro, content, link]
@@ -466,7 +505,13 @@ class ContactQuestionnaireViewModel {
         let view = manager.view
         let isRelevant = manager.question.isRelevant(in: task.contact.category)
         let disabledForSource = manager.question.disabledForSources.contains(task.source)
-        view.isHidden = !isRelevant || disabledForSource
+    
+        let disabledForAlreadyAnswered: Bool = {
+            let isShareIndexNameQuestion = manager.question.answerOptions?.contains { $0.trigger == .setShareIndexNameToYes } == true
+            return task.shareIndexNameAlreadyAnswered && isShareIndexNameQuestion
+        }()
+        
+        view.isHidden = !isRelevant || disabledForSource || disabledForAlreadyAnswered
         
         return view
     }

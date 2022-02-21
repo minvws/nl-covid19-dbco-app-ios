@@ -1,0 +1,43 @@
+name: usertest deploy testflight (acceptance)
+
+on: workflow_dispatch
+
+env: 
+  APPSTORE_KEY_BASE64_FILENAME: appstore-apikey.p8
+  FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 180
+  FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
+
+jobs:
+  upload:
+    if: github.event.repository.name == 'nl-covid19-dbco-app-ios-private'
+    runs-on: macOS-11
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+                
+      - name: Write p8 Key
+        if: github.event.repository.name == 'nl-covid19-dbco-app-ios-private'
+        env:
+          APP_STORE_API_KEY_P8_BASE64: ${{ secrets.APP_STORE_API_KEY_P8 }}
+        run: | 
+          echo $APP_STORE_API_KEY_P8_BASE64 | base64 --decode > $APPSTORE_KEY_BASE64_FILENAME # not certain this is p8 format
+          
+      - name: Load certificate
+        env:
+          CERTIFICATE_CONTENTS: ${{ secrets.DIST_CERT_CONTENTS }}
+        run: |
+          mkdir fastlane/certificates
+          echo "$CERTIFICATE_CONTENTS" | base64 -D > fastlane/certificates/distribution.p12          
+
+      - name: Build and deploy
+        timeout-minutes: 120
+        env:
+          CERTIFICATE_PATH: fastlane/certificates/distribution.p12
+          CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
+          SLACK_URL: ${{ secrets.SLACK_URL }}      
+          APP_STORE_API_KEY_ID: ${{ secrets.APP_STORE_API_KEY_ID }}
+          APP_STORE_API_KEY_ISSUER: ${{ secrets.APP_STORE_API_KEY_ISSUER }}
+        run: |
+          bundle install
+          bundle exec fastlane ios deploy_usertest_build_to_appstore

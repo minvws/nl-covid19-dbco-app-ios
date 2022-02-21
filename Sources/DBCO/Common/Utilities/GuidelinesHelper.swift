@@ -22,7 +22,7 @@ class GuidelinesHelper {
     }()
     
     private static func exposureDateRange(from match: NSTextCheckingResult, in text: NSString) -> ExposureDateRange? {
-        guard match.numberOfRanges == 2 else { return nil }
+        guard match.numberOfRanges == 3 else { return nil }
         guard let offset = Int(text.substring(with: match.range(at: 1))) else { return nil }
         
         return (match.range(at: 0), offset)
@@ -50,7 +50,7 @@ class GuidelinesHelper {
             
             let nsText = text as NSString
             
-            if let regex = try? NSRegularExpression(pattern: #"\{ExposureDate\+([0-9]+)\}"#, options: []) {
+            if let regex = try? NSRegularExpression(pattern: #"\{ExposureDate((\+|\-)[0-9]+)\}"#, options: []) {
                 let textRange = NSRange(location: 0, length: nsText.length)
                 let matches = regex.matches(in: text, options: [], range: textRange)
                 let ranges = matches.compactMap { exposureDateRange(from: $0, in: nsText) }

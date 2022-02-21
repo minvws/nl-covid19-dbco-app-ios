@@ -70,6 +70,7 @@ extension String {
     static var completed: String { return Localization.string(for: "completed") }
     static var disabled: String { return Localization.string(for: "disabled") }
     static var loading: String { return Localization.string(for: "loading") }
+    static var backButtonTitle: String { return Localization.string(for: "backButtonTitle") }
     
     // MARK: - Update App
     static var updateAppErrorMessage: String { return Localization.string(for: "updateApp.error.message") }
@@ -107,6 +108,8 @@ extension String {
     static var onboardingPairingIntroMessage: String { return Localization.string(for: "onboarding.pairingIntro.message") }
     static var onboardingPairingTitle: String { return Localization.string(for: "onboarding.pairing.title") }
     static var onboardingPairingCodeHint: String { return Localization.string(for: "onboarding.pairing.codeHint") }
+    static var onboardingExplainTaskOverviewTitle: String { return Localization.string(for: "onboarding.explainTaskOverview.title") }
+    static var onboardingExplainTaskOverviewMessage: String { return Localization.string(for: "onboarding.explainTaskOverview.message") }
     
     /* MARK: - Privacy */
     static var onboardingConsentShortTitle: String { return Localization.string(for: "onboarding.consent.shortTitle") }
@@ -177,6 +180,14 @@ extension String {
     static var determinePositiveTestDateTitle: String { return Localization.string(for: "determinePositiveTestDate.title") }
     static var determinePositiveTestDateSubtitle: String { return Localization.string(for: "determinePositiveTestDate.subtitle") }
     
+    static var distantDateVerifyAlertDateFormat: String { return Localization.string(for: "distantDateVerifyAlert.dateFormat") }
+    static var distantDateVerifyAlertTitle: String { return Localization.string(for: "distantDateVerifyAlert.title") }
+
+    static func distantDateVerifyAlertMessage(date: String) -> String { return Localization.string(for: "distantDateVerifyAlert.message", [date]) }
+    
+    static var distantDateVerifyAlertYes: String { return Localization.string(for: "distantDateVerifyAlert.yes") }
+    static var distantDateVerifyAlertNo: String { return Localization.string(for: "distantDateVerifyAlert.no") }
+    
     /* MARK: - Determine contacts */
     static var onboardingSelfBCOIntroTitle: String { return Localization.string(for: "onboardingSelfBCOIntro.title") }
     static var onboardingSelfBCOIntroMessage: String { return Localization.string(for: "onboardingSelfBCOIntro.message") }
@@ -185,6 +196,7 @@ extension String {
     static var onboardingDetermineContactsIntroMessage: String { return Localization.string(for: "onboardingDetermineContactsIntro.message") }
     
     static var determineContactsAuthorizationTitle: String { return Localization.string(for: "determineContactsAuthorization.title") }
+    static var determineContactsAuthorizationMessage: String { return Localization.string(for: "determineContactsAuthorization.message") }
     static var determineContactsAuthorizationAllowButton: String { return Localization.string(for: "determineContactsAuthorization.allowButton") }
     static var determineContactsAuthorizationAddManuallyButton: String { return Localization.string(for: "determineContactsAuthorization.addManuallyButton") }
     
@@ -287,10 +299,14 @@ extension String {
     
     static var contactTaskStatusStaffWillInform: String { return Localization.string(for: "contactTaskStatusStaffWillInform") }
     static var contactTaskStatusIndexDidInform: String { return Localization.string(for: "contactTaskStatusIndexDidInform") }
+    static var contactTaskStatusIndexWontInform: String { return Localization.string(for: "contactTaskStatusIndexWontInform") }
     static var contactTaskStatusIndexWillInform: String { return Localization.string(for: "contactTaskStatusIndexWillInform") }
     static var contactTaskStatusMissingDetails: String { return Localization.string(for: "contactTaskStatusMissingDetails") }
     
+    static func contactTaskStatusProgress(progress: CGFloat) -> String { return Localization.string(for: "contactTaskStatusProgress", [progress * 100]) }
+    
     static var taskOverviewWaitingForPairing: String { return Localization.string(for: "taskOverviewWaitingForPairing") }
+    static var taskOverviewWaitingForPairingAccessible: String { return Localization.string(for: "taskOverviewWaitingForPairingAccessible") }
     static var taskOverviewPairingTryAgain: String { return Localization.string(for: "taskOverviewPairingTryAgain") }
     static var taskOverviewPairingFailed: String { return Localization.string(for: "taskOverviewPairingFailed") }
     static var taskOverviewPairingExpired: String { return Localization.string(for: "taskOverviewPairingExpired") }
@@ -307,6 +323,7 @@ extension String {
     static var overviewTipsMessage: String { return Localization.string(for: "overviewTipsMessage") }
     
     static var overviewTipsSection1Title: String { return Localization.string(for: "overviewTipsSection1.title") }
+    static var overviewTipsSection1Label: String { return Localization.string(for: "overviewTipsSection1.label") }
     static var overviewTipsSection1Intro: String { return Localization.string(for: "overviewTipsSection1.intro") }
     static var overviewTipsSection1Photos: String { return Localization.string(for: "overviewTipsSection1.photos") }
     static var overviewTipsSection1SocialMedia: String { return Localization.string(for: "overviewTipsSection1.socialMedia") }
@@ -318,6 +335,7 @@ extension String {
     static var overviewTipsSection1Conversations: String { return Localization.string(for: "overviewTipsSection1.conversations") }
     
     static var overviewTipsSection2Title: String { return Localization.string(for: "overviewTipsSection2.title") }
+    static var overviewTipsSection2Label: String { return Localization.string(for: "overviewTipsSection2.label") }
     static var overviewTipsSection2Intro: String { return Localization.string(for: "overviewTipsSection2.intro") }
     static var overviewTipsSection2Item1: String { return Localization.string(for: "overviewTipsSection2.item1") }
     static var overviewTipsSection2Item2: String { return Localization.string(for: "overviewTipsSection2.item2") }
@@ -337,18 +355,29 @@ extension String {
     static var selectContactAuthorizationFallbackTitle: String { return Localization.string(for: "selectContactAuthorizationFallbackTitle") }
     
     static var selectContactAuthorizationMessage: String { return Localization.string(for: "selectContactAuthorizationMessage") }
+    static var selectContactAuthorizationItem1: String { return Localization.string(for: "selectContactAuthorization.item1") }
+    static var selectContactAuthorizationItem2: String { return Localization.string(for: "selectContactAuthorization.item2") }
+    static var selectContactAuthorizationItem3: String { return Localization.string(for: "selectContactAuthorization.item3") }
     static var selectContactAuthorizationAllowButton: String { return Localization.string(for: "selectContactAuthorizationAllowButton") }
     static var selectContactAuthorizationManualButton: String { return Localization.string(for: "selectContactAuthorizationManualButton") }
     
     // MARK: - Editing Contacts
+    static var deleteContactButtonTitle: String { return Localization.string(for: "deleteContactButtonTitle") }
+    
     static var informContactDeletePromptTitle: String { return Localization.string(for: "informContactDeletePrompt.title") }
     
     static var informContactCancelPromptTitle: String { return Localization.string(for: "informContactCancelPrompt.title") }
     static var informContactCancelPromptMessage: String { return Localization.string(for: "informContactCancelPrompt.message") }
     
     static func contactSectionLabel(index: Int, title: String, caption: String, isCollapsed: Bool, isCompleted: Bool, isEnabled: Bool) -> String {
-        let status = !isEnabled ? disabled : isCompleted ? completed : isCollapsed ? collapsed : expanded
-        return Localization.string(for: "contactSection.label", [status, index, title, caption])
+        let status = !isEnabled ? disabled : isCompleted ? completed : nil
+        let collapsed = isCollapsed ? collapsed : expanded
+        
+        let prefix = [status, collapsed]
+            .compactMap { $0 }
+            .joined(separator: ", ")
+    
+        return Localization.string(for: "contactSection.label", [prefix, index, title, caption])
     }
     
     static func contactSectionCompleted(index: Int) -> String {
@@ -357,6 +386,8 @@ extension String {
     
     static var contactTypeSectionTitle: String { return Localization.string(for: "contactTypeSection.title") }
     static var contactTypeSectionMessage: String { return Localization.string(for: "contactTypeSection.message") }
+    
+    static var disabledSectionMessage: String { return Localization.string(for: "disabledSection.message") }
         
     static var contactDetailsSectionTitle: String { return Localization.string(for: "contactDetailsSection.title") }
     static var contactDetailsSectionMessage: String { return Localization.string(for: "contactDetailsSection.message") }
@@ -402,6 +433,7 @@ extension String {
     static var sameHouseholdRiskQuestionAnswerNegative: String { return Localization.string(for: "sameHouseholdRiskQuestion.answer.negative") }
     
     static var distanceRiskQuestion: String { return Localization.string(for: "distanceRiskQuestion") }
+    static var distanceRiskQuestionDescription: String { return Localization.string(for: "distanceRiskQuestion.description") }
     static var distanceRiskQuestionAnswerMoreThan15Min: String { return Localization.string(for: "distanceRiskQuestion.answer.moreThan15Min") }
     static var distanceRiskQuestionAnswerLessThan15Min: String { return Localization.string(for: "distanceRiskQuestion.answer.lessThan15Min") }
     static var distanceRiskQuestionAnswerNegative: String { return Localization.string(for: "distanceRiskQuestion.answer.negative") }
@@ -419,6 +451,9 @@ extension String {
     static var otherCategoryMessage: String { return Localization.string(for: "otherCategoryMessage") }
     
     static var contactFallbackTitle: String { return Localization.string(for: "contactFallbackTitle") }
+    
+    static var contactInformationExplanation: String { return Localization.string(for: "contactInformationExplanation") }
+    
     static var contactInformationFirstName: String { return Localization.string(for: "contactInformationFirstName") }
     static var contactInformationLastName: String { return Localization.string(for: "contactInformationLastName") }
     static var contactInformationNameWarning: String { return Localization.string(for: "contactInformationNameWarning") }
@@ -444,6 +479,8 @@ extension String {
     static var earlierExposureDateTitle: String { return Localization.string(for: "earlierExposureDateTitle") }
     static var earlierExposureDateMessage: String { return Localization.string(for: "earlierExposureDateMessage") }
     
+    static var cappedExposureDatesInformation: String { return Localization.string(for: "cappedExposureDatesInformation") }
+    
     static var contactDeletePromptTitle: String { return Localization.string(for: "contactDeletePromptTitle") }
     static var contactDeletePromptMessage: String { return Localization.string(for: "contactDeletePromptMessage") }
     
@@ -460,6 +497,7 @@ extension String {
     static var contactInformOptionDone: String { return Localization.string(for: "contactInformOptionDone") }
     static var contactInformActionInformLater: String { return Localization.string(for: "contactInformActionInformLater") }
     static var contactInformActionInformNow: String { return Localization.string(for: "contactInformActionInformNow") }
+    static var contactInformActionWontInform: String { return Localization.string(for: "contactInformActionWontInform") }
     
     static func contactMissingDetailsPromptTitle(firstName: String) -> String { return Localization.string(for: "contactMissingDetailsPromptTitle", [firstName]) }
     
@@ -474,6 +512,7 @@ extension String {
     static var reversePairingConfirmMessage: String { return Localization.string(for: "reversePairingConfirm.message") }
     
     static var reversePairingWaiting: String { return Localization.string(for: "reversePairingWaiting") }
+    static var reversePairingWaitingAccessible: String { return Localization.string(for: "reversePairingWaitingAccessible") }
     static var reversePairingFinished: String { return Localization.string(for: "reversePairingFinished") }
     
     static var reversePairingStep1Title: String { return Localization.string(for: "reversePairingStep1.title") }
@@ -493,6 +532,8 @@ extension String {
     /* MARK: - Uploading */
     static var unfinishedTasksOverviewTitle: String { return Localization.string(for: "unfinishedTasksOverviewTitle") }
     static var unfinishedTasksOverviewMessage: String { return Localization.string(for: "unfinishedTasksOverviewMessage") }
+    static var unfinishedTasksOverviewExplanation: String { return Localization.string(for: "unfinishedTasksOverviewExplanation") }
+    static var unfinishedTaskOverviewDoneButtonTitle: String { return Localization.string(for: "unfinishedTaskOverviewDoneButtonTitle") }
     
     static var uploadConfirmAlertTitle: String { return Localization.string(for: "uploadConfirmAlert.title") }
     static var uploadConfirmAlertMessage: String { return Localization.string(for: "uploadConfirmAlert.message") }

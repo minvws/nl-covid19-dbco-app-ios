@@ -62,14 +62,18 @@ final class CaseManager: CaseManaging, Logging {
     }
     
     var startOfContagiousPeriod: Date? {
-        switch (dateOfTest, dateOfSymptomOnset) {
-        case (_, .some(let dateOfSymptomOnset)):
-            return dateOfSymptomOnset.dateByAddingDays(-2)
-        case (.some(let dateOfTest), _):
-            return dateOfTest
-        default:
-            return nil
-        }
+        let date: Date? = {
+            switch (dateOfTest, dateOfSymptomOnset) {
+            case (_, .some(let dateOfSymptomOnset)):
+                return dateOfSymptomOnset.dateByAddingDays(-2)
+            case (.some(let dateOfTest), _):
+                return dateOfTest
+            default:
+                return nil
+            }
+        }()
+        
+        return date.map { max($0, Date().dateByAddingDays(-13)) }
     }
     
     private(set) var symptomsKnown: Bool {
@@ -174,6 +178,17 @@ final class CaseManager: CaseManaging, Logging {
     ///
     /// Updates existing tasks if the user has not yet started them and adds any new tasks
     private func setTasks(_ fetchedTasks: [Task]) {
+        let fetchedTasks = fetchedTasks.map { fetchedTask -> Task in
+            // Modify the shareIndexNameAlreadyAnswered property for portal tasks
+            var task = fetchedTask
+            switch task.taskType {
+            case .contact:
+                task.shareIndexNameAlreadyAnswered = task.contact.shareIndexNameWithContact != nil
+            }
+            
+            return task
+        }
+        
         guard !tasks.isEmpty else {
             tasks = fetchedTasks
             return
@@ -187,16 +202,18 @@ final class CaseManager: CaseManaging, Logging {
                 } else {
                     switch tasks[existingTaskIndex].taskType {
                     case .contact:
-                        // Update only the communication type
+                        // Update only the communication type and shareIndexNameWithContact
                         let existingContact = tasks[existingTaskIndex].contact!
                         tasks[existingTaskIndex].contact = Task.Contact(category: existingContact.category,
                                                                         communication: task.contact.communication,
                                                                         informedByIndexAt: existingContact.informedByIndexAt,
-                                                                        dateOfLastExposure: existingContact.dateOfLastExposure)
+                                                                        dateOfLastExposure: existingContact.dateOfLastExposure,
+                                                                        shareIndexNameWithContact: task.contact.shareIndexNameWithContact)
                     }
                     
                     tasks[existingTaskIndex].label = task.label
                     tasks[existingTaskIndex].taskContext = task.taskContext
+                    tasks[existingTaskIndex].shareIndexNameAlreadyAnswered = task.shareIndexNameAlreadyAnswered
                 }
             } else {
                 tasks.append(task)
@@ -329,6 +346,7 @@ final class CaseManager: CaseManaging, Logging {
                                     communication: .unknown,
                                     informedByIndexAt: nil,
                                     dateOfLastExposure: dateOfLastExposure.map(Self.valueDateFormatter.string),
+                                    shareIndexNameWithContact: nil,
                                     contactIdentifier: contactIdentifier)
         tasks.append(task)
         
@@ -353,6 +371,15 @@ final class CaseManager: CaseManaging, Logging {
     private func markAllTasksAsSynced() {
         for index in 0 ..< tasks.count {
             tasks[index].isSyncedWithPortal = true
+            
+            switch tasks[index].taskType {
+            case .contact:
+                // If `shareIndexNameWithContact` was not yet set, but has a value now, mark `shareIndexNameAlreadyAnswered` as true
+                if tasks[index].shareIndexNameAlreadyAnswered == false,
+                   tasks[index].contact.shareIndexNameWithContact != nil {
+                    tasks[index].shareIndexNameAlreadyAnswered = true
+                }
+            }
         }
         
         listeners.forEach { $0.listener?.caseManagerDidUpdateTasks(self) }

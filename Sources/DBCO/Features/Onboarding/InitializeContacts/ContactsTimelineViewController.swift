@@ -76,14 +76,15 @@ class ContactsTimelineViewModel {
     }
     
     var title: String {
+        let endDate = max(endDate, .today.dateByAddingDays(-13))
         return .contactsTimelineTitle(endDate: dateFormatter.string(from: endDate))
     }
     
-    var sections: [Section] {
-        let today = Date().start
+    private var numberOfDays: Int {
+        return Calendar.current.dateComponents([.day], from: endDate, to: .today).day! + 1
+    }
     
-        let numberOfDays = Calendar.current.dateComponents([.day], from: endDate, to: today).day! + 1
-        
+    private var daySections: [Section] {
         func title(for index: Int, date: Date) -> String {
             let titleFormats: [String] = [
                 .contactsTimelineSectionTitleTodayFormat,
@@ -123,8 +124,8 @@ class ContactsTimelineViewModel {
             }
         }
         
-        var sections = (0 ..< numberOfDays).map { index -> Section in
-            let date = Calendar.current.date(byAdding: .day, value: -index, to: today)!
+        return (0 ..< numberOfDays).map { index -> Section in
+            let date = Calendar.current.date(byAdding: .day, value: -index, to: .today)!
             
             let section = Section.day(date: date,
                                       title: title(for: index, date: date),
@@ -132,6 +133,10 @@ class ContactsTimelineViewModel {
             
             return section
         }
+    }
+    
+    var sections: [Section] {
+        var sections = Array(daySections.prefix(14)) // limited to 14 days
         
         sections.insert(.reviewTips, at: 0)
         
@@ -148,7 +153,16 @@ class ContactsTimelineViewModel {
     var hideExtraDaySection: Bool {
         switch configuration {
         case .dateOfSymptomOnset:
-            return false
+            return numberOfDays >= 14
+        case .testDate:
+            return true
+        }
+    }
+    
+    var hideTwoWeeksExplanation: Bool {
+        switch configuration {
+        case .dateOfSymptomOnset:
+            return !hideExtraDaySection
         case .testDate:
             return true
         }
@@ -216,6 +230,7 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
     private let separatorView = SeparatorView()
     private let titleLabel = UILabel(title2: nil)
     private var addExtraDaySectionView: UIStackView!
+    private var twoWeeksExplanationView: UIStackView!
     private let addExtraDayTitleLabel = UILabel(bodyBold: nil)
     
     private let scrollView = UIScrollView(frame: .zero)
@@ -270,11 +285,20 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
                                         addExtraDayButton)
     }
     
+    private func setupTwoWeeksExplanationView() {
+        twoWeeksExplanationView =
+            HStack(spacing: 8,
+                   UIImageView(imageName: "Validation/Warning").asIcon(color: Theme.colors.primary),
+                   UILabel(subhead: .cappedExposureDatesInformation, textColor: Theme.colors.captionGray))
+                .alignment(.top)
+    }
+    
     private func setupView() {
         let margin: UIEdgeInsets = .top(32) + .bottom(16)
         
         sectionStackView = VStack(spacing: 40)
         setupAddExtraDaySectionView()
+        setupTwoWeeksExplanationView()
 
         let stack =
             VStack(spacing: 40,
@@ -285,6 +309,7 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
                    sectionStackView,
                    VStack(spacing: 16,
                           addExtraDaySectionView,
+                          twoWeeksExplanationView,
                           Button(title: .done, style: .primary).touchUpInside(self, action: #selector(handleContinue))))
                 .distribution(.fill)
                 .embed(in: scrollView.readableWidth, insets: margin)
@@ -328,6 +353,8 @@ class ContactsTimelineViewController: ViewController, ScrollViewNavivationbarAdj
         
         addExtraDaySectionView.isHidden = viewModel.hideExtraDaySection
         addExtraDayTitleLabel.text = viewModel.addExtraDayTitle
+        
+        twoWeeksExplanationView.isHidden = viewModel.hideTwoWeeksExplanation
     }
     
     private func createOrReuseView(for section: ContactsTimelineViewModel.Section, existingSectionViews: [TimelineSectionView], contacts: [Onboarding.Contact]) -> TimelineSectionView {
@@ -503,7 +530,7 @@ private class DaySectionView: TimelineSectionView {
         VStack(spacing: 8,
                VStack(spacing: 4,
                       titleLabel.asHeader(),
-                      subtitleLabel.hideIfEmpty()),
+                      subtitleLabel),
                contactList)
             .embed(in: self)
     }
@@ -515,6 +542,7 @@ private class DaySectionView: TimelineSectionView {
         
         titleLabel.text = title
         subtitleLabel.text = subtitle
+        subtitleLabel.hideIfEmpty()
     }
     
     override func isConfigured(for section: ContactsTimelineViewModel.Section) -> Bool {

@@ -11,7 +11,7 @@ import XCTest
 class TaskOverviewViewModelTests: XCTestCase {
     
     func testEmptyOverview() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         
         let input = TaskOverviewViewModel.Input(pairing: pairingManager, case: caseManager)
@@ -22,7 +22,6 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         viewModel.setHidePrompt { _ in isPromptVisible = false }
@@ -32,15 +31,14 @@ class TaskOverviewViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.isPairingErrorViewHidden)
         XCTAssertTrue(viewModel.isWindowExpiredMessageHidden)
         XCTAssertTrue(viewModel.isResetButtonHidden)
-        XCTAssertTrue(viewModel.isAddContactButtonHidden)
         
         XCTAssertFalse(viewModel.isDoneButtonHidden)
-        XCTAssertFalse(viewModel.isHeaderAddContactButtonHidden)
+        XCTAssertFalse(viewModel.isAddContactButtonHidden)
         XCTAssertFalse(isPromptVisible)
     }
     
     func testUnsyncedTaskOverview() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         caseManager.isSynced = false
         
@@ -52,7 +50,6 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         viewModel.setHidePrompt { _ in isPromptVisible = false }
@@ -62,15 +59,14 @@ class TaskOverviewViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.isPairingErrorViewHidden)
         XCTAssertTrue(viewModel.isWindowExpiredMessageHidden)
         XCTAssertTrue(viewModel.isResetButtonHidden)
-        XCTAssertTrue(viewModel.isAddContactButtonHidden)
         XCTAssertTrue(isPromptVisible)
         
         XCTAssertFalse(viewModel.isDoneButtonHidden)
-        XCTAssertFalse(viewModel.isHeaderAddContactButtonHidden)
+        XCTAssertFalse(viewModel.isAddContactButtonHidden)
     }
     
     func testExpiredTaskOverviewSynced() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         caseManager.isSynced = true
         caseManager.isWindowExpired = true
@@ -83,7 +79,6 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         viewModel.setHidePrompt { _ in isPromptVisible = false }
@@ -92,7 +87,7 @@ class TaskOverviewViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.isPairingViewHidden)
         XCTAssertTrue(viewModel.isPairingErrorViewHidden)
         XCTAssertTrue(viewModel.isAddContactButtonHidden)
-        XCTAssertTrue(viewModel.isHeaderAddContactButtonHidden)
+        XCTAssertTrue(viewModel.isAddContactButtonHidden)
         XCTAssertTrue(isPromptVisible)
         
         XCTAssertFalse(viewModel.isResetButtonHidden)
@@ -101,7 +96,7 @@ class TaskOverviewViewModelTests: XCTestCase {
     }
     
     func testExpiredTasksOverviewUnsynced() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         caseManager.isSynced = false
         caseManager.isWindowExpired = true
@@ -114,7 +109,6 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         viewModel.setHidePrompt { _ in isPromptVisible = false }
@@ -123,7 +117,7 @@ class TaskOverviewViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.isPairingViewHidden)
         XCTAssertTrue(viewModel.isPairingErrorViewHidden)
         XCTAssertTrue(viewModel.isAddContactButtonHidden)
-        XCTAssertTrue(viewModel.isHeaderAddContactButtonHidden)
+        XCTAssertTrue(viewModel.isAddContactButtonHidden)
         XCTAssertTrue(isPromptVisible)
         
         XCTAssertFalse(viewModel.isResetButtonHidden)
@@ -132,7 +126,7 @@ class TaskOverviewViewModelTests: XCTestCase {
     }
     
     func testTaskOverviewBecameExpired() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         caseManager.isWindowExpired = false
         
@@ -144,7 +138,6 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         viewModel.setHidePrompt { _ in isPromptVisible = false }
@@ -154,10 +147,9 @@ class TaskOverviewViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.isPairingErrorViewHidden)
         XCTAssertTrue(viewModel.isWindowExpiredMessageHidden)
         XCTAssertTrue(viewModel.isResetButtonHidden)
-        XCTAssertTrue(viewModel.isAddContactButtonHidden)
         
         XCTAssertFalse(viewModel.isDoneButtonHidden)
-        XCTAssertFalse(viewModel.isHeaderAddContactButtonHidden)
+        XCTAssertFalse(viewModel.isAddContactButtonHidden)
         XCTAssertFalse(isPromptVisible)
         
         caseManager.isWindowExpired = true
@@ -167,7 +159,7 @@ class TaskOverviewViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.isAddContactButtonHidden)
         
         XCTAssertTrue(viewModel.isDoneButtonHidden)
-        XCTAssertTrue(viewModel.isHeaderAddContactButtonHidden)
+        XCTAssertTrue(viewModel.isAddContactButtonHidden)
         XCTAssertTrue(isPromptVisible)
         
         XCTAssertFalse(viewModel.isWindowExpiredMessageHidden)
@@ -175,7 +167,7 @@ class TaskOverviewViewModelTests: XCTestCase {
     }
     
     func testAddContactButtonStateForUninformedContacts() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         caseManager.tasks = [createUninformedTask(label: "Anna Haro")]
         caseManager.hasSynced = false
@@ -186,16 +178,14 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         
-        XCTAssertTrue(viewModel.isHeaderAddContactButtonHidden)
         XCTAssertFalse(viewModel.isAddContactButtonHidden)
     }
     
     func testAddContactButtonStateForInformedContacts() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         caseManager.tasks = [createInformedTask(label: "Anna Haro")]
         caseManager.hasSynced = false
@@ -206,16 +196,14 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         
-        XCTAssertFalse(viewModel.isHeaderAddContactButtonHidden)
-        XCTAssertTrue(viewModel.isAddContactButtonHidden)
+        XCTAssertFalse(viewModel.isAddContactButtonHidden)
     }
     
     func testAddContactButtonStateForInformedAndUninformedContacts() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         caseManager.tasks = [createInformedTask(label: "Anna Haro"), createUninformedTask(label: "Daniel Higgins")]
         caseManager.hasSynced = false
@@ -226,16 +214,14 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         
-        XCTAssertTrue(viewModel.isHeaderAddContactButtonHidden)
         XCTAssertFalse(viewModel.isAddContactButtonHidden)
     }
     
     func testAddContactButtonStateForUnsyncedContacts() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         caseManager.tasks = [createUnsyncedTask(label: "Anna Haro")]
         caseManager.hasSynced = true
@@ -246,16 +232,14 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         
-        XCTAssertTrue(viewModel.isHeaderAddContactButtonHidden)
         XCTAssertFalse(viewModel.isAddContactButtonHidden)
     }
     
     func testAddContactButtonStateForSyncedContacts() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         caseManager.tasks = [createSyncedTask(label: "Anna Haro")]
         caseManager.hasSynced = true
@@ -266,16 +250,14 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         
-        XCTAssertFalse(viewModel.isHeaderAddContactButtonHidden)
-        XCTAssertTrue(viewModel.isAddContactButtonHidden)
+        XCTAssertFalse(viewModel.isAddContactButtonHidden)
     }
     
     func testAddContactButtonStateForSyncedAndUnsyncedContacts() {
-        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .development))
+        let pairingManager = MockPairingManager(networkManager: MockNetworkManager(configuration: .test))
         let caseManager = MockCaseManager()
         caseManager.tasks = [createSyncedTask(label: "Anna Haro"), createUnsyncedTask(label: "Daniel Higgins")]
         caseManager.hasSynced = true
@@ -286,11 +268,9 @@ class TaskOverviewViewModelTests: XCTestCase {
         viewModel.setupTableView(UITableView.createDefaultGrouped(),
                                  tableHeaderBuilder: nil,
                                  sectionHeaderBuilder: nil,
-                                 addContactFooterBuilder: nil,
                                  tableFooterBuilder: nil,
                                  selectedTaskHandler: { _, _ in })
         
-        XCTAssertTrue(viewModel.isHeaderAddContactButtonHidden)
         XCTAssertFalse(viewModel.isAddContactButtonHidden)
     }
 
@@ -298,13 +278,13 @@ class TaskOverviewViewModelTests: XCTestCase {
 
 private func createInformedTask(label: String) -> Task {
     var task = Task(type: .contact, label: label, source: .app)
-    task.contact = .init(category: .category1, communication: .index, informedByIndexAt: ISO8601DateFormatter().string(from: Date()), dateOfLastExposure: nil)
+    task.contact = .init(category: .category1, communication: .index, informedByIndexAt: ISO8601DateFormatter().string(from: Date()), dateOfLastExposure: nil, shareIndexNameWithContact: nil)
     return task
 }
 
 private func createUninformedTask(label: String) -> Task {
     var task = Task(type: .contact, label: label, source: .app)
-    task.contact = .init(category: .category1, communication: .index, informedByIndexAt: nil, dateOfLastExposure: nil)
+    task.contact = .init(category: .category1, communication: .index, informedByIndexAt: nil, dateOfLastExposure: nil, shareIndexNameWithContact: nil)
     return task
 }
 
