@@ -138,15 +138,7 @@ struct ClassificationHelper {
             risks.sameHousehold = false
             risks.distance = .yesLessThan15min
             risks.physicalContact = true
-        case .category3a:
-            risks.sameHousehold = false
-            risks.distance = .yesLessThan15min
-            risks.physicalContact = false
-        case .category3b:
-            risks.sameHousehold = false
-            risks.distance = .no
-            risks.sameRoom = true
-        case .other:
+        case .other, .category3a, .category3b:
             risks.sameHousehold = false
             risks.distance = .no
             risks.sameRoom = false
