@@ -78,7 +78,7 @@ struct ClassificationHelper {
         case .some(.yesLessThan15min):
             return evaluatePhysicalContactRisk(risks)
         case .some(.no):
-            return evaluateSameRoomRisk(risks)
+            return (.success(.other), [.sameHousehold, .distance]) // previously resulted in a call to evaluateSameRoomRisk(_ risks: Risks)
         }
     }
     
@@ -89,20 +89,21 @@ struct ClassificationHelper {
         case .some(true):
             return (.success(.category2b), [.sameHousehold, .distance, .physicalContact])
         case .some(false):
-            return (.success(.category3a), [.sameHousehold, .distance, .physicalContact])
+            return (.success(.other), [.sameHousehold, .distance, .physicalContact])
         }
     }
     
-    private static func evaluateSameRoomRisk(_ risks: Risks) -> ResultRiskPair {
-        switch risks.sameRoom {
-        case .none:
-            return (.needsAssessmentFor(.sameRoom), [.sameHousehold, .distance, .sameRoom])
-        case .some(true):
-            return (.success(.category3b), [.sameHousehold, .distance, .sameRoom])
-        case .some(false):
-            return (.success(.other), [.sameHousehold, .distance, .sameRoom])
-        }
-    }
+//    NOTE: Currently unused
+//    private static func evaluateSameRoomRisk(_ risks: Risks) -> ResultRiskPair {
+//        switch risks.sameRoom {
+//        case .none:
+//            return (.needsAssessmentFor(.sameRoom), [.sameHousehold, .distance, .sameRoom])
+//        case .some(true):
+//            return (.success(.category3b), [.sameHousehold, .distance, .sameRoom])
+//        case .some(false):
+//            return (.success(.other), [.sameHousehold, .distance, .sameRoom])
+//        }
+//    }
     
     /// Returns the classification or unassessed risk for the supplied risks
     ///
@@ -137,15 +138,7 @@ struct ClassificationHelper {
             risks.sameHousehold = false
             risks.distance = .yesLessThan15min
             risks.physicalContact = true
-        case .category3a:
-            risks.sameHousehold = false
-            risks.distance = .yesLessThan15min
-            risks.physicalContact = false
-        case .category3b:
-            risks.sameHousehold = false
-            risks.distance = .no
-            risks.sameRoom = true
-        case .other:
+        case .other, .category3a, .category3b:
             risks.sameHousehold = false
             risks.distance = .no
             risks.sameRoom = false
