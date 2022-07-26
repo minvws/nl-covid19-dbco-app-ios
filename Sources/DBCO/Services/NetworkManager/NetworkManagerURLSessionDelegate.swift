@@ -18,7 +18,7 @@ final class NetworkManagerURLSessionDelegate: NSObject, URLSessionDelegate, Logg
     
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
 
-        guard let localSignature = configuration.sslSignature(forHost: challenge.protectionSpace.host),
+        guard let localSignatures = configuration.sslSignatures(forHost: challenge.protectionSpace.host),
             challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
             let serverTrust = challenge.protectionSpace.serverTrust else {
             // no pinning
@@ -42,7 +42,7 @@ final class NetworkManagerURLSessionDelegate: NSObject, URLSessionDelegate, Logg
             return
         }
 
-        guard localSignature == signature else {
+        guard localSignatures.contains(signature) else {
             logError("Certificate signatures don't match")
             completionHandler(.cancelAuthenticationChallenge, nil)
             return
