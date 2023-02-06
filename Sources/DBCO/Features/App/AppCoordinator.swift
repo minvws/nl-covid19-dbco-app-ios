@@ -111,6 +111,8 @@ final class AppCoordinator: Coordinator {
             switch updateState {
             case .updateRequired(let versionInformation):
                 showRequiredUpdate(with: versionInformation)
+            case .endOfLife:
+                showEndOfLife()
             case .updateFailed:
                 showConfigUpdateFailed(retryHandler: { updateConfiguration(completionHandler: completionHandler) })
             case .noActionNeeded:
@@ -175,6 +177,16 @@ final class AppCoordinator: Coordinator {
         topController.present(updateController, animated: true)
     }
     
+    private func showEndOfLife() {
+        guard let topController = topViewController else { return }
+        guard !(topController is EndOfLifeViewController) else { return }
+        
+        let endOfLifeController = EndOfLifeViewController()
+        endOfLifeController.endOfLifedelegate = self
+        
+        topController.present(endOfLifeController, animated: true)
+    }
+    
     private func showConfigUpdateFailed(retryHandler: @escaping () -> Void) {
         guard let topController = topViewController else { return }
         
@@ -222,6 +234,14 @@ extension AppCoordinator: OnboardingCoordinatorDelegate {
 extension AppCoordinator: AppUpdateViewControllerDelegate {
     
     func appUpdateViewController(_ controller: AppUpdateViewController, wantsToOpen url: URL) {
+        UIApplication.shared.open(url)
+    }
+    
+}
+
+extension AppCoordinator: EndOfLifeViewControllerDelegate {
+    
+    func endOfLifeViewController(_ controller: EndOfLifeViewController, wantsToOpen url: URL) {
         UIApplication.shared.open(url)
     }
     

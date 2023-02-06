@@ -85,6 +85,7 @@ struct AppConfiguration: AppVersionInformation, Codable {
     let symptoms: [Symptom]
     let guidelines: Guidelines
     let fetchDate: Date
+    let endOfLife: Bool?
     
     enum CodingKeys: String, CodingKey {
         case minimumVersion = "iosMinimumVersion"
@@ -94,6 +95,7 @@ struct AppConfiguration: AppVersionInformation, Codable {
         case symptoms
         case guidelines
         case fetchDate
+        case endOfLife
     }
     
     init(from decoder: Decoder) throws {
@@ -113,11 +115,13 @@ struct AppConfiguration: AppVersionInformation, Codable {
         guidelines = try container.decode(Guidelines.self, forKey: .guidelines)
         
         fetchDate = (try container.decodeIfPresent(Date.self, forKey: .fetchDate)) ?? Date()
+        endOfLife = try container.decodeIfPresent(Bool.self, forKey: .endOfLife)
     }
 }
 
 enum ConfigUpdateResult {
     case updateRequired(AppVersionInformation)
+    case endOfLife
     case updateFailed
     case noActionNeeded
 }

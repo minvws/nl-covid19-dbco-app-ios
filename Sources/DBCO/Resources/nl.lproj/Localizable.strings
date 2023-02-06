@@ -31,6 +31,12 @@
 "updateApp.content" = "Update de app om te zorgen dat deze goed blijft werken.";
 "updateApp.button" = "Updaten";
 
+/* MARK: - End Of Life */
+"endOfLife.title" = "GGD contact is gestopt";
+"endOfLife.message" = "Het Ministerie van Volksgezondheid, Welzijn en Sport heeft besloten dat de app niet meer nodig is.";
+"endOfLife.button" = "Lees meer";
+"endOfLife.url" = "https://www.ggdcontact.nl";
+
 // MARK: - Launch
 "launchJailbreakAlert.title" = "Het besturingssysteem van je telefoon is aangepast";
 "launchJailbreakAlert.message" = "GGD Contact vraagt je naar gevoelige gegevens. We raden aan je gegevens te beveiligen door het originele besturingssysteem van je telefoon te gebruiken.";

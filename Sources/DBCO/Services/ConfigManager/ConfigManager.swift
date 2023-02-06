@@ -60,6 +60,8 @@ class ConfigManager: ConfigManaging, Logging {
         
         if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
             completion(.updateRequired(configuration))
+        } else if configuration.endOfLife == true {
+            completion(.endOfLife)
         } else {
             completion(.noActionNeeded)
         }
