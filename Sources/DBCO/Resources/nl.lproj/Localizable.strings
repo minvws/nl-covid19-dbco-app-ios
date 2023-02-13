@@ -32,10 +32,8 @@
 "updateApp.button" = "Updaten";
 
 /* MARK: - End Of Life */
-"endOfLife.title" = "GGD contact is gestopt";
-"endOfLife.message" = "Het Ministerie van Volksgezondheid, Welzijn en Sport heeft besloten dat de app niet meer nodig is.";
-"endOfLife.button" = "Lees meer";
-"endOfLife.url" = "https://www.ggdcontact.nl";
+"endOfLife.title" = "GGD Contact-app is gestopt";
+"endOfLife.message" = "Het Ministerie van Volksgezondheid, Welzijn en Sport heeft besloten dat de app niet meer nodig is. Bron- en contactonderzoek naar corona wordt nog maar weinig uitgevoerd, de GGD Contact-app wordt niet meer gebruikt en je kunt deze van de telefoon verwijderen.";
 
 // MARK: - Launch
 "launchJailbreakAlert.title" = "Het besturingssysteem van je telefoon is aangepast";

@@ -83,9 +83,6 @@ extension String {
     static var endOfLifeTitle: String { return Localization.string(for: "endOfLife.title") }
     static var endOfLifeMessage: String { return Localization.string(for: "endOfLife.message") }
     
-    static var endOfLifeButton: String { return Localization.string(for: "endOfLife.button") }
-    static var endOfLifeURL: String { return Localization.string(for: "endOfLife.url") }
-    
     // MARK: - Launch
     static var launchJailbreakAlertTitle: String { return Localization.string(for: "launchJailbreakAlert.title") }
     static var launchJailbreakAlertMessage: String { return Localization.string(for: "launchJailbreakAlert.message") }

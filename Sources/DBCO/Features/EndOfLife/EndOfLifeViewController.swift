@@ -26,10 +26,7 @@ class EndOfLifeViewController: NavigationController {
         let viewModel = StepViewModel(image: UIImage(named: "Onboarding2"),
                                       title: .endOfLifeTitle,
                                       message: .endOfLifeMessage,
-                                      actions: [.init(type: .primary,
-                                                      title: .endOfLifeButton,
-                                                      target: self,
-                                                      action: #selector(update))])
+                                      actions: [])
         
         setViewControllers([StepViewController(viewModel: viewModel)], animated: false)
         
@@ -38,11 +35,6 @@ class EndOfLifeViewController: NavigationController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    @objc private func update() {
-        let url = URL(string: .endOfLifeURL)!
-        endOfLifedelegate?.endOfLifeViewController(self, wantsToOpen: url)
     }
 
 }
