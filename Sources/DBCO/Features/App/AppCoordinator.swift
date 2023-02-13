@@ -181,10 +181,7 @@ final class AppCoordinator: Coordinator {
         guard let topController = topViewController else { return }
         guard !(topController is EndOfLifeViewController) else { return }
         
-        let endOfLifeController = EndOfLifeViewController()
-        endOfLifeController.endOfLifedelegate = self
-        
-        topController.present(endOfLifeController, animated: true)
+        topController.present(EndOfLifeViewController(), animated: true)
     }
     
     private func showConfigUpdateFailed(retryHandler: @escaping () -> Void) {
