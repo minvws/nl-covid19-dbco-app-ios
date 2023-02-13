@@ -239,14 +239,6 @@ extension AppCoordinator: AppUpdateViewControllerDelegate {
     
 }
 
-extension AppCoordinator: EndOfLifeViewControllerDelegate {
-    
-    func endOfLifeViewController(_ controller: EndOfLifeViewController, wantsToOpen url: URL) {
-        UIApplication.shared.open(url)
-    }
-    
-}
-
 extension AppCoordinator: TaskOverviewCoordinatorDelegate {
     
     func taskOverviewCoordinatorDidRequestReset(_ coordinator: TaskOverviewCoordinator) {

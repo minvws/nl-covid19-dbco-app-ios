@@ -7,18 +7,10 @@
 
 import UIKit
 
-
-
-protocol EndOfLifeViewControllerDelegate: AnyObject {
-    func endOfLifeViewController(_ controller: EndOfLifeViewController, wantsToOpen url: URL)
-}
-
 /// Fullscreen alert informing the user about the app no longer being necessary
 ///
 /// - Tag: EndOfLifeViewController
 class EndOfLifeViewController: NavigationController {
-    
-    weak var endOfLifedelegate: EndOfLifeViewControllerDelegate?
     
     init() {
         super.init(nibName: nil, bundle: nil)
