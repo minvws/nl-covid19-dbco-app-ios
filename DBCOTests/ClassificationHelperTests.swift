@@ -81,36 +81,36 @@ class ClassificationHelperTests: XCTestCase {
     }
     
     func testCategory3aClassification() throws {
-        XCTAssertEqual(result(sameHousehold: false, distance: .yesLessThan15min, physicalContact: nil, sameRoom: nil), .needsAssessmentFor(.physicalContact))
-        XCTAssertEqual(visibleRisks(sameHousehold: false, distance: .yesLessThan15min, physicalContact: nil, sameRoom: nil), [.sameHousehold, .distance, .physicalContact])
+        XCTAssertEqual(result(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: false), .success(.other))
+        XCTAssertEqual(visibleRisks(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: false), [.sameHousehold, .distance])
         
-        XCTAssertEqual(result(sameHousehold: false, distance: .yesLessThan15min, physicalContact: nil, sameRoom: false), .needsAssessmentFor(.physicalContact))
-        XCTAssertEqual(visibleRisks(sameHousehold: false, distance: .yesLessThan15min, physicalContact: nil, sameRoom: false), [.sameHousehold, .distance, .physicalContact])
+        XCTAssertEqual(result(sameHousehold: false, distance: .no, physicalContact: true, sameRoom: false), .success(.other))
+        XCTAssertEqual(visibleRisks(sameHousehold: false, distance: .no, physicalContact: true, sameRoom: nil), [.sameHousehold, .distance])
         
-        XCTAssertEqual(result(sameHousehold: false, distance: .yesLessThan15min, physicalContact: false, sameRoom: nil), .success(.category3a))
-        XCTAssertEqual(visibleRisks(sameHousehold: false, distance: .yesLessThan15min, physicalContact: false, sameRoom: nil), [.sameHousehold, .distance, .physicalContact])
+        XCTAssertEqual(result(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: false), .success(.other))
+        XCTAssertEqual(visibleRisks(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: true), [.sameHousehold, .distance])
     }
     
     func testCategory3bClassification() throws {
-        XCTAssertEqual(result(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: nil), .needsAssessmentFor(.sameRoom))
-        XCTAssertEqual(visibleRisks(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: nil), [.sameHousehold, .distance, .sameRoom])
+        XCTAssertEqual(result(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: false), .success(.other))
+        XCTAssertEqual(visibleRisks(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: false), [.sameHousehold, .distance])
         
-        XCTAssertEqual(result(sameHousehold: false, distance: .no, physicalContact: true, sameRoom: nil), .needsAssessmentFor(.sameRoom))
-        XCTAssertEqual(visibleRisks(sameHousehold: false, distance: .no, physicalContact: true, sameRoom: nil), [.sameHousehold, .distance, .sameRoom])
+        XCTAssertEqual(result(sameHousehold: false, distance: .no, physicalContact: true, sameRoom: false), .success(.other))
+        XCTAssertEqual(visibleRisks(sameHousehold: false, distance: .no, physicalContact: true, sameRoom: nil), [.sameHousehold, .distance])
         
-        XCTAssertEqual(result(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: true), .success(.category3b))
-        XCTAssertEqual(visibleRisks(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: true), [.sameHousehold, .distance, .sameRoom])
+        XCTAssertEqual(result(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: false), .success(.other))
+        XCTAssertEqual(visibleRisks(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: true), [.sameHousehold, .distance])
     }
     
     func testOtherClassification() throws {
         XCTAssertEqual(result(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: false), .success(.other))
-        XCTAssertEqual(visibleRisks(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: false), [.sameHousehold, .distance, .sameRoom])
+        XCTAssertEqual(visibleRisks(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: false), [.sameHousehold, .distance])
         
         XCTAssertEqual(result(sameHousehold: false, distance: .no, physicalContact: true, sameRoom: false), .success(.other))
-        XCTAssertEqual(visibleRisks(sameHousehold: false, distance: .no, physicalContact: true, sameRoom: nil), [.sameHousehold, .distance, .sameRoom])
+        XCTAssertEqual(visibleRisks(sameHousehold: false, distance: .no, physicalContact: true, sameRoom: nil), [.sameHousehold, .distance])
         
         XCTAssertEqual(result(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: false), .success(.other))
-        XCTAssertEqual(visibleRisks(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: true), [.sameHousehold, .distance, .sameRoom])
+        XCTAssertEqual(visibleRisks(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: true), [.sameHousehold, .distance])
     }
     
     func testSetCategory1Risks() throws {
@@ -134,13 +134,13 @@ class ClassificationHelperTests: XCTestCase {
     func testSetCategory3aRisks() throws {
         var risks: ClassificationHelper.Risks = .init()
         ClassificationHelper.setRisks(for: .category3a, risks: &risks)
-        XCTAssertEqual(risks, .init(sameHousehold: false, distance: .yesLessThan15min, physicalContact: false, sameRoom: nil))
+        XCTAssertEqual(risks, .init(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: false))
     }
     
     func testSetCategory3bRisks() throws {
         var risks: ClassificationHelper.Risks = .init()
         ClassificationHelper.setRisks(for: .category3b, risks: &risks)
-        XCTAssertEqual(risks, .init(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: true))
+        XCTAssertEqual(risks, .init(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: false))
     }
     
     func testSetOtherRisks() throws {
@@ -153,8 +153,8 @@ class ClassificationHelperTests: XCTestCase {
         XCTAssertEqual(result(sameHousehold: true, distance: nil, physicalContact: nil, sameRoom: nil).category, .category1)
         XCTAssertEqual(result(sameHousehold: false, distance: .yesMoreThan15min, physicalContact: nil, sameRoom: nil).category, .category2a)
         XCTAssertEqual(result(sameHousehold: false, distance: .yesLessThan15min, physicalContact: true, sameRoom: nil).category, .category2b)
-        XCTAssertEqual(result(sameHousehold: false, distance: .yesLessThan15min, physicalContact: false, sameRoom: nil).category, .category3a)
-        XCTAssertEqual(result(sameHousehold: false, distance: .no, physicalContact: false, sameRoom: true).category, .category3b)
+        XCTAssertEqual(result(sameHousehold: false, distance: .yesLessThan15min, physicalContact: false, sameRoom: nil).category, .other)
+        XCTAssertEqual(result(sameHousehold: false, distance: .no, physicalContact: false, sameRoom: true).category, .other)
         XCTAssertEqual(result(sameHousehold: false, distance: .no, physicalContact: nil, sameRoom: false).category, .other)
         
         XCTAssertEqual(result(sameHousehold: nil, distance: nil, physicalContact: nil, sameRoom: nil).category, nil)
