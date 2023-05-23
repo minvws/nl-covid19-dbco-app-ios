@@ -7,7 +7,7 @@ target 'DBCO' do
   inhibit_all_warnings!
 
   # Pods for DBCO
-  pod 'Sodium', '~> 0.8.0'
+  pod 'Sodium', '~> 0.9.1'
   pod 'CocoaLumberjack/Swift', '~> 3.7.0'
   pod 'IOSSecuritySuite', '~> 1.8.0'
 
