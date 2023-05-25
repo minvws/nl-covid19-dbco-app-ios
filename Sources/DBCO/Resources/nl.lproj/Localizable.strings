@@ -31,6 +31,10 @@
 "updateApp.content" = "Update de app om te zorgen dat deze goed blijft werken.";
 "updateApp.button" = "Updaten";
 
+/* MARK: - End Of Life */
+"endOfLife.title" = "GGD Contact-app is gestopt";
+"endOfLife.message" = "Het Ministerie van Volksgezondheid, Welzijn en Sport heeft besloten dat de app niet meer nodig is. Bron- en contactonderzoek naar corona wordt nog maar weinig uitgevoerd, de GGD Contact-app wordt niet meer gebruikt en je kunt deze van de telefoon verwijderen.";
+
 // MARK: - Launch
 "launchJailbreakAlert.title" = "Het besturingssysteem van je telefoon is aangepast";
 "launchJailbreakAlert.message" = "GGD Contact vraagt je naar gevoelige gegevens. We raden aan je gegevens te beveiligen door het originele besturingssysteem van je telefoon te gebruiken.";
@@ -152,7 +156,7 @@
 "determineContactsExplanation.shortTitle" = "Contacten";
 "determineContactsExplanation.title" = "We gaan een overzicht maken van mensen die je hebt ontmoet";
 "determineContactsExplanation.message" = "Niet iedereen die je hebt ontmoet heeft risico op besmetting gelopen. We zijn op zoek naar:";
-"determineContactsExplanation.item.1" = "Mensen bij wie je in de buurt en/of een tijdje in dezelfde ruimte bent geweest";
+"determineContactsExplanation.item.1" = "Mensen bij wie je een tijdje in de buurt bent geweest";
 "determineContactsExplanation.item.2" = "Mensen met wie je fysiek contact hebt gehad";
 "determineContactsExplanation.item.3" = "Je hoeft <b>geen</b> mensen toe te voegen die je heel kort hebt ontmoet (zoals de kassamedewerker in een winkel)";
 "determineContactsExplanation.item.4" = "Je hoeft je huisgenoten <b>niet</b> nog een keer toe te voegen";
@@ -269,7 +273,7 @@
 "overviewTipsSection2.title" = "Zet de contacten in de app";
 "overviewTipsSection2.label" = "Tip 2: Zet de contacten in de app";
 "overviewTipsSection2.intro" = "Niet iedereen die je hebt ontmoet heeft risico op besmetting gelopen. We zijn op zoek naar mensen met wie je:";
-"overviewTipsSection2.item1" = "Bij wie je in de buurt en/of een tijdje in dezelfde ruimte was";
+"overviewTipsSection2.item1" = "Een tijdje in de buurt was";
 "overviewTipsSection2.item2" = "Intens contact hebt gehad door zoenen of seksueel contact";
 "overviewTipsSection2.item3" = "Twijfel je? Voeg de persoon dan toch toe";
 

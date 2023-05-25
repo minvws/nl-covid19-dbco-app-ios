@@ -209,7 +209,7 @@ class ContactQuestionnaireViewModelTests: XCTestCase { // swiftlint:disable:this
             .first { $0.currentTitle == .physicalContactRiskQuestionAnswerNegative }?
             .sendActions(for: .touchUpInside)
         
-        XCTAssertEqual(viewModel.updatedTask.contact.category, .category3a)
+        XCTAssertEqual(viewModel.updatedTask.contact.category, .other)
     }
     
     func testOtherCategoryState() {
@@ -238,7 +238,7 @@ class ContactQuestionnaireViewModelTests: XCTestCase { // swiftlint:disable:this
     }
     
     func testContactDetailsPrefilling() {
-        let testCategories: [Task.Contact.Category] = [.category1, .category2a, .category2b, .category3a, .category3b]
+        let testCategories: [Task.Contact.Category] = [.category1, .category2a, .category2b]
         
         for category in testCategories {
             let input = ContactQuestionnaireViewModel.Input(

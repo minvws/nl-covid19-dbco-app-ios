@@ -18,7 +18,7 @@ struct NetworkConfiguration {
         let host: String
         let port: Int?
         let path: [String]
-        let sslSignature: Certificate.Signature? // SSL pinning certificate, nil = no pinning
+        let sslSignatures: [Certificate.Signature]? // Valid SSL pinning certificates, nil = no pinning
         let tokenParams: [String: String]
     }
 
@@ -26,8 +26,8 @@ struct NetworkConfiguration {
     let api: EndpointConfiguration
     let haPublicKey: HAPublicKeyInformation
     
-    func sslSignature(forHost host: String) -> Certificate.Signature? {
-        if api.host == host { return api.sslSignature }
+    func sslSignatures(forHost host: String) -> [Certificate.Signature]? {
+        if api.host == host { return api.sslSignatures }
 
         return nil
     }
@@ -39,7 +39,7 @@ struct NetworkConfiguration {
             host: "api-test.bco-portaal.nl",
             port: nil,
             path: ["v3"],
-            sslSignature: nil,
+            sslSignatures: nil,
             tokenParams: [:]
         ),
         haPublicKey: .init(
@@ -54,7 +54,7 @@ struct NetworkConfiguration {
             host: "api-acc.bco-portaal.nl",
             port: nil,
             path: ["v3"],
-            sslSignature: "TSSRQUz+lWdG7Ezvps9vcuKKEylDL52KkHrEy12twVo=",
+            sslSignatures: ["TSSRQUz+lWdG7Ezvps9vcuKKEylDL52KkHrEy12twVo=", "j+T7Cvk6TQ1n2wvrsj43xxvzJdy83SQOoE2vWLR+GEA="],
             tokenParams: [:]
         ),
         haPublicKey: .init(
@@ -69,7 +69,7 @@ struct NetworkConfiguration {
             host: "api-staging.bco-portaal.nl",
             port: nil,
             path: ["v3"],
-            sslSignature: "TSSRQUz+lWdG7Ezvps9vcuKKEylDL52KkHrEy12twVo=",
+            sslSignatures: ["TSSRQUz+lWdG7Ezvps9vcuKKEylDL52KkHrEy12twVo=", "j+T7Cvk6TQ1n2wvrsj43xxvzJdy83SQOoE2vWLR+GEA="],
             tokenParams: [:]
         ),
         haPublicKey: .init(
@@ -84,7 +84,7 @@ struct NetworkConfiguration {
             host: "api.bco-portaal.nl",
             port: nil,
             path: ["v3"],
-            sslSignature: "TSSRQUz+lWdG7Ezvps9vcuKKEylDL52KkHrEy12twVo=",
+            sslSignatures: ["TSSRQUz+lWdG7Ezvps9vcuKKEylDL52KkHrEy12twVo=", "j+T7Cvk6TQ1n2wvrsj43xxvzJdy83SQOoE2vWLR+GEA="],
             tokenParams: [:]
         ),
         haPublicKey: .init(
